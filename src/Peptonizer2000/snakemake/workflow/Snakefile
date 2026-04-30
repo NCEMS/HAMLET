@@ -1,0 +1,149 @@
+from os import path
+
+configfile: "../config/config.yaml"
+
+# Directories that are being used over all rules
+data_dir = config['data_dir']
+log_dir = config['log_dir']
+benchmark_dir = config['benchmark_dir']
+
+def select_command(use_profiler, profile_file):
+    if use_profiler:
+        return f"python3 -m cProfile -o {profile_file}"
+    else:
+        return "python3"
+
+# Get the absolute path of the project root
+project_root = Path(path.join(Path(workflow.basedir).parent.parent)).as_posix()
+
+rule All:
+    input:
+        path.join(data_dir, 'best_parameters.csv'),
+        path.join(data_dir, 'peptonizer_result.csv'),
+        path.join(data_dir, 'peptonizer_result.png')
+
+rule GetTaxonomyFromUnipept:
+    input:
+        config['input_file']
+    output:
+        path.join(data_dir, 'peptide_taxa.json')
+    log:
+        path.join(log_dir, 'get_taxonomy_from_unipept.log')
+    params:
+        taxon_query=config['taxon_query'],
+        taxon_rank=config['taxon_rank'],
+        run_command=select_command(config['profile'], path.join(benchmark_dir, "get_taxonomy_from_unipept.prof"))
+    benchmark:
+        path.join(benchmark_dir, "get_taxonomy_from_unipept.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/pout_to_taxonomy.py --input-file {input[0]} --unipept-response-file {output[0]} --log-file {log[0]} --taxonomy-query {params.taxon_query} --taxon-rank {params.taxon_rank}
+        """
+
+rule WeightTaxa:
+    input:
+        config['input_file'],
+        path.join(data_dir, 'peptide_taxa.json')
+    output:
+        path.join(data_dir, 'sequence_scores_dataframe.csv'),
+        path.join(data_dir, 'taxa_weights_dataframe.csv')
+    params:
+        number_of_taxa=config['taxa_in_graph'],
+        run_command=select_command(config['profile'], path.join(benchmark_dir, "weight_taxa.prof")),
+        taxon_rank=config['taxon_rank'],
+    benchmark:
+        path.join(benchmark_dir, "weight_taxa.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/infer_taxa_weights.py --pout-file {input[0]} --unipept-response-file {input[1]}  --sequence-scores-dataframe-file {output[0]} --taxa-weights-dataframe-file {output[1]} --number-of-taxa {params.number_of_taxa} --taxon-rank {params.taxon_rank}
+        """
+
+rule CreatePepGMGraph:
+    input:
+        path.join(data_dir, 'sequence_scores_dataframe.csv')
+    output:
+        path.join(data_dir, 'pepgm_full_graph.graphml')
+    params:
+        run_command=select_command(config['profile'], path.join(benchmark_dir, "create_pepgm_graph.prof"))
+    benchmark:
+        path.join(benchmark_dir, "create_pepgm_graph.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/create_pepgm_graph.py --sequence-scores-dataframe-file {input[0]} --out {output[0]}
+        """
+
+rule RunPepGM:
+    input:
+        path.join(data_dir, 'pepgm_full_graph.graphml')
+    output:
+        path.join(data_dir, 'prior{prior}', 'pepgm_results_a{alpha}_b{beta}_p{prior}.csv')
+    params:
+        regularized=config['regularized'],
+        run_command=select_command(config['profile'], path.join(benchmark_dir, 'prior{prior}', "run_pepgm_graph_a{alpha}_b{beta}_p{prior}.prof"))
+    benchmark:
+        path.join(benchmark_dir, 'prior{prior}', "run_pepgm_graph_a{alpha}_b{beta}_p{prior}.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/pepgm.py --communities-graphml-path {input[0]} --out {output[0]} --prior {wildcards.prior} --alpha {wildcards.alpha} --beta {wildcards.beta} --regularized {params.regularized}
+        """
+
+rule GenerateBarPlot:
+    input:
+        path.join(data_dir, 'prior{prior}', 'pepgm_results_a{alpha}_b{beta}_p{prior}.csv')
+    output:
+        path.join(data_dir, 'prior{prior}', 'pepgm_results_a{alpha}_b{beta}_p{prior}.png')
+    params:
+        taxa_in_plot=config['taxa_in_plot'],
+        run_command=select_command(config['profile'], path.join(benchmark_dir, 'prior{prior}', "generate_bar_plot_a{alpha}_b{beta}_p{prior}.prof"))
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/bar_plot_results.py --results-file {input[0]} --out {output[0]} --number-of-results {params.taxa_in_plot}
+        """
+
+rule PerformTaxaClustering:
+    input:
+        path.join(data_dir, 'pepgm_full_graph.graphml'),
+        path.join(data_dir, 'taxa_weights_dataframe.csv')
+    output:
+        path.join(data_dir, 'clustered_taxa_weights_dataframe.csv')
+    params:
+        similarity_threshold = 0.9,
+        run_command=select_command(config['profile'], path.join(benchmark_dir, "perform_taxa_clustering.prof"))
+    benchmark:
+        path.join(benchmark_dir, "create_pepgm_graph.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/cluster_taxa.py --full-graphml-path {input[0]} --taxa-weights-dataframe-file {input[1]} --similarity-threshold {params.similarity_threshold} --out {output[0]}
+        """
+
+rule FindBestParameters:
+    input:
+        path.join(data_dir, 'clustered_taxa_weights_dataframe.csv'),
+        expand(path.join(data_dir, 'prior{prior}', 'pepgm_results_a{alpha}_b{beta}_p{prior}.png'), alpha=config['alpha'], beta=config['beta'], prior=config['prior'])
+    output:
+        path.join(data_dir, 'best_parameters.csv'),
+        path.join(data_dir, 'peptonizer_result.csv'),
+        path.join(data_dir, 'peptonizer_result.png')
+    params:
+        results_dir=data_dir,
+        run_command=select_command(config['profile'], path.join(benchmark_dir, 'prior{prior}', "find_best_parameters.prof"))
+    benchmark:
+        path.join(benchmark_dir, "find_best_parameters.tsv")
+    conda: "env.yml"
+    shell:
+        """
+        export PYTHONPATH={project_root}:${{PYTHONPATH:-}}
+        {params.run_command} scripts/find_best_parameters.py --taxa-weights-dataframe-file {input[0]} --results-folder {params.results_dir} --best-params-file {output[0]} --best-params-csv {output[1]} --best-params-png {output[2]}
+        """

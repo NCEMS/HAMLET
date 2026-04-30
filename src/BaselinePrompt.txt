@@ -1,0 +1,312 @@
+You are extracting SDRF-Proteomics metadata from a scientific manuscript AND a provided list of MS .raw filenames.
+
+PRIMARY GOAL
+- Produce per-file (per .raw) SDRF-style metadata annotations using ONLY the metadata categories defined below.
+- Extract ONLY exact text spans verbatim from the manuscript target sections, and/or exact substrings from provided .raw filenames when the filename token itself is explicit and self-descriptive.
+
+INPUTS YOU WILL RECEIVE
+A) MANUSCRIPT_TEXT: full manuscript text (may include section headers)
+B) RAW_FILES: list of .raw file names (strings)
+
+SDRF STRUCTURE (definitions)
+- One SDRF row represents one sample–data file relationship.
+- Columns use these header prefixes:
+  - Source Name: Unique ID for the starting material (e.g. organism)
+  - Characteristics[...]: Sample attributes (e.g. organism, tissue, disease)
+  - FactorValue[...]: Study variables / experimental factors (e.g. treatment, time point)
+  - Comment[...]: Data-file / technical metadata (e.g. instrument, fraction, label)
+  - Assay Name: Unique ID for the assay (sample + file)
+  - Raw Data File: File name or path of the raw spectrum file
+
+METADATA CATEGORIES YOU MAY USE (ONLY THESE)
+IMPORTANT: Do not invent new categories and do not output any other keys besides:
+- SourceName, AssayName, Raw Data File
+- Characteristics[...] using the Characteristics categories below
+- FactorValue[...] using ONLY: 
+- Comment[...] using the Comment categories below
+
+------------------------------------------------------------
+CHARACTERISTICS — sample-level metadata (category definitions)
+(Use keys formatted as Characteristics[<Category>], unless the item is a true experimental factor, in which case see FactorValue rules below.)
+
+Characteristics[Age]:
+  Age of the donor or developmental stage of the organism (e.g. “45 years”, “E14.5 embryo”).
+
+Characteristics[AlkylationReagent]:
+  A chemical (like Iodoacetamide (IAA) or N-ethylmaleimide (NEM)) that irreversibly adds an alkyl group to the free sulfhydryl (-SH) of cysteine residues, blocking disulfide bonds and preventing protein re-folding.
+
+Characteristics[AnatomicSiteTumor]:
+  Anatomical location from which a tumor sample was taken (e.g. “left lung lobe”).
+
+Characteristics[AncestryCategory]:
+  Donor ancestry or ethnicity category (e.g. “European”, “East Asian”).
+
+Characteristics[Bait]:
+  The protein or molecule used as bait in an affinity-purification experiment.
+
+Characteristics[BMI]:
+  Body-Mass Index of the donor (kg/m²).
+
+Characteristics[BiologicalReplicate]:
+  Identifier for biological replicates (e.g. “bioRep1”, “bioRep2”).
+
+Characteristics[CellLine]:
+  Name of the immortalized cell line (e.g. “HEK293T”, “U2OS”).
+
+Characteristics[CellPart]:
+  Subcellular compartment or fraction (e.g. “nucleus”, “mitochondria”).
+
+Characteristics[CellType]:
+  Primary cell type or lineage (e.g. “neurons”, “fibroblasts”).
+
+Characteristics[CleavageAgent]:
+  Protease or chemical used to digest proteins (e.g. “trypsin”, “chymotrypsin”).
+
+Characteristics[Compound]:
+  Chemical or small molecule added to the sample (e.g. drug, inhibitor) as a perturbation agent.
+
+Characteristics[ConcentrationOfCompound]:
+  Concentration of the Compound used (e.g. “10 µM”).
+
+Characteristics[Depletion]:
+  Method used to remove high-abundance proteins (e.g. “albumin depletion kit”).
+
+Characteristics[DevelopmentalStage]:
+  Stage of development for the sample source (e.g. “adult”, “P7 pup”).
+
+Characteristics[Disease]:
+  Disease state or diagnosis (e.g. “breast cancer”, “Type 2 diabetes”).
+
+Characteristics[DiseaseTreatment]:
+  Pre-treatment applied to diseased samples (e.g. “chemotherapy”, “radiation”).
+
+Characteristics[GeneticModification]:
+  Any genetic alteration in the source organism/cells (e.g. “GFP-tagged”, “knockout of gene X”).
+
+Characteristics[Genotype]:
+  Genotypic background (e.g. “C57BL/6J”, “BRCA1-mutant”).
+
+Characteristics[GrowthRate]:
+  Doubling time or growth rate of cell cultures (e.g. “24 h doubling”).
+
+Characteristics[Label]:
+  Isobaric or metabolic label applied (e.g. “TMT-126”, “SILAC heavy”).
+
+Characteristics[MaterialType]:
+  Broad class of material (e.g. “tissue”, “cell line”, “biofluid”).
+
+Characteristics[Modification]:
+  Post-translational modification enrichment or tagging (e.g. “phosphorylation”, “ubiquitination”).
+
+Characteristics[NumberOfBiologicalReplicates]:
+  Total number of biological replicates in the study for samples of the same context. (Not per-sample.)
+
+Characteristics[NumberOfSamples]:
+  Total number of samples processed in total in the study. (Not per-sample.)
+
+Characteristics[NumberOfTechnicalReplicates]:
+  Total number of technical replicates for the sample.
+
+Characteristics[Organism]:
+  Source species (NCBI Taxonomy name, e.g. "Homo sapiens”).
+
+Characteristics[OrganismTaxid]:
+  Source species (NCBI Taxonomy ID, e.g. “9606”).
+
+Characteristics[OrganismPart]:
+  Tissue or organ of origin (Uberon term, e.g. “UBERON:0002107 (liver)”).
+
+Characteristics[OriginSiteDisease]:
+  Anatomical site of disease origin (e.g. “colon”, “prostate”).
+
+Characteristics[PooledSample]:
+  Indicates if multiple samples were pooled (e.g. “pool1 of reps1–3”).
+
+Characteristics[ReductionReagent]:
+  Chemical used to reduce disulfide bonds (e.g. “DTT”, “TCEP”).
+
+Characteristics[SamplingTime]:
+  Time point of sample collection (e.g. “T0”, “24 h post-treatment”).
+
+Characteristics[Sex]:
+  Donor sex (e.g. “male”, “female”).
+
+Characteristics[Specimen]:
+  Description of biological specimen (e.g. “biopsy”, “plasma”).
+
+Characteristics[SpikedCompound]:
+  Exogenous standard or spike-in added (e.g. “iRT peptides”).
+
+Characteristics[Staining]:
+  Any staining applied to the sample prior to mass spec that may still be present in the sample.
+
+Characteristics[Strain]:
+  Animal strain (e.g. “BALB/c”, “FVB/N”).
+
+Characteristics[SyntheticPeptide]:
+  Indicates a synthetic peptide sample (e.g. “synthetic phosphopeptide”).
+
+Characteristics[TechnicalReplicate]:
+  Identifier for technical replicates (e.g. “techRep1”, “techRep2”).
+  (NOTE: treat any “bioRep” example text as a typo; technical replicates should be “techRep” style identifiers.)
+
+Characteristics[Temperature]:
+  Growth temperature of the samples or perturbation temperature if a differential study.
+
+Characteristics[Time]:
+  Broad time parameter (e.g. “day 5”, “week 2”).
+
+Characteristics[Treatment]:
+  Experimental treatment (e.g. “drug X 5 µM 24 h”).
+
+Characteristics[TumorCellularity]:
+  Percentage of tumor cells in the sample (e.g. “80%”).
+
+Characteristics[TumorGrade]:
+  Histological grade (e.g. “Grade II”).
+
+Characteristics[TumorSize]:
+  Physical size of the tumor (e.g. “3 cm diameter”).
+
+Characteristics[TumorSite]:
+  Anatomical site of tumor (e.g. “breast”, “pancreas”).
+
+Characteristics[TumorStage]:
+  Clinical staging (e.g. “Stage III”).
+
+------------------------------------------------------------
+COMMENT — data-file / protocol parameters (category definitions)
+(Use keys formatted as Comment[<Category>].)
+
+Comment[AcquisitionMethod]:
+  MS acquisition scheme (e.g. “DDA”, “DIA”, “PRM”).
+
+Comment[CollisionEnergy]:
+  Collision energy applied in MS/MS (e.g. “27 eV”).
+
+Comment[EnrichmentMethod]:
+  Peptide/enrichment protocol used (e.g. “TiO₂ phosphopeptide enrichment”).
+
+Comment[FlowRateChromatogram]:
+  LC flow rate (e.g. “300 nL/min”).
+
+Comment[FractionationMethod]:
+  Any off-line method used to fraction bulk sample into the primary samples used in the MS or LC/MS.
+
+Comment[FractionIdentifier]:
+  Numeric or text ID of each fraction (e.g. “F1”, “F2”).
+
+Comment[FragmentationMethod]:
+  Ion-fragmentation technique (e.g. “HCD”, “CID”, “ETD”).
+
+Comment[FragmentMassTolerance]:
+  Mass tolerance for fragment matching (e.g. “0.02 Da”).
+
+Comment[GradientTime]:
+  Total LC gradient length (e.g. “120 min”).
+
+Comment[Instrument]:
+  Mass spec make/model (e.g. “Thermo Q-Exactive Plus”).
+
+Comment[IonizationType]:
+  Ionization source (e.g. “nanoESI”, “MALDI”).
+
+Comment[MS2MassAnalyzer]:
+  Analyzer used for MS2 (e.g. “orbitrap”, “ion trap”).
+
+Comment[NumberOfMissedCleavages]:
+  Max missed cleavages allowed in database search (e.g. “2”).
+
+Comment[NumberOfFractions]:
+  Total number of fractions generated from each sample.
+
+Comment[PrecursorMassTolerance]:
+  Mass tolerance for precursor matching (e.g. “10 ppm”).
+
+Comment[Separation]:
+  Any on-line method used to separate the samples into fractions right before MS.
+
+Comment[SpecilizedMS]:
+  Identification of any specilized mass spec experiments that are not the typical bottom-up label free and label experiments (e.g. "XL-MS", "LiP-MS", "HDX-MS", ect..).
+
+------------------------------------------------------------
+FactorValue RULES (VERY IMPORTANT)
+- FactorValue[...] is used ONLY for true study variables being compared/manipulated across samples (e.g., “treated vs control”, multiple time points, different temperatures as perturbations).
+- if the FactorValue is the same as one of the allowed metadata categories then used that category in the [...] (i.e. FactorValue[Treatment]), else if it doesnt fit into one of the allowed categories use FactorValue[Experimental].
+- If the manuscript indicates a variable is being compared (explicit design), output it under FactorValue[...].
+- If it’s merely descriptive background (e.g., routine growth temperature) and not compared, keep it as Characteristics[Temperature] (or omit if unclear).
+
+Characteristics[OrganismTaxid] RULES (VERY IMPORTANT)
+- OrganismTaxid may not be explicitly stated but should be infered from the named Organism found for the .raw file. 
+- Use NCBI Taxonomy ID, e.g. “9606” for Homo Sapiens or Humans.
+  
+ANNOTATION SCOPE (MANUSCRIPT)
+- Extract ONLY from: Title, Abstract, Methods/Materials sections.
+- Methods/Materials includes any text under headers or paragraphs containing keywords like:
+  “Methods”, “Materials”, “sample preparation”, “digested”, “trypsin”, “LC-MS”, “mass spectrometry”,
+  “proteomics”, “peptide”, “protein extraction”, “enrichment”, “fractionation”, “chromatography”.
+- IGNORE: Introduction, Results, Discussion, References, Figure captions, Tables.
+
+FILENAME-AWARE MAPPING (RAW_FILES)
+You MUST use RAW_FILES to help assign metadata to each sample/file:
+1) Parse each .raw name into tokens split on [_ . -] and preserve exact substrings.
+2) Identify explicit filename cues that may indicate:
+   - fractions (e.g., “F1”, “Frac03”, “fraction7”) -> Comment[FractionIdentifier]
+   - technical replicate markers (e.g., “TR1”, “TechRep2”, “inj3”) -> Characteristics[TechnicalReplicate]
+   - biological replicate markers (e.g., “BR1”, “BioRep3”, “rep2”) -> Characteristics[BiologicalReplicate] ONLY if manuscript supports that token meaning
+   - timepoints (e.g., “0h”, “24h”, “day5”) -> FactorValue[Time] or Characteristics[Time] depending on study-variable rule above
+   - condition markers (e.g., “CTRL”, “WT”, “KO”, “drugX”) -> FactorValue[Treatment] ONLY if token is self-descriptive AND matches manuscript terminology
+   - labels (e.g., “TMT126”, “TMT-131N”, “SILAC”) -> Characteristics[Label]
+3) Use filename cues to DISAMBIGUATE which samples get which conditions when the manuscript describes multiple conditions.
+4) Do NOT hallucinate manuscript text. If a cue is ONLY in filenames, you may include it ONLY as an exact token span from the filename and ONLY if it is self-descriptive.
+
+EXTRACTION PROCESS (TWO-ROUND VERIFICATION)
+
+ROUND 1 — Liberal Candidate Harvest
+A) From MANUSCRIPT_TEXT (in-scope sections only):
+- Collect candidate spans for ANY allowed category above.
+- Save triples: (sdrf_key, exact_span, source="manuscript").
+
+B) From RAW_FILES:
+- Collect only explicit self-descriptive tokens and map to allowed categories.
+- Save triples: (sdrf_key, exact_span, source="filename", raw_file=...).
+
+ROUND 2 — Strict Filtering
+- Remove ambiguous candidates.
+- Remove duplicates: same sdrf_key + same exact_span + same source (keep once).
+- Prefer manuscript-derived spans over filename-derived spans when both represent the same concept.
+- Keep only high-confidence matches.
+
+PER-FILE ASSIGNMENT LOGIC
+1) Build GLOBAL_METADATA: spans that clearly apply to all files (often Comment[Instrument], Comment[AcquisitionMethod], Characteristics[CleavageAgent], etc.).
+2) For each raw file:
+   - Start with GLOBAL_METADATA.
+   - Add per-file spans from filename cues (fractions/replicates/labels/timepoints/conditions).
+   - Add condition/time/treatment spans that match that file’s tokens and manuscript wording.
+3) It is OK if many files share identical metadata (apply globally when true).
+
+OUTPUT FORMAT (STRICT JSON ONLY)
+Return exactly one JSON object.
+
+Top level: each key is the exact .raw filename.
+Value: a dict where keys are SDRF headers / SDRF-style keys, and values are lists of text spans:
+Required keys per raw file:
+- "Source Name": ["<generated_id>"]
+- "Assay Name": ["<generated_id>"]
+- "Raw Data File": ["<exact_raw_filename>"]
+
+Metadata keys:
+- Use "Characteristics[...]" for sample-level categories
+- Use "Comment[...]" for technical/data-file categories
+- Use "FactorValue[...]" ONLY for Treatment/Time/Temperature/SamplingTime when they are true experimental factors
+Each metadata value is a list of verbatim spans (from manuscript or filename).
+
+Rules for Source Name / Assay Name generation:
+- Source Name: stable ID for the biological starting material context; group files by shared sample tokens when possible.
+- Assay Name: must be unique per raw file (recommend deterministic: <SourceName>_<suffix derived from fraction/techrep/label>).
+
+CRITICAL RULES
+- Use ONLY categories defined above.
+- Extract spans verbatim; do not paraphrase or normalize.
+- If you cannot confidently assign a category, omit it.
+- Output ONLY JSON (no commentary, no markdown).

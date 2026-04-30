@@ -1,0 +1,51 @@
+# ** Input / output settings **
+
+# Which file should be used as input for the whole pipeline?
+input_file: '../resources/test_files/S03.tsv'
+
+# In which directory should all output (and intermediate) files be stored. This directory is relative to the location of
+# the Snakefile.
+data_dir: '../data'
+
+# In which directory should all logs for each of the different Snakemake rules be stored?
+log_dir: '../logs'
+
+# Where should we store all benchmark results?
+benchmark_dir: '../benchmarks'
+
+# ** Analysis specific parameters**
+
+# How many taxa are being used in the graphical model?
+taxa_in_graph: 100
+
+# Increments of alpha parameter to use for the grid search
+alpha: [0.8, 0.9, 0.99]
+#alpha: [0.99]
+
+# Range of parameter beta to use for the grid search
+beta: [0.6, 0.7, 0.8, 0.9]
+#beta: [0.9]
+
+# Range of prior parameter to use for the gird search
+prior: [0.3, 0.5]
+#prior: [0.5]
+
+regularized: True
+
+# How many taxa should be shown in the final barplot?
+taxa_in_plot: 25
+
+# ** Unipept specific parameters **
+
+# Which taxon should all queried taxa be a child of? (2 is bacteria, meaning that we are only looking for bacteria in
+# our input sample).
+taxon_query: [2]
+
+# At which NCBI rank should the output taxa be situated?
+taxon_rank: 'species'
+
+# ** Advanced parameters **
+
+# Run a profiler on the scripts that can be used for advanced analysis of the tasks performed by this workflow. The
+# workflow will then generate a `.prof` file for each Snakemake rule in the "benchmarks" directory.
+profile: False

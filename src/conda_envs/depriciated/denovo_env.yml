@@ -1,0 +1,53 @@
+name: denovo_env
+channels:
+  - pytorch
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Python and core numerical
+  - python=3.10
+  - numpy=1.26.4
+  - scipy
+  - pandas==2.3.1
+  - scikit-learn
+  
+  # Mass spectrometry and proteomics
+  - pyteomics
+  - lxml
+  - pyyaml
+  - pydantic
+  - click
+  - tqdm
+  
+  # Visualization and utilities
+  - matplotlib
+  - networkx
+  - setuptools>=65.0
+  - wheel
+  - packaging
+  - pip
+  - importlib-metadata
+  
+  # PyTorch and Lightning (pinned for Cascadia compatibility)
+  # Cascadia requires: torch<2.1,>=2.0 and pytorch-lightning<2.0,>=1.9
+  - pytorch::pytorch=2.0.1
+  
+  # Other ML/search packages
+  - faiss-cpu
+
+  - cudatoolkit=11.8
+  - h5py
+  - hdf5plugin
+
+pip:
+  # PyTorch Lightning (used by Cascadia)
+  - pytorch-lightning==1.9.5
+  - torchmetrics==1.9.0
+  - lightning-utilities>=0.10.0
+  
+  # Core de novo tools
+  # Note: Cascadia requires torch<2.1,>=2.0; Casanovo prefers torch>=2.2
+  # Using torch 2.0.1 for Cascadia compatibility
+  - cascadia==0.0.7
+  - casanovo==5.1.2
