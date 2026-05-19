@@ -592,16 +592,10 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
         else:
             # e.g. organism_results/CasanovoSequence
             out_dir = os.path.join(output_dir, "CasanovoSequence", out_root)
-            
-            # Clean up existing output directory to avoid FileExistsError
-            # even with --force_overwrite flag
-            if os.path.exists(out_dir):
-                print(f"Removing existing Casanovo output directory: {out_dir}")
-                shutil.rmtree(out_dir)
-            
-            os.makedirs(out_dir, exist_ok=True)
             out_file = os.path.join(out_dir, f"{out_root}.mztab")
-            log_file = os.path.join(out_dir, f"{out_root}.log")
+            # Use .casanovo.log suffix to avoid conflicting with casanovo's own
+            # *.log existence check (casanovo raises FileExistsError if .log is present)
+            log_file = os.path.join(out_dir, f"{out_root}.casanovo.log")
 
         # Fast-path: if output already exists, reuse it.
         # - Cascadia: prefer existing .mztab; else convert existing .ssl; else run prediction.
@@ -626,6 +620,12 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 print(f"Found existing Casanovo mztab, skipping prediction: {out_file}")
                 casanovo_outputs.append(out_file)
                 continue
+            # Clean up stale output directory before running (may contain .log files
+            # from a failed previous run that would trigger casanovo's FileExistsError)
+            if os.path.exists(out_dir):
+                print(f"Removing existing Casanovo output directory: {out_dir}")
+                shutil.rmtree(out_dir)
+            os.makedirs(out_dir, exist_ok=True)
 
         print("#" * 50)
         print(f"Running {tool_name} on: {mzml_path}")
@@ -684,18 +684,19 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
             else:
                 env = _prepend_env_lib_to_ld_library_path(env, casanovo_env_path)
 
-            res = subprocess.run(
-                base_cmd,
-                text=True,
-                capture_output=True,
-                check=True,
-                env=env,
-            )
-            # write log
-            with open(log_file, "w") as lf:
-                lf.write(res.stdout)
-                lf.write("\n---- STDERR (GPU) ----\n")
-                lf.write(res.stderr)
+            # Stream output directly to log files to avoid deadlock with large outputs
+            # (capture_output=True can cause subprocess to hang when output buffer fills)
+            stderr_log_file = f"{log_file}.stderr"
+            with open(log_file, "w") as log_out, open(stderr_log_file, "w") as log_err:
+                res = subprocess.run(
+                    base_cmd,
+                    stdout=log_out,
+                    stderr=log_err,
+                    text=True,
+                    check=True,
+                    env=env,
+                    timeout=7200,  # 2-hour per-file safety timeout
+                )
             print(f"{tool_name} (GPU) succeeded.")
             
             # Check and convert output if using Cascadia
@@ -722,7 +723,14 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                     
         except subprocess.CalledProcessError as e:
             print(f"{tool_name} (GPU mode) exited with code {e.returncode}")
-            print(f"STDERR excerpt: {e.stderr[:500] if e.stderr else 'N/A'}")
+            
+            # Read stderr from log file (since we streamed it there)
+            stderr_content = "N/A"
+            stderr_log_file = f"{log_file}.stderr"
+            if os.path.exists(stderr_log_file):
+                with open(stderr_log_file, "r") as f:
+                    stderr_content = f.read()
+            print(f"STDERR excerpt: {stderr_content[:500] if stderr_content != 'N/A' else 'N/A'}")
             
             # CRITICAL: Check if output was created despite the error
             # This can happen with CUDA device capability check failures that occur AFTER prediction completes
@@ -741,21 +749,27 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 # Append error info to log but don't treat as failure
                 with open(log_file, "a") as lf:
                     lf.write(f"\n---- STDERR (post-prediction error but output verified) ----\n")
-                    lf.write(e.stderr if e.stderr else "N/A")
+                    lf.write(stderr_content)
             else:
                 # No output generated - this is a real failure
                 print(f"✗ {tool_name} (GPU mode) failed, no output generated")
                 error_msg = f"\n{'='*70}\nERROR: {tool_name} (GPU) failed for {mzml_path}\n{'='*70}\n"
                 error_msg += f"Exit Code: {e.returncode}\n"
-                error_msg += f"Error Output:\n{e.stderr}\n\n"
+                error_msg += f"Error Output:\n{stderr_content}\n\n"
                 error_msg += f"{tool_name} processing failed on GPU.\n"
                 error_msg += f"{'='*70}\n"
                 print(error_msg)
                 with open(log_file, "w") as lf:
                     lf.write(error_msg)
-                    lf.write(f"\nFull STDERR:\n{e.stderr}\n")
+                    lf.write(f"\nFull STDERR:\n{stderr_content}\n")
                 # Continue to next file instead of crashing entire pipeline
                 continue
+
+        except subprocess.TimeoutExpired:
+            print(f"\u2717 {tool_name} timed out (>2h) for {mzml_path}, skipping file")
+            with open(log_file, "w") as lf:
+                lf.write(f"ERROR: {tool_name} timed out after 7200s for {mzml_path}\n")
+            continue
 
         # only count it if the .mztab is actually there
         if os.path.exists(out_file):

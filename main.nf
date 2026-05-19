@@ -199,6 +199,10 @@ workflow {
     // Output: [pxd, fetched_dir]
     // fetch_pxd produces: tuple(pxd, fetched_dir)  
     fetched_ch = fetch_pxd(pxd_ch)
+        .map { pxd, work_path -> 
+            // Use stable canonical path instead of work-dir symlink for downstream cache stability
+            tuple(pxd, file("${params.central_mzml_dir}/${pxd}"))
+        }
 
     // Auto-detect acquisition type and labeling from runAssessor results
     // Output: [pxd, fetched_dir, detected_params_json]
@@ -325,8 +329,16 @@ workflow {
         .join(llm_results_ch)             // Join on pxd: [pxd, fetched_dir, organism_results, search_results, llm_results]
         .join(taxid_mapping_ch.map { pxd, mapping, warnings -> tuple(pxd, warnings) })  // Add warnings
     
+    // Split combined_ch into two branches to allow reuse for both aggregate and agentic processes
+    combined_ch
+        .multiMap { pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings ->
+            for_aggregate: tuple(pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings)
+            for_agentic: tuple(pxd, llm_results)
+        }
+        .set { combined_split }
+    
     // Run aggregation after all processes complete
-    aggregated_results_ch = aggregate_results(combined_ch)
+    aggregated_results_ch = aggregate_results(combined_split.for_aggregate)
     
     // Conditionally run agentic metadata extraction if enabled
     // Also build a final barrier channel so we can run ResultsSummary exactly once
@@ -335,10 +347,12 @@ workflow {
     if (params.run_agentic_metadata) {
         // Extract llm_results and aggregate path for agentic metadata process
         // aggregated_results_ch contains: [pxd, aggregated_results.json, pipeline.json, pipeline_summary.md]
-        // combined_ch contains: [pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings]
+        // combined_split.for_agentic contains: [pxd, llm_results]
+        // Join and filter out any entries where aggregated_results is null (failed upstream processes)
         agentic_input_ch = aggregated_results_ch
             .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
-            .join(combined_ch.map { pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings -> tuple(pxd, llm_results) })
+            .join(combined_split.for_agentic, remainder: true)
+            .filter { pxd, aggregated_results, llm_results -> aggregated_results != null }
         
         agentic_results_ch = agentic_metadata_extraction(agentic_input_ch)
 
@@ -574,6 +588,8 @@ process organism_id {
 
     errorStrategy 'ignore'  // Skip PXDs that fail taxa weighing or other issues
 
+    time '8h'
+
     input:
     tuple val(pxd), path(fetched_dir), path(detected_params), path(contaminants_fasta), path(taxid_list_file)
 
@@ -635,10 +651,11 @@ process organism_id {
     # 2) Numba: give it a writable cache directory (DON'T disable JIT!)
     export NUMBA_CACHE_DIR=\$PWD/.cache/numba
 
-    # 3) Set temp directories to use work directory space
-    export TMPDIR=\$PWD/.cache/tmp
-    export TMP=\$PWD/.cache/tmp
-    export TEMP=\$PWD/.cache/tmp
+    # 3) Set temp directories - use /tmp for multiprocessing socket compatibility
+    # (AF_UNIX socket paths from PyTorch DataLoader must be <108 chars; work-dir paths exceed this)
+    export TMPDIR=/tmp
+    export TMP=/tmp
+    export TEMP=/tmp
 
     # 4) Cache directories for various tools
     export HF_HOME=\$PWD/.cache/huggingface
@@ -830,53 +847,27 @@ process agentic_metadata_extraction {
     """
     # Initialize conda
     ${params.conda_init}
-    
-    # Create PXD-specific working directories to isolate each PXD's data
-    # Prevents cross-contamination when multiple PXDs are processed in parallel
-    DOCS_DIR="/tmp/documents_${pxd}"
-    RUNASSESSOR_DIR="/tmp/runassessor_data_${pxd}"
-    AGENTIC_OUTPUT="/tmp/agentic_output_${pxd}"
-    
-    mkdir -p "\$DOCS_DIR"
-    mkdir -p "\$RUNASSESSOR_DIR"
+
     mkdir -p metadata_extraction_output
-
-    # Copy PubText.txt to PXD-specific documents directory for input
-    if [ -d "${llm_results_dir}" ] && [ -f "${llm_results_dir}/${pxd}_PubText.txt" ]; then
-        echo "Found publication text: ${llm_results_dir}/${pxd}_PubText.txt"
-        cp "${llm_results_dir}/${pxd}_PubText.txt" "\$DOCS_DIR/"
-    else
-        echo "WARNING: Publication text not found at ${llm_results_dir}/${pxd}_PubText.txt"
-        echo "Creating placeholder to continue pipeline"
-        echo "No publication text available" > "\$DOCS_DIR/${pxd}_PubText.txt"
-    fi
-
-    # Copy aggregated results to PXD-specific runassessor_data for integration
-    cp "${aggregated_results}" "\$RUNASSESSOR_DIR/"
 
     # Ensure both variable names are available inside the task and inherited by conda run.
     export LLM_API_KEY="\${LLM_API_KEY:-\${OPENAI_API_KEY:-}}"
     export OPENAI_API_KEY="\${OPENAI_API_KEY:-\${LLM_API_KEY:-}}"
 
-    # Run agentic-metadata extraction with LLM agents and integration
-    # Each PXD uses its own temp directories to prevent cross-contamination
-    echo "=== Running Agentic Metadata Extraction for ${pxd} ==="
-    conda run -p ${params.meti_env_path} python ${baseDir}/src/agentic-metadata/main.py all \\
-        --config ${baseDir}/src/agentic-metadata/config.yaml \\
-        --input "\$DOCS_DIR" \\
-        --output "\$AGENTIC_OUTPUT" \\
-        --integrate \\
-        --runassessor-dir "\$RUNASSESSOR_DIR" \\
-        --single-temp 0.0 \\
-        --seed 42 || {
+    # Run unified wrapper: performs agentic extraction and writes SDRF TSV.
+    echo "=== Running Agentic Metadata Extraction wrapper for ${pxd} ==="
+    conda run -p ${params.meti_env_path} python ${baseDir}/src/python/run_agentic_metadata.py \\
+        --input ${aggregated_results} \\
+        --outdir metadata_extraction_output \\
+        --pride_cache ${baseDir}/pride_survey/pride_cache \\
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache || {
         echo "WARNING: Agentic metadata extraction failed for ${pxd} - continuing"
-        mkdir -p "\$AGENTIC_OUTPUT"
+        mkdir -p metadata_extraction_output
     }
 
-    # Copy outputs to result directory
-    if [ -d "\$AGENTIC_OUTPUT" ]; then
-        echo "Copying agentic metadata results..."
-        cp -r "\$AGENTIC_OUTPUT"/* metadata_extraction_output/ 2>/dev/null || true
+    # Non-fatal validation for expected SDRF output from wrapper.
+    if [ ! -f "metadata_extraction_output/${pxd}.sdrf.tsv" ]; then
+        echo "WARNING: Expected SDRF output missing: metadata_extraction_output/${pxd}.sdrf.tsv"
     fi
 
     # Verify output
