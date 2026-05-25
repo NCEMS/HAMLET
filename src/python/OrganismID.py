@@ -318,6 +318,65 @@ def add_stripped_sequence_column(df):
 ###############################################
 
 ###############################################
+def extract_taxid_from_accession(accession):
+    if not accession:
+        return None
+    match = re.search(r'(?:NEWT:|taxid:)?(\d+)', str(accession), re.IGNORECASE)
+    return match.group(1) if match else None
+
+
+def load_pride_organism_taxids(pride_metadata_path):
+    """Return all numeric taxids found in project.organisms[*].accession."""
+    if not pride_metadata_path or not os.path.exists(pride_metadata_path):
+        print(f"PRIDE metadata not found, skipping organism taxid augmentation: {pride_metadata_path}")
+        return []
+
+    try:
+        with open(pride_metadata_path, 'r') as f:
+            pride_data = json.load(f)
+    except Exception as e:
+        print(f"Could not parse PRIDE metadata at {pride_metadata_path}: {e}")
+        return []
+
+    organisms = pride_data.get('project', {}).get('organisms', [])
+    taxids = []
+    seen = set()
+
+    for organism in organisms:
+        taxid = extract_taxid_from_accession(organism.get('accession'))
+        if taxid and taxid not in seen:
+            seen.add(taxid)
+            taxids.append(taxid)
+
+    if taxids:
+        print(f"Found PRIDE organism taxids: {taxids}")
+    else:
+        print(f"No PRIDE organism taxids found in project.organisms for {pride_metadata_path}")
+
+    return taxids
+
+
+def merge_taxid_query(base_taxid_list_str, extra_taxids):
+    """Append taxids to a comma-separated query string without duplicates."""
+    merged_taxids = []
+    seen = set()
+
+    for taxid in str(base_taxid_list_str).split(','):
+        normalized = taxid.strip()
+        if normalized and normalized not in seen:
+            seen.add(normalized)
+            merged_taxids.append(normalized)
+
+    for taxid in extra_taxids:
+        normalized = str(taxid).strip()
+        if normalized and normalized not in seen:
+            seen.add(normalized)
+            merged_taxids.append(normalized)
+
+    return ','.join(merged_taxids)
+###############################################
+
+###############################################
 def make_config(input_file, data_dir, log_dir, config_path, taxid_list_str):
     # prefer env var from container; fallback to where you had it on the host
     script_dir = os.environ.get(
@@ -516,7 +575,7 @@ def generate_snakemake_commands(filtered_files, taxid_list_str, min_peptides=100
 ###############################################
 
 ####################################################
-def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80):
+def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80, src_dir=None):
     """
     Run de novo sequencing (Casanovo or Cascadia) on all .mzML files under input_dir.
     If no .mzML files are found, attempt to convert .raw files to .mzML.
@@ -645,26 +704,46 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
             # It also respects CUDA_VISIBLE_DEVICES if set
             cascadia_t = str(float(denovo_threshold_pct) / 100.0)
             
-            # Use wrapper script that monkeypatches pyteomics to use local Unimod
-            wrapper_script = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                'cascadia_wrapper.py'
-            )
-            base_cmd = [
-                "python", wrapper_script, "sequence", mzml_path, model_path,
-                "-o", ssl_root,
-                "-t", cascadia_t
-            ]
+            # Prefer cascadiaBolt (src/cascadiaBolt/) when src_dir is supplied;
+            # fall back to the monkeypatching wrapper for legacy envs.
+            cascadia_bolt_dir = os.path.join(src_dir, "cascadiaBolt") if src_dir else None
+            if cascadia_bolt_dir and os.path.exists(os.path.join(cascadia_bolt_dir, "cascadia.py")):
+                base_cmd = [
+                    "python", "-m", "cascadiaBolt.cascadia", "sequence", mzml_path, model_path,
+                    "-o", ssl_root,
+                    "-t", cascadia_t
+                ]
+            else:
+                wrapper_script = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)),
+                    'cascadia_wrapper.py'
+                )
+                base_cmd = [
+                    "python", wrapper_script, "sequence", mzml_path, model_path,
+                    "-o", ssl_root,
+                    "-t", cascadia_t
+                ]
             base_cmd = _conda_wrap(base_cmd, conda_exe=conda_exe, env_path=cascadia_env_path)
         else:
-            # Casanovo 5.1.2+ command - uses subcommand-based CLI
-            # casanovo sequence PEAK_PATH [--output_dir DIR] [--output_root ROOT]
-            base_cmd = [
-                "casanovo", "sequence",
-                mzml_path,
-                "--output_dir", out_dir,
-                "--output_root", out_root
-            ]
+            # Prefer casanovoBolt (src/casanovoBolt/casanovo.py) when src_dir is supplied;
+            # fall back to the installed casanovo CLI for legacy envs.
+            casanovo_bolt_script = os.path.join(src_dir, "casanovoBolt", "casanovo.py") if src_dir else None
+            if casanovo_bolt_script and os.path.exists(casanovo_bolt_script):
+                # Use -m module invocation so relative imports inside casanovoBolt work.
+                # casanovo.py uses `from . import __version__, utils` which requires a package context.
+                base_cmd = [
+                    "python", "-m", "casanovoBolt.casanovo", "sequence",
+                    mzml_path,
+                    "--output_dir", out_dir,
+                    "--output_root", out_root
+                ]
+            else:
+                base_cmd = [
+                    "casanovo", "sequence",
+                    mzml_path,
+                    "--output_dir", out_dir,
+                    "--output_root", out_root
+                ]
             base_cmd = _conda_wrap(base_cmd, conda_exe=conda_exe, env_path=casanovo_env_path)
 
         # --- Run Casanovo/Cascadia on GPU ---
@@ -683,6 +762,15 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 env = _prepend_env_lib_to_ld_library_path(env, cascadia_env_path)
             else:
                 env = _prepend_env_lib_to_ld_library_path(env, casanovo_env_path)
+
+            # For Bolt invocations (module-based): prepend src_dir to PYTHONPATH
+            # so `python -m cascadiaBolt.cascadia` / `python -m casanovoBolt.casanovo`
+            # resolve the package correctly via relative imports.
+            casanovo_bolt_dir = os.path.join(src_dir, "casanovoBolt") if src_dir else None
+            use_casanovo_bolt = not use_cascadia and casanovo_bolt_dir and os.path.exists(casanovo_bolt_dir)
+            if (use_cascadia and cascadia_bolt_dir and os.path.exists(cascadia_bolt_dir)) or use_casanovo_bolt:
+                old_pp = env.get("PYTHONPATH", "")
+                env["PYTHONPATH"] = f"{src_dir}:{old_pp}" if old_pp else src_dir
 
             # Stream output directly to log files to avoid deadlock with large outputs
             # (capture_output=True can cause subprocess to hang when output buffer fills)
@@ -867,6 +955,9 @@ def main():
     parser.add_argument('--conda_exe', default=None, help='Path to conda executable (for conda run -p ...)')
     parser.add_argument('--casanovo_env_path', default=None, help='Conda env prefix path containing casanovo')
     parser.add_argument('--cascadia_env_path', default=None, help='Conda env prefix path containing cascadia')
+    parser.add_argument('--src_dir', default=None,
+                        help='Path to HAMLET src/ directory. When set, casanovoBolt and '
+                             'cascadiaBolt source is used instead of the installed packages.')
     parser.add_argument('--snakemake_env_path', default=None, help='Conda env prefix path containing snakemake (defaults to current env)')
     parser.add_argument('--cascadia_model_path', default=None, help='Path to cascadia.ckpt')
     parser.add_argument('--peptonizer_container', default=None, help='Path to peptonizer2000.sif container (if set, Peptonizer2000 runs via singularity instead of conda)')
@@ -934,6 +1025,11 @@ def main():
         print(f'taxid_list: {taxid_list}')
         print(f"Loaded {len(taxid_list.split(','))} taxids from {args.taxid_list_file}")
 
+    pride_metadata_path = os.path.join(args.input_dir, f"{pxd}_PRIDEmetadata.json")
+    pride_taxids = load_pride_organism_taxids(pride_metadata_path)
+    taxid_list = merge_taxid_query(taxid_list, pride_taxids)
+    print(f"Effective taxid query for Peptonizer2000: {taxid_list}")
+
 
     # Run de novo sequencing (Casanovo or Cascadia depending on mode)
     denovo_files = run_de_novo_sequencing(
@@ -944,6 +1040,7 @@ def main():
         cascadia_env_path=args.cascadia_env_path,
         cascadia_model_path=args.cascadia_model_path,
         denovo_threshold_pct=denovo_threshold_pct,
+        src_dir=args.src_dir,
     )
     print(f"Finished running de novo sequencing on input directory: {args.input_dir}")
     print(f"Generated de novo sequencing output files: {denovo_files}")

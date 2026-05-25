@@ -8,7 +8,7 @@ HAMLET is a local Nextflow DSL2 pipeline that processes PRIDE proteomics dataset
 
 1. **Fetches** RAW files from PRIDE and converts them to mzML (via ThermoRawFileParser / ProteoWizard)
 2. **Assesses** each run with runAssessor — detects acquisition type (DDA/DIA), labeling, instrument model, fragmentation
-3. **Identifies organisms** via de novo peptide sequencing (Casanovo) + Peptonizer2000 taxonomy scoring
+3. **Identifies organisms** via de novo peptide sequencing (Casanovo / CasanovoBolt) + Peptonizer2000 taxonomy scoring, with PRIDE project organism metadata used to augment the taxid search pool
 4. **Routes searches** automatically — DDA via SAGE, DIA via DIA-NN (controlled by `--acquisition_type`)
 5. **Extracts publication metadata** optionally via direct LLM prompting (`--run_llm_extraction`) or a multi-agent agentic pipeline (`--run_agentic_metadata`)
 6. **Aggregates** all per-PXD outputs into a single `*_aggregated_results.json` report
@@ -43,8 +43,8 @@ bash src/setup.sh
 - Create four conda environments from [src/conda_envs/](src/conda_envs/):
   - `meti_env` — core tools: FetchPXD, SAGE, runAssessor, aggregation scripts
   - `search_env` — database search dependencies
-  - `cascadia_env` — DIA peptide identification (Cascadia)
-  - `casanovo_env` — DDA de novo sequencing (Casanovo)
+  - `cascadia_env` — DIA peptide identification runtime (model weights + Lightning; uses `src/cascadiaBolt/` for inference)
+  - `casanovo_env` — DDA de novo sequencing runtime (PyTorch + Lightning; uses `src/casanovoBolt/` for inference)
 - Verify key executables (`ThermoRawFileParser`, `aria2c`, etc.)
 
 ### 3. Download the Cascadia model (required for DIA)
@@ -234,10 +234,11 @@ parallel -j 10 < run_agentic_metadata.cmds
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--denovo_threshold` | `70` | Min Casanovo peptide confidence |
+| `--denovo_threshold` | `80` | Min Casanovo/CasanovoBolt peptide confidence |
 | `--min_peptides_for_peptonizer` | `5` | Min peptides required to run Peptonizer2000 |
 | `--contaminants_fasta` | `assets/UniversalContaminats.fasta` | Contaminant sequences |
 | `--taxid_list_file` | `assets/taxid_lists/CommonPRIDEtaxids.txt` | Allowed taxid list |
+| `--num_gpus` | `2` | Number of GPUs for de novo sequencing (controls `maxForks` + `CUDA_VISIBLE_DEVICES` assignment; set to `0` or `1` for single-GPU systems) |
 
 ### Metadata extraction
 
@@ -294,7 +295,10 @@ nextflow.config              # All parameters and process resources
 src/
   setup.sh                   # Environment bootstrap
   conda_envs/                # Environment YAML definitions
+  casanovoBolt/              # Optimized Casanovo fork (BF16, larger batches for RTX Ada)
+  cascadiaBolt/              # Optimized Cascadia fork (BF16, larger batches for RTX Ada)
   python/
+    OrganismID.py            # Organism identification orchestrator (de novo + Peptonizer)
     run_agentic_metadata.py  # Standalone agentic extraction + SDRF script
     sdrf_builder.py          # AgenticToSDRF class (SDRF-Proteomics v1.1.0)
   agentic-metadata/          # Multi-agent metadata extraction system
@@ -304,7 +308,6 @@ assets/
   default_sage.config        # Default SAGE search parameters
   UniversalContaminats.fasta # Contaminant sequences
   taxid_lists/               # Allowed organism taxid lists
-aggregated_results/          # Pre-computed results for reference PXDs
 store/                       # Agentic extraction outputs and SDRF files
 docs/                        # Implementation notes and architecture docs
 ```
@@ -314,6 +317,8 @@ docs/                        # Implementation notes and architecture docs
 ## Troubleshooting
 
 **`command not found: conda`** — Run `source ~/.bashrc` (or `source ~/miniconda3/etc/profile.d/conda.sh`) then retry.
+
+**GPU not utilized / wrong GPU assigned** — The local Nextflow executor does not support the `accelerator` directive. GPU assignment is done via `CUDA_VISIBLE_DEVICES` inside each `organism_id` task using `--num_gpus` (default `2`). If you have a different number of GPUs, override with `--num_gpus <N>` on the command line.
 
 **`ThermoRawFileParser not found`** — The `meti_env` conda environment is not activated. Run `conda activate meti_env`.
 

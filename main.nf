@@ -664,12 +664,16 @@ process organism_id {
     # 5) Set Peptonizer2000 host path so OrganismID.py can properly mount it in singularity
     export PEPTONIZER2000_HOME='${params.peptonizer2000_host_path}'
 
-    # 6) Explicitly assign GPU device based on task index (for local executor without accelerator support)
-    # With 2 GPUs: task 0→GPU0, task 1→GPU1, task 2→GPU0, etc.
-    NUM_GPUS=2  # <-- adjust this based on your system (e.g., 2 GPUs)
+    # 6) Assign GPU device via CUDA_VISIBLE_DEVICES.
+    # The `accelerator` directive is only supported by SLURM/cloud executors, not `local`.
+    # For local executor, maxForks=params.num_gpus throttles concurrency, and we use
+    # task.index (global sequential counter) mod num_gpus to assign each concurrent
+    # task to a distinct GPU. Any two concurrently running tasks always have consecutive
+    # indices, so their mod values are always different.
+    NUM_GPUS=${params.num_gpus}
     GPU_ID=\$((${task.index} % NUM_GPUS))
     export CUDA_VISIBLE_DEVICES=\$GPU_ID
-    echo "Task ${task.index} assigned to GPU \$GPU_ID (CUDA_VISIBLE_DEVICES=\$GPU_ID)"
+    echo "Task ${task.index} assigned to GPU \$GPU_ID (CUDA_VISIBLE_DEVICES=\$GPU_ID, NUM_GPUS=\$NUM_GPUS)"
 
     echo "Running organism ID: Stage 1 (Denovo) via separate conda envs, Stage 2 (Peptonizer) via repo workflow"
 
@@ -684,6 +688,7 @@ process organism_id {
         --casanovo_env_path ${params.casanovo_env_path} \
         --cascadia_env_path ${params.cascadia_env_path} \
         --cascadia_model_path ${params.cascadia_model_path} \
+        --src_dir ${baseDir}/src \
         --snakemake_env_path ${params.meti_env_path} \
         ${peptonizer_container_arg} \
         --log_file organism/events.jsonl \
