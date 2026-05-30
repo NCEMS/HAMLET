@@ -671,7 +671,7 @@ process organism_id {
     # task to a distinct GPU. Any two concurrently running tasks always have consecutive
     # indices, so their mod values are always different.
     NUM_GPUS=${params.num_gpus}
-    GPU_ID=\$((${task.index} % NUM_GPUS))
+    GPU_ID=\$(((${task.index} - 1) % NUM_GPUS))
     export CUDA_VISIBLE_DEVICES=\$GPU_ID
     echo "Task ${task.index} assigned to GPU \$GPU_ID (CUDA_VISIBLE_DEVICES=\$GPU_ID, NUM_GPUS=\$NUM_GPUS)"
 
