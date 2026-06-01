@@ -94,6 +94,18 @@ create_or_update_env "$PROJECT_ROOT/src/conda_envs/search_env.yml" "search_env"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/cascadia_env.yml" "cascadia_env"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/casanovo_env.yml" "casanovo_env"
 
+# casanovoBolt uses relative imports from a 'data' subpackage that lives in the
+# installed casanovo package.  Symlink it into the source tree so the import
+# 'from .data.psm import PepSpecMatch' resolves correctly at runtime.
+CASANOVO_DATA="$(conda run -n casanovo_env python -c \
+    'import casanovo, os; print(os.path.join(os.path.dirname(casanovo.__file__), "data"))' 2>/dev/null || echo "")"
+if [ -n "$CASANOVO_DATA" ] && [ -d "$CASANOVO_DATA" ]; then
+    ln -sfn "$CASANOVO_DATA" "$PROJECT_ROOT/src/casanovoBolt/data"
+    echo "✓ Linked casanovo data package into casanovoBolt"
+else
+    echo "⚠ Could not locate installed casanovo data package; casanovoBolt may fail to import"
+fi
+
 # ============================================
 # Step 4: Install Search Tools
 # ============================================
@@ -163,7 +175,124 @@ else
 fi
 
 # ============================================
-# Step 6: Final Checks & Instructions
+# Step 6: GPU Setup and Validation
+# ============================================
+echo ""
+echo "Checking for NVIDIA GPU..."
+
+# Detect NVIDIA GPU presence via lspci or existing device nodes
+GPU_PRESENT=false
+if command -v lspci &>/dev/null && lspci 2>/dev/null | grep -qi nvidia; then
+    GPU_PRESENT=true
+    GPU_INFO=$(lspci 2>/dev/null | grep -i nvidia | head -1)
+    echo "✓ NVIDIA GPU detected: $GPU_INFO"
+elif [ -e /dev/nvidia0 ]; then
+    GPU_PRESENT=true
+    echo "✓ NVIDIA GPU device node found (/dev/nvidia0)"
+fi
+
+if [ "$GPU_PRESENT" = true ]; then
+    # Check whether the required kernel modules are already loaded
+    MODULES_LOADED=false
+    if lsmod 2>/dev/null | grep -q "^nvidia "; then
+        MODULES_LOADED=true
+        echo "✓ NVIDIA kernel modules already loaded"
+    else
+        echo "  NVIDIA kernel modules not loaded — attempting to load..."
+
+        # Determine if we have passwordless sudo; if not, prompt once
+        HAS_SUDO=false
+        if sudo -n true 2>/dev/null; then
+            HAS_SUDO=true
+        elif sudo true 2>/dev/null; then
+            HAS_SUDO=true
+        else
+            echo "  ⚠ Cannot load NVIDIA modules: sudo access unavailable."
+            echo "    Run manually after setup:"
+            echo "      sudo modprobe nvidia nvidia_uvm nvidia_drm"
+            echo "    Then re-run this script to complete GPU validation."
+        fi
+
+        if [ "$HAS_SUDO" = true ]; then
+            LOAD_OK=true
+            for mod in nvidia nvidia_uvm nvidia_drm; do
+                if sudo modprobe "$mod" 2>/dev/null; then
+                    : # module loaded silently
+                else
+                    echo "  ⚠ Failed to load kernel module: $mod"
+                    LOAD_OK=false
+                fi
+            done
+
+            if [ "$LOAD_OK" = true ]; then
+                MODULES_LOADED=true
+                echo "✓ NVIDIA kernel modules loaded: nvidia, nvidia_uvm, nvidia_drm"
+
+                # Persist modules across reboots
+                MODULES_CONF="/etc/modules-load.d/nvidia.conf"
+                if [ ! -f "$MODULES_CONF" ] || ! grep -q "nvidia_uvm" "$MODULES_CONF" 2>/dev/null; then
+                    printf 'nvidia\nnvidia_uvm\nnvidia_drm\n' | sudo tee "$MODULES_CONF" >/dev/null
+                    echo "✓ NVIDIA modules configured to load on boot ($MODULES_CONF)"
+                else
+                    echo "✓ NVIDIA boot persistence already configured ($MODULES_CONF)"
+                fi
+            fi
+        fi
+    fi
+
+    # Verify device nodes exist after module load
+    if [ "$MODULES_LOADED" = true ]; then
+        if ls /dev/nvidia0 &>/dev/null; then
+            echo "✓ NVIDIA device nodes present: $(ls /dev/nvidia* 2>/dev/null | tr '\n' ' ')"
+        else
+            echo "  ⚠ NVIDIA modules loaded but /dev/nvidia0 not present."
+            echo "    Try: sudo nvidia-smi   (this can trigger device-node creation)"
+        fi
+    fi
+
+    # ---- casanovo_env: PyTorch CUDA check ----
+    echo ""
+    echo "  Checking PyTorch CUDA in casanovo_env..."
+    CASANOVO_CUDA=$(conda run -n casanovo_env python -c \
+        "import torch; print('available' if torch.cuda.is_available() else 'not_available')" \
+        2>/dev/null || echo "error")
+    if [ "$CASANOVO_CUDA" = "available" ]; then
+        GPU_NAME=$(conda run -n casanovo_env python -c \
+            "import torch; print(torch.cuda.get_device_name(0))" 2>/dev/null || echo "unknown")
+        GPU_MEM=$(conda run -n casanovo_env python -c \
+            "import torch; print(torch.cuda.get_device_properties(0).total_memory // 1024**3)" \
+            2>/dev/null || echo "?")
+        echo "  ✓ casanovo_env: CUDA available — $GPU_NAME (${GPU_MEM} GB)"
+    else
+        echo "  ⚠ casanovo_env: CUDA not available — casanovo will use CPU (slower)."
+        if [ "$MODULES_LOADED" = true ]; then
+            TORCH_CUDA_VER=$(conda run -n casanovo_env python -c \
+                "import torch; print(torch.version.cuda)" 2>/dev/null || echo "unknown")
+            echo "    Modules are loaded but PyTorch reports no CUDA (torch.version.cuda=$TORCH_CUDA_VER)."
+            echo "    The PyTorch build may not match the installed driver CUDA version."
+            echo "    Reinstall PyTorch matching driver CUDA: https://pytorch.org/get-started/locally/"
+        fi
+    fi
+
+    # ---- cascadia_env: PyTorch CUDA check ----
+    echo "  Checking PyTorch CUDA in cascadia_env..."
+    CASCADIA_CUDA=$(conda run -n cascadia_env python -c \
+        "import torch; print('available' if torch.cuda.is_available() else 'not_available')" \
+        2>/dev/null || echo "error")
+    if [ "$CASCADIA_CUDA" = "available" ]; then
+        echo "  ✓ cascadia_env: CUDA available"
+    elif [ "$CASCADIA_CUDA" = "not_available" ]; then
+        echo "  ⚠ cascadia_env: CUDA not available — cascadia will use CPU (slower)."
+    else
+        echo "  ⚠ cascadia_env: could not import torch (env may not include PyTorch)."
+    fi
+else
+    echo "  No NVIDIA GPU detected — pipeline will run CPU-only."
+    echo "  casanovo and cascadia de-novo sequencing will use CPU (slower inference)."
+fi
+
+# ============================================
+# Step 7: Final Checks & Instructions
 # ============================================
 echo ""
 echo "✓ Setup complete!"

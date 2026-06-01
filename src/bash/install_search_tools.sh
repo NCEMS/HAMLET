@@ -151,7 +151,11 @@ install_fragpipe() {
     fi
     
     echo "  Extracting Fragpipe..."
-    unzip -q "$tmpdir/fragpipe.zip" -d "$tmpdir"
+    if command -v unzip &>/dev/null; then
+        unzip -q "$tmpdir/fragpipe.zip" -d "$tmpdir"
+    else
+        python3 -c "import zipfile,sys; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])" "$tmpdir/fragpipe.zip" "$tmpdir"
+    fi
     
     # Find the extracted FragPipe directory (may be fragpipe, FragPipe, or versioned variants)
     local fragpipe_src
@@ -281,7 +285,12 @@ install_diann() {
     fi
     
     echo "  Extracting..."
-    unzip -q "$tmpdir/diann.zip" -d "$tmpdir/diann_unzipped" || true
+    mkdir -p "$tmpdir/diann_unzipped"
+    if command -v unzip &>/dev/null; then
+        unzip -q "$tmpdir/diann.zip" -d "$tmpdir/diann_unzipped" || true
+    else
+        python3 -c "import zipfile,sys; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])" "$tmpdir/diann.zip" "$tmpdir/diann_unzipped" || true
+    fi
     
     # Find and extract the main binary
     local diann_bin
@@ -297,7 +306,13 @@ install_diann() {
         
         if [ -n "${installed_bin:-}" ]; then
             chmod +x "$installed_bin" || true
-            ln -sf "$installed_bin" "$DIANN_DIR/diann"
+            # Create a wrapper script so bundled libgomp is found at runtime
+            cat > "$DIANN_DIR/diann" <<WRAPPER
+#!/usr/bin/env bash
+export LD_LIBRARY_PATH="$DIANN_DIR\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}"
+exec "$installed_bin" "\$@"
+WRAPPER
+            chmod +x "$DIANN_DIR/diann"
             ln -sf "$DIANN_DIR/diann" "$CONDA_ENV_PATH/bin/diann"
             echo "✓ DIA-NN installed successfully"
             ls -lh "$DIANN_DIR/diann" 2>/dev/null || true

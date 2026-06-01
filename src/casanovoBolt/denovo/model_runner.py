@@ -295,6 +295,13 @@ class ModelRunner:
 
         try:
             self.loaders.setup(stage="test", annotated=evaluate)
+        except StopIteration:
+            logger.warning(
+                "No valid spectra found in the input file(s) after filtering "
+                "(e.g. all spectra have invalid or missing precursor charge). "
+                "Skipping de novo sequencing — output will be empty."
+            )
+            return
         except (KeyError, OSError) as e:
             if evaluate:
                 error_message = (
@@ -336,6 +343,12 @@ class ModelRunner:
             precision=self.config.precision,
             logger=False,
         )
+
+        # bf16-mixed requires a GPU; fall back to full float32 when running on CPU
+        # to avoid "expected scalar type Float but found BFloat16" at inference.
+        import torch
+        if not torch.cuda.is_available() and "bf16" in str(trainer_cfg["precision"]):
+            trainer_cfg["precision"] = "32-true"
 
         if train:
             if self.config.devices is None:

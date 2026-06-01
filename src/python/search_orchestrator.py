@@ -1054,7 +1054,7 @@ def main():
     parser.add_argument('--labeling', default='unknown', help='Labeling type (unknown, TMT6plex, iTRAQ4plex, etc.)')
     parser.add_argument('--diann_modifications', default='[]', help='JSON string of DIA-NN modifications')
     parser.add_argument('--min_ptm_psms', type=int, default=150, help='Minimum PSMs for PTM validation (DDA only)')
-    parser.add_argument('--min_ptm_percent', type=float, default=0.005, help='Minimum percent PSMs for PTM validation (default 0.005 = 0.5%)')
+    parser.add_argument('--min_ptm_percent', type=float, default=0.005, help='Minimum percent PSMs for PTM validation (default 0.005 = 0.5%%)')
     parser.add_argument('--max_ptm_classes', type=int, default=3, help='Maximum PTM classes to include (DDA only)')
     parser.add_argument('--sage_config', default=None, help='Path to SAGE config file')
     parser.add_argument('--high_confidence_q_threshold', type=float, default=0.01, help='spectrum_q < this value counts as high-confidence PSM')

@@ -901,6 +901,23 @@ class Spec2Pep(pl.LightningModule):
 
         return tokens_out, scores_out
 
+    def _detokenize_safe(
+        self, pred_tokens: torch.Tensor
+    ) -> Optional[str]:
+        """Detokenize a beam-search token tensor to a peptide string.
+
+        Returns None when depthcharge raises an IndexError because the
+        token sequence is empty (all padding), so callers can filter
+        those predictions out gracefully.
+        """
+        try:
+            parts = self.tokenizer.detokenize(
+                torch.unsqueeze(pred_tokens, 0), join=False
+            )[0]
+            return "".join(parts)
+        except IndexError:
+            return None
+
     def _get_top_peptide(
         self,
         pred_cache: Dict[
@@ -944,19 +961,34 @@ class Spec2Pep(pl.LightningModule):
                         # self.tokenizer.detokenize(
                         #     torch.unsqueeze(pred_tokens, 0)
                         # )[0],
-                        "".join(
-                            self.tokenizer.detokenize(
-                                torch.unsqueeze(pred_tokens, 0),
-                                join=False,
-                            )[0]
-                        ),
+                        seq_str,
                     )
                     for pep_score, _, aa_scores, pred_tokens in heapq.nlargest(
                         self.top_match, peptides
                     )
+                    for seq_str in [self._detokenize_safe(pred_tokens)]
+                    if seq_str is not None
                 ]
             else:
                 yield []
+
+    def _detokenize_safe(
+        self, pred_tokens: torch.Tensor
+    ) -> Optional[str]:
+        """Detokenize a beam-search token tensor to a peptide string.
+
+        Returns None when depthcharge raises an IndexError because the
+        decoded sequence is empty (all-padding output).  Callers filter
+        out None entries so empty beams are skipped gracefully rather
+        than crashing the prediction loop.
+        """
+        try:
+            parts = self.tokenizer.detokenize(
+                torch.unsqueeze(pred_tokens, 0), join=False
+            )[0]
+            return "".join(parts)
+        except IndexError:
+            return None
 
     def _process_batch(
         self, batch: Dict[str, torch.Tensor]
@@ -1239,9 +1271,15 @@ class Spec2Pep(pl.LightningModule):
                 spec_match.aa_scores = spec_match.aa_scores[1:]
 
             # Compute the precursor m/z of the predicted peptide.
-            spec_match.calc_mz = self.tokenizer.calculate_precursor_ions(
-                spec_match.sequence, torch.tensor(spec_match.charge)
-            ).item()
+            # Guard against ValueError("Unrecognized token") which occurs when
+            # the checkpoint tokenizer (MskbPeptideTokenizer) produces tokens
+            # that cannot be re-encoded by calculate_precursor_ions.
+            try:
+                spec_match.calc_mz = self.tokenizer.calculate_precursor_ions(
+                    spec_match.sequence, torch.tensor(spec_match.charge)
+                ).item()
+            except (ValueError, KeyError):
+                spec_match.calc_mz = float("nan")
 
             self.out_writer.psms.append(spec_match)
 

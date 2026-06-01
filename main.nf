@@ -204,14 +204,29 @@ workflow {
             tuple(pxd, file("${params.central_mzml_dir}/${pxd}"))
         }
 
-    // Auto-detect acquisition type and labeling from runAssessor results
+    // Run LLM-based metadata extraction from publications (optional)
+    // Must complete BEFORE determine_acquisition_params so its results can be used for DIA/DDA detection.
+    // Output: [pxd, llm_results]
+    if (params.run_llm_extraction) {
+        llm_results_ch = llm_extraction(fetched_ch)
+    } else {
+        // Create dummy files with unique names per PXD to avoid collisions
+        llm_results_ch = fetched_ch.map { pxd, fetched_dir ->
+            def dummy_llm = file("${baseDir}/work/dummy_llm_${pxd}.empty")
+            dummy_llm.parent.mkdirs()
+            dummy_llm.text = ""
+            tuple(pxd, dummy_llm)
+        }
+    }
+
+    // Auto-detect acquisition type and labeling (after LLM extraction)
+    // Joins fetched_ch with llm_results_ch so LLM Comment[AcquisitionMethod] is available.
     // Output: [pxd, fetched_dir, detected_params_json]
     if (params.auto_detect) {
-        detected_ch = parse_runAssessor(fetched_ch)
+        acq_input_ch = fetched_ch.join(llm_results_ch, by: 0)
+        detected_ch = determine_acquisition_params(acq_input_ch)
     } else {
-        // Create a dummy channel with user-provided params - need to create a JSON file
-        detected_ch = fetched_ch.map { pxd, fetched_dir ->
-            // This would need to create a dummy JSON, but for now we'll require auto_detect
+        detected_ch = fetched_ch.join(llm_results_ch, by: 0).map { pxd, fetched_dir, llm_results ->
             error "Manual parameter specification not yet supported in parallel mode. Use --auto_detect true"
         }
     }
@@ -236,21 +251,6 @@ workflow {
                 forced_detected.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
             }
             tuple(pxd, fetched_dir, forced_detected)
-        }
-    }
-    
-    // Run LLM-based metadata extraction from publications (optional, runs in parallel)
-    // Output: [pxd, llm_results]
-    if (params.run_llm_extraction) {
-        llm_results_ch = llm_extraction(fetched_ch)
-    } else {
-        // Create dummy files with unique names per PXD to avoid collisions
-        llm_results_ch = fetched_ch.map { pxd, fetched_dir ->
-            // Create a unique placeholder file for this PXD
-            def dummy_llm = file("${baseDir}/work/dummy_llm_${pxd}.empty")
-            dummy_llm.parent.mkdirs()
-            dummy_llm.text = ""
-            tuple(pxd, dummy_llm)
         }
     }
 
@@ -372,20 +372,20 @@ workflow {
 
 
 /* -----------------------
- * PROCESS: parse_runAssessor
+ * PROCESS: determine_acquisition_params
  * --------------------- */
-process parse_runAssessor {
+process determine_acquisition_params {
 
-    tag "detect-${fetched_dir.name}"
+    tag "acqparams-${pxd}"
 
-    publishDir "${params.outdir}/${fetched_dir.name}", mode: 'copy', overwrite: false
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false
 
     cache 'deep'
 
     errorStrategy 'ignore'  // Skip PXDs that fail auto-detection
 
     input:
-    tuple val(pxd), path(fetched_dir)
+    tuple val(pxd), path(fetched_dir), path(llm_results)
 
     output:
     tuple val(pxd), path(fetched_dir), path("detected_params.json")
@@ -394,14 +394,16 @@ process parse_runAssessor {
     """
     # Initialize conda
     ${params.conda_init}
-    
-    # Parse runAssessor results to detect acquisition type and labeling
-    # Pass central_mzml_dir for fast reuse of cached runAssessor results on second run
-    conda run -p ${params.meti_env_path} python ${baseDir}/src/python/parse_runAssessor.py \\
+
+    # Determine acquisition type and labeling from runAssessor + LLM + PRIDE evidence.
+    # The script writes a persistent copy to spectral_files/<PXD>/detected_params.json
+    # and reuses it on subsequent runs (skip-if-exists logic is inside the Python script).
+    conda run -p ${params.meti_env_path} python ${baseDir}/src/python/determine_acquisition_params.py \\
         --input_dir ${fetched_dir} \\
         --output detected_params.json \\
         --central_mzml_dir ${params.central_mzml_dir} \\
-        --pxd ${pxd}
+        --pxd ${pxd} \\
+        --llm_results_dir ${llm_results}
 
     # Display results
     echo "Detected parameters:"
@@ -432,10 +434,18 @@ process llm_extraction {
     """
     # Initialize conda
     ${params.conda_init}
-    
+
     # Create output directory
     mkdir -p llm_results
-    
+
+    # Skip if LLM results already exist in spectral_files (persistent cache)
+    central_llm="${params.central_mzml_dir}/${pxd}/llm_results"
+    if [ -d "\$central_llm" ] && [ "\$(ls -A \$central_llm 2>/dev/null)" ]; then
+        echo "✓ Using cached LLM results from spectral_files: \$central_llm"
+        cp -r "\$central_llm/." llm_results/
+        exit 0
+    fi
+
     # Check if OPENAI_API_KEY is set (use parameter expansion to avoid unbound variable error)
     if [ -z "\${OPENAI_API_KEY:-}" ]; then
         echo "WARNING: OPENAI_API_KEY not set. Skipping LLM extraction."
@@ -485,6 +495,12 @@ process llm_extraction {
     
     echo "=== LLM extraction completed for ${pxd} ==="
     ls -la llm_results/
+
+    # Persist results to spectral_files for future reruns (skip-if-exists check is at the top)
+    central_llm="${params.central_mzml_dir}/${pxd}/llm_results"
+    mkdir -p "\$central_llm"
+    cp -r llm_results/. "\$central_llm/"
+    echo "✓ LLM results persisted to spectral_files: \$central_llm"
     """
 }
 

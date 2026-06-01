@@ -106,6 +106,26 @@ def sequence():
             proforma, reverse=False, replace_isoleucine_with_leucine=True
         )
 
+    # ── CascadiaBolt: align tokenizer vocab to checkpoint (29-token embedding) ─
+    # Newer cascadia adds zero-mass terminal mods ('-[+0.000000]', '[+0.000000]-')
+    # that were not present when assets/cascadia.ckpt was trained (28-token vocab
+    # → Embedding(29, 512)). Remove them so len(tokenizer)==28 → Embedding(29,512).
+    from sortedcontainers import SortedDict as _SortedDict
+    _ckpt_state = torch.load(model_ckpt_path, map_location='cpu')
+    _ckpt_vocab = _ckpt_state['state_dict']['decoder.aa_encoder.weight'].shape[0]
+    if len(tokenizer) + 1 != _ckpt_vocab:
+        _zero_mass = {'-[+0.000000]', '[+0.000000]-'}
+        _tokens = [t for t in tokenizer.reverse_index[1:] if t not in _zero_mass]
+        if len(_tokens) + 1 == _ckpt_vocab:
+            tokenizer.index = _SortedDict({k: i + 1 for i, k in enumerate(_tokens)})
+            tokenizer.reverse_index = [None] + _tokens
+            tokenizer.stop_int = tokenizer.index[tokenizer.stop_token]
+            print(f"[cascadiaBolt] Adjusted tokenizer vocab: {len(tokenizer)} tokens "
+                  f"to match checkpoint embedding size {_ckpt_vocab}")
+        else:
+            print(f"[cascadiaBolt] WARNING: tokenizer vocab ({len(tokenizer)+1}) "
+                  f"still doesn't match checkpoint ({_ckpt_vocab}) after adjustment")
+
     train_dataset = AnnotatedSpectrumDataset(
         tokenizer, asf_file, index_path=train_index_filename,
         preprocessing_fn=[scale_intensity(scaling="root"), scale_to_unit_norm]

@@ -772,6 +772,13 @@ def processes_pxds(pxd_list: List[str], download_dir: str, use_aria2c: bool = Fa
             
             if all_valid:
                 print(f"✓ All files valid, skipping download for {pxd}")
+                # Run runAssessor if its output is missing for these mzML files
+                runAssessor_outfile = os.path.join(download_dir, pxd, "runAssessor", "study_metadata.json")
+                if not os.path.exists(runAssessor_outfile):
+                    print(f"  runAssessor output missing for {pxd}, running now...")
+                    run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
+                else:
+                    print(f"  ✓ runAssessor output already exists: {runAssessor_outfile}")
                 # Create symlink in current work directory for Nextflow output
                 work_pxd_dir = os.path.join('.', pxd)
                 if os.path.islink(work_pxd_dir):
