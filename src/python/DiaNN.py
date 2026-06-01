@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import argparse
 import json
 import glob
@@ -220,7 +221,60 @@ def run_diann(mzml_files: list, fasta_path: str, outdir: str, taxid: str = None,
     print(f"stderr → {stderr_log}")
 
     if proc.returncode != 0:
-        # Show a helpful tail of stderr in the exception
+        # Try to identify which file caused the crash from DIA-NN's stdout,
+        # then retry once without it.  This handles algorithmic failures on
+        # unusual files (e.g. gel-slice mzMLs with only a handful of DIA cycles).
+        culprit = None
+        for line in reversed((proc.stdout or "").splitlines()):
+            m = re.search(r'Loading run (.+)', line)
+            if m:
+                candidate = m.group(1).strip()
+                for f in mzml_files:
+                    if os.path.basename(f) in candidate or candidate.endswith(os.path.basename(f)):
+                        culprit = f
+                        break
+                if culprit:
+                    break
+
+        remaining = [f for f in mzml_files if f != culprit] if culprit else []
+        if culprit and remaining:
+            print(f"WARNING: DIA-NN crashed (exit {proc.returncode}) on "
+                  f"'{os.path.basename(culprit)}' — skipping it and retrying "
+                  f"with {len(remaining)} file(s).")
+            # Rebuild cmd: strip all --f / <file> pairs then re-add remaining files
+            new_cmd, skip_next = [], False
+            for x in cmd:
+                if skip_next:
+                    skip_next = False
+                    continue
+                if x == "--f":
+                    skip_next = True
+                    continue
+                new_cmd.append(x)
+            for f in remaining:
+                new_cmd.extend(["--f", f])
+
+            ts2 = datetime.now().strftime("%Y%m%d_%H%M%S")
+            stdout_log2 = os.path.join(outdir, f"diann_stdout_{ts2}.log")
+            stderr_log2 = os.path.join(outdir, f"diann_stderr_{ts2}.log")
+            print("Retrying DIA-NN CMD:", " ".join(new_cmd))
+            proc2 = subprocess.run(new_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   text=True, encoding="utf-8", errors="replace")
+            Path(stdout_log2).write_text(proc2.stdout or "", encoding="utf-8")
+            Path(stderr_log2).write_text(proc2.stderr or "", encoding="utf-8")
+            print(f"DIA-NN retry finished with code {proc2.returncode}.")
+            print(f"stdout → {stdout_log2}")
+            print(f"stderr → {stderr_log2}")
+            if proc2.returncode == 0:
+                return proc2.returncode, stdout_log2, stderr_log2
+            tail = "\n".join((proc2.stderr or "").splitlines()[-40:])
+            raise RuntimeError(
+                f"DIA-NN failed (exit {proc2.returncode}) even after skipping "
+                f"'{os.path.basename(culprit)}'. See logs.\n"
+                f"stderr tail:\n{'-'*60}\n{tail}\n{'-'*60}"
+            )
+
+        # Could not identify a culprit or no files left — raise original error
         tail = "\n".join((proc.stderr or "").splitlines()[-40:])
         raise RuntimeError(
             f"DIA-NN failed (exit {proc.returncode}). See logs.\n"
