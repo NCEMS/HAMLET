@@ -282,15 +282,34 @@ workflow {
         tuple(pxd, organism_results)
     }
     
-    // Pre-join all inputs for determine_taxids by PXD key to prevent channel multiplication
-    // This ensures exactly 1 task invocation per PXD (not duplicates from implicit Nextflow grouping)
-    taxid_input_ch = organism_with_context_ch
-        .map { pxd, fetched_dir, detected_params, organism_results -> 
-            tuple(pxd, fetched_dir, organism_results) 
+    // Pre-join all inputs for determine_taxids by PXD key.
+    // Anchor on detected_ch (all fetched+detected PXDs) rather than organism_with_context_ch
+    // so determine_taxids still runs when organism_id is ignored (errorStrategy = 'ignore').
+    // organism_results and llm_results are optional — nulls are replaced by empty fallback dirs.
+    def emptyOrganismDir = file("${baseDir}/work/empty_organism")
+    emptyOrganismDir.mkdirs()
+    if (!emptyOrganismDir.resolve("empty.json").exists()) {
+        emptyOrganismDir.resolve("empty.json").text = "{}"
+    }
+    def emptyLlmDir = file("${baseDir}/work/empty_llm_results")
+    emptyLlmDir.mkdirs()
+    if (!emptyLlmDir.resolve("empty.json").exists()) {
+        emptyLlmDir.resolve("empty.json").text = "{}"
+    }
+
+    taxid_input_ch = detected_ch
+        .map { pxd, fetched_dir, detected_params -> tuple(pxd, fetched_dir) }
+        .join(organism_results_ch, by: 0, remainder: true)
+        // left-only (organism_id ignored): [pxd, fetched_dir, null]
+        // matched:                          [pxd, fetched_dir, organism_results]
+        .map { pxd, fetched_dir, organism_results ->
+            tuple(pxd, fetched_dir, organism_results ?: emptyOrganismDir)
         }
         .join(llm_results_ch, by: 0, remainder: true)
-        .map { pxd, fetched_dir, organism_results, llm_results -> 
-            tuple(pxd, fetched_dir, organism_results, llm_results) 
+        // left-only (llm failed): [pxd, fetched_dir, organism_results, null]
+        // matched:                 [pxd, fetched_dir, organism_results, llm_results]
+        .map { pxd, fetched_dir, organism_results, llm_results ->
+            tuple(pxd, fetched_dir, organism_results, llm_results ?: emptyLlmDir)
         }
     
     // Determine taxids for each raw file from organism_id, LLM, and PRIDE metadata

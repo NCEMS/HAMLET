@@ -13,6 +13,16 @@ Changes vs upstream Cascadia:
   6. DataLoader num_workers 4 → 8 (configurable)  (Change 6)
 """
 
+# ── Redirect pyteomics unimod to local XML before any cascadia import ────────
+# cascadia.utils.write_results calls mass.unimod.Unimod() which by default fetches
+# http://www.unimod.org/xml/unimod_tables.xml from the internet.  In offline /
+# HPC environments that fails.  Point it at the bundled local copy instead.
+import pathlib as _pathlib
+import pyteomics.mass.unimod as _pyteomics_unimod
+_local_unimod = _pathlib.Path(__file__).parent.parent.parent / "assets" / "unimod" / "unimod_tables.xml"
+if _local_unimod.exists():
+    _pyteomics_unimod._unimod_xml_download_url = _local_unimod.as_uri()
+
 # ── stdlib / third-party imports identical to upstream ──────────────────────
 from cascadia.depthcharge.data.spectrum_datasets import AnnotatedSpectrumDataset
 from cascadia.depthcharge.data.preprocessing import scale_to_unit_norm, scale_intensity
