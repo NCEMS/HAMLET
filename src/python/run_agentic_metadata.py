@@ -120,7 +120,7 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
                 "--input", str(docs_dir),
                 "--output", str(agentic_output),
                 "--integrate",
-                "--runassessor-dir", str(runassessor_dir),
+                "--meti-dir", str(runassessor_dir),
                 "--single-temp", temperature,
                 "--seed", "42",
             ]
