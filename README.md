@@ -184,6 +184,82 @@ parallel -j 10 < run_agentic_metadata.cmds
 
 ---
 
+## PRIDE Survey (`src/python/pride_survey.py`)
+
+`pride_survey.py` is a standalone utility for surveying all public PRIDE projects, building a master dataset, and slicing it into analysis subsets. It runs in three explicit stages that can be invoked independently or combined.
+
+### Stages
+
+| Flag | Stage | Description |
+|------|-------|-------------|
+| `--update_caches` | 1 — Update caches | Fetches all PRIDE projects (paginated) and PMC full-text for each project that has a PubMed ID. Results are stored in `<outdir>/pride_cache` and `<outdir>/pmc_cache`. Already-cached entries are skipped. |
+| `--build_master` | 2 — Build master.csv | Reads the caches and produces `master.csv` with one row per PRIDE project, including organism names, taxids, raw file count, experiment types, publication license, and reannotation status flags. |
+| `--parse_subsets` | 3 — Parse subsets | Reads master.csv, writes analysis subset CSVs (e.g. LiP-MS projects), and runs LLM analysis on each subset using `<outdir>/llm_cache`. |
+
+### Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--update_caches` | off | Run Stage 1: fetch/refresh PRIDE and PMC caches |
+| `--build_master` | off | Run Stage 2: build master.csv from caches |
+| `--parse_subsets` | off | Run Stage 3: parse subsets and run LLM analysis |
+| `--outdir` | `./pride_survey/` | Directory containing `pride_cache`, `pmc_cache`, `llm_cache`, and subset CSVs |
+| `--master` | `./master.csv` | Path to write (Stage 2) or read (Stage 3) master.csv |
+| `--prompt` | `assets/prompts/minimal_lipms.txt` | LLM prompt file used in Stage 3 |
+
+### Columns in master.csv
+
+| Column | Source | Description |
+|--------|--------|-------------|
+| `accession` | PRIDE | PXD accession |
+| `pubmed_id` | PRIDE references | PubMed ID of the associated publication |
+| `pmc_id` | PMC cache | PMC ID resolved from the PubMed ID |
+| `raw_file_count` | PRIDE files | Number of `.raw` files in the project |
+| `organism` | PRIDE organisms | Semicolon-separated organism names |
+| `taxids` | PRIDE organisms | Semicolon-separated NCBI taxids (from `NEWT:XXXXX` accession codes) |
+| `experiment_types` | PRIDE experimentTypes | Semicolon-separated experiment type names |
+| `pub_license` | PMC full-text response | Open-access license (e.g. `CC BY`, `CC BY-NC-ND`) |
+| `Reannotated` | — | Boolean flag for tracking reannotation status |
+| `Reannotation_QC` | — | Boolean flag for tracking QC status |
+
+### Usage examples
+
+**Stage 1 only — refresh caches:**
+```bash
+python src/python/pride_survey.py --update_caches --outdir pride_survey/
+```
+
+**Stage 2 only — build master.csv from existing caches:**
+```bash
+python src/python/pride_survey.py \
+  --build_master \
+  --outdir pride_survey/ \
+  --master master.csv
+```
+
+**All stages in one run:**
+```bash
+python src/python/pride_survey.py \
+  --update_caches \
+  --build_master \
+  --parse_subsets \
+  --outdir pride_survey/ \
+  --master master.csv \
+  --prompt assets/prompts/minimal_lipms.txt
+```
+
+**Using a separate output directory (e.g. for a dated survey run):**
+```bash
+python src/python/pride_survey.py \
+  --build_master \
+  --outdir pride_survey_06022026/ \
+  --master pride_survey_06022026/master.csv
+```
+
+> **Note:** `pride_cache` (~hundreds of MB) and `pmc_cache` (~2.5 GB) are large binary JSON files stored in `--outdir`. Stage 1 is incremental — running `--update_caches` again will only fetch projects not already in `pmc_cache`.
+
+---
+
 ## Parameters
 
 ### Input

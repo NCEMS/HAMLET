@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import random
 import pandas as pd
 import re
 import subprocess
@@ -377,6 +378,67 @@ def merge_taxid_query(base_taxid_list_str, extra_taxids):
 ###############################################
 
 ###############################################
+def count_unique_llm_taxids(llm_results_path):
+    """Return a set of unique numeric taxids found across all *_Metadata.json files
+    in the LLM results directory.  Returns an empty set if the path is absent/invalid."""
+    taxids = set()
+    if not llm_results_path:
+        return taxids
+    llm_path = Path(str(llm_results_path))
+    if not llm_path.exists() or not llm_path.is_dir():
+        return taxids
+    for llm_file in llm_path.rglob("*_Metadata.json"):
+        try:
+            with open(llm_file) as f:
+                data = json.load(f)
+            for raw_file, metadata in data.items():
+                if isinstance(metadata, dict):
+                    taxid_vals = metadata.get("Characteristics[OrganismTaxid]", [])
+                    if taxid_vals:
+                        t = str(taxid_vals[0]).strip()
+                        if t and t.isdigit():
+                            taxids.add(t)
+        except Exception:
+            pass
+    return taxids
+###############################################
+
+###############################################
+def broadcast_organism_results(output_dir, representative_mzml, all_mzml_files, pxd_name, denovo_threshold_pct):
+    """Copy the representative file's peptonizer_result.csv into the expected output
+    directory for every other mzML file in the PXD so that determine_taxids.py can
+    find a result for each raw file without running Peptonizer on them all."""
+    use_cascadia = os.environ.get('CASCADIA_HOME') is not None
+    seq_type = "CascadiaSequence" if use_cascadia else "CasanovoSequence"
+
+    rep_base = os.path.splitext(os.path.basename(representative_mzml))[0]
+    rep_out_root = f"{pxd_name}_{rep_base}"
+    rep_dir = os.path.join(output_dir, seq_type, rep_out_root)
+
+    rep_results = list(Path(rep_dir).rglob("peptonizer_result.csv"))
+    if not rep_results:
+        print(f"WARNING: No peptonizer_result.csv found under {rep_dir}; cannot broadcast to other files.")
+        return
+    rep_csv = rep_results[0]
+    print(f"Broadcasting representative result from {rep_csv} to {len(all_mzml_files) - 1} other file(s).")
+
+    for mzml_path in all_mzml_files:
+        if os.path.abspath(mzml_path) == os.path.abspath(representative_mzml):
+            continue
+        base = os.path.splitext(os.path.basename(mzml_path))[0]
+        out_root = f"{pxd_name}_{base}"
+        filtered_basename = f"{out_root}_filtered{denovo_threshold_pct}pct_slim"
+        data_dir = os.path.join(output_dir, seq_type, out_root, "Peptonizer2000_data", filtered_basename)
+        os.makedirs(data_dir, exist_ok=True)
+        dest_csv = os.path.join(data_dir, "peptonizer_result.csv")
+        if not os.path.exists(dest_csv):
+            shutil.copy2(str(rep_csv), dest_csv)
+            print(f"  → Broadcast to: {dest_csv}")
+        else:
+            print(f"  → Already exists, skipping: {dest_csv}")
+###############################################
+
+###############################################
 def make_config(input_file, data_dir, log_dir, config_path, taxid_list_str):
     # prefer env var from container; fallback to where you had it on the host
     script_dir = os.environ.get(
@@ -575,11 +637,15 @@ def generate_snakemake_commands(filtered_files, taxid_list_str, min_peptides=100
 ###############################################
 
 ####################################################
-def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80, src_dir=None):
+def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80, src_dir=None, file_subset=None):
     """
     Run de novo sequencing (Casanovo or Cascadia) on all .mzML files under input_dir.
     If no .mzML files are found, attempt to convert .raw files to .mzML.
     Use hardware acceleration for optimal performance (GPU-accelerated by default).
+
+    file_subset: optional list of absolute paths; when provided only those mzML files
+                 are processed (used for representative-file mode).
+
     Return a list of successfully created .mztab files.
     """
     # Check if we should use Cascadia instead of Casanovo
@@ -591,6 +657,12 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
         for f in files:
             if f.lower().endswith(".mzml"):
                 mzml_files.append(os.path.join(root, f))
+
+    # Apply subset filter when running in representative-file mode
+    if file_subset is not None:
+        subset_abs = {os.path.abspath(p) for p in file_subset}
+        mzml_files = [p for p in mzml_files if os.path.abspath(p) in subset_abs]
+        print(f"file_subset applied: {len(mzml_files)} file(s) will be processed.")
 
     # 2) If no mzML files found, try to find and convert .raw files
     if not mzml_files:
@@ -940,6 +1012,117 @@ def check_cached_organism_results(pxd, input_dir, results_base_dir, denovo_thres
     return False, None, []
 
 ###############################################
+def load_ncbi_taxonomy(nodes_dmp_path, names_dmp_path):
+    """
+    Load NCBI taxonomy tree from nodes.dmp and names.dmp.
+    
+    Returns a dict: {taxid_str: {'parent': parent_taxid_str, 'rank': rank_str, 'name': name_str}}
+    """
+    taxonomy = {}
+    
+    # Parse nodes.dmp: taxid | parent_taxid | rank | ...
+    # Fields are separated by '\t|\t'
+    print(f"Loading NCBI taxonomy from {nodes_dmp_path}...")
+    try:
+        with open(nodes_dmp_path, 'r') as f:
+            for line in f:
+                fields = [f.strip() for f in line.strip().split('|')]
+                if len(fields) < 3:
+                    continue
+                taxid = fields[0]
+                parent_taxid = fields[1]
+                rank = fields[2]
+                taxonomy[taxid] = {
+                    'parent': parent_taxid,
+                    'rank': rank,
+                    'name': ''
+                }
+    except Exception as e:
+        print(f"ERROR loading nodes.dmp: {e}")
+        return {}
+    
+    # Parse names.dmp to add organism names
+    # Fields: taxid | name | unique name | name class
+    # We want lines where name_class = 'scientific name'
+    print(f"Loading organism names from {names_dmp_path}...")
+    try:
+        with open(names_dmp_path, 'r') as f:
+            for line in f:
+                fields = [f.strip() for f in line.strip().split('|')]
+                if len(fields) < 4:
+                    continue
+                taxid = fields[0]
+                name = fields[1]
+                name_class = fields[3]
+                
+                # Only use scientific names
+                if name_class == 'scientific name' and taxid in taxonomy:
+                    taxonomy[taxid]['name'] = name
+    except Exception as e:
+        print(f"ERROR loading names.dmp: {e}")
+    
+    print(f"Loaded taxonomy for {len(taxonomy)} taxa")
+    return taxonomy
+
+
+def get_species_taxid(taxid, taxonomy):
+    """
+    Walk up the taxonomy tree until reaching 'species' rank.
+    If no species ancestor is found, return None.
+    Strategy A: strict - only count down-to-species taxids.
+    """
+    if not taxid or taxid not in taxonomy:
+        return None
+    
+    current = taxid
+    max_iterations = 100
+    iteration = 0
+    
+    while iteration < max_iterations:
+        if current not in taxonomy:
+            return None
+        
+        rank = taxonomy[current].get('rank', '')
+        
+        # Found species rank
+        if rank == 'species':
+            return current
+        
+        parent = taxonomy[current].get('parent', '')
+        
+        # Reached root (parent == taxid) or no more parents
+        if parent == current or not parent:
+            return None
+        
+        current = parent
+        iteration += 1
+    
+    return None
+
+
+def count_unique_species(taxid_list, taxonomy):
+    """
+    Count the number of distinct species from a list of taxids.
+    Strategy A (strict): Only count taxids that have a species ancestor.
+    """
+    species = set()
+    
+    for taxid in taxid_list:
+        # Clean up taxid
+        taxid = str(taxid).strip()
+        if not taxid:
+            continue
+        
+        # Walk up to species
+        sp = get_species_taxid(taxid, taxonomy)
+        
+        # Only count if we successfully found a species-level taxid
+        if sp and sp in taxonomy and taxonomy[sp].get('rank') == 'species':
+            species.add(sp)
+    
+    return len(species)
+
+###############################################
 def main():
 
     ## Get the user arguments
@@ -964,6 +1147,11 @@ def main():
     parser.add_argument('--log_file', default=None, help='Path to JSONL file for pipeline event logging')
     parser.add_argument('--results_base_dir', default='results', help='Base directory where completed results are stored (for caching)')
     parser.add_argument('--pxd', default=None, help='PXD accession (auto-detected from input_dir if not provided)')
+    parser.add_argument('--llm_results', default=None,
+                        help='Path to llm_results directory for this PXD (used to count unique LLM taxids)')
+    parser.add_argument('--organism_id_all', action='store_true', default=False,
+                        help='Force organism_id on every file even when only a single taxid is reported '
+                             'by PRIDE metadata and LLM results')
     args = parser.parse_args()
 
     # Initialize logger if log_file specified
@@ -1030,6 +1218,72 @@ def main():
     taxid_list = merge_taxid_query(taxid_list, pride_taxids)
     print(f"Effective taxid query for Peptonizer2000: {taxid_list}")
 
+    # ---------------------------------------------------------------
+    # Decide representative-file vs all-files mode
+    # ---------------------------------------------------------------
+    llm_unique_taxids = count_unique_llm_taxids(args.llm_results)
+    print(f"Unique PRIDE taxids: {pride_taxids}")
+    print(f"Unique LLM taxids: {llm_unique_taxids}")
+
+    # Load NCBI taxonomy for species-level deduplication
+    # Determine paths relative to this script's location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.dirname(os.path.dirname(script_dir))  # Go up to HAMLET root
+    nodes_dmp_path = os.path.join(repo_root, "assets", "taxonomy", "nodes.dmp")
+    names_dmp_path = os.path.join(repo_root, "assets", "taxonomy", "names.dmp")
+    
+    ncbi_taxonomy = {}
+    if os.path.exists(nodes_dmp_path) and os.path.exists(names_dmp_path):
+        ncbi_taxonomy = load_ncbi_taxonomy(nodes_dmp_path, names_dmp_path)
+    else:
+        print(f"WARNING: NCBI taxonomy files not found at {nodes_dmp_path} or {names_dmp_path}")
+        print(f"         Will fall back to simple taxid counting")
+
+    # Collect all mzML files now (needed for both mode decision and broadcast)
+    all_mzml_files = []
+    for root, _, files in os.walk(args.input_dir):
+        for f in files:
+            if f.lower().endswith(".mzml"):
+                all_mzml_files.append(os.path.join(root, f))
+    print(f"Total mzML files in PXD: {len(all_mzml_files)}")
+
+    # Count distinct species (with species-level deduplication if taxonomy loaded)
+    if ncbi_taxonomy:
+        unique_pride_species = count_unique_species(pride_taxids, ncbi_taxonomy)
+        unique_llm_species = count_unique_species(list(llm_unique_taxids), ncbi_taxonomy)
+        print(f"After species-level deduplication: PRIDE species={unique_pride_species}, LLM species={unique_llm_species}")
+    else:
+        # Fallback: simple taxid counting
+        unique_pride_species = len(pride_taxids)
+        unique_llm_species = len(llm_unique_taxids)
+        print(f"Using simple taxid counting (no NCBI taxonomy): PRIDE taxids={unique_pride_species}, LLM taxids={unique_llm_species}")
+
+    run_all_files = (
+        args.organism_id_all
+        or unique_pride_species > 1
+        or unique_llm_species > 1
+    )
+
+    # representative_mzml is set only when we run on a single file and need to broadcast
+    representative_mzml = None
+    file_subset = None  # None → process all files found in input_dir
+
+    if not run_all_files and len(all_mzml_files) > 1:
+        random.seed(42)  # reproducible representative selection
+        representative_mzml = random.choice(all_mzml_files)
+        file_subset = [representative_mzml]
+        print(
+            f"Single-taxid mode: {unique_pride_species} PRIDE species, "
+            f"{unique_llm_species} LLM species. "
+            f"Running organism_id on representative file only: "
+            f"{os.path.basename(representative_mzml)}"
+        )
+    else:
+        print(
+            f"All-files mode: {unique_pride_species} PRIDE species, "
+            f"{unique_llm_species} LLM species, "
+            f"organism_id_all={args.organism_id_all}."
+        )
 
     # Run de novo sequencing (Casanovo or Cascadia depending on mode)
     denovo_files = run_de_novo_sequencing(
@@ -1041,6 +1295,7 @@ def main():
         cascadia_model_path=args.cascadia_model_path,
         denovo_threshold_pct=denovo_threshold_pct,
         src_dir=args.src_dir,
+        file_subset=file_subset,
     )
     print(f"Finished running de novo sequencing on input directory: {args.input_dir}")
     print(f"Generated de novo sequencing output files: {denovo_files}")
@@ -1066,6 +1321,16 @@ def main():
         peptonizer_container=args.peptonizer_container,
     )
     print(f"Generated Peptonizer2000 output files: {peptonizer_result_files} {len(peptonizer_result_files)}")
+
+    # If representative-file mode was used, broadcast the result to all other files
+    if representative_mzml is not None and len(all_mzml_files) > 1:
+        broadcast_organism_results(
+            output_dir=args.output_dir,
+            representative_mzml=representative_mzml,
+            all_mzml_files=all_mzml_files,
+            pxd_name=os.path.basename(args.input_dir.rstrip("/")),
+            denovo_threshold_pct=denovo_threshold_pct,
+        )
 
     # Log completion
     if logger:

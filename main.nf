@@ -65,6 +65,13 @@ PIPELINE PARAMS (this workflow)
         --run_llm_extraction true|false   Default: false
         --run_agentic_metadata true|false Default: false
 
+    Organism ID sampling
+        --organism_id_all true|false      Default: false
+            false: if PRIDE + LLM both report a single taxid, run de novo +
+                   Peptonizer on one representative file and broadcast the
+                   result to all files in the PXD (saves GPU time)
+            true : always run organism_id on every file
+
 EXAMPLES
     # AUTO routing (default), multiple PXDs
     nextflow run main.nf --pxd_csv PXDs.csv -resume
@@ -114,6 +121,7 @@ params.taxid              = params.taxid              ?: '9606'
 params.acquisition_type   = params.acquisition_type   ?: 'AUTO'  // AUTO, DDA, DIA
 
 params.run_agentic_metadata = params.run_agentic_metadata ?: false  // Enable LLM metadata extraction after aggregation
+params.organism_id_all     = params.organism_id_all     ?: false  // Force organism_id on all files even when single taxid
 
 // Organism identification parameters
 params.denovo_threshold            = params.denovo_threshold            ?: 70
@@ -204,13 +212,12 @@ workflow {
             tuple(pxd, file("${params.central_mzml_dir}/${pxd}"))
         }
 
-    // Run LLM-based metadata extraction from publications (optional)
-    // Must complete BEFORE determine_acquisition_params so its results can be used for DIA/DDA detection.
+    // Run LLM-based metadata extraction from publications FIRST.
+    // LLM results inform determine_acquisition_params (e.g., Comment[AcquisitionMethod]).
     // Output: [pxd, llm_results]
     if (params.run_llm_extraction) {
         llm_results_ch = llm_extraction(fetched_ch)
     } else {
-        // Create dummy files with unique names per PXD to avoid collisions
         llm_results_ch = fetched_ch.map { pxd, fetched_dir ->
             def dummy_llm = file("${baseDir}/work/dummy_llm_${pxd}.empty")
             dummy_llm.parent.mkdirs()
@@ -219,8 +226,8 @@ workflow {
         }
     }
 
-    // Auto-detect acquisition type and labeling (after LLM extraction)
-    // Joins fetched_ch with llm_results_ch so LLM Comment[AcquisitionMethod] is available.
+    // Auto-detect acquisition type and labeling after LLM extraction so LLM metadata is available.
+    // Joins fetched_ch with llm_results_ch so Comment[AcquisitionMethod] etc. can be used.
     // Output: [pxd, fetched_dir, detected_params_json]
     if (params.auto_detect) {
         acq_input_ch = fetched_ch.join(llm_results_ch, by: 0)
@@ -260,16 +267,37 @@ workflow {
 
     // Route to appropriate conda environment (DIA vs DDA) based on detected_params.json
     // Cascadia (DIA) and Casanovo (DDA) environments selected by organism_id process
+    // Join llm_results_ch so organism_id can decide representative vs all-files mode
     organism_input_ch = detected_ch.combine(contaminants_ch).combine(taxid_list_ch)
+        .join(llm_results_ch, by: 0)
 
     // Run organism ID (optional) or use dummy results
     if (params.run_organism_id) {
         log.info "Running organism_id process (de novo + Peptonizer)"
-        organism_with_context_ch = organism_id(organism_input_ch)
+        raw_organism_ch = organism_id(organism_input_ch)
+        // Barrier: ensure ALL organism_id tasks finish before any PXD advances downstream.
+        //
+        // Problem with collect().flatMap { it }: flatMap deep-flattens tuple-lists into
+        // individual strings. Problem with combine(collected_list): combine also flattens
+        // the list elements into the tuple.
+        //
+        // Solution: use multiMap to split raw_organism_ch without double-consuming it,
+        // collect only scalar PXD strings (not full tuples), map the whole collected list
+        // to a single scalar string 'barrier_done', then combine() appends that scalar as
+        // one element — no flattening occurs.
+        raw_organism_ch.multiMap { pxd, fetched_dir, detected_params, organism_results ->
+            pxd_ids: pxd
+            results: tuple(pxd, fetched_dir, detected_params, organism_results)
+        }.set { org_split }
+        barrier_val = org_split.pxd_ids.collect().map { 'barrier_done' }
+        organism_with_context_ch = org_split.results
+            .combine(barrier_val)
+            .map { pxd, fetched_dir, detected_params, organism_results, _done ->
+                tuple(pxd, fetched_dir, detected_params, organism_results) }
     } else {
         log.info "Skipping organism_id process (--run_organism_id false). Will use LLM + PRIDE metadata only."
         // Create dummy organism_results for each PXD to maintain channel structure
-        organism_with_context_ch = organism_input_ch.map { pxd, fetched_dir, detected_params, contaminants, taxid_list ->
+        organism_with_context_ch = organism_input_ch.map { pxd, fetched_dir, detected_params, contaminants, taxid_list, llm_results ->
             def dummy_organism = file("${baseDir}/work/dummy_organism_${pxd}.empty")
             dummy_organism.parent.mkdirs()
             dummy_organism.text = "{}"
@@ -282,10 +310,9 @@ workflow {
         tuple(pxd, organism_results)
     }
     
-    // Pre-join all inputs for determine_taxids by PXD key.
-    // Anchor on detected_ch (all fetched+detected PXDs) rather than organism_with_context_ch
-    // so determine_taxids still runs when organism_id is ignored (errorStrategy = 'ignore').
-    // organism_results and llm_results are optional — nulls are replaced by empty fallback dirs.
+    // Build taxid_input_ch anchored on detected_ch so determine_taxids still runs
+    // even when organism_id is ignored (errorStrategy 'ignore'). organism_results and
+    // llm_results are optional — nulls are replaced by pre-created empty fallback dirs.
     def emptyOrganismDir = file("${baseDir}/work/empty_organism")
     emptyOrganismDir.mkdirs()
     if (!emptyOrganismDir.resolve("empty.json").exists()) {
@@ -300,14 +327,10 @@ workflow {
     taxid_input_ch = detected_ch
         .map { pxd, fetched_dir, detected_params -> tuple(pxd, fetched_dir) }
         .join(organism_results_ch, by: 0, remainder: true)
-        // left-only (organism_id ignored): [pxd, fetched_dir, null]
-        // matched:                          [pxd, fetched_dir, organism_results]
         .map { pxd, fetched_dir, organism_results ->
             tuple(pxd, fetched_dir, organism_results ?: emptyOrganismDir)
         }
         .join(llm_results_ch, by: 0, remainder: true)
-        // left-only (llm failed): [pxd, fetched_dir, organism_results, null]
-        // matched:                 [pxd, fetched_dir, organism_results, llm_results]
         .map { pxd, fetched_dir, organism_results, llm_results ->
             tuple(pxd, fetched_dir, organism_results, llm_results ?: emptyLlmDir)
         }
@@ -464,7 +487,7 @@ process llm_extraction {
         cp -r "\$central_llm/." llm_results/
         exit 0
     fi
-
+    
     # Check if OPENAI_API_KEY is set (use parameter expansion to avoid unbound variable error)
     if [ -z "\${OPENAI_API_KEY:-}" ]; then
         echo "WARNING: OPENAI_API_KEY not set. Skipping LLM extraction."
@@ -515,7 +538,7 @@ process llm_extraction {
     echo "=== LLM extraction completed for ${pxd} ==="
     ls -la llm_results/
 
-    # Persist results to spectral_files for future reruns (skip-if-exists check is at the top)
+    # Persist results to spectral_files for future reruns
     central_llm="${params.central_mzml_dir}/${pxd}/llm_results"
     mkdir -p "\$central_llm"
     cp -r llm_results/. "\$central_llm/"
@@ -626,7 +649,7 @@ process organism_id {
     time '8h'
 
     input:
-    tuple val(pxd), path(fetched_dir), path(detected_params), path(contaminants_fasta), path(taxid_list_file)
+    tuple val(pxd), path(fetched_dir), path(detected_params), path(contaminants_fasta), path(taxid_list_file), path(llm_results)
 
     output:
     tuple val(pxd), path(fetched_dir), path(detected_params), path("organism_results")
@@ -725,6 +748,8 @@ process organism_id {
         --cascadia_model_path ${params.cascadia_model_path} \
         --src_dir ${baseDir}/src \
         --snakemake_env_path ${params.meti_env_path} \
+        --llm_results ${llm_results} \
+        ${params.organism_id_all ? '--organism_id_all' : ''} \
         ${peptonizer_container_arg} \
         --log_file organism/events.jsonl \
         --results_base_dir ${params.outdir} \
