@@ -113,6 +113,36 @@ nextflow run main.nf \
   -resume
 ```
 
+### Using pre-configured test datasets
+
+Test PXD lists are available in [assets/pxd_test_files/](assets/pxd_test_files/) for validation and CI/CD:
+
+| Dataset | Count | Purpose |
+|---------|-------|---------|
+| `ConsolidatedTestPXDs.csv` | 142 | Comprehensive test — all validated test PXDs |
+| `GoldStandardSDRFs.csv` | 101 | Production validation — datasets with known-good SDRFs |
+| `PXDsTest.csv` | 2 | Quick smoke test for CI/CD pipelines |
+| `PXDsingle.csv` | 1 | Single-PXD debugging |
+
+**Quick test with 2 PXDs (fast validation):**
+```bash
+nextflow run main.nf \
+  --pxd_csv assets/pxd_test_files/PXDsTest.csv \
+  --max_raw_files 3 \
+  -resume
+```
+
+**Comprehensive test with 20 datasets:**
+```bash
+nextflow run main.nf \
+  --pxd_csv assets/pxd_test_files/ConsolidatedTestPXDs.csv \
+  --num_pxds 20 \
+  --max_raw_files 5 \
+  -resume
+```
+
+See [assets/pxd_test_files/README.md](assets/pxd_test_files/README.md) for detailed information about each test set.
+
 ### With database search enabled
 
 HAMLET auto-routes each PXD to SAGE (DDA) or DIA-NN (DIA) based on runAssessor detection:

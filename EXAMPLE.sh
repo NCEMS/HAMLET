@@ -5,6 +5,14 @@
 # ---------------------------------------------------------------------------
 # Before running with LLM/agentic features, set your API key:
 #   export OPENAI_API_KEY="sk-..."
+#
+# Test PXD lists are available in assets/pxd_test_files/:
+#   - ConsolidatedTestPXDs.csv    (all 142 unique test PXDs, union of all test sets)
+#   - GoldStandardSDRFs.csv       (101 PXDs with validated SDRF files)
+#   - PXDs.csv                    (12 general test PXDs)
+#   - PXDsTest.csv                (2 quick test PXDs)
+#   - PXDsingle.csv               (1 single PXD for minimal testing)
+#   - PXDfail.csv                 (5 known problematic PXDs)
 # ---------------------------------------------------------------------------
 
 # Example 1: Quick test — single PXD, 3 files, no search
@@ -13,7 +21,14 @@ nextflow run main.nf \
   --max_raw_files 3 \
   -resume
 
-# Example 2: Batch from CSV, limit files per PXD (good for testing)
+# Example 2: Quick batch test with consolidated test PXDs (good for CI/testing)
+# nextflow run main.nf \
+#   --pxd_csv assets/pxd_test_files/ConsolidatedTestPXDs.csv \
+#   --num_pxds 5 \
+#   --max_raw_files 3 \
+#   -resume
+
+# Example 3: Batch from master.csv, limit files per PXD (production testing)
 # master.csv must have a "PXD" column
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
@@ -21,14 +36,14 @@ nextflow run main.nf \
 #   --max_raw_files 3 \
 #   -resume
 
-# Example 3: Batch with database search enabled (auto-routes DDA→SAGE, DIA→DIA-NN)
+# Example 4: Batch with database search enabled (auto-routes DDA→SAGE, DIA→DIA-NN)
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
 #   --num_pxds 10 \
 #   --run_search true \
 #   -resume
 
-# Example 4: Force DDA search with a fallback taxid
+# Example 5: Force DDA search with a fallback taxid
 # nextflow run main.nf \
 #   --pxd PXD000070 \
 #   --run_search true \
@@ -36,7 +51,7 @@ nextflow run main.nf \
 #   --taxid 9606 \
 #   -resume
 
-# Example 5: With LLM metadata extraction from publications
+# Example 6: With LLM metadata extraction from publications
 # export OPENAI_API_KEY="sk-..."
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
@@ -44,7 +59,7 @@ nextflow run main.nf \
 #   --run_llm_extraction true \
 #   -resume
 
-# Example 6: Full pipeline — search + LLM + agentic metadata enrichment
+# Example 7: Full pipeline — search + LLM + agentic metadata enrichment
 # export OPENAI_API_KEY="sk-..."
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
@@ -54,7 +69,7 @@ nextflow run main.nf \
 #   --run_agentic_metadata true \
 #   -resume
 
-# Example 7: Run in background, log to file
+# Example 8: Run in background, log to file
 # nohup nextflow run main.nf \
 #   --pxd_csv master.csv \
 #   --run_search true \
