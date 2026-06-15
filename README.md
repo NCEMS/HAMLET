@@ -46,8 +46,23 @@ bash src/setup.sh
   - `cascadia_env` — DIA peptide identification runtime (model weights + Lightning; uses `src/cascadiaBolt/` for inference)
   - `casanovo_env` — DDA de novo sequencing runtime (PyTorch + Lightning; uses `src/casanovoBolt/` for inference)
 - Verify key executables (`ThermoRawFileParser`, `aria2c`, etc.)
+- Download NCBI taxonomy database files (nodes.dmp, names.dmp) for organism identification
 
-### 3. Download the Cascadia model (required for DIA)
+### 3. Download the NCBI taxonomy database (required for organism identification)
+
+The pipeline uses NCBI taxonomy files for deduplication during organism identification. These are downloaded automatically by `src/setup.sh`, but you can also download them manually:
+
+```bash
+bash src/bash/download_ncbi_taxonomy.sh
+```
+
+This downloads and extracts:
+- `nodes.dmp` (206 MB) — NCBI taxid hierarchy
+- `names.dmp` (277 MB) — NCBI taxid to organism name mapping
+
+These files are required for accurate species-level organism identification but will fall back gracefully if missing (using simple taxid counting).
+
+### 4. Download the Cascadia model (required for DIA)
 
 The Cascadia checkpoint (558 MB) is stored separately from the repo:
 
@@ -59,7 +74,7 @@ The Cascadia checkpoint (558 MB) is stored separately from the repo:
 
 If you only process DDA datasets you can skip this step.
 
-### 4. Set your API key (required for LLM/agentic features)
+### 5. Set your API key (required for LLM/agentic features)
 
 ```bash
 export OPENAI_API_KEY="sk-..."   # or any OpenAI-compatible key
@@ -67,7 +82,7 @@ export OPENAI_API_KEY="sk-..."   # or any OpenAI-compatible key
 
 Add this to `~/.bashrc` to make it persistent. The pipeline reads it from the environment — **never put API keys in source files**.
 
-### 5. Verify setup
+### 6. Verify setup
 
 ```bash
 conda activate meti_env

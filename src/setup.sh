@@ -175,7 +175,39 @@ else
 fi
 
 # ============================================
-# Step 6: GPU Setup and Validation
+# Step 6: Download NCBI Taxonomy Database
+# ============================================
+echo ""
+echo "Checking for NCBI taxonomy database..."
+
+NODES_DMP="${PROJECT_ROOT}/assets/taxonomy/nodes.dmp"
+NAMES_DMP="${PROJECT_ROOT}/assets/taxonomy/names.dmp"
+
+if [ -f "$NODES_DMP" ] && [ -f "$NAMES_DMP" ]; then
+    NODES_SIZE=$(du -h "$NODES_DMP" | cut -f1)
+    NAMES_SIZE=$(du -h "$NAMES_DMP" | cut -f1)
+    echo "✓ NCBI taxonomy database found:"
+    echo "  - nodes.dmp ($NODES_SIZE)"
+    echo "  - names.dmp ($NAMES_SIZE)"
+else
+    echo "ℹ NCBI taxonomy database not found. Downloading..."
+    echo "  (Required for accurate organism identification)"
+    echo ""
+    
+    if bash "$PROJECT_ROOT/src/bash/download_ncbi_taxonomy.sh"; then
+        echo "✓ NCBI taxonomy database downloaded successfully"
+    else
+        echo ""
+        echo "⚠ Warning: Failed to download NCBI taxonomy database"
+        echo "  The pipeline will still work but organism identification will be less accurate"
+        echo "  You can download manually later with:"
+        echo "  bash src/bash/download_ncbi_taxonomy.sh"
+        echo ""
+    fi
+fi
+
+# ============================================
+# Step 7: GPU Setup and Validation
 # ============================================
 echo ""
 echo "Checking for NVIDIA GPU..."
@@ -292,7 +324,7 @@ else
 fi
 
 # ============================================
-# Step 7: Final Checks & Instructions
+# Step 8: Final Checks & Instructions
 # ============================================
 echo ""
 echo "✓ Setup complete!"
