@@ -1,0 +1,66 @@
+
+# Unified Extraction Framework Configuration
+# HAMLET-specific override — passed via --config to agentic-metadata/main.py
+# Keep this file in the HAMLET repo; do NOT modify the submodule's config.yaml directly.
+
+llm:
+  # Base URL for the LLM API (OpenAI)
+  base_url: "https://api.openai.com/v1/"
+  # Model name to request
+  model: "gpt-4o-mini"
+  # Environment variable name containing the API key
+  api_key_env_var: "OPENAI_API_KEY"
+
+paths:
+  # Input and output directories (relative to project root recommended)
+  input_dir: "./docs"
+  output_dir: "./framework_output"
+  ontology_dir: "ontologies"
+  cache_dir: "ontology_cache"
+
+normalization:
+  # Backend to use for nearest neighbor search: 'faiss' (recommended), 'sklearn', 'annoy'
+  backend: "faiss"
+  
+  # Use GPU for embeddings if available
+  use_gpu: true
+  
+  # Use quantization index (IVF+SQ) for large ontologies (>10k terms) to save memory
+  use_quantization: true
+  
+  # Semantic similarity threshold (0.0 to 1.0)
+  similarity_threshold: 0.7
+  
+  # Number of candidates to retrieve
+  top_k: 5
+
+agents:
+  # LLM sampling temperatures to try
+  temperatures: [0.0]
+  
+  # Enable validation agent (The Critic)
+  validate: true
+  
+  # Re-extraction feedback loop: retry if confidence is below threshold
+  max_retries: 1              # Max re-extraction attempts (0 to disable)
+  confidence_threshold: 0.6   # Re-extract below this confidence score
+
+concurrency:
+  # Maximum number of parallel workers for extraction
+  # Should match --parallel in run_qwen_server.sh
+  max_workers: 2
+  # Timeout for LLM requests (seconds) — used by both the core pipeline and
+  # docetl operations. With reduced context and parallel slots, requests
+  # should complete faster, but keep generous timeout for safety.
+  request_timeout: 300
+
+# ============================================================
+# Reproducibility Settings
+# ============================================================
+reproducibility:
+  # Random seed for reproducible results
+  # Set to null for non-deterministic mode
+  seed: 42
+  
+  # Log reproducibility info at startup
+  log_info: true

@@ -22,7 +22,7 @@ import json
 ALLOWED_section_types = ['TITLE', 'ABSTRACT', 'INTRO', 'RESULTS', 'DISCUSS', 'FIG', 'METHODS', 'REF', 'SUPPL']
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 AGENTIC_MAIN = REPO_ROOT / "src" / "agentic-metadata" / "main.py"
-AGENTIC_CONFIG = REPO_ROOT / "src" / "agentic-metadata" / "config.yaml"
+AGENTIC_CONFIG = REPO_ROOT / "assets" / "agentic_metadata_config.yaml"
 
 # Set in main() so agentic_to_sdrf() can access the aggregated_results.json path.
 _last_input_json: Path = Path("")
