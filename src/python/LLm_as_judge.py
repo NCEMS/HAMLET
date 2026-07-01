@@ -1495,6 +1495,11 @@ def run_pipeline_evaluation(pxd_id: str, input_dir: str,
         print(f"  WARNING: no valid extracted values found for {pxd_id}")
         return
 
+    # Redirect cache dir to the output dir so it's writable in the pipeline work dir
+    global CACHE_DIR, _judge_model
+    CACHE_DIR     = os.path.join(out_dir, f".prompt_cache_{_CACHE_MODEL_SLUG}")
+    _judge_model  = None  # force re-init with new CACHE_DIR
+
     # --- Run GEval judge ---
     if USE_LLM_JUDGE and source_text:
         eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
@@ -2028,6 +2033,7 @@ MODES:
             EVALUATION_MODEL  = args.judge_model
             _CACHE_MODEL_SLUG = EVALUATION_MODEL.replace("/", "_").replace(" ", "_")
             CACHE_DIR         = os.path.join(BASE_DIR, f".prompt_cache_{_CACHE_MODEL_SLUG}")
+            _judge_model      = None  # force re-init
         run_pipeline_evaluation(args.pxd, args.input_dir, args.pmc_cache, args.outdir)
         return
 
