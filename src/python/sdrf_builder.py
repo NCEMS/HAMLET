@@ -143,27 +143,27 @@ class AgenticToSDRF:
 
         self.pxd_id: str = agg.get("pxd_id", "")
 
-        ra = agg.get("runAssessor", {})
+        ra = agg.get("runAssessor") or {}
         self._ra_files: dict = ra.get("files", {})          # mzml_path → file data
         self._ra_search: dict = ra.get("search_criteria", {})
         self._ra_knowledge: dict = ra.get("knowledge", {})
 
-        oi = agg.get("organism_identification", {})
+        oi = agg.get("organism_identification") or {}
         self._oi_results: list = oi.get("results", [])
 
-        msf = agg.get("modification_site_fractions", {})
-        dda_msf = msf.get("dda_closed_search", {})
+        msf = agg.get("modification_site_fractions") or {}
+        dda_msf = msf.get("dda_closed_search") or {}
         self._mods_per_stem: dict = dda_msf.get("per_sample_files", {})   # stem → {data:[...]}
 
         # sage quantification method
-        sage = agg.get("sage_results", {})
-        p2 = sage.get("pass2_closed_search", {}) if isinstance(sage, dict) else {}
+        sage = agg.get("sage_results") or {}
+        p2 = sage.get("pass2_closed_search") or {} if isinstance(sage, dict) else {}
         self._quant_method: str = (
             p2.get("quantification", {}).get("method", "")
             if isinstance(p2, dict) else ""
         )
 
-        pride_proj = agg.get("pride_metadata", {}).get("project", {})
+        pride_proj = (agg.get("pride_metadata") or {}).get("project") or {}
         self._sample_proc: str = pride_proj.get("sampleProcessingProtocol", "")
         self._data_proc: str = pride_proj.get("dataProcessingProtocol", "")
         self._pride_organisms: list = pride_proj.get("organisms", [])
@@ -171,7 +171,7 @@ class AgenticToSDRF:
         self._pride_diseases: list = pride_proj.get("diseases", [])
         self._pub_date: str = pride_proj.get("publicationDate", "")
 
-        self._llm_meta: dict = agg.get("llm_extracted_metadata", {})   # raw_file → metadata
+        self._llm_meta: dict = agg.get("llm_extracted_metadata") or {}   # raw_file → metadata
 
         # stem → mzML path index
         self._stem_to_mzml: dict[str, str] = {
@@ -256,6 +256,31 @@ class AgenticToSDRF:
     def _get_age(self) -> str:
         val = self._agentic_field(self._bio, "age")
         return val if val else "not available"
+
+    # ------------------------------------------------------------------ #
+    # Experimental design extractors (from ExperimentalDesignAgent)
+    # ------------------------------------------------------------------ #
+
+    def _get_biological_replicate(self) -> str:
+        val = self._agentic_field(self._exp, "number_of_biological_replicates")
+        if val and val.isdigit():
+            return val
+        return "1"
+
+    def _get_technical_replicate(self) -> str:
+        val = self._agentic_field(self._exp, "number_of_technical_replicates")
+        if val and val.isdigit():
+            return val
+        return "1"
+
+    def _get_fraction_identifier(self) -> str:
+        val = self._agentic_field(self._exp, "number_of_fractions")
+        if val and val.isdigit():
+            return val
+        return "1"
+
+    def _get_factor_value(self) -> str | None:
+        return self._agentic_field(self._exp, "factor_value")
 
     # ------------------------------------------------------------------ #
     # Per-file data extractors
@@ -515,6 +540,7 @@ class AgenticToSDRF:
         has_treatment: bool,
         has_enrichment: bool,
         has_fv_organism_part: bool,
+        has_factor_value: bool,
     ) -> list[str]:
         cols: list[str] = [
             "source name",
@@ -548,6 +574,8 @@ class AgenticToSDRF:
             "comment[technical replicate]",
             "comment[dissociation method]",
         ]
+        if has_factor_value:
+            cols.append("factor value[experimental design]")
         # multi-cardinality: indexed internally, flattened to same header on write
         for j in range(max_mods):
             cols.append(f"comment[modification parameters]#{j}")
@@ -596,6 +624,10 @@ class AgenticToSDRF:
         cell_line = self._get_cell_line()
         sex = self._get_sex()
         age = self._get_age()
+        biological_replicate = self._get_biological_replicate()
+        technical_replicate = self._get_technical_replicate()
+        fraction_identifier = self._get_fraction_identifier()
+        factor_value = self._get_factor_value()
         cleavage_agent = self._get_cleavage_agent()
         prec_tol, frag_tol = self._get_mass_tolerances()
         reduction_reagent = self._get_reduction_reagent()
@@ -636,6 +668,7 @@ class AgenticToSDRF:
         has_enrichment = any(pf["enrichment"] for pf in per_file)
         organism_parts = [organism_part] * len(raw_files)
         has_fv_organism_part = len(set(organism_parts)) > 1
+        has_factor_value = bool(factor_value)
 
         columns = self._build_column_order(
             has_cell_type=has_cell_type,
@@ -651,6 +684,7 @@ class AgenticToSDRF:
             has_treatment=has_treatment,
             has_enrichment=has_enrichment,
             has_fv_organism_part=has_fv_organism_part,
+            has_factor_value=has_factor_value,
         )
 
         rows: list[dict] = []
@@ -665,7 +699,7 @@ class AgenticToSDRF:
             if has_cell_line:
                 row["characteristics[cell line]"] = cell_line or "not available"
                 row["characteristics[cellosaurus accession]"] = "not available"
-            row["characteristics[biological replicate]"] = "1"
+            row["characteristics[biological replicate]"] = biological_replicate
             row["characteristics[sex]"] = sex
             row["characteristics[age]"] = age
             row["characteristics[individual]"] = pf["stem"]
@@ -679,8 +713,8 @@ class AgenticToSDRF:
             row["comment[label]"] = pf["label"]
             row["comment[instrument]"] = pf["instrument"]
             row["comment[cleavage agent details]"] = cleavage_agent
-            row["comment[fraction identifier]"] = "1"
-            row["comment[technical replicate]"] = "1"
+            row["comment[fraction identifier]"] = fraction_identifier
+            row["comment[technical replicate]"] = technical_replicate
             row["comment[dissociation method]"] = pf["dissociation"]
             for j, mod_str in enumerate(pf["mods"]):
                 row[f"comment[modification parameters]#{j}"] = mod_str
@@ -707,6 +741,8 @@ class AgenticToSDRF:
             row["factor value[disease]"] = disease
             if has_fv_organism_part:
                 row["factor value[organism part]"] = organism_part
+            if has_factor_value:
+                row["factor value[experimental design]"] = factor_value or "not available"
             rows.append(row)
 
         return columns, rows
