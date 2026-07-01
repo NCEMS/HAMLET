@@ -64,6 +64,7 @@ PIPELINE PARAMS (this workflow)
     LLM metadata extraction
         --run_llm_extraction true|false   Default: false
         --run_agentic_metadata true|false Default: false
+        --run_llm_judge true|false        Default: false
 
     Organism ID sampling
         --organism_id_all true|false      Default: false
@@ -121,6 +122,7 @@ params.taxid              = params.taxid              ?: '9606'
 params.acquisition_type   = params.acquisition_type   ?: 'AUTO'  // AUTO, DDA, DIA
 
 params.run_agentic_metadata = params.run_agentic_metadata ?: false  // Enable LLM metadata extraction after aggregation
+params.run_llm_judge        = params.run_llm_judge        ?: false  // Enable LLM-as-judge evaluation after agentic metadata
 params.organism_id_all     = params.organism_id_all     ?: false  // Force organism_id on all files even when single taxid
 
 // Organism identification parameters
@@ -398,11 +400,19 @@ workflow {
         
         agentic_results_ch = agentic_metadata_extraction(agentic_input_ch)
 
-        // Ensure summary waits for agentic extraction too
+        // Conditionally run LLM judge on agentic output
+        def post_agentic_ch
+        if (params.run_llm_judge) {
+            post_agentic_ch = llm_judge(agentic_results_ch)
+        } else {
+            post_agentic_ch = agentic_results_ch
+        }
+
+        // Ensure summary waits for agentic extraction (and judge if enabled) too
         final_barrier_ch = aggregated_results_ch
             .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
-            .join(agentic_results_ch)
-            .map { pxd, aggregated_results, metadata_extraction_output -> tuple(pxd, aggregated_results) }
+            .join(post_agentic_ch)
+            .map { pxd, aggregated_results, _output -> tuple(pxd, aggregated_results) }
     } else {
         final_barrier_ch = aggregated_results_ch
             .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
@@ -937,6 +947,57 @@ process agentic_metadata_extraction {
 
     # Verify output
     ls -la metadata_extraction_output/ || echo "No metadata extraction output"
+    """
+}
+
+
+/* -----------------------
+ * PROCESS: llm_judge
+ * --------------------- */
+process llm_judge {
+
+    tag "judge-${pxd}"
+
+    publishDir "${params.outdir}/${pxd}/judge_output", mode: 'copy', overwrite: true
+
+    cache 'deep'
+
+    errorStrategy 'ignore'  // Non-blocking quality step; pipeline continues if judge fails
+
+    input:
+    tuple val(pxd), path(metadata_extraction_output)
+
+    output:
+    tuple val(pxd), path("judge_output")
+
+    script:
+    """
+    # Initialize conda
+    ${params.conda_init}
+
+    mkdir -p judge_output
+
+    # Propagate API key for the judge model (OpenRouter)
+    export OPENROUTER_API_KEY="\${OPENROUTER_API_KEY:-}"
+
+    if [ -z "\${OPENROUTER_API_KEY}" ]; then
+        echo "WARNING: OPENROUTER_API_KEY not set. Skipping LLM judge."
+        echo '{"skipped": true, "reason": "OPENROUTER_API_KEY not set"}' > judge_output/skipped.json
+        exit 0
+    fi
+
+    echo "=== Running LLM Judge for ${pxd} ==="
+    conda run -p ${params.meti_env_path} python ${baseDir}/src/python/LLm_as_judge.py \\
+        --pipeline \\
+        --pxd ${pxd} \\
+        --input_dir ${metadata_extraction_output} \\
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache \\
+        --outdir judge_output || {
+        echo "WARNING: LLM judge failed for ${pxd} - continuing"
+        mkdir -p judge_output
+    }
+
+    ls -la judge_output/ || echo "No judge output"
     """
 }
 

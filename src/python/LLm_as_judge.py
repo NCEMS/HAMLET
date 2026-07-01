@@ -1286,6 +1286,273 @@ def evaluate_paper_with_geval(paper_id: str,
     return eval_rows
 
 
+def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
+                                agent: str) -> dict[str, list[str]]:
+    """Load one agent's pipeline enriched JSON from the integrated_output structure.
+
+    Reads from:
+        input_dir/integrated_output/{agent}/temp_0.0/{pxd_id}_PubText_enriched.json
+
+    Each non-private field is a dict like {"resolved": "value", "confidence": ..., "status": "..."}.
+    Extracts the "resolved" value, skipping nulls and complex (non-string) resolved values.
+    Applies FIELD_NAME_MAP to canonical names.
+    """
+    enriched_path = os.path.join(
+        input_dir, "integrated_output", agent, "temp_0.0",
+        f"{pxd_id}_PubText_enriched.json"
+    )
+    if not os.path.exists(enriched_path):
+        print(f"    WARNING: pipeline enriched JSON not found: {enriched_path}")
+        return {}
+
+    try:
+        with open(enriched_path, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
+        print(f"    [{agent}] pipeline loaded: {enriched_path}")
+    except Exception as e:
+        print(f"    WARNING: could not read {enriched_path}: {e}")
+        return {}
+
+    allowed_fields: set[str] = set()
+    for fields_list in PIPELINE_FIELDS.values():
+        for field in fields_list:
+            allowed_fields.add(field)
+            allowed_fields.add(FIELD_NAME_MAP.get(field, field))
+
+    parsed: dict[str, list[str]] = {}
+    for field, entry in raw_data.items():
+        if field.startswith("_"):
+            continue
+        if field not in allowed_fields:
+            continue
+        if not isinstance(entry, dict):
+            continue
+        resolved = entry.get("resolved")
+        if resolved is None:
+            continue
+        # Skip complex resolved values (e.g. modification_site_fractions dicts)
+        if not isinstance(resolved, (str, int, float)):
+            continue
+        value_str = str(resolved).strip()
+        if _is_not_extracted(value_str) or _is_evidence_sentence(value_str):
+            continue
+        mapped = FIELD_NAME_MAP.get(field, field)
+        existing = parsed.setdefault(mapped, [])
+        if value_str not in existing:
+            existing.append(value_str)
+    return parsed
+
+
+def get_manuscript_from_pmc_cache(pxd_id: str, pmc_cache_path: str) -> str:
+    """Load publication text for a PXD from the pipeline's PMC cache JSON.
+
+    The PMC cache is a JSON file (or directory with a JSON file) keyed by PXD ID,
+    each entry having a 'full_text' key.  Mirrors the logic in run_agentic_metadata.py.
+    """
+    # Support both a direct JSON file path and a directory containing the cache
+    cache_path = Path(pmc_cache_path)
+    if cache_path.is_dir():
+        # Try common filenames inside the directory
+        for candidate in ["pmc_cache.json", "cache.json"]:
+            p = cache_path / candidate
+            if p.exists():
+                cache_path = p
+                break
+        else:
+            # Fall back: try to read directly as if the directory IS the cache file
+            print(f"    WARNING: pmc_cache is a directory with no known JSON file: {pmc_cache_path}")
+            return ""
+
+    if not cache_path.exists():
+        print(f"    WARNING: pmc_cache file not found: {cache_path}")
+        return ""
+
+    try:
+        with open(cache_path, "r", encoding="utf-8") as f:
+            pmc_data = json.load(f)
+    except Exception as e:
+        print(f"    WARNING: could not read pmc_cache {cache_path}: {e}")
+        return ""
+
+    pmc_entry = pmc_data.get(pxd_id)
+    if not pmc_entry:
+        print(f"    WARNING: PXD {pxd_id} not found in pmc_cache")
+        return ""
+
+    full_text = pmc_entry.get("full_text", "").strip()
+    if not full_text:
+        print(f"    WARNING: empty full_text in pmc_cache for {pxd_id}")
+        return ""
+
+    # Extract title + abstract + methods sections (same logic as load_manuscript)
+    kept_parts = []
+    for section in ["TITLE", "ABSTRACT", "METHODS"]:
+        pattern = rf"===\s*{section}\s*===(.*?)(?===\s*[A-Z]|\Z)"
+        match = re.search(pattern, full_text, re.DOTALL | re.IGNORECASE)
+        if match:
+            kept_parts.append(f"=== {section} ===\n{match.group(1).strip()}")
+    if kept_parts:
+        result = "\n\n".join(kept_parts)
+        print(f"    PMC cache [{pxd_id}]: {len(full_text):,} chars total, "
+              f"using {len(result):,} chars (title + abstract + methods)")
+        return result
+    print(f"    PMC cache [{pxd_id}]: {len(full_text):,} chars (full text, no sections found)")
+    return full_text
+
+
+def run_pipeline_evaluation(pxd_id: str, input_dir: str,
+                             pmc_cache_path: str, out_dir: str) -> None:
+    """Run the LLM judge evaluation for a single PXD from pipeline enriched JSONs.
+
+    input_dir is the metadata_extraction_output directory produced by
+    run_agentic_metadata.py (contains integrated_output/{agent}/temp_0.0/).
+    Outputs are written to out_dir (per-paper CSV, JSON, coverage CSV, plots).
+    """
+    os.makedirs(out_dir, exist_ok=True)
+
+    print(f"\n=== LLM Judge: pipeline evaluation for {pxd_id} ===")
+    print(f"  Input dir   : {input_dir}")
+    print(f"  PMC cache   : {pmc_cache_path}")
+    print(f"  Output dir  : {out_dir}")
+    print(f"  Judge model : {EVALUATION_MODEL}  (via OpenRouter)")
+    print(f"  LLM judge   : {'ENABLED' if USE_LLM_JUDGE else 'DISABLED'}")
+    print(f"  Workers     : {MAX_WORKERS}")
+
+    # --- Load manuscript text ---
+    source_text = get_manuscript_from_pmc_cache(pxd_id, pmc_cache_path)
+    if not source_text:
+        print(f"  WARNING: no manuscript text found for {pxd_id} -- proceeding without judge")
+
+    # --- Load extraction JSONs from all three agents ---
+    all_predicted: dict[str, dict[str, list[str]]] = {}
+    for agent in AGENTS:
+        pred = load_enriched_json_pipeline(input_dir, pxd_id, agent)
+        if pred:
+            all_predicted[agent] = pred
+
+    if not all_predicted:
+        print(f"  ERROR: no enriched JSON found for {pxd_id} -- aborting judge evaluation")
+        return
+
+    # --- Build coverage rows ---
+    coverage_rows = []
+    for agent in AGENTS:
+        pred = all_predicted.get(agent, {})
+        for raw_field in PIPELINE_FIELDS.get(agent, []):
+            if raw_field.lower() in SKIP_ANNOTATION_FIELDS:
+                continue
+            mapped  = FIELD_NAME_MAP.get(raw_field, raw_field)
+            values  = pred.get(mapped) or pred.get(raw_field) or []
+            display = " | ".join(values) if values else ""
+            coverage_rows.append({
+                "paper_id":        pxd_id,
+                "agent":           agent,
+                "pipeline_field":  raw_field,
+                "mapped_field":    mapped,
+                "extracted_value": display,
+                "was_extracted":   bool(values),
+            })
+
+    n_extracted = sum(1 for r in coverage_rows if r["was_extracted"])
+    print(f"  Fields extracted: {n_extracted}/{len(coverage_rows)}")
+
+    # --- Build eval rows (deduplicated) ---
+    seen_eval: set[tuple[str, str]] = set()
+    eval_rows: list[dict] = []
+    for agent in AGENTS:
+        pred = all_predicted.get(agent, {})
+        for raw_field in PIPELINE_FIELDS.get(agent, []):
+            if raw_field.lower() in SKIP_ANNOTATION_FIELDS:
+                continue
+            mapped = FIELD_NAME_MAP.get(raw_field, raw_field)
+            values = pred.get(mapped) or pred.get(raw_field) or []
+            for v in values:
+                if _is_not_extracted(v):
+                    continue
+                dedup_key = (mapped, _norm(v))
+                if dedup_key in seen_eval:
+                    continue
+                seen_eval.add(dedup_key)
+                eval_rows.append({
+                    "paper_id":             pxd_id,
+                    "agent":                agent,
+                    "annotation_type":      mapped,
+                    "extracted_value":      v,
+                    "all_values_for_field": "",
+                    "verdict":              None,
+                    "type_mismatch":        None,
+                    "correct_type":         None,
+                    "value_correct":        None,
+                    "value_complete":       None,
+                    "hallucination":        None,
+                    "issue_summary":        "",
+                    "corrected_value":      None,
+                })
+
+    print(f"  Evaluation rows: {len(eval_rows)} (deduplicated)")
+
+    if not eval_rows:
+        print(f"  WARNING: no valid extracted values found for {pxd_id}")
+        return
+
+    # --- Run GEval judge ---
+    if USE_LLM_JUDGE and source_text:
+        eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
+    else:
+        print("  Skipping LLM judge (disabled or no manuscript text).")
+
+    # --- Write outputs ---
+    import csv as _csv
+
+    review_path   = os.path.join(out_dir, "llm_judge_annotation_review.csv")
+    stats_path    = os.path.join(out_dir, "llm_judge_per_paper.csv")
+    coverage_path = os.path.join(out_dir, "llm_judge_coverage.csv")
+    json_dir      = os.path.join(out_dir, "json_outputs")
+    os.makedirs(json_dir, exist_ok=True)
+
+    for path, fieldnames, rows in [
+        (review_path,   _REVIEW_CSV_FIELDS,   eval_rows),
+        (stats_path,    _STATS_CSV_FIELDS,    [_compute_single_paper_stats(pxd_id, eval_rows)]),
+        (coverage_path, _COVERAGE_CSV_FIELDS, coverage_rows),
+    ]:
+        with open(path, "w", newline="", encoding="utf-8") as fh:
+            writer = _csv.DictWriter(fh, fieldnames=fieldnames,
+                                     quoting=_csv.QUOTE_ALL, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"  Written: {path}")
+
+    _write_paper_json(pxd_id, eval_rows, json_dir)
+
+    per_paper_df = pd.DataFrame([_compute_single_paper_stats(pxd_id, eval_rows)])
+    df           = pd.DataFrame(eval_rows)
+    plot_results(df, per_paper_df, pxd_id, out_dir)
+
+    stat = per_paper_df.iloc[0]
+    print(f"\n  RESULTS: {pxd_id}")
+    print(f"    total={stat.get('total_extracted', 0)}  "
+          f"correct={stat.get('judge_n_correct', 0)}  "
+          f"halluc={stat.get('judge_n_hallucinated', 0)}  "
+          f"mismatch={stat.get('judge_n_mismatch', 0)}  "
+          f"wrong={stat.get('judge_n_wrong', 0)}  "
+          f"incomplete={stat.get('judge_n_incomplete', 0)}")
+    acc = stat.get("judge_accuracy")
+    if acc is not None:
+        print(f"    accuracy={acc:.1%}")
+
+    cache_stats = _get_judge_model().get_cache_stats()
+    print("\n  CACHE STATISTICS")
+    for k, v in cache_stats.items():
+        print(f"    {k:<35} {v}")
+
+    print(f"\n  Output files:")
+    print(f"    Review CSV  : {review_path}")
+    print(f"    Stats CSV   : {stats_path}")
+    print(f"    Coverage CSV: {coverage_path}")
+    print(f"    JSON outputs: {json_dir}/{pxd_id}.json")
+    print(f"    Plots       : {out_dir}/llm_judge_*.png")
+
+
 def load_manuscript(pxd_id: str) -> str:
     """Load the manuscript text for a given PXD dataset"""
     path = os.path.join(TEST_SET, pxd_id, "manuscript.txt")
@@ -1701,15 +1968,45 @@ def plot_results(df: pd.DataFrame, per_paper_df: pd.DataFrame,
 
 def main():
     """Parse command line arguments and run the full evaluation pipeline"""
-    global USE_LLM_JUDGE, LIMIT, MAX_WORKERS
+    global USE_LLM_JUDGE, LIMIT, MAX_WORKERS, EVALUATION_MODEL, _CACHE_MODEL_SLUG, CACHE_DIR
 
     parser = argparse.ArgumentParser(
-        description="LLM judge evaluation using manuscript text and extraction JSONs only")
-    parser.add_argument("--model", required=True,
-                        choices=list(MODEL_EXTRACTION_DIRS.keys()),
-                        help="Model: claude / gpt / gemini / llama")
-    parser.add_argument("--no-judge", action="store_true", help="Skip LLM judge")
-    parser.add_argument("--limit", type=int, default=None, help="Limit to first N papers")
+        description="LLM judge evaluation for agentic metadata extraction",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+MODES:
+  Pipeline mode (HAMLET integration):
+    --pipeline --pxd PXD073162 --input_dir metadata_extraction_output
+               --pmc_cache pride_survey/pmc_cache --outdir judge_output
+
+  Benchmark mode (multi-model/multi-paper evaluation):
+    --model claude|gpt|gemini|llama
+""",
+    )
+
+    # ---- mode selection ----
+    mode_grp = parser.add_mutually_exclusive_group(required=True)
+    mode_grp.add_argument("--pipeline", action="store_true",
+                          help="Pipeline mode: evaluate a single PXD from enriched JSONs")
+    mode_grp.add_argument("--model", choices=list(MODEL_EXTRACTION_DIRS.keys()),
+                          help="Benchmark mode: model to evaluate (claude/gpt/gemini/llama)")
+
+    # ---- pipeline-mode args ----
+    parser.add_argument("--pxd", default=None,
+                        help="[pipeline] PXD accession to evaluate (e.g. PXD073162)")
+    parser.add_argument("--input_dir", default=None,
+                        help="[pipeline] Path to metadata_extraction_output directory")
+    parser.add_argument("--pmc_cache", default=None,
+                        help="[pipeline] Path to PMC cache JSON (or directory containing it)")
+    parser.add_argument("--outdir", default=None,
+                        help="[pipeline] Output directory for judge results")
+    parser.add_argument("--judge_model", default=None,
+                        help=f"[pipeline] OpenRouter model name (default: {EVALUATION_MODEL})")
+
+    # ---- shared args ----
+    parser.add_argument("--no-judge", action="store_true", help="Skip LLM judge API calls")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="[benchmark] Limit to first N papers")
     parser.add_argument("--workers", type=int, default=None,
                         help=f"Max parallel LLM calls (default: {MAX_WORKERS})")
     args = parser.parse_args()
@@ -1721,6 +2018,20 @@ def main():
     if args.workers:
         MAX_WORKERS = args.workers
 
+    # ---- pipeline mode ----
+    if args.pipeline:
+        for flag, name in [(args.pxd, "--pxd"), (args.input_dir, "--input_dir"),
+                           (args.pmc_cache, "--pmc_cache"), (args.outdir, "--outdir")]:
+            if not flag:
+                parser.error(f"{name} is required in --pipeline mode")
+        if args.judge_model:
+            EVALUATION_MODEL  = args.judge_model
+            _CACHE_MODEL_SLUG = EVALUATION_MODEL.replace("/", "_").replace(" ", "_")
+            CACHE_DIR         = os.path.join(BASE_DIR, f".prompt_cache_{_CACHE_MODEL_SLUG}")
+        run_pipeline_evaluation(args.pxd, args.input_dir, args.pmc_cache, args.outdir)
+        return
+
+    # ---- benchmark mode ----
     model_name     = args.model
     extraction_dir = MODEL_EXTRACTION_DIRS[model_name]
     out_dir        = os.path.join(BASE_DIR, "deepeval_SDRF_results_Final_V_text_only3",
