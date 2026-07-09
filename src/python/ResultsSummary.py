@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+import json
 import os
 import re
 from collections import defaultdict
@@ -104,6 +105,57 @@ def _list_spectral_files(downloads_root: Path, pxd: str) -> List[str]:
     return out
 
 
+def _read_judge_summary(results_dir: Path, pxd: str) -> Dict[str, str]:
+    """Read llm_judge and SDRF refinement metrics from the finalize_sdrf output."""
+    empty: Dict[str, str] = {
+        "pre_judge_accuracy": "",
+        "pre_judge_correct": "",
+        "pre_judge_hallucinated": "",
+        "pre_judge_wrong": "",
+        "pre_judge_mismatch": "",
+        "overrides_applied": "",
+        "applied_override_fields": "",
+        "post_judge_accuracy": "",
+        "post_judge_correct": "",
+    }
+    report_path = (
+        results_dir
+        / pxd
+        / "agentic_metadata"
+        / "metadata_extraction_output"
+        / f"{pxd}.sdrf_refinement_report.json"
+    )
+    if not report_path.exists():
+        return empty
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+    except Exception:
+        return empty
+
+    out: Dict[str, str] = dict(empty)
+
+    pre = report.get("pre_judge_summary") or {}
+    if pre.get("judge_accuracy") is not None:
+        out["pre_judge_accuracy"] = f"{float(pre['judge_accuracy']):.2f}"
+    out["pre_judge_correct"]     = str(pre.get("judge_n_correct", ""))
+    out["pre_judge_hallucinated"] = str(pre.get("judge_n_hallucinated", ""))
+    out["pre_judge_wrong"]       = str(pre.get("judge_n_wrong", ""))
+    out["pre_judge_mismatch"]    = str(pre.get("judge_n_mismatch", ""))
+
+    apps = report.get("applied_overrides") or {}
+    out["overrides_applied"]       = str(len(apps))
+    out["applied_override_fields"] = ";".join(
+        f"{k}={v}" for k, v in apps.items()
+    )
+
+    post = report.get("post_judge_summary") or {}
+    if post.get("judge_accuracy") is not None:
+        out["post_judge_accuracy"] = f"{float(post['judge_accuracy']):.2f}"
+    out["post_judge_correct"] = str(post.get("judge_n_correct", ""))
+
+    return out
+
+
 def _discover_pxds(results_dir: Path, nextflow_log_map: Dict[str, Dict[str, object]]) -> List[str]:
     pxds = set()
 
@@ -132,6 +184,7 @@ def build_rows(
     nxf_map: DefaultDict[str, DefaultDict[str, List[Tuple[str, str, str]]]],
     work_root: Path,
     downloads_root: Path,
+    results_dir: Optional[Path] = None,
 ) -> List[Dict[str, str]]:
     rows: List[Dict[str, str]] = []
 
@@ -178,6 +231,10 @@ def build_rows(
             row[f"{proc}_workdir"] = workdirs_str
 
         rows.append(row)
+
+        if results_dir is not None:
+            judge_cols = _read_judge_summary(results_dir, pxd)
+            row.update(judge_cols)
 
     return rows
 
@@ -274,12 +331,24 @@ def main() -> None:
         nxf_map=nxf_map,
         work_root=work_root,
         downloads_root=downloads_root,
+        results_dir=results_dir,
     )
 
     fieldnames: List[str] = ["PXD", "Sample File"]
     for proc in processes:
         fieldnames.append(f"{proc}_completed")
         fieldnames.append(f"{proc}_workdir")
+    fieldnames += [
+        "pre_judge_accuracy",
+        "pre_judge_correct",
+        "pre_judge_hallucinated",
+        "pre_judge_wrong",
+        "pre_judge_mismatch",
+        "overrides_applied",
+        "applied_override_fields",
+        "post_judge_accuracy",
+        "post_judge_correct",
+    ]
 
     write_csv(out_csv, rows, fieldnames)
 

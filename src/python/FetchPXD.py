@@ -693,55 +693,22 @@ def run_runAssessor(output_dir="raw_data", central_mzml_dir=None, pxd=None):
     If central_mzml_dir is provided, saves results to central storage for persistence.
     Otherwise, saves to output_dir/runAssessor/ (local cache).
     """
-    # Figure out where THIS script lives (inside container: /workspace/src/python)
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    assessor_path = os.path.join(this_dir, "mzML_assessor.py")
-
-    print(f"\nLaunching Run Assessor")
-    
-    # Determine where to save results
-    if central_mzml_dir and pxd:
-        # Save to central storage for reuse across pipeline runs
-        runAssessor_output_dir = os.path.join(central_mzml_dir, pxd, "runAssessor")
-    else:
-        # Fall back to local output_dir
-        runAssessor_output_dir = os.path.join(output_dir, "runAssessor")
-    
-    os.makedirs(runAssessor_output_dir, exist_ok=True)
-    runAssessor_outfile = os.path.join(runAssessor_output_dir, "study_metadata.json")
-
-    if os.path.exists(runAssessor_outfile):
-        print(f"✓ RunAssessor output already exists: {runAssessor_outfile}")
-        return runAssessor_outfile
-
-    cmd = [
-        "python",
-        assessor_path,
-        "--inpath", output_dir,
-        "--outpath", runAssessor_output_dir,
-    ]
-
-    print("#" * 50)
-    print("Running command:", " ".join(cmd))
-    result = subprocess.run(cmd, capture_output=True, text=True)
-
-    # show logs
-    if result.stdout:
-        print(result.stdout)
-    if result.stderr:
-        print(result.stderr)
-
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"mzML_assessor failed with code {result.returncode}:\n{result.stderr}"
-        )
-
-    print(f"✓ RunAssessor results saved to: {runAssessor_outfile}")
-    return runAssessor_outfile
+    raise RuntimeError(
+        "Local runAssessor execution from FetchPXD is deprecated. "
+        "Use the dedicated Nextflow run_assessor stage with the RunAssessor submodule."
+    )
 ###################################################################################################################################################
 
 ###################################################################################################################################################
-def processes_pxds(pxd_list: List[str], download_dir: str, use_aria2c: bool = False, aria2c_threads: int = 4, max_raw_files: Optional[int] = None, logger: Optional[PipelineLogger] = None):
+def processes_pxds(
+    pxd_list: List[str],
+    download_dir: str,
+    use_aria2c: bool = False,
+    aria2c_threads: int = 4,
+    max_raw_files: Optional[int] = None,
+    logger: Optional[PipelineLogger] = None,
+    skip_run_assessor: bool = False,
+):
     for pxd in pxd_list:
         print(f"\nProcessing PXD: {pxd}")
         if logger:
@@ -772,13 +739,16 @@ def processes_pxds(pxd_list: List[str], download_dir: str, use_aria2c: bool = Fa
             
             if all_valid:
                 print(f"✓ All files valid, skipping download for {pxd}")
-                # Run runAssessor if its output is missing for these mzML files
-                runAssessor_outfile = os.path.join(download_dir, pxd, "runAssessor", "study_metadata.json")
-                if not os.path.exists(runAssessor_outfile):
-                    print(f"  runAssessor output missing for {pxd}, running now...")
-                    run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
+                # Run runAssessor if requested and its output is missing.
+                if skip_run_assessor:
+                    print("  Skipping runAssessor (handled by separate pipeline stage)")
                 else:
-                    print(f"  ✓ runAssessor output already exists: {runAssessor_outfile}")
+                    runAssessor_outfile = os.path.join(download_dir, pxd, "runAssessor", "study_metadata.json")
+                    if not os.path.exists(runAssessor_outfile):
+                        print(f"  runAssessor output missing for {pxd}, running now...")
+                        run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
+                    else:
+                        print(f"  ✓ runAssessor output already exists: {runAssessor_outfile}")
                 # Create symlink in current work directory for Nextflow output
                 work_pxd_dir = os.path.join('.', pxd)
                 if os.path.islink(work_pxd_dir):
@@ -997,8 +967,11 @@ def processes_pxds(pxd_list: List[str], download_dir: str, use_aria2c: bool = Fa
         else:
             print(f"⚠ No mzML files found after conversion - download may have failed")
 
-        # Run RunAssessor on the downloaded data
-        run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
+        # Run runAssessor on the downloaded data unless delegated to a separate stage.
+        if skip_run_assessor:
+            print("Skipping runAssessor (handled by separate pipeline stage)")
+        else:
+            run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
         
         # Create symlink in current work directory for Nextflow output
         work_pxd_dir = os.path.join('.', pxd)
@@ -1036,6 +1009,7 @@ def main():
     parser.add_argument('--use_aria2c', action='store_true', help='Use aria2c for multi-threaded downloads instead of wget')
     parser.add_argument('--aria2c_threads', type=int, default=4, help='Number of threads for aria2c downloads (default: 4)')
     parser.add_argument('--max_raw_files', type=int, default=None, help='Maximum number of spectrum files (.RAW) to download per PXD (default: all files)')
+    parser.add_argument('--skip_run_assessor', action='store_true', help='Skip runAssessor execution (use when pipeline runs it as a dedicated stage)')
     parser.add_argument('--log_file', default=None, help='Path to JSONL file for pipeline event logging')
     args = parser.parse_args()
     print(f"\nStarting FetchPXD with arguments: {args}")
@@ -1064,7 +1038,15 @@ def main():
             logger.process_error("fetch", "No PXD identifiers provided")
         return
     print(f"Processing PXDs: {pxd_list}")
-    processes_pxds(pxd_list, download_dir, args.use_aria2c, args.aria2c_threads, args.max_raw_files, logger=logger)
+    processes_pxds(
+        pxd_list,
+        download_dir,
+        args.use_aria2c,
+        args.aria2c_threads,
+        args.max_raw_files,
+        logger=logger,
+        skip_run_assessor=args.skip_run_assessor,
+    )
     
 ###################################################################################################################################################
 if __name__ == "__main__":

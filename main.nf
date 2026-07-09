@@ -46,7 +46,6 @@ PIPELINE PARAMS (this workflow)
         --min_peptides_for_peptonizer <N> Default: 100 (may be overridden in config)
 
     Search
-        --run_search true|false                        Default: false
         --taxid <taxid>                               Default: 9606 (may be overridden)
         --search_min_ptm_psms <N>                     Default: 50
         --search_max_variable_mods <N>                Default: 4
@@ -57,14 +56,11 @@ PIPELINE PARAMS (this workflow)
         --aria2c_threads <N>              Default: 4
         --max_parallel_pxds <N>           Default: 10
         --download_timeout <duration>     Default: 4h
-
-    Organism identification
-        --run_organism_id true|false      Default: true
+        --stage_manifest <path>           Default: results/pipeline_stage_manifest.json
+            Manifest with per-PXD, per-stage Availability/Complete/key_outputs.
 
     LLM metadata extraction
         --run_llm_extraction true|false   Default: false
-        --run_agentic_metadata true|false Default: false
-        --run_llm_judge true|false        Default: false
 
     Organism ID sampling
         --organism_id_all true|false      Default: false
@@ -80,8 +76,8 @@ EXAMPLES
     # Force DIA for everything
     nextflow run main.nf --pxd_csv PXDs.csv --acquisition_type DIA -resume
 
-    # Single PXD, no search
-    nextflow run main.nf --pxd PXD000070 --run_search false -resume
+    # Single PXD (stage behavior controlled by stage_manifest)
+    nextflow run main.nf --pxd PXD000070 -resume
 """
 }
 
@@ -107,22 +103,16 @@ params.taxid_list_file    = params.taxid_list_file    ?: "${baseDir}/assets/taxi
 // params.proteowizard_wineprefix = removed (container-free pipeline)
 params.sage_config        = params.sage_config        ?: "${baseDir}/assets/default_sage.config"
 
-params.run_search         = params.run_search         ?: false
-// Search routing (simplified):
-//   - if run_search=true and DDA: open search -> PTM-Shepherd -> closed search
-//   - if run_search=true and DIA: DIA-NN inference only (default mods)
-// Backwards-compat: old values 'open_only'/'open_and_closed' are treated as true.
 params.search_min_ptm_psms = params.search_min_ptm_psms ?: 50
 
-params.run_organism_id    = params.run_organism_id    ?: true   // Run organism_id (de novo + Peptonizer)
 params.search_max_variable_mods = params.search_max_variable_mods ?: 4  // Max variable mods (e.g., Phosphorylation, Oxidation)
 params.high_confidence_q_threshold = params.high_confidence_q_threshold ?: 0.01
 params.min_high_confidence_peptides = params.min_high_confidence_peptides ?: 10
 params.taxid              = params.taxid              ?: '9606'
 params.acquisition_type   = params.acquisition_type   ?: 'AUTO'  // AUTO, DDA, DIA
+params.stage_manifest     = params.stage_manifest     ?: "${params.outdir}/pipeline_stage_manifest.json"
 
-params.run_agentic_metadata = params.run_agentic_metadata ?: false  // Enable LLM metadata extraction after aggregation
-params.run_llm_judge        = params.run_llm_judge        ?: false  // Enable LLM-as-judge evaluation after agentic metadata
+params.n_judge_runs         = params.n_judge_runs         ?: 3      // Number of judge runs for consensus (1 = single pass)
 params.organism_id_all     = params.organism_id_all     ?: false  // Force organism_id on all files even when single taxid
 
 // Organism identification parameters
@@ -168,13 +158,10 @@ workflow {
         diann_libs_dir.mkdirs()
     }
 
-    // Create PXD channel from either single PXD or CSV file
+    // Build PXD list from either single PXD or CSV file
+    def pxd_list = []
     if (params.pxd_csv) {
-        // Read PXDs from CSV file
         log.info "Reading PXDs from CSV: ${params.pxd_csv}"
-        
-        // Read and collect PXDs to list first
-        def pxd_list = []
         new File(params.pxd_csv).withReader { reader ->
             reader.readLine() // Skip header
             reader.eachLine { line ->
@@ -186,24 +173,50 @@ workflow {
                 }
             }
         }
-        
-        // Apply limit if specified
-        if (params.num_pxds) {
-            pxd_list = pxd_list.take(params.num_pxds as int)
-        }
-        
-        log.info "Will process ${pxd_list.size()} PXD(s) in parallel: ${pxd_list.join(', ')}"
-        
-        // Create channel from list
-        pxd_ch = Channel.fromList(pxd_list)
-        
     } else if (params.pxd) {
-        // Single PXD mode
-        log.info "Processing single PXD: ${params.pxd}"
-        pxd_ch = Channel.of(params.pxd)
+        pxd_list = [ params.pxd.toString().trim() ]
     } else {
         error "Must specify either --pxd (single PXD) or --pxd_csv (CSV file with PXDs)"
     }
+
+    // Apply limit if specified
+    if (params.num_pxds) {
+        pxd_list = pxd_list.take(params.num_pxds as int)
+    }
+
+    if (pxd_list) {
+        log.info "Will process ${pxd_list.size()} PXD(s) in parallel: ${pxd_list.join(', ')}"
+    } else {
+        log.info "No PXDs selected. Downstream steps will be skipped; results_summary will still run."
+    }
+
+    // Initialize/reconcile unified stage manifest before launching processes.
+    // This computes stage completion from file checkpoints and preserves user-edited availability.
+    def manifestCmd = [
+        'python',
+        "${baseDir}/src/python/stage_manifest.py",
+        'init',
+        '--manifest', params.stage_manifest.toString(),
+        '--base_dir', baseDir.toString(),
+        '--outdir', params.outdir.toString(),
+        '--central_dir', params.central_mzml_dir.toString(),
+        '--pxds', pxd_list.join(','),
+    ]
+    def manifestProc = new ProcessBuilder(manifestCmd.collect { it.toString() })
+        .directory(new File(baseDir.toString()))
+        .redirectErrorStream(true)
+        .start()
+    def manifestOut = manifestProc.inputStream.getText('UTF-8')
+    def manifestRc = manifestProc.waitFor()
+    if (manifestOut?.trim()) {
+        log.info manifestOut.trim()
+    }
+    if (manifestRc != 0) {
+        error "Failed to initialize stage manifest at ${params.stage_manifest} (exit=${manifestRc})"
+    }
+
+    // Create channel from final list
+    pxd_ch = Channel.fromList(pxd_list)
 
     // Fetch all PXDs (runs in parallel)
     // Output: [pxd, fetched_dir]
@@ -213,6 +226,11 @@ workflow {
             // Use stable canonical path instead of work-dir symlink for downstream cache stability
             tuple(pxd, file("${params.central_mzml_dir}/${pxd}"))
         }
+
+    // Run runAssessor as an explicit pipeline stage so it can be rerun independently
+    // (e.g., after updating the runAssessor submodule).
+    assessor_ch = run_assessor(fetched_ch)
+        .map { pxd, fetched_dir, study_metadata -> tuple(pxd, fetched_dir) }
 
     // Run LLM-based metadata extraction from publications FIRST.
     // LLM results inform determine_acquisition_params (e.g., Comment[AcquisitionMethod]).
@@ -228,17 +246,32 @@ workflow {
         }
     }
 
+    // determine_acquisition_params consumes LLM input, but later stages still need the same
+    // per-PXD metadata. Split once here, then carry LLM context forward with the PXD record.
+    llm_results_ch
+        .multiMap { pxd, llm_results ->
+            for_detect: tuple(pxd, llm_results)
+            for_context: tuple(pxd, llm_results)
+        }
+        .set { llm_split }
+
+    llm_for_detect_ch = llm_split.for_detect
+    llm_for_context_ch = llm_split.for_context
+
     // Auto-detect acquisition type and labeling after LLM extraction so LLM metadata is available.
-    // Joins fetched_ch with llm_results_ch so Comment[AcquisitionMethod] etc. can be used.
     // Output: [pxd, fetched_dir, detected_params_json]
     if (params.auto_detect) {
-        acq_input_ch = fetched_ch.join(llm_results_ch, by: 0)
+        acq_input_ch = assessor_ch.join(llm_for_detect_ch, by: 0)
         detected_ch = determine_acquisition_params(acq_input_ch)
     } else {
-        detected_ch = fetched_ch.join(llm_results_ch, by: 0).map { pxd, fetched_dir, llm_results ->
+        detected_ch = assessor_ch.join(llm_for_detect_ch, by: 0).map { pxd, fetched_dir, llm_results ->
             error "Manual parameter specification not yet supported in parallel mode. Use --auto_detect true"
         }
     }
+
+    // Re-attach LLM metadata immediately after acquisition detection so downstream stages can
+    // work from one per-PXD context channel instead of repeatedly rejoining raw LLM outputs.
+    detected_with_llm_ch = detected_ch.join(llm_for_context_ch, by: 0)
 
     // If acquisition type is forced, normalize detected_params.json so downstream steps
     // (e.g., search orchestration) follow the requested workflow for all PXDs.
@@ -267,159 +300,111 @@ workflow {
     contaminants_ch = Channel.fromPath(params.contaminants_fasta, checkIfExists: true)
     taxid_list_ch = Channel.fromPath(params.taxid_list_file, checkIfExists: true)
 
-    // Route to appropriate conda environment (DIA vs DDA) based on detected_params.json
-    // Cascadia (DIA) and Casanovo (DDA) environments selected by organism_id process
-    // Join llm_results_ch so organism_id can decide representative vs all-files mode
-    organism_input_ch = detected_ch.combine(contaminants_ch).combine(taxid_list_ch)
-        .join(llm_results_ch, by: 0)
-
-    // Run organism ID (optional) or use dummy results
-    if (params.run_organism_id) {
-        log.info "Running organism_id process (de novo + Peptonizer)"
-        raw_organism_ch = organism_id(organism_input_ch)
-        // Barrier: ensure ALL organism_id tasks finish before any PXD advances downstream.
-        //
-        // Problem with collect().flatMap { it }: flatMap deep-flattens tuple-lists into
-        // individual strings. Problem with combine(collected_list): combine also flattens
-        // the list elements into the tuple.
-        //
-        // Solution: use multiMap to split raw_organism_ch without double-consuming it,
-        // collect only scalar PXD strings (not full tuples), map the whole collected list
-        // to a single scalar string 'barrier_done', then combine() appends that scalar as
-        // one element — no flattening occurs.
-        raw_organism_ch.multiMap { pxd, fetched_dir, detected_params, organism_results ->
-            pxd_ids: pxd
-            results: tuple(pxd, fetched_dir, detected_params, organism_results)
-        }.set { org_split }
-        barrier_val = org_split.pxd_ids.collect().map { 'barrier_done' }
-        organism_with_context_ch = org_split.results
-            .combine(barrier_val)
-            .map { pxd, fetched_dir, detected_params, organism_results, _done ->
-                tuple(pxd, fetched_dir, detected_params, organism_results) }
-    } else {
-        log.info "Skipping organism_id process (--run_organism_id false). Will use LLM + PRIDE metadata only."
-        // Create dummy organism_results for each PXD to maintain channel structure
-        organism_with_context_ch = organism_input_ch.map { pxd, fetched_dir, detected_params, contaminants, taxid_list, llm_results ->
-            def dummy_organism = file("${baseDir}/work/dummy_organism_${pxd}.empty")
-            dummy_organism.parent.mkdirs()
-            dummy_organism.text = "{}"
-            tuple(pxd, fetched_dir, detected_params, dummy_organism)
+    // Split the detected per-PXD context once at the point where downstream branches diverge.
+    detected_with_llm_ch
+        .multiMap { pxd, fetched_dir, detected_params, llm_results ->
+            for_organism: tuple(pxd, fetched_dir, detected_params, llm_results)
+            for_taxid_context: tuple(pxd, fetched_dir, detected_params, llm_results)
         }
-    }
+        .set { detected_split }
+
+    // Route to appropriate conda environment (DIA vs DDA) based on detected_params.json.
+    // The organism_id process needs both static reference files and per-PXD LLM metadata.
+    organism_input_ch = detected_split.for_organism
+        .combine(contaminants_ch)
+        .combine(taxid_list_ch)
+        .map { pxd, fetched_dir, detected_params, llm_results, contaminants_fasta, taxid_list_file ->
+            tuple(pxd, fetched_dir, detected_params, contaminants_fasta, taxid_list_file, llm_results)
+        }
+
+    // Run organism_id for all PXDs; stage_manifest controls per-PXD run/skip behavior.
+    log.info "Running organism_id process (manifest-controlled per PXD)"
+    // Keep per-PXD streaming semantics: each PXD advances downstream as soon as
+    // its own organism_id result is available.
+    organism_with_context_ch = organism_id(organism_input_ch)
     
     // Extract just organism_results for downstream processes that don't need context
     organism_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results ->
         tuple(pxd, organism_results)
     }
     
-    // Build taxid_input_ch anchored on detected_ch so determine_taxids still runs
-    // even when organism_id is ignored (errorStrategy 'ignore'). organism_results and
-    // llm_results are optional — nulls are replaced by pre-created empty fallback dirs.
+    // Build taxid-ready per-PXD context anchored on acquisition detection so determine_taxids
+    // still runs even when organism_id is ignored. Missing organism results fall back to an
+    // empty directory, but the PXD record stays intact.
     def emptyOrganismDir = file("${baseDir}/work/empty_organism")
     emptyOrganismDir.mkdirs()
     if (!emptyOrganismDir.resolve("empty.json").exists()) {
         emptyOrganismDir.resolve("empty.json").text = "{}"
     }
-    def emptyLlmDir = file("${baseDir}/work/empty_llm_results")
-    emptyLlmDir.mkdirs()
-    if (!emptyLlmDir.resolve("empty.json").exists()) {
-        emptyLlmDir.resolve("empty.json").text = "{}"
-    }
 
-    taxid_input_ch = detected_ch
-        .map { pxd, fetched_dir, detected_params -> tuple(pxd, fetched_dir) }
+    taxid_context_ch = detected_split.for_taxid_context
         .join(organism_results_ch, by: 0, remainder: true)
-        .map { pxd, fetched_dir, organism_results ->
-            tuple(pxd, fetched_dir, organism_results ?: emptyOrganismDir)
+        .map { pxd, fetched_dir, detected_params, llm_results, organism_results ->
+            tuple(pxd, fetched_dir, detected_params, llm_results, organism_results ?: emptyOrganismDir)
         }
-        .join(llm_results_ch, by: 0, remainder: true)
-        .map { pxd, fetched_dir, organism_results, llm_results ->
-            tuple(pxd, fetched_dir, organism_results, llm_results ?: emptyLlmDir)
+
+    // Split the taxid-ready context into the distinct process inputs that need it.
+    taxid_context_ch
+        .multiMap { pxd, fetched_dir, detected_params, llm_results, organism_results ->
+            for_taxids: tuple(pxd, fetched_dir, organism_results, llm_results)
+            for_search: tuple(pxd, fetched_dir, detected_params)
+            for_aggregate: tuple(pxd, fetched_dir, organism_results, llm_results)
+            for_agentic: tuple(pxd, llm_results)
         }
+        .set { taxid_context_split }
+
+    taxid_input_ch = taxid_context_split.for_taxids
     
     // Determine taxids for each raw file from organism_id, LLM, and PRIDE metadata
     // Output: [pxd, taxid_mapping.json, warnings.json]
     taxid_mapping_ch = determine_taxids(taxid_input_ch)
     
-    // Run search if enabled
-    // Accept true/false and legacy tri-state strings.
-    def run_search_str = params.run_search == null ? 'false' : params.run_search.toString().trim().toLowerCase()
-    def do_search = (run_search_str in ['true','open_only','open_and_closed'])
-    if (do_search) {
-        // Use organism_with_context_ch to get fetched_dir and detected_params, then add taxid_mapping
-        // Output: [pxd, search_results]
-        search_input_ch = organism_with_context_ch
-            .map { pxd, fetched_dir, detected_params, organism_results -> tuple(pxd, fetched_dir, detected_params) }
-            .join(taxid_mapping_ch.map { pxd, mapping, warnings -> tuple(pxd, mapping) })
-        
-        search_results_ch = search(search_input_ch)
-    } else {
-        // Create dummy files with unique names per PXD to avoid collisions
-        search_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results ->
-            // Create a unique placeholder file for this PXD
-            def dummy_sage = file("${baseDir}/work/dummy_sage_${pxd}.empty")
-            dummy_sage.parent.mkdirs()
-            dummy_sage.text = ""
-            tuple(pxd, dummy_sage)
+    // Split taxid_mapping once so search and aggregation do not compete for the same queue items.
+    taxid_mapping_ch
+        .multiMap { pxd, mapping, warnings ->
+            for_search: tuple(pxd, mapping)
+            for_aggregate: tuple(pxd, warnings)
         }
-    }
-    
-    // Combine all results for aggregation
-    // Join channels by PXD ID to match results together
-    // We need: [pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings]
-    combined_ch = organism_with_context_ch
-        .map { pxd, fetched_dir, detected_params, organism_results -> tuple(pxd, fetched_dir, organism_results) }
-        .join(search_results_ch)            // Join on pxd: [pxd, fetched_dir, organism_results, search_results]
-        .join(llm_results_ch)             // Join on pxd: [pxd, fetched_dir, organism_results, search_results, llm_results]
-        .join(taxid_mapping_ch.map { pxd, mapping, warnings -> tuple(pxd, warnings) })  // Add warnings
-    
-    // Split combined_ch into two branches to allow reuse for both aggregate and agentic processes
-    combined_ch
-        .multiMap { pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings ->
-            for_aggregate: tuple(pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings)
-            for_agentic: tuple(pxd, llm_results)
-        }
-        .set { combined_split }
-    
-    // Run aggregation after all processes complete
-    aggregated_results_ch = aggregate_results(combined_split.for_aggregate)
-    
-    // Conditionally run agentic metadata extraction if enabled
-    // Also build a final barrier channel so we can run ResultsSummary exactly once
-    // after the last enabled step completes for all PXDs.
-    def final_barrier_ch
-    if (params.run_agentic_metadata) {
-        // Extract llm_results and aggregate path for agentic metadata process
-        // aggregated_results_ch contains: [pxd, aggregated_results.json, pipeline.json, pipeline_summary.md]
-        // combined_split.for_agentic contains: [pxd, llm_results]
-        // Join and filter out any entries where aggregated_results is null (failed upstream processes)
-        agentic_input_ch = aggregated_results_ch
-            .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
-            .join(combined_split.for_agentic, remainder: true)
-            .filter { pxd, aggregated_results, llm_results -> aggregated_results != null }
-        
-        agentic_results_ch = agentic_metadata_extraction(agentic_input_ch)
+        .set { taxid_mapping_split }
 
-        // Conditionally run LLM judge on agentic output
-        def post_agentic_ch
-        if (params.run_llm_judge) {
-            post_agentic_ch = llm_judge(agentic_results_ch)
-        } else {
-            post_agentic_ch = agentic_results_ch
+    // Run search for all PXDs; stage_manifest controls per-PXD run/skip behavior.
+    search_input_ch = taxid_context_split.for_search
+        .join(taxid_mapping_split.for_search, by: 0)
+    search_results_ch = search(search_input_ch)
+    
+    // Build the aggregate input from the per-PXD context plus the two process outputs that
+    // become available after taxid selection.
+    aggregate_input_ch = taxid_context_split.for_aggregate
+        .join(search_results_ch, by: 0)
+        .join(taxid_mapping_split.for_aggregate, by: 0)
+        .map { pxd, fetched_dir, organism_results, llm_results, search_results, taxid_warnings ->
+            tuple(pxd, fetched_dir, organism_results, search_results, llm_results, taxid_warnings)
         }
 
-        // Ensure summary waits for agentic extraction (and judge if enabled) too
-        final_barrier_ch = aggregated_results_ch
-            .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
-            .join(post_agentic_ch)
-            .map { pxd, aggregated_results, _output -> tuple(pxd, aggregated_results) }
-    } else {
-        final_barrier_ch = aggregated_results_ch
-            .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
-    }
+    // Run aggregation after all per-PXD inputs are available.
+    aggregated_results_ch = aggregate_results(aggregate_input_ch)[0]
+    
+    // Run downstream metadata/judge/finalize for all PXDs; stage_manifest controls per-PXD run/skip behavior.
+    agentic_input_ch = aggregated_results_ch
+        .map { pxd, aggregated_results, pipeline_json, pipeline_summary -> tuple(pxd, aggregated_results) }
+
+    agentic_results_ch = agentic_metadata_extraction(agentic_input_ch)[0]
+
+    llm_judge_input_ch = agentic_results_ch
+        .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output) }
+
+    llm_judge_ch = llm_judge(llm_judge_input_ch)[0]
+
+    finalized_sdrf_input_ch = agentic_results_ch
+        .join(llm_judge_ch)
+        .map { pxd, metadata_extraction_output, aggregated_results, judge_output ->
+            tuple(pxd, metadata_extraction_output, aggregated_results, judge_output)
+        }
+
+    finalized_sdrf_ch = finalize_sdrf(finalized_sdrf_input_ch)[0]
 
     // Run ResultsSummary once after pipeline completion
-    results_summary(final_barrier_ch.collect())
+    results_summary(finalized_sdrf_ch.collect())
 }
 
 
@@ -447,6 +432,20 @@ process determine_acquisition_params {
     # Initialize conda
     ${params.conda_init}
 
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage determine_acquisition_params || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
+
     # Determine acquisition type and labeling from runAssessor + LLM + PRIDE evidence.
     # The script writes a persistent copy to spectral_files/<PXD>/detected_params.json
     # and reuses it on subsequent runs (skip-if-exists logic is inside the Python script).
@@ -460,6 +459,14 @@ process determine_acquisition_params {
     # Display results
     echo "Detected parameters:"
     cat detected_params.json
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage determine_acquisition_params || true
     """
 }
 
@@ -580,6 +587,20 @@ process determine_taxids {
     """
     # Initialize conda
     ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage determine_taxids || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
     
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/determine_taxids.py \\
         --pxd ${pxd} \\
@@ -589,6 +610,14 @@ process determine_taxids {
         ${default_taxid_arg} \\
         --output_mapping taxid_mapping.json \\
         --output_warnings taxid_warnings.json
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage determine_taxids || true
     """
 }
 
@@ -620,6 +649,20 @@ process fetch_pxd {
     """
     # Initialize conda
     ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage fetch || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
     
     # FetchPXD.py handles all caching logic:
     # 1. Checks if files exist in central_mzml_dir
@@ -629,6 +672,7 @@ process fetch_pxd {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/FetchPXD.py \\
         --central_mzml_dir ${params.central_mzml_dir} \
         --PXD ${pxd} \
+        --skip_run_assessor \
         ${aria2c_args} \
         ${max_files_arg} \
         --log_file fetch/events.jsonl
@@ -640,6 +684,110 @@ process fetch_pxd {
     echo "✓ Original .raw files removed"
 
     ls -R ${pxd} || true
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage fetch || true
+    """
+}
+
+/* -----------------------
+ * PROCESS: run_assessor
+ * --------------------- */
+process run_assessor {
+
+    tag "assessor-${pxd}"
+
+    publishDir "${params.outdir}/${pxd}/runAssessor", mode: 'copy', overwrite: false
+
+    cache false
+
+    errorStrategy 'ignore'
+
+    input:
+    tuple val(pxd), path(fetched_dir)
+
+    output:
+    tuple val(pxd), path(fetched_dir), path("study_metadata.json")
+
+    script:
+    """
+    # Initialize conda
+    ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage run_assessor || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
+
+    assessor_script="${params.runassessor_script}"
+    if [ ! -f "\$assessor_script" ]; then
+        echo "ERROR: runAssessor script not found at \$assessor_script"
+        exit 1
+    fi
+
+    if ! conda run -p ${params.meti_env_path} python -c "import pypdf" >/dev/null 2>&1; then
+        echo "ERROR: pypdf is required in meti_env for submodule runAssessor"
+        exit 1
+    fi
+
+    mkdir -p ${params.central_mzml_dir}/${pxd}/runAssessor
+
+    # Build modern RunAssessor CLI invocation and append staged mzML inputs.
+    if [[ "\$assessor_script" == *"/src/runassessor.py" ]]; then
+        assessor_cmd=(
+            conda run -p ${params.meti_env_path} python "\$assessor_script"
+            --verbose
+            --metadata_filepath ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
+        )
+        shopt -s nullglob
+        for mzml in ${fetched_dir}/*.mzML ${fetched_dir}/*.mzML.gz; do
+            assessor_cmd+=("\$mzml")
+        done
+        shopt -u nullglob
+
+        if [ \${#assessor_cmd[@]} -le 8 ]; then
+            echo "WARNING: No mzML files found for ${pxd}; writing empty study_metadata.json"
+            echo '{}' > ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
+            cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
+            exit 0
+        fi
+
+        "\${assessor_cmd[@]}"
+        assessor_rc=\$?
+    else
+        echo "ERROR: Unsupported runAssessor entrypoint: \$assessor_script"
+        exit 1
+    fi
+
+    if [ \$assessor_rc -eq 0 ]; then
+        cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
+
+        python ${baseDir}/src/python/stage_manifest.py mark-complete \
+            --manifest ${params.stage_manifest} \
+            --base_dir ${baseDir} \
+            --outdir ${params.outdir} \
+            --central_dir ${params.central_mzml_dir} \
+            --pxd ${pxd} \
+            --stage run_assessor || true
+    else
+        echo "WARNING: runAssessor failed for ${pxd}; continuing with LLM/PRIDE fallback for acquisition detection"
+        echo '{}' > study_metadata.json
+    fi
     """
 }
 
@@ -671,6 +819,20 @@ process organism_id {
     
     # Initialize conda
     ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage organism_id || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
     
     # Setup trap to ensure organism_results directory is created even if process is killed
     # This catches SIGTERM (sent by Nextflow on timeout) and creates empty results
@@ -775,6 +937,14 @@ process organism_id {
     fi
 
     ls -R organism_results || true
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage organism_id || true
     """
 }
 
@@ -804,6 +974,20 @@ process search {
     """
     # Initialize conda
     ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage search || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
     
     mkdir -p search
     mkdir -p .cache/tmp .cache/mpl
@@ -847,6 +1031,14 @@ with open('${taxid_mapping}') as f:
         --min_high_confidence_peptides ${params.min_high_confidence_peptides} \\
         --pxd ${pxd} \\
         --log_file search/events.jsonl || exit 1
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage search || true
     """
 }
 
@@ -860,7 +1052,7 @@ process aggregate_results {
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true
 
-    cache 'deep'
+    cache false
 
     errorStrategy 'ignore'
 
@@ -874,6 +1066,20 @@ process aggregate_results {
     """
     # Initialize conda
     ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage aggregate_results || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
     
     echo "Generating aggregated results JSON for ${pxd}"
     
@@ -897,6 +1103,14 @@ process aggregate_results {
         --output_file ${pxd}_aggregated_results.json
     
     ls -la *.json || true
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage aggregate_results || true
     """
 }
 /* -----------------------
@@ -906,24 +1120,48 @@ process agentic_metadata_extraction {
 
     tag "agentic-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true
+    publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true, saveAs: { name ->
+        def normalized = name.replaceFirst('^\\./', '')
+        if (!normalized || normalized == 'agentic_stage_output') {
+            return null
+        }
+        normalized = normalized.replaceFirst('^agentic_stage_output/?', '')
+        if (!normalized || normalized.startsWith('agentic_stage_output/') || normalized.startsWith('metadata_extraction_output/') || normalized.endsWith('.sdrf.tsv')) {
+            return null
+        }
+        return "metadata_extraction_output/${normalized}"
+    }
 
-    cache 'deep'
+    cache false
 
     errorStrategy 'ignore'  // Continue if metadata extraction fails
 
     input:
-    tuple val(pxd), path(aggregated_results), path(llm_results_dir)
+    tuple val(pxd), path(aggregated_results)
 
     output:
-    tuple val(pxd), path("metadata_extraction_output")
+    tuple val(pxd), path("agentic_stage_output"), path(aggregated_results)
 
     script:
     """
     # Initialize conda
     ${params.conda_init}
 
-    mkdir -p metadata_extraction_output
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage agentic_metadata_extraction || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
+
+    mkdir -p agentic_stage_output
 
     # Ensure both variable names are available inside the task and inherited by conda run.
     export LLM_API_KEY="\${LLM_API_KEY:-\${OPENAI_API_KEY:-}}"
@@ -933,20 +1171,32 @@ process agentic_metadata_extraction {
     echo "=== Running Agentic Metadata Extraction wrapper for ${pxd} ==="
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/run_agentic_metadata.py \\
         --input ${aggregated_results} \\
-        --outdir metadata_extraction_output \\
+        --outdir agentic_stage_output \\
         --pride_cache ${baseDir}/pride_survey/pride_cache \\
-        --pmc_cache ${baseDir}/pride_survey/pmc_cache || {
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache \
+        --skip_sdrf_write || {
         echo "WARNING: Agentic metadata extraction failed for ${pxd} - continuing"
-        mkdir -p metadata_extraction_output
+        mkdir -p agentic_stage_output
     }
 
-    # Non-fatal validation for expected SDRF output from wrapper.
-    if [ ! -f "metadata_extraction_output/${pxd}.sdrf.tsv" ]; then
-        echo "WARNING: Expected SDRF output missing: metadata_extraction_output/${pxd}.sdrf.tsv"
-    fi
-
     # Verify output
-    ls -la metadata_extraction_output/ || echo "No metadata extraction output"
+    ls -la agentic_stage_output/ || echo "No metadata extraction output"
+
+    # Materialize only the canonical agentic output folders before manifest update.
+    mkdir -p ${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output
+    for rel_path in integrated_output technical_metadata_output Biological_annotations experimental_design_output; do
+        if [ -e "agentic_stage_output/\${rel_path}" ]; then
+            cp -r "agentic_stage_output/\${rel_path}" ${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output/ 2>/dev/null || true
+        fi
+    done
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage agentic_metadata_extraction || true
     """
 }
 
@@ -958,31 +1208,55 @@ process llm_judge {
 
     tag "judge-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}/judge_output", mode: 'copy', overwrite: true
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true, saveAs: { name ->
+        def normalized = name.replaceFirst('^\\./', '')
+        if (!normalized || normalized == 'judge_stage_output') {
+            return null
+        }
+        normalized = normalized.replaceFirst('^judge_stage_output/?', '')
+        if (!normalized || normalized.startsWith('judge_stage_output/') || normalized.startsWith('judge_output/')) {
+            return null
+        }
+        return "judge_output/${normalized}"
+    }
 
-    cache 'deep'
+    cache false
 
     errorStrategy 'ignore'  // Non-blocking quality step; pipeline continues if judge fails
 
     input:
-    tuple val(pxd), path(metadata_extraction_output)
+    tuple val(pxd), path(agentic_stage_output)
 
     output:
-    tuple val(pxd), path("judge_output")
+    tuple val(pxd), path("judge_stage_output")
 
     script:
     """
     # Initialize conda
     ${params.conda_init}
 
-    mkdir -p judge_output
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage llm_judge || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
+
+    mkdir -p judge_stage_output
 
     # Propagate API key for the judge model (OpenRouter)
     export OPENROUTER_API_KEY="\${OPENROUTER_API_KEY:-}"
 
     if [ -z "\${OPENROUTER_API_KEY}" ]; then
         echo "WARNING: OPENROUTER_API_KEY not set. Skipping LLM judge."
-        echo '{"skipped": true, "reason": "OPENROUTER_API_KEY not set"}' > judge_output/skipped.json
+        echo '{"skipped": true, "reason": "OPENROUTER_API_KEY not set"}' > judge_stage_output/skipped.json
         exit 0
     fi
 
@@ -990,14 +1264,107 @@ process llm_judge {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/LLm_as_judge.py \\
         --pipeline \\
         --pxd ${pxd} \\
-        --input_dir ${metadata_extraction_output} \\
+        --input_dir ${agentic_stage_output} \\
         --pmc_cache ${baseDir}/pride_survey/pmc_cache \\
-        --outdir judge_output || {
+        --n_judge_runs ${params.n_judge_runs} \\
+        --outdir judge_stage_output || {
         echo "WARNING: LLM judge failed for ${pxd} - continuing"
-        mkdir -p judge_output
+        mkdir -p judge_stage_output
     }
 
-    ls -la judge_output/ || echo "No judge output"
+    ls -la judge_stage_output/ || echo "No judge output"
+
+    # Materialize only canonical judge outputs before manifest update.
+    mkdir -p ${params.outdir}/${pxd}/judge_output
+    for rel_path in json_outputs llm_judge_accuracy.png llm_judge_aggregate.png llm_judge_annotation_quality_counts.png llm_judge_annotation_review.csv llm_judge_coverage.csv llm_judge_per_paper.csv skipped.json; do
+        if [ -e "judge_stage_output/\${rel_path}" ]; then
+            cp -r "judge_stage_output/\${rel_path}" ${params.outdir}/${pxd}/judge_output/ 2>/dev/null || true
+        fi
+    done
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage llm_judge || true
+    """
+}
+
+
+/* -----------------------
+ * PROCESS: finalize_sdrf
+ * --------------------- */
+process finalize_sdrf {
+
+    tag "final-sdrf-${pxd}"
+
+    publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
+    publishDir "${baseDir}/store/hamlet_sdrfs", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
+
+    cache false
+
+    errorStrategy 'ignore'
+
+    input:
+    tuple val(pxd), path(agentic_stage_output), path(aggregated_results), path(judge_stage_output)
+
+    output:
+    tuple val(pxd), path("finalize_stage_output")
+    path("${pxd}.sdrf.tsv"), optional: true
+
+    script:
+    """
+    ${params.conda_init}
+
+    MANIFEST_RC=0
+    python ${baseDir}/src/python/stage_manifest.py prepare \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage finalize_sdrf || MANIFEST_RC=\$?
+    if [ \$MANIFEST_RC -eq 0 ]; then
+        exit 0
+    elif [ \$MANIFEST_RC -ne 3 ]; then
+        exit \$MANIFEST_RC
+    fi
+
+    judge_args=""
+    if [ -d "${judge_stage_output}" ]; then
+        judge_args="--judge_dir ${judge_stage_output}"
+    fi
+
+    mkdir -p finalize_stage_output
+
+    conda run -p ${params.meti_env_path} python ${baseDir}/src/python/finalize_sdrf.py \
+        --pxd ${pxd} \
+        --input_dir ${agentic_stage_output} \
+        --aggregated_json ${aggregated_results} \
+        --output_dir finalize_stage_output \
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache \
+        \${judge_args} || {
+        echo "WARNING: SDRF finalization failed for ${pxd} - continuing"
+    }
+
+    # Promote flat SDRF to task root so Nextflow can publish it directly to hamlet_sdrfs/
+    if [ -f "finalize_stage_output/${pxd}.sdrf.tsv" ]; then
+        cp finalize_stage_output/${pxd}.sdrf.tsv ${pxd}.sdrf.tsv
+        mkdir -p ${params.outdir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf.tsv ${params.outdir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
+    fi
+
+    ls -la finalize_stage_output/ || echo "No finalized SDRF output"
+
+    python ${baseDir}/src/python/stage_manifest.py mark-complete \
+        --manifest ${params.stage_manifest} \
+        --base_dir ${baseDir} \
+        --outdir ${params.outdir} \
+        --central_dir ${params.central_mzml_dir} \
+        --pxd ${pxd} \
+        --stage finalize_sdrf || true
     """
 }
 

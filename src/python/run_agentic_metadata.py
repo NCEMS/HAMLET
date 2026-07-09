@@ -194,6 +194,7 @@ def main():
     parser.add_argument("--outdir", required=True, type=Path, help="Output directory for extraction results")
     parser.add_argument("--pride_cache", default="pride_survey/pride_cache", type=Path, help="Path to the binary cache of PRIDE metadata")
     parser.add_argument("--pmc_cache", default="pride_survey/pmc_cache", type=Path, help="Optional path to PXD*_PubText.txt for publication text input")
+    parser.add_argument("--skip_sdrf_write", action="store_true", help="Only run extraction; do not write the final .sdrf.tsv")
     args = parser.parse_args()
 
     if not args.input.exists():
@@ -211,6 +212,10 @@ def main():
 
     ### Run the agentic metadata extraction
     output_files = run_agentic_extraction(args.input, args.outdir, args.pride_cache, args.pmc_cache)
+
+    if args.skip_sdrf_write:
+        print("Skipping SDRF write as requested; extraction outputs are ready for downstream finalization.")
+        return
 
     ### Convert agentic output to SDRF format (placeholder)
     agentic_to_sdrf(agentic_output=output_files, sdrf_output=args.outdir / f"{pxd}.sdrf.tsv")

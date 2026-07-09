@@ -209,6 +209,26 @@ for _line in _FIELD_DEFINITIONS_TEXT.strip().splitlines():
 #Set of all known canonical field names in lowercase for type check lookups
 _KNOWN_FIELD_TYPES_LOWER: set[str] = set(FIELD_DEFINITIONS.keys())
 
+SAFE_SDRF_OVERRIDE_FIELDS = {
+    # Sample/biological fields
+    "species":             "organism",
+    "organ":               "organism_part",
+    "disease":             "disease",
+    "cell_type":           "cell_type",
+    "cell_line":           "cell_line",
+    "sex":                 "sex",
+    "age":                 "age",
+    "material_type":       "sample_source",
+    # Technical fields
+    "instrument":          "instrument",
+    "label":               "label",
+    # Experimental design fields
+    "replicates":          "biological_replicate",
+    "technical_replicates": "technical_replicate",
+    "fractions":           "fraction_identifier",
+    "factor_value":        "factor_value",
+}
+
 
 #Full system prompt sent to the judge model on every API call
 _STATIC_SYSTEM_PROMPT = """\
@@ -985,7 +1005,7 @@ def _run_geval_semantic(field_name: str,
             reason += ("\n[POST-PROCESSING OVERRIDE] Concentration field: "
                        "numeric quantity + unit without reagent name IS complete.")
 
-    corrected_value = _parse_corrected_value(reason) if verdict == "medium" else None
+    corrected_value = _parse_corrected_value(reason)
 
     #Derive a human readable match type label from the parsed flags
     if is_hallucinated:
@@ -1401,12 +1421,15 @@ def get_manuscript_from_pmc_cache(pxd_id: str, pmc_cache_path: str) -> str:
 
 
 def run_pipeline_evaluation(pxd_id: str, input_dir: str,
-                             pmc_cache_path: str, out_dir: str) -> None:
+                             pmc_cache_path: str, out_dir: str,
+                             n_runs: int = 1) -> None:
     """Run the LLM judge evaluation for a single PXD from pipeline enriched JSONs.
 
     input_dir is the metadata_extraction_output directory produced by
     run_agentic_metadata.py (contains integrated_output/{agent}/temp_0.0/).
-    Outputs are written to out_dir (per-paper CSV, JSON, coverage CSV, plots).
+    Outputs are written to out_dir.
+    When n_runs > 1 the judge is run that many times with separate cache contexts
+    and a majority-vote consensus is built before writing final outputs.
     """
     os.makedirs(out_dir, exist_ok=True)
 
@@ -1455,56 +1478,54 @@ def run_pipeline_evaluation(pxd_id: str, input_dir: str,
 
     n_extracted = sum(1 for r in coverage_rows if r["was_extracted"])
     print(f"  Fields extracted: {n_extracted}/{len(coverage_rows)}")
+    print(f"  Judge runs      : {n_runs}")
 
-    # --- Build eval rows (deduplicated) ---
-    seen_eval: set[tuple[str, str]] = set()
-    eval_rows: list[dict] = []
-    for agent in AGENTS:
-        pred = all_predicted.get(agent, {})
-        for raw_field in PIPELINE_FIELDS.get(agent, []):
-            if raw_field.lower() in SKIP_ANNOTATION_FIELDS:
-                continue
-            mapped = FIELD_NAME_MAP.get(raw_field, raw_field)
-            values = pred.get(mapped) or pred.get(raw_field) or []
-            for v in values:
-                if _is_not_extracted(v):
-                    continue
-                dedup_key = (mapped, _norm(v))
-                if dedup_key in seen_eval:
-                    continue
-                seen_eval.add(dedup_key)
-                eval_rows.append({
-                    "paper_id":             pxd_id,
-                    "agent":                agent,
-                    "annotation_type":      mapped,
-                    "extracted_value":      v,
-                    "all_values_for_field": "",
-                    "verdict":              None,
-                    "type_mismatch":        None,
-                    "correct_type":         None,
-                    "value_correct":        None,
-                    "value_complete":       None,
-                    "hallucination":        None,
-                    "issue_summary":        "",
-                    "corrected_value":      None,
-                })
-
-    print(f"  Evaluation rows: {len(eval_rows)} (deduplicated)")
-
-    if not eval_rows:
+    # Check early that there's anything to evaluate
+    any_values = any(
+        not _is_not_extracted(v)
+        for pred in all_predicted.values()
+        for vals in pred.values()
+        for v in (vals if isinstance(vals, list) else [vals])
+    )
+    if not any_values:
         print(f"  WARNING: no valid extracted values found for {pxd_id}")
         return
 
-    # Redirect cache dir to the output dir so it's writable in the pipeline work dir
+    # --- Run judge N times, building consensus if n_runs > 1 ---
     global CACHE_DIR, _judge_model
-    CACHE_DIR     = os.path.join(out_dir, f".prompt_cache_{_CACHE_MODEL_SLUG}")
-    _judge_model  = None  # force re-init with new CACHE_DIR
+    all_runs_eval_rows: list[list[dict]] = []
 
-    # --- Run GEval judge ---
-    if USE_LLM_JUDGE and source_text:
-        eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
+    for run_idx in range(n_runs):
+        run_label = f"run {run_idx + 1}/{n_runs}"
+        # Each run gets its own cache dir so fresh API calls are made after run 0.
+        # Run 0 reuses the standard pipeline cache; subsequent runs use a per-run slug.
+        if run_idx == 0:
+            run_cache = os.path.join(out_dir, f".prompt_cache_{_CACHE_MODEL_SLUG}")
+        else:
+            run_cache = os.path.join(out_dir, f".prompt_cache_{_CACHE_MODEL_SLUG}_run{run_idx}")
+
+        print(f"  [{run_label}] cache: {run_cache}")
+        single_rows = _run_single_evaluation(
+            pxd_id=pxd_id,
+            input_dir=input_dir,
+            pmc_cache_path=pmc_cache_path,
+            source_text=source_text,
+            all_predicted=all_predicted,
+            run_cache_dir=run_cache,
+        )
+        all_runs_eval_rows.append(single_rows)
+        print(f"  [{run_label}] got {len(single_rows)} eval rows")
+
+    # Restore primary cache for any subsequent callers
+    CACHE_DIR    = os.path.join(out_dir, f".prompt_cache_{_CACHE_MODEL_SLUG}")
+    _judge_model = None
+
+    if n_runs > 1:
+        print(f"  Computing consensus across {n_runs} runs...")
+        eval_rows = _compute_consensus_eval_rows(all_runs_eval_rows)
+        print(f"  Consensus: {len(eval_rows)} unique field-value pairs")
     else:
-        print("  Skipping LLM judge (disabled or no manuscript text).")
+        eval_rows = all_runs_eval_rows[0] if all_runs_eval_rows else []
 
     # --- Write outputs ---
     import csv as _csv
@@ -1528,6 +1549,7 @@ def run_pipeline_evaluation(pxd_id: str, input_dir: str,
         print(f"  Written: {path}")
 
     _write_paper_json(pxd_id, eval_rows, json_dir)
+    _write_sdrf_override_json(pxd_id, eval_rows, all_predicted, json_dir)
 
     per_paper_df = pd.DataFrame([_compute_single_paper_stats(pxd_id, eval_rows)])
     df           = pd.DataFrame(eval_rows)
@@ -1638,6 +1660,112 @@ def _parse_checks_to_dict(issue_summary: str) -> dict:
     return result
 
 
+def _compute_consensus_eval_rows(all_runs: list[list[dict]]) -> list[dict]:
+    """Merge eval rows from N judge runs using majority-vote consensus.
+
+    For each (annotation_type, extracted_value) pair:
+    - The majority verdict (>N/2) is used.
+    - The majority corrected_value (>N/2, ignoring None) is used when available.
+    - If corrected_values are spread across runs, no corrected_value is applied.
+    """
+    if not all_runs:
+        return []
+    if len(all_runs) == 1:
+        return all_runs[0]
+
+    n = len(all_runs)
+    threshold = n // 2 + 1  # strict majority
+
+    # Index rows by dedup key across all runs
+    from collections import Counter, defaultdict
+    key_to_rows: dict[tuple, list[dict]] = defaultdict(list)
+    for run in all_runs:
+        for row in run:
+            key = (row.get("annotation_type", ""), _norm(str(row.get("extracted_value", ""))))
+            key_to_rows[key].append(row)
+
+    consensus: list[dict] = []
+    for key, rows in key_to_rows.items():
+        base = dict(rows[0])  # template from first row
+
+        # Majority verdict
+        verdicts = [r.get("verdict") for r in rows if r.get("verdict")]
+        if verdicts:
+            verdict_counts = Counter(verdicts)
+            majority_verdict, count = verdict_counts.most_common(1)[0]
+            base["verdict"] = majority_verdict if count >= threshold else verdict_counts.most_common(1)[0][0]
+
+        # Majority per boolean flags
+        for flag in ("hallucination", "type_mismatch", "value_correct", "value_complete"):
+            vals = [r.get(flag) for r in rows if r.get(flag) is not None]
+            if vals:
+                true_count = sum(1 for v in vals if v is True or v == "True")
+                base[flag] = true_count >= threshold
+
+        # Majority corrected_value (must appear in strict majority, ignoring None)
+        corr_vals = [r.get("corrected_value") for r in rows if r.get("corrected_value")]
+        if corr_vals:
+            corr_counts = Counter(corr_vals)
+            top_val, top_count = corr_counts.most_common(1)[0]
+            base["corrected_value"] = top_val if top_count >= threshold else None
+        else:
+            base["corrected_value"] = None
+
+        # Annotate that this came from consensus
+        base["consensus_runs"] = n
+        base["consensus_votes"] = len(rows)
+        consensus.append(base)
+
+    return consensus
+
+
+def _run_single_evaluation(pxd_id: str, input_dir: str,
+                           pmc_cache_path: str, source_text: str,
+                           all_predicted: dict, run_cache_dir: str) -> list[dict]:
+    """Run one GEval judge pass and return the eval_rows."""
+    global CACHE_DIR, _judge_model
+    CACHE_DIR    = run_cache_dir
+    _judge_model = None  # force re-init with new cache dir
+
+    # Build eval rows
+    seen_eval: set[tuple[str, str]] = set()
+    eval_rows: list[dict] = []
+    for agent in AGENTS:
+        pred = all_predicted.get(agent, {})
+        for raw_field in PIPELINE_FIELDS.get(agent, []):
+            if raw_field.lower() in SKIP_ANNOTATION_FIELDS:
+                continue
+            mapped = FIELD_NAME_MAP.get(raw_field, raw_field)
+            values = pred.get(mapped) or pred.get(raw_field) or []
+            for v in values:
+                if _is_not_extracted(v):
+                    continue
+                dedup_key = (mapped, _norm(v))
+                if dedup_key in seen_eval:
+                    continue
+                seen_eval.add(dedup_key)
+                eval_rows.append({
+                    "paper_id":             pxd_id,
+                    "agent":                agent,
+                    "annotation_type":      mapped,
+                    "extracted_value":      v,
+                    "all_values_for_field": "",
+                    "verdict":              None,
+                    "type_mismatch":        None,
+                    "correct_type":         None,
+                    "value_correct":        None,
+                    "value_complete":       None,
+                    "hallucination":        None,
+                    "issue_summary":        "",
+                    "corrected_value":      None,
+                })
+
+    if USE_LLM_JUDGE and source_text:
+        eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
+
+    return eval_rows
+
+
 def _write_paper_json(pxd_id: str, eval_rows: list[dict], json_dir: str) -> None:
     """Write evaluation results for one paper to a JSON file"""
     os.makedirs(json_dir, exist_ok=True)
@@ -1653,6 +1781,7 @@ def _write_paper_json(pxd_id: str, eval_rows: list[dict], json_dir: str) -> None
             "value_correct":   row.get("value_correct"),
             "value_complete":  row.get("value_complete"),
             "hallucination":   row.get("hallucination"),
+            "corrected_value": row.get("corrected_value"),
             "issue_summary":   _parse_checks_to_dict(raw_summary),
         })
 
@@ -1661,6 +1790,109 @@ def _write_paper_json(pxd_id: str, eval_rows: list[dict], json_dir: str) -> None
     with open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2, ensure_ascii=False)
     print(f"    JSON written: {path}")
+
+
+def _single_scalar_value(raw) -> str | None:
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text or text.lower() in _NOT_EXTRACTED_VALUES:
+        return None
+    if text.startswith("[") and text.endswith("]"):
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, list) and len(parsed) == 1:
+                value = str(parsed[0]).strip()
+                return value or None
+            return None
+        except (json.JSONDecodeError, TypeError, ValueError):
+            return None
+    if " | " in text:
+        return None
+    return text
+
+
+def _choose_override_candidate(rows: list[dict]) -> tuple[str | None, str | None, list[str]]:
+    high_values = []
+    corrected_values = []
+    reasons = []
+
+    for row in rows:
+        extracted_scalar = _single_scalar_value(row.get("extracted_value"))
+        corrected_scalar = _single_scalar_value(row.get("corrected_value"))
+        if (
+            row.get("verdict") == "high"
+            and row.get("value_correct") is True
+            and not row.get("hallucination")
+            and not row.get("type_mismatch")
+            and extracted_scalar
+        ):
+            high_values.append(extracted_scalar)
+            reasons.append("judge_high_confidence")
+        if corrected_scalar:
+            corrected_values.append(corrected_scalar)
+
+    high_values = sorted(set(high_values))
+    corrected_values = sorted(set(corrected_values))
+
+    if len(high_values) == 1:
+        return high_values[0], "judge_high_confidence", reasons
+    if len(corrected_values) == 1:
+        return corrected_values[0], "judge_corrected_value", ["judge_corrected_value"]
+    return None, None, []
+
+
+def _write_sdrf_override_json(pxd_id: str, eval_rows: list[dict], all_predicted: dict[str, dict[str, list[str]]], json_dir: str) -> None:
+    os.makedirs(json_dir, exist_ok=True)
+
+    predicted_by_field: dict[str, list[str]] = {}
+    for pred in all_predicted.values():
+        for field, values in pred.items():
+            predicted_by_field.setdefault(field, [])
+            for value in values:
+                if value not in predicted_by_field[field]:
+                    predicted_by_field[field].append(value)
+
+    field_overrides = {}
+    for field, builder_field in SAFE_SDRF_OVERRIDE_FIELDS.items():
+        rows = [row for row in eval_rows if row.get("annotation_type") == field]
+        if not rows:
+            continue
+
+        selected_value, selection_source, _ = _choose_override_candidate(rows)
+        pipeline_values = predicted_by_field.get(field, [])
+        unique_pipeline_values = sorted(set(v for v in pipeline_values if _single_scalar_value(v)))
+        apply_override = bool(selected_value) and unique_pipeline_values != [selected_value]
+
+        field_overrides[field] = {
+            "builder_field": builder_field,
+            "pipeline_values": unique_pipeline_values,
+            "selected_value": selected_value,
+            "selection_source": selection_source,
+            "apply_override": apply_override,
+            "judge_rows": [
+                {
+                    "extracted_value": row.get("extracted_value"),
+                    "verdict": row.get("verdict"),
+                    "value_correct": row.get("value_correct"),
+                    "value_complete": row.get("value_complete"),
+                    "hallucination": row.get("hallucination"),
+                    "type_mismatch": row.get("type_mismatch"),
+                    "corrected_value": row.get("corrected_value"),
+                }
+                for row in rows
+            ],
+        }
+
+    out = {
+        "paper_id": pxd_id,
+        "safe_fields": list(SAFE_SDRF_OVERRIDE_FIELDS.keys()),
+        "field_overrides": field_overrides,
+    }
+    path = os.path.join(json_dir, f"{pxd_id}_sdrf_overrides.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2, ensure_ascii=False)
+    print(f"    SDRF override JSON written: {path}")
 
 
 def process_model(model_name: str, extraction_dir: str, out_dir: str):
@@ -2007,6 +2239,8 @@ MODES:
                         help="[pipeline] Output directory for judge results")
     parser.add_argument("--judge_model", default=None,
                         help=f"[pipeline] OpenRouter model name (default: {EVALUATION_MODEL})")
+    parser.add_argument("--n_judge_runs", type=int, default=1,
+                        help="[pipeline] Run judge N times and use consensus corrections (default: 1)")
 
     # ---- shared args ----
     parser.add_argument("--no-judge", action="store_true", help="Skip LLM judge API calls")
@@ -2034,7 +2268,8 @@ MODES:
             _CACHE_MODEL_SLUG = EVALUATION_MODEL.replace("/", "_").replace(" ", "_")
             CACHE_DIR         = os.path.join(BASE_DIR, f".prompt_cache_{_CACHE_MODEL_SLUG}")
             _judge_model      = None  # force re-init
-        run_pipeline_evaluation(args.pxd, args.input_dir, args.pmc_cache, args.outdir)
+        run_pipeline_evaluation(args.pxd, args.input_dir, args.pmc_cache, args.outdir,
+                                n_runs=args.n_judge_runs)
         return
 
     # ---- benchmark mode ----

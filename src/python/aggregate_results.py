@@ -611,6 +611,12 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     # Load PRIDE metadata
     print("Loading PRIDE metadata...")
     pride_metadata = load_pride_metadata(pride_json_dir, pxd_id, pxd_dir=pxd_dir)
+    if isinstance(pride_metadata, dict):
+        top_level_organisms = pride_metadata.get("organisms")
+        project_organisms = (pride_metadata.get("project") or {}).get("organisms", [])
+        # Compatibility normalization: some downstream consumers expect top-level pride_metadata.organisms.
+        if not top_level_organisms and project_organisms:
+            pride_metadata["organisms"] = project_organisms
     aggregated_results["pride_metadata"] = pride_metadata
     
     # Compute modification site fractions for DDA (closed search) and DIA

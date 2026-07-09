@@ -121,11 +121,13 @@ class AgenticToSDRF:
         bio_json: Path,
         exp_json: Path,
         aggregated_json: Path,
+        overrides: dict | None = None,
     ) -> None:
         self.tech_json = Path(tech_json)
         self.bio_json = Path(bio_json)
         self.exp_json = Path(exp_json)
         self.aggregated_json = Path(aggregated_json)
+        self._overrides = overrides or {}
         self._load_agentic_jsons()
         self._load_aggregated()
 
@@ -196,6 +198,15 @@ class AgenticToSDRF:
             return None
         return val_s
 
+    def _override_field(self, field: str) -> str | None:
+        val = self._overrides.get(field)
+        if val is None:
+            return None
+        val_s = str(val).strip()
+        if val_s.upper() in ("", "UNKNOWN", "NONE", "NULL", "N/A"):
+            return None
+        return val_s
+
     def _get_raw_files(self) -> list[str]:
         """Return ordered list of .raw basenames."""
         if self._llm_meta:
@@ -208,6 +219,9 @@ class AgenticToSDRF:
     # ------------------------------------------------------------------ #
 
     def _get_organism(self) -> str:
+        override = self._override_field("organism")
+        if override:
+            return override.lower()
         for field in ("species", "organism"):
             val = self._agentic_field(self._bio, field)
             if val:
@@ -220,6 +234,9 @@ class AgenticToSDRF:
         return "not available"
 
     def _get_organism_part(self) -> str:
+        override = self._override_field("organism_part")
+        if override:
+            return override.lower()
         for field in ("tissue", "organ"):
             val = self._agentic_field(self._bio, field)
             if val:
@@ -233,6 +250,9 @@ class AgenticToSDRF:
         return "not available"
 
     def _get_disease(self) -> str:
+        override = self._override_field("disease")
+        if override:
+            return override.lower()
         for field in ("disease_state", "disease"):
             val = self._agentic_field(self._bio, field)
             if val:
@@ -242,18 +262,24 @@ class AgenticToSDRF:
         return "not available"
 
     def _get_cell_type(self) -> str | None:
-        return self._agentic_field(self._bio, "cell_type")
+        return self._override_field("cell_type") or self._agentic_field(self._bio, "cell_type")
 
     def _get_cell_line(self) -> str | None:
-        return self._agentic_field(self._bio, "cell_line")
+        return self._override_field("cell_line") or self._agentic_field(self._bio, "cell_line")
 
     def _get_sex(self) -> str:
+        override = self._override_field("sex")
+        if override and override.lower() in ("male", "female", "intersex"):
+            return override.lower()
         val = self._agentic_field(self._bio, "sex")
         if val and val.lower() in ("male", "female", "intersex"):
             return val.lower()
         return "not available"
 
     def _get_age(self) -> str:
+        override = self._override_field("age")
+        if override:
+            return override
         val = self._agentic_field(self._bio, "age")
         return val if val else "not available"
 
@@ -262,25 +288,34 @@ class AgenticToSDRF:
     # ------------------------------------------------------------------ #
 
     def _get_biological_replicate(self) -> str:
+        override = self._override_field("biological_replicate")
+        if override and override.isdigit():
+            return override
         val = self._agentic_field(self._exp, "number_of_biological_replicates")
         if val and val.isdigit():
             return val
         return "1"
 
     def _get_technical_replicate(self) -> str:
+        override = self._override_field("technical_replicate")
+        if override and override.isdigit():
+            return override
         val = self._agentic_field(self._exp, "number_of_technical_replicates")
         if val and val.isdigit():
             return val
         return "1"
 
     def _get_fraction_identifier(self) -> str:
+        override = self._override_field("fraction_identifier")
+        if override and override.isdigit():
+            return override
         val = self._agentic_field(self._exp, "number_of_fractions")
         if val and val.isdigit():
             return val
         return "1"
 
     def _get_factor_value(self) -> str | None:
-        return self._agentic_field(self._exp, "factor_value")
+        return self._override_field("factor_value") or self._agentic_field(self._exp, "factor_value")
 
     # ------------------------------------------------------------------ #
     # Per-file data extractors
@@ -292,6 +327,9 @@ class AgenticToSDRF:
         return self._ra_files.get(mzml, {}) if mzml else {}
 
     def _get_instrument(self, raw_stem: str) -> str:
+        override = self._override_field("instrument")
+        if override:
+            return override
         fd = self._ra_file_data(raw_stem)
         name = fd.get("instrument_model", {}).get("name")
         if name:
@@ -319,10 +357,23 @@ class AgenticToSDRF:
 
     def _get_dissociation_method(self, raw_stem: str) -> str:
         fd = self._ra_file_data(raw_stem)
+        spectra_stats = fd.get("spectra_stats", {})
+
+        # runAssessor may emit placeholders like "??" for per-file tag even when
+        # a valid per-file/type-level value exists; ignore placeholders so fallback works.
+        def _clean_frag(v: str | None) -> str:
+            if not v:
+                return ""
+            s = str(v).strip()
+            if s.lower() in {"?", "??", "unknown", "not available", "n/a", "none", "null"}:
+                return ""
+            return s
+
         raw = (
-            fd.get("spectra_stats", {}).get("fragmentation_tag")
-            or self._agentic_field(self._tech, "fragmentation")
-            or self._ra_search.get("fragmentation_type")
+            _clean_frag(spectra_stats.get("fragmentation_tag"))
+            or _clean_frag(spectra_stats.get("fragmentation_type"))
+            or _clean_frag(self._agentic_field(self._tech, "fragmentation"))
+            or _clean_frag(self._ra_search.get("fragmentation_type"))
             or ""
         )
         return self._map_dissociation(raw)
@@ -359,14 +410,81 @@ class AgenticToSDRF:
         return None
 
     def _get_mass_tolerances(self) -> tuple[str | None, str | None]:
+        def _fmt(value: object, unit: str) -> str | None:
+            if value is None:
+                return None
+            try:
+                num = float(value)
+                if num.is_integer():
+                    return f"{int(num)} {unit}"
+                return f"{num:g} {unit}"
+            except (TypeError, ValueError):
+                m = re.search(r"([-+]?\d+(?:\.\d+)?)", str(value))
+                if not m:
+                    return None
+                num = float(m.group(1))
+                if num.is_integer():
+                    return f"{int(num)} {unit}"
+                return f"{num:g} {unit}"
+
+        # Preferred source: structured runAssessor tolerances from aggregated JSON.
+        tol = self._ra_search.get("tolerances", {}) if isinstance(self._ra_search, dict) else {}
+        if isinstance(tol, dict):
+            items = [(str(k), v) for k, v in tol.items()]
+
+            def _pick(kind: str) -> str | None:
+                preferred = [
+                    (f"recommended overall {kind} tolerance (ppm)", "ppm"),
+                    (f"recommended_overall_{kind}_tolerance_ppm", "ppm"),
+                ]
+                for key, unit in preferred:
+                    if key in tol:
+                        out = _fmt(tol.get(key), unit)
+                        if out:
+                            return out
+
+                for key, value in items:
+                    lk = key.lower()
+                    if kind not in lk or "tolerance" not in lk:
+                        continue
+                    unit = "ppm"
+                    if " da" in lk or "(da" in lk or lk.endswith("_da") or " dalton" in lk:
+                        unit = "Da"
+                    elif "mmu" in lk:
+                        unit = "mmu"
+                    out = _fmt(value, unit)
+                    if out:
+                        return out
+                return None
+
+            ra_prec = _pick("precursor")
+            ra_frag = _pick("fragment")
+            if ra_prec or ra_frag:
+                return ra_prec, ra_frag
+
+        # Fallback: parse protocol text if structured tolerances are unavailable.
         text = self._data_proc + " " + self._sample_proc
         prec = frag = None
-        m = re.search(r"precursor[^.]{0,80}?(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)", text, re.I)
-        if m:
-            prec = f"{m.group(1)} {m.group(2)}"
-        m2 = re.search(r"fragment[^.]{0,80}?(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)", text, re.I)
-        if m2:
-            frag = f"{m2.group(1)} {m2.group(2)}"
+        prec_patterns = [
+            r"(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)\s*for\s*precursor",
+            r"precursor[^.]{0,80}?(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)",
+        ]
+        frag_patterns = [
+            r"(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)\s*for\s*fragment",
+            r"fragment[^.]{0,80}?(\d+(?:\.\d+)?)\s*(ppm|Da|mmu)",
+        ]
+
+        for pattern in prec_patterns:
+            m = re.search(pattern, text, re.I)
+            if m:
+                prec = f"{m.group(1)} {m.group(2)}"
+                break
+        for pattern in frag_patterns:
+            m = re.search(pattern, text, re.I)
+            if m:
+                frag = f"{m.group(1)} {m.group(2)}"
+                break
+
         return prec, frag
 
     def _get_scan_range(self) -> str | None:
@@ -557,7 +675,6 @@ class AgenticToSDRF:
             "characteristics[biological replicate]",
             "characteristics[sex]",
             "characteristics[age]",
-            "characteristics[individual]",
         ]
         if has_treatment:
             cols.append("characteristics[treatment]")
@@ -702,7 +819,6 @@ class AgenticToSDRF:
             row["characteristics[biological replicate]"] = biological_replicate
             row["characteristics[sex]"] = sex
             row["characteristics[age]"] = age
-            row["characteristics[individual]"] = pf["stem"]
             if has_treatment:
                 row["characteristics[treatment]"] = pf["treatment"] or "not available"
             if has_enrichment:

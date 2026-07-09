@@ -10,7 +10,7 @@ HAMLET is a local Nextflow DSL2 pipeline that processes PRIDE proteomics dataset
 2. **Assesses** each run with runAssessor — detects acquisition type (DDA/DIA), labeling, instrument model, fragmentation
 3. **Identifies organisms** via de novo peptide sequencing (Casanovo / CasanovoBolt) + Peptonizer2000 taxonomy scoring, with PRIDE project organism metadata used to augment the taxid search pool
 4. **Routes searches** automatically — DDA via SAGE, DIA via DIA-NN (controlled by `--acquisition_type`)
-5. **Extracts publication metadata** optionally via direct LLM prompting (`--run_llm_extraction`) or a multi-agent agentic pipeline (`--run_agentic_metadata`)
+5. **Extracts publication metadata** via optional LLM prompting (`--run_llm_extraction`) and manifest-controlled downstream agentic stages
 6. **Aggregates** all per-PXD outputs into a single `*_aggregated_results.json` report
 7. **Generates SDRF** — the agentic pipeline can produce SDRF-Proteomics v1.1.0 TSV files via `src/python/run_agentic_metadata.py`
 
@@ -158,40 +158,65 @@ nextflow run main.nf \
 
 See [assets/pxd_test_files/README.md](assets/pxd_test_files/README.md) for detailed information about each test set.
 
-### With database search enabled
+### Manifest-driven stage control
 
-HAMLET auto-routes each PXD to SAGE (DDA) or DIA-NN (DIA) based on runAssessor detection:
+HAMLET now uses `results/pipeline_stage_manifest.json` as the single source of truth for per-PXD stage execution.
+
+- Deprecated run flags such as `--run_search`, `--run_agentic_metadata`, and `--run_llm_judge` are no longer used.
+- On each run, HAMLET reconciles the manifest from existing outputs.
+- runAssessor now runs in its own dedicated stage (`run_assessor`) between `fetch` and `determine_acquisition_params`, so it can be updated and rerun independently.
+- Per stage, each PXD has:
+  - `availability`: whether the stage is allowed to run
+  - `complete`: computed from checkpoint files
+  - `key_outputs`: checkpoint file patterns used to determine completion
+
+### runAssessor as a submodule (recommended)
+
+You can keep runAssessor decoupled from HAMLET by installing it as a git submodule and letting the dedicated `run_assessor` process call it.
 
 ```bash
-nextflow run main.nf \
-  --pxd PXD000070 \
-  --run_search true \
-  -resume
+git submodule add <RUNASSESSOR_REPO_URL> submodules/runassessor
+git submodule update --init --recursive
 ```
 
-Force a specific mode or supply a fallback taxid if organism detection may fail:
+Then run HAMLET normally. The pipeline will prefer:
+
+- `--runassessor_script submodules/runassessor/src/runassessor.py`
+
+and requires this submodule path to exist.
+
+Default behavior for a normal run:
+
+```bash
+nextflow run main.nf --pxd_csv master.csv -resume
+```
+
+Force acquisition mode or provide fallback taxid:
 
 ```bash
 nextflow run main.nf \
   --pxd PXD000070 \
-  --run_search true \
   --acquisition_type DDA \
   --taxid 9606 \
   -resume
 ```
 
-### With LLM metadata extraction
+### Example: disable a stage for one PXD in the manifest
 
 ```bash
-export OPENAI_API_KEY="sk-..."
+python - <<'PY'
+import json
+from pathlib import Path
 
-nextflow run main.nf \
-  --pxd_csv master.csv \
-  --run_llm_extraction true \
-  -resume
+mf = Path('results/pipeline_stage_manifest.json')
+data = json.loads(mf.read_text())
+data['pxds']['PXD000070']['stages']['llm_judge']['availability'] = False
+mf.write_text(json.dumps(data, indent=2))
+print('Updated manifest: disabled llm_judge for PXD000070')
+PY
 ```
 
-### With full agentic metadata (LLM + multi-agent enrichment)
+### With optional LLM extraction
 
 ```bash
 export OPENAI_API_KEY="sk-..."
@@ -199,7 +224,6 @@ export OPENAI_API_KEY="sk-..."
 nextflow run main.nf \
   --pxd_csv master.csv \
   --run_llm_extraction true \
-  --run_agentic_metadata true \
   -resume
 ```
 
@@ -321,7 +345,7 @@ python src/python/pride_survey.py \
 |-----------|---------|-------------|
 | `--max_raw_files` | `30` | Max RAW files per PXD (`null` = all) |
 | `--use_aria2c` | `true` | Parallel downloads via aria2c |
-| `--aria2c_threads` | `4` | aria2c concurrency per download |
+| `--aria2c_threads` | `16` | aria2c concurrency per download |
 | `--download_timeout` | `4h` | Timeout for download + mzML conversion |
 | `--max_parallel_pxds` | `10` | Max PXDs fetched at the same time |
 
@@ -343,7 +367,6 @@ python src/python/pride_survey.py \
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--run_search` | `false` | Enable database search |
 | `--taxid` | unset | Fallback taxid if organism detection fails |
 | `--sage_config` | `assets/default_sage.config` | SAGE search configuration |
 | `--search_min_ptm_psms` | `50` | Min PSMs for a PTM to be included |
@@ -355,10 +378,11 @@ python src/python/pride_survey.py \
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--denovo_threshold` | `80` | Min Casanovo/CasanovoBolt peptide confidence |
+| `--denovo_threshold` | `70` | Min Casanovo/CasanovoBolt peptide confidence |
 | `--min_peptides_for_peptonizer` | `5` | Min peptides required to run Peptonizer2000 |
 | `--contaminants_fasta` | `assets/UniversalContaminats.fasta` | Contaminant sequences |
 | `--taxid_list_file` | `assets/taxid_lists/CommonPRIDEtaxids.txt` | Allowed taxid list |
+| `--organism_id_all` | `false` | Run organism identification on all files even when one representative file would suffice |
 | `--num_gpus` | `2` | Number of GPUs for de novo sequencing (controls `maxForks` + `CUDA_VISIBLE_DEVICES` assignment; set to `0` or `1` for single-GPU systems) |
 
 ### Metadata extraction
@@ -366,10 +390,18 @@ python src/python/pride_survey.py \
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `--run_llm_extraction` | `false` | LLM-based metadata extraction from publications |
-| `--run_agentic_metadata` | `false` | Multi-agent enrichment after aggregation |
+| `--n_judge_runs` | `3` | Number of LLM judge runs for consensus |
+| `--stage_manifest` | `results/pipeline_stage_manifest.json` | Per-PXD stage availability/completion manifest |
 | `--pride_database_path` | `/THISPATHDOESNOTEXIST` | Path to local PRIDE publication text database |
 | `--llm_prompt_file` | `src/BaselinePrompt.txt` | Prompt template for LLM extraction |
 | `--llm_workers` | `1` | Parallel LLM API calls per PXD |
+
+### runAssessor stage
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `--runassessor_submodule_dir` | `submodules/runassessor` | Preferred runAssessor submodule directory |
+| `--runassessor_script` | `submodules/runassessor/src/runassessor.py` | Script used by dedicated `run_assessor` stage |
 
 ### Tool paths
 
