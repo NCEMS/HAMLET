@@ -31,6 +31,29 @@ def strip_mods(seq):  # Peptide (unmodified)
 ###########################################################################
 
 ###########################################################################
+def is_valid_fasta(path, min_size_bytes=32):
+    """
+    Sanity-check a downloaded/cached FASTA file.
+
+    UniProt's stream endpoint occasionally returns HTTP 200 with a plain-text
+    error body (e.g. "Error encountered when streaming data. Please try again
+    later.") instead of real FASTA content. Since raise_for_status() doesn't
+    catch this (it's a 200), we need to validate the file content directly:
+    a real FASTA file must start with '>' and be non-trivially sized.
+    """
+    try:
+        if not os.path.isfile(path):
+            return False
+        if os.path.getsize(path) < min_size_bytes:
+            return False
+        with open(path, "rb") as f:
+            head = f.read(4096).lstrip()
+        return head.startswith(b">")
+    except OSError:
+        return False
+###########################################################################
+
+###########################################################################
 def convert_sage_to_ptmshepherd(df: pd.DataFrame, args, static_masses=None) -> pd.DataFrame:
     """
     Convert SAGE PSM table to a PTM-Shepherd-compatible PSM table.
@@ -592,6 +615,10 @@ def main():
     print(f'Using URL: {url}')
     print(f'Using FASTA file: {fasta_path}')
     
+    if os.path.isfile(fasta_path) and not is_valid_fasta(fasta_path):
+        print(f'WARNING: Cached FASTA {fasta_path} does not look like valid FASTA content (likely a stale error response). Discarding and re-downloading.')
+        os.remove(fasta_path)
+
     if os.path.isfile(fasta_path):
         print(f'FASTA file already exists (reusing): {fasta_path}')
     else:
@@ -608,6 +635,15 @@ def main():
                 response.raise_for_status()
                 with open(fasta_path, "wb") as f:
                     f.write(response.content)
+                if not is_valid_fasta(fasta_path):
+                    # UniProt can return HTTP 200 with a plain-text error body
+                    # (e.g. transient streaming/rate-limit errors). Treat this like a failed attempt.
+                    with open(fasta_path, "rb") as f:
+                        preview = f.read(200)
+                    os.remove(fasta_path)
+                    raise requests.exceptions.RequestException(
+                        f"Response did not contain valid FASTA content: {preview!r}"
+                    )
                 print(f'SAVED: {fasta_path}')
                 break
             except (requests.exceptions.RequestException, OSError) as e:
@@ -636,6 +672,10 @@ def main():
             full_fasta_filename = f"{args.taxid}_all.fasta"
             full_fasta_path = os.path.join(os.path.dirname(fasta_path), full_fasta_filename)
             
+            if os.path.isfile(full_fasta_path) and not is_valid_fasta(full_fasta_path):
+                print(f'WARNING: Cached FASTA {full_fasta_path} does not look like valid FASTA content (likely a stale error response). Discarding and re-downloading.')
+                os.remove(full_fasta_path)
+
             if os.path.isfile(full_fasta_path):
                 print(f'Using existing full FASTA: {full_fasta_path}')
                 fasta_path = full_fasta_path
@@ -650,6 +690,13 @@ def main():
                         response.raise_for_status()
                         with open(full_fasta_path, "wb") as f:
                             f.write(response.content)
+                        if not is_valid_fasta(full_fasta_path):
+                            with open(full_fasta_path, "rb") as f:
+                                preview = f.read(200)
+                            os.remove(full_fasta_path)
+                            raise requests.exceptions.RequestException(
+                                f"Response did not contain valid FASTA content: {preview!r}"
+                            )
                         print(f'SAVED: {full_fasta_path}')
                         fasta_path = full_fasta_path
                         break

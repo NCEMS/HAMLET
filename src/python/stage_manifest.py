@@ -79,7 +79,38 @@ def _expand(base_dir: Path, pattern: str) -> List[str]:
     return glob.glob(str(base_dir / pattern), recursive=True)
 
 
-def _stage_complete(base_dir: Path, stage: str, key_outputs: List[str]) -> bool:
+def _run_assessor_complete(base_dir: Path, pxd: str, key_outputs: List[str]) -> bool:
+    # Output file(s) must exist first.
+    if not all(_expand(base_dir, p) for p in key_outputs):
+        return False
+
+    # If there are no mzML inputs for this PXD, an empty 'files' dict in the
+    # output is legitimate (nothing to process) and the stage is complete.
+    mzml_inputs = _expand(base_dir, f"spectral_files/{pxd}/*.mzML") + _expand(base_dir, f"spectral_files/{pxd}/*.mzML.gz")
+    if not mzml_inputs:
+        return True
+
+    # Otherwise, guard against a crashed/killed run_assessor process leaving
+    # behind an empty template (study.create() writes this before any per-file
+    # results are populated; if the process dies before study.store() runs
+    # with real data, the empty template is all that's left on disk). Treat
+    # that as incomplete so the stage gets retried instead of being cached
+    # forever as "done".
+    for output_pattern in key_outputs:
+        for path in _expand(base_dir, output_pattern):
+            try:
+                with open(path, "r", encoding="utf-8") as fh:
+                    data = json.load(fh)
+            except (OSError, json.JSONDecodeError):
+                return False
+            if not data.get("files"):
+                return False
+    return True
+
+
+def _stage_complete(base_dir: Path, stage: str, key_outputs: List[str], pxd: str = None) -> bool:
+    if stage == "run_assessor" and pxd:
+        return _run_assessor_complete(base_dir, pxd, key_outputs)
     if stage in {"fetch", "organism_id", "search", "llm_judge"}:
         # Any valid output is enough for these stage families.
         return any(_expand(base_dir, p) for p in key_outputs)
@@ -170,7 +201,7 @@ def cmd_init(args):
             _ensure_skeleton(manifest, pxd, args)
             for s in STAGES:
                 st = manifest["pxds"][pxd]["stages"][s]
-                st["complete"] = _stage_complete(base_dir, s, st["key_outputs"])
+                st["complete"] = _stage_complete(base_dir, s, st["key_outputs"], pxd=pxd)
         _atomic_write(manifest_path, manifest)
     finally:
         fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
@@ -327,7 +358,7 @@ def cmd_prepare(args):
 
     # Honor explicit manifest completion for organism_id.
     if not (args.stage == "organism_id" and availability and complete):
-        complete = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []))
+        complete = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []), pxd=args.pxd)
     # Note: we intentionally do NOT write complete back to the manifest here.
     # mark-complete is the authoritative update path.  This removes the
     # LOCK_EX serialisation bottleneck when hundreds of tasks run concurrently.
@@ -350,7 +381,7 @@ def cmd_mark_complete(args):
         manifest = _load_manifest(manifest_path)
         _ensure_skeleton(manifest, args.pxd, args)
         stage_rec = manifest["pxds"][args.pxd]["stages"][args.stage]
-        stage_rec["complete"] = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []))
+        stage_rec["complete"] = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []), pxd=args.pxd)
         _atomic_write(manifest_path, manifest)
     finally:
         fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)

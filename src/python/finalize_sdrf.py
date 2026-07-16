@@ -94,6 +94,44 @@ def _resolve_integrated_json(input_dir: Path, agent: str, pxd: str) -> Path:
     return path
 
 
+def _copy_judge_as_post_judge(judge_dir: Path, output_dir: Path) -> dict | None:
+    """Copy the first-pass judge outputs into output_dir/post_judge/ verbatim.
+
+    Used when no SDRF overrides were applied: the integrated JSONs going into
+    the final SDRF are unchanged from what the first-pass judge already
+    evaluated, so re-running the (expensive) judge would just reproduce the
+    same result. We still need a post_judge/llm_judge_per_paper.csv on disk
+    for downstream analysis, so copy the existing judge outputs instead.
+    """
+    post_judge_out = output_dir / "post_judge"
+    post_judge_out.mkdir(parents=True, exist_ok=True)
+
+    for name in (
+        "llm_judge_per_paper.csv",
+        "llm_judge_annotation_review.csv",
+        "llm_judge_coverage.csv",
+        "llm_judge_accuracy.png",
+        "llm_judge_aggregate.png",
+        "llm_judge_annotation_quality_counts.png",
+    ):
+        src = judge_dir / name
+        if src.exists():
+            shutil.copy2(src, post_judge_out / name)
+
+    json_src = judge_dir / "json_outputs"
+    if json_src.exists():
+        shutil.copytree(json_src, post_judge_out / "json_outputs", dirs_exist_ok=True)
+
+    stats_path = post_judge_out / "llm_judge_per_paper.csv"
+    if not stats_path.exists():
+        return None
+    with open(stats_path, "r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            return dict(row)
+    return None
+
+
 def _run_post_judge_evaluation(
     pxd: str,
     input_dir: Path,
@@ -203,7 +241,10 @@ def main() -> None:
     sdrf_path = output_dir / f"{args.pxd}.sdrf.tsv"
     builder.to_sdrf(sdrf_path)
 
-    # Run post-judge evaluation against the overridden integrated JSONs
+    # Run post-judge evaluation against the overridden integrated JSONs.
+    # When no overrides were applied, the post-refinement state is identical
+    # to what the first-pass judge already evaluated, so copy those results
+    # instead of re-running the judge for nothing.
     post_judge_stats = None
     if applied_overrides and args.pmc_cache and args.pmc_cache.exists():
         print("Running post-judge evaluation against refined integrated outputs...")
@@ -219,11 +260,15 @@ def main() -> None:
                 print(f"Post-judge accuracy: {float(post_judge_stats.get('judge_accuracy', 0)):.0%}")
         except Exception as exc:
             print(f"WARNING: post-judge evaluation failed: {exc}")
+    elif judge_dir is not None:
+        print("No overrides applied; copying first-pass judge results as post_judge "
+              "(nothing changed to re-evaluate).")
+        post_judge_stats = _copy_judge_as_post_judge(judge_dir, output_dir)
+        if post_judge_stats:
+            print(f"Post-judge accuracy (unchanged from first pass): "
+                  f"{float(post_judge_stats.get('judge_accuracy', 0)):.0%}")
     else:
-        if not applied_overrides:
-            print("Skipping post-judge evaluation: no overrides were applied.")
-        elif not args.pmc_cache:
-            print("Skipping post-judge evaluation: --pmc_cache not provided.")
+        print("Skipping post-judge evaluation: no judge_dir available.")
 
     report = {
         "paper_id": args.pxd,

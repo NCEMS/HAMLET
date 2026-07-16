@@ -18,6 +18,7 @@ import glob
 import json
 import math
 import os
+import re
 import sys
 import time
 import urllib.request
@@ -31,6 +32,60 @@ import pandas as pd
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def _load_allowed_pxds(pxd_list_path: str | None) -> set[str] | None:
+    """Load allowed PXDs from CSV/TXT and return an uppercase accession set.
+
+    Accepted inputs:
+    - CSV with a column named PXDs / pxd / accession (case-insensitive)
+    - Plain text with one accession per line
+    """
+    if not pxd_list_path:
+        return None
+
+    if not os.path.exists(pxd_list_path):
+        raise FileNotFoundError(f"PXD list file not found: {pxd_list_path}")
+
+    allowed: set[str] = set()
+    lower_name = os.path.basename(pxd_list_path).lower()
+
+    if lower_name.endswith(".csv"):
+        df = pd.read_csv(pxd_list_path)
+        if df.empty:
+            return set()
+
+        lower_cols = {str(c).strip().lower(): c for c in df.columns}
+        pick_col = None
+        for candidate in ("pxds", "pxd", "accession"):
+            if candidate in lower_cols:
+                pick_col = lower_cols[candidate]
+                break
+        if pick_col is None:
+            pick_col = df.columns[0]
+
+        values = df[pick_col].dropna().astype(str).str.strip().tolist()
+    else:
+        with open(pxd_list_path, "r", encoding="utf-8") as fh:
+            values = [line.strip() for line in fh if line.strip()]
+
+    for v in values:
+        token = str(v).strip().upper()
+        if token.startswith("PXD"):
+            allowed.add(token)
+    return allowed
+
+
+def _filter_aggregated_files_by_pxd(files: list[str], allowed_pxds: set[str] | None) -> list[str]:
+    """Keep only aggregated files whose PXD is in *allowed_pxds*."""
+    if allowed_pxds is None:
+        return files
+
+    filtered: list[str] = []
+    for fpath in files:
+        pxd = os.path.basename(fpath).split("_aggregated")[0].strip().upper()
+        if pxd in allowed_pxds:
+            filtered.append(fpath)
+    return filtered
 
 def _parse_ground_truth_taxids(project: dict) -> set[str]:
     """Return set of string taxids from pride_metadata.project.organisms.
@@ -238,8 +293,13 @@ def _normalize_to_species(taxids: set[str], email: str) -> set[str]:
 # Analysis: taxid_prediction
 # ---------------------------------------------------------------------------
 
-def run_taxid_prediction(store_dir: str, threshold: float | str, outdir: str,
-                         email: str | None = None) -> None:
+def run_taxid_prediction(
+    store_dir: str,
+    threshold: float | str,
+    outdir: str,
+    email: str | None = None,
+    allowed_pxds: set[str] | None = None,
+) -> None:
     """Evaluate organism-identification accuracy against PRIDE ground truth.
 
     For each PXD in *store_dir*/aggregated_results_files/:
@@ -262,6 +322,7 @@ def run_taxid_prediction(store_dir: str, threshold: float | str, outdir: str,
     agg_dir = os.path.join(store_dir, "aggregated_results_files")
     pattern = os.path.join(agg_dir, "PXD*_aggregated_results.json")
     files = sorted(glob.glob(pattern))
+    files = _filter_aggregated_files_by_pxd(files, allowed_pxds)
 
     if not files:
         print(f"[taxid_prediction] No aggregated results found in: {agg_dir}", file=sys.stderr)
@@ -628,7 +689,11 @@ _GROUP_ORDER = [
 ]
 
 
-def run_modification_frequency(store_dir: str, outdir: str) -> None:
+def run_modification_frequency(
+    store_dir: str,
+    outdir: str,
+    allowed_pxds: set[str] | None = None,
+) -> None:
     """Plot the frequency of PTMs identified in modification_site_fractions.
 
     For every PXD that has a non-null modification_site_fractions section,
@@ -649,6 +714,7 @@ def run_modification_frequency(store_dir: str, outdir: str) -> None:
     agg_dir = os.path.join(store_dir, "aggregated_results_files")
     pattern = os.path.join(agg_dir, "PXD*_aggregated_results.json")
     files = sorted(glob.glob(pattern))
+    files = _filter_aggregated_files_by_pxd(files, allowed_pxds)
 
     if not files:
         print(f"[modification_frequency] No aggregated results found in: {agg_dir}",
@@ -827,6 +893,789 @@ def _plot_mod_grouped(grp_df: pd.DataFrame, n_with_msf: int, outdir: str) -> Non
 
 
 # ---------------------------------------------------------------------------
+# Analysis: runassessor_technical_summary
+# ---------------------------------------------------------------------------
+
+_RE_MS_LEVEL = re.compile(r"^n_ms(.+)_spectra$")
+_RE_CHARGE = re.compile(r"^n_charge_(.+)_precursors$")
+
+
+def _normalize_category(value: object, unknown: str = "unknown") -> str:
+    """Normalize category-like values from JSON to a stable lowercase label."""
+    if value is None:
+        return unknown
+    text = str(value).strip()
+    if not text or text.lower() in {"none", "null", "nan"}:
+        return unknown
+    return text.lower()
+
+
+def _to_float_or_none(value: object) -> float | None:
+    """Return float(value) when possible, else None."""
+    try:
+        if value is None:
+            return None
+        num = float(value)
+        if math.isnan(num):
+            return None
+        return num
+    except (TypeError, ValueError):
+        return None
+
+
+def _collect_runassessor_stats(files: list[str]) -> dict:
+    """Aggregate RunAssessor technical fields across aggregated-result files.
+
+    Shared by the standalone runassessor_technical_summary analysis and the
+    Figure 3 composite (panel a) so both draw from identical counts.
+    """
+    from collections import Counter
+
+    stats: dict = {
+        "acquisition_counter": Counter(),
+        "fragmentation_counter": Counter(),
+        "fragmentation_tag_counter": Counter(),
+        "labeling_counter": Counter(),
+        "high_acc_precursor_counter": Counter(),
+        "water_loss_counter": Counter(),
+        "ms_level_counter": Counter(),
+        "precursor_charge_counter": Counter(),
+        "isolation_width_counter": Counter(),
+        "fragment_channel_counter": Counter(),
+        "roi_signature_counter": Counter(),
+        "precursor_tol_ppm": [],
+        "fragment_tol_ppm": [],
+        "phospho_water_ratio": [],
+        "dynex_decay_constant": [],
+        "dynex_pulse_start": [],
+        "n_with_runassessor": 0,
+        "n_without_runassessor": 0,
+        "n_file_level_entries": 0,
+    }
+
+    acquisition_counter = stats["acquisition_counter"]
+    fragmentation_counter = stats["fragmentation_counter"]
+    fragmentation_tag_counter = stats["fragmentation_tag_counter"]
+    labeling_counter = stats["labeling_counter"]
+    high_acc_precursor_counter = stats["high_acc_precursor_counter"]
+    water_loss_counter = stats["water_loss_counter"]
+    ms_level_counter = stats["ms_level_counter"]
+    precursor_charge_counter = stats["precursor_charge_counter"]
+    isolation_width_counter = stats["isolation_width_counter"]
+    fragment_channel_counter = stats["fragment_channel_counter"]
+    roi_signature_counter = stats["roi_signature_counter"]
+    precursor_tol_ppm = stats["precursor_tol_ppm"]
+    fragment_tol_ppm = stats["fragment_tol_ppm"]
+    phospho_water_ratio = stats["phospho_water_ratio"]
+    dynex_decay_constant = stats["dynex_decay_constant"]
+    dynex_pulse_start = stats["dynex_pulse_start"]
+
+    for fpath in files:
+        with open(fpath, "r") as fh:
+            data = json.load(fh)
+
+        run_assessor = data.get("runAssessor")
+        if not run_assessor:
+            stats["n_without_runassessor"] += 1
+            continue
+        stats["n_with_runassessor"] += 1
+
+        pxd_roi_types: set[str] = set()
+        run_files = run_assessor.get("files") or {}
+        if run_files:
+            for file_data in run_files.values():
+                if not isinstance(file_data, dict):
+                    continue
+
+                spectra_stats = file_data.get("spectra_stats") or {}
+                if isinstance(spectra_stats, dict) and spectra_stats:
+                    stats["n_file_level_entries"] += 1
+                    acquisition_counter[_normalize_category(spectra_stats.get("acquisition_type"))] += 1
+                    fragmentation_counter[_normalize_category(spectra_stats.get("fragmentation_type"))] += 1
+                    fragmentation_tag_counter[_normalize_category(spectra_stats.get("fragmentation_tag"))] += 1
+                    high_acc_precursor_counter[_normalize_category(spectra_stats.get("high_accuracy_precursors"))] += 1
+
+                    isolation_windows = spectra_stats.get("isolation_window_full_widths") or {}
+                    if isinstance(isolation_windows, dict):
+                        for width, count in isolation_windows.items():
+                            w = _to_float_or_none(width)
+                            c = _to_float_or_none(count)
+                            if w is None or c is None:
+                                continue
+                            isolation_width_counter[f"{w:g}"] += c
+
+                    for key, value in spectra_stats.items():
+                        n = _to_float_or_none(value)
+                        if n is None:
+                            continue
+
+                        ms_match = _RE_MS_LEVEL.match(key)
+                        if ms_match:
+                            ms_level_counter[f"ms{ms_match.group(1)}"] += n
+
+                        charge_match = _RE_CHARGE.match(key)
+                        if charge_match:
+                            precursor_charge_counter[charge_match.group(1)] += n
+
+                        key_upper = key.upper()
+                        if "HCD" in key_upper:
+                            fragment_channel_counter["hcd"] += n
+                        if "CID" in key_upper:
+                            fragment_channel_counter["cid"] += n
+                        if "ETD" in key_upper:
+                            fragment_channel_counter["etd"] += n
+                        if "QTOF" in key_upper:
+                            fragment_channel_counter["qtof"] += n
+
+                summary = file_data.get("summary") or {}
+                if isinstance(summary, dict) and summary:
+                    combined = summary.get("combined summary") or {}
+                    if isinstance(combined, dict):
+                        labeling_counter[_normalize_category(combined.get("call"))] += 1
+                        water_loss_counter[_normalize_category(combined.get("has water_loss"))] += 1
+
+                        rec_prec = _to_float_or_none(combined.get("recommended precursor tolerance (ppm)"))
+                        if rec_prec is not None:
+                            precursor_tol_ppm.append(rec_prec)
+
+                        frag_tol_block = combined.get("fragmentation tolerance") or {}
+                        if isinstance(frag_tol_block, dict):
+                            rec_frag = _to_float_or_none(frag_tol_block.get("recommended fragment tolerance"))
+                            if rec_frag is not None:
+                                fragment_tol_ppm.append(rec_frag)
+
+                        ratio = _to_float_or_none(
+                            combined.get("total z=2 phosphoric_acid to z=2 water_loss intensity ratio")
+                        )
+                        if ratio is not None:
+                            phospho_water_ratio.append(ratio)
+
+                    precursor_stats = summary.get("precursor stats") or {}
+                    if isinstance(precursor_stats, dict):
+                        dynex = precursor_stats.get("dynamic exclusion window") or {}
+                        if isinstance(dynex, dict):
+                            fit = dynex.get("fit_pulse_time") or {}
+                            if isinstance(fit, dict):
+                                decay = _to_float_or_none(fit.get("decay constant"))
+                                pulse = _to_float_or_none(fit.get("pulse start"))
+                                if decay is not None:
+                                    dynex_decay_constant.append(decay)
+                                if pulse is not None:
+                                    dynex_pulse_start.append(pulse)
+
+            if not isinstance(file_data, dict):
+                continue
+            rois = file_data.get("ROIs") or {}
+            if not isinstance(rois, dict):
+                continue
+            for roi_name, roi_data in rois.items():
+                if not isinstance(roi_data, dict):
+                    continue
+                found = bool(((roi_data.get("peak") or {}).get("assessment") or {}).get("is_found"))
+                if not found:
+                    continue
+                roi_type = _normalize_category(roi_data.get("type") or roi_name)
+                pxd_roi_types.add(roi_type)
+        else:
+            # Fallback to top-level runAssessor schema when per-file entries are absent.
+            search_criteria = run_assessor.get("search_criteria") or {}
+            acquisition_counter[_normalize_category(search_criteria.get("acquisition_type"))] += 1
+            fragmentation_counter[_normalize_category(search_criteria.get("fragmentation_type"))] += 1
+            labeling_counter[_normalize_category(search_criteria.get("labeling"))] += 1
+            high_acc_precursor_counter[_normalize_category(search_criteria.get("high_accuracy_precursors"))] += 1
+
+            tolerances = search_criteria.get("tolerances") or {}
+            rec_prec = _to_float_or_none(tolerances.get("recommended overall precursor tolerance (ppm)"))
+            rec_frag = _to_float_or_none(tolerances.get("recommended overall fragment tolerance (ppm)"))
+            if rec_prec is not None:
+                precursor_tol_ppm.append(rec_prec)
+            if rec_frag is not None:
+                fragment_tol_ppm.append(rec_frag)
+
+            spectra_stats = run_assessor.get("spectra_stats") or {}
+            for key, value in spectra_stats.items():
+                n = _to_float_or_none(value)
+                if n is None:
+                    continue
+                ms_match = _RE_MS_LEVEL.match(key)
+                if ms_match:
+                    ms_level_counter[f"ms{ms_match.group(1)}"] += n
+                charge_match = _RE_CHARGE.match(key)
+                if charge_match:
+                    precursor_charge_counter[charge_match.group(1)] += n
+                key_upper = key.upper()
+                if "HCD" in key_upper:
+                    fragment_channel_counter["hcd"] += n
+                if "CID" in key_upper:
+                    fragment_channel_counter["cid"] += n
+                if "ETD" in key_upper:
+                    fragment_channel_counter["etd"] += n
+                if "QTOF" in key_upper:
+                    fragment_channel_counter["qtof"] += n
+
+        for roi_type in pxd_roi_types:
+            roi_signature_counter[roi_type] += 1
+
+    return stats
+
+
+def run_runassessor_technical_summary(
+    store_dir: str,
+    outdir: str,
+    allowed_pxds: set[str] | None = None,
+) -> None:
+    """Summarize runAssessor technical metadata and write plot/CSV outputs.
+
+    Outputs
+    -------
+    <outdir>/runassessor_technical_summary.csv
+    <outdir>/runassessor_technical_summary_plot.png
+    """
+    from collections import Counter
+
+    agg_dir = os.path.join(store_dir, "aggregated_results_files")
+    pattern = os.path.join(agg_dir, "PXD*_aggregated_results.json")
+    files = sorted(glob.glob(pattern))
+    files = _filter_aggregated_files_by_pxd(files, allowed_pxds)
+
+    if not files:
+        print(f"[runassessor_technical_summary] No aggregated results found in: {agg_dir}",
+              file=sys.stderr)
+        return
+
+    print(f"[runassessor_technical_summary] Found {len(files)} aggregated result files.")
+
+    stats = _collect_runassessor_stats(files)
+    n_with_runassessor = stats["n_with_runassessor"]
+    n_without_runassessor = stats["n_without_runassessor"]
+    n_file_level_entries = stats["n_file_level_entries"]
+
+    print("\n[runassessor_technical_summary] Summary")
+    print(f"  PXDs with runAssessor section    : {n_with_runassessor}")
+    print(f"  PXDs without runAssessor section : {n_without_runassessor}")
+    print(f"  File-level run summaries parsed  : {n_file_level_entries}")
+
+    if n_with_runassessor == 0:
+        print("[runassessor_technical_summary] No runAssessor data available.", file=sys.stderr)
+        return
+
+    # Build long-form summary table
+    summary_rows = []
+
+    def add_counter_rows(domain: str, counter: Counter, denominator: float | None = None) -> None:
+        for key, value in counter.items():
+            row = {"domain": domain, "category": str(key), "value": float(value)}
+            if denominator and denominator > 0:
+                row["fraction"] = float(value) / float(denominator)
+            else:
+                row["fraction"] = float("nan")
+            summary_rows.append(row)
+
+    cat_den = n_file_level_entries if n_file_level_entries > 0 else n_with_runassessor
+    add_counter_rows("acquisition_type", stats["acquisition_counter"], cat_den)
+    add_counter_rows("fragmentation_type", stats["fragmentation_counter"], cat_den)
+    add_counter_rows("fragmentation_tag", stats["fragmentation_tag_counter"], cat_den)
+    add_counter_rows("labeling", stats["labeling_counter"], cat_den)
+    add_counter_rows("high_accuracy_precursors", stats["high_acc_precursor_counter"], cat_den)
+    add_counter_rows("has_water_loss", stats["water_loss_counter"], cat_den)
+    add_counter_rows("ms_level_spectra", stats["ms_level_counter"], sum(stats["ms_level_counter"].values()))
+    add_counter_rows("precursor_charge", stats["precursor_charge_counter"],
+                     sum(stats["precursor_charge_counter"].values()))
+    add_counter_rows("isolation_window_full_width", stats["isolation_width_counter"],
+                     sum(stats["isolation_width_counter"].values()))
+    add_counter_rows("fragmentation_channel_spectra", stats["fragment_channel_counter"],
+                     sum(stats["fragment_channel_counter"].values()))
+    add_counter_rows("roi_quant_signature_pxds", stats["roi_signature_counter"], n_with_runassessor)
+
+    def add_numeric_rows(domain: str, values: list[float]) -> None:
+        if not values:
+            return
+        summary_rows.extend([
+            {"domain": domain, "category": "count",  "value": float(len(values)), "fraction": float("nan")},
+            {"domain": domain, "category": "mean",   "value": float(np.mean(values)), "fraction": float("nan")},
+            {"domain": domain, "category": "median", "value": float(np.median(values)), "fraction": float("nan")},
+            {"domain": domain, "category": "p95",    "value": float(np.percentile(values, 95)), "fraction": float("nan")},
+        ])
+
+    add_numeric_rows("recommended_precursor_tolerance_ppm", stats["precursor_tol_ppm"])
+    add_numeric_rows("recommended_fragment_tolerance_ppm", stats["fragment_tol_ppm"])
+    add_numeric_rows("phosphoric_to_water_intensity_ratio", stats["phospho_water_ratio"])
+    add_numeric_rows("dynamic_exclusion_decay_constant", stats["dynex_decay_constant"])
+    add_numeric_rows("dynamic_exclusion_pulse_start", stats["dynex_pulse_start"])
+
+    os.makedirs(outdir, exist_ok=True)
+    summary_df = pd.DataFrame(summary_rows)
+    summary_csv = os.path.join(outdir, "runassessor_technical_summary.csv")
+    summary_df.to_csv(summary_csv, index=False)
+    print(f"[runassessor_technical_summary] Saved summary table to: {summary_csv}")
+
+    _plot_runassessor_technical_summary(stats, outdir)
+
+
+def _bar_with_aligned_ticks(ax, labels, values, color, alpha=0.9):
+    """Draw bars with explicit tick locations to avoid category offset artifacts."""
+    x = np.arange(len(labels))
+    ax.bar(x, values, color=color, edgecolor="white", alpha=alpha)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=35, ha="right", rotation_mode="anchor")
+
+
+def _draw_runassessor_panels(
+    fig: plt.Figure,
+    outer_spec,
+    stats: dict,
+    title_fs: float,
+    label_fs: float,
+    tick_fs: float,
+) -> None:
+    """Draw the 10-panel RunAssessor technical-summary grid into *outer_spec*.
+
+    Shared by the standalone runassessor_technical_summary plot and by
+    panel a of the Figure 3 composite, so both stay visually identical.
+    """
+    inner_gs = outer_spec.subgridspec(2, 5, wspace=0.55, hspace=0.85)
+    axes = [[fig.add_subplot(inner_gs[r, c]) for c in range(5)] for r in range(2)]
+    for row in axes:
+        for ax in row:
+            ax.tick_params(axis="both", labelsize=tick_fs)
+
+    acquisition_counter = stats["acquisition_counter"]
+    fragmentation_counter = stats["fragmentation_counter"]
+    fragmentation_tag_counter = stats["fragmentation_tag_counter"]
+    ms_level_counter = stats["ms_level_counter"]
+    precursor_charge_counter = stats["precursor_charge_counter"]
+    isolation_width_counter = stats["isolation_width_counter"]
+    precursor_tol_ppm = stats["precursor_tol_ppm"]
+    fragment_tol_ppm = stats["fragment_tol_ppm"]
+    fragment_channel_counter = stats["fragment_channel_counter"]
+    labeling_counter = stats["labeling_counter"]
+    roi_signature_counter = stats["roi_signature_counter"]
+
+    # 1) Acquisition type (DDA/DIA)
+    ax = axes[0][0]
+    acq_items = sorted(acquisition_counter.items(), key=lambda kv: kv[1], reverse=True)
+    _bar_with_aligned_ticks(ax, [k for k, _ in acq_items], [v for _, v in acq_items], "#4C72B0")
+    ax.set_title("Acquisition", fontsize=title_fs)
+    ax.set_ylabel("Runs", fontsize=label_fs)
+
+    # 2) Fragmentation type
+    ax = axes[0][1]
+    frag_items = sorted(fragmentation_counter.items(), key=lambda kv: kv[1], reverse=True)[:6]
+    _bar_with_aligned_ticks(ax, [k for k, _ in frag_items], [v for _, v in frag_items], "#64B5CD")
+    ax.set_title("Fragmentation type", fontsize=title_fs)
+
+    # 3) Fragmentation tag
+    ax = axes[0][2]
+    tag_items = sorted(fragmentation_tag_counter.items(), key=lambda kv: kv[1], reverse=True)[:5]
+    _bar_with_aligned_ticks(ax, [k for k, _ in tag_items], [v for _, v in tag_items], "#4E79A7")
+    ax.set_title("Fragmentation tag", fontsize=title_fs)
+
+    # 4) MS-level spectrum distribution
+    ax = axes[0][3]
+    ms_order = ["ms0", "ms1", "ms2", "ms3", "ms3+"]
+    ms_labels = [m for m in ms_order if m in ms_level_counter]
+    ms_vals = [ms_level_counter[m] for m in ms_labels]
+    if ms_vals:
+        total_ms = float(sum(ms_vals))
+        ms_frac = [v / total_ms for v in ms_vals]
+        _bar_with_aligned_ticks(ax, ms_labels, ms_frac, "#55A868")
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{y:.0%}"))
+        ax.set_ylim(0, min(1.0, max(ms_frac) * 1.15))
+    ax.set_title("MS levels", fontsize=title_fs)
+    ax.set_ylabel("Frac", fontsize=label_fs)
+
+    # 5) Precursor charge distribution (top 6 + other)
+    ax = axes[0][4]
+    charge_items = []
+    for k, v in precursor_charge_counter.items():
+        try:
+            charge_items.append((int(k), v))
+        except ValueError:
+            continue
+    charge_items.sort(key=lambda kv: kv[1], reverse=True)
+    top = charge_items[:6]
+    other_sum = sum(v for _, v in charge_items[6:])
+    charge_labels = [f"z={k}" for k, _ in top]
+    charge_vals = [v for _, v in top]
+    if other_sum > 0:
+        charge_labels.append("other")
+        charge_vals.append(other_sum)
+    if charge_vals:
+        total_charge = float(sum(charge_vals))
+        charge_frac = [v / total_charge for v in charge_vals]
+        _bar_with_aligned_ticks(ax, charge_labels, charge_frac, "#C44E52")
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{y:.0%}"))
+        ax.set_ylim(0, min(1.0, max(charge_frac) * 1.15))
+    ax.set_title("Precursor charge", fontsize=title_fs)
+    ax.set_ylabel("Frac", fontsize=label_fs)
+
+    # 6) Isolation window widths
+    ax = axes[1][0]
+    iso_items = []
+    for k, v in isolation_width_counter.items():
+        try:
+            iso_items.append((float(k), v))
+        except ValueError:
+            continue
+    iso_items.sort(key=lambda kv: kv[0])
+    if iso_items:
+        labels = [f"{w:g}" for w, _ in iso_items[:8]]
+        vals = [v for _, v in iso_items[:8]]
+        total_iso = float(sum(v for _, v in iso_items))
+        vals = [v / total_iso for v in vals]
+        _bar_with_aligned_ticks(ax, labels, vals, "#F28E2B")
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{y:.0%}"))
+    ax.set_title("Isolation window (m/z)", fontsize=title_fs)
+    ax.set_ylabel("Frac", fontsize=label_fs)
+
+    # 7) Fragmentation-channel distribution
+    ax = axes[1][1]
+    channel_items = sorted(fragment_channel_counter.items(), key=lambda kv: kv[1], reverse=True)
+    channel_labels = [k.upper() for k, _ in channel_items]
+    channel_vals = [v for _, v in channel_items]
+    if channel_vals:
+        total_frag = float(sum(channel_vals))
+        channel_frac = [v / total_frag for v in channel_vals]
+        _bar_with_aligned_ticks(ax, channel_labels, channel_frac, "#B07AA1")
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda y, _: f"{y:.0%}"))
+        ax.set_ylim(0, min(1.0, max(channel_frac) * 1.15))
+    ax.set_title("Fragmentation channels", fontsize=title_fs)
+    ax.set_ylabel("Frac", fontsize=label_fs)
+
+    # 8) Recommended precursor tolerance — own subplot
+    ax = axes[1][2]
+    if precursor_tol_ppm:
+        ax.hist(precursor_tol_ppm, bins=12, alpha=0.8, color="#8172B2", edgecolor="white")
+    ax.set_title("Precursor tolerance", fontsize=title_fs)
+    ax.set_xlabel("ppm", fontsize=label_fs)
+    ax.set_ylabel("Count", fontsize=label_fs)
+
+    # 9) Recommended fragment tolerance — own subplot
+    ax = axes[1][3]
+    if fragment_tol_ppm:
+        ax.hist(fragment_tol_ppm, bins=12, alpha=0.8, color="#E15759", edgecolor="white")
+    ax.set_title("Fragment tolerance", fontsize=title_fs)
+    ax.set_xlabel("ppm", fontsize=label_fs)
+    ax.set_ylabel("Count", fontsize=label_fs)
+
+    # 10) Labeling calls and ROI quant signatures
+    ax = axes[1][4]
+    label_items = sorted(labeling_counter.items(), key=lambda kv: kv[1], reverse=True)[:4]
+    roi_items = sorted(roi_signature_counter.items(), key=lambda kv: kv[1], reverse=True)[:4]
+    names = [f"L:{k}" for k, _ in label_items] + [f"Q:{k}" for k, _ in roi_items]
+    vals = [v for _, v in label_items] + [v for _, v in roi_items]
+    colors = ["#76B7B2"] * len(label_items) + ["#CCB974"] * len(roi_items)
+    if vals:
+        _bar_with_aligned_ticks(ax, names, vals, "#76B7B2")
+        # Reapply per-bar colors after helper call.
+        for patch, color in zip(ax.patches, colors):
+            patch.set_facecolor(color)
+    ax.set_title("Labeling + quant", fontsize=title_fs)
+    ax.set_ylabel("Count", fontsize=label_fs)
+    ax.tick_params(axis="x", rotation=45)
+
+
+def _plot_runassessor_technical_summary(stats: dict, outdir: str) -> None:
+    """Create the standalone RunAssessor technical summary at 180 mm x 80 mm."""
+    fig_width_in = 180.0 / 25.4
+    fig_height_in = 80.0 / 25.4
+    fig = plt.figure(figsize=(fig_width_in, fig_height_in))
+    outer_spec = fig.add_gridspec(1, 1, left=0.055, right=0.99, top=0.95, bottom=0.16)[0, 0]
+
+    title_fs, label_fs, tick_fs = 7, 6, 5
+    _draw_runassessor_panels(fig, outer_spec, stats, title_fs, label_fs, tick_fs)
+
+    plot_path = os.path.join(outdir, "runassessor_technical_summary_plot.png")
+    fig.savefig(plot_path, dpi=300)
+    plt.close(fig)
+    print(f"[runassessor_technical_summary] Saved plot to: {plot_path}")
+
+
+# ---------------------------------------------------------------------------
+# Analysis: figure3_composite
+# ---------------------------------------------------------------------------
+
+def _compute_taxid_metrics_for_composite(
+    files: list[str],
+    threshold: float | str = "best",
+    email: str | None = None,
+) -> dict[str, list[float]]:
+    """Lightweight recomputation of taxid recall/precision/F1/balanced accuracy.
+
+    Mirrors the core scoring logic in run_taxid_prediction (same threshold
+    semantics and optional species-level normalisation) but only returns
+    the evaluable per-PXD metric lists needed to draw Figure 3 panel b.
+    """
+    metrics_lists: dict[str, list[float]] = {
+        "recall": [], "precision": [], "f1": [], "balanced_accuracy": [],
+    }
+    for fpath in files:
+        with open(fpath, "r") as fh:
+            data = json.load(fh)
+
+        project = (data.get("pride_metadata") or {}).get("project") or {}
+        ground_truth = _parse_ground_truth_taxids(project)
+        if not ground_truth:
+            continue
+
+        organism_id = data.get("organism_identification")
+        llm_meta = data.get("llm_extracted_metadata") or {}
+        llm_taxids = _parse_llm_taxids(llm_meta)
+        has_org_id = bool(organism_id and organism_id.get("results"))
+
+        if has_org_id:
+            predicted = _parse_predicted_taxids(
+                organism_id, threshold, n_best=max(1, len(ground_truth))
+            ) | llm_taxids
+        else:
+            predicted = llm_taxids
+
+        if not predicted:
+            continue
+
+        if email:
+            gt_for_metrics = _normalize_to_species(ground_truth, email)
+            pred_for_metrics = _normalize_to_species(predicted, email)
+        else:
+            gt_for_metrics = ground_truth
+            pred_for_metrics = predicted
+
+        metrics = _compute_metrics(gt_for_metrics, pred_for_metrics)
+        for key in metrics_lists:
+            value = metrics.get(key)
+            if value is not None and not (isinstance(value, float) and math.isnan(value)):
+                metrics_lists[key].append(float(value))
+
+    return metrics_lists
+
+
+def _compute_mod_grouped_for_composite(files: list[str]) -> tuple[pd.DataFrame, int]:
+    """Lightweight recomputation of grouped PTM frequency for Figure 3 panel c."""
+    from collections import defaultdict
+
+    mod_data: dict[str, dict] = defaultdict(lambda: {"pxds": set(), "fractions": [], "n_sample_obs": 0})
+    group_pxds: dict[str, set] = defaultdict(set)
+    n_with_msf = 0
+
+    for fpath in files:
+        pxd = os.path.basename(fpath).split("_aggregated")[0]
+        with open(fpath, "r") as fh:
+            data = json.load(fh)
+
+        msf = data.get("modification_site_fractions")
+        if not msf:
+            continue
+        n_with_msf += 1
+
+        for search_key in _SEARCH_TYPE_KEYS:
+            search_block = msf.get(search_key)
+            if not search_block:
+                continue
+            per_sample = search_block.get("per_sample_files", {})
+            for _sample, sample_data in per_sample.items():
+                for entry in sample_data.get("data", []):
+                    mk = entry.get("mod_key", "")
+                    if not mk:
+                        continue
+                    rec = mod_data[mk]
+                    rec["pxds"].add(pxd)
+                    group = _MOD_GROUP_MAP.get(mk, "Miscellaneous rare")
+                    group_pxds[group].add(pxd)
+                    frac = entry.get("fraction_modified")
+                    if frac is not None and not (isinstance(frac, float) and math.isnan(frac)):
+                        rec["fractions"].append(float(frac))
+                        rec["n_sample_obs"] += 1
+
+    if not mod_data:
+        return pd.DataFrame(columns=["group", "n_pxds_unique", "weighted_mean_fraction"]), n_with_msf
+
+    rows = []
+    for mk, rec in mod_data.items():
+        rows.append({
+            "mod_key": mk,
+            "group": _MOD_GROUP_MAP.get(mk, "Miscellaneous rare"),
+            "n_sample_obs": rec["n_sample_obs"],
+            "mean_fraction_modified": float(np.mean(rec["fractions"])) if rec["fractions"] else float("nan"),
+        })
+    df = pd.DataFrame(rows)
+
+    grp_rows = []
+    for grp, sub in df.groupby("group"):
+        valid = sub.dropna(subset=["mean_fraction_modified"])
+        weights = valid["n_sample_obs"].values.astype(float)
+        fracs_w = valid["mean_fraction_modified"].values.astype(float)
+        wmean = float(np.average(fracs_w, weights=weights)) if weights.sum() > 0 else float("nan")
+        grp_rows.append({
+            "group": grp,
+            "n_pxds_unique": len(group_pxds[grp]),
+            "weighted_mean_fraction": wmean,
+        })
+
+    grp_df = pd.DataFrame(grp_rows).sort_values("n_pxds_unique", ascending=False).reset_index(drop=True)
+    return grp_df, n_with_msf
+
+
+def _draw_taxid_metrics_panel(
+    fig: plt.Figure,
+    outer_spec,
+    metrics: dict[str, list[float]],
+    title_fs: float,
+    label_fs: float,
+    tick_fs: float,
+) -> None:
+    """Draw a compact 2x2 grid of taxid-prediction metric histograms."""
+    inner_gs = outer_spec.subgridspec(2, 2, wspace=0.45, hspace=0.65)
+    metrics_cfg = [
+        ("recall", "Recall", "#4C72B0", 0, 0),
+        ("precision", "Precision", "#55A868", 0, 1),
+        ("f1", "F1 score", "#C44E52", 1, 0),
+        ("balanced_accuracy", "Balanced acc.", "#9B59B6", 1, 1),
+    ]
+    for key, label, color, r, c in metrics_cfg:
+        ax = fig.add_subplot(inner_gs[r, c])
+        ax.tick_params(axis="both", labelsize=tick_fs)
+        vals = np.asarray(metrics.get(key, []), dtype=float)
+        if vals.size:
+            mean_val = float(np.mean(vals))
+            ax.hist(vals, bins=12, range=(0, 1), color=color, alpha=0.8, edgecolor="white")
+            ax.axvline(mean_val, color="black", linewidth=1.0, linestyle="--")
+            ax.set_xlim(-0.02, 1.02)
+        ax.set_title(label, fontsize=title_fs)
+        if c == 0:
+            ax.set_ylabel("PXDs", fontsize=label_fs)
+        if r == 1:
+            ax.set_xlabel("Score", fontsize=label_fs)
+
+
+def _draw_mod_grouped_panel(
+    fig: plt.Figure,
+    outer_spec,
+    grp_df: pd.DataFrame,
+    n_with_msf: int,
+    title_fs: float,
+    label_fs: float,
+    tick_fs: float,
+) -> None:
+    """Draw grouped-PTM frequency (all groups) as two side-by-side horizontal bars.
+
+    Uses the same full group set (and exclusions) as the standalone
+    modification_grouped.csv / modification_grouped_plot.png — no top-N
+    truncation — so panel c matches the separate plot exactly.
+    """
+    inner_gs = outer_spec.subgridspec(1, 2, wspace=0.15)
+
+    plot_df = grp_df[~grp_df["group"].isin(_PLOT_EXCLUDE_GROUPS)].copy()
+    plot_df = plot_df.sort_values("n_pxds_unique", ascending=False)
+    plot_df = plot_df.iloc[::-1]
+    labels = plot_df["group"].tolist()
+    y = np.arange(len(labels))
+    group_tick_fs = max(3.5, tick_fs - 1.5)
+
+    ax_frac = fig.add_subplot(inner_gs[0, 0])
+    ax_frac.tick_params(axis="both", labelsize=tick_fs)
+    frac_vals = (plot_df["n_pxds_unique"] / n_with_msf).tolist() if n_with_msf else [0.0] * len(labels)
+    ax_frac.barh(y, frac_vals, color="#4C72B0", edgecolor="white", alpha=0.85)
+    ax_frac.set_yticks(y)
+    ax_frac.set_yticklabels(labels, fontsize=group_tick_fs)
+    ax_frac.set_ylim(-0.6, len(labels) - 0.4)
+    ax_frac.xaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
+    ax_frac.set_title("Fraction of PXDs", fontsize=title_fs)
+
+    ax_wm = fig.add_subplot(inner_gs[0, 1])
+    ax_wm.tick_params(axis="both", labelsize=tick_fs)
+    wm_vals = plot_df["weighted_mean_fraction"].fillna(0).tolist()
+    ax_wm.barh(y, wm_vals, color="#C44E52", edgecolor="white", alpha=0.85)
+    ax_wm.set_yticks(y)
+    ax_wm.set_yticklabels([])
+    ax_wm.set_ylim(-0.6, len(labels) - 0.4)
+    ax_wm.set_title("Mean occupancy", fontsize=title_fs)
+
+
+def _add_panel_label(fig: plt.Figure, spec, label: str) -> None:
+    """Place a bold panel label ('a', 'b', 'c', ...) above the top-left of *spec*."""
+    bbox = spec.get_position(fig)
+    fig.text(
+        max(0.0, bbox.x0 - 0.045),
+        min(0.995, bbox.y1 + 0.006),
+        label,
+        fontsize=12,
+        fontweight="bold",
+        ha="left",
+        va="bottom",
+    )
+
+
+def run_figure3_composite(
+    store_dir: str,
+    outdir: str,
+    allowed_pxds: set[str] | None = None,
+    threshold: float | str = "best",
+    email: str | None = None,
+) -> None:
+    """Build the Figure 3 consensus composite (180 mm x 180 mm).
+
+    Panel a : RunAssessor technical summary, spanning the full top half.
+    Panel b : taxid-prediction metric distributions (bottom-left).
+    Panel c : grouped PTM frequency summary (bottom-right).
+
+    *threshold* and *email* are forwarded to the same taxid-scoring logic
+    used by run_taxid_prediction so panel b always matches the standalone
+    taxid_prediction_plot.png produced in the same invocation.
+
+    Outputs
+    -------
+    <outdir>/figure3_composite.png
+    <outdir>/figure3_composite.svg
+    """
+    agg_dir = os.path.join(store_dir, "aggregated_results_files")
+    pattern = os.path.join(agg_dir, "PXD*_aggregated_results.json")
+    files = sorted(glob.glob(pattern))
+    files = _filter_aggregated_files_by_pxd(files, allowed_pxds)
+
+    if not files:
+        print(f"[figure3_composite] No aggregated results found in: {agg_dir}", file=sys.stderr)
+        return
+
+    print(f"[figure3_composite] Found {len(files)} aggregated result files.")
+
+    stats = _collect_runassessor_stats(files)
+    taxid_metrics = _compute_taxid_metrics_for_composite(files, threshold=threshold, email=email)
+    grp_df, n_with_msf = _compute_mod_grouped_for_composite(files)
+
+    os.makedirs(outdir, exist_ok=True)
+
+    fig_w = 180.0 / 25.4
+    fig_h = 180.0 / 25.4
+    fig = plt.figure(figsize=(fig_w, fig_h))
+
+    outer = fig.add_gridspec(
+        2, 1, height_ratios=[1.0, 0.82], hspace=0.32,
+        left=0.065, right=0.99, top=0.96, bottom=0.07,
+    )
+    top_spec = outer[0, 0]
+    bottom_gs = outer[1, 0].subgridspec(1, 2, wspace=0.55)
+    panel_b_spec = bottom_gs[0, 0]
+    panel_c_spec = bottom_gs[0, 1]
+
+    title_fs, label_fs, tick_fs = 7, 6, 5
+
+    _draw_runassessor_panels(fig, top_spec, stats, title_fs, label_fs, tick_fs)
+    _draw_taxid_metrics_panel(fig, panel_b_spec, taxid_metrics, title_fs, label_fs, tick_fs)
+    _draw_mod_grouped_panel(fig, panel_c_spec, grp_df, n_with_msf, title_fs, label_fs, tick_fs)
+
+    _add_panel_label(fig, top_spec, "a")
+    _add_panel_label(fig, panel_b_spec, "b")
+    _add_panel_label(fig, panel_c_spec, "c")
+
+    png_path = os.path.join(outdir, "figure3_composite.png")
+    svg_path = os.path.join(outdir, "figure3_composite.svg")
+    fig.savefig(png_path, dpi=400)
+    fig.savefig(svg_path)
+    plt.close(fig)
+    print(f"[figure3_composite] Saved composite figure to: {png_path}")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -845,6 +1694,15 @@ def main() -> None:
         default="./meti_results",
         help="Directory to write analysis outputs.",
     )
+    parser.add_argument(
+        "--pxd_list",
+        type=str,
+        default=None,
+        help=(
+            "Optional path to CSV/TXT containing PXDs to include. "
+            "When provided, only matching PXD aggregated files are analyzed."
+        ),
+    )
 
     # Analysis selection
     parser.add_argument(
@@ -860,6 +1718,25 @@ def main() -> None:
         help="Plot frequency of PTMs from modification_site_fractions.",
     )
     parser.add_argument(
+        "--runassessor_technical_summary",
+        action="store_true",
+        default=False,
+        help=(
+            "Generate runAssessor-derived technical summaries (MS levels, precursor "
+            "characteristics, DDA/DIA, fragmentation, and labeling/quant signatures)."
+        ),
+    )
+    parser.add_argument(
+        "--figure3_composite",
+        action="store_true",
+        default=False,
+        help=(
+            "Build the Figure 3 consensus composite (180mm x 180mm): panel a is the "
+            "RunAssessor technical summary spanning the top half, panel b is taxid-"
+            "prediction metrics, and panel c is grouped PTM frequency (bottom half)."
+        ),
+    )
+    parser.add_argument(
         "--email",
         type=str,
         default=None,
@@ -869,10 +1746,10 @@ def main() -> None:
     parser.add_argument(
         "--threshold",
         type=str,
-        default="0.5",
+        default="best",
         help=("Minimum score for a taxid prediction to count as positive, "
               "or 'best' to select only the top-scoring taxid per raw file. "
-              "(default: 0.5)"),
+              "(default: 'best')"),
     )
 
     args = parser.parse_args()
@@ -895,18 +1772,55 @@ def main() -> None:
         sys.exit(1)
 
     outdir = os.path.abspath(args.outdir)
+    pxd_list_path = os.path.abspath(args.pxd_list) if args.pxd_list else None
 
-    if not args.taxid_prediction and not args.modification_frequency:
+    try:
+        allowed_pxds = _load_allowed_pxds(pxd_list_path)
+    except Exception as exc:
+        print(f"ERROR: failed to load --pxd_list: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+    if allowed_pxds is not None:
+        print(f"[analyzeMeti] PXD filter active: {len(allowed_pxds)} accessions from {pxd_list_path}")
+
+    if (
+        not args.taxid_prediction
+        and not args.modification_frequency
+        and not args.runassessor_technical_summary
+        and not args.figure3_composite
+    ):
         parser.print_help()
-        print("\nERROR: specify at least one analysis flag (--taxid_prediction, --modification_frequency)",
-              file=sys.stderr)
+        print(
+            "\nERROR: specify at least one analysis flag "
+            "(--taxid_prediction, --modification_frequency, --runassessor_technical_summary, "
+            "--figure3_composite)",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if args.taxid_prediction:
-        run_taxid_prediction(store_dir, threshold, outdir, email=args.email)
+        run_taxid_prediction(
+            store_dir,
+            threshold,
+            outdir,
+            email=args.email,
+            allowed_pxds=allowed_pxds,
+        )
 
     if args.modification_frequency:
-        run_modification_frequency(store_dir, outdir)
+        run_modification_frequency(store_dir, outdir, allowed_pxds=allowed_pxds)
+
+    if args.runassessor_technical_summary:
+        run_runassessor_technical_summary(store_dir, outdir, allowed_pxds=allowed_pxds)
+
+    if args.figure3_composite:
+        run_figure3_composite(
+            store_dir,
+            outdir,
+            allowed_pxds=allowed_pxds,
+            threshold=threshold,
+            email=args.email,
+        )
 
 
 if __name__ == "__main__":

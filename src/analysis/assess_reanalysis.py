@@ -17,11 +17,9 @@ def main():
     store_dir = os.path.abspath(args.store_dir)
     agg_dest = os.path.join(store_dir, "aggregated_results_files")
     inter_dest = os.path.join(store_dir, "intermediate_files")
-    sdrf_dest = os.path.join(store_dir, "hamlet_sdrfs")
 
     os.makedirs(agg_dest, exist_ok=True)
     os.makedirs(inter_dest, exist_ok=True)
-    os.makedirs(sdrf_dest, exist_ok=True)
 
     # Read PXDs from CSV
     master = pd.read_csv(args.master_csv)
@@ -32,8 +30,6 @@ def main():
     missing = 0
     no_agg = 0
     archived = 0
-    sdrf_copied = 0
-    sdrf_missing_or_header_only = 0
     errors = []
 
     for rowi, row in master.iterrows():
@@ -100,30 +96,7 @@ def main():
                     shutil.copy2(src, dst)
                     print(f"  Copied intermediate file to {dst}")
 
-            # 3) Copy SDRF to store/hamlet_sdrfs only if it has more than one line.
-            sdrf_file = os.path.join(pxd_results, "agentic_metadata", f"{pxd}.sdrf.tsv")
-            if os.path.isfile(sdrf_file):
-                try:
-                    with open(sdrf_file, "r", encoding="utf-8") as sdrf_handle:
-                        line_count = sum(1 for _ in sdrf_handle)
-
-                    if line_count > 1:
-                        sdrf_dest_file = os.path.join(sdrf_dest, os.path.basename(sdrf_file))
-                        shutil.copy2(sdrf_file, sdrf_dest_file)
-                        sdrf_copied += 1
-                        print(f"  Copied SDRF to {sdrf_dest_file}")
-                    else:
-                        sdrf_missing_or_header_only += 1
-                        print(f"  SDRF skipped (header-only): {sdrf_file}")
-                except Exception as e:
-                    sdrf_missing_or_header_only += 1
-                    errors.append((pxd, f"SDRF copy/check failed: {e}"))
-                    print(f"  SDRF check/copy failed for {pxd}: {e}")
-            else:
-                sdrf_missing_or_header_only += 1
-                print(f"  SDRF not found for PXD: {pxd}")
-
-            # 4) Delete the results/PXD###### directory
+            # 3) Delete the results/PXD###### directory
             shutil.rmtree(pxd_results)
             archived += 1
             print(f"  Archived and deleted results for PXD: {pxd}")
@@ -146,8 +119,6 @@ def main():
     print(f"No aggregated results:   {no_agg}")
     print(f"Completed (agg found):   {completed}")
     print(f"Archived & deleted:      {archived}")
-    print(f"SDRF files copied:       {sdrf_copied}")
-    print(f"SDRF missing/header-only:{sdrf_missing_or_header_only}")
     if errors:
         print(f"Errors during archival:  {len(errors)}")
         for pxd, err in errors:

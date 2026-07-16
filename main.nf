@@ -417,7 +417,7 @@ process determine_acquisition_params {
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false
 
-    cache 'deep'
+    cache false
 
     errorStrategy 'ignore'  // Skip PXDs that fail auto-detection
 
@@ -1300,6 +1300,14 @@ process finalize_sdrf {
 
     tag "final-sdrf-${pxd}"
 
+    // NOTE: Nextflow's saveAs closure for a bare directory-type `path()`
+    // output (finalize_stage_output here) is invoked exactly ONCE with the
+    // directory's own name -- it is NOT recursed per nested file. That means
+    // saveAs can only rename/filter the directory as a whole, never pick out
+    // a nested subtree like post_judge/. Verified empirically with a minimal
+    // standalone Nextflow script. So publishing of both the SDRF file and the
+    // post_judge/ subtree is done via explicit `cp` in the script block below,
+    // not through saveAs.
     publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
     publishDir "${baseDir}/store/hamlet_sdrfs", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
 
@@ -1354,6 +1362,22 @@ process finalize_sdrf {
         cp finalize_stage_output/${pxd}.sdrf.tsv ${pxd}.sdrf.tsv
         mkdir -p ${params.outdir}/${pxd}/agentic_metadata
         cp finalize_stage_output/${pxd}.sdrf.tsv ${params.outdir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
+    fi
+
+    # Publish the post_judge/ subtree (second-pass judge evaluation run after
+    # overrides are applied) explicitly via cp -- Nextflow's publishDir/saveAs
+    # cannot reach into a nested subdirectory of a directory-type output (see
+    # note above), so we copy it ourselves, excluding the internal prompt cache.
+    if [ -d "finalize_stage_output/post_judge" ]; then
+        dest="${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
+        mkdir -p "\$dest"
+        for item in finalize_stage_output/post_judge/*; do
+            base=\$(basename "\$item")
+            case "\$base" in
+                .prompt_cache*) continue ;;
+            esac
+            cp -r "\$item" "\$dest/"
+        done
     fi
 
     ls -la finalize_stage_output/ || echo "No finalized SDRF output"
