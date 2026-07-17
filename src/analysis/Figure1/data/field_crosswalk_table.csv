@@ -1,0 +1,38 @@
+category,agentic_field,canonical_field,safe_override_field,final_sdrf_columns,used_in_current_sdrf_builder,pride_cache_field_path,pride_present_in_sampled_n,sample_size,sample_source,notes,ann_metadata_labels
+biological,species,organism,species,characteristics[organism],yes,response[].organisms,100,100,HamletPXDs.csv,Primary organism label,Organism
+biological,tissue,organism_part,organ,characteristics[organism part]; factor value[organism part]*,yes,response[].organismParts OR response[].sampleAttributes[key.name~organism part|tissue],61,100,HamletPXDs.csv,factor value[organism part] only when variable across samples,OrganismPart
+biological,disease_state,disease,disease,characteristics[disease]; factor value[disease],yes,response[].diseases,23,100,HamletPXDs.csv,,Disease
+biological,cell_type,cell_type,cell_type,characteristics[cell type]*,conditional,response[].sampleAttributes[key.name~cell type],0,100,HamletPXDs.csv,Column emitted only if any value present,CellType
+biological,cell_line,cell_line,cell_line,characteristics[cell line]*; characteristics[cellosaurus accession]*,conditional,response[].sampleAttributes[key.name~cell line],0,100,HamletPXDs.csv,Cellosaurus accession currently filled as not available,CellLine
+biological,sex,sex,sex,characteristics[sex],yes,response[].sampleAttributes[key.name~sex|gender],0,100,HamletPXDs.csv,,Sex
+biological,age,age,age,characteristics[age],yes,response[].sampleAttributes[key.name~age],0,100,HamletPXDs.csv,,Age
+biological,sample_source,material_type,material_type,(not currently emitted as dedicated SDRF column),no,response[].sampleAttributes[key.name~sample type|material type],0,100,HamletPXDs.csv,Safe override exists but builder has no dedicated output column,Specimen
+biological,anatomic_site_tumor,anatomic_site_tumor,,(not mapped),no,response[].projectDescription (free text),0,100,HamletPXDs.csv,,TumorSite
+biological,BMI,BMI,,(not mapped),no,response[].projectDescription (free text),0,100,HamletPXDs.csv,,
+biological,strain,strain,,(not mapped),no,response[].projectDescription (free text),0,100,HamletPXDs.csv,,Strain
+biological,developmental_stage,developmental_stage,,(not mapped),no,response[].projectDescription (free text),0,100,HamletPXDs.csv,,DevelopmentalStage
+biological,ethnicity,ethnicity,,(not mapped),no,response[].projectDescription (free text),0,100,HamletPXDs.csv,,
+technical,acquisition_method,acquisition_method,acquisition_method,comment[proteomics data acquisition method],yes,response[].experimentTypes / response[].projectTags,100,100,HamletPXDs.csv,Currently sourced mainly from runAssessor/detected params,AcquisitionMethod
+technical,instrument,instrument,instrument,comment[instrument],yes,response[].instruments,100,100,HamletPXDs.csv,,Instrument
+technical,labeling,label,label,comment[label],yes,response[].quantificationMethods,42,100,HamletPXDs.csv,,Label
+technical,fragmentation_method,fragmentation,,comment[dissociation method],yes,response[].sampleProcessingProtocol / response[].dataProcessingProtocol,75,100,HamletPXDs.csv,,FragmentationMethod
+technical,cleavage_agent,cleavage_agent,,comment[cleavage agent details],yes,response[].sampleProcessingProtocol,83,100,HamletPXDs.csv,Currently protocol-derived in builder,CleavageAgent
+technical,enrichment_method,enrichment_method,,characteristics[enrichment process]*,conditional,response[].sampleProcessingProtocol,38,100,HamletPXDs.csv,Via llm_extracted_metadata fallback,EnrichmentMethod
+technical,fractionation_method,fractionation,,(not currently emitted as dedicated SDRF column),no,response[].sampleProcessingProtocol,8,100,HamletPXDs.csv,,FractionationMethod;Separation;Chromatography;FractionationFraction
+technical,reduction_reagent,reduction_reagent,,comment[reduction reagent]*,conditional,response[].sampleProcessingProtocol,12,100,HamletPXDs.csv,,ReductionReagent
+technical,alkylation_reagent,alkylation_reagent,,comment[alkylation reagent]*,conditional,response[].sampleProcessingProtocol,39,100,HamletPXDs.csv,,AlkylationReagent
+technical,collision_energy,collision_energy,,comment[collision energy]*,conditional,response[].sampleProcessingProtocol,0,100,HamletPXDs.csv,,CollisionEnergy
+technical,ionization_type,ionization_type,,(not mapped),no,response[].sampleProcessingProtocol (free text),0,100,HamletPXDs.csv,,IonizationType
+technical,mass_analyzer,mass_analyzer,,comment[ms2 mass analyzer]*,conditional,response[].instruments (inferred),0,100,HamletPXDs.csv,Builder infers analyzer from instrument model,MS2MassAnalyzer
+technical,alkylation_concentration,alkylation_concentration,,(not mapped),no,response[].sampleProcessingProtocol (free text),0,100,HamletPXDs.csv,,ConcentrationOfCompound
+technical,reduction_concentration,reduction_concentration,,(not mapped),no,response[].sampleProcessingProtocol (free text),0,100,HamletPXDs.csv,,ConcentrationOfCompound
+technical,ptm,ptm,,comment[modification parameters]*,conditional,response[].identifiedPTMStrings / protocols,0,100,HamletPXDs.csv,Builder emits one or more modification parameter columns,Modification
+experimental_design,number_of_biological_replicates,replicates,replicates,characteristics[biological replicate],yes,response[].projectDescription / response[].sampleProcessingProtocol,2,100,HamletPXDs.csv,,NumberOfBiologicalReplicates
+experimental_design,number_of_technical_replicates,technical_replicates,technical_replicates,comment[technical replicate],yes,response[].projectDescription / response[].sampleProcessingProtocol,3,100,HamletPXDs.csv,,NumberOfTechnicalReplicates
+experimental_design,number_of_fractions,fractions,fractions,comment[fraction identifier],yes,response[].projectDescription / response[].sampleProcessingProtocol,6,100,HamletPXDs.csv,,NumberOfFractions
+experimental_design,factor_value,factor_value,factor_value,factor value[experimental design]*,conditional,response[].sampleAttributes / response[].projectDescription,23,100,HamletPXDs.csv,,FactorValue
+experimental_design,experimental_design,experimental_design,,(not mapped to dedicated SDRF column),no,response[].projectTags / response[].experimentTypes / response[].projectDescription,11,100,HamletPXDs.csv,,Experiment
+experimental_design,number_of_samples,number_of_samples,,(not mapped),no,response[].sampleAttributes / response[].projectDescription,0,100,HamletPXDs.csv,,NumberOfSamples
+experimental_design,biological_replicate,replicates,replicates,characteristics[biological replicate] (via canonical collapse),yes,response[].projectDescription / response[].sampleProcessingProtocol,2,100,HamletPXDs.csv,Aliases collapse through FIELD_NAME_MAP,BiologicalReplicate
+experimental_design,technical_replicate,technical_replicates,technical_replicates,comment[technical replicate] (via canonical collapse),yes,response[].projectDescription / response[].sampleProcessingProtocol,3,100,HamletPXDs.csv,Aliases collapse through FIELD_NAME_MAP,TechnicalReplicate
+experimental_design,technology_type,technology_type,,(not mapped),no,response[].experimentTypes,100,100,HamletPXDs.csv,,TechnologyType
