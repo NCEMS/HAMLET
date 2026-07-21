@@ -1,6 +1,6 @@
 # HAMLET Store
 
-**HAMLET** (High-throughput Automated Metadata and Label Extraction Tool) is a Nextflow pipeline for automated re-annotation of public proteomics datasets from the PRIDE Archive. For each dataset (PXD accession) HAMLET downloads raw spectral files, characterises the experiment, identifies the source organism via de novo sequencing, runs a database search, extracts metadata from the associated publication using an LLM, and produces structured SDRF-compatible outputs.
+**HAMLET** (Hybrid Agentic Metadata Literature Extraction and Technical annotation tool) is a Nextflow pipeline for automated re-annotation of public proteomics datasets from the PRIDE Archive. For each dataset (PXD accession) HAMLET downloads raw spectral files, characterises the experiment, identifies the source organism via de novo sequencing, runs a database search, extracts metadata from the associated publication using an LLM, and produces structured SDRF-compatible outputs.
 
 **Source code and documentation:** https://github.com/ianmsitarik/HAMLET *(private — contact authors for access)*
 
