@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 import tempfile
+import time
 from pathlib import Path
 from typing import Dict, List
 
@@ -117,6 +118,68 @@ def _stage_complete(base_dir: Path, stage: str, key_outputs: List[str], pxd: str
     return all(_expand(base_dir, p) for p in key_outputs)
 
 
+def _fresh_matches(base_dir: Path, pattern: str, since_ts: float) -> List[str]:
+    return [p for p in _expand(base_dir, pattern) if os.path.getmtime(p) >= since_ts]
+
+
+def _stage_complete_since(base_dir: Path, stage: str, key_outputs: List[str], since_ts: float, pxd: str = None) -> bool:
+    """
+    Same matching semantics as `_stage_complete`, but every matched file must
+    also have been modified at/after `since_ts`. Used to verify a stage that
+    had a forced rerun requested has actually produced *new* outputs, rather
+    than trusting leftover files from before the rerun was requested.
+    """
+    if stage == "run_assessor" and pxd:
+        if not _run_assessor_complete(base_dir, pxd, key_outputs):
+            return False
+        return all(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
+    if stage in {"fetch", "organism_id", "search", "llm_judge"}:
+        return any(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
+    return all(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
+
+
+def _upstream_ok(stages: Dict, stage: str) -> bool:
+    """
+    True if every stage before `stage` (in STAGES order) is either
+    unavailable (intentionally disabled) or complete.
+
+    A stage can never be considered complete if an earlier, available
+    stage for the same PXD hasn't finished -- e.g. llm_judge/finalize_sdrf
+    must be treated as incomplete whenever agentic_metadata_extraction
+    reruns or is otherwise not done, even if their own key_outputs happen
+    to still exist on disk from a previous run.
+    """
+    idx = STAGES.index(stage)
+    for s in STAGES[:idx]:
+        st = stages.get(s, {})
+        if bool(st.get("availability", True)) and not bool(st.get("complete", False)):
+            return False
+    return True
+
+
+def _effective_complete(base_dir: Path, stage: str, stages: Dict, pxd: str) -> bool:
+    """
+    Resolve the real completion state for `stage`, layering on top of the
+    raw file-based `_stage_complete` check:
+      - A stage can't be complete if an earlier available stage isn't
+        (dependency cascade).
+      - If `force_rerun_after` (epoch timestamp) is set, the stage is only
+        complete once its key_outputs exist *and* were (re)written at/after
+        that timestamp. This self-heals automatically as soon as the forced
+        rerun actually produces fresh outputs -- unlike a plain boolean
+        flag, it doesn't get stuck if the completion check races Nextflow's
+        publishDir (which copies task outputs to their canonical location
+        only after the task process exits).
+    """
+    st = stages.get(stage, {})
+    if not _upstream_ok(stages, stage):
+        return False
+    since_ts = st.get("force_rerun_after")
+    if since_ts:
+        return _stage_complete_since(base_dir, stage, st.get("key_outputs", []), float(since_ts), pxd=pxd)
+    return _stage_complete(base_dir, stage, st.get("key_outputs", []), pxd=pxd)
+
+
 def _load_manifest(path: Path) -> Dict:
     if not path.exists():
         return {"version": 1, "pxds": {}}
@@ -158,6 +221,13 @@ def _ensure_skeleton(manifest: Dict, pxd: str, args):
         st.setdefault("availability", _default_availability(s, args))
         st.setdefault("complete", False)
         st.setdefault("key_outputs", _default_key_outputs(s, pxd))
+        st.setdefault("force_rerun_after", None)
+        # Drop the older boolean force_rerun flag (superseded by the
+        # timestamp-based force_rerun_after field, which self-heals instead
+        # of getting permanently stuck if mark-complete's check raced
+        # Nextflow's publishDir). Any PXD that still genuinely needs a
+        # forced rerun should get a fresh `set-force-rerun` call.
+        st.pop("force_rerun", None)
 
         # Migrate legacy checkpoint patterns written by earlier manifest versions.
         if s == "agentic_metadata_extraction":
@@ -199,9 +269,16 @@ def cmd_init(args):
         pxds = [p.strip() for p in args.pxds.split(",") if p.strip()]
         for pxd in pxds:
             _ensure_skeleton(manifest, pxd, args)
+            stages = manifest["pxds"][pxd]["stages"]
+            # Iterate in pipeline order so each stage's cascade check sees
+            # the already-recomputed complete value of every earlier stage.
             for s in STAGES:
-                st = manifest["pxds"][pxd]["stages"][s]
-                st["complete"] = _stage_complete(base_dir, s, st["key_outputs"], pxd=pxd)
+                st = stages[s]
+                st["complete"] = _effective_complete(base_dir, s, stages, pxd=pxd)
+                if st["complete"] and st.get("force_rerun_after"):
+                    # The forced rerun has produced verifiably fresh output;
+                    # the flag has done its job and can be cleared.
+                    st["force_rerun_after"] = None
         _atomic_write(manifest_path, manifest)
     finally:
         fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
@@ -351,14 +428,24 @@ def cmd_prepare(args):
             fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
             lock_fh.close()
 
-    stage_rec = manifest["pxds"][args.pxd]["stages"].get(args.stage, {})
+    stages_for_pxd = manifest["pxds"][args.pxd]["stages"]
+    stage_rec = stages_for_pxd.get(args.stage, {})
 
     availability = bool(stage_rec.get("availability", True))
     complete = bool(stage_rec.get("complete", False))
+    force_since = stage_rec.get("force_rerun_after")
+    upstream_ok = _upstream_ok(stages_for_pxd, args.stage)
 
-    # Honor explicit manifest completion for organism_id.
-    if not (args.stage == "organism_id" and availability and complete):
-        complete = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []), pxd=args.pxd)
+    if not upstream_ok:
+        # An incomplete upstream stage always wins: this stage must (re)run
+        # regardless of its own leftover outputs.
+        complete = False
+    # Honor explicit manifest completion for organism_id (skip recheck),
+    # unless a forced rerun is pending for it.
+    elif args.stage == "organism_id" and availability and complete and not force_since:
+        pass
+    else:
+        complete = _effective_complete(base_dir, args.stage, stages_for_pxd, pxd=args.pxd)
     # Note: we intentionally do NOT write complete back to the manifest here.
     # mark-complete is the authoritative update path.  This removes the
     # LOCK_EX serialisation bottleneck when hundreds of tasks run concurrently.
@@ -380,13 +467,51 @@ def cmd_mark_complete(args):
     try:
         manifest = _load_manifest(manifest_path)
         _ensure_skeleton(manifest, args.pxd, args)
-        stage_rec = manifest["pxds"][args.pxd]["stages"][args.stage]
-        stage_rec["complete"] = _stage_complete(base_dir, args.stage, stage_rec.get("key_outputs", []), pxd=args.pxd)
+        stages_for_pxd = manifest["pxds"][args.pxd]["stages"]
+        stage_rec = stages_for_pxd[args.stage]
+        stage_rec["complete"] = _effective_complete(base_dir, args.stage, stages_for_pxd, pxd=args.pxd)
+        # A stage that just genuinely completed (with fresh-enough output,
+        # per _effective_complete) has consumed any pending force_rerun
+        # request; clear it so future runs don't get stuck.
+        if stage_rec["complete"]:
+            stage_rec["force_rerun_after"] = None
         _atomic_write(manifest_path, manifest)
     finally:
         fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
         lock_fh.close()
     print(f"Manifest updated for {args.pxd}:{args.stage}")
+
+
+def cmd_set_force_rerun(args):
+    """
+    Force one or more PXDs to redo a stage (and, via the dependency
+    cascade, every stage after it) the next time the pipeline runs --
+    even if that stage's own key_outputs still exist on disk from a
+    previous run (e.g. a stale/pre-fix SDRF).
+    """
+    manifest_path = Path(args.manifest)
+    base_dir = Path(args.base_dir)
+    pxds = [p.strip() for p in args.pxds.split(",") if p.strip()]
+
+    lock_fh = _with_lock(manifest_path)
+    try:
+        manifest = _load_manifest(manifest_path)
+        for pxd in pxds:
+            _ensure_skeleton(manifest, pxd, args)
+            stages_for_pxd = manifest["pxds"][pxd]["stages"]
+            stages_for_pxd[args.stage]["force_rerun_after"] = None if args.clear else time.time()
+            # Recompute this PXD's whole stage chain so the cascade is
+            # reflected immediately (not just at the next `init`).
+            for s in STAGES:
+                stages_for_pxd[s]["complete"] = _effective_complete(base_dir, s, stages_for_pxd, pxd=pxd)
+                if stages_for_pxd[s]["complete"] and stages_for_pxd[s].get("force_rerun_after"):
+                    stages_for_pxd[s]["force_rerun_after"] = None
+        _atomic_write(manifest_path, manifest)
+    finally:
+        fcntl.flock(lock_fh.fileno(), fcntl.LOCK_UN)
+        lock_fh.close()
+    action = "Cleared" if args.clear else "Set"
+    print(f"{action} force_rerun on stage '{args.stage}' for {len(pxds)} PXD(s): {', '.join(pxds)}")
 
 
 def build_parser():
@@ -413,6 +538,12 @@ def build_parser():
     p_mark.add_argument("--pxd", required=True)
     p_mark.add_argument("--stage", required=True, choices=STAGES)
 
+    p_force = sub.add_parser("set-force-rerun")
+    add_common(p_force)
+    p_force.add_argument("--pxds", required=True, help="Comma-separated PXDs")
+    p_force.add_argument("--stage", required=True, choices=STAGES)
+    p_force.add_argument("--clear", action="store_true", help="Clear force_rerun instead of setting it")
+
     return p
 
 
@@ -427,6 +558,9 @@ def main():
         return cmd_prepare(args)
     if args.cmd == "mark-complete":
         cmd_mark_complete(args)
+        return 0
+    if args.cmd == "set-force-rerun":
+        cmd_set_force_rerun(args)
         return 0
     return 1
 

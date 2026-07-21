@@ -1,0 +1,379 @@
+diff --git a/agents/integration_agent.py b/agents/integration_agent.py
+index 515c173..b0d5e09 100644
+--- a/agents/integration_agent.py
++++ b/agents/integration_agent.py
+@@ -319,8 +319,14 @@ class IntegrationAgent:
+         return {}
+     
+     def _get_pride_organisms(self, data: dict) -> list[dict]:
+-        """Extract organism info from pride_metadata.organisms (PRIDE descriptors)."""
+-        organisms = data.get("pride_metadata", {}).get("organisms", [])
++        """Extract organism info from PRIDE descriptors.
++
++        Supports both:
++        - pride_metadata.organisms
++        - pride_metadata.project.organisms
++        """
++        pride_meta = data.get("pride_metadata") or {}
++        organisms = pride_meta.get("organisms") or (pride_meta.get("project") or {}).get("organisms", [])
+         return [{
+             "value": org.get("name"),
+             "accession": org.get("accession"),
+diff --git a/core/prompts.py b/core/prompts.py
+index 8679081..0732287 100644
+--- a/core/prompts.py
++++ b/core/prompts.py
+@@ -1,24 +1,36 @@
+-BIOLOGICAL_PROMPT = """You are a scientific metadata extraction agent. Extract ONLY values EXPLICITLY stated in the text.
+-
+-FIELDS TO EXTRACT:
+-- species: Scientific organism name (e.g., Homo sapiens, Mus musculus, E. coli)
+-- tissue: Tissue type (e.g., liver, brain, blood, tumor)
+-- cell_type: Cell type (e.g., T cells, hepatocytes, neurons)
+-- disease_state: Disease name if mentioned
+-- sample_source: Sample origin description
+-- age: Numerical age or age range
+-- anatomic_site_tumor: Tumor anatomical location
+-- BMI: Body mass index
+-- cell_line: Cell line name (e.g., HeLa, HEK293, MCF7)
+-- sex: Biological sex
+-- strain: Organism strain name
++BIOLOGICAL_PROMPT = """You are a scientific metadata extraction agent.
++Extract ONLY metadata for mass spectrometry proteomics samples that belong to the target PXD submission.
++
++SCOPE PRIORITY:
++1. PRIDE project/sample metadata tied to the PXD.
++2. Paper sections that describe the analyzed proteomics samples and LC-MS/MS workflow.
++3. If evidence is not sample-linked, do not extract it.
++
++EXCLUDE THESE CONTEXTS UNLESS EXPLICITLY IDENTIFIED AS ANALYZED PXD PROTEOMICS SAMPLES:
++- recombinant expression hosts, cloning, transfection systems
++- orthogonal validation assays (western blot, IF, ELISA, qPCR, microscopy)
++- functional follow-up models not measured in submitted proteomics runs
++- generic background biology statements
++
++FIELDS TO EXTRACT (PXD PROTEOMICS SAMPLE SCOPE ONLY):
++- species: Scientific organism name of analyzed proteomics sample material.
++- tissue: Tissue/organism part of analyzed proteomics sample material.
++- cell_type: Biological cell type of analyzed proteomics sample material.
++- disease_state: Health or the Disease state of analyzed proteomics sample material. 
++- sample_source: Biological source description of analyzed proteomics sample material.
++- age: Age/age range of source organism/subject of analyzed proteomics sample.
++- anatomic_site_tumor: Tumor anatomical site of analyzed proteomics sample, if applicable.
++- BMI: Body mass index of source subject of analyzed proteomics sample, if applicable.
++- cell_line: Cell line ONLY if that cell line itself was analyzed by proteomics in the PXD.
++- sex: Biological sex of source organism/subject of analyzed proteomics sample.
++- strain: Organism strain of analyzed proteomics sample.
+ 
+ === REASONING PROTOCOL ===
+ 
+ For EACH field, follow this structured search:
+ 
+ 1. FIELD: [field_name]
+-   SEARCH: Scanning text for [common patterns for this field]...
++   SEARCH: Scanning sample-linked text for [common patterns for this field]...
+    FOUND: "[exact quote]" in sentence "[full sentence]"
+    DECISION: Extract "[value]" | Mark as "unknown" (reason)
+ 
+@@ -65,43 +77,50 @@ FINAL JSON:
+ === STRICT RULES ===
+ 1. Copy values EXACTLY as written (keep abbreviations: "P. falciparum" not "Plasmodium falciparum")
+ 2. Extract the CORE NOUN only, not modifying adjectives (extract "erythrocytes" not "infected erythrocytes")
+-3. If not explicitly stated → "unknown" with empty evidence ""
++3. If not explicitly stated in sample-linked context -> "unknown" with empty evidence ""
+ 4. Each value = [extracted_value, evidence_sentence]
+-5. CRITICAL: The evidence sentence MUST contain the exact extracted value as a substring. If the value doesn't appear in the sentence, you have the wrong evidence.
+-6. Complete ALL fields systematically
++5. CRITICAL: The evidence sentence MUST contain the exact extracted value as a substring.
++6. Evidence sentence must describe analyzed PXD proteomics samples or immediate sample prep/acquisition context.
++7. If evidence appears only in excluded context, set value to "unknown".
++8. Complete ALL fields systematically.
+ 
+ === SPECIES INFERENCE RULES ===
+-7. If the text mentions "human", "patient", "donor", "clinical samples", "biopsy", or "human tissue" → extract species as "Homo sapiens"
+-8. If a well-known HUMAN cell line is mentioned (HeLa, HEK293, MCF-7, A549, Jurkat, K562, U2OS, MDA-MB-231, HCT116, PC-3, LNCaP, SH-SY5Y, Caco-2, THP-1, 293T) → extract species as "Homo sapiens" (put the cell line name ONLY in cell_line, NEVER in species)
+-9. If a well-known MOUSE cell line is mentioned (NIH3T3, MEF, RAW264.7, Neuro2a) → extract species as "Mus musculus"
+-10. NEVER put a cell line name in the species field. Cell line names belong ONLY in cell_line.
+-11. If the text mentions "mice" or "mouse" → extract species as "Mus musculus". If "rat" → "Rattus norvegicus". If "yeast" → "Saccharomyces cerevisiae". If "fly" or "Drosophila" → "Drosophila melanogaster".
++9. Apply inference ONLY after scope filtering.
++10. If text mentions "human", "patient", "donor", "clinical samples", "biopsy", or "human tissue" in sample-linked context -> "Homo sapiens".
++11. If a well-known HUMAN cell line is mentioned in sample-linked context (HeLa, HEK293, MCF-7, A549, Jurkat, K562, U2OS, MDA-MB-231, HCT116, PC-3, LNCaP, SH-SY5Y, Caco-2, THP-1, 293T) -> species "Homo sapiens".
++12. If a well-known MOUSE cell line is mentioned in sample-linked context (NIH3T3, MEF, RAW264.7, Neuro2a) -> species "Mus musculus".
++13. NEVER put a cell line name in species.
++14. If text mentions "mouse" -> "Mus musculus"; "rat" -> "Rattus norvegicus"; "yeast" -> "Saccharomyces cerevisiae"; "Drosophila" -> "Drosophila melanogaster" (sample-linked only).
+ 
+ === TISSUE INFERENCE RULES ===
+-12. If a cell line is mentioned, infer tissue of origin: HeLa → "cervix", HEK293/293T → "kidney", MCF-7/MDA-MB-231 → "breast", A549 → "lung", Jurkat → "blood", HCT116/Caco-2 → "colon", SH-SY5Y/Neuro2a → "brain", PC-3/LNCaP → "prostate"
+-13. If a cancer type names an organ (e.g., "gastric cancer", "breast cancer", "lung adenocarcinoma"), infer the tissue as that organ ("stomach", "breast", "lung")
++15. If a cell line is mentioned in sample-linked context, infer tissue of origin: HeLa -> cervix, HEK293/293T -> kidney, MCF-7/MDA-MB-231 -> breast, A549 -> lung, Jurkat -> blood, HCT116/Caco-2 -> colon, SH-SY5Y/Neuro2a -> brain, PC-3/LNCaP -> prostate.
++16. If cancer type names an organ in sample-linked context (e.g., gastric cancer, breast cancer, lung adenocarcinoma), infer tissue as that organ.
+ 
+ === DISEASE INFERENCE RULES ===
+-14. If studying healthy, control, or normal samples with NO disease mentioned → extract disease_state as "normal"
+-15. If a cancer cell line is used, extract the associated cancer type as disease_state:
+-    HeLa → "cervical adenocarcinoma", MCF-7/MDA-MB-231 → "breast carcinoma", A549 → "lung adenocarcinoma",
+-    HCT116 → "colorectal carcinoma", Caco-2 → "colorectal carcinoma", K562 → "chronic myeloid leukemia",
+-    Jurkat → "T-cell lymphoma", PC-3 → "prostate carcinoma", LNCaP → "prostate carcinoma",
+-    U2OS → "osteosarcoma", HepG2 → "hepatocellular carcinoma", SH-SY5Y → "neuroblastoma"
++17. If studying healthy/control/normal samples with no disease in sample-linked context -> disease_state "normal".
++18. If a cancer cell line is used as analyzed proteomics sample, infer disease_state from that cell line:
++    HeLa -> cervical adenocarcinoma, MCF-7/MDA-MB-231 -> breast carcinoma, A549 -> lung adenocarcinoma,
++    HCT116/Caco-2 -> colorectal carcinoma, K562 -> chronic myeloid leukemia,
++    Jurkat -> T-cell lymphoma, PC-3/LNCaP -> prostate carcinoma,
++    U2OS -> osteosarcoma, HepG2 -> hepatocellular carcinoma, SH-SY5Y -> neuroblastoma.
+ 
+ === CELL TYPE RULES ===
+-16. For cell_type: extract the BIOLOGICAL cell type, not the cell line name.
+-    If only a cell line is mentioned, infer the biological cell type:
+-    MCF-7/MDA-MB-231 → "epithelial cell", Jurkat → "T cell", K562 → "myeloid cell",
+-    THP-1/U937 → "monocyte", HepG2 → "hepatocyte", SH-SY5Y → "neuron",
+-    NIH3T3 → "fibroblast", C2C12 → "myoblast", RAW264.7 → "macrophage"
+-17. If a cell line AND a biological cell type are both mentioned, prefer the biological cell type.
+-
++19. For cell_type: extract biological cell type, not cell line name.
++20. If only a sample-linked cell line is present, infer cell type:
++    MCF-7/MDA-MB-231 -> epithelial cell, Jurkat -> T cell, K562 -> myeloid cell,
++    THP-1/U937 -> monocyte, HepG2 -> hepatocyte, SH-SY5Y -> neuron,
++    NIH3T3 -> fibroblast, C2C12 -> myoblast, RAW264.7 -> macrophage.
++21. If both cell line and biological cell type are present, prefer biological cell type.
++
++=== CELL LINE GUARDRAIL RULES ===
++22. Extract cell_line ONLY if sentence indicates analyzed proteomics samples are from that cell line.
++23. If a cell line appears only in recombinant expression/transfection/auxiliary validation context, cell_line must be "unknown".
++24. Do not infer cell_line from expression hosts, antibody production systems, or control constructs unless those were submitted proteomics samples.
+ 
+ === SAMPLE SOURCE RULES ===
+-18. Sample source must describe the BIOLOGICAL origin of the sample — e.g., "healthy donors", "tumor biopsy", "cell culture", "post-mortem brain tissue", "patient serum", "mouse liver".
+-19. NEVER extract institutional names (hospitals, universities, labs, biobanks, companies) as sample source. For example, "obtained from Massachusetts General Hospital" → extract "unknown", NOT "Massachusetts General Hospital". The hospital is WHERE the sample was collected, not WHAT the sample is.
+-20. NEVER extract commercial supplier names (ATCC, Sigma, Thermo Fisher, Invitrogen) as sample source. For example, "HeLa cells were purchased from ATCC" → extract "cell culture" or "ATCC cell repository", NOT "ATCC".
++25. sample_source must describe biological origin of analyzed proteomics samples.
++26. NEVER extract institutional names (hospitals/universities/labs/biobanks/companies) as sample_source.
++27. NEVER extract supplier names (ATCC/Sigma/Thermo/Invitrogen) as sample_source.
+ 
+ === YOUR TASK ===
+ 
+@@ -111,30 +130,40 @@ TEXT:
+ Now apply the reasoning protocol above. Output THOUGHT PROCESS then FINAL JSON."""
+ 
+ 
+-TECHNICAL_PROMPT = """You are a scientific metadata extraction agent specializing in mass spectrometry. Extract ONLY values EXPLICITLY stated in the text.
+-
+-FIELDS TO EXTRACT:
+-- acquisition method: MS acquisition strategy (DDA, DIA, PRM, SRM, targeted)
+-- alkylation reagent: Cysteine alkylation chemical (iodoacetamide, chloroacetamide, NEM)
+-- alkylation concentration: Concentration of alkylation reagent
+-- cleavage agent: Protease(s) used (trypsin, Lys-C, chymotrypsin, GluC)
+-- collision energy: Fragmentation energy (NCE, eV values)
+-- enrichment method: Enrichment technique (IMAC, TiO2, antibody, affinity)
+-- fractionation method: Fractionation approach (SCX, high-pH, bRP, gel)
+-- fragmentation method: MS fragmentation type (HCD, CID, ETD, EThcD)
+-- instrument: Mass spectrometer model (Q Exactive, Orbitrap Fusion, timsTOF)
+-- ionization type: Ionization source (ESI, nanoESI, MALDI)
+-- labeling: Quantification method (TMT, iTRAQ, SILAC, label-free)
+-- reduction reagent: Disulfide reduction chemical (DTT, TCEP, BME)
+-- reduction concentration: Concentration of reduction reagent
+-
++TECHNICAL_PROMPT = """You are a scientific metadata extraction agent specializing in mass spectrometry.
++Extract ONLY technical metadata for proteomics samples analyzed in the target PXD submission.
++
++SCOPE PRIORITY:
++1. PRIDE project/sample metadata tied to the PXD.
++2. Paper sections describing proteomics sample preparation and LC-MS/MS acquisition.
++3. If evidence is not sample-linked, do not extract it.
++
++EXCLUDE THESE CONTEXTS:
++- technical details from non-proteomics assays
++- expression/purification settings not tied to analyzed proteomics runs
++- generic instrument descriptions not linked to PXD sample runs
++
++FIELDS TO EXTRACT (PXD PROTEOMICS SAMPLE SCOPE ONLY):
++- acquisition method: MS strategy used for submitted proteomics runs (DDA, DIA, PRM, SRM, targeted)
++- alkylation reagent: Cysteine alkylation chemical used in proteomics sample prep
++- alkylation concentration: Concentration of alkylation reagent in proteomics sample prep
++- cleavage agent: Protease(s) used for proteomics sample digestion
++- collision energy: Fragmentation energy used for proteomics MS/MS
++- enrichment method: Enrichment method used for analyzed proteomics samples
++- fractionation method: Fractionation approach used for analyzed proteomics samples
++- fragmentation method: MS fragmentation mode used for analyzed proteomics samples
++- instrument: Instrument model used for analyzed proteomics samples
++- ionization type: Ionization source for analyzed proteomics samples
++- labeling: Quantification/labeling strategy for analyzed proteomics samples
++- reduction reagent: Disulfide reduction chemical in proteomics sample prep
++- reduction concentration: Concentration of reduction reagent in proteomics sample prep
+ 
+ === REASONING PROTOCOL ===
+ 
+ For EACH field, follow this structured search:
+ 
+ 1. FIELD: [field_name]
+-   SEARCH: Scanning for [domain-specific terms]...
++   SEARCH: Scanning sample-linked text for [domain-specific terms]...
+    FOUND: "[exact quote]" in sentence "[context]"
+    DECISION: Extract "[value]" | Mark as "unknown"
+ 
+@@ -182,19 +211,21 @@ FINAL JSON:
+   "ionization type": ["unknown", ""],
+   "labeling": ["TMT 10-plex", "labeled with TMT 10-plex"],
+   "reduction reagent": ["unknown", ""],
+-  "reduction concentration": ["unknown", ""],
++  "reduction concentration": ["unknown", ""]
+ }}
+ 
+ === STRICT RULES ===
+-1. Copy values EXACTLY as written in text
+-2. If not explicitly stated → "unknown" with empty evidence ""
+-3. Each value = [extracted_value, evidence_sentence]
+-4. CRITICAL: The evidence sentence MUST contain the exact extracted value as a substring. If the value doesn't appear in the sentence, you have the wrong evidence.
+-5. Complete ALL fields systematically
++1. Copy values EXACTLY as written in text.
++2. If not explicitly stated in sample-linked context -> "unknown" with empty evidence "".
++3. Each value = [extracted_value, evidence_sentence].
++4. CRITICAL: Evidence sentence MUST contain exact extracted value as substring.
++5. Evidence must be tied to analyzed PXD proteomics samples.
++6. If paper includes multiple experiment types, prefer PRIDE/project and sample-linked proteomics context.
++7. Complete ALL fields systematically.
+ 
+ === LABELING INFERENCE RULE ===
+-6. For the "labeling" field ONLY: if no labeling or quantification strategy is mentioned anywhere in the text (no TMT, iTRAQ, SILAC, dimethyl labeling, ICAT, or other isobaric/metabolic labels), then the experiment is label-free. Extract "label-free" with evidence from any sentence describing the quantification or MS analysis approach (e.g., "peptides were analyzed by LC-MS/MS"). Do NOT leave labeling as "unknown" — proteomics experiments are always either labeled or label-free.
+-7. Also extract "label-free" if the text explicitly mentions "label-free", "LFQ", "spectral counting", "emPAI", or "intensity-based" quantification.
++8. For labeling ONLY: if no labeling strategy is mentioned for sample-linked proteomics runs (no TMT/iTRAQ/SILAC/dimethyl/ICAT), extract "label-free" with sample-linked evidence.
++9. Also extract "label-free" if sample-linked text mentions "label-free", "LFQ", "spectral counting", "emPAI", or "intensity-based" quantification.
+ 
+ === YOUR TASK ===
+ 
+@@ -204,24 +235,36 @@ TEXT:
+ Now apply the reasoning protocol above. Output THOUGHT PROCESS then FINAL JSON."""
+ 
+ 
+-EXPERIMENTAL_DESIGN_PROMPT = """You are a scientific metadata extraction agent specializing in experimental design. Extract values from the text, using inference ONLY where indicated.
++EXPERIMENTAL_DESIGN_PROMPT = """You are a scientific metadata extraction agent specializing in experimental design.
++Extract design metadata only for proteomics samples analyzed in the target PXD submission.
++Use inference ONLY where indicated and only for sample-linked proteomics context.
++
++SCOPE PRIORITY:
++1. PRIDE sample/project context for the PXD.
++2. Paper sections describing analyzed proteomics sample cohorts, runs, and contrasts.
++3. If evidence is not linked to analyzed proteomics samples, do not extract it.
+ 
+-FIELDS TO EXTRACT:
+-- biological_replicate: Description of distinct biological units (can INFER from "3 mice", "n=5 patients")
+-- technical_replicate: Repeated measurements of same material (can INFER from "triplicate injections")
+-- experimental_design: Study structure (INFER from "treated vs control", "time course")
+-- factor_value: Variables defining groups (treatment, genotype, condition)
+-- number_of_fractions: Total fractions if fractionation applied
+-- number_of_technical_replicates: Count of technical replicates
+-- number_of_biological_replicates: Count of biological replicates
+-- number_of_samples: Total biological samples
++EXCLUDE THESE CONTEXTS:
++- design details from non-proteomics follow-up experiments
++- validation cohorts not measured by submitted proteomics runs
++- generic background statements
++
++FIELDS TO EXTRACT (PXD PROTEOMICS SAMPLE SCOPE ONLY):
++- biological_replicate: Distinct biological units for analyzed proteomics samples (can infer)
++- technical_replicate: Repeated measurements of same proteomics sample material (can infer)
++- experimental_design: Study structure among analyzed proteomics sample groups (can infer)
++- factor_value: Variables defining analyzed proteomics sample groups (treatment/genotype/condition)
++- number_of_fractions: Total fractions used for analyzed proteomics samples
++- number_of_technical_replicates: Count of technical replicates for analyzed proteomics samples
++- number_of_biological_replicates: Count of biological replicates for analyzed proteomics samples
++- number_of_samples: Total analyzed proteomics samples
+ 
+ === REASONING PROTOCOL ===
+ 
+ For EACH field, follow this structured search:
+ 
+ 1. FIELD: [field_name]
+-   SEARCH: Scanning for [relevant patterns]...
++   SEARCH: Scanning sample-linked text for [relevant patterns]...
+    FOUND: "[quote]" in "[context]"
+    INFERENCE: [explain reasoning if inferring]
+    DECISION: Extract "[value]" | Mark as "unknown"
+@@ -271,7 +314,7 @@ THOUGHT PROCESS:
+    DECISION: Extract "12"
+ 
+ 8. FIELD: number_of_samples
+-   SEARCH: Total samples = biological reps × fractions...
++   SEARCH: Total samples = biological reps x fractions...
+    INFERENCE: 10 mice described
+    DECISION: Extract "10"
+ 
+@@ -284,24 +327,25 @@ FINAL JSON:
+   "number_of_fractions": ["12", "fractionated into 12 high-pH fractions"],
+   "number_of_technical_replicates": ["2", "run in technical duplicate"],
+   "number_of_biological_replicates": ["10", "5 wild-type and 5 knockout mice"],
+-  "number_of_samples": ["10", "5 wild-type and 5 knockout mice"],
++  "number_of_samples": ["10", "5 wild-type and 5 knockout mice"]
+ }}
+ 
+ === RULES ===
+-1. For experimental_design, factor_value, replicates: INFERENCE is allowed
+-2. For other fields: copy EXACTLY as written
+-3. If unclear → "unknown" with empty evidence ""
+-4. Each value = [extracted_value, evidence_sentence]
+-5. CRITICAL: The evidence sentence MUST contain the exact extracted value as a substring. If the value doesn't appear in the sentence, you have the wrong evidence.
+-6. Complete ALL fields systematically
++1. For experimental_design/factor_value/replicates: INFERENCE allowed only in sample-linked proteomics context.
++2. For other fields: copy EXACTLY as written.
++3. If unclear or not sample-linked -> "unknown" with empty evidence "".
++4. Each value = [extracted_value, evidence_sentence].
++5. CRITICAL: Evidence sentence MUST contain exact extracted value as substring.
++6. If paper includes multiple experiment types, prefer sample-linked proteomics context for PXD submitted runs.
++7. Complete ALL fields systematically.
+ 
+ === DEFAULT VALUE RULES ===
+-7. If no fractionation or pre-fractionation is described anywhere in the text → extract number_of_fractions as "1"
+-8. If no biological replicates are described or implied → extract number_of_biological_replicates as "1"
++8. If no sample-linked fractionation is described -> number_of_fractions = "1".
++9. If no sample-linked biological replicates are described/implied -> number_of_biological_replicates = "1".
+ 
+ === YOUR TASK ===
+ 
+ TEXT:
+ {descriptor}
+ 
+-Now apply the reasoning protocol above. Output THOUGHT PROCESS then FINAL JSON."""
++Now apply the reasoning protocol above. Output THOUGHT PROCESS then FINAL JSON."""
+\ No newline at end of file
+diff --git a/validation/validator.py b/validation/validator.py
+index ff8395a..7dca1b2 100644
+--- a/validation/validator.py
++++ b/validation/validator.py
+@@ -25,7 +25,7 @@ logger = get_logger(__name__)
+ # ============================================================================
+ 
+ VALIDATION_PROMPT = """You are a QA Critic for scientific metadata extraction.
+-Your job is to verify that the extracted JSON metadata matches the Source Text and follows the Strict Rules.
++Your job is to verify that extracted JSON metadata matches Source Text and is scoped to analyzed PXD mass spectrometry proteomics samples only.
+ 
+ SOURCE TEXT:
+ {text}
+@@ -35,14 +35,16 @@ EXTRACTED JSON:
+ 
+ STRICT RULES TO ENFORCE:
+ 1. All values must be EXPLICITLY in the text (exact substring match). Do not allow abbreviation expansions.
+-2. If not in text, value must be "unknown".
+-3. No hallucinations or inferred values that aren't supported by text.
++2. Evidence must be sample-linked to analyzed PXD proteomics samples.
++3. If a value appears only in unrelated context (recombinant expression, transfection, orthogonal validation assays, generic background), value must be "unknown".
++4. If not in text, value must be "unknown".
++5. No hallucinations or inferred values that aren't supported by allowed context.
+ 4. "unknown" values must have empty evidence string "".
+ 5. Each value must be a list: [value_string, evidence_string]. If it is not a list, FIX IT.
+ 
+ TASK:
+ - Review each field in the EXTRACTED JSON.
+-- If a value violates the rules (e.g. it is not in the text, or should be "unknown"), CORRECT it.
++- If a value violates the rules (e.g. it is not in text, not sample-linked, or should be "unknown"), CORRECT it.
+ - If the extraction is perfect, return it as is.
+ - Return ONLY the final corrected JSON.
+ 
+@@ -425,6 +427,8 @@ class ValidationAgent:
+         and other numeric values where a one-digit difference (5 mM vs
+         50 mM) would otherwise score > 0.6 in SequenceMatcher.
+         """
++        if not isinstance(val, str):
++            return False
+         return bool(self._NUMERIC_RE.match(val.strip()))
+ 
+     def _fuzzy_match(self, s1: str, s2: str) -> float:

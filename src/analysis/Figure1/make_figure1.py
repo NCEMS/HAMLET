@@ -23,6 +23,7 @@ import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 import pandas as pd
+import requests
 
 
 def parse_args() -> argparse.Namespace:
@@ -38,9 +39,9 @@ def parse_args() -> argparse.Namespace:
         help="Path to local PRIDE cache JSON.",
     )
     parser.add_argument(
-        "--store-dir",
-        default="store/hamlet_sdrfs",
-        help="Directory containing HAMLET SDRF outputs named {PXD}.sdrf.tsv.",
+        "--results-dir",
+        default="results",
+        help="Root directory containing PXD result folders with SDRF outputs.",
     )
     parser.add_argument(
         "--hamlet-pxds",
@@ -51,6 +52,11 @@ def parse_args() -> argparse.Namespace:
         "--master-csv",
         default="master.csv",
         help="Master CSV for panel a (all PXDs).",
+    )
+    parser.add_argument(
+        "--sdrf-presence-cache",
+        default="src/analysis/Figure1/output/all_master_sdrf_presence.csv",
+        help="CSV cache for PRIDE SDRF endpoint presence checks.",
     )
     parser.add_argument(
         "--ann-root",
@@ -66,6 +72,11 @@ def parse_args() -> argparse.Namespace:
         "--basename",
         default="figure1_composite",
         help="Base filename for output files.",
+    )
+    parser.add_argument(
+        "--refresh-sdrf-cache",
+        action="store_true",
+        help="Requery PRIDE SDRF endpoint for panel a even if cache file exists.",
     )
     return parser.parse_args()
 
@@ -392,13 +403,16 @@ def _parse_sdrf_columns(cell: str) -> list[str]:
     return cols
 
 
-def _find_sdrf_path(store_dir: Path, pxd: str) -> Path | None:
-    direct = store_dir / f"{pxd}.sdrf.tsv"
-    return direct if direct.exists() else None
+def _find_sdrf_path(results_dir: Path, pxd: str) -> Path | None:
+    direct = results_dir / pxd / "agentic_metadata" / f"{pxd}.sdrf.tsv"
+    if direct.exists():
+        return direct
+    nested = sorted((results_dir / pxd).glob("agentic_metadata/**/*.sdrf.tsv"))
+    return nested[0] if nested else None
 
 
 def compute_hamlet_counts(
-    filtered_df: pd.DataFrame, pxds: list[str], store_dir: Path
+    filtered_df: pd.DataFrame, pxds: list[str], results_dir: Path
 ) -> pd.DataFrame:
     field_to_columns = {
         row.agentic_field: _parse_sdrf_columns(row.final_sdrf_columns)
@@ -407,7 +421,7 @@ def compute_hamlet_counts(
     field_to_count = {field: 0 for field in field_to_columns}
 
     for pxd in pxds:
-        sdrf_path = _find_sdrf_path(store_dir, pxd)
+        sdrf_path = _find_sdrf_path(results_dir, pxd)
         if sdrf_path is None:
             continue
         try:
@@ -439,15 +453,61 @@ def compute_hamlet_counts(
 # -----------------------------------------------------------------------------
 
 
-def compute_panel_a(master_df: pd.DataFrame) -> tuple[dict[str, int], pd.DataFrame]:
+def load_or_query_sdrf_presence(accessions: list[str], cache_csv: Path, refresh: bool) -> pd.DataFrame:
+    def _normalize_bool_series(series: pd.Series) -> pd.Series:
+        lowered = series.astype(str).str.strip().str.lower()
+        return lowered.isin({"true", "1", "yes", "y", "t"})
+
+    if cache_csv.exists() and not refresh:
+        cached = pd.read_csv(cache_csv)
+        if {"accession", "existing_PRIDE_SDRF"}.issubset(cached.columns):
+            cached = cached.rename(
+                columns={"accession": "pxd", "existing_PRIDE_SDRF": "has_sdrf"}
+            )
+            cached["has_sdrf"] = _normalize_bool_series(cached["has_sdrf"])
+
+        if {"pxd", "has_sdrf"}.issubset(cached.columns):
+            have = set(cached["pxd"].astype(str).str.strip())
+            missing = [a for a in accessions if a not in have]
+            if not missing:
+                return cached[["pxd", "has_sdrf"]]
+            accessions = missing
+            existing = cached[["pxd", "has_sdrf"]].copy()
+        else:
+            existing = pd.DataFrame(columns=["pxd", "has_sdrf"])
+    else:
+        existing = pd.DataFrame(columns=["pxd", "has_sdrf"])
+
+    endpoint = "https://www.ebi.ac.uk/pride/ws/archive/v3/files/sdrf/{}"
+    session = requests.Session()
+    rows = []
+    for idx, pxd in enumerate(accessions, start=1):
+        has_sdrf = False
+        try:
+            resp = session.get(endpoint.format(pxd), timeout=30)
+            data = resp.json() if resp.ok else []
+            has_sdrf = bool(data)
+        except Exception:
+            has_sdrf = False
+        rows.append({"pxd": pxd, "has_sdrf": has_sdrf})
+        if idx % 200 == 0:
+            print(f"SDRF query progress: {idx}/{len(accessions)}")
+
+    new_df = pd.DataFrame(rows)
+    out = pd.concat([existing, new_df], ignore_index=True).drop_duplicates(subset=["pxd"], keep="last")
+    cache_csv.parent.mkdir(parents=True, exist_ok=True)
+    out.to_csv(cache_csv, index=False)
+    return out
+
+
+def compute_panel_a(master_df: pd.DataFrame, sdrf_df: pd.DataFrame) -> tuple[dict[str, int], pd.DataFrame]:
     all_pxds = master_df["accession"].astype(str).str.strip()
     pmc_mask = master_df["pmc_id"].notna() & master_df["pmc_id"].astype(str).str.strip().ne("")
     lic = master_df["pub_license"].fillna("").astype(str).str.strip()
     by_mask = lic.str.match(r"^CC\s+BY", na=False) | (lic == "CC0")
 
-    sdrf_mask = master_df["existing_PRIDE_SDRF"].astype(str).str.strip().str.lower().isin(
-        {"true", "1", "yes", "y", "t"}
-    )
+    sdrf_map = dict(zip(sdrf_df["pxd"].astype(str), sdrf_df["has_sdrf"].astype(bool)))
+    sdrf_mask = all_pxds.map(lambda x: bool(sdrf_map.get(x, False)))
 
     total = len(master_df)
     stats = {
@@ -984,14 +1044,22 @@ def main() -> None:
     ].copy()
 
     panel_b_df = compute_presence_counts(filtered_crosswalk_df, hamlet_pxds, cache_by_pxd)
-    hamlet_counts = compute_hamlet_counts(panel_b_df, hamlet_pxds, Path(args.store_dir))
+    hamlet_counts = compute_hamlet_counts(panel_b_df, hamlet_pxds, Path(args.results_dir))
     panel_b_df = panel_b_df.merge(hamlet_counts, on="agentic_field", how="left")
     panel_b_df["hamlet_present_n"] = panel_b_df["hamlet_present_in_sampled_n"].fillna(0).astype(int)
     panel_b_df["existing_present_n"] = panel_b_df["pride_present_in_sampled_n_recomputed"].astype(int)
 
     # Panel a inputs (all master.csv PXDs)
     master_df = pd.read_csv(Path(args.master_csv))
-    panel_a_stats, panel_a_membership = compute_panel_a(master_df)
+    all_accessions = (
+        master_df["accession"].dropna().astype(str).str.strip().loc[lambda s: s.str.startswith("PXD")].tolist()
+    )
+    sdrf_presence_df = load_or_query_sdrf_presence(
+        all_accessions,
+        Path(args.sdrf_presence_cache),
+        refresh=args.refresh_sdrf_cache,
+    )
+    panel_a_stats, panel_a_membership = compute_panel_a(master_df, sdrf_presence_df)
 
     # Panels c/d inputs (.ann): include all fields where used_in_current_sdrf_builder != no.
     used_active_fields = set(
