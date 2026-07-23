@@ -227,14 +227,22 @@ workflow {
         minimal_agg_results = create_minimal_aggregated_results(minimal_agg_input_ch)
         
         // Agentic metadata extraction (uses minimal aggregated results)
+        // Outputs: [pxd, agentic_stage_output, aggregated_results]
         agentic_results_ch_minimal = agentic_metadata_extraction(minimal_agg_results)
         
+        // llm_judge expects only [pxd, agentic_stage_output], so select first 2 elements
         llm_judge_input_ch_minimal = agentic_results_ch_minimal
+            .map { pxd, agentic_output, agg_results -> [pxd, agentic_output] }
         
+        // llm_judge outputs: [pxd, judge_stage_output]
         llm_judge_ch_minimal = llm_judge(llm_judge_input_ch_minimal)[0]
         
-        finalize_input_ch_minimal = minimal_agg_results
-            .join(llm_judge_ch_minimal)
+        // finalize_sdrf needs: [pxd, agentic_stage_output, aggregated_results, judge_stage_output]
+        // agentic_results_ch_minimal = [pxd, agentic_stage_output, aggregated_results]
+        // llm_judge_ch_minimal = [pxd, judge_stage_output]
+        // Join on pxd to get all 4 elements
+        finalize_input_ch_minimal = agentic_results_ch_minimal
+            .join(llm_judge_ch_minimal, by: 0)
         
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
         
