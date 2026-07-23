@@ -214,14 +214,14 @@ workflow {
         
         acq_params_results = determine_acquisition_params(assessor_results)
         
-        // Combine outputs for minimal aggregation: (pxd, fetched_dir, study_metadata, detected_dir)
-        minimal_agg_input_ch = acq_params_results
-            .map { pxd, detected_dir ->
-                [ pxd, detected_dir ]
-            }
-            .join(assessor_results.map { pxd, study_metadata, mzml_root -> [ pxd, study_metadata, mzml_root ] })
-            .map { pxd, detected_dir, study_metadata, mzml_root ->
-                [ pxd, mzml_root, study_metadata, detected_dir ]
+        // Combine outputs for minimal aggregation
+        // assessor_results = [pxd, fetched_dir, study_metadata]
+        // acq_params_results = [pxd, fetched_dir, detected_params.json]
+        // After join: [pxd, fetched_dir, study_metadata, fetched_dir, detected_params.json]
+        // Need to reshape to: [pxd, fetched_dir, study_metadata, detected_params.json]
+        minimal_agg_input_ch = assessor_results.join(acq_params_results, by: 0)
+            .map { pxd, fetched_dir1, study_metadata, fetched_dir2, detected_params ->
+                [ pxd, fetched_dir1, study_metadata, detected_params ]
             }
         
         minimal_agg_results = create_minimal_aggregated_results(minimal_agg_input_ch)
