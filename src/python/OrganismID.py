@@ -823,6 +823,17 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
         try:
             # Run with GPU enabled (no CUDA_VISIBLE_DEVICES restriction)
             env = os.environ.copy()
+
+            # Casanovo/Cascadia are launched as local subprocesses inside a Nextflow task.
+            # Strip inherited SLURM_* variables so Lightning does not mis-detect this as
+            # a SLURM-managed multi-task job and abort on scheduler argument checks.
+            removed_slurm_keys = 0
+            for env_key in list(env.keys()):
+                if env_key.startswith("SLURM_"):
+                    env.pop(env_key, None)
+                    removed_slurm_keys += 1
+            if removed_slurm_keys:
+                print(f"Stripped {removed_slurm_keys} inherited SLURM_* variables for local {tool_name} subprocess.")
             
             # For Cascadia: ensure a writable cache directory for the wrapper script
             if use_cascadia:

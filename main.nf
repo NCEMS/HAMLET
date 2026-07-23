@@ -706,7 +706,7 @@ process run_assessor {
 
     cache false
 
-    errorStrategy 'ignore'
+    errorStrategy 'terminate'
 
     input:
     tuple val(pxd), path(fetched_dir)
@@ -785,8 +785,8 @@ process run_assessor {
             --pxd ${pxd} \
             --stage run_assessor || true
     else
-        echo "WARNING: runAssessor failed for ${pxd}; continuing with LLM/PRIDE fallback for acquisition detection"
-        echo '{}' > study_metadata.json
+        echo "WARNING: runAssessor failed for ${pxd}; this is critical and the pipeline cannot continue"
+        exit 1
     fi
     """
 }
@@ -1371,13 +1371,16 @@ process finalize_sdrf {
     if [ -d "finalize_stage_output/post_judge" ]; then
         dest="${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
         mkdir -p "\$dest"
-        for item in finalize_stage_output/post_judge/*; do
+        shopt -s nullglob
+        post_judge_items=(finalize_stage_output/post_judge/*)
+        for item in "\${post_judge_items[@]}"; do
             base=\$(basename "\$item")
             case "\$base" in
                 .prompt_cache*) continue ;;
             esac
             cp -r "\$item" "\$dest/"
         done
+        shopt -u nullglob
     fi
 
     ls -la finalize_stage_output/ || echo "No finalized SDRF output"

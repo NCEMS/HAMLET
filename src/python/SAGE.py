@@ -51,6 +51,36 @@ def is_valid_fasta(path, min_size_bytes=32):
         return head.startswith(b">")
     except OSError:
         return False
+
+
+def download_fasta_with_retries(url, fasta_path, taxid, label, max_retries=3, wait_seconds=30):
+    """Download a FASTA file with a fixed retry policy and content validation."""
+    for attempt in range(max_retries):
+        try:
+            print(f'Downloading {label} FASTA (attempt {attempt + 1}/{max_retries})...')
+            response = requests.get(url, timeout=60)
+            response.raise_for_status()
+            with open(fasta_path, "wb") as handle:
+                handle.write(response.content)
+            if not is_valid_fasta(fasta_path):
+                # UniProt can return HTTP 200 with a plain-text error body
+                # (e.g. transient streaming/rate-limit errors). Treat this like a failed attempt.
+                with open(fasta_path, "rb") as handle:
+                    preview = handle.read(200)
+                os.remove(fasta_path)
+                raise requests.exceptions.RequestException(
+                    f"Response did not contain valid FASTA content: {preview!r}"
+                )
+            print(f'SAVED: {fasta_path}')
+            return
+        except (requests.exceptions.RequestException, OSError) as exc:
+            if attempt < max_retries - 1:
+                print(f'Download failed (attempt {attempt + 1}/{max_retries}): {exc}')
+                print(f'Retrying in {wait_seconds} seconds...')
+                time.sleep(wait_seconds)
+            else:
+                print(f'Download failed after {max_retries} attempts: {exc}')
+                raise FileNotFoundError(f"Could not download FASTA for taxid {taxid} from UniProt. Server may be unavailable.")
 ###########################################################################
 
 ###########################################################################
@@ -611,6 +641,13 @@ def main():
             # Fallback to output directory
             fasta_path = os.path.join(outdir, fasta_filename)
             print(f"Using local FASTA output directory: {outdir}")
+
+    repo_root = Path(__file__).resolve().parents[2]
+    assets_cache_dir = os.path.join(repo_root, "assets", "fasta_cache")
+    assets_fasta_path = os.path.join(assets_cache_dir, fasta_filename)
+    if os.path.isfile(assets_fasta_path):
+        fasta_path = assets_fasta_path
+        print(f"Using assets FASTA cache: {assets_cache_dir}")
     
     print(f'Using URL: {url}')
     print(f'Using FASTA file: {fasta_path}')
@@ -625,36 +662,31 @@ def main():
         # Ensure cache directory exists
         fasta_cache_dir = os.path.dirname(fasta_path)
         os.makedirs(fasta_cache_dir, exist_ok=True)
-        
-        # Download FASTA with retries and exponential backoff
-        max_retries = 5
-        for attempt in range(max_retries):
+        if use_reviewed:
             try:
-                print(f'Downloading FASTA (attempt {attempt + 1}/{max_retries})...')
-                response = requests.get(url, timeout=60)
-                response.raise_for_status()
-                with open(fasta_path, "wb") as f:
-                    f.write(response.content)
-                if not is_valid_fasta(fasta_path):
-                    # UniProt can return HTTP 200 with a plain-text error body
-                    # (e.g. transient streaming/rate-limit errors). Treat this like a failed attempt.
-                    with open(fasta_path, "rb") as f:
-                        preview = f.read(200)
-                    os.remove(fasta_path)
-                    raise requests.exceptions.RequestException(
-                        f"Response did not contain valid FASTA content: {preview!r}"
-                    )
-                print(f'SAVED: {fasta_path}')
-                break
-            except (requests.exceptions.RequestException, OSError) as e:
-                if attempt < max_retries - 1:
-                    wait_time = (2 ** attempt)  # Exponential backoff: 1, 2, 4, 8, 16 seconds
-                    print(f'Download failed (attempt {attempt + 1}/{max_retries}): {e}')
-                    print(f'Retrying in {wait_time} seconds...')
-                    time.sleep(wait_time)
+                download_fasta_with_retries(url, fasta_path, args.taxid, "reviewed")
+            except FileNotFoundError:
+                print(f'WARNING: Reviewed FASTA unavailable for taxid {args.taxid}; trying full FASTA fallback.')
+                full_fasta_filename = f"{args.taxid}_all.fasta"
+                full_fasta_path = os.path.join(os.path.dirname(fasta_path), full_fasta_filename)
+                full_url = f"https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=organism_id:{args.taxid}"
+
+                if os.path.isfile(full_fasta_path) and not is_valid_fasta(full_fasta_path):
+                    print(f'WARNING: Cached FASTA {full_fasta_path} does not look like valid FASTA content (likely a stale error response). Discarding and re-downloading.')
+                    os.remove(full_fasta_path)
+
+                if os.path.isfile(full_fasta_path):
+                    print(f'Using existing full FASTA fallback: {full_fasta_path}')
+                    fasta_path = full_fasta_path
                 else:
-                    print(f'Download failed after {max_retries} attempts: {e}')
-                    raise FileNotFoundError(f"Could not download FASTA for taxid {args.taxid} from UniProt. Server may be unavailable.")
+                    try:
+                        download_fasta_with_retries(full_url, full_fasta_path, args.taxid, "full")
+                        fasta_path = full_fasta_path
+                    except FileNotFoundError:
+                        print(f'ERROR: Both reviewed and full FASTA queries failed for taxid {args.taxid}.')
+                        raise
+        else:
+            download_fasta_with_retries(url, fasta_path, args.taxid, "full")
     
     if not os.path.isfile(fasta_path):
         print(f'Error: {fasta_path} not found.')
@@ -664,7 +696,7 @@ def main():
         print(f'FASTA file ready: {fasta_path} ({fasta_size_mb:.1f} MB)')
         
         # Fallback for closed search: if reviewed-only FASTA is empty/too small, use full FASTA
-        if use_reviewed and fasta_size_mb < 0.1:
+        if use_reviewed and os.path.basename(fasta_path).endswith("_reviewed.fasta") and fasta_size_mb < 0.1:
             print(f'WARNING: Reviewed-only FASTA is empty ({fasta_size_mb:.1f} MB)')
             print(f'Falling back to full FASTA database for taxid {args.taxid}')
             
@@ -682,33 +714,12 @@ def main():
             else:
                 print(f'Downloading full FASTA database...')
                 full_url = f"https://rest.uniprot.org/uniprotkb/stream?format=fasta&query=organism_id:{args.taxid}"
-                max_retries = 5
-                for attempt in range(max_retries):
-                    try:
-                        print(f'Downloading full FASTA (attempt {attempt + 1}/{max_retries})...')
-                        response = requests.get(full_url, timeout=60)
-                        response.raise_for_status()
-                        with open(full_fasta_path, "wb") as f:
-                            f.write(response.content)
-                        if not is_valid_fasta(full_fasta_path):
-                            with open(full_fasta_path, "rb") as f:
-                                preview = f.read(200)
-                            os.remove(full_fasta_path)
-                            raise requests.exceptions.RequestException(
-                                f"Response did not contain valid FASTA content: {preview!r}"
-                            )
-                        print(f'SAVED: {full_fasta_path}')
-                        fasta_path = full_fasta_path
-                        break
-                    except (requests.exceptions.RequestException, OSError) as e:
-                        if attempt < max_retries - 1:
-                            wait_time = (2 ** attempt)
-                            print(f'Download failed (attempt {attempt + 1}/{max_retries}): {e}')
-                            print(f'Retrying in {wait_time} seconds...')
-                            time.sleep(wait_time)
-                        else:
-                            print(f'Download of full FASTA also failed after {max_retries} attempts')
-                            print(f'Proceeding with empty FASTA (closed search will find 0 PSMs)')
+                try:
+                    download_fasta_with_retries(full_url, full_fasta_path, args.taxid, "full")
+                    fasta_path = full_fasta_path
+                except FileNotFoundError:
+                    print(f'ERROR: Full FASTA fallback also failed for taxid {args.taxid}.')
+                    raise
             
             fasta_size_mb = os.path.getsize(fasta_path) / (1024 * 1024)
             print(f'FASTA file ready: {fasta_path} ({fasta_size_mb:.1f} MB)')
