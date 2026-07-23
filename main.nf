@@ -22,6 +22,7 @@ HAMLET annotator Nextflow pipeline
 USAGE
     nextflow run main.nf [nextflow options] --pxd <PXD...> [pipeline params]
     nextflow run main.nf [nextflow options] --pxd_csv <PXDs.csv> [pipeline params]
+    nextflow run main.nf [nextflow options] --agentic_only true [--aggregated_results_dir <dir>]
 
 NEXTFLOW OPTIONS (runtime)
     nextflow help run
@@ -31,6 +32,11 @@ PIPELINE PARAMS (this workflow)
         --pxd <PXD000000>                 Single PXD accession
         --pxd_csv <PXDs.csv>              CSV with PXD IDs (first column)
         --num_pxds <N>                    Limit number of PXDs from CSV
+        --agentic_only true               Skip organism_id, determine_taxids, search;
+                                          create minimal aggregated results from
+                                          fetch/run_assessor/determine_acq_params
+                                          then run metadata extraction onwards
+                                          (requires --pxd or --pxd_csv)
 
     Acquisition type routing
         --acquisition_type AUTO|DDA|DIA   Default: AUTO
@@ -59,6 +65,11 @@ PIPELINE PARAMS (this workflow)
         --stage_manifest <path>           Default: results/pipeline_stage_manifest.json
             Manifest with per-PXD, per-stage Availability/Complete/key_outputs.
 
+    Agentic-only mode
+        --agentic_only true               Enable agentic-only mode
+        --aggregated_results_dir <dir>    Directory with *_aggregated_results.json files
+                                          Default: store/aggregated_results_files
+
     LLM metadata extraction
         --run_llm_extraction true|false   Default: false
 
@@ -78,6 +89,9 @@ EXAMPLES
 
     # Single PXD (stage behavior controlled by stage_manifest)
     nextflow run main.nf --pxd PXD000070 -resume
+
+    # Agentic-only: skip search stages, create minimal aggregated results, run metadata extraction
+    nextflow run main.nf --agentic_only true --pxd_csv GSlist0.csv -resume
 """
 }
 
@@ -135,6 +149,10 @@ params.auto_detect = params.auto_detect ?: true  // Enable automatic parameter d
 //   'closed_only' = per-file open search, aggregate closed search
 //   'none'        = per-file for both open and closed searches
 
+// Agentic-only mode: skip search and run metadata extraction on pre-computed aggregated results
+params.agentic_only         = params.agentic_only         ?: false
+params.aggregated_results_dir = params.aggregated_results_dir ?: "${baseDir}/store/aggregated_results_files"
+
 workflow {
 
     def doHelp = params.containsKey('help') && (params.help == true || params.help?.toString()?.toLowerCase() == 'true')
@@ -149,6 +167,105 @@ workflow {
     }
 
     log.info "Acquisition type mode: ${acqType}"
+
+    // ==================== AGENTIC-ONLY WORKFLOW ====================
+    // Run fetch, run_assessor, determine_acquisition_params; create minimal aggregated results;
+    // skip organism_id, determine_taxids, search; run agentic metadata extraction
+    if( params.agentic_only ) {
+        log.info "=== AGENTIC-ONLY MODE ==="
+        log.info "Pipeline: fetch → run_assessor → determine_acquisition_params → create_minimal_aggregated_results → agentic_metadata_extraction → llm_judge → finalize_sdrf"
+        
+        // Build PXD list from CSV or single PXD
+        def pxd_list_agentic = []
+        if (params.pxd_csv) {
+            log.info "Reading PXDs from CSV: ${params.pxd_csv}"
+            new File(params.pxd_csv).withReader { reader ->
+                reader.readLine() // Skip header
+                reader.eachLine { line ->
+                    if (line.trim()) {
+                        def parts = line.split(',')
+                        if (parts[0].trim()) {
+                            pxd_list_agentic << parts[0].trim()
+                        }
+                    }
+                }
+            }
+        } else if (params.pxd) {
+            pxd_list_agentic = [ params.pxd.toString().trim() ]
+        } else {
+            error "Must specify either --pxd (single PXD) or --pxd_csv (CSV file with PXDs) for agentic-only mode"
+        }
+
+        if (params.num_pxds) {
+            pxd_list_agentic = pxd_list_agentic.take(params.num_pxds as int)
+        }
+
+        log.info "Will process ${pxd_list_agentic.size()} PXD(s) in agentic-only mode: ${pxd_list_agentic.join(', ')}"
+        
+        // Create channel from PXD list
+        pxd_ch_agentic = Channel.fromList(pxd_list_agentic)
+        
+        // Fetch PXDs
+        fetched_ch_agentic = fetch_pxd(pxd_ch_agentic)
+            .map { pxd, work_path -> 
+                tuple(pxd, file("${params.central_mzml_dir}/${pxd}"))
+            }
+        
+        // Run runAssessor
+        assessor_ch_agentic = run_assessor(fetched_ch_agentic)
+            .map { pxd, fetched_dir, study_metadata -> tuple(pxd, fetched_dir, study_metadata) }
+        
+        // Determine acquisition parameters (with minimal LLM context)
+        llm_results_ch_agentic = fetched_ch_agentic.map { pxd, fetched_dir ->
+            def dummy_llm = file("${baseDir}/work/dummy_llm_${pxd}.empty")
+            dummy_llm.parent.mkdirs()
+            dummy_llm.text = ""
+            tuple(pxd, dummy_llm)
+        }
+        
+        acq_input_ch_agentic = assessor_ch_agentic
+            .map { pxd, fetched_dir, study_metadata -> 
+                tuple(pxd, fetched_dir, study_metadata)
+            }
+            .join(llm_results_ch_agentic, by: 0)
+            .map { pxd, fetched_dir, study_metadata, llm_results ->
+                tuple(pxd, fetched_dir, llm_results)
+            }
+        
+        detected_ch_agentic = determine_acquisition_params(acq_input_ch_agentic)
+        
+        // Create minimal aggregated results
+        minimal_agg_input_ch = assessor_ch_agentic
+            .join(detected_ch_agentic, by: 0)
+        
+        minimal_agg_ch = create_minimal_aggregated_results(minimal_agg_input_ch)
+        
+        // Run agentic metadata extraction on minimal aggregated results
+        agentic_input_ch_minimal = minimal_agg_ch
+            .map { pxd, aggregated_results ->
+                tuple(pxd, aggregated_results)
+            }
+        
+        agentic_results_ch_minimal = agentic_metadata_extraction(agentic_input_ch_minimal)[0]
+        
+        // Run LLM judge
+        llm_judge_input_ch_minimal = agentic_results_ch_minimal
+            .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output) }
+        llm_judge_ch_minimal = llm_judge(llm_judge_input_ch_minimal)[0]
+        
+        // Finalize SDRF
+        finalized_sdrf_input_ch_minimal = agentic_results_ch_minimal
+            .join(llm_judge_ch_minimal)
+            .map { pxd, metadata_extraction_output, aggregated_results, judge_output ->
+                tuple(pxd, metadata_extraction_output, aggregated_results, judge_output)
+            }
+        finalized_sdrf_ch_minimal = finalize_sdrf(finalized_sdrf_input_ch_minimal)[0]
+        
+        // Run results summary
+        results_summary(finalized_sdrf_ch_minimal.collect())
+        
+        return  // Exit early; skip main full workflow
+    }
     
     // Ensure required directories exist for search infrastructure
     // DIA-NN needs diann_libraries directory to cache spectral libraries
@@ -467,6 +584,44 @@ process determine_acquisition_params {
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
         --stage determine_acquisition_params || true
+    """
+}
+
+/* -----------------------
+ * PROCESS: create_minimal_aggregated_results
+ * --------------------- */
+process create_minimal_aggregated_results {
+
+    tag "minimal-agg-${pxd}"
+
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true
+
+    cache false
+
+    errorStrategy 'finish'
+
+    input:
+    tuple val(pxd), path(fetched_dir, stageAs: "fetched/*"), path(study_metadata), path(detected_dir, stageAs: "detected/*")
+
+    output:
+    tuple val(pxd), path("${pxd}_aggregated_results.json")
+
+    script:
+    """
+    # Initialize conda
+    ${params.conda_init}
+
+    # detected_dir is a directory from determine_acquisition_params, extract the JSON
+    detected_params_json=\$(find detected -name 'detected_params.json' -type f | head -1)
+
+    python ${baseDir}/src/python/create_minimal_aggregated_results.py \\
+        --pxd ${pxd} \\
+        --fetched_dir fetched \\
+        --study_metadata ${study_metadata} \\
+        --detected_params "\$detected_params_json" \\
+        --output ${pxd}_aggregated_results.json
+
+    ls -lh ${pxd}_aggregated_results.json
     """
 }
 
@@ -1166,6 +1321,9 @@ process agentic_metadata_extraction {
     # Ensure both variable names are available inside the task and inherited by conda run.
     export LLM_API_KEY="\${LLM_API_KEY:-\${OPENAI_API_KEY:-}}"
     export OPENAI_API_KEY="\${OPENAI_API_KEY:-\${LLM_API_KEY:-}}"
+    
+    # Propagate API key for the agentic model (OpenRouter/Gemma)
+    export OPENROUTER_API_KEY="\${OPENROUTER_API_KEY:-}"
 
     # Run unified wrapper: performs agentic extraction and writes SDRF TSV.
     echo "=== Running Agentic Metadata Extraction wrapper for ${pxd} ==="
