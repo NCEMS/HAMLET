@@ -239,7 +239,8 @@ workflow {
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
         
         // Results summary for agentic-only
-        results_summary(finalize_results_ch_minimal.collect())
+        // finalize_sdrf has 2 outputs; select first (tuple with pxd, path) before collecting
+        results_summary(finalize_results_ch_minimal[0].collect())
         
         // Exit after agentic-only workflow
         return
