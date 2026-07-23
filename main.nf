@@ -1209,6 +1209,45 @@ process aggregate_results {
         --stage aggregate_results || true
     """
 }
+
+/* -----------------------
+ * PROCESS: create_minimal_aggregated_results
+ * --------------------- */
+process create_minimal_aggregated_results {
+
+    tag "minimal-agg-${pxd}"
+
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true
+
+    cache false
+
+    errorStrategy 'finish'
+
+    input:
+    tuple val(pxd), path(fetched_dir, stageAs: "fetched/*"), path(study_metadata), path(detected_dir, stageAs: "detected/*")
+
+    output:
+    tuple val(pxd), path("${pxd}_aggregated_results.json")
+
+    script:
+    """
+    # Initialize conda
+    ${params.conda_init}
+
+    # detected_dir is a directory from determine_acquisition_params, extract the JSON
+    detected_params_json=\$(find detected -name 'detected_params.json' -type f | head -1)
+
+    python ${baseDir}/src/python/create_minimal_aggregated_results.py \\
+        --pxd ${pxd} \\
+        --fetched_dir fetched \\
+        --study_metadata ${study_metadata} \\
+        --detected_params "\$detected_params_json" \\
+        --output ${pxd}_aggregated_results.json
+
+    ls -lh ${pxd}_aggregated_results.json
+    """
+}
+
 /* -----------------------
  * PROCESS: agentic_metadata_extraction
  * --------------------- */
