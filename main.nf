@@ -22,6 +22,7 @@ HAMLET annotator Nextflow pipeline
 USAGE
     nextflow run main.nf [nextflow options] --pxd <PXD...> [pipeline params]
     nextflow run main.nf [nextflow options] --pxd_csv <PXDs.csv> [pipeline params]
+    nextflow run main.nf [nextflow options] --agentic_only true [--aggregated_results_dir <dir>]
 
 NEXTFLOW OPTIONS (runtime)
     nextflow help run
@@ -31,6 +32,15 @@ PIPELINE PARAMS (this workflow)
         --pxd <PXD000000>                 Single PXD accession
         --pxd_csv <PXDs.csv>              CSV with PXD IDs (first column)
         --num_pxds <N>                    Limit number of PXDs from CSV
+
+    Agentic-only mode
+        --agentic_only true               Skip organism_id, determine_taxids, search;
+                                          create minimal aggregated results from
+                                          fetch/run_assessor/determine_acq_params
+                                          then run metadata extraction onwards
+                                          (requires --pxd or --pxd_csv)
+        --aggregated_results_dir <dir>    Directory with *_aggregated_results.json files
+                                          Default: store/aggregated_results_files
 
     Acquisition type routing
         --acquisition_type AUTO|DDA|DIA   Default: AUTO
@@ -78,6 +88,9 @@ EXAMPLES
 
     # Single PXD (stage behavior controlled by stage_manifest)
     nextflow run main.nf --pxd PXD000070 -resume
+
+    # Agentic-only: skip search stages, create minimal aggregated results, run metadata extraction
+    nextflow run main.nf --agentic_only true --pxd_csv GSlist0.csv -resume
 """
 }
 
@@ -128,6 +141,10 @@ params.peptonizer2000_host_path = params.peptonizer2000_host_path ?: "${baseDir}
 // Auto-detection parameters (can be overridden by runAssessor results)
 params.auto_detect = params.auto_detect ?: true  // Enable automatic parameter detection
 
+// Agentic-only mode: skip search and run metadata extraction on pre-computed aggregated results
+params.agentic_only         = params.agentic_only         ?: false
+params.aggregated_results_dir = params.aggregated_results_dir ?: "${baseDir}/store/aggregated_results_files"
+
 // Search per-sample strategy for aggregation
 // Controls both OPEN SEARCH (Pass 1) and CLOSED SEARCH (Pass 2) aggregation behavior:
 //   false         = aggregate/pool both open and closed searches (default, fastest, bulk quantification)
@@ -149,6 +166,84 @@ workflow {
     }
 
     log.info "Acquisition type mode: ${acqType}"
+
+    // ==================== AGENTIC-ONLY WORKFLOW ====================
+    // Run fetch, run_assessor, determine_acquisition_params; create minimal aggregated results;
+    // skip organism_id, determine_taxids, search; run agentic metadata extraction
+    if( params.agentic_only ) {
+        log.info "=== AGENTIC-ONLY MODE ==="
+        log.info "Pipeline: fetch → run_assessor → determine_acquisition_params → create_minimal_aggregated_results → agentic_metadata_extraction → llm_judge → finalize_sdrf"
+        
+        // Build PXD list from CSV or single PXD
+        def pxd_list_agentic = []
+        if (params.pxd_csv) {
+            log.info "Reading PXDs from CSV: ${params.pxd_csv}"
+            new File(params.pxd_csv).withReader { reader ->
+                reader.readLine() // Skip header
+                reader.eachLine { line ->
+                    if (line.trim()) {
+                        def parts = line.split(',')
+                        if (parts[0].trim()) {
+                            pxd_list_agentic << parts[0].trim()
+                        }
+                    }
+                }
+            }
+        } else if (params.pxd) {
+            pxd_list_agentic = [ params.pxd.toString().trim() ]
+        } else {
+            error "Must specify either --pxd (single PXD) or --pxd_csv (CSV file with PXDs) for agentic-only mode"
+        }
+        
+        // Limit to num_pxds if specified
+        if (params.num_pxds && params.num_pxds > 0) {
+            pxd_list_agentic = pxd_list_agentic.take(params.num_pxds)
+        }
+        
+        log.info "Will process ${pxd_list_agentic.size()} PXD(s) in parallel: ${pxd_list_agentic.join(', ')}"
+        
+        // Initialize/reconcile manifest
+        "${params.stage_manifest}" as File  // Ensure it exists
+        
+        pxds_ch = Channel.from(pxd_list_agentic)
+        
+        // === AGENTIC-ONLY BIFURCATED PATH ===
+        fetch_results = fetch_pxd(pxds_ch)
+        
+        assessor_results = run_assessor(fetch_results)
+        
+        acq_params_results = determine_acquisition_params(assessor_results)
+        
+        // Combine outputs for minimal aggregation: (pxd, fetched_dir, study_metadata, detected_dir)
+        minimal_agg_input_ch = acq_params_results
+            .map { pxd, detected_dir ->
+                [ pxd, detected_dir ]
+            }
+            .join(assessor_results.map { pxd, study_metadata, mzml_root -> [ pxd, study_metadata, mzml_root ] })
+            .map { pxd, detected_dir, study_metadata, mzml_root ->
+                [ pxd, mzml_root, study_metadata, detected_dir ]
+            }
+        
+        minimal_agg_results = create_minimal_aggregated_results(minimal_agg_input_ch)
+        
+        // Agentic metadata extraction (uses minimal aggregated results)
+        agentic_results_ch_minimal = agentic_metadata_extraction(minimal_agg_results)
+        
+        llm_judge_input_ch_minimal = agentic_results_ch_minimal
+        
+        llm_judge_ch_minimal = llm_judge(llm_judge_input_ch_minimal)[0]
+        
+        finalize_input_ch_minimal = minimal_agg_results
+            .join(llm_judge_ch_minimal)
+        
+        finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
+        
+        // Results summary for agentic-only
+        results_summary(finalize_results_ch_minimal)
+        
+        // Exit after agentic-only workflow
+        return
+    }
     
     // Ensure required directories exist for search infrastructure
     // DIA-NN needs diann_libraries directory to cache spectral libraries
@@ -157,6 +252,7 @@ workflow {
         log.info "Creating DIA-NN library cache directory: ${diann_libs_dir.absolutePath}"
         diann_libs_dir.mkdirs()
     }
+
 
     // Build PXD list from either single PXD or CSV file
     def pxd_list = []
