@@ -239,7 +239,7 @@ workflow {
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
         
         // Results summary for agentic-only
-        results_summary(finalize_results_ch_minimal)
+        results_summary(finalize_results_ch_minimal.collect())
         
         // Exit after agentic-only workflow
         return
