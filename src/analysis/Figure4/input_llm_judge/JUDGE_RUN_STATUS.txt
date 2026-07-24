@@ -1,0 +1,60 @@
+SDRF LLM-judge three-pass run — launched 2026-07-23 ~22:50 CEST
+=================================================================
+
+WHAT IS RUNNING
+  A background driver script runs three full judge passes over all 30 PXDs
+  (human_annotation / hamlet_raw / hamlet_harmonized x strict/inference),
+  writing to:
+    compare_sources_results_30pxds_run1/
+    compare_sources_results_30pxds_run2/
+    compare_sources_results_30pxds_run3/
+  After run1 finishes, it also generates the error-stacking figures
+  (plot_llm_judge_comparison.py --results-dir .../run1). After all three
+  runs finish, it runs compute_judge_consensus.py (judge-variability
+  analysis across the three passes).
+
+  Fixed bug before this launch: run_llm_judge_30pxds.py was not unpacking
+  the (dict, dict) tuple returned by merge_agent_jsons() for hamlet_raw /
+  hamlet_harmonized, causing "'dict' object has no attribute 'lower'" in
+  sdrf_judge._evaluate_predicted on the very first paper of every prior
+  attempt. Fixed at lines ~231/234 (now `hamlet_raw, _ = merge_agent_jsons(...)`).
+
+DRIVER SCRIPT / LOG LOCATION (session-scoped scratch, will NOT survive
+a reboot, but does survive this session ending):
+  script: /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/run_three_judge_passes_v3.sh
+  log:    /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/three_runs_v3.log
+
+  Launched with: setsid nohup <script> > <log> 2>&1 < /dev/null & disown
+  (survives the Claude Code session closing; will NOT survive a machine
+  reboot/logout since it's not a systemd unit.)
+
+HOW TO CHECK STATUS TOMORROW
+  1) Is it still running?
+       pgrep -af "run_three_judge_passes_v3.sh|run_llm_judge_30pxds.py"
+     If nothing prints, it has stopped (finished or crashed).
+
+  2) What has it done so far / did it crash?
+       tail -100 /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/three_runs_v3.log
+       grep -a "^=== " /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/three_runs_v3.log
+       grep -a "Traceback" /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/three_runs_v3.log
+
+  3) How many PXDs/sources are done per run (progress check):
+       find src/analysis/Figure4/input_llm_judge/compare_sources_results_30pxds_run1 -name "*.json" -path "*json_outputs*" | wc -l
+       (repeat for run2 / run3; each complete run covers 30 PXDs x up to
+       3 sources x 2 modes)
+
+  NOTE: if this Claude Code session's /tmp/claude-1005/... scratch directory
+  has been cleaned up (session garbage collection), the log will be gone but
+  the driver process (if still alive) and the output directories under
+  src/analysis/Figure4/input_llm_judge/compare_sources_results_30pxds_run*/
+  are unaffected — check those directly with step 3 above.
+
+  For reference, prior (broken) attempts left log breadcrumbs at:
+    /tmp/claude-1005/-home-tine-git-Publication-HAMLET/e977ea6e-.../scratchpad/three_runs.log  (first attempt, died mid run2, run1 output later got overwritten)
+    /tmp/claude-1005/-home-tine-git-Publication-HAMLET/3a1c7a7a-.../scratchpad/full_run_v2.log (crashed immediately on hamlet_raw, root cause found and fixed here)
+To reconnect and check on it later:
+ssh <same-host>
+Then just run the same status commands as before — no screen/tmux needed since the process is already detached:
+pgrep -af "run_three_judge_passes_v3.sh|run_llm_judge_30pxds.py"
+tail -50 /tmp/claude-1005/-home-tine-git-Publication-HAMLET/8c673cef-3739-4364-8118-c46666bbfd66/scratchpad/three_runs_v3.log
+Those exact commands are also saved in src/analysis/Figure4/input_llm_judge/JUDGE_RUN_STATUS.txt if you want to start a fresh Claude Code session tomorrow instead of remembering the paths.

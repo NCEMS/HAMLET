@@ -1,0 +1,423 @@
+{
+  "paper_id": "PXD013809",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HeLa",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HeLa\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the source for multiple MS experiments, including \"shotgun proteomic analysis\", \"SEC-PCP-SILAC\", and \"immunoprecipitation mass spectrometry\".",
+        "TRUTH_CHECK": "The text confirms that HeLa cells were cultured, stimulated with IFNβ, lysed, and analyzed by LC-MS/MS.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"HeLa\", which is the only cell line used for the mass spectrometry experiments described in the paper (THP-1 cells are mentioned in culture but not linked to an MS workflow)."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "9606 (Homo sapiens)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a species name (including its NCBI taxon ID), which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human recombinant IFNβ\", \"human proteome\", and that data were searched against the \"Homo sapiens UniProt database\".",
+        "TRUTH_CHECK": "The source organism for the cells (HeLa, THP-1) and the database used is indeed Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "60",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "80",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The value comes from the shotgun proteomic analysis context: \"Fractions were collected every 40 s for 60 min,\" which implies 90 fractions (60*60/40), but the text also mentions \"Every eighth fraction was then concatenated,\" and in the SEC-PCP-SILAC context, it explicitly states \"Samples were collected into 80 fractions.\"",
+        "TRUTH_CHECK": "The value \"60\" is not explicitly stated as the number of fractions. For the shotgun proteomics, 60 minutes of collection every 40 seconds equals 90 fractions. For the SEC-PCP-SILAC experiment, the text explicitly says \"collected into 80 fractions.\"",
+        "COMPLETENESS_CHECK": "The full set contains only \"60\", which is factually incorrect based on the text."
+      }
+    },
+    {
+      "annotation_type": "collision_energy",
+      "extracted_value": "NCE 28",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "NCE 28, 23 to 65 eV, 42 eV",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric value representing normalized collision energy, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"NCE 28\" is explicitly stated in the methods section describing the Q-Exactive mass spectrometer settings used for the shotgun proteomic analysis.",
+        "TRUTH_CHECK": "The value is factually correct as per the text (\"NCE 28\").",
+        "COMPLETENESS_CHECK": "While the paper mentions other collision energy ranges for different instruments (e.g., \"23 to 65 eV\" for Impact II and \"42 eV\" for timsTOF), the extracted value \"NCE 28\" is a correct value for the Q-Exactive experiment. However, the full set of extracted values is incomplete because it omits the collision energies used for the other two mass spectrometers mentioned in the study."
+      }
+    },
+    {
+      "annotation_type": "fractionation",
+      "extracted_value": "high pH reverse-phase (RP) fractionation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a peptide fractionation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" section as the method used for peptides before MS analysis.",
+        "TRUTH_CHECK": "The paper states: \"Peptides from each biological replicate were then subjected to high pH reverse-phase (RP) fractionation on an Agilent 1100 HPLC system\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the high-pH RP fractionation (used for shotgun proteomics) and SEC (used for the PCP-SILAC experiment), covering all fractionation methods described in the paper."
+      }
+    },
+    {
+      "annotation_type": "fractionation",
+      "extracted_value": "size-exclusion chromatography (SEC)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a method of protein/peptide separation, which fits the category of fractionation.",
+        "SOURCE_CHECK": "The value is present in the text; SEC was used to separate protein lysates into fractions before LC-MS/MS analysis in the SEC-PCP-SILAC experiment.",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using BioSep4000 columns for size-exclusion chromatography to collect 80 fractions.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the high-pH RP fractionation (used for shotgun proteomics) and SEC (used for PCP), covering all fractionation methods described in the paper."
+      }
+    },
+    {
+      "annotation_type": "ionization_type",
+      "extracted_value": "nanoESI",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"nanoESI\" is the correct category for the ionization_type field.",
+        "SOURCE_CHECK": "The value is explicitly mentioned and inferable; the paper describes a \"Captive spray nanospray ionization source\" and \"nano ESI source\" for the Bruker instruments, and the Q-Exactive is coupled to an \"Easy nano LC 1000\", which implies nano-electrospray.",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly mentions \"nano ESI source\" and \"nanospray ionization source\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for the experiments described."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "cell line",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cell line\" is a valid category for the material_type field.",
+        "SOURCE_CHECK": "The MS experiments used HeLa and THP-1 cells, which are well-known immortalized cell lines.",
+        "TRUTH_CHECK": "The value is factually correct as the proteomics analysis was performed on these cell lines.",
+        "COMPLETENESS_CHECK": "The full set includes \"cell line\" and \"cell lysate\"; while \"cell lysate\" is a state of the material, \"cell line\" correctly identifies the broad material class. Together they cover the source."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "cell lysate",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "type_mismatch",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cell lysate\" describes the state of the material after processing, but the field definition requires a broad material class (e.g., \"cell line\", \"tissue\").",
+        "SOURCE_CHECK": "The paper describes using HeLa and THP-1 cells, which are lysed for MS analysis.",
+        "TRUTH_CHECK": "While the samples were indeed lysates, \"cell lysate\" is not one of the categorical material classes defined for this field; the source material is a \"cell line\".",
+        "COMPLETENESS_CHECK": "The full set includes \"cell line\", which is the correct category. \"cell lysate\" is a redundant, non-categorical description."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "DDA",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"DDA\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes multiple MS experiments; for the Q-Exactive, it states it was operated in \"data-dependent mode\", and for the Impact II, it used \"data-dependent auto-MS/MS mode\".",
+        "TRUTH_CHECK": "\"DDA\" is the standard abbreviation for \"data-dependent acquisition\", which matches the \"data-dependent mode\" described in the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"DDA\", which accurately covers the acquisition scheme used across the different instruments mentioned."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Lys-C",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" sections as being added to the samples.",
+        "TRUTH_CHECK": "The paper states \"Three micrograms of LysC was added to each sample\", confirming the use of Lys-C.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Lys-C\", \"trypsin\") is exhaustive, as the paper describes a sequential digestion using both LysC and trypsin."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" sections as part of the MS sample preparation workflow.",
+        "TRUTH_CHECK": "The paper explicitly states that samples were subjected to \"trypsin digestion\" and that \"trypsin (Promega) was added\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Lys-C\", \"trypsin\") is exhaustive, as the paper describes a sequential digestion using both LysC and trypsin."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "0.05 Da",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"0.05 Da\" is explicitly mentioned in the \"Protein identification and quantification\" section for both SEC-PCP-SILAC and timsTOF experiments.",
+        "TRUTH_CHECK": "The text explicitly links \"0.05 Da\" to \"fragment mass accuracy\" for these experiments.",
+        "COMPLETENESS_CHECK": "The value \"0.05 Da\" is the only fragment mass tolerance reported for the database searches in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "HCD",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HCD\" is a valid fragmentation method.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" section describing the Q-Exactive MS settings.",
+        "TRUTH_CHECK": "The paper states the instrument was set to \"fragment the top ten multiply charged ions... by HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains \"HCD\", which is the only fragmentation method explicitly named for the MS experiments in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q-Exactive mass spectrometer",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" section as the instrument used for analysis.",
+        "TRUTH_CHECK": "The paper states \"analyzed using... a Q-Exactive mass spectrometer (Thermo Fisher)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the Q-Exactive and the timsTOF Pro, which are the two different mass spectrometers used for the various experiments described in the paper."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "timsTOF Pro",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the methods section (\"timsTOF trapped ion mobility quadrupole time of flight mass spectrometer (timsTOF Pro; Bruker Daltonics)\") as the instrument used for the analysis of HeLa cells after siRNA knockdown.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the Q-Exactive and the timsTOF Pro, which covers all mass spectrometers used in the different experimental arms of the study."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "SILAC",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "SILAC, label-free",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"SILAC\" is a metabolic labeling method, which matches the definition of the label field.",
+        "SOURCE_CHECK": "The paper explicitly describes \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" using light, medium, and heavy isotopologues of lysine and arginine for the MS experiments.",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes the use of SILAC for multiple proteomics workflows.",
+        "COMPLETENESS_CHECK": "While the paper also mentions \"label-free quantitation (LFQ)\" for immunoprecipitation and ribosome composition experiments, \"SILAC\" is a primary labeling method used in the study. However, since the pipeline extracted only \"SILAC\" and the paper explicitly uses both SILAC and LFQ for different MS samples, the full set is technically incomplete."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap (in Q-Exactive)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q-Exactive mass spectrometer\", which is well-known to use an Orbitrap analyzer.",
+        "TRUTH_CHECK": "The Q-Exactive instrument utilizes an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the different instruments used in the study (Q-Exactive and timsTOF Pro)."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "TIMS (in timsTOF Pro)",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "type_mismatch",
+      "corrected_value": "TOF",
+      "issue_summary": {
+        "TYPE_CHECK": "No, \"TIMS\" (Trapped Ion Mobility Spectrometry) is an ion mobility separation technique, not a mass analyzer.",
+        "SOURCE_CHECK": "The value is present in the text as part of the instrument name \"timsTOF Pro\".",
+        "TRUTH_CHECK": "The mass analyzer in a timsTOF Pro is a Time-of-Flight (TOF) analyzer; TIMS is the preceding mobility stage.",
+        "COMPLETENESS_CHECK": "The full set is incomplete/incorrect as it misidentifies the analyzer for the timsTOF instrument."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "carbamidomethyl",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "carbamidomethyl, methionine oxidation, deamidation (NQ), N-acetylation",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein identification and quantification\" section of the methods.",
+        "TRUTH_CHECK": "The paper explicitly lists \"fixed modifications, carbamidomethyl\" for multiple experiments (shotgun SILAC, SEC-PCP-SILAC, and timsTOF data).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also explicitly lists \"methionine oxidation\", \"deamidation (NQ)\", and \"N-acetylation\" (or \"N-acetyl peptides\") as variable modifications."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "10 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Protein identification and quantification\" section for multiple experiments (SEC-PCP-SILAC, timsTOF, and the second search of shotgun SILAC).",
+        "TRUTH_CHECK": "The text states \"peptide mass accuracy, 20 ppm (ppm) for first search, 10 ppm for second search\" and \"peptide mass accuracy 10 ppm\" for other runs; \"peptide mass accuracy\" refers to the precursor mass tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains \"10 ppm\", which is the primary tolerance used for the final identifications across the different MS platforms described."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "DTT",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"DTT\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"DTT\" is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" sections as part of the sample preparation workflow for the MS experiments.",
+        "TRUTH_CHECK": "The paper states that samples were reduced and alkylated by adding \"6 μg of DTT\", confirming its use as the reduction reagent.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"DTT\", which is the only reduction reagent mentioned for the MS samples in the text."
+      }
+    }
+  ]
+}

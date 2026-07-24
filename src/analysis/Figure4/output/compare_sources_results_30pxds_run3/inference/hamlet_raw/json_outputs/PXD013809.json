@@ -1,0 +1,480 @@
+{
+  "paper_id": "PXD013809",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HeLa, THP-1",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "wrong_value",
+      "corrected_value": "HeLa",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which is the correct category for this field.",
+        "SOURCE_CHECK": "HeLa is explicitly used for multiple MS experiments (shotgun proteomics, SEC-PCP-SILAC, IP-MS, and ribosome analysis). THP-1 is mentioned in the \"Cell culture\" section as being cultured, but there is no mention of THP-1 cells being lysed, digested, or analyzed by mass spectrometry in any of the proteomics workflows described.",
+        "TRUTH_CHECK": "HeLa is correct; THP-1 is not used for the MS experiments.",
+        "COMPLETENESS_CHECK": "The full set includes THP-1, which is incorrect, and only HeLa is the valid MS sample source."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell, myeloid cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": true,
+      "error_category": "inferred",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of cell lineages, which matches the definition of cell_type.",
+        "SOURCE_CHECK": "The paper explicitly states that HeLa and THP-1 cells were used; both were subjected to proteomics workflows (HeLa for shotgun, SEC-PCP-SILAC, and ribosome analysis; THP-1 is mentioned in the cell culture section and the study describes the \"human interactome\" and \"human proteome\" using these cells).",
+        "TRUTH_CHECK": "HeLa is a well-established epithelial cell line and THP-1 is a well-established myeloid/monocyte cell line.",
+        "COMPLETENESS_CHECK": "The full set covers the lineages of the two cell lines used in the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field as a safe default.",
+        "SOURCE_CHECK": "The study uses HeLa and THP-1 cell lines to study the interferon response; there is no mention of a specific disease state for the samples analyzed by MS.",
+        "TRUTH_CHECK": "Since the study is not a disease-comparison study and uses standard cell lines to model a biological response, the safe default \"normal\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a study not focused on a specific disease."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "cervix, blood",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": true,
+      "error_category": "inferred",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organs/tissues, which is the correct category for this field.",
+        "SOURCE_CHECK": "The MS samples were derived from HeLa cells (well-known origin: cervix) and THP-1 cells (well-known origin: blood/monocyte lineage).",
+        "TRUTH_CHECK": "HeLa is a cervical adenocarcinoma cell line and THP-1 is a human monocytic cell line (derived from blood).",
+        "COMPLETENESS_CHECK": "The full set covers both cell lines used for the proteomics experiments described in the paper."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that the data were searched against the \"Homo sapiens UniProt database\" and describes the use of human cell lines (HeLa, THP-1) for the MS experiments.",
+        "TRUTH_CHECK": "The use of human cell lines and the search against the human database confirm the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the proteomics samples."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "IFN-stimulated vs unstimulated",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental contrast/comparison, which is an acceptable format for a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly describes comparing \"IFN-stimulated and unstimulated cells\" across multiple proteomics experiments (shotgun, SEC-PCP-SILAC, and IP-MS).",
+        "TRUTH_CHECK": "The value accurately reflects the primary experimental variable (IFNβ stimulation) and the groups being compared.",
+        "COMPLETENESS_CHECK": "The full set contains this single contrast, which captures the central experimental design of the study."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "60",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "incomplete",
+      "corrected_value": "60, 90",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The value is present in the \"SILAC labeling and shotgun mass spectrometry\" section, which describes the sample preparation for the MS experiment.",
+        "TRUTH_CHECK": "The text states, \"Fractions were collected every 40 s for 60 min,\" which equals 90 fractions (60*60/40). However, it later says \"Every eighth fraction was then concatenated,\" and the candidate value \"60\" does not match the total collected (90) or the concatenated total (90/8 ≈ 11). Looking at the SEC-PCP-SILAC section, it mentions \"collected into 80 fractions\" and \"only fractions 6–65... were submitted for LC-MS/MS analysis,\" which is 60 fractions.",
+        "COMPLETENESS_CHECK": "The paper describes multiple MS workflows (Shotgun, SEC-PCP-SILAC, IP-MS, and timsTOF). The value \"60\" correctly describes the number of fractions analyzed for the SEC-PCP-SILAC experiment (fractions 6-65)."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "3",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"three replicates\" in the context of the SEC-PCP-SILAC data analysis (\"aggregated across all three replicates using Stouffer’s method\") and the siRPL28 SILAC proteomics dataset (\"quantified in both the heavy and medium channels in at least two of three replicates\").",
+        "TRUTH_CHECK": "The value \"3\" is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"3\", which covers the biological replication described for the main proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "collision_energy",
+      "extracted_value": "23 to 65 eV",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "incomplete",
+      "corrected_value": "23 to 65 eV, NCE 28, 42 eV",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a range of energy values, which matches the definition of collision energy.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Tandem liquid chromatography mass spectrometry of SEC-PCP-SILAC and LFQ samples\" section, referring to the Impact II mass spectrometer used for the MS analysis.",
+        "TRUTH_CHECK": "The text states \"the collision energy ranged from 23 to 65 eV depending on ion mass and charge.\"",
+        "COMPLETENESS_CHECK": "The paper mentions multiple MS instruments; while this value is correct for the Impact II, the Q-Exactive used \"NCE 28\" and the timsTOF used \"42 eV\". The full set of extracted values is missing these other collision energy settings."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "treated vs control",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"treated vs control\" is one of the allowed categorical labels for the experimental_design field.",
+        "SOURCE_CHECK": "The paper describes multiple proteomics experiments comparing IFNβ-stimulated cells (treated) to unstimulated cells (control).",
+        "TRUTH_CHECK": "The study design is a comparison between a treated group (IFNβ stimulation) and a control group (unstimulated), making \"treated vs control\" the correct category.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately captures the primary experimental design of the study."
+      }
+    },
+    {
+      "annotation_type": "fractionation",
+      "extracted_value": "high-pH reverse-phase (RP) fractionation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific method of peptide fractionation, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly states that peptides from each biological replicate were subjected to \"high pH reverse-phase (RP) fractionation on an Agilent 1100 HPLC system\" before mass spectrometry analysis.",
+        "TRUTH_CHECK": "The value is factually correct as described in the \"SILAC labeling and shotgun mass spectrometry\" section.",
+        "COMPLETENESS_CHECK": "The full set contains the only fractionation method mentioned for the shotgun proteomics workflow."
+      }
+    },
+    {
+      "annotation_type": "ionization_type",
+      "extracted_value": "nanoESI",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"nanoESI\" is a valid ionization source type.",
+        "SOURCE_CHECK": "The paper explicitly mentions a \"Captive spray nanospray ionization source\" and \"nano ESI source\" in the context of the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The value is factually correct as it matches the \"nanospray\" and \"nano ESI\" descriptions in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only ionization method used for the MS experiments described."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "cell line",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cell line\" belongs to the defined categories for the material_type field.",
+        "SOURCE_CHECK": "The MS experiments used HeLa and THP-1 cells, both of which are well-known immortalized cell lines.",
+        "TRUTH_CHECK": "The value is factually correct as the proteomics analysis was performed on these cell lines.",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"cell line\", \"cell lysate\"] covers the material used; \"cell lysate\" is a more specific state of the material, while \"cell line\" is the correct broad category."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "cell culture",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cell culture\" is an acceptable general synonym for \"cell line\" or \"primary cells\" according to the field definition.",
+        "SOURCE_CHECK": "The MS experiments were performed using HeLa and THP-1 cells, which are cultured cells.",
+        "TRUTH_CHECK": "The value is factually correct as the samples were derived from cell lines grown in culture.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"cell line\", \"cell culture\") exhaustively covers the material type described in the paper."
+      }
+    },
+    {
+      "annotation_type": "number_of_samples",
+      "extracted_value": "3",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number_of_samples field.",
+        "SOURCE_CHECK": "The paper mentions \"three replicates\" in the context of the SEC-PCP-SILAC analysis (\"aggregated across all three replicates\") and the siRPL28 SILAC dataset (\"at least two of three replicates\").",
+        "TRUTH_CHECK": "While 3 replicates are mentioned for specific experiments, the study is complex and involves multiple distinct proteomics experiments: 1) Shotgun SILAC (3 conditions: control, 4h IFN, 24h IFN), 2) SEC-PCP-SILAC (multiple channels/replicates), 3) IP-MS (multiple antibodies), and 4) timsTOF analysis of siRNA knockdowns. A value of \"3\" only accounts for the replicates of a single experiment, not the total count of samples processed in the entire study.",
+        "COMPLETENESS_CHECK": "The full set (containing only \"3\") is incomplete as it fails to sum the samples across the various experimental arms described (Shotgun, SEC-PCP, IP-MS, and timsTOF)."
+      }
+    },
+    {
+      "annotation_type": "ptm",
+      "extracted_value": "carbamidomethylation, methionine oxidation, deamidation (NQ), and N-acetylation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value lists chemical modifications, which fits the category of post-translational modifications (PTM).",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Protein identification and quantification\" section as fixed and variable modifications used during database searching.",
+        "TRUTH_CHECK": "The values \"carbamidomethyl\", \"methionine oxidation\", \"deamidation (NQ)\", and \"N-acetylation\" are all explicitly stated in the text.",
+        "COMPLETENESS_CHECK": "The full set captures all modifications mentioned in the search parameters for the various MS experiments described."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "DDA",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": true,
+      "error_category": "inferred",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"DDA\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes the Q-Exactive being operated in a \"data-dependent mode\" and the Impact II being set to \"data-dependent auto-MS/MS mode\".",
+        "TRUTH_CHECK": "\"DDA\" is the standard abbreviation for \"data-dependent acquisition\", which matches the \"data-dependent mode\" described in the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"DDA\", which covers the acquisition schemes described for the instruments used."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a chemical reagent used for alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"iodoacetamide\" is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" sections as part of the sample preparation for LC-MS/MS.",
+        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described proteomics workflows.",
+        "COMPLETENESS_CHECK": "The full set contains \"iodoacetamide\", which is the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned multiple times in the methods (e.g., \"subjected to trypsin digestion before being analyzed by LC-MS/MS\", \"trypsin (Promega) was added\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using trypsin for digestion across several MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"Lys-C\", \"trypsin\"] is exhaustive, as both proteases are explicitly mentioned in the sample preparation workflows."
+      }
+    },
+    {
+      "annotation_type": "enrichment_method",
+      "extracted_value": "antibody",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "type_mismatch",
+      "corrected_value": "immunoprecipitation",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"antibody\" refers to the tool used for capture, but the field definition requires the protocol/method name (e.g., \"immunoprecipitation\").",
+        "SOURCE_CHECK": "The paper explicitly describes \"Immunoprecipitation mass spectrometry sample preparation\" using antibodies (e.g., anti-IFI35, anti-NMI).",
+        "TRUTH_CHECK": "While antibodies were used, the correct name for the enrichment method is \"immunoprecipitation\".",
+        "COMPLETENESS_CHECK": "The full set contains only \"antibody\", which is a descriptor of the reagent rather than the method name."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "HCD",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HCD\" is a standard fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"HCD\" in the context of the Q-Exactive mass spectrometer used for the shotgun proteomic analysis.",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the methods section.",
+        "COMPLETENESS_CHECK": "The full set contains \"HCD\", which is the only fragmentation method mentioned for the MS experiments in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q-Exactive",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "incomplete",
+      "corrected_value": "Q-Exactive, Impact II, timsTOF Pro",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" section (\"...coupled to a Q-Exactive mass spectrometer (Thermo Fisher)\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper describes three different mass spectrometers used for different experiments: the Q-Exactive, the Impact II, and the timsTOF Pro."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "SILAC",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"SILAC\" is a metabolic labeling method, which matches the definition for the label field.",
+        "SOURCE_CHECK": "The paper explicitly describes \"SILAC labeling and shotgun mass spectrometry\" and the use of \"light\", \"medium\", and \"heavy\" lysine and arginine isotopologues for HeLa cells analyzed by MS.",
+        "TRUTH_CHECK": "The value is factually correct as the study extensively uses SILAC for its quantitative proteomic and PCP experiments.",
+        "COMPLETENESS_CHECK": "The full set contains \"SILAC\", which covers the primary labeling method used for the quantitative experiments described. While some specific IP experiments used \"label-free quantitation (LFQ)\", the overall study is characterized by its SILAC-based approach, and \"SILAC\" is a correct extraction."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": true,
+      "error_category": "inferred",
+      "corrected_value": "Orbitrap, TOF",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for the mass_analyzer field.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q-Exactive mass spectrometer\", which is a well-known Orbitrap-based instrument.",
+        "TRUTH_CHECK": "The Q-Exactive instrument uses an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The paper uses multiple instruments: a Q-Exactive (Orbitrap), an Impact II (TOF), and a timsTOF Pro (TOF). The full set of extracted values only contains \"Orbitrap\", missing the TOF analyzers."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "DTT",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": false,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"DTT\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC labeling and shotgun mass spectrometry\" and \"SEC-PCP-SILAC sample preparation\" sections as being used to reduce samples before LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) is the reagent used for reduction in the described proteomics workflows.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"DTT\", which is the only reduction reagent mentioned in the text for the MS samples."
+      }
+    }
+  ]
+}
