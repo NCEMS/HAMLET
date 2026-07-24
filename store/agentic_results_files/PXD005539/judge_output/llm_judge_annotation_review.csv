@@ -1,0 +1,157 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD005539","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""Human Melanoma-Derived Extracellular Vesicles"", ""human malignant melanocytes"", and ""healthy human donors"".
+TRUTH CHECK:       The source material (melanoma cell lines, primary melanocytes, and PBMCs) is human.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which exhaustively covers the species described in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD005539","BiologicalAgent","organ","skin","","low","False","","True","False","False","TYPE CHECK:        The candidate value ""skin"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper mentions ""melanoma"" (a skin cancer) and ""epidermal melanocytes"" (cells of the skin), but the actual samples analyzed by mass spectrometry were extracellular vesicles (EVs) derived from cell lines or lymph fluid.
+TRUTH CHECK:       The proteomics experiment was performed on EVs isolated from melanoma cell lines (SKMEL28, A375, C32TG) and primary epidermal melanocytes. While these originate from skin, the ""organ"" of the sample processed for MS is the EV preparation, and the cell lines are immortalized. More importantly, the paper does not explicitly state ""skin"" as the organ of origin for the MS samples; it describes them as ""melanoma cell lines"" and ""primary adult epidermal melanocytes"".
+COMPLETENESS CHECK: The full set contains only ""skin"", which is an inference rather than a stated organ for the MS samples.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD005539","BiologicalAgent","cell_type","melanocytes","melanocytes","high","False","","True","True","False","TYPE CHECK:        The candidate value ""melanocytes"" describes a primary cell type, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""primary adult epidermal melanocytes"" and ""primary non-malignant melanocytes"".
+TRUTH CHECK:       The value is factually correct as the study used primary melanocytes as a control for the melanoma cell lines.
+COMPLETENESS CHECK: The full set contains ""melanocytes"", which covers the primary cell type used in the study (the other cells mentioned are either immortalized cell lines or derived from PBMCs).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD005539","BiologicalAgent","disease","melanoma","melanoma","medium","False","","True","False","False","TYPE CHECK:        Yes, ""melanoma"" is a disease state/diagnosis.
+SOURCE CHECK:      Yes, the paper explicitly discusses ""melanoma-derived extracellular vesicles"" and patients with ""melanoma"".
+TRUTH CHECK:       Yes, the study focuses on melanoma.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the study also includes a ""healthy control cohort"" (described as ""healthy lymph node"" and ""healthy human donors"").
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""melanoma"", ""healthy""]","melanoma, healthy"
+"PXD005539","BiologicalAgent","material_type","extracellular vesicles","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""extracellular vesicles"" is not one of the allowed broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""primary cells"", ""biofluid"").
+SOURCE CHECK:      The paper explicitly focuses on extracellular vesicles (EVs), but these are the isolated analytes/objects of study, not the broad material class from which they were derived.
+TRUTH CHECK:       While the study is about EVs, the material_type field requires the broad source class. The EVs were derived from ""cell line"" (SKMEL28, A375, C32TG), ""primary cells"" (adult primary melanocytes), and ""biofluid"" (human afferent lymphatic fluid).
+COMPLETENESS CHECK: The full set contains only ""extracellular vesicles"", which is a type mismatch and fails to capture the actual source materials used in the experiments.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""primary cells"", ""biofluid""]","cell line, biofluid"
+"PXD005539","BiologicalAgent","cell_line","SKMEL28, A375, C32TG","SKMEL28, A375, C32TG","high","False","","True","True","False","TYPE CHECK:        The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK:      The cell lines SKMEL28, A375, and C32TG are explicitly mentioned in the ""Cell Lines"" and ""EV Proteomics"" sections of the methods.
+TRUTH CHECK:       The values are factually correct as they are the melanoma cell lines used in the study.
+COMPLETENESS CHECK: The full set of extracted values covers all melanoma cell lines mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD005539","TechnicalAgent","instrument","Thermo Scientific Orbitrap Elite Hybrid Mass Spectrometer, QExactivePlus","Thermo Scientific Orbitrap Elite Hybrid Mass Spectrometer, QExactivePlus","high","False","","True","True","False","TYPE CHECK:        The candidate value contains mass spectrometer make and model names, which matches the field definition.
+SOURCE CHECK:      Both instruments are explicitly mentioned in the ""EV Proteomics"" section of the methods.
+TRUTH CHECK:       The values ""Thermo Scientific Orbitrap Elite Hybrid Mass Spectrometer"" and ""QExactivePlus"" are factually correct as per the text.
+COMPLETENESS CHECK: The full set contains both instruments used for the LC-MS/MS analysis described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD005539","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the EV Proteomics section; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The proteomics analysis used silver-stained gel sections and LC-MS/MS without any mention of labels, making ""label-free"" factually correct.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD005539","ExperimentalDesignAgent","replicates","3 melanoma cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""3 melanoma cell lines"" is a description of the sample groups, not a numeric count of biological replicates for a single condition.
+SOURCE CHECK:      The text mentions ""three melanoma cell lines"" (SKMEL28, A375, and C32TG), but these are different biological entities/groups, not replicates of the same condition.
+TRUTH CHECK:       The number of biological replicates is not explicitly stated for the proteomics experiments; however, the candidate value confuses the number of distinct cell lines with the number of replicates.
+COMPLETENESS CHECK: The full set contains ""3"", which is likely a misinterpretation of the ""three melanoma cell lines"" mentioned in the text. Since no explicit biological replicate count (e.g., ""n=3 per group"") is provided, the safe default is ""1"".
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD005539","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""three melanoma cell lines"" (SKMEL28, A375, and C32TG) were used for the proteomic assessment, but it does not explicitly state the number of biological replicates per cell line.
+TRUTH CHECK:       The value ""3"" is being inferred from the number of different cell lines used, but the number of cell lines is not the same as the number of biological replicates for a given sample.
+COMPLETENESS CHECK:    The full set of extracted values includes ""3 melanoma cell lines"", which confirms the extraction is confusing the number of distinct biological sources (cell lines) with the number of replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD005539","ExperimentalDesignAgent","experimental_design","Comparison of EV protein cargo across three melanoma cell lines","Comparison of EV protein cargo across three melanoma cell lines","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the objective/comparison of the experiment, which fits the general nature of an experimental design.
+SOURCE CHECK:      The paper states that protein composition of melanoma EVs was interrogated by mass spectrometry and a shared proteomic signature was identified among all three melanoma cell lines (SKMEL28, A375, C32TG).
+TRUTH CHECK:       The value accurately reflects the proteomic part of the study.
+COMPLETENESS CHECK:   The full set of extracted values only covers the proteomics part, but the study also includes a ""treated vs control"" design for DC maturation (EV-treated vs liposome-treated) and a ""case-control"" design for the SLN CyTOF analysis (melanoma patient vs healthy control).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Comparison of EV protein cargo across three melanoma cell lines"", ""treated vs control"", ""case-control""]","Comparison of EV protein cargo across three melanoma cell lines, treated vs control, case-control"
+"PXD005539","ExperimentalDesignAgent","factor_value","cell line (SKMEL28, C32TG, A375)","cell line (SKMEL28, C32TG, A375)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the cell lines used as a variable in the study, which fits the category of an experimental factor.
+SOURCE CHECK:      The paper explicitly mentions the use of three melanoma cell lines: SKMEL28, A375, and C32TG.
+TRUTH CHECK:       The value is factually correct as these three cell lines were used to identify a shared proteomic signature of EV cargo.
+COMPLETENESS CHECK:    The full set of extracted values is incomplete; the study also investigates ""hypoxia"" (hypoxic vs. normal culture conditions) and ""EV treatment"" (melanoma EVs vs. liposomes/control) as primary experimental factors.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cell line (SKMEL28, C32TG, A375)"", ""hypoxia"", ""EV treatment""]","cell line (SKMEL28, C32TG, A375), hypoxia, EV treatment"
+"PXD005539","ExperimentalDesignAgent","fractions","9","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'fractions' field.
+SOURCE CHECK:      I have searched the ""EV Proteomics"" and ""EV Isolation and Quantification"" sections; there is no mention of the number 9 in relation to peptide or protein fractionation.
+TRUTH CHECK:       The paper does not describe any offline fractionation process that would result in 9 fractions; it mentions ""gel fractions"" in the context of silver-stained gel sections, but does not specify a count of 9.
+COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD005539","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions ""three melanoma cell lines"" (SKMEL28, A375, and C32TG) used for the proteomic assessment of EV cargo.
+TRUTH CHECK:       While 3 cell lines were used for the proteomics, the study also includes primary melanocytes, healthy human donors (PBMCs), and patient lymph node samples (melanoma cohort and healthy control cohort). The value ""3"" only refers to the melanoma cell lines, not the total count of samples processed in the entire study.
+COMPLETENESS CHECK:    The full set of extracted values (""3"") is incomplete as it ignores the other biological samples (primary cells, PBMCs, and patient tissues) described in the results and methods.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

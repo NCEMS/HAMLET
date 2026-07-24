@@ -1,0 +1,147 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD010154","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human tissues"" and ""human genes"" throughout the title, abstract, and methods.
+TRUTH CHECK:       The source organism is indeed human (Homo sapiens).
+COMPLETENESS CHECK: The full set contains the only correct species mentioned in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010154","BiologicalAgent","organ","testis","testis","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""testis"" is an organ/tissue, which matches the field definition.
+SOURCE CHECK:      The value ""testis"" is explicitly mentioned multiple times in the text (e.g., ""particularly in testis"", ""missing proteins in the testis"").
+TRUTH CHECK:       The paper describes a proteome atlas of 29 healthy human tissues, and testis is one of the primary tissues analyzed.
+COMPLETENESS CHECK: The full set of extracted values contains only ""testis"", but the paper explicitly states it analyzed ""29 healthy human tissues"". Therefore, the extraction is highly incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   The full set should include all 29 tissues mentioned in the study (e.g., testis, brain, heart, liver, kidney, prostate, fallopian tube, tonsil, spleen, lymph node, duodenum, small intestine, etc., as listed in the paper's Table EV1).",""
+"PXD010154","BiologicalAgent","cell_type","lymphocytes","lymphocytes","low","False","","False","False","False","TYPE CHECK: The candidate value ""lymphocytes"" is a primary cell type, which matches the field definition.
+SOURCE CHECK: The paper mentions that the appendix, spleen, lymph node, and tonsil ""contain a large fraction of lymphocytes.""
+TRUTH CHECK: The value is factually correct as the paper identifies lymphocytes as a significant cellular component of several analyzed tissues.
+COMPLETENESS CHECK: The full set of extracted values only contains ""lymphocytes""; however, the paper mentions other cell types such as ""glandular cells"" (in the duodenum and small intestine). Therefore, the extraction is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""lymphocytes"", ""glandular cells""]",""
+"PXD010154","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper explicitly mentions ""29 healthy human tissues"" in the title and ""29 histologically healthy tissue specimen"" in the results.
+TRUTH CHECK:       The subjects are described as healthy, making ""normal"" a factually correct value according to the field definition.
+COMPLETENESS CHECK: The full set contains ""normal"", which exhaustively covers the disease state of the subjects described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010154","BiologicalAgent","material_type","human tissue specimen","","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the source material, but it includes the species (""human"") and a descriptor (""specimen"") rather than sticking to the broad material class defined in the field definitions.
+SOURCE CHECK:      The text explicitly mentions ""29 human tissue specimen"" and ""human tissue samples"".
+TRUTH CHECK:       The material used was indeed tissue.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the material as tissue, although it is not formatted as a broad class.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   tissue",""
+"PXD010154","TechnicalAgent","instrument","Q Exactive Plus, Q Exactive HF, Orbitrap Fusion Lumos","Q Exactive Plus, Q Exactive HF, Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value contains mass spectrometer make and model names, which matches the field definition.
+SOURCE CHECK:      All three instruments are explicitly mentioned in the ""On-line liquid chromatography–tandem mass spectrometry (LC-MS/MS)"" section of the methods.
+TRUTH CHECK:       The values are factually correct as they are the instruments used for the different digestion/analysis workflows described.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010154","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label metadata field.
+SOURCE CHECK:      The paper explicitly mentions ""label-free quantitative proteomics"" in the Results section and ""Quantitative label-free LC-MS/MS analysis"" in the Methods section.
+TRUTH CHECK:       The value is factually correct as the study used label-free quantification.
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive for the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","replicates","29 healthy human tissues","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""29 healthy human tissues"" is a description of the sample set, not a numeric count of biological replicates per sample/condition.
+SOURCE CHECK:      The text mentions 29 tissues were analyzed, but this refers to the number of different organs/tissues (samples), not the number of replicates per tissue.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'; 29 is the number of samples (number_of_samples), not the number of biological replicates.
+COMPLETENESS CHECK:The full set of extracted values consists of the sample count, which does not address the number of biological replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","replicates","29","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The number ""29"" appears in the text, but it refers to the number of different tissues (samples), not the number of biological replicates per tissue.
+TRUTH CHECK:       The value is factually incorrect; 29 is the number of samples/tissues, not the number of biological replicates. The paper does not explicitly mention biological replicates for the main atlas, implying a value of ""1"" per tissue.
+COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the sample size as the replicate count.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","experimental_design","abundance atlas of 29 paired healthy human tissues","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the goal/output of the study rather than the study design type (e.g., cross-sectional, case-control).
+SOURCE CHECK:      The phrase is present in the title and abstract.
+TRUTH CHECK:       While the phrase is in the text, it is not a ""study design type"" as defined by the field.
+COMPLETENESS CHECK: The full set contains only this value, which is a description of the resource created, not the experimental design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","factor_value","tissue type (29 healthy human tissues)","tissue type (29 healthy human tissues)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the experimental variable (tissue type) being compared across the study.
+SOURCE CHECK:      Yes, the paper explicitly states it is an atlas of ""29 healthy human tissues"" and analyzes protein/transcript expression across these tissues.
+TRUTH CHECK:       Yes, the primary factor being studied is the difference in expression across the 29 different tissue types.
+COMPLETENESS CHECK:The full set contains the primary experimental factor described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","fractions","36","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'fractions' field.
+SOURCE CHECK:      A search of the paper text for ""fractions"", ""fractionated"", ""hSAX"", and ""number"" does not reveal the number 36 or any other specific count of fractions generated per sample.
+TRUTH CHECK:       The value ""36"" is not mentioned or inferable from the provided text.
+COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD010154","ExperimentalDesignAgent","number_of_samples","29","29","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper explicitly states in the title and abstract that they analyzed ""29 healthy human tissues"".
+TRUTH CHECK:       The value 29 is factually correct as the primary number of tissue samples processed for the abundance atlas.
+COMPLETENESS CHECK: The full set contains ""29"", which covers the primary study cohort described throughout the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

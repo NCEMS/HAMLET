@@ -1,0 +1,245 @@
+{
+  "paper_id": "PXD001281",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that \"HEK293 cells stably expressing 6His-SUMO2T90K\" were used to establish the workflow, lysed, digested, and analyzed by MS.",
+        "TRUTH_CHECK": "The value \"HEK293\" is factually correct as the source of the MS samples (specifically the N3S variant).",
+        "COMPLETENESS_CHECK": "The full set contains the correct cell line used for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a cell type, which matches the required category for this field.",
+        "SOURCE_CHECK": "The paper mentions the use of HEK293 cells (a human embryonic kidney cell line), but the phrase \"epithelial cell\" does not appear in the text.",
+        "TRUTH_CHECK": "The MS samples were derived from HEK293 cells; while HEK293 cells have epithelial characteristics, the paper never explicitly identifies them as \"epithelial cells\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is the correct category (organ/tissue) for this field.",
+        "SOURCE_CHECK": "The word \"kidney\" does not appear in the paper text; the MS samples were derived from HEK293 N3S cell lysates.",
+        "TRUTH_CHECK": "The value is factually incorrect as the experiment used a human embryonic kidney cell line, but the material analyzed was the cell line/culture, not the kidney organ itself.",
+        "COMPLETENESS_CHECK": "The full set is incorrect and does not reflect the paper's content."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human cell lysates\" and searching against the \"UniProtKB human proteome\" for the MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the experiment used human HEK293 cells.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used in the experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "condition (heat stress 43°C), cell line (HEK293 expressing 6His-SUMO2T90K)",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "heat stress 43°C, HEK293",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a combination of two different factors (condition and cell line) rather than a single factor value.",
+        "SOURCE_CHECK": "Both the heat stress (43°C) and the HEK293 cells expressing 6His-SUMO2T90K are explicitly mentioned as the materials and conditions used for the MS experiment.",
+        "TRUTH_CHECK": "The values are factually correct, but the extraction format is incorrect; it includes the factor names (\"condition\", \"cell line\") within the value itself.",
+        "COMPLETENESS_CHECK": "The full set contains only this combined string, which is an improper representation of factor values."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the fractions field.",
+        "SOURCE_CHECK": "The paper describes a workflow where peptides were desalted and then analyzed by LC-MS/MS without any mention of offline fractionation (e.g., high-pH RP or SAX) for the primary SUMO2T90K experiment.",
+        "TRUTH_CHECK": "Since no offline fractionation is described for the main proteomics experiment, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only \"1\", which accurately reflects the lack of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper states, \"We performed the SUMO2T90K protein and peptide enrichment workflow in duplicate on a lysate of HEK293 culture,\" which refers to the MS experiment.",
+        "TRUTH_CHECK": "\"In duplicate\" is equivalent to 2 replicates.",
+        "COMPLETENESS_CHECK": "The full set contains the value \"2\", which accurately reflects the reproducibility experiment described."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical_replicates.",
+        "SOURCE_CHECK": "The paper mentions that for the reproducibility experiment, \"duplicate 750mL cultures of HEK293 6His-SUMO2T90K... were processed in parallel,\" but these are biological replicates (separate cultures), not technical replicates of a single sample.",
+        "TRUTH_CHECK": "There is no mention of technical replicates (multiple MS injections or preparations of the same biological sample) in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the results section (\"...using 'top 10' data dependent acquisition...\").",
+        "TRUTH_CHECK": "The paper describes using data-dependent acquisition (DDA) for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the acquisition method described in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "9 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": "0.5 Da",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"9 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper explicitly states a mass deviation of \"0.5 Da for MS2 peaks\" (fragment ions) and \"6 parts per million\" for the main search (precursor ions).",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and fails to capture the actual fragment mass tolerance mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper mentions using a \"Q Exactive mass spectrometer\", but it does not explicitly name the fragmentation method (e.g., HCD, CID, or beam-type CID) in the text.",
+        "TRUTH_CHECK": "While the Q Exactive instrument uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" does not appear in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but the value itself is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometric analysis and data processing\" section as the instrument used for the analysis.",
+        "TRUTH_CHECK": "The paper states the samples were \"analysed by liquid chromatography tandem MS on a Q Exactive mass spectrometer (Thermo Scientific)\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer model mentioned for the primary experiment."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling; therefore, \"label-free\" is a safe default.",
+        "TRUTH_CHECK": "The extraction is factually correct as no labeling methods were described for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for the mass_analyzer field.",
+        "SOURCE_CHECK": "The paper states the samples were analysed on a \"Q Exactive mass spectrometer\", which is an Orbitrap-based instrument.",
+        "TRUTH_CHECK": "The Q Exactive is a well-known Orbitrap mass spectrometer, making this value factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the primary experiment."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6.1 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "6 ppm",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper mentions a \"mass deviation of 6 parts per million\" for the main search in the Data analysis section.",
+        "TRUTH_CHECK": "The paper explicitly states \"6 parts per million\", not \"6.1 ppm\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is factually inaccurate."
+      }
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD000561","Biological","age","adult, fetal","","low","True","developmental_stage","False","False","False","TYPE CHECK: The candidate value contains developmental stages (""adult"", ""fetal"") rather than specific ages (numeric values or time points).
+SOURCE CHECK: The paper explicitly states that the MS analysis included ""17 adult tissues"" and ""7 fetal tissues"".
+TRUTH CHECK: While the paper mentions adult and fetal samples, these are developmental stages, not ""age"" as defined by the field (which expects values like ""45 years"", ""P30"", etc.).
+COMPLETENESS CHECK: The full set consists of developmental stages, which belong in the `developmental_stage` field, not the `age` field.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: developmental_stage
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD000561","Biological","cell_type","hematopoietic cells","hematopoietic cells","medium","False","","True","False","False","TYPE CHECK: The candidate value ""hematopoietic cells"" describes a primary cell lineage, which matches the definition of cell_type.
+SOURCE CHECK: The paper explicitly states that ""6 purified primary hematopoietic cells"" were among the 30 histologically normal human samples used for ""in-depth proteomic profiling"" and later describes their isolation and analysis by LC-MS/MS.
+TRUTH CHECK: The value is factually correct as the paper identifies hematopoietic cells as one of the primary biological sources analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set of extracted values for cell_type is [""hematopoietic cells""]; however, the paper also specifies the exact populations isolated (CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells). While ""hematopoietic cells"" is a correct supertype, the specific lineages are also present.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: hematopoietic cells, CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells","hematopoietic cells, CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells"
+"PXD000561","Biological","disease","normal","normal","high","False","","True","True","False","TYPE CHECK: The candidate value ""normal"" belongs to the category of disease state/diagnosis.
+SOURCE CHECK: The paper explicitly states that ""All tissues were histologically confirmed to be normal prior to analysis"" and mentions ""histologically normal human samples"".
+TRUTH CHECK: The value is factually correct as the study focused on a map of the normal human proteome.
+COMPLETENESS CHECK: The full set of extracted values (""normal"") covers the disease state described for the samples in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Biological","organ","liver","liver","medium","False","","True","False","False","TYPE CHECK: The candidate value ""liver"" is a valid organ/tissue name.
+SOURCE CHECK: The paper mentions ""17 adult tissues"" and ""7 fetal tissues"" were analyzed by mass spectrometry, and specifically lists ""liver"" as one of the 10 tissues for which Illumina Human Body Map 2.0 data was used for comparison with the MS results.
+TRUTH CHECK: The paper describes a large-scale proteome analysis of 30 human samples, including adult and fetal tissues; liver is a standard human tissue and is explicitly mentioned in the context of the expression comparison.
+COMPLETENESS CHECK:The full set of extracted values contains only ""liver"", but the paper states that 17 adult tissues and 7 fetal tissues (totaling 24 tissues plus 6 cell types) were analyzed. The extraction is missing the vast majority of the tissues analyzed.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: NONE",""
+"PXD000561","Biological","species","homo sapiens","homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly states it is a ""map of the human proteome"" and uses ""human samples"" and ""human reference genome"" for the MS analysis.
+TRUTH CHECK: ""homo sapiens"" is the scientific name for humans, and the study is performed on human samples.
+COMPLETENESS CHECK: The full set contains the only species analyzed in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","ExperimentalDesign","factor_value","tissue/cell type (17 adult tissues, 7 fetal tissues, 6 purified primary hematopoietic cells)","normal","low","True","","False","False","False","TYPE CHECK: The candidate value is a description of the sample types/counts rather than a specific factor value (e.g., ""liver"" or ""adult"").
+SOURCE CHECK: The information is present in the text, but it is a summary of the study's scope rather than a value for an individual sample's factor.
+TRUTH CHECK: While the numbers are factually correct based on the abstract, a ""factor_value"" should be the specific value of the variable for the sample (e.g., ""adult tissue""), not a summary list of all samples in the study.
+COMPLETENESS CHECK: The full set includes ""normal"" (a safe default for disease), but the candidate value is a summary of the experimental design rather than a valid factor value.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD000561","ExperimentalDesign","factor_value","normal","normal","high","False","","True","True","False","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, specifically mirroring a disease/health state.
+SOURCE CHECK: The paper explicitly states that ""All tissues were histologically confirmed to be normal prior to analysis,"" referring to the samples used for the MS experiment.
+TRUTH CHECK: The value is factually correct as the study focused on normal human tissues and cells.
+COMPLETENESS CHECK: The full set of extracted values covers both the tissue/cell type distribution and the health status of the samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","ExperimentalDesign","fractions","24","24","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The value is explicitly stated in the ""Peptide preparation"" section: ""A total of 96 fractions were collected which were then concatenated to 24 fractions"".
+TRUTH CHECK: The value is factually correct as the final number of fractions used for LC-MS analysis.
+COMPLETENESS CHECK: The full set of extracted values contains the single correct number of fractions described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","ExperimentalDesign","replicates","30","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The paper mentions ""30 histologically normal human samples"" and ""30 cells/tissues analyzed"", but these refer to the total number of distinct sample types/sources, not biological replicates of a single condition.
+TRUTH CHECK: The value ""30"" is the total number of samples (number_of_samples), not the number of biological replicates per sample. The text states ""three adult donors for each tissue"", which indicates 3 biological replicates for the adult tissues.
+COMPLETENESS CHECK: The full set contains only the total sample count, failing to capture the actual biological replication.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 3","3"
+"PXD000561","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical_replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates performed for the MS analysis.
+TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The full set contains only the default value ""1"", which is exhaustive given the absence of specific information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The paper explicitly states in the LC-MS/MS section: ""Mass spectrometry analysis was carried out in a data dependent manner"".
+TRUTH CHECK: The value is factually correct as it matches the ""data dependent manner"" described in the text.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","False","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""10 ppm"" is present in the paper text under ""Database searching"" and ""Proteogenomic analysis"".
+TRUTH CHECK: The paper explicitly states ""The mass error was set to 10 ppm for precursor ions and 0.05 Da for fragment ions"" and later ""Precursor mass error set at 10 ppm, Fragment mass error set at 0.05 Da"". Therefore, ""10 ppm"" is the precursor mass tolerance, not the fragment mass tolerance.
+COMPLETENESS CHECK: The full set contains only the incorrect value; the correct fragment mass tolerance (0.05 Da) is missing.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: precursor_mass_tolerance
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 0.05 Da","0.05 Da"
+"PXD000561","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The paper explicitly states that ""All the tandem mass spectra were produced by higher-energy collision dissociation (HCD) method.""
+TRUTH CHECK: ""Higher-energy collision dissociation (HCD)"" is the specific name for the beam-type collision-induced dissociation implemented in Orbitrap instruments; however, the paper uses the term ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, but it uses a descriptive synonym rather than the term explicitly used in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","instrument","LTQ-Orbitrap Velos, LTQ-Orbitrap Elite","LTQ-Orbitrap Velos, LTQ-Orbitrap Elite","high","False","","True","True","False","TYPE CHECK: The candidate value consists of mass spectrometer models, which matches the required category for the instrument field.
+SOURCE CHECK: The values are explicitly mentioned in the ""LC-MS/MS"" section as the instruments used to analyze the peptide samples.
+TRUTH CHECK: The paper states that samples ""were analyzed on LTQ-Orbitrap Velos or LTQ-Orbitrap Elite mass spectrometers"".
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers mentioned as being used for the analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","label","label free","label free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The extraction is factually correct as no labeling methods were described in the methods section.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The paper explicitly mentions the use of ""LTQ-Orbitrap Velos or LTQ-Orbitrap Elite mass spectrometers"" and an ""Orbitrap mass analyzer"".
+TRUTH CHECK: The value is factually correct as the samples were analyzed using an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set of extracted values (""orbitrap"") is exhaustive for the mass analyzers described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000561","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" is not present in the paper text; the text explicitly states ""10 ppm for precursor ions"" in both the ""Database searching"" and ""Proteogenomic analysis"" sections.
+TRUTH CHECK: The value is factually incorrect based on the provided text.
+COMPLETENESS CHECK:The full set contains only this incorrect value and does not cover the correct value mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 10 ppm","10 ppm"

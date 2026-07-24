@@ -1,0 +1,136 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD007073","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human meningiomas"" and ""normal human meninges"" multiple times.
+TRUTH CHECK: The use of ""Homo sapiens"" is the correct scientific name for humans.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD007073","BiologicalAgent","organ","meninges","meninges","high","False","","True","True","False","TYPE CHECK: The candidate value ""meninges"" refers to a tissue/organ, which matches the definition of the `organ` field.
+SOURCE CHECK: The paper explicitly mentions ""normal healthy human meninges"" and ""normal human meninges"" as the control group.
+TRUTH CHECK: The value is factually correct as the study compares meningioma (tumors of the meninges) against normal meninges.
+COMPLETENESS CHECK: The full set of extracted values (""meninges"") covers the organ of origin for the control samples; the tumor samples are meningiomas (which originate from the meninges).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD007073","BiologicalAgent","disease","meningioma","meningioma","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""meningioma"" is a diagnosis/disease state, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""meningioma"" throughout the title, abstract, and results (e.g., ""Proteomic analysis discovers the differential expression of novel proteins and phosphoproteins in meningioma"").
+TRUTH CHECK:       The value is factually correct as the study focuses on meningioma specimens.
+COMPLETENESS CHECK:    The full set of extracted values contains ""meningioma""; however, the paper also explicitly uses ""normal healthy human meninges"" and ""NMT"" (Normal Meninges Tissue) as controls. According to the field definition, ""normal"" or ""healthy"" should be extracted for healthy controls.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""meningioma"", ""normal""]","meningioma, normal"
+"PXD007073","BiologicalAgent","material_type","frozen meningioma specimens","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""frozen meningioma specimens"" describes the specific sample, but the field definition requires a ""Broad material class"" (e.g., ""tissue"", ""cell line"").
+SOURCE CHECK:      The paper explicitly mentions ""frozen meningioma specimens"" in the Methods section.
+TRUTH CHECK:       While the specimens are indeed frozen meningiomas, the value is too specific and does not match the required broad categories defined for this field.
+COMPLETENESS CHECK:The full set contains only this specific value, failing to map the material to the broad class ""tissue"".
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   tissue","tissue"
+"PXD007073","BiologicalAgent","anatomic_site_tumor","intracranial","intracranial","high","False","","True","True","False","TYPE CHECK:        Yes, ""intracranial"" describes an anatomical location.
+SOURCE CHECK:      Yes, the abstract explicitly states ""Meningioma is the most frequent primary intracranial tumour.""
+TRUTH CHECK:       Yes, the tumors studied (meningiomas) are located intracranially.
+COMPLETENESS CHECK:The full set contains the only anatomical location mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007073","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label metadata field.
+SOURCE CHECK:      The paper explicitly mentions ""Proteins were quantified with label free quantification (LFQ)"".
+TRUTH CHECK:       The value is factually correct as the study used LFQ and no isobaric or metabolic labels are mentioned.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","replicates","meningioma specimens and normal healthy human meninges","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of sample types, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""meningioma specimens and normal healthy human meninges,"" but this describes the material, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates,"" which requires a number.
+COMPLETENESS CHECK: The full set contains both a descriptive string and a number (""25""), but the descriptive string is a type mismatch.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","replicates","25","","high","False","","True","True","False","TYPE CHECK:        The candidate value ""25"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions a discovery set of 22 meningiomas and 3 normal healthy human meninges (22 + 3 = 25).
+TRUTH CHECK:       The value 25 represents the total number of biological samples (subjects) used in the discovery set, not the number of replicates per condition/group.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; one is a description of the samples and the other is the total sample count, neither of which defines the number of biological replicates per group.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","experimental_design","Comparison of WHO grade I, II, and III meningiomas vs normal human meninges","Comparison of WHO grade I, II, and III meningiomas vs normal human meninges","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental groups and comparison, which fits the nature of a study design.
+SOURCE CHECK:      The paper explicitly states they performed proteomic profiling of grade I, II, and III frozen meningioma specimens and three normal healthy human meninges.
+TRUTH CHECK:       The value accurately reflects the primary experimental design described in the methods and results.
+COMPLETENESS CHECK: The full set contains this single value, which comprehensively covers the main study design of the proteomics experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","factor_value","WHO grade (grade I, grade II, grade III, normal healthy human meninges)","WHO grade (grade I, grade II, grade III, normal healthy human meninges)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (WHO grade) and its levels, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares ""grade I, II and III frozen meningioma specimens and three normal healthy human meninges"".
+TRUTH CHECK:       The value is factually correct as the study focuses on differential expression across these specific grades and the normal control.
+COMPLETENESS CHECK: The full set captures the primary experimental factor used for the proteomic profiling and subsequent comparisons.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","fractions","6","6","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper explicitly states in the ""Protein fractionation and in-gel digestion"" section that ""Sample lanes were excised from gels, sliced into 6 fractions"".
+TRUTH CHECK:       The value ""6"" is factually correct based on the described experimental procedure.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007073","ExperimentalDesignAgent","number_of_samples","25","","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper states a 'discovery set' of 22 meningiomas and a 'validation set' of 15 meningiomas, plus 3 normal healthy human meninges.
+TRUTH CHECK:       The total count of samples processed is 22 (discovery) + 15 (validation) + 3 (controls) = 40. The value ""25"" is factually incorrect.
+COMPLETENESS CHECK:The full set contains only ""25"", which is incorrect and does not cover the total sample count described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
