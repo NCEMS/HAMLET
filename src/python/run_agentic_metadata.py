@@ -26,6 +26,55 @@ AGENTIC_CONFIG = REPO_ROOT / "assets" / "agentic_metadata_config.yaml"
 
 # Set in main() so agentic_to_sdrf() can access the aggregated_results.json path.
 _last_input_json: Path = Path("")
+
+######################################################################################################
+def slice_cache_entry(cache_file: Path, key: str, is_array: bool = False, array_key: str = "accession") -> dict:
+    """
+    Extract a single entry from a large JSON cache file using jq (streaming, memory-efficient).
+    
+    Args:
+        cache_file: Path to large JSON cache file (e.g., pride_cache, pmc_cache)
+        key: Key to extract (PXD ID for pmc_cache, or value to find in array for pride_cache)
+        is_array: If True, search through 'response' array for array_key==key
+        array_key: Field name to match when is_array=True (default: 'accession')
+    
+    Returns:
+        dict: The extracted entry, or empty dict if not found
+    """
+    try:
+        # Build jq filter for efficient streaming extraction
+        if is_array:
+            # For pride_cache: .response[] | select(.accession == "PXD000070")
+            jq_filter = f'.response[] | select(.{array_key} == "{key}")'
+        else:
+            # For pmc_cache: .["{key}"]
+            jq_filter = f'.["{key}"]'
+        
+        result = subprocess.run(
+            ['jq', '-c', jq_filter, str(cache_file)],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        
+        if result.returncode == 0 and result.stdout.strip():
+            return json.loads(result.stdout.strip())
+        else:
+            return {}
+    except Exception as e:
+        print(f"WARNING: jq failed ({e}), falling back to full load for {cache_file.name}")
+        # Fallback to full load if jq not available
+        try:
+            with open(cache_file, 'r') as f:
+                data = json.load(f)
+            if is_array:
+                return next((m for m in data.get('response', []) if m.get(array_key) == key), {})
+            else:
+                return data.get(key, {})
+        except Exception as e2:
+            print(f"ERROR: Could not extract {key} from {cache_file.name}: {e2}")
+            return {}
+
 ######################################################################################################
 
 ######################################################################################################
@@ -49,33 +98,26 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
     if not pub_text.exists():
         print(f"Publication text file not found: {pub_text}, Creating...")
 
-        ## Load pride_cache and get pxd metadata
-        with open(pride_cache, "rb") as f:
-            pride_data = json.load(f)
-
-        pxd_metadata = next((m for m in pride_data['response'] if m['accession'] == pxd), None)
-        if pxd_metadata is None:
+        ## Extract pride_cache entry for this PXD (memory-efficient using jq)
+        print(f"Extracting {pxd} from PRIDE cache (memory-efficient)...")
+        pxd_metadata = slice_cache_entry(pride_cache, pxd, is_array=True, array_key='accession')
+        
+        if not pxd_metadata:
             sys.exit(f"ERROR: PXD ID {pxd} not found in PRIDE cache")
         print(f"Loaded metadata for {pxd} from PRIDE cache")
-        # print(pxd_metadata)
 
         ## Extract .raw file names from PRIDE metadata
         files = pxd_metadata.get('files', [])
         filenames = [f.get('fileName', '') for f in files if f.get('fileName', '').lower().endswith('.raw')]
         print(f"Extracted .raw filenames from PRIDE metadata: {filenames}")
 
-
-        ###-------------------------------------------------------------------------------
-        # Load pmc_cache and get publication text if available
-        pmc_data = None
-        with open(pmc_cache, "r") as f:
-            pmc_data = json.load(f)
-
-        pmc_metadata = pmc_data.get(pxd, None)
-        if pmc_metadata is None:
+        ## Extract pmc_cache entry for this PXD (memory-efficient using jq)
+        print(f"Extracting {pxd} from PMC cache (memory-efficient)...")
+        pmc_metadata = slice_cache_entry(pmc_cache, pxd, is_array=False)
+        
+        if not pmc_metadata:
             sys.exit(f"ERROR: PXD ID {pxd} not found in PMC cache")
         print(f"Loaded publication text metadata for {pxd} from PMC cache")
-        # print(pmc_metadata)
 
         full_text = pmc_metadata.get('full_text', '')
         full_text = full_text + "\nMass spectrometry data files:\n" + "\n".join(filenames)

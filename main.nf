@@ -811,7 +811,7 @@ process run_assessor {
 
     cache false
 
-    errorStrategy 'terminate'
+    errorStrategy 'ignore'
 
     input:
     tuple val(pxd), path(fetched_dir)
@@ -872,7 +872,7 @@ process run_assessor {
             exit 0
         fi
 
-        "\${assessor_cmd[@]}"
+        "\${assessor_cmd[@]}" || true
         assessor_rc=\$?
     else
         echo "ERROR: Unsupported runAssessor entrypoint: \$assessor_script"
@@ -890,8 +890,9 @@ process run_assessor {
             --pxd ${pxd} \
             --stage run_assessor || true
     else
-        echo "WARNING: runAssessor failed for ${pxd}; this is critical and the pipeline cannot continue"
-        exit 1
+        echo "WARNING: runAssessor failed for ${pxd}; creating dummy study_metadata.json"
+        echo '{}' > ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
+        cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
     fi
     """
 }

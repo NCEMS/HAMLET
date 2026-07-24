@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J HAMLETTest
+#SBATCH -J HAMLET_0
 #SBATCH --partition=standard
 #SBATCH -N 1
-#SBATCH -n 20
+#SBATCH -n 10
 #SBATCH -t 48:00:00
 #SBATCH --account=read_crch_ims86
 #SBATCH --mem=128G
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:1
 #SBATCH -o assets/slurm/logs/%x-%j.out
 #SBATCH -e assets/slurm/logs/%x-%j.err
 

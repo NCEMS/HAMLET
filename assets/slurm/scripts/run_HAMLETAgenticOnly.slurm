@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J HAMLETAgenticOnly
+#SBATCH -J HAMLET_0AgOnly
 #SBATCH --partition=standard
 #SBATCH -N 1
 #SBATCH -n 10
@@ -18,7 +18,7 @@
 # Redirect Nextflow home away from /storage/home (limited quota)
 export NXF_HOME=/storage/group/epo2/default/ims86/.nextflow
 
-cd /storage/group/epo2/default/ims86/git_repos/HAMLET
+cd /scratch/ims86/HAMLETruns/HAMLET_0
 
 source /storage/group/epo2/default/ims86/miniconda3/etc/profile.d/conda.sh
 conda activate meti_env
@@ -30,6 +30,6 @@ export OPENROUTER_API_KEY="${OPENROUTER_API_KEY}"
 # Run agentic-only workflow
 nextflow run main.nf \
     --agentic_only true \
-    --pxd PXD006195 \
+    --pxd_csv /scratch/ims86/HAMLETruns/HAMLET_0/assets/pxd_lists/GSlist_split/GSlist0.csv \
     --conda_base /storage/work/ims86/.conda \
     -resume
