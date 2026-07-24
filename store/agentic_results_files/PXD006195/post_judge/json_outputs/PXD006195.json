@@ -1,0 +1,197 @@
+{
+  "paper_id": "PXD006195",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "BL21 Δarg/Δlys",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a bacterial strain name, which is the appropriate category for the cell_line field in a prokaryotic proteomics study.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LpxC and FtsH Purification\" and \"Preparation of the Super-SILAC Standard\" sections as the source of the proteins that were purified and analysed by LC-MS/MS.",
+        "TRUTH_CHECK": "The paper states that \"Escherichia coli BL21 Δarg/Δlys cells\" were used for both the purification of the interactomes and the creation of the super-SILAC standard.",
+        "COMPLETENESS_CHECK": "The full set contains the only strain used for the mass spectrometry samples."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "escherichia coli",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is an organism name, which matches the species field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned throughout the text as the source of the proteins analyzed by LC-MS/MS.",
+        "TRUTH_CHECK": "The paper identifies the organism as Escherichia coli.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used in the experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "bait protein (Strep-LpxC, Strep-tag, His6-MBP-FtsH, His6-MBP), growth rate/temperature (30°C, 37°C, 40°C)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (bait proteins and growth conditions), which fits the category of factor_value.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Experimental Design\" and \"LpxC and FtsH Purification\" sections as the variables used to generate the MS samples.",
+        "TRUTH_CHECK": "The bait proteins (Strep-LpxC, Strep-tag, His6-MBP-FtsH, His6-MBP) and the temperatures used to modulate growth rate (30, 37, and 40°C) are factually correct.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental variables (bait and growth rate) described for the proteomics workflow."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a workflow where proteins were separated by SDS-PAGE, and \"single protein bands were excised\" for digestion and LC-MS/MS analysis; no offline peptide fractionation (e.g., high-pH RP) is mentioned.",
+        "TRUTH_CHECK": "Since no fractionation method is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" accurately reflects the lack of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "36",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "3",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The value \"36\" appears in the text, but it refers to the total number of samples (\"a total number of 36 samples\"), not the number of biological replicates per condition.",
+        "TRUTH_CHECK": "The text explicitly states \"Three biological replicates of each culture resulted in a total number of 36 samples,\" meaning the number of biological replicates is 3.",
+        "COMPLETENESS_CHECK": "The full set contains only the total sample count, which is factually incorrect for the \"replicates\" field."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for silent technical replication.",
+        "COMPLETENESS_CHECK": "The full set contains the single default value, which is complete for this paper."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes a \"Top20 method\" where the \"20 most intense peptide ions... were selected and fragmented,\" which is the definition of data-dependent acquisition (DDA).",
+        "TRUTH_CHECK": "The description of selecting the most intense ions for fragmentation is factually consistent with data-dependent acquisition.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method used in the study."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "-0.36913 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": "0.5 Da",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"-0.36913 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper explicitly states \"MS/MS tolerance = 0.5 Da\" in the Data Analysis section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values does not cover the correct value mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that ions \"were fragmented by CID\" in the Liquid Chromatography and Mass Spectrometry section.",
+        "TRUTH_CHECK": "\"collision-induced dissociation\" is the full name for the abbreviation \"CID\" used in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragmentation method mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Elite",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Liquid Chromatography and Mass Spectrometry\" section as the instrument used for analysis.",
+        "TRUTH_CHECK": "The paper states that an \"Orbitrap Elite hybrid ion trap-Orbitrap mass spectrometer (Thermo Fisher Scientific)\" was used.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of an \"Orbitrap Elite hybrid ion trap-Orbitrap mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used contains an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the mass analyzer used."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "7 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": "20 ppm",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"7 ppm\" does not appear in the provided paper text. The text explicitly states \"MS tolerance = 20 ppm\" in the Data Analysis section.",
+        "TRUTH_CHECK": "The value is factually incorrect based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it does not reflect the value stated in the paper."
+      }
+    }
+  ]
+}
