@@ -52,9 +52,11 @@ for pxd_dir in results_path.glob("PXD*"):
 
     # (4) copy /scratch/ims86/HAMLETruns/HAMLET_0/results/PXD000070/agentic_metadata/PXD000070.sdrf.tsv
     sdrf = pxd_dir / "agentic_metadata" / f"{pxd}.sdrf.tsv"
-    if sdrf.exists():
+    if sdrf.exists() and sum(1 for _ in sdrf.open()) > 1:
         shutil.copy2(sdrf, store_path / "agentic_results_files" / pxd / f"{pxd}.sdrf.tsv")
         print(f"  ✓ Copied {pxd}.sdrf.tsv")
+    elif sdrf.exists():
+        print(f"  ℹ {pxd}.sdrf.tsv contains only a header, skipping")
     else:
         print(f"  ✗ {pxd}.sdrf.tsv not found")
         
