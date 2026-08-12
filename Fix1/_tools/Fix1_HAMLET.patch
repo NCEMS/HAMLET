@@ -1,0 +1,295 @@
+diff --git a/src/python/sdrf_builder.py b/src/python/sdrf_builder.py
+index 6ad62bca..77d09f2b 100644
+--- a/src/python/sdrf_builder.py
++++ b/src/python/sdrf_builder.py
+@@ -70,6 +70,58 @@ class AgenticToSDRF:
+         "silac": "not available",
+     }
+ 
++    _TMT6_CHANNELS: list[str] = [
++        "TMT126", "TMT127", "TMT128", "TMT129", "TMT130", "TMT131",
++    ]
++    _TMT10_CHANNELS: list[str] = [
++        "TMT126", "TMT127N", "TMT127C", "TMT128N", "TMT128C",
++        "TMT129N", "TMT129C", "TMT130N", "TMT130C", "TMT131",
++    ]
++    _TMT11_CHANNELS: list[str] = _TMT10_CHANNELS + ["TMT131C"]
++    _TMT16_CHANNELS: list[str] = [
++        "TMT126", "TMT127N", "TMT127C", "TMT128N", "TMT128C",
++        "TMT129N", "TMT129C", "TMT130N", "TMT130C", "TMT131N",
++        "TMT131C", "TMT132N", "TMT132C", "TMT133N", "TMT133C", "TMT134N",
++    ]
++    _ITRAQ4_CHANNELS: list[str] = [
++        "iTRAQ114", "iTRAQ115", "iTRAQ116", "iTRAQ117",
++    ]
++    _ITRAQ8_CHANNELS: list[str] = [
++        "iTRAQ113", "iTRAQ114", "iTRAQ115", "iTRAQ116",
++        "iTRAQ117", "iTRAQ118", "iTRAQ119", "iTRAQ121",
++    ]
++    _SILAC_RK_CHANNELS: list[list[str]] = [
++        [
++            "AC=PRIDE:0000615;NT=SILAC heavy R:13C(6)15N(4)",
++            "AC=PRIDE:0000617;NT=SILAC heavy K:13C(6)15N(2)",
++        ],
++        [
++            "AC=PRIDE:0000611;NT=SILAC light R:12C(6)14N(4)",
++            "AC=PRIDE:0000613;NT=SILAC light K:12C(6)14N(2)",
++        ],
++    ]
++
++    _LABEL_CHANNELS: dict[str, list[list[str]]] = {
++        "tmt": [[c] for c in _TMT6_CHANNELS],
++        "tmt2": [[c] for c in _TMT6_CHANNELS[:2]],
++        "tmt6": [[c] for c in _TMT6_CHANNELS],
++        "tmt6plex": [[c] for c in _TMT6_CHANNELS],
++        "tmt10": [[c] for c in _TMT10_CHANNELS],
++        "tmt10plex": [[c] for c in _TMT10_CHANNELS],
++        "tmt11": [[c] for c in _TMT11_CHANNELS],
++        "tmt11plex": [[c] for c in _TMT11_CHANNELS],
++        "tmt16": [[c] for c in _TMT16_CHANNELS],
++        "tmt16plex": [[c] for c in _TMT16_CHANNELS],
++        "tmtpro": [[c] for c in _TMT16_CHANNELS],
++        "itraq": [[c] for c in _ITRAQ4_CHANNELS],
++        "itraq4": [[c] for c in _ITRAQ4_CHANNELS],
++        "itraq4plex": [[c] for c in _ITRAQ4_CHANNELS],
++        "itraq8": [[c] for c in _ITRAQ8_CHANNELS],
++        "itraq8plex": [[c] for c in _ITRAQ8_CHANNELS],
++        "silac": [list(c) for c in _SILAC_RK_CHANNELS],
++        "silac2": [list(c) for c in _SILAC_RK_CHANNELS],
++    }
++
+     # Ordered: more specific patterns first
+     _CLEAVAGE_PATTERNS: list[tuple[re.Pattern, str]] = [
+         (re.compile(r"chymotrypsin", re.I), "NT=Chymotrypsin;AC=MS:1001306"),
+@@ -345,15 +397,24 @@ class AgenticToSDRF:
+         raw = fd.get("spectra_stats", {}).get("acquisition_type") or self._ra_search.get("acquisition_type", "")
+         return self._map_acquisition(raw)
+ 
+-    def _get_label(self, raw_stem: str) -> str:
++    def _raw_label(self, raw_stem: str) -> str:
+         fd = self._ra_file_data(raw_stem)
+-        raw = (
++        return (
+             fd.get("summary", {}).get("labeling", {}).get("call")
+             or self._ra_search.get("labeling")
+             or self._quant_method
+             or ""
+         )
+-        return self._map_label(raw)
++
++    def _get_label(self, raw_stem: str) -> str:
++        return self._map_label(self._raw_label(raw_stem))
++
++    def _get_channels(self, raw_stem: str) -> list[list[str]]:
++        key = str(self._raw_label(raw_stem)).lower().strip().replace("-", "").replace(" ", "")
++        channels = self._LABEL_CHANNELS.get(key)
++        if channels:
++            return [list(c) for c in channels]
++        return [[self._get_label(raw_stem)]]
+ 
+     def _get_dissociation_method(self, raw_stem: str) -> str:
+         fd = self._ra_file_data(raw_stem)
+@@ -382,31 +443,60 @@ class AgenticToSDRF:
+     # Experiment-level extractors (parsed from protocol text)
+     # ------------------------------------------------------------------ #
+ 
++    def _tech_evidence(self, field: str) -> str:
++        entry = self._tech.get(field)
++        if not isinstance(entry, dict):
++            return ""
++        sources = entry.get("sources")
++        if not isinstance(sources, dict):
++            return ""
++        llm = sources.get("llm")
++        if not isinstance(llm, dict):
++            return ""
++        return str(llm.get("evidence") or "")
++
+     def _get_cleavage_agent(self) -> str:
+-        text = self._sample_proc + " " + self._data_proc
+-        for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
+-            if pattern.search(text):
+-                return sdrf_val
++        override = self._override_field("cleavage_agent")
++        if override:
++            for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
++                if pattern.search(override):
++                    return sdrf_val
++        for text in (
++            self._sample_proc + " " + self._data_proc,
++            " ".join([
++                self._agentic_field(self._tech, "cleavage_agent") or "",
++                self._tech_evidence("cleavage_agent"),
++            ]),
++        ):
++            for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
++                if pattern.search(text):
++                    return sdrf_val
+         return "not available"
+ 
+     def _get_reduction_reagent(self) -> str | None:
+-        t = self._sample_proc
+-        if re.search(r"dithiothreitol|\bDTT\b", t, re.I):
+-            return "dithiothreitol"
+-        if re.search(r"\bTCEP\b|tris\(2-carboxyethyl\)phosphine", t, re.I):
+-            return "tris(2-carboxyethyl)phosphine"
+-        if re.search(r"beta-mercaptoethanol|\b2-ME\b|\bBME\b", t, re.I):
+-            return "beta-mercaptoethanol"
++        for t in (self._sample_proc, " ".join([
++            self._agentic_field(self._tech, "reduction_reagent") or "",
++            self._tech_evidence("reduction_reagent"),
++        ])):
++            if re.search(r"dithiothreitol|\bDTT\b", t, re.I):
++                return "dithiothreitol"
++            if re.search(r"\bTCEP\b|tris\(2-carboxyethyl\)phosphine", t, re.I):
++                return "tris(2-carboxyethyl)phosphine"
++            if re.search(r"beta-mercaptoethanol|\b2-ME\b|\bBME\b", t, re.I):
++                return "beta-mercaptoethanol"
+         return None
+ 
+     def _get_alkylation_reagent(self) -> str | None:
+-        t = self._sample_proc
+-        if re.search(r"iodoacetamide|\bIAA\b", t, re.I):
+-            return "iodoacetamide"
+-        if re.search(r"chloroacetamide|\bCAA\b|2-chloroacetamide", t, re.I):
+-            return "chloroacetamide"
+-        if re.search(r"N-ethylmaleimide|\bNEM\b", t, re.I):
+-            return "N-ethylmaleimide"
++        for t in (self._sample_proc, " ".join([
++            self._agentic_field(self._tech, "alkylation_reagent") or "",
++            self._tech_evidence("alkylation_reagent"),
++        ])):
++            if re.search(r"iodoacetamide|\bIAA\b", t, re.I):
++                return "iodoacetamide"
++            if re.search(r"chloroacetamide|\bCAA\b|2-chloroacetamide", t, re.I):
++                return "chloroacetamide"
++            if re.search(r"N-ethylmaleimide|\bNEM\b", t, re.I):
++                return "N-ethylmaleimide"
+         return None
+ 
+     def _get_mass_tolerances(self) -> tuple[str | None, str | None]:
+@@ -535,7 +625,16 @@ class AgenticToSDRF:
+         Parse dataProcessingProtocol for explicit modification mentions.
+         Returns list of dicts: {uid, name, residues, mod_type}.
+         """
+-        text = self._data_proc + " " + self._sample_proc
++        text = " ".join([
++            self._data_proc,
++            self._sample_proc,
++            self._agentic_field(self._tech, "alkylation_reagent") or "",
++            self._tech_evidence("alkylation_reagent"),
++            self._agentic_field(self._tech, "ptm") or "",
++            self._tech_evidence("ptm"),
++            self._agentic_field(self._tech, "modification") or "",
++            self._tech_evidence("modification"),
++        ])
+         result: list[dict] = []
+         seen: set[int] = set()
+ 
+@@ -546,6 +645,8 @@ class AgenticToSDRF:
+ 
+         if re.search(r"carbamidomethyl", text, re.I):
+             _add(4, "Carbamidomethyl", "C", "Fixed")
++        elif self._get_alkylation_reagent() in ("iodoacetamide", "chloroacetamide"):
++            _add(4, "Carbamidomethyl", "C", "Fixed")
+         if re.search(r"\bTMT\b|\bTMTpro\b", text, re.I):
+             _add(730, "TMT6plex", "K", "Fixed")
+         if re.search(r"\biTRAQ\b", text, re.I):
+@@ -558,8 +659,18 @@ class AgenticToSDRF:
+             _add(21, "Phospho", "STY", "Variable")
+         if re.search(r"deamid", text, re.I):
+             _add(7, "Deamidation", "NQ", "Variable")
+-        if re.search(r"methylat", text, re.I):
+-            _add(34, "Methyl", "KR", "Variable")
++        methyl_k = r"\blysines?\b|\bLys\b(?!\s*-?\s*C\b)|[\(\[]\s*K\s*[\)\]]|\bon\s+K\b"
++        methyl_r = r"\barginines?\b|\bArg\b|[\(\[]\s*R\s*[\)\]]|\bon\s+R\b"
++        methyl_residues = ""
++        for m in re.finditer(r"\bmethylat\w*", text, re.I):
++            window = text[max(0, m.start() - 60): m.end() + 60]
++            if re.search(methyl_k, window, re.I):
++                methyl_residues += "K"
++            if re.search(methyl_r, window, re.I):
++                methyl_residues += "R"
++        methyl_residues = "".join(sorted(set(methyl_residues)))
++        if methyl_residues:
++            _add(34, "Methyl", methyl_residues, "Variable")
+ 
+         return result
+ 
+@@ -659,6 +770,7 @@ class AgenticToSDRF:
+         has_enrichment: bool,
+         has_fv_organism_part: bool,
+         has_factor_value: bool,
++        max_labels: int = 1,
+     ) -> list[str]:
+         cols: list[str] = [
+             "source name",
+@@ -684,7 +796,10 @@ class AgenticToSDRF:
+             "assay name",
+             "technology type",
+             "comment[proteomics data acquisition method]",
+-            "comment[label]",
++        ]
++        for j in range(max(1, max_labels)):
++            cols.append(f"comment[label]#{j}")
++        cols += [
+             "comment[instrument]",
+             "comment[cleavage agent details]",
+             "comment[fraction identifier]",
+@@ -763,6 +878,7 @@ class AgenticToSDRF:
+                 "instrument": instrument,
+                 "acq": self._get_acquisition_method(stem),
+                 "label": self._get_label(stem),
++                "channels": self._get_channels(stem),
+                 "dissociation": self._get_dissociation_method(stem),
+                 "ms2_analyzer": self._get_ms2_analyzer(instrument),
+                 "mods": self._get_modification_params(stem),
+@@ -772,6 +888,10 @@ class AgenticToSDRF:
+ 
+         # --- optional column flags ---
+         max_mods = max((len(pf["mods"]) for pf in per_file), default=0)
++        max_labels = max(
++            (len(ch) for pf in per_file for ch in pf["channels"]),
++            default=1,
++        )
+         has_cell_type = bool(cell_type)
+         has_cell_line = bool(cell_line)
+         has_prec_tol = bool(prec_tol)
+@@ -802,12 +922,16 @@ class AgenticToSDRF:
+             has_enrichment=has_enrichment,
+             has_fv_organism_part=has_fv_organism_part,
+             has_factor_value=has_factor_value,
++            max_labels=max_labels,
+         )
+ 
+         rows: list[dict] = []
+-        for i, pf in enumerate(per_file):
++        sample_index = 0
++        channel_rows = [(i, pf, ch) for i, pf in enumerate(per_file) for ch in pf["channels"]]
++        for i, pf, channel in channel_rows:
++            sample_index += 1
+             row: dict[str, str] = {}
+-            row["source name"] = f"{self.pxd_id}-Sample-{i + 1}"
++            row["source name"] = f"{self.pxd_id}-Sample-{sample_index}"
+             row["characteristics[organism]"] = organism
+             row["characteristics[organism part]"] = organism_part
+             row["characteristics[disease]"] = disease
+@@ -826,7 +950,8 @@ class AgenticToSDRF:
+             row["assay name"] = f"run {i + 1}"
+             row["technology type"] = "proteomic profiling by mass spectrometry"
+             row["comment[proteomics data acquisition method]"] = pf["acq"]
+-            row["comment[label]"] = pf["label"]
++            for j in range(max(1, max_labels)):
++                row[f"comment[label]#{j}"] = channel[j] if j < len(channel) else "not applicable"
+             row["comment[instrument]"] = pf["instrument"]
+             row["comment[cleavage agent details]"] = cleavage_agent
+             row["comment[fraction identifier]"] = fraction_identifier
+@@ -878,6 +1003,8 @@ class AgenticToSDRF:
+         def _header(col: str) -> str:
+             if col.startswith("comment[modification parameters]#"):
+                 return "comment[modification parameters]"
++            if col.startswith("comment[label]#"):
++                return "comment[label]"
+             return col
+ 
+         headers = [_header(c) for c in columns]

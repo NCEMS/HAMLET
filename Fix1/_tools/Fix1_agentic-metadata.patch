@@ -1,0 +1,37 @@
+diff --git a/agents/integration_agent.py b/agents/integration_agent.py
+index b0d5e09..173d518 100644
+--- a/agents/integration_agent.py
++++ b/agents/integration_agent.py
+@@ -12,6 +12,10 @@ from typing import Optional
+ from core.field_mappings import AGENT_FIELDS, ALL_AGENT_FIELDS
+ 
+ 
++def _normalize_field_key(name: str) -> str:
++    return re.sub(r"[\s\-]+", "_", str(name).strip().lower())
++
++
+ class IntegrationAgent:
+     """
+     Enriches extracted metadata with METI technical pipeline data using PMID matching.
+@@ -686,10 +690,19 @@ class IntegrationAgent:
+ 
+         # Iterate ONLY over target fields for this agent
+         disagreements = []  # Collect RA disagreements for logging
+-        
++
++        extracted_by_norm_key = {}
++        for raw_key, raw_val in extracted.items():
++            if not isinstance(raw_key, str) or raw_key.startswith('_'):
++                continue
++            extracted_by_norm_key.setdefault(_normalize_field_key(raw_key), raw_val)
++
+         for field in target_fields:
+             # 1. Get LLM Value
+-            llm_value = extracted.get(field)
++            if field in extracted:
++                llm_value = extracted[field]
++            else:
++                llm_value = extracted_by_norm_key.get(_normalize_field_key(field))
+             
+             # 2. Get METI value
+             ra_value = None
