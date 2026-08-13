@@ -70,6 +70,55 @@ class AgenticToSDRF:
         "silac": "not available",
     }
 
+    # label channels per multiplex scheme. names and SILAC accessions
+    # follow the curated SDRF files in assets/gold_standard_sdrfs/.
+    _TMT6_CHANNELS: list[str] = [
+        "TMT126", "TMT127", "TMT128", "TMT129", "TMT130", "TMT131",
+    ]
+    _TMT10_CHANNELS: list[str] = [
+        "TMT126", "TMT127N", "TMT127C", "TMT128N", "TMT128C",
+        "TMT129N", "TMT129C", "TMT130N", "TMT130C", "TMT131",
+    ]
+    _TMT11_CHANNELS: list[str] = _TMT10_CHANNELS + ["TMT131C"]
+    _TMT16_CHANNELS: list[str] = [
+        "TMT126", "TMT127N", "TMT127C", "TMT128N", "TMT128C",
+        "TMT129N", "TMT129C", "TMT130N", "TMT130C", "TMT131N",
+        "TMT131C", "TMT132N", "TMT132C", "TMT133N", "TMT133C", "TMT134N",
+    ]
+    _ITRAQ4_CHANNELS: list[str] = ["iTRAQ114", "iTRAQ115", "iTRAQ116", "iTRAQ117"]
+    _ITRAQ8_CHANNELS: list[str] = [
+        "iTRAQ113", "iTRAQ114", "iTRAQ115", "iTRAQ116",
+        "iTRAQ117", "iTRAQ118", "iTRAQ119", "iTRAQ121",
+    ]
+    # SILAC carries one label term per labelled residue so a channel is a list.
+    _SILAC_RK_CHANNELS: list[list[str]] = [
+        ["AC=PRIDE:0000615;NT=SILAC heavy R:13C(6)15N(4)",
+         "AC=PRIDE:0000617;NT=SILAC heavy K:13C(6)15N(2)"],
+        ["AC=PRIDE:0000611;NT=SILAC light R:12C(6)14N(4)",
+         "AC=PRIDE:0000613;NT=SILAC light K:12C(6)14N(2)"],
+    ]
+
+    _LABEL_CHANNELS: dict[str, list[list[str]]] = {
+        "tmt": [[c] for c in _TMT6_CHANNELS],
+        "tmt2": [[c] for c in _TMT6_CHANNELS[:2]],
+        "tmt6": [[c] for c in _TMT6_CHANNELS],
+        "tmt6plex": [[c] for c in _TMT6_CHANNELS],
+        "tmt10": [[c] for c in _TMT10_CHANNELS],
+        "tmt10plex": [[c] for c in _TMT10_CHANNELS],
+        "tmt11": [[c] for c in _TMT11_CHANNELS],
+        "tmt11plex": [[c] for c in _TMT11_CHANNELS],
+        "tmt16": [[c] for c in _TMT16_CHANNELS],
+        "tmt16plex": [[c] for c in _TMT16_CHANNELS],
+        "tmtpro": [[c] for c in _TMT16_CHANNELS],
+        "itraq": [[c] for c in _ITRAQ4_CHANNELS],
+        "itraq4": [[c] for c in _ITRAQ4_CHANNELS],
+        "itraq4plex": [[c] for c in _ITRAQ4_CHANNELS],
+        "itraq8": [[c] for c in _ITRAQ8_CHANNELS],
+        "itraq8plex": [[c] for c in _ITRAQ8_CHANNELS],
+        "silac": [list(c) for c in _SILAC_RK_CHANNELS],
+        "silac2": [list(c) for c in _SILAC_RK_CHANNELS],
+    }
+
     # Ordered: more specific patterns first
     _CLEAVAGE_PATTERNS: list[tuple[re.Pattern, str]] = [
         (re.compile(r"chymotrypsin", re.I), "NT=Chymotrypsin;AC=MS:1001306"),
@@ -345,15 +394,25 @@ class AgenticToSDRF:
         raw = fd.get("spectra_stats", {}).get("acquisition_type") or self._ra_search.get("acquisition_type", "")
         return self._map_acquisition(raw)
 
-    def _get_label(self, raw_stem: str) -> str:
+    def _raw_label(self, raw_stem: str) -> str:
         fd = self._ra_file_data(raw_stem)
-        raw = (
+        return (
             fd.get("summary", {}).get("labeling", {}).get("call")
             or self._ra_search.get("labeling")
             or self._quant_method
             or ""
         )
-        return self._map_label(raw)
+
+    def _get_label(self, raw_stem: str) -> str:
+        return self._map_label(self._raw_label(raw_stem))
+
+    def _get_channels(self, raw_stem: str) -> list[list[str]]:
+        """label channels for this file. one entry per SDRF row to emit."""
+        key = str(self._raw_label(raw_stem)).lower().strip().replace("-", "").replace(" ", "")
+        channels = self._LABEL_CHANNELS.get(key)
+        if channels:
+            return [list(c) for c in channels]
+        return [[self._get_label(raw_stem)]]
 
     def _get_dissociation_method(self, raw_stem: str) -> str:
         fd = self._ra_file_data(raw_stem)
@@ -659,6 +718,7 @@ class AgenticToSDRF:
         has_enrichment: bool,
         has_fv_organism_part: bool,
         has_factor_value: bool,
+        max_labels: int = 1,
     ) -> list[str]:
         cols: list[str] = [
             "source name",
@@ -684,7 +744,10 @@ class AgenticToSDRF:
             "assay name",
             "technology type",
             "comment[proteomics data acquisition method]",
-            "comment[label]",
+        ]
+        for j in range(max(1, max_labels)):
+            cols.append(f"comment[label]#{j}")
+        cols += [
             "comment[instrument]",
             "comment[cleavage agent details]",
             "comment[fraction identifier]",
@@ -763,6 +826,7 @@ class AgenticToSDRF:
                 "instrument": instrument,
                 "acq": self._get_acquisition_method(stem),
                 "label": self._get_label(stem),
+                "channels": self._get_channels(stem),
                 "dissociation": self._get_dissociation_method(stem),
                 "ms2_analyzer": self._get_ms2_analyzer(instrument),
                 "mods": self._get_modification_params(stem),
@@ -772,6 +836,7 @@ class AgenticToSDRF:
 
         # --- optional column flags ---
         max_mods = max((len(pf["mods"]) for pf in per_file), default=0)
+        max_labels = max((len(ch) for pf in per_file for ch in pf["channels"]), default=1)
         has_cell_type = bool(cell_type)
         has_cell_line = bool(cell_line)
         has_prec_tol = bool(prec_tol)
@@ -802,12 +867,16 @@ class AgenticToSDRF:
             has_enrichment=has_enrichment,
             has_fv_organism_part=has_fv_organism_part,
             has_factor_value=has_factor_value,
+            max_labels=max_labels,
         )
 
         rows: list[dict] = []
-        for i, pf in enumerate(per_file):
+        sample_index = 0
+        channel_rows = [(i, pf, ch) for i, pf in enumerate(per_file) for ch in pf["channels"]]
+        for i, pf, channel in channel_rows:
+            sample_index += 1
             row: dict[str, str] = {}
-            row["source name"] = f"{self.pxd_id}-Sample-{i + 1}"
+            row["source name"] = f"{self.pxd_id}-Sample-{sample_index}"
             row["characteristics[organism]"] = organism
             row["characteristics[organism part]"] = organism_part
             row["characteristics[disease]"] = disease
@@ -826,7 +895,8 @@ class AgenticToSDRF:
             row["assay name"] = f"run {i + 1}"
             row["technology type"] = "proteomic profiling by mass spectrometry"
             row["comment[proteomics data acquisition method]"] = pf["acq"]
-            row["comment[label]"] = pf["label"]
+            for j in range(max(1, max_labels)):
+                row[f"comment[label]#{j}"] = channel[j] if j < len(channel) else "not applicable"
             row["comment[instrument]"] = pf["instrument"]
             row["comment[cleavage agent details]"] = cleavage_agent
             row["comment[fraction identifier]"] = fraction_identifier
@@ -878,6 +948,8 @@ class AgenticToSDRF:
         def _header(col: str) -> str:
             if col.startswith("comment[modification parameters]#"):
                 return "comment[modification parameters]"
+            if col.startswith("comment[label]#"):
+                return "comment[label]"
             return col
 
         headers = [_header(c) for c in columns]
