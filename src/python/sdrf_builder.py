@@ -326,7 +326,20 @@ class AgenticToSDRF:
         mzml = self._stem_to_mzml.get(raw_stem)
         return self._ra_files.get(mzml, {}) if mzml else {}
 
-    def _get_instrument(self, raw_stem: str) -> str:
+    def _meti_accession(self, field: str) -> tuple[str, str]:
+        """the METI value and its accession for a TechnicalAgent field."""
+        entry = self._tech.get(field)
+        if not isinstance(entry, dict):
+            return "", ""
+        sources = entry.get("sources")
+        if not isinstance(sources, dict):
+            return "", ""
+        meti = sources.get("meti")
+        if not isinstance(meti, dict):
+            return "", ""
+        return str(meti.get("value") or ""), str(meti.get("accession") or "")
+
+    def _get_instrument_name(self, raw_stem: str) -> str:
         override = self._override_field("instrument")
         if override:
             return override
@@ -339,6 +352,17 @@ class AgenticToSDRF:
             return val
         km = self._ra_knowledge.get("instrument_model")
         return str(km) if km else "not available"
+
+    def _get_instrument(self, raw_stem: str) -> str:
+        name = self._get_instrument_name(raw_stem)
+        if name == "not available":
+            return name
+        # the enrichment step already resolved an MS accession for this model,
+        # so pair it with the name instead of writing the bare string.
+        meti_value, accession = self._meti_accession("instrument")
+        if accession and meti_value.strip().lower() == name.strip().lower():
+            return f"NT={name};AC={accession}"
+        return name
 
     def _get_acquisition_method(self, raw_stem: str) -> str:
         fd = self._ra_file_data(raw_stem)
@@ -764,7 +788,7 @@ class AgenticToSDRF:
                 "acq": self._get_acquisition_method(stem),
                 "label": self._get_label(stem),
                 "dissociation": self._get_dissociation_method(stem),
-                "ms2_analyzer": self._get_ms2_analyzer(instrument),
+                "ms2_analyzer": self._get_ms2_analyzer(self._get_instrument_name(stem)),
                 "mods": self._get_modification_params(stem),
                 "treatment": self._get_treatment(raw_file),
                 "enrichment": self._get_enrichment_process(raw_file),
