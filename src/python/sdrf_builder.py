@@ -218,19 +218,28 @@ class AgenticToSDRF:
     # Sample characteristics extractors
     # ------------------------------------------------------------------ #
 
+    @staticmethod
+    def _format_organism(name: str) -> str:
+        """species names are written Genus species so the first letter is a
+        capital and the rest of the source casing is kept as it is. any common
+        name in brackets is dropped, for example Homo sapiens (human)."""
+        name = re.sub(r"\s*\([^)]+\)", "", str(name)).strip()
+        if not name:
+            return ""
+        return name[0].upper() + name[1:]
+
     def _get_organism(self) -> str:
         override = self._override_field("organism")
         if override:
-            return override.lower()
+            return self._format_organism(override)
         for field in ("species", "organism"):
             val = self._agentic_field(self._bio, field)
             if val:
-                return val.lower()
+                return self._format_organism(val)
         if self._pride_organisms:
-            name = self._pride_organisms[0].get("name", "")
-            name = re.sub(r"\s*\([^)]+\)", "", name).strip()
+            name = self._format_organism(self._pride_organisms[0].get("name", ""))
             if name:
-                return name.lower()
+                return name
         return "not available"
 
     def _get_organism_part(self) -> str:
