@@ -110,6 +110,22 @@ nextflow run main.nf \
   -resume
 ```
 
+### Globus download and runAssessor-only mode
+
+Use `--globus` to transfer selected PRIDE RAW files from the EMBL-EBI Public Data collection. The Globus CLI must be authenticated, and Globus Connect Personal must expose `--central_mzml_dir` on the destination host.
+
+Use `--runAssessorOnly` to stop after `fetch_pxd` and `run_assessor`; no acquisition detection, organism identification, search, aggregation, or agentic processes are launched.
+
+```bash
+nextflow run main.nf \
+  -c assets/nextflow_configs/nextflow_JS2.config \
+  --pxd PXD000070 \
+  --globus \
+  --runAssessorOnly \
+  --max_raw_files 1 \
+  -resume
+```
+
 ### Batch from CSV
 
 The CSV must have a `PXD` column:
@@ -344,6 +360,10 @@ python src/python/pride_survey.py \
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `--max_raw_files` | `30` | Max RAW files per PXD (`null` = all) |
+| `--globus` | `false` | Transfer PRIDE RAW files using Globus instead of aria2c/wget |
+| `--globus_source_collection` | EMBL-EBI Public Data | Source Globus collection UUID |
+| `--globus_destination_collection` | local collection | Destination UUID; discovered with `globus endpoint local-id` when unset |
+| `--globus_destination_base` | `central_mzml_dir` | Destination collection path corresponding to central storage |
 | `--use_aria2c` | `true` | Parallel downloads via aria2c |
 | `--aria2c_threads` | `16` | aria2c concurrency per download |
 | `--download_timeout` | `4h` | Timeout for download + mzML conversion |
@@ -400,6 +420,7 @@ python src/python/pride_survey.py \
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
+| `--runAssessorOnly` | `false` | Run only `fetch_pxd` and `run_assessor`, then stop |
 | `--runassessor_submodule_dir` | `submodules/runassessor` | Preferred runAssessor submodule directory |
 | `--runassessor_script` | `submodules/runassessor/src/runassessor.py` | Script used by dedicated `run_assessor` stage |
 
@@ -415,12 +436,23 @@ python src/python/pride_survey.py \
 
 ## Output layout
 
-Each processed PXD produces a subdirectory under `--outdir`:
+Converted spectra have one canonical location under `--central_mzml_dir` (default: `spectral_files`). A downloaded RAW file is deleted only after its same-stem mzML file passes validation. The full pipeline and `--runAssessorOnly` both use this same storage policy.
+
+```text
+spectral_files/
+└── PXDxxxxxx/
+  ├── run-01.mzML                         # Canonical spectrum file
+  ├── PXDxxxxxx_PRIDEmetadata.json
+  ├── pmc_json/
+  └── runAssessor/
+    └── study_metadata.json
+```
+
+Spectral directories are not copied into `--outdir`. Each processed PXD publishes derived results only:
 
 ```
 results/
 └── PXDxxxxxx/
-    ├── mzML/                                # Converted mzML files
     ├── organism_results/                    # Casanovo + Peptonizer2000 outputs
     ├── search/                              # SAGE or DIA-NN search results
     ├── llm_results/                         # LLM-extracted metadata (if enabled)
@@ -445,8 +477,11 @@ The `*_aggregated_results.json` is the primary deliverable: a single document wi
 ```
 main.nf                      # Pipeline entrypoint
 nextflow.config              # All parameters and process resources
+master.csv                   # Full PRIDE survey master dataset
+subset.csv                   # Analysis subset of master.csv
 src/
   setup.sh                   # Environment bootstrap
+  BaselinePrompt.txt         # LLM prompt template for baseline metadata extraction
   conda_envs/                # Environment YAML definitions
   casanovoBolt/              # Optimized Casanovo fork (BF16, larger batches for RTX Ada)
   cascadiaBolt/              # Optimized Cascadia fork (BF16, larger batches for RTX Ada)
@@ -454,15 +489,34 @@ src/
     OrganismID.py            # Organism identification orchestrator (de novo + Peptonizer)
     run_agentic_metadata.py  # Standalone agentic extraction + SDRF script
     sdrf_builder.py          # AgenticToSDRF class (SDRF-Proteomics v1.1.0)
+    conflictAssessment.py    # SDRF field-level conflict assessment vs PRIDE/user SDRFs
+    pride_survey.py          # PRIDE Archive survey and master.csv builder
   agentic-metadata/          # Multi-agent metadata extraction system
-  bash/                      # Helper bash scripts
+  analysis/
+    plot_style.py            # Shared matplotlib style helpers for figures
+    Figure1/  Figure3/  Figure4/
+  bash/
+    EXAMPLE.sh               # Annotated pipeline invocation examples
+    run_single_pxd_test.sh   # Single-PXD test harness
+    download_ncbi_taxonomy.sh
+    install_search_tools.sh
+  command_lists/             # Batch command files for parallel execution
+    conflict_assessment.cmds # conflictAssessment.py batch run over gold-standard PXDs
+    run_agentic_metadata.cmds
 assets/
   cascadia.ckpt              # Cascadia model (download separately)
   default_sage.config        # Default SAGE search parameters
   UniversalContaminats.fasta # Contaminant sequences
   taxid_lists/               # Allowed organism taxid lists
-store/                       # Agentic extraction outputs and SDRF files
-docs/                        # Implementation notes and architecture docs
+  pxd_lists/                 # PXD accession lists (batch inputs, test sets, tracking)
+  nextflow_configs/          # Site-specific Nextflow config overrides (JS2, CyVerse)
+  gold_standard_sdrfs/       # Curated reference SDRFs for conflict assessment
+  pxd_test_files/            # Test PXD sets for CI/CD validation
+docs/
+  PLOT_STYLE_GUIDE.md        # Figure style conventions
+  architecture/              # Architecture diagrams and design notes
+  guides/                    # How-to guides for pipeline operation
+store/                       # Aggregated results, SDRFs, and agentic outputs (see store/README.md)
 ```
 
 ---

@@ -54,6 +54,8 @@ FIGURE3_DIR = Path(__file__).resolve().parent
 REPO_ROOT = FIGURE3_DIR.parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+if str(REPO_ROOT / "src" / "analysis") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "src" / "analysis"))
 if str(FIGURE3_DIR) not in sys.path:
     sys.path.insert(0, str(FIGURE3_DIR))
 

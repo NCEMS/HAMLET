@@ -6,16 +6,16 @@ This guide explains how to run the complete HAMLET Nextflow pipeline on a single
 
 ```bash
 # Run full pipeline on a single PXD
-./run_single_pxd_test.sh PXD000070
+./src/bash/run_single_pxd_test.sh PXD000070
 
 # Quick test (limit to 3 RAW files)
-./run_single_pxd_test.sh PXD000070 --max_raw_files 3
+./src/bash/run_single_pxd_test.sh PXD000070 --max_raw_files 3
 
 # Resume a previous run
-./run_single_pxd_test.sh PXD000070 -resume
+./src/bash/run_single_pxd_test.sh PXD000070 -resume
 
 # Using SLURM executor
-./run_single_pxd_test.sh PXD000070 --profile slurm
+./src/bash/run_single_pxd_test.sh PXD000070 --profile slurm
 ```
 
 ## What the Pipeline Does
@@ -72,7 +72,7 @@ Ensure sufficient free disk space (per PXD):
 ### Basic Run: Full Pipeline
 
 ```bash
-./run_single_pxd_test.sh PXD000070
+./src/bash/run_single_pxd_test.sh PXD000070
 ```
 
 This will:
@@ -88,7 +88,7 @@ This will:
 For fast validation, process only the first few RAW files:
 
 ```bash
-./run_single_pxd_test.sh PXD000070 --max_raw_files 3
+./src/bash/run_single_pxd_test.sh PXD000070 --max_raw_files 3
 ```
 
 **Estimated time:** 15–30 minutes
@@ -98,7 +98,7 @@ For fast validation, process only the first few RAW files:
 If a run was interrupted, resume from the last checkpoint:
 
 ```bash
-./run_single_pxd_test.sh PXD000070 -resume
+./src/bash/run_single_pxd_test.sh PXD000070 -resume
 ```
 
 Nextflow will skip completed stages and continue from where it left off.
@@ -108,8 +108,8 @@ Nextflow will skip completed stages and continue from where it left off.
 If automatic detection fails, force DDA or DIA:
 
 ```bash
-./run_single_pxd_test.sh PXD000070 --acquisition_type DDA
-./run_single_pxd_test.sh PXD000070 --acquisition_type DIA
+./src/bash/run_single_pxd_test.sh PXD000070 --acquisition_type DDA
+./src/bash/run_single_pxd_test.sh PXD000070 --acquisition_type DIA
 ```
 
 ### Provide Fallback Taxid
@@ -117,7 +117,7 @@ If automatic detection fails, force DDA or DIA:
 If organism identification fails, provide a known taxid:
 
 ```bash
-./run_single_pxd_test.sh PXD000070 --taxid 9606  # Human
+./src/bash/run_single_pxd_test.sh PXD000070 --taxid 9606  # Human
 ```
 
 ### Using SLURM Executor
@@ -125,7 +125,7 @@ If organism identification fails, provide a known taxid:
 Run on an HPC cluster with SLURM:
 
 ```bash
-./run_single_pxd_test.sh PXD000070 --profile slurm
+./src/bash/run_single_pxd_test.sh PXD000070 --profile slurm
 ```
 
 This requires SLURM configuration in `nextflow.config`.
@@ -133,7 +133,7 @@ This requires SLURM configuration in `nextflow.config`.
 ### Debug Mode (Verbose Output)
 
 ```bash
-./run_single_pxd_test.sh PXD000070 --debug_mode true
+./src/bash/run_single_pxd_test.sh PXD000070 --debug_mode true
 ```
 
 ## Output Structure
@@ -202,8 +202,8 @@ ls -lh results/PXD000070/
 
 **Solution:** Use format `PXDxxxxxx` (6 digits after PXD):
 ```bash
-./run_single_pxd_test.sh PXD000070  # ✓ Correct
-./run_single_pxd_test.sh PXD00070   # ✗ Wrong (5 digits)
+./src/bash/run_single_pxd_test.sh PXD000070  # ✓ Correct
+./src/bash/run_single_pxd_test.sh PXD00070   # ✗ Wrong (5 digits)
 ```
 
 ### Error: "Nextflow not found"
@@ -219,7 +219,7 @@ sudo mv nextflow /usr/local/bin/
 **Solution:** Run from the HAMLET repository root:
 ```bash
 cd /mnt/storage_1/HAMLET
-./run_single_pxd_test.sh PXD000070
+./src/bash/run_single_pxd_test.sh PXD000070
 ```
 
 ### Error: "Conda environment not found"
@@ -237,7 +237,7 @@ bash src/setup.sh
 
 **Solution:** Increase available disk space or use `--max_raw_files` to limit processing:
 ```bash
-./run_single_pxd_test.sh PXD000070 --max_raw_files 2
+./src/bash/run_single_pxd_test.sh PXD000070 --max_raw_files 2
 ```
 
 ### Error: "LLM API key not set" (for agentic stages)
@@ -245,7 +245,7 @@ bash src/setup.sh
 **Solution:** Set the API key:
 ```bash
 export OPENAI_API_KEY="sk-..."
-./run_single_pxd_test.sh PXD000070
+./src/bash/run_single_pxd_test.sh PXD000070
 ```
 
 ## Performance Tips
@@ -262,7 +262,7 @@ export OPENAI_API_KEY="sk-..."
 ### Custom Nextflow Config
 
 ```bash
-./run_single_pxd_test.sh PXD000070 -c custom.config
+./src/bash/run_single_pxd_test.sh PXD000070 -c custom.config
 ```
 
 ### Skip Certain Stages
@@ -274,7 +274,7 @@ Modify `nextflow.config` or use stage manifest (see README.md for details).
 ```bash
 for pxd in PXD000070 PXD000312 PXD000534; do
     echo "Processing $pxd..."
-    ./run_single_pxd_test.sh "$pxd" --max_raw_files 3 || echo "Failed: $pxd"
+    ./src/bash/run_single_pxd_test.sh "$pxd" --max_raw_files 3 || echo "Failed: $pxd"
 done
 ```
 
@@ -312,7 +312,7 @@ See `assets/pxd_test_files/README.md` for details on test datasets.
 - **Main README:** [README.md](../README.md) — Full pipeline documentation
 - **Test Files:** [assets/pxd_test_files/README.md](../assets/pxd_test_files/README.md) — Test dataset information
 - **Architecture:** [docs/ARCHITECTURE.md](ARCHITECTURE.md) — Pipeline design
-- **Script:** [./run_single_pxd_test.sh](../run_single_pxd_test.sh)
+- **Script:** [./src/bash/run_single_pxd_test.sh](../src/bash/run_single_pxd_test.sh)
 
 ## FAQ
 
@@ -342,5 +342,5 @@ See `assets/pxd_test_files/README.md` for details on test datasets.
 ---
 
 **Last Updated:** 2026  
-**Script Location:** `./run_single_pxd_test.sh`  
+**Script Location:** `./src/bash/run_single_pxd_test.sh`  
 **Documentation:** `docs/RUNNING_SINGLE_PXD_AGENTIC.md`

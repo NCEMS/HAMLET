@@ -119,16 +119,95 @@ intermediate_files/PXD######/
 
 ---
 
+## STATUS — as of 2026-08-18
+
+### 1. `aggregated_results_files/` — 2,756 PXDs
+
+**Pipeline version breakdown:**
+
+| `pipeline_version` | Count | Description |
+|---|---|---|
+| `1.0` | **2,647** | Full HAMLET pipeline run (fetch → assessor → organism ID → search → aggregation) |
+| `agentic_only_1.0` | **109** | Agentic-metadata-only pass; wet-lab pipeline stages skipped |
+
+**Stage coverage across the 2,647 full-pipeline (`v1.0`) records:**
+
+| Stage | PXDs with output | Coverage |
+|---|---|---|
+| runAssessor | 2,647 | 100% |
+| PRIDE metadata | 2,647 | 100% |
+| SAGE search results | 2,622 | 99% |
+| Organism identification | 2,261 | 85% |
+| PTM-Shepherd open search | 1,425 | 54% |
+| Modification site fractions | 1,369 | 52% |
+| LLM extracted metadata | 1,393 | 53% |
+| PTM-Shepherd closed search | 0 | 0% — not yet run pipeline-wide |
+
+Total spectral files indexed across all full-pipeline PXDs: **8,744**
+
+**`agentic_only_1.0` breakdown (109 PXDs):**
+
+| Category | Count |
+|---|---|
+| Never processed by full pipeline (single commit, always agentic-only) | 109 |
+| Previously had full `v1.0` data, downgraded by a later commit (now restored) | 9 *(restored 2026-08-18)* |
+
+The 9 previously-downgraded PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) have been restored to their richest `v1.0` git history version. They are now counted under `v1.0` above.
+
+---
+
+### 2. `hamlet_sdrfs/` — 306 PXDs
+
+306 curated SDRF TSV files produced by the agentic metadata extraction stage. These are a strict subset of the PXDs that completed the full agentic pipeline. Every SDRF has been validated against the PRIDE SDRF column specification.
+
+---
+
+### 3. `agentic_results_files/` — 1,820 PXDs
+
+Raw per-agent LLM extraction outputs (BiologicalAgent, ExperimentalDesignAgent, TechnicalAgent) for 1,820 PXDs. This is a superset of `hamlet_sdrfs/` — not all agentic runs produced a passing SDRF. The gap between 1,820 (agentic runs) and 306 (final SDRFs) reflects LLM quality filtering, judge-stage failures, and datasets excluded from SDRF scope.
+
+---
+
+## Pipeline version reference
+
+Two version strings appear in `aggregated_results_files/` JSONs and have distinct meanings:
+
+### Top-level `pipeline_version`
+
+Controls which stages ran and what data is present in the file.
+
+| Value | Stages present | When assigned |
+|---|---|---|
+| `1.0` | runAssessor, organism_id, SAGE search, PTM-Shepherd, LLM extraction, PRIDE metadata, consolidated_pipeline event log | Full HAMLET pipeline run (`main.nf` without `--runAgenticOnly`) |
+| `agentic_only_1.0` | runAssessor state block only; all other stages set to `"status": "skipped_agentic_only"` | Agentic-only run (`--runAgenticOnly` flag) or `runAssessor`-only run where aggregation was written before full processing |
+
+Key structural differences between the two:
+
+| Field | `v1.0` | `agentic_only_1.0` |
+|---|---|---|
+| `runAssessor.files` | Full per-file spectral characterisation (ROI peaks, charge dist., labeling) | Empty `{}` |
+| `organism_identification` | Casanovo de novo + Peptonizer2000 scores + final taxid | `{"status": "skipped_agentic_only", "results": {}}` |
+| `PTM-shepherd_open_search` | PTM mass-shift profile from open search | `{"status": "skipped_agentic_only", "results": {}}` |
+| `Search_and_modification_results` | SAGE PSM/peptide/protein counts, per-file breakdown | `{"status": "skipped_agentic_only", "files": {}}` |
+| `modification_site_fractions` | Per-residue mod abundance fractions | `{"status": "skipped_agentic_only", "data": {}}` |
+| `consolidated_pipeline` | Full lifecycle event log with taxid decisions, quality gates, key findings | `{"status": "minimal_agentic_only", "data": {}}` |
+| `processing_summary` | Boolean flags per stage + `total_data_files` count | `{"status": "minimal_agentic_only", "total_files": 0}` |
+
+### Nested `consolidated_pipeline.pipeline_version`
+
+Present only in `v1.0` files. Always `v2.0.0`. This is the schema version of the pipeline event log sub-document (the orchestrator that records stage lifecycle, taxid mapping decisions, and key findings), independent of the top-level pipeline version.
+
+---
+
 ## Coverage
 
-As of the most recent tarball generation:
+As of 2026-08-18:
 
-| Directory | PXD count |
-|---|---|
-| `aggregated_results_files/` | 2,317 |
-| `hamlet_sdrfs/` | 299 |
-| `agentic_results_files/` | 1,705 |
-| `intermediate_files/` | 2,317 |
+| Directory | PXD count | Disk |
+|---|---|---|
+| `aggregated_results_files/` | 2,756 | 507 MB |
+| `agentic_results_files/` | 1,820 | 191 MB |
+| `hamlet_sdrfs/` | 306 | 1.3 MB |
 
 ---
 
@@ -136,4 +215,5 @@ As of the most recent tarball generation:
 
 | Date | Version | Notes |
 |------|---------|-------|
+| 2026-08-18 | — | Restored 9 PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) from git history to their richest `v1.0` versions after they were incorrectly overwritten with `agentic_only_1.0` shells. Added STATUS section and pipeline version reference to README. |
 | 2026-06-04 | v1.0 | Initial store tarball. 2,317 PXDs processed from PRIDE Archive. Includes organism ID (Casanovo + Peptonizer2000), SAGE open/closed search, LLM baseline extraction, and agentic SDRF generation. |

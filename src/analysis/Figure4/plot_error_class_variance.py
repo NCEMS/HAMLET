@@ -31,6 +31,8 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+if str(REPO_ROOT / "src" / "analysis") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "src" / "analysis"))
 
 from plot_style import COLORS, clean_axes, add_suptitle, save_fig  # noqa: E402
 

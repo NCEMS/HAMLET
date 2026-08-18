@@ -354,5 +354,5 @@ echo "  3. Run pipeline: nextflow run main.nf --pxd PXD003539 -resume"
 echo ""
 echo "For more information, see:"
 echo "  - README.md - Project overview & setup guide"
-echo "  - EXAMPLE.sh - Example pipeline invocations"
+echo "  - src/bash/EXAMPLE.sh - Example pipeline invocations"
 
