@@ -9,7 +9,10 @@ import shutil
 from typing import List, Any, Dict, Optional
 import json
 import zipfile
+import shlex
+import tempfile
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 # Add parent directory to path for importing PipelineLogger and pmc_client
 sys.path.insert(0, str(Path(__file__).parent))
@@ -17,6 +20,7 @@ from PipelineLogger import PipelineLogger
 from pmc_client import PMCClient
 
 EXIT_NO_RAW_FILES = 42
+PRIDE_GLOBUS_COLLECTION = "47772002-3e5b-4fd3-b97c-18cee38d6df2"
 ###################################################################################################################################################
 def fetch_pride_project_and_files(pxd: str, page_size: int = 200, timeout: int = 20, max_pages: Optional[int] = 100, session: Optional[requests.Session] = None) -> Dict[str, Any]:
     """
@@ -190,6 +194,131 @@ def _wget(url: str, outfile_path: str):
     ]
     print("Running command:", " ".join(cmd))
     return subprocess.run(cmd, check=True, capture_output=True, text=True)
+
+
+def select_raw_file_records(files_info: List[Dict[str, Any]], max_raw_files: Optional[int] = None) -> List[Dict[str, str]]:
+    selected = []
+    seen = set()
+    for file_record in files_info:
+        file_name = file_record.get("fileName")
+        if not file_name or not file_name.lower().endswith(".raw") or file_name in seen:
+            continue
+
+        ftp_url = next(
+            (
+                location.get("value")
+                for location in (file_record.get("publicFileLocations") or [])
+                if (location.get("value") or "").startswith("ftp://")
+            ),
+            None,
+        )
+        if not ftp_url:
+            print(f"Skipping .raw file without a PRIDE FTP location: {file_name}")
+            continue
+
+        selected.append({"file_name": file_name, "ftp_url": ftp_url})
+        seen.add(file_name)
+        if max_raw_files and len(selected) >= max_raw_files:
+            break
+    return selected
+
+
+def pride_ftp_url_to_globus_path(ftp_url: str) -> str:
+    parsed = urlparse(ftp_url)
+    prefix = "/pride/data/archive/"
+    if parsed.hostname != "ftp.pride.ebi.ac.uk" or not parsed.path.startswith(prefix):
+        raise ValueError(f"Unsupported PRIDE FTP URL for Globus transfer: {ftp_url}")
+    return "/pride-archive/" + unquote(parsed.path[len(prefix):])
+
+
+def transfer_files_via_globus(
+    pxd: str,
+    selected_files: List[Dict[str, str]],
+    pxd_dir: str,
+    source_collection: str,
+    destination_collection: Optional[str],
+    destination_base: Optional[str],
+) -> str:
+    globus_executable = shutil.which("globus")
+    if not globus_executable:
+        raise RuntimeError("Globus was requested, but the 'globus' CLI is not available in PATH")
+
+    if not destination_collection:
+        local_id = subprocess.run(
+            [globus_executable, "endpoint", "local-id"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        destination_collection = local_id.stdout.strip()
+    if not destination_collection:
+        raise RuntimeError("Could not determine the local Globus destination collection")
+
+    if not destination_base or destination_base.strip().lower() in {"null", "none"}:
+        destination_base = os.path.dirname(pxd_dir)
+    destination_root = os.path.abspath(destination_base)
+    destination_pxd_dir = os.path.join(destination_root, pxd)
+    batch_lines = []
+    for selected_file in selected_files:
+        source_path = pride_ftp_url_to_globus_path(selected_file["ftp_url"])
+        destination_path = os.path.join(destination_pxd_dir, selected_file["file_name"])
+        batch_lines.append(f"{shlex.quote(source_path)} {shlex.quote(destination_path)}")
+
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", delete=False) as batch_file:
+        batch_file.write("\n".join(batch_lines) + "\n")
+        batch_path = batch_file.name
+
+    try:
+        submit = subprocess.run(
+            [
+                globus_executable,
+                "transfer",
+                f"{source_collection}:/",
+                f"{destination_collection}:/",
+                "--batch",
+                batch_path,
+                "--sync-level",
+                "checksum",
+                "--verify-checksum",
+                "--label",
+                f"HAMLET fetch {pxd}",
+                "--format",
+                "json",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        task_id = json.loads(submit.stdout)["task_id"]
+        print(f"Submitted Globus task {task_id} for {len(selected_files)} RAW file(s)")
+
+        wait_result = subprocess.run([globus_executable, "task", "wait", task_id])
+        task_result = subprocess.run(
+            [globus_executable, "task", "show", task_id, "--format", "json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        task_data = json.loads(task_result.stdout)
+        with open(os.path.join(pxd_dir, "globus_transfer.json"), "w", encoding="utf-8") as task_file:
+            json.dump(task_data, task_file, indent=2)
+
+        if wait_result.returncode != 0 or task_data.get("status") != "SUCCEEDED":
+            raise RuntimeError(
+                f"Globus task {task_id} ended with status {task_data.get('status')}: "
+                f"{task_data.get('fatal_error') or task_data.get('nice_status_details') or 'unknown error'}"
+            )
+
+        missing = [
+            item["file_name"]
+            for item in selected_files
+            if not os.path.isfile(os.path.join(pxd_dir, item["file_name"]))
+        ]
+        if missing:
+            raise RuntimeError(f"Globus task succeeded but destination files are missing: {', '.join(missing)}")
+        return task_id
+    finally:
+        os.unlink(batch_path)
 ###################################################################################################################################################
 
 ###################################################################################################################################################
@@ -680,10 +809,35 @@ def validate_mzml_file(filepath: str, min_size_mb: int = 1) -> tuple:
             header = f.read(1024)
             if b'<mzML' not in header and b'<?xml' not in header:
                 return False, "File does not contain mzML markers"
+
+            f.seek(max(0, os.path.getsize(filepath) - 8192))
+            footer = f.read()
+            if b'</mzML>' not in footer and b'</indexedmzML>' not in footer:
+                return False, "File does not contain a complete mzML closing tag"
         
         return True, None
     except Exception as e:
         return False, f"Validation error: {str(e)}"
+
+
+def remove_converted_raw_files(pxd_dir: str) -> int:
+    """Delete RAW files only when the corresponding mzML is valid."""
+    removed = 0
+    for raw_path in Path(pxd_dir).glob("*"):
+        if not raw_path.is_file() or raw_path.suffix.lower() != ".raw":
+            continue
+
+        mzml_path = raw_path.with_suffix(".mzML")
+        is_valid, reason = validate_mzml_file(str(mzml_path))
+        if not is_valid:
+            print(f"  Keeping {raw_path.name}: corresponding mzML is not valid ({reason})")
+            continue
+
+        raw_path.unlink()
+        removed += 1
+        print(f"  Removed converted RAW file: {raw_path.name}")
+
+    return removed
 
 ###################################################################################################################################################
 def run_runAssessor(output_dir="raw_data", central_mzml_dir=None, pxd=None):
@@ -708,12 +862,17 @@ def processes_pxds(
     max_raw_files: Optional[int] = None,
     logger: Optional[PipelineLogger] = None,
     skip_run_assessor: bool = False,
+    use_globus: bool = False,
+    globus_source_collection: str = PRIDE_GLOBUS_COLLECTION,
+    globus_destination_collection: Optional[str] = None,
+    globus_destination_base: Optional[str] = None,
 ):
     for pxd in pxd_list:
         print(f"\nProcessing PXD: {pxd}")
         if logger:
             logger.process_step("fetch", f"Processing {pxd}", {"pxd": pxd})
-        print(f"Download method: {'aria2c (' + str(aria2c_threads) + ' threads)' if use_aria2c else 'wget'}")
+        download_method = "Globus" if use_globus else ('aria2c (' + str(aria2c_threads) + ' threads)' if use_aria2c else 'wget')
+        print(f"Download method: {download_method}")
         if max_raw_files:
             print(f"Max raw files to download: {max_raw_files}")
 
@@ -738,6 +897,9 @@ def processes_pxds(
                     all_valid = False
             
             if all_valid:
+                removed_raw_count = remove_converted_raw_files(pxd_dir)
+                if removed_raw_count:
+                    print(f"✓ Removed {removed_raw_count} converted RAW file(s) from central storage")
                 print(f"✓ All files valid, skipping download for {pxd}")
                 # Run runAssessor if requested and its output is missing.
                 if skip_run_assessor:
@@ -832,47 +994,26 @@ def processes_pxds(
             if logger:
                 logger.process_error("fetch", f"PMC fetch error: {str(e)}", is_fatal=False)
 
-        # For each file check its FTP location and download
+        selected_files = select_raw_file_records(files_info, max_raw_files)
+        if use_globus and selected_files:
+            transfer_files_via_globus(
+                pxd,
+                selected_files,
+                pxd_dir,
+                globus_source_collection,
+                globus_destination_collection,
+                globus_destination_base or download_dir,
+            )
+
         num_raw_downloaded = 0
         num_download_failures = 0
-        processed_files = set()  # Track processed .raw files to avoid duplicates
-        
-        # Single pass: ONLY download .raw files (no .wiff, .zip, or other formats)
-        for file_record_i, file_record in enumerate(files_info):
+        for selected_file in selected_files:
+            file_name = selected_file["file_name"]
+            ftp_url = selected_file["ftp_url"]
+            outfile_path = os.path.join(pxd_dir, file_name)
 
-            # Check if we've reached the max spectrum files limit BEFORE downloading next file
-            if max_raw_files and num_raw_downloaded >= max_raw_files:
-                print(f"Reached max spectrum files limit ({max_raw_files}). Stopping download.")
-                break
-
-            file_name = file_record.get('fileName')
-            file_lower = file_name.lower()
-            
-            # FILTER: Only download .raw files (no .wiff, .zip, or other formats)
-            if not file_lower.endswith('.raw'):
-                print(f"Skipping non-.raw file: {file_name}")
-                continue
-            
-            # Skip if we've already processed this file
-            if file_name in processed_files:
-                print(f"Already processed {file_name}, skipping")
-                continue
-            processed_files.add(file_name)
-
-            public_locations = file_record.get('publicFileLocations')
-            ftp_url = None
-            for location in public_locations:
-                if location.get('value').startswith('ftp://'):
-                    ftp_url = location.get('value')
-                    break
-            print(f"Found FTP URL: {ftp_url}")
-
-            ## if ftp_url is found, download the file
-            if ftp_url and file_name:
-                outfile_path = os.path.join(pxd_dir, file_name)
+            if not use_globus:
                 print(f"Downloading .raw file {file_name} from {ftp_url} to {outfile_path}")
-                
-                # Try to download the file
                 try:
                     if use_aria2c:
                         download_ftp_file_aria2c(ftp_url, outfile_path, aria2c_threads)
@@ -893,18 +1034,13 @@ def processes_pxds(
                     print(f"Skipping {file_name} and continuing to next file...")
                     continue
 
-                # Count this spectral file BEFORE attempting conversion
-                # (regardless of conversion success/failure)
+            mzml_path = convert_spectral_file_to_mzml(outfile_path)
+            if mzml_path and os.path.exists(mzml_path):
                 num_raw_downloaded += 1
-                
-                # Convert .raw file to mzML via ThermoRawFileParser
-                mzml_path = convert_spectral_file_to_mzml(outfile_path)
-                if mzml_path and os.path.exists(mzml_path):
-                    print(f"Successfully converted {outfile_path} to {mzml_path}")
-                else:
-                    print(f"WARNING: Conversion may have failed for {outfile_path}")
+                print(f"Successfully converted {outfile_path} to {mzml_path}")
             else:
-                print(f"Failed to extract {zip_path}, skipping")
+                num_download_failures += 1
+                print(f"WARNING: Conversion failed for {outfile_path}")
 
         # Print download summary
         print(f"\n{'='*80}")
@@ -967,6 +1103,9 @@ def processes_pxds(
         else:
             print(f"⚠ No mzML files found after conversion - download may have failed")
 
+        removed_raw_count = remove_converted_raw_files(pxd_dir)
+        print(f"✓ Removed {removed_raw_count} converted RAW file(s) from central storage")
+
         # Run runAssessor on the downloaded data unless delegated to a separate stage.
         if skip_run_assessor:
             print("Skipping runAssessor (handled by separate pipeline stage)")
@@ -1009,6 +1148,10 @@ def main():
     parser.add_argument('--use_aria2c', action='store_true', help='Use aria2c for multi-threaded downloads instead of wget')
     parser.add_argument('--aria2c_threads', type=int, default=4, help='Number of threads for aria2c downloads (default: 4)')
     parser.add_argument('--max_raw_files', type=int, default=None, help='Maximum number of spectrum files (.RAW) to download per PXD (default: all files)')
+    parser.add_argument('--globus', action='store_true', help='Transfer PRIDE RAW files with Globus instead of HTTPS/FTP')
+    parser.add_argument('--globus_source_collection', default=PRIDE_GLOBUS_COLLECTION, help='PRIDE Globus source collection UUID')
+    parser.add_argument('--globus_destination_collection', default=None, help='Destination collection UUID (default: globus endpoint local-id)')
+    parser.add_argument('--globus_destination_base', default=None, help='Destination collection path corresponding to central_mzML_dir')
     parser.add_argument('--skip_run_assessor', action='store_true', help='Skip runAssessor execution (use when pipeline runs it as a dedicated stage)')
     parser.add_argument('--log_file', default=None, help='Path to JSONL file for pipeline event logging')
     args = parser.parse_args()
@@ -1046,6 +1189,10 @@ def main():
         args.max_raw_files,
         logger=logger,
         skip_run_assessor=args.skip_run_assessor,
+        use_globus=args.globus,
+        globus_source_collection=args.globus_source_collection,
+        globus_destination_collection=args.globus_destination_collection,
+        globus_destination_base=args.globus_destination_base,
     )
     
 ###################################################################################################################################################

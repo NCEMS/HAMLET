@@ -42,6 +42,9 @@ PIPELINE PARAMS (this workflow)
         --aggregated_results_dir <dir>    Directory with *_aggregated_results.json files
                                           Default: store/aggregated_results_files
 
+    Limited workflow mode
+        --runAssessorOnly true            Run only fetch_pxd → run_assessor
+
     Acquisition type routing
         --acquisition_type AUTO|DDA|DIA   Default: AUTO
             AUTO: per-PXD routing uses detected_params.json
@@ -62,6 +65,10 @@ PIPELINE PARAMS (this workflow)
 
     Download control
         --max_raw_files <N>               Default: 30 (null = all)
+        --globus true|false               Use Globus for PRIDE RAW transfers
+        --globus_destination_collection   Destination collection UUID;
+                                          default: local Globus Connect Personal collection
+        --globus_destination_base <path>  Collection path corresponding to central_mzml_dir
         --use_aria2c true|false           Default: true
         --aria2c_threads <N>              Default: 4
         --max_parallel_pxds <N>           Default: 10
@@ -88,6 +95,9 @@ EXAMPLES
 
     # Single PXD (stage behavior controlled by stage_manifest)
     nextflow run main.nf --pxd PXD000070 -resume
+
+    # Fetch one RAW with Globus, convert it, and run only runAssessor
+    nextflow run main.nf --pxd PXD000070 --globus --runAssessorOnly --max_raw_files 1
 
     # Agentic-only: skip search stages, create minimal aggregated results, run metadata extraction
     nextflow run main.nf --agentic_only true --pxd_csv GSlist0.csv -resume
@@ -124,6 +134,10 @@ params.min_high_confidence_peptides = params.min_high_confidence_peptides ?: 10
 params.taxid              = params.taxid              ?: '9606'
 params.acquisition_type   = params.acquisition_type   ?: 'AUTO'  // AUTO, DDA, DIA
 params.stage_manifest     = params.stage_manifest     ?: "${params.outdir}/pipeline_stage_manifest.json"
+params.globus            = params.globus            ?: false
+params.globus_source_collection = params.globus_source_collection ?: '47772002-3e5b-4fd3-b97c-18cee38d6df2'
+params.globus_destination_collection = params.globus_destination_collection ?: null
+params.globus_destination_base = params.globus_destination_base ?: params.central_mzml_dir
 
 params.n_judge_runs         = params.n_judge_runs         ?: 3      // Number of judge runs for consensus (1 = single pass)
 params.organism_id_all     = params.organism_id_all     ?: false  // Force organism_id on all files even when single taxid
@@ -144,6 +158,7 @@ params.auto_detect = params.auto_detect ?: true  // Enable automatic parameter d
 // Agentic-only mode: skip search and run metadata extraction on pre-computed aggregated results
 params.agentic_only         = params.agentic_only         ?: false
 params.aggregated_results_dir = params.aggregated_results_dir ?: "${baseDir}/store/aggregated_results_files"
+params.runAssessorOnly      = params.runAssessorOnly      ?: false
 
 // Search per-sample strategy for aggregation
 // Controls both OPEN SEARCH (Pass 1) and CLOSED SEARCH (Pass 2) aggregation behavior:
@@ -166,6 +181,10 @@ workflow {
     }
 
     log.info "Acquisition type mode: ${acqType}"
+
+    if( params.runAssessorOnly && params.agentic_only ) {
+        error "--runAssessorOnly and --agentic_only cannot be used together"
+    }
 
     // ==================== AGENTIC-ONLY WORKFLOW ====================
     // Run fetch, run_assessor, determine_acquisition_params; create minimal aggregated results;
@@ -336,6 +355,12 @@ workflow {
     // (e.g., after updating the runAssessor submodule).
     assessor_ch = run_assessor(fetched_ch)
         .map { pxd, fetched_dir, study_metadata -> tuple(pxd, fetched_dir) }
+
+    if( params.runAssessorOnly ) {
+        log.info "=== RUN-ASSESSOR-ONLY MODE ==="
+        log.info "Pipeline: fetch → run_assessor"
+        return
+    }
 
     // Run LLM-based metadata extraction from publications FIRST.
     // LLM results inform determine_acquisition_params (e.g., Comment[AcquisitionMethod]).
@@ -520,7 +545,8 @@ process determine_acquisition_params {
 
     tag "acqparams-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false,
+        saveAs: { name -> name == 'detected_params.json' ? name : null }
 
     cache false
 
@@ -733,8 +759,6 @@ process fetch_pxd {
 
     tag "fetch-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false
-
     // No caching - let FetchPXD.py handle cache logic internally
     // It checks for existing files and creates symlinks in work directory when needed
     cache false
@@ -751,6 +775,9 @@ process fetch_pxd {
     script:
     def aria2c_args = params.use_aria2c ? "--use_aria2c --aria2c_threads ${params.aria2c_threads}" : ""
     def max_files_arg = params.max_raw_files ? "--max_raw_files ${params.max_raw_files}" : ""
+    def globus_destination_base = params.globus_destination_base ?: params.central_mzml_dir
+    def globus_args = params.globus ? "--globus --globus_source_collection ${params.globus_source_collection} --globus_destination_base ${globus_destination_base}" : ""
+    def globus_destination_arg = params.globus_destination_collection ? "--globus_destination_collection ${params.globus_destination_collection}" : ""
     """
     # Initialize conda
     ${params.conda_init}
@@ -778,15 +805,11 @@ process fetch_pxd {
         --central_mzml_dir ${params.central_mzml_dir} \
         --PXD ${pxd} \
         --skip_run_assessor \
+        ${globus_args} \
+        ${globus_destination_arg} \
         ${aria2c_args} \
         ${max_files_arg} \
         --log_file fetch/events.jsonl
-
-    # Clean up original .raw files after conversion to .mzML
-    # Keep only .mzML files to save disk space (all downstream processes use only .mzML)
-    echo "Cleaning up original .raw files..."
-    find ${pxd} -type f -iname "*.raw" -delete
-    echo "✓ Original .raw files removed"
 
     ls -R ${pxd} || true
 
@@ -807,7 +830,8 @@ process run_assessor {
 
     tag "assessor-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}/runAssessor", mode: 'copy', overwrite: false
+    publishDir "${params.outdir}/${pxd}/runAssessor", mode: 'copy', overwrite: false,
+        saveAs: { name -> name == 'study_metadata.json' ? name : null }
 
     cache false
 
@@ -857,23 +881,26 @@ process run_assessor {
         assessor_cmd=(
             conda run -p ${params.meti_env_path} python "\$assessor_script"
             --verbose
+            --n_threads ${task.cpus}
             --metadata_filepath ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
         )
+        mzml_count=0
         shopt -s nullglob
         for mzml in ${fetched_dir}/*.mzML ${fetched_dir}/*.mzML.gz; do
             assessor_cmd+=("\$mzml")
+            mzml_count=\$((mzml_count + 1))
         done
         shopt -u nullglob
 
-        if [ \${#assessor_cmd[@]} -le 8 ]; then
+        if [ \$mzml_count -eq 0 ]; then
             echo "WARNING: No mzML files found for ${pxd}; writing empty study_metadata.json"
             echo '{}' > ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
             cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
             exit 0
         fi
 
-        "\${assessor_cmd[@]}" || true
-        assessor_rc=\$?
+        assessor_rc=0
+        "\${assessor_cmd[@]}" || assessor_rc=\$?
     else
         echo "ERROR: Unsupported runAssessor entrypoint: \$assessor_script"
         exit 1
@@ -890,9 +917,8 @@ process run_assessor {
             --pxd ${pxd} \
             --stage run_assessor || true
     else
-        echo "WARNING: runAssessor failed for ${pxd}; creating dummy study_metadata.json"
-        echo '{}' > ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json
-        cp ${params.central_mzml_dir}/${pxd}/runAssessor/study_metadata.json study_metadata.json
+        echo "ERROR: runAssessor failed for ${pxd} with exit code \$assessor_rc"
+        exit \$assessor_rc
     fi
     """
 }
@@ -904,7 +930,8 @@ process organism_id {
 
     tag "organism-${pxd}"
 
-    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false
+    publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false,
+        saveAs: { name -> name == 'organism_results' ? name : null }
 
     cache 'deep'
 

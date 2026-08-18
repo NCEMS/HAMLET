@@ -34,45 +34,47 @@ def _default_availability(stage: str, args) -> bool:
     return True
 
 
-def _default_key_outputs(stage: str, pxd: str) -> List[str]:
+def _default_key_outputs(stage: str, pxd: str, args=None) -> List[str]:
+    central_root = Path(args.central_dir) if args else Path("spectral_files")
+    output_root = Path(args.outdir) if args else Path("results")
     if stage == "fetch":
-        return [f"spectral_files/{pxd}/*.mzML"]
+        return [str(central_root / pxd / "*.mzML")]
     if stage == "run_assessor":
-        return [f"spectral_files/{pxd}/runAssessor/study_metadata.json"]
+        return [str(central_root / pxd / "runAssessor" / "study_metadata.json")]
     if stage == "determine_acquisition_params":
-        return [f"spectral_files/{pxd}/detected_params.json"]
+        return [str(central_root / pxd / "detected_params.json")]
     if stage == "organism_id":
         return [
-            f"results/{pxd}/organism_results/CasanovoSequence/**/peptonizer_result.csv",
-            f"results/{pxd}/organism_results/CascadiaSequence/**/peptonizer_result.csv",
-            f"results/{pxd}/organism_results/CasanovoSequence/{pxd}/Peptonizer2000_data/{pxd}_filtered70pct_slim/peptonizer_result.csv",
-            f"results/{pxd}/organism_results/CascadiaSequence/{pxd}/Peptonizer2000_data/{pxd}_filtered70pct_slim/peptonizer_result.csv",
+            str(output_root / pxd / "organism_results" / "CasanovoSequence" / "**" / "peptonizer_result.csv"),
+            str(output_root / pxd / "organism_results" / "CascadiaSequence" / "**" / "peptonizer_result.csv"),
+            str(output_root / pxd / "organism_results" / "CasanovoSequence" / pxd / "Peptonizer2000_data" / f"{pxd}_filtered70pct_slim" / "peptonizer_result.csv"),
+            str(output_root / pxd / "organism_results" / "CascadiaSequence" / pxd / "Peptonizer2000_data" / f"{pxd}_filtered70pct_slim" / "peptonizer_result.csv"),
         ]
     if stage == "determine_taxids":
         return [
-            f"results/{pxd}/taxid_mapping.json",
-            f"results/{pxd}/taxid_warnings.json",
+            str(output_root / pxd / "taxid_mapping.json"),
+            str(output_root / pxd / "taxid_warnings.json"),
         ]
     if stage == "search":
         return [
-            f"results/{pxd}/search/dda_search/search_results.tsv",
-            f"results/{pxd}/search/dia_search/search_results.tsv",
+            str(output_root / pxd / "search" / "dda_search" / "search_results.tsv"),
+            str(output_root / pxd / "search" / "dia_search" / "search_results.tsv"),
         ]
     if stage == "aggregate_results":
-        return [f"results/{pxd}/{pxd}_aggregated_results.json"]
+        return [str(output_root / pxd / f"{pxd}_aggregated_results.json")]
     if stage == "agentic_metadata_extraction":
         return [
-            f"results/{pxd}/agentic_metadata/metadata_extraction_output/integrated_output/TechnicalAgent/temp_0.0/{pxd}_PubText_enriched.json",
-            f"results/{pxd}/agentic_metadata/metadata_extraction_output/integrated_output/BiologicalAgent/temp_0.0/{pxd}_PubText_enriched.json",
-            f"results/{pxd}/agentic_metadata/metadata_extraction_output/integrated_output/ExperimentalDesignAgent/temp_0.0/{pxd}_PubText_enriched.json",
+            str(output_root / pxd / "agentic_metadata" / "metadata_extraction_output" / "integrated_output" / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json"),
+            str(output_root / pxd / "agentic_metadata" / "metadata_extraction_output" / "integrated_output" / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json"),
+            str(output_root / pxd / "agentic_metadata" / "metadata_extraction_output" / "integrated_output" / "ExperimentalDesignAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json"),
         ]
     if stage == "llm_judge":
         return [
-            f"results/{pxd}/judge_output/llm_judge_per_paper.csv",
-            f"results/{pxd}/judge_output/judge_output/llm_judge_per_paper.csv",
+            str(output_root / pxd / "judge_output" / "llm_judge_per_paper.csv"),
+            str(output_root / pxd / "judge_output" / "judge_output" / "llm_judge_per_paper.csv"),
         ]
     if stage == "finalize_sdrf":
-        return [f"results/{pxd}/agentic_metadata/{pxd}.sdrf.tsv"]
+        return [str(output_root / pxd / "agentic_metadata" / f"{pxd}.sdrf.tsv")]
     return []
 
 
@@ -80,14 +82,14 @@ def _expand(base_dir: Path, pattern: str) -> List[str]:
     return glob.glob(str(base_dir / pattern), recursive=True)
 
 
-def _run_assessor_complete(base_dir: Path, pxd: str, key_outputs: List[str]) -> bool:
+def _run_assessor_complete(base_dir: Path, central_dir: Path, pxd: str, key_outputs: List[str]) -> bool:
     # Output file(s) must exist first.
     if not all(_expand(base_dir, p) for p in key_outputs):
         return False
 
     # If there are no mzML inputs for this PXD, an empty 'files' dict in the
     # output is legitimate (nothing to process) and the stage is complete.
-    mzml_inputs = _expand(base_dir, f"spectral_files/{pxd}/*.mzML") + _expand(base_dir, f"spectral_files/{pxd}/*.mzML.gz")
+    mzml_inputs = list((central_dir / pxd).glob("*.mzML")) + list((central_dir / pxd).glob("*.mzML.gz"))
     if not mzml_inputs:
         return True
 
@@ -109,9 +111,9 @@ def _run_assessor_complete(base_dir: Path, pxd: str, key_outputs: List[str]) -> 
     return True
 
 
-def _stage_complete(base_dir: Path, stage: str, key_outputs: List[str], pxd: str = None) -> bool:
+def _stage_complete(base_dir: Path, central_dir: Path, stage: str, key_outputs: List[str], pxd: str = None) -> bool:
     if stage == "run_assessor" and pxd:
-        return _run_assessor_complete(base_dir, pxd, key_outputs)
+        return _run_assessor_complete(base_dir, central_dir, pxd, key_outputs)
     if stage in {"fetch", "organism_id", "search", "llm_judge"}:
         # Any valid output is enough for these stage families.
         return any(_expand(base_dir, p) for p in key_outputs)
@@ -122,7 +124,7 @@ def _fresh_matches(base_dir: Path, pattern: str, since_ts: float) -> List[str]:
     return [p for p in _expand(base_dir, pattern) if os.path.getmtime(p) >= since_ts]
 
 
-def _stage_complete_since(base_dir: Path, stage: str, key_outputs: List[str], since_ts: float, pxd: str = None) -> bool:
+def _stage_complete_since(base_dir: Path, central_dir: Path, stage: str, key_outputs: List[str], since_ts: float, pxd: str = None) -> bool:
     """
     Same matching semantics as `_stage_complete`, but every matched file must
     also have been modified at/after `since_ts`. Used to verify a stage that
@@ -130,7 +132,7 @@ def _stage_complete_since(base_dir: Path, stage: str, key_outputs: List[str], si
     than trusting leftover files from before the rerun was requested.
     """
     if stage == "run_assessor" and pxd:
-        if not _run_assessor_complete(base_dir, pxd, key_outputs):
+        if not _run_assessor_complete(base_dir, central_dir, pxd, key_outputs):
             return False
         return all(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
     if stage in {"fetch", "organism_id", "search", "llm_judge"}:
@@ -157,7 +159,7 @@ def _upstream_ok(stages: Dict, stage: str) -> bool:
     return True
 
 
-def _effective_complete(base_dir: Path, stage: str, stages: Dict, pxd: str) -> bool:
+def _effective_complete(base_dir: Path, central_dir: Path, stage: str, stages: Dict, pxd: str) -> bool:
     """
     Resolve the real completion state for `stage`, layering on top of the
     raw file-based `_stage_complete` check:
@@ -176,8 +178,8 @@ def _effective_complete(base_dir: Path, stage: str, stages: Dict, pxd: str) -> b
         return False
     since_ts = st.get("force_rerun_after")
     if since_ts:
-        return _stage_complete_since(base_dir, stage, st.get("key_outputs", []), float(since_ts), pxd=pxd)
-    return _stage_complete(base_dir, stage, st.get("key_outputs", []), pxd=pxd)
+        return _stage_complete_since(base_dir, central_dir, stage, st.get("key_outputs", []), float(since_ts), pxd=pxd)
+    return _stage_complete(base_dir, central_dir, stage, st.get("key_outputs", []), pxd=pxd)
 
 
 def _load_manifest(path: Path) -> Dict:
@@ -220,7 +222,11 @@ def _ensure_skeleton(manifest: Dict, pxd: str, args):
         st = stages.setdefault(s, {})
         st.setdefault("availability", _default_availability(s, args))
         st.setdefault("complete", False)
-        st.setdefault("key_outputs", _default_key_outputs(s, pxd))
+        legacy_defaults = _default_key_outputs(s, pxd)
+        configured_defaults = _default_key_outputs(s, pxd, args)
+        st.setdefault("key_outputs", configured_defaults)
+        if st.get("key_outputs") == legacy_defaults:
+            st["key_outputs"] = configured_defaults
         st.setdefault("force_rerun_after", None)
         # Drop the older boolean force_rerun flag (superseded by the
         # timestamp-based force_rerun_after field, which self-heals instead
@@ -234,13 +240,13 @@ def _ensure_skeleton(manifest: Dict, pxd: str, args):
             legacy_prefix = f"results/{pxd}/agentic_metadata/integrated_output/"
             keys = st.get("key_outputs", [])
             if isinstance(keys, list) and any(isinstance(k, str) and k.startswith(legacy_prefix) for k in keys):
-                st["key_outputs"] = _default_key_outputs(s, pxd)
+                st["key_outputs"] = _default_key_outputs(s, pxd, args)
         elif s == "organism_id":
             keys = st.get("key_outputs", [])
             if not isinstance(keys, list):
-                st["key_outputs"] = _default_key_outputs(s, pxd)
+                st["key_outputs"] = _default_key_outputs(s, pxd, args)
             else:
-                desired = _default_key_outputs(s, pxd)
+                desired = _default_key_outputs(s, pxd, args)
                 # Keep any custom patterns but ensure canonical defaults are present.
                 seen = {k for k in keys if isinstance(k, str)}
                 for k in desired:
@@ -250,9 +256,9 @@ def _ensure_skeleton(manifest: Dict, pxd: str, args):
         elif s == "llm_judge":
             keys = st.get("key_outputs", [])
             if not isinstance(keys, list):
-                st["key_outputs"] = _default_key_outputs(s, pxd)
+                st["key_outputs"] = _default_key_outputs(s, pxd, args)
             else:
-                desired = _default_key_outputs(s, pxd)
+                desired = _default_key_outputs(s, pxd, args)
                 seen = {k for k in keys if isinstance(k, str)}
                 for k in desired:
                     if k not in seen:
@@ -274,7 +280,7 @@ def cmd_init(args):
             # the already-recomputed complete value of every earlier stage.
             for s in STAGES:
                 st = stages[s]
-                st["complete"] = _effective_complete(base_dir, s, stages, pxd=pxd)
+                st["complete"] = _effective_complete(base_dir, Path(args.central_dir), s, stages, pxd=pxd)
                 if st["complete"] and st.get("force_rerun_after"):
                     # The forced rerun has produced verifiably fresh output;
                     # the flag has done its job and can be cleared.
@@ -445,7 +451,7 @@ def cmd_prepare(args):
     elif args.stage == "organism_id" and availability and complete and not force_since:
         pass
     else:
-        complete = _effective_complete(base_dir, args.stage, stages_for_pxd, pxd=args.pxd)
+        complete = _effective_complete(base_dir, Path(args.central_dir), args.stage, stages_for_pxd, pxd=args.pxd)
     # Note: we intentionally do NOT write complete back to the manifest here.
     # mark-complete is the authoritative update path.  This removes the
     # LOCK_EX serialisation bottleneck when hundreds of tasks run concurrently.
@@ -469,7 +475,7 @@ def cmd_mark_complete(args):
         _ensure_skeleton(manifest, args.pxd, args)
         stages_for_pxd = manifest["pxds"][args.pxd]["stages"]
         stage_rec = stages_for_pxd[args.stage]
-        stage_rec["complete"] = _effective_complete(base_dir, args.stage, stages_for_pxd, pxd=args.pxd)
+        stage_rec["complete"] = _effective_complete(base_dir, Path(args.central_dir), args.stage, stages_for_pxd, pxd=args.pxd)
         # A stage that just genuinely completed (with fresh-enough output,
         # per _effective_complete) has consumed any pending force_rerun
         # request; clear it so future runs don't get stuck.
@@ -503,7 +509,7 @@ def cmd_set_force_rerun(args):
             # Recompute this PXD's whole stage chain so the cascade is
             # reflected immediately (not just at the next `init`).
             for s in STAGES:
-                stages_for_pxd[s]["complete"] = _effective_complete(base_dir, s, stages_for_pxd, pxd=pxd)
+                stages_for_pxd[s]["complete"] = _effective_complete(base_dir, Path(args.central_dir), s, stages_for_pxd, pxd=pxd)
                 if stages_for_pxd[s]["complete"] and stages_for_pxd[s].get("force_rerun_after"):
                     stages_for_pxd[s]["force_rerun_after"] = None
         _atomic_write(manifest_path, manifest)
