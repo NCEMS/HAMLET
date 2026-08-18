@@ -31,12 +31,14 @@ class AgenticToSDRF:
     # Class-level CV maps
     # ------------------------------------------------------------------ #
 
+    # accessions are PRIDE CV children of PRIDE:0000659 "Proteomics data acquisition method" that is the value source the SDRF spec names for
+    # this column (assets/sdrf-terms.csv)and the equivalent ms terms are the xrefs MS:1003221 (DDA) and MS:1003215 (DIA).
     _ACQUISITION_MAP: dict[str, str] = {
-        "dda": "data-dependent acquisition",
-        "dia": "data-independent acquisition",
-        "prm": "parallel reaction monitoring",
-        "srm": "selected reaction monitoring",
-        "targeted": "parallel reaction monitoring",
+        "dda": "NT=data-dependent acquisition;AC=PRIDE:0000627",
+        "dia": "NT=data-independent acquisition;AC=PRIDE:0000450",
+        "prm": "NT=parallel reaction monitoring;AC=PRIDE:0000629",
+        "srm": "NT=selected reaction monitoring;AC=PRIDE:0000630",
+        "targeted": "NT=parallel reaction monitoring;AC=PRIDE:0000629",
     }
 
     _DISSOCIATION_MAP: dict[str, str] = {
