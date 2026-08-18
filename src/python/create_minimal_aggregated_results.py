@@ -23,6 +23,8 @@ from pathlib import Path
 from datetime import datetime
 import glob
 
+from hamlet_version import HAMLET_VERSION
+
 
 def create_minimal_aggregated_results(pxd, fetched_dir, study_metadata_file, detected_params_file):
     """Create minimal aggregated results JSON."""
@@ -52,7 +54,8 @@ def create_minimal_aggregated_results(pxd, fetched_dir, study_metadata_file, det
     # Build minimal aggregated results
     aggregated = {
         "pxd_id": pxd,
-        "pipeline_version": "agentic_only_1.0",
+        "pipeline_version": HAMLET_VERSION,
+        "run_mode": "agentic_only",
         "aggregation_timestamp": datetime.utcnow().isoformat(),
         "input_paths": {
             "pxd_dir": pxd,
@@ -116,7 +119,7 @@ def main():
         args.pxd,
         args.fetched_dir,
         args.study_metadata,
-        args.detected_params
+        args.detected_params,
     )
     
     if minimal_agg is None:

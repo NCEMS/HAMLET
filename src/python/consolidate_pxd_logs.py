@@ -137,7 +137,6 @@ def consolidate_logs(output_dir: str, pxd_id: str) -> dict:
         "pxd": pxd_id,
         "timestamp_start": start_time,
         "timestamp_end": end_time,
-        "pipeline_version": "v2.0.0",
         "status": overall_status,
         
         # Event history

@@ -28,7 +28,8 @@ The primary output for each dataset. A single JSON document that consolidates al
 | Key | Description |
 |-----|-------------|
 | `pxd_id` | PRIDE accession (e.g. `PXD000095`) |
-| `pipeline_version` | HAMLET pipeline version string |
+| `pipeline_version` | Canonical HAMLET release version |
+| `run_mode` | Processing scope: `full` or `agentic_only` |
 | `aggregation_timestamp` | ISO-8601 timestamp of aggregation |
 | `input_paths` | Paths used during processing (mzML dir, organism dir, search dir, etc.) |
 | `runAssessor` | Per-file instrument characterisation: acquisition type (DDA/DIA), fragmentation method, labeling reagent, precursor charge distribution, and any detected problems |
@@ -123,14 +124,14 @@ intermediate_files/PXD######/
 
 ### 1. `aggregated_results_files/` — 2,756 PXDs
 
-**Pipeline version breakdown:**
+**Run-mode breakdown:**
 
-| `pipeline_version` | Count | Description |
+| `run_mode` | Count | Description |
 |---|---|---|
-| `1.0` | **2,647** | Full HAMLET pipeline run (fetch → assessor → organism ID → search → aggregation) |
-| `agentic_only_1.0` | **109** | Agentic-metadata-only pass; wet-lab pipeline stages skipped |
+| `full` | **2,647** | Full HAMLET pipeline run (fetch → assessor → organism ID → search → aggregation) |
+| `agentic_only` | **109** | Agentic-metadata-only pass; wet-lab pipeline stages skipped |
 
-**Stage coverage across the 2,647 full-pipeline (`v1.0`) records:**
+**Stage coverage across the 2,647 full-pipeline records:**
 
 | Stage | PXDs with output | Coverage |
 |---|---|---|
@@ -145,14 +146,14 @@ intermediate_files/PXD######/
 
 Total spectral files indexed across all full-pipeline PXDs: **8,744**
 
-**`agentic_only_1.0` breakdown (109 PXDs):**
+**`agentic_only` breakdown (109 PXDs):**
 
 | Category | Count |
 |---|---|
 | Never processed by full pipeline (single commit, always agentic-only) | 109 |
-| Previously had full `v1.0` data, downgraded by a later commit (now restored) | 9 *(restored 2026-08-18)* |
+| Previously had full data, downgraded by a later commit (now restored) | 9 *(restored 2026-08-18)* |
 
-The 9 previously-downgraded PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) have been restored to their richest `v1.0` git history version. They are now counted under `v1.0` above.
+The 9 previously-downgraded PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) have been restored to their richest git history version. They are now counted under `full` above.
 
 ---
 
@@ -168,22 +169,20 @@ Raw per-agent LLM extraction outputs (BiologicalAgent, ExperimentalDesignAgent, 
 
 ---
 
-## Pipeline version reference
+## Version and run-mode reference
 
-Two version strings appear in `aggregated_results_files/` JSONs and have distinct meanings:
+HAMLET has one release version. The current release, incorporating the merged SDRF-builder fixes, is **`v2.1.0`**. Each new aggregated-results JSON records this value in its top-level `pipeline_version` field.
 
-### Top-level `pipeline_version`
+`run_mode` is separate from the release version and describes how the individual PXD was processed.
 
-Controls which stages ran and what data is present in the file.
-
-| Value | Stages present | When assigned |
+| `run_mode` | Stages present | When assigned |
 |---|---|---|
-| `1.0` | runAssessor, organism_id, SAGE search, PTM-Shepherd, LLM extraction, PRIDE metadata, consolidated_pipeline event log | Full HAMLET pipeline run (`main.nf` without `--runAgenticOnly`) |
-| `agentic_only_1.0` | runAssessor state block only; all other stages set to `"status": "skipped_agentic_only"` | Agentic-only run (`--runAgenticOnly` flag) or `runAssessor`-only run where aggregation was written before full processing |
+| `full` | runAssessor, organism_id, SAGE search, PTM-Shepherd, LLM extraction, PRIDE metadata, consolidated pipeline event log | Full HAMLET pipeline run |
+| `agentic_only` | runAssessor state block; unrun stages set to `"status": "skipped_agentic_only"` | Agentic-only run or runAssessor-only aggregation |
 
-Key structural differences between the two:
+Key structural differences by run mode:
 
-| Field | `v1.0` | `agentic_only_1.0` |
+| Field | `full` | `agentic_only` |
 |---|---|---|
 | `runAssessor.files` | Full per-file spectral characterisation (ROI peaks, charge dist., labeling) | Empty `{}` |
 | `organism_identification` | Casanovo de novo + Peptonizer2000 scores + final taxid | `{"status": "skipped_agentic_only", "results": {}}` |
@@ -192,10 +191,6 @@ Key structural differences between the two:
 | `modification_site_fractions` | Per-residue mod abundance fractions | `{"status": "skipped_agentic_only", "data": {}}` |
 | `consolidated_pipeline` | Full lifecycle event log with taxid decisions, quality gates, key findings | `{"status": "minimal_agentic_only", "data": {}}` |
 | `processing_summary` | Boolean flags per stage + `total_data_files` count | `{"status": "minimal_agentic_only", "total_files": 0}` |
-
-### Nested `consolidated_pipeline.pipeline_version`
-
-Present only in `v1.0` files. Always `v2.0.0`. This is the schema version of the pipeline event log sub-document (the orchestrator that records stage lifecycle, taxid mapping decisions, and key findings), independent of the top-level pipeline version.
 
 ---
 
@@ -215,5 +210,5 @@ As of 2026-08-18:
 
 | Date | Version | Notes |
 |------|---------|-------|
-| 2026-08-18 | — | Restored 9 PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) from git history to their richest `v1.0` versions after they were incorrectly overwritten with `agentic_only_1.0` shells. Added STATUS section and pipeline version reference to README. |
-| 2026-06-04 | v1.0 | Initial store tarball. 2,317 PXDs processed from PRIDE Archive. Includes organism ID (Casanovo + Peptonizer2000), SAGE open/closed search, LLM baseline extraction, and agentic SDRF generation. |
+| 2026-08-18 | — | Restored 9 PXDs (PXD002080, PXD003209, PXD004143, PXD005463, PXD009602, PXD012307, PXD012986, PXD014528, PXD021874) from git history after later agentic-only records overwrote their full outputs. Added the STATUS section and version/run-mode reference. |
+| 2026-06-04 | — | Initial store tarball. 2,317 PXDs processed from PRIDE Archive. Includes organism ID (Casanovo + Peptonizer2000), SAGE open/closed search, LLM baseline extraction, and agentic SDRF generation. |

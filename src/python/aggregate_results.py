@@ -16,6 +16,8 @@ import sys
 import csv
 import tempfile
 
+from hamlet_version import HAMLET_VERSION
+
 
 def compute_modification_site_fractions(results_tsv_path: str, script_dir: str, include_hidden_mods: bool = True) -> dict:
     """
@@ -538,7 +540,8 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     # Initialize the main results structure
     aggregated_results = {
         "pxd_id": pxd_id,
-        "pipeline_version": "1.0",
+        "pipeline_version": HAMLET_VERSION,
+        "run_mode": "full",
         "aggregation_timestamp": datetime.now().isoformat(),
         "input_paths": {
             "pxd_dir": pxd_dir,
@@ -753,7 +756,7 @@ def main():
         llm_results_dir=args.llm_results_dir,
         pride_json_dir=args.pride_json_dir,
         taxid_warnings=args.taxid_warnings,
-        output_file=args.output_file
+        output_file=args.output_file,
     )
     
     # Consolidate pipeline logs if they exist

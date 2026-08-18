@@ -466,6 +466,28 @@ The `*_aggregated_results.json` is the primary deliverable: a single document wi
 
 ---
 
+## STATUS - store coverage as of 2026-08-18
+
+The three primary directories under [`store/`](store/) are packaged pipeline outputs. Full file layouts, stage coverage, and the JSON schema reference are in [`store/README.md`](store/README.md).
+
+| Directory | PXD count | Contents |
+|---|---:|---|
+| [`store/aggregated_results_files/`](store/aggregated_results_files/) | 2,756 | One aggregated pipeline-results JSON per PXD |
+| [`store/agentic_results_files/`](store/agentic_results_files/) | 1,820 | Per-PXD BiologicalAgent, ExperimentalDesignAgent, and TechnicalAgent outputs |
+| [`store/hamlet_sdrfs/`](store/hamlet_sdrfs/) | 306 | Curated SDRF-Proteomics TSV files |
+
+### `store/aggregated_results_files/` version summary
+
+| Category | Count | Meaning |
+|---|---:|---|
+| Full pipeline (`run_mode: full`) | **2,647** | Fetch, runAssessor, organism identification, search, aggregation, and PRIDE metadata completed |
+| Agentic-only (`run_mode: agentic_only`) | **109** | Single-commit agentic-only records; no richer full-pipeline record exists in git history |
+| Historical downgrades restored | **9** | Included in the 2,647 full-pipeline records above after restoration from git history |
+
+The restored PXDs are `PXD002080`, `PXD003209`, `PXD004143`, `PXD005463`, `PXD009602`, `PXD012307`, `PXD012986`, `PXD014528`, and `PXD021874`. The richest recovered records were `PXD003209`, `PXD004143`, and `PXD005463`; they retain PTM open-search and modification-site-fraction results, and the first two also retain LLM metadata.
+
+---
+
 ## Caching and resume
 
 `resume = true` is set globally in [nextflow.config](nextflow.config). Nextflow caches completed tasks in `work/` — keep this directory to avoid re-running expensive steps. You can also pass `-resume` explicitly on the command line.
