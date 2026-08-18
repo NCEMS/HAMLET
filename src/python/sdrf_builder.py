@@ -382,31 +382,58 @@ class AgenticToSDRF:
     # Experiment-level extractors (parsed from protocol text)
     # ------------------------------------------------------------------ #
 
+    def _tech_evidence(self, field: str) -> str:
+        """return the LLM evidence quote for a TechnicalAgent field or ""."""
+        entry = self._tech.get(field)
+        if not isinstance(entry, dict):
+            return ""
+        sources = entry.get("sources")
+        if not isinstance(sources, dict):
+            return ""
+        llm = sources.get("llm")
+        if not isinstance(llm, dict):
+            return ""
+        return str(llm.get("evidence") or "")
+
+    def _tech_text(self, field: str) -> str:
+        """agentic resolved value plus its evidence quote for regex matching."""
+        return " ".join([
+            self._agentic_field(self._tech, field) or "",
+            self._tech_evidence(field),
+        ])
+
     def _get_cleavage_agent(self) -> str:
-        text = self._sample_proc + " " + self._data_proc
-        for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
-            if pattern.search(text):
-                return sdrf_val
+        override = self._override_field("cleavage_agent")
+        if override:
+            for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
+                if pattern.search(override):
+                    return sdrf_val
+        # PRIDE protocol text takes precedence and the agentic value only fills a gap.
+        for text in (self._sample_proc + " " + self._data_proc,
+                     self._tech_text("cleavage_agent")):
+            for pattern, sdrf_val in self._CLEAVAGE_PATTERNS:
+                if pattern.search(text):
+                    return sdrf_val
         return "not available"
 
     def _get_reduction_reagent(self) -> str | None:
-        t = self._sample_proc
-        if re.search(r"dithiothreitol|\bDTT\b", t, re.I):
-            return "dithiothreitol"
-        if re.search(r"\bTCEP\b|tris\(2-carboxyethyl\)phosphine", t, re.I):
-            return "tris(2-carboxyethyl)phosphine"
-        if re.search(r"beta-mercaptoethanol|\b2-ME\b|\bBME\b", t, re.I):
-            return "beta-mercaptoethanol"
+        for t in (self._sample_proc, self._tech_text("reduction_reagent")):
+            if re.search(r"dithiothreitol|\bDTT\b", t, re.I):
+                return "dithiothreitol"
+            if re.search(r"\bTCEP\b|tris\(2-carboxyethyl\)phosphine", t, re.I):
+                return "tris(2-carboxyethyl)phosphine"
+            if re.search(r"beta-mercaptoethanol|\b2-ME\b|\bBME\b", t, re.I):
+                return "beta-mercaptoethanol"
         return None
 
     def _get_alkylation_reagent(self) -> str | None:
-        t = self._sample_proc
-        if re.search(r"iodoacetamide|\bIAA\b", t, re.I):
-            return "iodoacetamide"
-        if re.search(r"chloroacetamide|\bCAA\b|2-chloroacetamide", t, re.I):
-            return "chloroacetamide"
-        if re.search(r"N-ethylmaleimide|\bNEM\b", t, re.I):
-            return "N-ethylmaleimide"
+        for t in (self._sample_proc, self._tech_text("alkylation_reagent")):
+            if re.search(r"iodoacetamide|\bIAA\b", t, re.I):
+                return "iodoacetamide"
+            if re.search(r"chloroacetamide|\bCAA\b|2-chloroacetamide", t, re.I):
+                return "chloroacetamide"
+            if re.search(r"N-ethylmaleimide|\bNEM\b", t, re.I):
+                return "N-ethylmaleimide"
         return None
 
     def _get_mass_tolerances(self) -> tuple[str | None, str | None]:
@@ -535,7 +562,13 @@ class AgenticToSDRF:
         Parse dataProcessingProtocol for explicit modification mentions.
         Returns list of dicts: {uid, name, residues, mod_type}.
         """
-        text = self._data_proc + " " + self._sample_proc
+        text = " ".join([
+            self._data_proc,
+            self._sample_proc,
+            self._tech_text("alkylation_reagent"),
+            self._tech_text("ptm"),
+            self._tech_text("modification"),
+        ])
         result: list[dict] = []
         seen: set[int] = set()
 
@@ -545,6 +578,9 @@ class AgenticToSDRF:
                 result.append({"uid": uid, "name": name, "residues": residues, "mod_type": mod_type})
 
         if re.search(r"carbamidomethyl", text, re.I):
+            _add(4, "Carbamidomethyl", "C", "Fixed")
+        elif self._get_alkylation_reagent() in ("iodoacetamide", "chloroacetamide"):
+            # both reagents produce +57.0215 on cysteine.
             _add(4, "Carbamidomethyl", "C", "Fixed")
         if re.search(r"\bTMT\b|\bTMTpro\b", text, re.I):
             _add(730, "TMT6plex", "K", "Fixed")
