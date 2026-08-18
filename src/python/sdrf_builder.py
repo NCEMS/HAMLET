@@ -558,8 +558,21 @@ class AgenticToSDRF:
             _add(21, "Phospho", "STY", "Variable")
         if re.search(r"deamid", text, re.I):
             _add(7, "Deamidation", "NQ", "Variable")
-        if re.search(r"methylat", text, re.I):
-            _add(34, "Methyl", "KR", "Variable")
+        # only emit Methyl when a target residue is named close to the word and
+        # take the residue from the text rather than assuming KR. a bare mention
+        # of "methylation" is often a citation title or sample prep wording.
+        methyl_k = r"\blysines?\b|\bLys\b(?!\s*-?\s*C\b)|[\(\[]\s*K\s*[\)\]]|\bon\s+K\b"
+        methyl_r = r"\barginines?\b|\bArg\b|[\(\[]\s*R\s*[\)\]]|\bon\s+R\b"
+        methyl_residues = ""
+        for m in re.finditer(r"\bmethylat\w*", text, re.I):
+            window = text[max(0, m.start() - 60): m.end() + 60]
+            if re.search(methyl_k, window, re.I):
+                methyl_residues += "K"
+            if re.search(methyl_r, window, re.I):
+                methyl_residues += "R"
+        methyl_residues = "".join(sorted(set(methyl_residues)))
+        if methyl_residues:
+            _add(34, "Methyl", methyl_residues, "Variable")
 
         return result
 
