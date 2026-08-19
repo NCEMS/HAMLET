@@ -9,14 +9,41 @@ HAMLET is a local Nextflow DSL2 pipeline that processes PRIDE proteomics dataset
 ### Pipeline overview
 
 ```mermaid
-flowchart LR
-  A["PRIDE RAW files"] --> B["Fetch and convert to mzML"]
-  B --> C["runAssessor"]
-  C --> D["Organism identification"]
-  D --> E["DDA: SAGE / DIA: DIA-NN"]
-  E --> F["Aggregate results"]
-  F --> G["Agentic metadata and SDRF"]
-  G --> H["Store-backed JSON and SDRF outputs"]
+flowchart TD
+  A["PRIDE Archive<br/>RAW files and project metadata"] --> B["<b>FetchPXD.py</b><br/><small>Nextflow: fetch_pxd</small>"]
+  B --> C["spectral_files/PXD<br/>mzML, PRIDE metadata"]
+
+  C --> D["<b>runAssessor submodule<br/>src/runassessor.py</b><br/><small>Nextflow: run_assessor</small>"]
+  C --> E["<b>determine_acquisition_params.py</b><br/><small>Nextflow: determine_acquisition_params</small>"]
+  D --> E
+  D --> F["runAssessor study_metadata.json"]
+
+  E --> G["<b>determine_taxids.py</b><br/><small>Nextflow: determine_taxids</small>"]
+  E --> H["<b>OrganismID.py</b><br/>Casanovo/Cascadia + Peptonizer2000<br/><small>Nextflow: organism_id</small>"]
+  H --> G
+  G --> I["taxid_mapping.json"]
+
+  E --> J["<b>search_orchestrator.py</b><br/>SAGE (DDA) or DIA-NN (DIA)<br/><small>Nextflow: search</small>"]
+  I --> J
+  J --> K["search and PTM outputs"]
+
+  C --> L["<b>aggregate_results.py</b><br/><small>Nextflow: aggregate_results</small>"]
+  F --> L
+  H --> L
+  K --> L
+  L --> M["PXD_aggregated_results.json"]
+
+  M --> N["<b>run_agentic_metadata.py</b><br/>agentic-metadata submodule<br/><small>Nextflow: agentic_metadata_extraction</small>"]
+  N --> O["Integrated Biological, Experimental Design,<br/>and Technical Agent JSON"]
+  O --> P["<b>LLm_as_judge.py</b><br/><small>Nextflow: llm_judge</small>"]
+  O --> Q["<b>finalize_sdrf.py</b><br/>AgenticToSDRF / sdrf_builder.py<br/><small>Nextflow: finalize_sdrf</small>"]
+  P --> Q
+  Q --> R["PXD.sdrf.tsv and confidence sidecar"]
+
+  C --> S["<b>create_minimal_aggregated_results.py</b><br/><small>Nextflow: create_minimal_aggregated_results<br/>agentic-only path</small>"]
+  D --> S
+  E --> S
+  S --> M
 ```
 
 ### What HAMLET does
