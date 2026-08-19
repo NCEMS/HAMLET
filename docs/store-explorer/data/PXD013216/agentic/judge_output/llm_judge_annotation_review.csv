@@ -1,0 +1,156 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD013216","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human PKD1"" and ""human PKD3"" multiple times.
+TRUTH CHECK: The use of human proteins and human-derived cell lines (HEK293T) confirms Homo sapiens as a source organism.
+COMPLETENESS CHECK: While the paper also uses C. elegans and R. norvegicus, the extraction of ""Homo sapiens"" is a correct individual value; however, the full set is incomplete as it misses the other species used in the experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Caenorhabditis elegans"", ""Rattus norvegicus""]","Homo sapiens, Caenorhabditis elegans, Rattus norvegicus"
+"PXD013216","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is an organ, which matches the field definition.
+SOURCE CHECK:      A search of the paper text reveals no mention of ""kidney"".
+TRUTH CHECK:       The value is not present in the text and is not a safe default or inferable from the context.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK: No, ""epithelial cell"" is a cell type, but the paper does not describe the cells used as epithelial.
+SOURCE CHECK: No, the term ""epithelial cell"" does not appear in the text, nor is it reasonably inferable.
+TRUTH CHECK: No, the paper uses HEK293T (human embryonic kidney), NIH3T3 (mouse embryonic fibroblast), COS7 (monkey kidney), and INS-1 (rat pancreatic beta-cell) cells.
+COMPLETENESS CHECK: The full set is incorrect as it contains a hallucinated value and misses the actual cell types mentioned.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: [""fibroblasts"", ""pancreatic beta-cells""]","fibroblasts, pancreatic beta-cells"
+"PXD013216","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper uses standard cell lines (HEK293T, NIH3T3, COS7, INS-1) and recombinant proteins; there is no mention of a disease state or clinical diagnosis.
+TRUTH CHECK:       The experiments are performed on standard laboratory cell lines and purified proteins without any disease pathology, making ""normal"" a safe and correct default.
+COMPLETENESS CHECK: The full set contains ""normal"", which accurately reflects the lack of disease in the experimental models used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","material_type","HEK293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK293T cells"" is a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The paper explicitly mentions the use of HEK293T cells for PRM MS and activation assays.
+TRUTH CHECK:       The value is factually present, but it is a specific entity rather than the broad category requested by the definition.
+COMPLETENESS CHECK:   The full set contains only this specific cell line, but it fails to provide the broad material class and misses other materials used (e.g., INS-1 cells, NIH3T3 cells, and recombinant proteins).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD013216","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""HEK293T"" is explicitly mentioned multiple times in the text (e.g., ""estimate the concentration of endogenous PKD1 in HEK293T cells"").
+TRUTH CHECK:       The value is factually correct as it is the cell line used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is missing other cell lines mentioned in the paper, such as ""INS-1"", ""NIH3T3"", and ""COS7"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""INS-1"", ""NIH3T3"", ""COS7""]","HEK293T, INS-1, NIH3T3, COS7"
+"PXD013216","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text mentions a ""Waters Synapt G2-Si"" and a ""Dionex Ultimate 3000 HPLC system"", but ""Q Exactive HF"" does not appear anywhere in the provided text.
+TRUTH CHECK:       The value is not present in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set contains only this hallucinated value and misses the actual instrument mentioned (Waters Synapt G2-Si).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes the use of parallel reaction monitoring (PRM) and intact mass spectrometry without any mention of isobaric or metabolic labels.
+TRUTH CHECK:       Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","ExperimentalDesignAgent","replicates","HEK293T and INS-1 cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK293T and INS-1 cell lines"" is a list of cell lines, not a numeric count of biological replicates.
+SOURCE CHECK:      The cell lines are mentioned in the text, but they do not represent the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set of extracted values contains a type mismatch and a numeric value (""2"") that is not explicitly supported by the text as a biological replicate count for the MS experiments.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper does not mention a specific number of biological replicates for the MS experiments (PRM or intact MS).
+TRUTH CHECK:       There is no evidence in the text to support the value ""2"" as the number of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; one value is a cell line name (type mismatch) and the other is an unsupported number.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""1""]","1"
+"PXD013216","ExperimentalDesignAgent","experimental_design","Quantification of endogenous PKD1 levels in HEK293T and INS-1 cell lines","","low","True","","False","False","False","TYPE CHECK:        No. The candidate value describes a specific experimental objective or procedure, not a study design type (e.g., ""treated vs control"", ""case-control"").
+SOURCE CHECK:      Yes, the paper does quantify endogenous PKD1 levels in these cell lines.
+TRUTH CHECK:       Yes, the action described is factually present in the paper.
+COMPLETENESS CHECK:The full set contains only this value, which is a description of a task rather than a design category.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","ExperimentalDesignAgent","factor_value","cell line (HEK293T, INS-1)","cell line (HEK293T, INS-1)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the cell lines used as experimental variables, which fits the category of an experimental factor.
+SOURCE CHECK:      The paper explicitly mentions using HEK293T and INS-1 cells to estimate endogenous PKD1 concentrations.
+TRUTH CHECK:       The value is factually correct as these cell lines were used to compare protein concentrations.
+COMPLETENESS CHECK: The full set only includes these cell lines, but the paper also uses NIH3T3 and COS7 cells as experimental factors for activation and translocation assays.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""INS-1"", ""NIH3T3"", ""COS7""]","HEK293T, INS-1, NIH3T3, COS7"
+"PXD013216","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes various MS experiments (intact MS, PRM, phosphopeptide mapping), but does not mention any offline peptide/protein fractionation steps.
+TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is applicable.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which correctly represents the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions the quantification of endogenous PKD1 in two different cell lines: HEK293T and INS-1.
+TRUTH CHECK:       While the study uses two different cell lines for the PRM MS quantification, the overall study involves numerous other samples, including various recombinant protein constructs (DKF-1, PKD1, PKD2, PKD3), multiple mutants (F59E, F104E, etc.), and different cell-based assays (HEK293T, NIH3T3, COS7). The value ""2"" only refers to the specific cell lines used for the PRM quantification, not the total count of samples processed in the study.
+COMPLETENESS CHECK: The full set of extracted values (""2"") does not cover the total number of samples processed across the entire experimental study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

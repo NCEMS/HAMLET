@@ -1,0 +1,247 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD001805","","strict","Biological","cell_line","HeLa, 2fTGH, U5A, LoVo","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: Only HeLa cells were used for the SILAC/LC-MS/MS experiment; 2fTGH and U5A were used for interferon-responsiveness assays, and LoVo cells were used for RNASeq.
+TRUTH CHECK: The candidate value is factually incorrect because it includes cell lines (2fTGH, U5A, LoVo) that were not analyzed by mass spectrometry.
+COMPLETENESS CHECK: The set is incorrect as it conflates the MS sample source with other cell lines used for different assays in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HeLa","HeLa"
+"PXD001805","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" describes a cell lineage, which matches the definition of the cell_type field.
+SOURCE CHECK: The MS experiment used HeLa cells (""We made use of SILAC coupled with LC-MS/MS and compared cells that express empty vector, cells that express ISG15...""), and HeLa cells are a well-established epithelial cell line.
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma and are categorized as epithelial cells.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the lineage of the cell line used for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Biological","disease","cervical adenocarcinoma","cervical adenocarcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK: The value is inferable from the use of HeLa cells, which were the biological material analyzed by LC-MS/MS (as described in the ""SILAC and His-affinity purification"" and ""LC-MS/MS"" sections).
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.
+COMPLETENESS CHECK: The full set contains this single value, which correctly describes the disease origin of the cell line used for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Biological","organ","cervix","cervix","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""cervix"" is a valid organ/tissue type.
+SOURCE CHECK: The MS sample was derived from HeLa cells (""We made use of SILAC coupled with LC-MS/MS... [using] HeLa cells""), and the cervix is the well-known tissue of origin for the HeLa cell line.
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma; therefore, ""cervix"" is factually correct.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the origin of the cells used for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The proteomics experiment used HeLa cells (human) and searched against the ""human proteins in the Uniprot/Swiss-Prot database"".
+TRUTH CHECK: The value is factually correct as the MS analysis was performed on human cell lines.
+COMPLETENESS CHECK: The full set contains the only species used for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","ExperimentalDesign","factor_value","condition (empty vector, ISG15 expression, ISG15 expression + interferon)","condition (empty vector, ISG15 expression, ISG15 expression + interferon) | cervical adenocarcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental conditions/groups being compared, which is a correct category for factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context; the paper states they compared ""cells that express empty vector, cells that express ISG15 and cells that express ISG15 that were treated with interferon"" using SILAC and LC-MS/MS.
+TRUTH CHECK: The value accurately reflects the three experimental arms described in the proteomics section of the paper.
+COMPLETENESS CHECK: The full set of extracted values includes the experimental conditions and the disease state (cervical adenocarcinoma, inferred from HeLa), which together cover the primary design factors of the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","ExperimentalDesign","factor_value","cervical adenocarcinoma","condition (empty vector, ISG15 expression, ISG15 expression + interferon) | cervical adenocarcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The value is not explicitly mentioned in the text; it is inferred from the use of HeLa cells.
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma, making this a factually correct inference for the biological source of the MS sample.
+COMPLETENESS CHECK: The full set of extracted values includes both the experimental conditions and the disease origin of the cell line, covering the relevant factors.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes the LC-MS/MS workflow but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the injection of the eluate.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation information is provided in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","ExperimentalDesign","replicates","3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the LC-MS/MS experiment; it mentions ""two large 500 cm2 per condition"" and that ""lysates from two dishes were combined for each condition,"" but this describes sample pooling rather than biological replication.
+TRUTH CHECK: There is no evidence in the text to support the value ""3"" for the proteomics experiment. The value ""triplicate"" appears only in the context of the RNASeq experiment (""The experiment was performed in triplicate""), not the MS experiment.
+COMPLETENESS CHECK: The value is not supported by the text for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD001805","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
+TRUTH CHECK: Per the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or lack thereof) in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS"" section of the methods (""The mass spectrometer was operated in data-dependent mode"").
+TRUTH CHECK: The value is factually correct as the paper describes the instrument operating in data-dependent mode.
+COMPLETENESS CHECK: The full set contains the only acquisition method described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","alkylation_reagent","chloroacetamide","chloroacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""SILAC and His-affinity purification"" section of the methods (""...reduced and alkylated by incubation with 5 mM tris(2-carboxyethyl)phosphine (TCEP) and 10 mM chloroacetamide..."").
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the proteomics workflow.
+COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS"" section of the methods (""proteins were digested with 20 μg trypsin"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","fragment_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper explicitly states: ""a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively"". The fragment mass tolerance is 20 ppm, not 7 ppm.
+COMPLETENESS CHECK: The full set contains only the incorrect value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 20 ppm","20 ppm"
+"PXD001805","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper explicitly states that ions were isolated ""for fragmentation by CID"".
+TRUTH CHECK: While the paper uses the abbreviation ""CID"" (Collision-Induced Dissociation), it does not specify that it was ""beam-type"" CID. In the context of a Q Exactive instrument (which uses a quadrupole-ion trap), CID typically refers to trap-based CID, not beam-type CID (which is characteristic of Q-TOF or Triple Quad instruments).
+COMPLETENESS CHECK: The full set contains only this value, but the value itself is an over-specification not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: CID","CID"
+"PXD001805","","strict","Technical","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS"" section of the methods (""...connected to a Q Exactive mass spectrometer"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of a ""Q Exactive mass spectrometer"", and the Q Exactive is a well-known Orbitrap-based instrument.
+TRUTH CHECK: The value is factually correct as the Q Exactive uses an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the LC-MS/MS experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Data analysis"" section of the methods (""Carbamidomethyl formation of cysteine residues was set as a fixed modification"").
+TRUTH CHECK: The value is factually correct as it is explicitly stated in the text.
+COMPLETENESS CHECK: The full set of extracted values includes the fixed modification and the variable modifications mentioned in the text (Oxidation, pyroglutamate), although ""4,4,5,5-D4 Lysine"" is a SILAC label rather than a PTM. However, for the specific candidate ""Carbamidomethyl (C)"", it is correct and complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Data analysis"" section of the methods (""oxidation of methionine residues"").
+TRUTH CHECK: The value is factually correct as it is explicitly listed as a variable modification used in the MaxQuant search.
+COMPLETENESS CHECK: The full set of extracted values covers the fixed and variable modifications mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","modification","4,4,5,5-D4 Lysine (A)","Carbamidomethyl (C) | Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a specific amino acid isotope/modification, which fits the category of a protein modification.
+SOURCE CHECK: The text mentions ""4,4,5,5-D4-L-Lysine HCl"" in the SILAC labeling section, but this is a labeling reagent used for sample preparation, not a modification searched for during database search.
+TRUTH CHECK: The candidate value is not listed as a searched modification in the ""Data analysis"" section; the searched modifications are GlyGly, oxidation, pyroglutamate, and carbamidomethyl.
+COMPLETENESS CHECK: The full set of extracted values includes correct searched modifications, but this specific candidate is incorrect.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001805","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""6 ppm"" does not appear in the paper text; the text explicitly states ""a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively"".
+TRUTH CHECK: The value is factually incorrect based on the provided text.
+COMPLETENESS CHECK: The full set is incorrect as it provides a value not found in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 4.5 ppm","4.5 ppm"
+"PXD001805","","strict","Technical","reduction_reagent","tris(2-carboxyethyl)phosphine","tris(2-carboxyethyl)phosphine","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""SILAC and His-affinity purification"" section as being used to reduce proteins prior to LC-MS/MS analysis.
+TRUTH CHECK: The value ""tris(2-carboxyethyl)phosphine"" is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains the only reduction reagent mentioned for the MS sample preparation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,0 +1,158 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD006856","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""human HAP1 cells"" and ""human proteins,"" making ""Homo sapiens"" a correct and reasonable extraction.
+TRUTH CHECK:       The experimental models used (HAP1 and HeLa cells) are human-derived.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006856","BiologicalAgent","organ","blood","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""blood"" is the correct category (organ/tissue) for this field.
+SOURCE CHECK:      The paper mentions ""HAP1 cells"" and ""HeLa cells,"" but there is no mention of blood or blood-derived samples.
+TRUTH CHECK:       The value is not supported by the text; the experiments were performed using immortalized cell lines (HAP1 and HeLa).
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006856","BiologicalAgent","cell_type","hematopoietic progenitor cell","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""hematopoietic progenitor cell"" is a cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HAP1 cells"" multiple times. HAP1 is a well-known human hematopoietic progenitor cell line.
+TRUTH CHECK:       While HAP1 cells are used, the paper explicitly refers to them as ""HAP1 cells"" and ""HAP1 NAA80-KO cell lines."" In proteomics metadata, when a specific immortalized line is used, it should be captured in the `cell_line` field.
+COMPLETENESS CHECK: The full set contains only this value, but it describes the lineage of the cell line used rather than the specific cell line name.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006856","BiologicalAgent","disease","normal, NAA80-knockout","normal, NAA80-knockout","high","False","","True","True","False","TYPE CHECK:        The candidate value contains a control state (""normal"") and a genetic modification (""NAA80-knockout""), which fits the category of disease/disease state.
+SOURCE CHECK:      The paper describes ""control"" cells and ""NAA80-KO"" (knockout) cells.
+TRUTH CHECK:       The values accurately reflect the experimental groups (control vs. knockout).
+COMPLETENESS CHECK: The full set covers the primary experimental conditions described in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006856","BiologicalAgent","material_type","HAP1 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HAP1 cells"" is a specific cell line name, not a broad material class as required by the definition.
+SOURCE CHECK:      The paper mentions ""human HAP1 cells"" and ""HAP1 NAA80-KO cell lines"".
+TRUTH CHECK:       While HAP1 cells are used, the value provided is the specific name of the cell line, not the material type.
+COMPLETENESS CHECK:The full set contains only the specific cell line name and fails to provide the broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD006856","BiologicalAgent","cell_line","HAP1","HAP1","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HAP1"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""human HAP1 cells"" and ""HAP1 NAA80-KO cell lines"".
+TRUTH CHECK:       The value is factually correct as HAP1 is the cell line used in the experiments.
+COMPLETENESS CHECK:    The full set contains ""HAP1"", and while ""HeLa"" is mentioned in the context of immunoprecipitating NAA80, HAP1 is the primary cell line used for the main experimental findings (KO lines, motility, etc.). However, since HeLa was also used for a specific experiment, the set is technically missing one mentioned cell line.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HAP1"", ""HeLa""]","HAP1, HeLa"
+"PXD006856","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text mentions ""N-terminal proteomics"" and ""Table S1"", but the specific instrument model ""Q Exactive HF"" is not mentioned anywhere in the provided title, abstract, or methods text.
+TRUTH CHECK:       The value cannot be verified as correct because it is not present in the source text.
+COMPLETENESS CHECK: The full set contains only this value, but since it is not in the text, it is not a valid extraction.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006856","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper mentions ""N-terminal proteomics"" to assess Nt-acetylation status but does not mention any isobaric or metabolic labeling (like TMT or SILAC).
+TRUTH CHECK:       Since no specific labeling method is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only ""label-free"", which accurately reflects the lack of labeling mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006856","ExperimentalDesignAgent","replicates","control and NAA80 KO1 cell lysates","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of sample groups, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""control and NAA80 KO1 cell lysates,"" but this describes the experimental groups, not the number of replicates.
+TRUTH CHECK:       The value is factually a description of the samples used, but it is not a ""number of biological replicates.""
+COMPLETENESS CHECK: The full set contains both a descriptive string and a number (""2""), but the descriptive string is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006856","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper mentions ""two HAP1 NAA80-KO cell lines (KO1 and KO2)"", but these are distinct genetic clones/lines, not biological replicates of a single condition.
+TRUTH CHECK:       The value ""2"" likely refers to the two KO cell lines (KO1 and KO2) rather than the number of biological replicates per group. The text does not explicitly state the number of biological replicates used for the proteomics or other assays.
+COMPLETENESS CHECK:    The full set of extracted values includes a description of samples (""control and NAA80 KO1 cell lysates"") and the number ""2"", neither of which accurately defines the number of biological replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD006856","ExperimentalDesignAgent","experimental_design","comparison of Nt-acetylation status between control and NAA80 KO1 cell lysates","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison rather than a broad study design type (e.g., ""case-control"", ""treated vs control"").
+SOURCE CHECK:      The comparison between control and NAA80 KO1 cell lysates is explicitly mentioned in the text.
+TRUTH CHECK:       The fact that this comparison was performed is correct, but the value is a description of a specific result/analysis, not the ""experimental design"" as defined.
+COMPLETENESS CHECK: The full set contains only this specific analysis, failing to capture the overall study design (which involves knockout vs control comparisons across multiple assays).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control","treated vs control"
+"PXD006856","ExperimentalDesignAgent","factor_value","NAA80 status (control, KO1)","NAA80 status (control, KO1)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental variable (the presence or absence of NAA80), which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares ""control"" and ""NAA80-KO"" (specifically KO1 and KO2) cells across multiple assays.
+TRUTH CHECK:       The value is factually correct; the study investigates the effect of NAA80 knockout versus control.
+COMPLETENESS CHECK: The full set mentions ""control"" and ""KO1"", but the paper also explicitly uses ""KO2"" as a second knockout cell line for validation (e.g., ""two HAP1 NAA80-KO cell lines (KO1 and KO2)"").
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""NAA80 status (control, KO1, KO2)""]","NAA80 status (control, KO1, KO2)"
+"PXD006856","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to MS analysis.
+TRUTH CHECK:       Per the field definition, ""1"" is the correct value when no fractionation occurred.
+COMPLETENESS CHECK: The full set contains only ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006856","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions ""two HAP1 NAA80-KO cell lines (KO1 and KO2)"" and ""control"" cells, but does not explicitly state a total sample count for the proteomics experiment.
+TRUTH CHECK:       The value ""2"" likely refers only to the KO cell lines, ignoring the control group. The proteomics analysis compared ""control and NAA80 KO1 cell lysates,"" implying at least 2 samples, but the study used multiple cell lines (KO1, KO2, and control).
+COMPLETENESS CHECK: The full set [""2""] is insufficient as it does not account for the control samples or the second KO line used across the study.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

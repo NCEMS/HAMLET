@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 SUPPORTED_SUFFIXES = {".csv", ".json", ".png", ".tsv"}
+MAX_PUBLISHED_FILE_BYTES = 1 * 1024 * 1024
 
 
 def copy_file(source: Path, destination: Path) -> None:
@@ -31,7 +32,7 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
     record = {"pxd": pxd, "aggregated": None, "agentic": []}
     pxd_data_dir = output_data_dir / pxd
     aggregate = store_path / "aggregated_results_files" / f"{pxd}_aggregated_results.json"
-    if aggregate.is_file():
+    if aggregate.is_file() and aggregate.stat().st_size <= MAX_PUBLISHED_FILE_BYTES:
         relative_path = Path(pxd) / "aggregated_results.json"
         copy_file(aggregate, output_data_dir / relative_path)
         record["aggregated"] = relative_path.as_posix()
@@ -41,7 +42,16 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
         for source in sorted(agentic_source.rglob("*")):
             if not source.is_file() or source.suffix.lower() not in SUPPORTED_SUFFIXES:
                 continue
-            relative_path = Path(pxd) / "agentic" / source.relative_to(agentic_source)
+            relative_source = source.relative_to(agentic_source)
+            if source.stat().st_size > MAX_PUBLISHED_FILE_BYTES:
+                continue
+            if aggregate.is_file() and relative_source == Path("metadata_extraction_output") / f"{pxd}_aggregated_results.json":
+                continue
+            if relative_source.parts[:2] == ("metadata_extraction_output", "post_judge"):
+                judge_copy = agentic_source / "judge_output" / Path(*relative_source.parts[2:])
+                if judge_copy.is_file():
+                    continue
+            relative_path = Path(pxd) / "agentic" / relative_source
             copy_file(source, output_data_dir / relative_path)
             record["agentic"].append(relative_path.as_posix())
 
