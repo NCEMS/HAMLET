@@ -11,6 +11,19 @@ from pathlib import Path
 SUPPORTED_SUFFIXES = {".csv", ".json", ".png", ".tsv"}
 MAX_PUBLISHED_FILE_BYTES = 1 * 1024 * 1024
 RELEASE_VERSION_PATTERN = re.compile(r'"pipeline_version"\s*:\s*"(v\d+\.\d+\.\d+)"')
+HAMLET_VERSION_PATTERN = re.compile(r'HAMLET_VERSION\s*=\s*"(v\d+\.\d+\.\d+)"')
+HAMLET_VERSION_FILE = Path(__file__).resolve().parents[1] / "python" / "hamlet_version.py"
+
+
+def canonical_hamlet_version() -> str:
+    match = HAMLET_VERSION_PATTERN.search(HAMLET_VERSION_FILE.read_text(encoding="utf-8"))
+    if not match:
+        raise RuntimeError(f"Could not read HAMLET_VERSION from {HAMLET_VERSION_FILE}")
+    return match.group(1)
+
+
+CURRENT_SCHEMA_VERSION = canonical_hamlet_version()
+LEGACY_SCHEMA_VERSION = "v2.0.0"
 
 
 def copy_file(source: Path, destination: Path) -> None:
@@ -18,11 +31,19 @@ def copy_file(source: Path, destination: Path) -> None:
     shutil.copy2(source, destination)
 
 
-def release_version(aggregate: Path) -> str | None:
+def release_version(aggregate: Path, agentic_source: Path, pxd: str) -> str | None:
+    current_schema = {
+        f"{pxd}.sdrf.tsv",
+        f"{pxd}.confidence.sdrf.tsv",
+        "metadata_extraction_output",
+        "judge_output",
+    }
+    if agentic_source.is_dir() and current_schema <= {path.name for path in agentic_source.iterdir()}:
+        return CURRENT_SCHEMA_VERSION
     if not aggregate.is_file():
         return None
     versions = RELEASE_VERSION_PATTERN.findall(aggregate.read_text(encoding="utf-8", errors="replace"))
-    return versions[-1] if versions else None
+    return versions[-1] if versions else LEGACY_SCHEMA_VERSION
 
 
 def read_pxd_file(path: Path) -> list[str]:
@@ -46,14 +67,14 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
     record = {"pxd": pxd, "version": None, "available": False, "aggregated": None, "agentic": []}
     pxd_data_dir = output_data_dir / pxd
     aggregate = store_path / "aggregated_results_files" / f"{pxd}_aggregated_results.json"
-    record["version"] = release_version(aggregate)
+    agentic_source = store_path / "agentic_results_files" / pxd
+    record["version"] = release_version(aggregate, agentic_source, pxd)
     record["available"] = aggregate.is_file()
     if aggregate.is_file() and aggregate.stat().st_size <= MAX_PUBLISHED_FILE_BYTES:
         relative_path = Path(pxd) / "aggregated_results.json"
         copy_file(aggregate, output_data_dir / relative_path)
         record["aggregated"] = relative_path.as_posix()
 
-    agentic_source = store_path / "agentic_results_files" / pxd
     if agentic_source.is_dir():
         record["available"] = True
         for source in sorted(agentic_source.rglob("*")):
