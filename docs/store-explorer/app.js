@@ -69,10 +69,8 @@ async function renderRecord(record) {
     if (images.length) html += `<section class="section"><h3>SDRF judge reports</h3><div class="image-grid">${images.map(path => `<a href="data/${esc(path)}" target="_blank"><img src="data/${esc(path)}" alt="${esc(path.split("/").pop())}"><span class="file-path">${esc(path.split("/").pop())}</span></a>`).join("")}</div></section>`;
     const judgeTables = await Promise.all(judgeFiles.filter(path => path.endsWith(".csv")).map(async path => ({ path, rows: parseDelimited(await fetchText(path), ",") })));
     html += judgeTables.map(item => table(item.path.split("/").pop(), "LLM judge report", item.rows)).join("");
-    const fileLinks = files.filter(path => !path.endsWith(".tsv") && !path.endsWith(".csv") && !path.endsWith(".png")).map(path => `<div class="file"><span class="file-path">${esc(path)}</span><a href="data/${esc(path)}" target="_blank">Open</a></div>`).join("");
-    if (fileLinks) html += `<section class="section"><h3>Agentic metadata</h3><div class="files">${fileLinks}</div></section>`;
     const viewers = await Promise.all(jsonFiles.slice(0, 12).map(path => renderJson(path, `store/agentic_results_files/${record.pxd}/${path.replace(`${record.pxd}/agentic/`, "")}`)));
-    if (viewers.length) html += `<section class="section"><h3>Interactive JSON</h3><div class="files">${viewers.join("")}</div></section>`;
+    if (viewers.length) html += `<section class="section"><h3>Agentic metadata</h3><div class="files">${viewers.join("")}</div></section>`;
     if (record.aggregated) html += `<section class="section"><h3>Aggregated results</h3>${await renderJson(record.aggregated, `store/aggregated_results_files/${record.pxd}_aggregated_results.json`)}</section>`;
     detail.innerHTML = html;
   } catch (error) {
