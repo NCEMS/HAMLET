@@ -89,6 +89,13 @@ function renderCatalog() {
 
 async function initialize() {
   const response = await fetch("data/store-index.json");
+  if (!response.ok) {
+    throw new Error(`Could not load store index (${response.status} ${response.statusText})`);
+  }
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(`Store index is not JSON (received ${contentType || "an unknown content type"})`);
+  }
   const index = await response.json();
   state.records = index.pxds;
   document.querySelector("#record-count").textContent = `${state.records.length} stored PXDs`;
