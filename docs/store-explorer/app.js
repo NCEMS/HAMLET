@@ -2,6 +2,7 @@ const state = { records: [], selected: null };
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
 const filter = document.querySelector("#pxd-filter");
+const versionFilter = document.querySelector("#version-filter");
 
 function esc(value) {
   return String(value).replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
@@ -80,8 +81,10 @@ async function renderRecord(record) {
 
 function renderCatalog() {
   const term = filter.value.trim().toLowerCase();
-  const shown = state.records.filter(record => record.pxd.toLowerCase().includes(term));
-  list.innerHTML = shown.map(record => `<button class="pxd-button ${record.pxd === state.selected ? "active" : ""}" data-pxd="${record.pxd}"><span>${record.pxd}</span><span class="badge">${record.agentic.length + Number(Boolean(record.aggregated))}</span></button>`).join("");
+  const selectedVersion = versionFilter.value;
+  const shown = state.records.filter(record => record.pxd.toLowerCase().includes(term) && (!selectedVersion || (record.version || "Unknown") === selectedVersion));
+  document.querySelector("#record-count").textContent = `${shown.length} of ${state.records.length} stored PXDs`;
+  list.innerHTML = shown.map(record => `<button class="pxd-button ${record.pxd === state.selected ? "active" : ""}" data-pxd="${record.pxd}"><span>${record.pxd}</span><span class="pxd-meta"><span class="version-badge">${esc(record.version || "Unknown")}</span><span class="badge">${record.agentic.length + Number(Boolean(record.aggregated))}</span></span></button>`).join("");
   list.querySelectorAll("button").forEach(button => button.addEventListener("click", () => renderRecord(state.records.find(record => record.pxd === button.dataset.pxd))));
 }
 
@@ -96,8 +99,10 @@ async function initialize() {
   }
   const index = await response.json();
   state.records = index.pxds;
-  document.querySelector("#record-count").textContent = `${state.records.length} stored PXDs`;
+  const versions = [...new Set(state.records.map(record => record.version || "Unknown"))].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+  versionFilter.innerHTML += versions.map(version => `<option value="${esc(version)}">${esc(version)}</option>`).join("");
   filter.addEventListener("input", renderCatalog);
+  versionFilter.addEventListener("change", renderCatalog);
   renderCatalog();
   const selected = location.hash.slice(1);
   const initial = state.records.find(record => record.pxd === selected) || state.records[0];
