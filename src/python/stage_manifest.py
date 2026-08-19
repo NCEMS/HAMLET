@@ -228,6 +228,8 @@ def _ensure_skeleton(manifest: Dict, pxd: str, args):
         if st.get("key_outputs") == legacy_defaults:
             st["key_outputs"] = configured_defaults
         st.setdefault("force_rerun_after", None)
+        if getattr(args, "store_backed_agentic_only", False) and STAGES.index(s) < STAGES.index("agentic_metadata_extraction"):
+            st["availability"] = False
         # Drop the older boolean force_rerun flag (superseded by the
         # timestamp-based force_rerun_after field, which self-heals instead
         # of getting permanently stuck if mark-complete's check raced
@@ -529,6 +531,8 @@ def build_parser():
         sp.add_argument("--base_dir", required=True)
         sp.add_argument("--outdir", required=True)
         sp.add_argument("--central_dir", required=True)
+        sp.add_argument("--store_backed_agentic_only", action="store_true",
+                        help="Disable upstream stages for store-backed agentic finalization")
 
     p_init = sub.add_parser("init")
     add_common(p_init)

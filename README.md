@@ -4,7 +4,22 @@
 
 HAMLET is a local Nextflow DSL2 pipeline that processes PRIDE proteomics datasets end-to-end — from raw file download through database search — and produces a structured JSON report per experiment enriched with organism identity, instrument parameters, post-translational modifications, and optionally LLM- and agentic-extracted publication metadata.
 
-## What HAMLET does
+## 1. Pipeline Structure and Installation
+
+### Pipeline overview
+
+```mermaid
+flowchart LR
+  A["PRIDE RAW files"] --> B["Fetch and convert to mzML"]
+  B --> C["runAssessor"]
+  C --> D["Organism identification"]
+  D --> E["DDA: SAGE / DIA: DIA-NN"]
+  E --> F["Aggregate results"]
+  F --> G["Agentic metadata and SDRF"]
+  G --> H["Store-backed JSON and SDRF outputs"]
+```
+
+### What HAMLET does
 
 1. **Fetches** RAW files from PRIDE and converts them to mzML (via ThermoRawFileParser / ProteoWizard)
 2. **Assesses** each run with runAssessor — detects acquisition type (DDA/DIA), labeling, instrument model, fragmentation
@@ -18,7 +33,7 @@ The pipeline is **100% container-free**, using conda environments for all tools.
 
 ---
 
-## Quick Start
+### Installation
 
 ### 1. Prerequisites
 
@@ -93,9 +108,9 @@ conda deactivate
 
 ---
 
-## Running the pipeline
+## 2. Pipeline Usage Modes
 
-### Single PXD (minimal)
+### Single PXD
 
 ```bash
 nextflow run main.nf --pxd PXD000070
@@ -245,7 +260,7 @@ nextflow run main.nf \
 
 ---
 
-## Generating SDRF files
+### Standalone SDRF generation
 
 After the pipeline produces `*_aggregated_results.json` outputs, you can generate SDRF-Proteomics v1.1.0 TSV files independently using the agentic metadata script.
 
@@ -269,7 +284,7 @@ parallel -j 10 < run_agentic_metadata.cmds
 
 ---
 
-## PRIDE Survey (`src/python/pride_survey.py`)
+### PRIDE survey (`src/python/pride_survey.py`)
 
 `pride_survey.py` is a standalone utility for surveying all public PRIDE projects, building a master dataset, and slicing it into analysis subsets. It runs in three explicit stages that can be invoked independently or combined.
 
@@ -345,7 +360,7 @@ python src/python/pride_survey.py \
 
 ---
 
-## Parameters
+### Parameters
 
 ### Input
 
@@ -434,7 +449,9 @@ python src/python/pride_survey.py \
 
 ---
 
-## Output layout
+## 3. Store and Per-PXD Contents
+
+### Runtime output layout
 
 Converted spectra have one canonical location under `--central_mzml_dir` (default: `spectral_files`). A downloaded RAW file is deleted only after its same-stem mzML file passes validation. The full pipeline and `--runAssessorOnly` both use this same storage policy.
 
@@ -464,9 +481,50 @@ results/
 
 The `*_aggregated_results.json` is the primary deliverable: a single document with runAssessor data, organism identification, search results, PTM fractions, PRIDE metadata, and optionally LLM/agentic enrichments.
 
+### Agentic metadata, judge, and SDRF flow
+
+The final SDRF is generated from the per-PXD runtime outputs under `results/`; `store/` is an archival layout and is not an input to this workflow. The builder combines the aggregated results JSON with all three integrated agent JSONs. It does not use a raw agent response directly.
+
+```mermaid
+flowchart TD
+  A["PRIDE RAW files"] --> B["<b>fetch_pxd</b>"]
+  B --> C["spectral_files/PXD/run-*.mzML"]
+  C --> D["<b>run_assessor</b>"]
+  D --> E["runAssessor metadata"]
+  E --> F["<b>aggregate_results</b> or<br/><b>create_minimal_aggregated_results</b>"]
+  F --> G["results/PXD/PXD_aggregated_results.json"]
+
+  H["PRIDE cache + PMC publication text"] --> I["<b>agentic_metadata_extraction</b>"]
+  G --> I
+  I --> J["TechnicalAgent integrated JSON"]
+  I --> K["BiologicalAgent integrated JSON"]
+  I --> L["ExperimentalDesignAgent integrated JSON"]
+
+  J --> M["<b>llm_judge</b>: N independent passes"]
+  K --> M
+  L --> M
+  H --> M
+  M --> N["majority-vote evaluation consensus"]
+  N --> O["judge_output/json_outputs/PXD_sdrf_overrides.json"]
+
+  G --> P["<b>finalize_sdrf</b>"]
+  J --> P
+  K --> P
+  L --> P
+  O --> P
+  P --> R["sdrf_builder.py:<br/>AgenticToSDRF"]
+  R --> Q["results/PXD/agentic_metadata/PXD.sdrf.tsv"]
+```
+
+By default, **`llm_judge`** makes three independent evaluations (`--n_judge_runs 3`) against publication text and the integrated agent values. It majority-votes each field/value evaluation and writes both a consensus review and `judge_output/json_outputs/<PXD>_sdrf_overrides.json`.
+
+**`finalize_sdrf`** reads that override document, accepts only an unambiguous selected value from the safe-field allowlist, and passes the resulting `{builder_field: value}` dictionary to `AgenticToSDRF`. The override applies in memory during TSV construction; it never mutates the three integrated JSONs. Each override artifact also retains judge verdict, correctness/completeness, hallucination/type-mismatch flags, and any corrected value for future provenance or confidence reporting.
+
+The current safe override fields are organism/sample attributes, instrument, label, replicate and fraction identifiers, and experimental factor value. Technical fields derived directly from runAssessor or search output, including acquisition method, dissociation, mass tolerance, and modification parameters, are not currently judge-overridable.
+
 ---
 
-## STATUS - store coverage as of 2026-08-18
+### Store coverage as of 2026-08-18
 
 The three primary directories under [`store/`](store/) are packaged pipeline outputs. Full file layouts, stage coverage, and the JSON schema reference are in [`store/README.md`](store/README.md).
 
@@ -488,13 +546,25 @@ The restored PXDs are `PXD002080`, `PXD003209`, `PXD004143`, `PXD005463`, `PXD00
 
 ---
 
-## Caching and resume
+## 4. Further Documentation
+
+Start with [store/README.md](store/README.md) for the complete store schema, version/run-mode distinctions, and coverage tables. The following documents cover the most common operating and development paths:
+
+| Topic | Documentation |
+|---|---|
+| Agentic-only execution | [docs/AGENTIC_ONLY_WORKFLOW.md](docs/AGENTIC_ONLY_WORKFLOW.md), [docs/RUNNING_SINGLE_PXD_AGENTIC.md](docs/RUNNING_SINGLE_PXD_AGENTIC.md) |
+| Store schema and output validation | [store/README.md](store/README.md), [docs/guides/AGGREGATED_RESULTS_SCHEMA.md](docs/guides/AGGREGATED_RESULTS_SCHEMA.md), [docs/guides/PIPELINE_VERIFICATION.md](docs/guides/PIPELINE_VERIFICATION.md) |
+| Pipeline architecture | [docs/architecture/IMPLEMENTATION_NOTES.md](docs/architecture/IMPLEMENTATION_NOTES.md), [docs/architecture/TAXID_DETERMINATION.md](docs/architecture/TAXID_DETERMINATION.md), [docs/ARCHITECTURE_PER_FILE_CLOSED_SEARCH.md](docs/ARCHITECTURE_PER_FILE_CLOSED_SEARCH.md) |
+| Storage and operations | [docs/CENTRALIZED_MZML_STORAGE_PLAN.md](docs/CENTRALIZED_MZML_STORAGE_PLAN.md), [docs/guides/PARALLEL_EXECUTION.md](docs/guides/PARALLEL_EXECUTION.md), [docs/guides/AUTO_DETECTION_FEATURE.md](docs/guides/AUTO_DETECTION_FEATURE.md) |
+| SDRF roadmap | [docs/SDRF_PLAN.md](docs/SDRF_PLAN.md), [docs/plans/LLM_JUDGE_SDRF_INTEGRATION_PLAN.md](docs/plans/LLM_JUDGE_SDRF_INTEGRATION_PLAN.md) |
+
+### Caching and resume
 
 `resume = true` is set globally in [nextflow.config](nextflow.config). Nextflow caches completed tasks in `work/` — keep this directory to avoid re-running expensive steps. You can also pass `-resume` explicitly on the command line.
 
 ---
 
-## Repository structure
+### Repository structure
 
 ```
 main.nf                      # Pipeline entrypoint
@@ -543,7 +613,7 @@ store/                       # Aggregated results, SDRFs, and agentic outputs (s
 
 ---
 
-## Troubleshooting
+### Troubleshooting
 
 **`command not found: conda`** — Run `source ~/.bashrc` (or `source ~/miniconda3/etc/profile.d/conda.sh`) then retry.
 
@@ -566,6 +636,6 @@ withName: search {
 
 ---
 
-## License
+### License
 
 MIT License — see [LICENSE](LICENSE).

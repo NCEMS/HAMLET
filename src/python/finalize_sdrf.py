@@ -134,10 +134,13 @@ def main() -> None:
         exp_json=exp_json,
         aggregated_json=args.aggregated_json.resolve(),
         overrides=applied_overrides,
+        judge_document=override_doc,
     )
 
     sdrf_path = output_dir / f"{args.pxd}.sdrf.tsv"
     builder.to_sdrf(sdrf_path)
+    confidence_path = output_dir / f"{args.pxd}.confidence.sdrf.tsv"
+    builder.to_confidence_sidecar(confidence_path)
 
     # Run post-judge evaluation against the finalized SDRF.
     # This always runs (even when no overrides were applied) so post_judge reflects
@@ -162,6 +165,7 @@ def main() -> None:
     report = {
         "paper_id": args.pxd,
         "final_sdrf": str(sdrf_path),
+        "confidence_sidecar": str(confidence_path),
         "pre_judge_summary": judge_stats,
         "override_document": override_doc,
         "applied_overrides": applied_overrides,

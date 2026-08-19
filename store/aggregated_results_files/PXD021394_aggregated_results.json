@@ -66706,7 +66706,1325 @@
     "status": "skipped_agentic_only",
     "data": {}
   },
-  "pride_metadata": {},
+  "pride_metadata": {
+    "project": {
+      "accession": "PXD021394",
+      "title": "DIA-MS analysis of 24 breast cancer tissues",
+      "additionalAttributes": [],
+      "projectDescription": "In recent years genomic and proteomic technologies have been employed in a combined effort to extrapolate key clinical and biological information of complex diseases such as cancer. Most integrative studies employ DNA and/or RNA sequencing technologies coupled to mass spectrometry-derived information to achieve deep information extraction levels, resulting in massive experimental efforts. In this context the employment of data independent acquisition (DIA) methods, which generally do not rely on fractionation, has seldom been tested. In this study, we evaluated the ability of DIA and data dependent acquisition (DDA) MS in determining key biological features of a set of 21 breast cancer tissues for whose RNA-sequencing data was also collected. We evaluated how proteomic data layers matched RNA analysis-derived genomic information, their degree of consensus, and their discrepancies.",
+      "sampleProcessingProtocol": "We performed MS analysis of 24 breast cancer tissues. All tumor samples had proteins extracted as part of ALLPREP (Qiagen) protocol (Protein flowthrough: FT). All samples were measured via data independent acquisition (DIA) MS. All samples were digested using the filter-aided sample preparation (FASP) procedure (as in Wi\u015bniewski et al, 2009, DOI: 10.1038/nmeth.1322) To achieve high proteome depth, all samples analyzed by DDA were fractionated digested by filter-aided sample preparation protocol (FASP) by strong anion exchange (SAX) as in Tyanova et al (2016; DOI: 10.1038/ncomms10259). All samples were subjected to solid phase extraction using the SP3 peptide protocol (Hughes et al, 2014; DOI: 10.15252/msb.20145625). For DIA MS analysis, unfractionated samples were eluted in a 120 min gradient (flow: 300 nl/min; mobile phase A: 0.1% formic acid in H2O; mobile phase B: 80.0% acetonitrile and 0.1% formic acid) on a Q-Exactive HFX (Thermo-Fisher) instrument coupled online to an EASY-nLC 1200 system (Thermo-Fisher). Digested peptides were separated by RP-HPLC (ID 75\u2009\u00b5m\u2009\u00d7\u200950\u2009cm C18 2\u2009\u00b5m 100\u2009\u00c5 resin; Thermo-Fisher). Gradient was run as follows: 10-30% B in 90 min; 30-45% B in 20 min; 45-90% B in 30 s, and 90% B for 9 min. One high resolution MS scan (resolution: 60,000 at 200 m/z) was performed and followed by a set of 32 DIA MS cycles with variable isolation windows (resolution: 30,000 at 200 m/z; isolation windows: 13, 14, 15, 16, 17, 18, 20, 22, 23, 25, 29, 37, 45, 51, 66, 132 m/z; overlap between windows: 0.5 m/z). Ions within each window were fragmented by HCD (collision energy: 30). AGC target for MS scans was set to 1e6 for MS and MS/MS scans, with ion accumulation time set to 100 ms and 120 ms for MS and MS/MS, respectively.",
+      "dataProcessingProtocol": "DIA workflow: this computational pipeline uses the DDA raw data by first employing MaRaCluster (v0.05.0, Build Date Apr 16 2018 21:04:32) to cluster the spectra, and then generating consensus spectra from the clustering using a 5% clustering p-value cut-off. Other parameters of MaRaCluster were kept to default settings. In the next step, the consensus spectra of the selected clusters were searched against the sequence database (Uniprot-Swissprot version download 2017.06.12 for general protein quantification) using Comet (v\"2017.01 rev. 4\"; Eng et al, 2013; DOI: 10.1002/pmic.201200439) and the resulting Peptide Spectral Matches (PSMs) were scored by Percolator (v3.02.1, Build Date Aug 13 2018 15:50:58; The et al, 2016; DOI: 10.1007/s13361-016-1460-7). The resulting scored PSMs were then processed using an in-house built python script, that selected (for each peptide) the spectral match with the best Q-value smaller than 10%. Subsequently, our script extracted transitions from each spectrum by matching peaks to theoretical ion masses within 1ppm (only y and b ions were considered here, since our machine mostly generates such ions). The resulting output consisted of an OpenSWATH compatible Generic Transition List (GTL) in tsv format. To select a set of internal retention time (iRT) peptides (i.e. peptides that are endogenously present in each sample run) OpenSWATH was run without iRT peptide input in order to extract the best candidates to be used as iRT peptides for the next iteration. We used a python script to extract from the resulting OSW files a set of peptides that were detected closest to their library retention time (at most 10 minutes). These were then additionally filtered based on peak-width (i.e. less than 16.5 seconds at the base), and intensity (i.e. at least 1e5). Peptides detected in less than 20 samples were discarded and the remaining set of peptides was randomly subsampled to no more than 100 peptides per RT bin when splitting the DIA gradient into 20 equally sized RT bins. This set of peptides was then used in the next step to fit a lasso iRT model with OpenSWATH, and the results were again processed to extract the best-fitting, sharp-peaked peptides that were found in many samples. Each set of output files was scored using PyProphet (v2.0.1) by merging a subsample of 5% of PSMs from each sample and scoring the merged dataset (scoring level was MS1-MS2). The resulting model (build on a representative sample comprised of 5% from each individual sample) was then back-propagated to the individual samples and used for their scoring. The so scored samples were then passed to the feature_alignment.py script for TRIC alignment (R\u00f6st et al, 2016; DOI: 10.1038/nmeth.3954). After 5 iterations the number of proteins identified with this method seemed to stabilize (4219, 4281, 4298, 4302 and 4301 respectively using the library generated from our DDA data: PXD018830), and for this we chose the last iteration results as our dataset for further analysis. Subsequent to re-quantification, 16,658 peptides covering 4,217 proteins were quantified. These were scaled by per-sample median intensity to account for sample-level differences. A Log2-transformed, mean-centered and standard deviation-scaled version of this matrix was generated both on the peptide level and on the protein level. For protein summarization we first selected for each protein the larges subgroup of at least 3 peptides that had a spearman correlation of at least 0.7 among them, summed those peptides intensities and applied the Log2 transformation, scaling and centering on this summed intensity. We applied the same workflow to all three generated libraries (our own, Tyanova (2016; DOI: 10.1038/ncomms10259) and Bouchal (2019, DOI: 10.1016/j.celrep.2019.06.046)) individually.",
+      "projectTags": [],
+      "keywords": [
+        "Human",
+        "Breast cancer",
+        "Dia"
+      ],
+      "doi": "",
+      "submissionType": "PARTIAL",
+      "license": "Creative Commons Public Domain (CC0)",
+      "submissionDate": "2020-09-10",
+      "publicationDate": "2021-04-26",
+      "submitters": [
+        {
+          "title": "Mr",
+          "firstName": "Tommaso",
+          "lastName": "De Marchi",
+          "identifier": "106360149",
+          "affiliation": "Lund University",
+          "email": "tommaso.de_marchi@med.lu.se",
+          "country": "Sweden",
+          "orcid": "0000-0002-4845-1084",
+          "name": "Tommaso De Marchi",
+          "id": "106360149"
+        }
+      ],
+      "labPIs": [
+        {
+          "title": "Dr",
+          "firstName": "Emma",
+          "lastName": "Nimeus",
+          "identifier": "2152838",
+          "affiliation": "Division of Surgery, Oncology, and Pathology, Department of Clinical Sciences. Biomedical Center \u2013 Lund University, Solvegatan 19, 223 62, Lund, Sweden",
+          "email": "emma.nimeus@med.lu.se",
+          "country": "",
+          "orcid": "",
+          "name": "Emma Nimeus",
+          "id": "2152838"
+        }
+      ],
+      "instruments": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "MS",
+          "accession": "MS:1001911",
+          "name": "Q Exactive",
+          "value": ""
+        }
+      ],
+      "softwares": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "MS",
+          "accession": "MS:1002251",
+          "name": "Comet"
+        },
+        {
+          "@type": "CvParam",
+          "cvLabel": "MS",
+          "accession": "MS:1001490",
+          "name": "Percolator"
+        }
+      ],
+      "experimentTypes": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000447",
+          "name": "SWATH MS"
+        }
+      ],
+      "quantificationMethods": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000450",
+          "name": "Data-independent acquisition"
+        }
+      ],
+      "countries": [
+        "Sweden"
+      ],
+      "sampleAttributes": [
+        {
+          "@type": "Tuple",
+          "key": {
+            "cvLabel": "EFO",
+            "accession": "EFO:0000635",
+            "name": "organism part"
+          },
+          "value": [
+            {
+              "cvLabel": "BTO",
+              "accession": "BTO:0001211",
+              "name": "breast epithelial cell",
+              "value": ""
+            },
+            {
+              "cvLabel": "BTO",
+              "accession": "BTO:0000150",
+              "name": "breast cancer cell",
+              "value": ""
+            },
+            {
+              "cvLabel": "CL",
+              "accession": "CL:0000066",
+              "name": "epithelial cell",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "@type": "Tuple",
+          "key": {
+            "cvLabel": "EFO",
+            "accession": "OBI:0100026",
+            "name": "organism"
+          },
+          "value": [
+            {
+              "cvLabel": "NEWT",
+              "accession": "NEWT:9606",
+              "name": "Homo sapiens (Human)",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "@type": "Tuple",
+          "key": {
+            "cvLabel": "EFO",
+            "accession": "EFO:0000408",
+            "name": "disease"
+          },
+          "value": [
+            {
+              "cvLabel": "DOID",
+              "accession": "DOID:1612",
+              "name": "breast cancer",
+              "value": ""
+            }
+          ]
+        }
+      ],
+      "organisms": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "NEWT",
+          "accession": "NEWT:9606",
+          "name": "Homo sapiens (human)",
+          "value": ""
+        }
+      ],
+      "organismParts": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "CL",
+          "accession": "CL:0000066",
+          "name": "Epithelial cell",
+          "value": ""
+        },
+        {
+          "@type": "CvParam",
+          "cvLabel": "BTO",
+          "accession": "BTO:0000150",
+          "name": "Breast cancer cell",
+          "value": ""
+        },
+        {
+          "@type": "CvParam",
+          "cvLabel": "BTO",
+          "accession": "BTO:0001211",
+          "name": "Breast epithelial cell",
+          "value": ""
+        }
+      ],
+      "diseases": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "DOID",
+          "accession": "DOID:1612",
+          "name": "Breast cancer",
+          "value": ""
+        }
+      ],
+      "references": [
+        {
+          "referenceLine": "De Marchi T, Pyl PT, Sj\u00f6str\u00f6m M, Klasson S, Sartor H, Tran L, Pekar G, Malmstr\u00f6m J, Malmstr\u00f6m L, Nim\u00e9us E. Proteogenomic Workflow Reveals Molecular Phenotypes Related to Breast Cancer Mammographic Appearance. J Proteome Res. 2021",
+          "pubmedID": 33855848,
+          "doi": "10.1021/acs.jproteome.1c00243"
+        }
+      ],
+      "identifiedPTMStrings": [
+        {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000398",
+          "name": "No PTMs are included in the dataset",
+          "value": ""
+        }
+      ],
+      "totalFileDownloads": 5004,
+      "otherOmicsLinks": [
+        "pride.project:PXD018830",
+        "px:PXD018830"
+      ]
+    },
+    "files": [
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "2a45a1ae1e9cae126d1be633a56bf94b2be1495834b122616ac4292656a0491d",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "34fa35b44cc99249f4abdadc466c86a9f058d71e",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_291.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_291.raw"
+          }
+        ],
+        "fileSizeBytes": 3815122562,
+        "fileName": "TDM_M1912_291.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 183
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "7cb3728699f795f5dd09d365170ce2eba38797adda44df6ef2dfa3aea2284014",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "98d7ebfde7d430201ebd99b42043a584884b0ef6",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_261.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_261.raw"
+          }
+        ],
+        "fileSizeBytes": 3489871182,
+        "fileName": "TDM_M1912_261.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 203
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "98a7ca922da5783cfca6e9513a59d36a68e5a05b68b2335036732eecd61b7a1f",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000410",
+          "name": "Other type file URI",
+          "value": "OTHER"
+        },
+        "checksum": "93cba3e4bf21245a57eef4d2f51ade6c32d3dc81",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/Sample.information.xlsx"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/Sample.information.xlsx"
+          }
+        ],
+        "fileSizeBytes": 9673,
+        "fileName": "Sample.information.xlsx",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 295
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "2c0f2c5cb912584976aaa4ee6cab85e6bb87a3be407873e7db468c635e05c059",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "8551799335da3926d09550c32e0269d0bb118fad",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_241.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_241.raw"
+          }
+        ],
+        "fileSizeBytes": 3442741574,
+        "fileName": "TDM_M1912_241.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 156
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "640127c67f4d3cc2f17ff8e607a1a12a606f1284951210045e7a505266cd8a3d",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "5b8fbe6426418404a0f5b4d416548e053648fa88",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_034.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_034.raw"
+          }
+        ],
+        "fileSizeBytes": 3510442010,
+        "fileName": "TDM_M2002_034.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 117
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "3219bbe5d0e8b57448246d08817dbef029db7d7070f5f7303b86973a709c51f1",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "c4c802ca057012e23cb1ba8aa014c5c4933d240c",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_234.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_234.raw"
+          }
+        ],
+        "fileSizeBytes": 3650672100,
+        "fileName": "TDM_M1912_234.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 173
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "692e6ff54427b90f08e8ddc2198f9cd2fae2156038589dfd648f1a259c55ced5",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "16e59db53148349b917f59958c54469a53230c94",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_094.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_094.raw"
+          }
+        ],
+        "fileSizeBytes": 5558690540,
+        "fileName": "TDM_M2002_094.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 164
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "34e4b8e72f8930c659ab21e9307f75ab184ccf870d5cdf42f6f14d35db3dc41a",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000464",
+          "name": "Fasta file URI",
+          "value": "FASTA"
+        },
+        "checksum": "32ba4469c7e8eeaa8c2e88c206a85b283204f9ab",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/2017-06-12.uniprot.hsapiens.reviewed.fasta"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/2017-06-12.uniprot.hsapiens.reviewed.fasta"
+          }
+        ],
+        "fileSizeBytes": 13392583,
+        "fileName": "2017-06-12.uniprot.hsapiens.reviewed.fasta",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 126
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "ca1f78d9b0d58936f1cde84cf87c34b7ae1cad4f20489627737a75018fa614bb",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "19ddcef94505cabf019ef9c3f22c836176e56d0e",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_230.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_230.raw"
+          }
+        ],
+        "fileSizeBytes": 3569215164,
+        "fileName": "TDM_M1912_230.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 183
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "186a29feb0a90f04f6c71d82402af8490a7f89c54987b13299d61eeffa0d3898",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "a09ff73fdbddadce31182631b81fb94bdf081c5c",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_109.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_109.raw"
+          }
+        ],
+        "fileSizeBytes": 2906565268,
+        "fileName": "TDM_M2002_109.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 241
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "2c3cf83cd45ffd10367d675992654b148bfc779bedd3b920623f2a1d6a508fd8",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "acc2e35af5ed90c096f4d7655ce2753c729e2b6f",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_256.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_256.raw"
+          }
+        ],
+        "fileSizeBytes": 4198967490,
+        "fileName": "TDM_M1912_256.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 180
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "d10a7677c25ced5c9cec1d64e216ea22e466e6f515b0cc949d94fd28659817b0",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000410",
+          "name": "Other type file URI",
+          "value": "OTHER"
+        },
+        "checksum": "96a1a621e87dc206f2370e7abb492a537e74a70e",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/2019-05-20.Subtypes.Merged.GTL.old.DIA.Scale.FDR.0.10.tr.3.to.100.lenient.Unimod.DECOY.PQP"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/2019-05-20.Subtypes.Merged.GTL.old.DIA.Scale.FDR.0.10.tr.3.to.100.lenient.Unimod.DECOY.PQP"
+          }
+        ],
+        "fileSizeBytes": 131334144,
+        "fileName": "2019-05-20.Subtypes.Merged.GTL.old.DIA.Scale.FDR.0.10.tr.3.to.100.lenient.Unimod.DECOY.PQP",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 162
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "e10218768d678cb60c3a06663153d0f375bc4a3a997a863092f9d5e71fe71c5c",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "fe6e0103c4568da4278510073d7edd4f9929a36e",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_226.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_226.raw"
+          }
+        ],
+        "fileSizeBytes": 2908364128,
+        "fileName": "TDM_M1912_226.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 154
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "06ce5b073ef3e9caf296f592f0891b1b2172c37b811ef883bb3d540ecd8f4c26",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "ce5722c9c26fa232843efbcc3112a07e4fe2d939",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_279.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_279.raw"
+          }
+        ],
+        "fileSizeBytes": 3724078502,
+        "fileName": "TDM_M1912_279.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 139
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "5a366c83ea5ad3b82908b5a5382e0dc05ace820727204f88a3eff588b6252893",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "ea766d11a009737a000495f3dcabfa52db3e6606",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_227.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_227.raw"
+          }
+        ],
+        "fileSizeBytes": 3407110184,
+        "fileName": "TDM_M1912_227.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 156
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "52d9bb975dd772d9fee998ac086c48a423ca06dd53319c30e3ce4434363185bd",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000464",
+          "name": "Fasta file URI",
+          "value": "FASTA"
+        },
+        "checksum": "bbfa4a3ad81ac8ca3ffb345e1f3ce30530e1e9de",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/2017-06-12.uniprot.hsapiens.reviewed.DECOYed.fasta"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/2017-06-12.uniprot.hsapiens.reviewed.DECOYed.fasta"
+          }
+        ],
+        "fileSizeBytes": 26811823,
+        "fileName": "2017-06-12.uniprot.hsapiens.reviewed.DECOYed.fasta",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 136
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "3798548041be8bd050f24345157bc0c72320b522367c2c7aabd6759691b1b7fc",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "a57c3d3bd690cf3c33ada8ca10ff6adcf7446a7a",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_026.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_026.raw"
+          }
+        ],
+        "fileSizeBytes": 4652595738,
+        "fileName": "TDM_M2002_026.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 146
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "ba0f117881e1f63fff0eb81ffd79f26a6e9ca36ffe2e46214b5b56f30efe7ce9",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "8ec748ac03dcf8fe0d916e9afed3fcad406e4dfa",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_277.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_277.raw"
+          }
+        ],
+        "fileSizeBytes": 3920920342,
+        "fileName": "TDM_M1912_277.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 128
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "7403d74651549632e62bf06db037531c8101e2b416e3c383562070851b158ba2",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000408",
+          "name": "Search engine output file URI",
+          "value": "SEARCH"
+        },
+        "checksum": "1c3d805afb362e1d0ea30f0fa7bc5127a8a96bc8",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/run10.feature_alignment_matrix.tsv"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/run10.feature_alignment_matrix.tsv"
+          }
+        ],
+        "fileSizeBytes": 27007589,
+        "fileName": "run10.feature_alignment_matrix.tsv",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 153
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "78ea9aae7890f270cf0ed6d3bf445f2e3253270586e1e1141a7260b1ce05fd19",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "0d45ca759e3c16638460c20a9c25be7daf89c90e",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_276.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_276.raw"
+          }
+        ],
+        "fileSizeBytes": 3586829646,
+        "fileName": "TDM_M1912_276.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 125
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "2a3a1d4702a709e19703a0cbeaa9431f6bdb78f6167873754c4c42578f847f86",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "be3c6d2b0d2f3862173d5b2117234c7089fa612a",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_063.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_063.raw"
+          }
+        ],
+        "fileSizeBytes": 3719565984,
+        "fileName": "TDM_M2002_063.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 171
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "794a565eff856a218b5102a2585a746fb569016e0c2e4e5568084664979c4165",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "0fc93fc06ad15de5cc7f7610beec537a1cd31976",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_098.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_098.raw"
+          }
+        ],
+        "fileSizeBytes": 5862691500,
+        "fileName": "TDM_M2002_098.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 124
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "6c8fd005a80cce8cdb97e2b1136bddc9650d43163e698b722ded0438405186ec",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "8aed1de5c8810cb00959e8ebfa41ad6f690db9b2",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_097.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_097.raw"
+          }
+        ],
+        "fileSizeBytes": 4976892164,
+        "fileName": "TDM_M2002_097.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 128
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "43e8fd677560bc85c19b4e893f9b01631ff619af4160f20c2000b7ad57718941",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "91b55f3fdbd90ba311f3af3b6db0a205766e7cc0",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_265.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_265.raw"
+          }
+        ],
+        "fileSizeBytes": 3755100246,
+        "fileName": "TDM_M1912_265.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 154
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "1f204bc2f68ba1f232362e1ede51a9a1574be5d36e48bc5d9f011f51fb7ff12e",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "427316844a8ce99de2c6461c9dde30a337da0815",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_236.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_236.raw"
+          }
+        ],
+        "fileSizeBytes": 3685189160,
+        "fileName": "TDM_M1912_236.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 171
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "df7e0c86bc55bab7921c5cba0012fea35072a87747042dd39e66eee686dfb86b",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "00ebfd5c65dd8f5a2af82aeb5c13c2c0bd610a1f",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_275.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_275.raw"
+          }
+        ],
+        "fileSizeBytes": 3974814438,
+        "fileName": "TDM_M1912_275.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 141
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "7f691a2ff37c38be78f1ac0e629b84a1f9b476a912bc78dc8ce04cf8e4387919",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "830e22b0689260119bc5467f6533f3f3bf5a5459",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M1912_232.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M1912_232.raw"
+          }
+        ],
+        "fileSizeBytes": 3795176804,
+        "fileName": "TDM_M1912_232.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 200
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "e86b7c190e38083bddd2cc554cdec59b580bec2304d1516f2b1f82e088d2975b",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "6b1b61fead0fabd7082061b572eaddab6256ab4b",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_070.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_070.raw"
+          }
+        ],
+        "fileSizeBytes": 4125137144,
+        "fileName": "TDM_M2002_070.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 138
+      },
+      {
+        "projectAccessions": [
+          "PXD021394"
+        ],
+        "accession": "b639c672f10130304db914a34998cf5a8ed725f404ad49439a11d778faff229f",
+        "fileCategory": {
+          "@type": "CvParam",
+          "cvLabel": "PRIDE",
+          "accession": "PRIDE:0000404",
+          "name": "Associated raw file URI",
+          "value": "RAW"
+        },
+        "checksum": "6ba8c932b0b26831482d0e5a5ded82eb9fbb8d7c",
+        "publicFileLocations": [
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000468",
+            "name": "Aspera Protocol",
+            "value": "prd_ascp@fasp.ebi.ac.uk:pride/data/archive/2021/04/PXD021394/TDM_M2002_095.raw"
+          },
+          {
+            "@type": "CvParam",
+            "cvLabel": "PRIDE",
+            "accession": "PRIDE:0000469",
+            "name": "FTP Protocol",
+            "value": "ftp://ftp.pride.ebi.ac.uk/pride/data/archive/2021/04/PXD021394/TDM_M2002_095.raw"
+          }
+        ],
+        "fileSizeBytes": 5038711772,
+        "fileName": "TDM_M2002_095.raw",
+        "compress": false,
+        "submissionDate": "2020-09-10T08:38:15.000+00:00",
+        "publicationDate": "2021-04-26T04:12:43.068+00:00",
+        "updatedDate": "2020-09-10T08:38:15.000+00:00",
+        "additionalAttributes": [],
+        "totalDownloads": 163
+      }
+    ]
+  },
   "processing_summary": {
     "total_files": 0,
     "files_processed": 0,

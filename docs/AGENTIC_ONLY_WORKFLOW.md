@@ -2,13 +2,12 @@
 
 ## Overview
 
-The **agentic-only mode** allows you to skip the computationally expensive search stages (organism_id, determine_taxids, search) and run only the fetch, metadata assessment, and metadata extraction stages. It:
+The **agentic-only mode** reuses existing aggregated results and runs only the agentic metadata and SDRF stages. It:
 
-1. Fetches raw data from PRIDE
-2. Runs runAssessor to assess metadata
-3. Determines acquisition parameters (DIA vs DDA)
-4. **Creates minimal aggregated results** (no organism_id or search)
-5. Runs metadata extraction and finalization
+1. Loads each `<PXD>_aggregated_results.json` from `--aggregated_results_dir`
+2. Runs agentic metadata extraction from publication text and the stored aggregate
+3. Runs multi-pass LLM judge consensus
+4. Finalizes the SDRF using judge-approved overrides
 
 This is useful when:
 - You want to quickly test metadata extraction logic without re-running expensive search
@@ -19,20 +18,19 @@ This is useful when:
 ## Workflow Stages
 
 ### Executed Stages (In Order)
-1. `fetch_pxd` - Downloads raw data from PRIDE
-2. `run_assessor` - Assesses metadata from raw files
-3. `determine_acquisition_params` - Detects DIA/DDA acquisition type
-4. **`create_minimal_aggregated_results`** - **NEW** - Creates stub aggregated results with minimal but valid structure
-5. `agentic_metadata_extraction` - LLM-based metadata extraction from publications
-6. `llm_judge` - Multi-run consensus evaluation of extracted metadata
-7. `finalize_sdrf` - Final SDRF generation with user overrides
-8. `results_summary` - Pipeline summary CSV
+1. `agentic_metadata_extraction` - LLM-based metadata extraction from publications and the stored aggregate
+2. `llm_judge` - Multi-run consensus evaluation of extracted metadata
+3. `finalize_sdrf` - Final SDRF generation with user overrides
+4. `results_summary` - Pipeline summary CSV
 
 ### Skipped Stages (Bypassed)
+- `fetch_pxd` - RAW file download and conversion
+- `run_assessor` - Instrument/run characterization
+- `determine_acquisition_params` - DIA/DDA detection
 - `organism_id` - De novo sequencing to predict organism
 - `determine_taxids` - Determines taxid for search
 - `search` - Spectral search (SAGE/DIA-NN)
-- `aggregate_results` - Aggregates full search results
+- `aggregate_results` - Full pipeline aggregation
 
 ## Input Requirements
 
@@ -62,6 +60,8 @@ nextflow run main.nf --agentic_only true --pxd_csv GSlist0.csv -resume
 nextflow run main.nf \
     --agentic_only true \
     --pxd_csv GSlist0.csv \
+    --aggregated_results_dir store/aggregated_results_files \
+    --stage_manifest results/agentic_only_stage_manifest.json \
     --num_pxds 5 \
     -resume
 ```
@@ -108,48 +108,11 @@ results/
           ExperimentalDesignAgent/
         post_judge/        # Second-pass judge results (after user overrides)
       PXD000070.sdrf.tsv   # Final SDRF file
-    detected_params.json   # Detected acquisition parameters
-    PXD000070_aggregated_results.json  # Minimal aggregated results
   ...
 ResultsSummary.csv         # Pipeline completion summary
 ```
 
-## Minimal Aggregated Results Structure
-
-The `create_minimal_aggregated_results` process generates a lightweight JSON with:
-
-```json
-{
-  "pxd_id": "PXD000070",
-  "pipeline_version": "agentic_only_1.0",
-  "aggregation_timestamp": "2026-07-23T...",
-  "input_paths": {...},
-  "runAssessor": {...},           // Full runAssessor metadata
-  "organism_identification": {
-    "status": "skipped_agentic_only",
-    "results": {}
-  },
-  "PTM-shepherd_open_search": {
-    "status": "skipped_agentic_only",
-    "results": {}
-  },
-  "PTM-shepherd_closed_search": {
-    "status": "skipped_agentic_only",
-    "results": {}
-  },
-  "Search_and_modification_results": {
-    "status": "skipped_agentic_only",
-    "files": {}
-  },
-  "modification_site_fractions": {...},
-  "pride_metadata": {...},
-  "processing_summary": {...},
-  "llm_extracted_metadata": {},
-  "consolidated_pipeline": {...}
-}
-```
-
-This structure is valid for `agentic_metadata_extraction` and downstream processes, avoiding missing-key errors.
+The stored `*_aggregated_results.json` file remains in `--aggregated_results_dir`; agentic-only mode does not download RAW files, run runAssessor, or create a replacement aggregate. Use a dedicated `--stage_manifest` path as shown above so the temporary upstream-stage skips do not affect a future full-pipeline run for the same PXD.
 
 ## Performance Notes
 

@@ -82,6 +82,12 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
 
     temperature = "0.0"
 
+    if not AGENTIC_MAIN.is_file():
+        raise FileNotFoundError(
+            f"Agentic metadata entrypoint not found: {AGENTIC_MAIN}. "
+            "Initialize src/agentic-metadata at its pinned submodule revision before running extraction."
+        )
+
     ###-------------------------------------------------------------------------------
     print(f"\nInput JSON: {input_json}")
     print(f"Output directory: {outdir}")
@@ -169,9 +175,7 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
             print(f"Running command: {' '.join(cmd)}")
 
             print(f"Running agentic metadata extraction for {pxd}...")
-            result = subprocess.run(cmd, cwd=REPO_ROOT / "src" / "agentic-metadata")
-            if result.returncode != 0:
-                print(f"WARNING: Extraction exited with code {result.returncode}")
+            subprocess.run(cmd, cwd=REPO_ROOT / "src" / "agentic-metadata", check=True)
 
             # Copy results to output directory
             print(f"Copying agentic output from {agentic_output} to {outdir}...")
@@ -194,6 +198,12 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
 
         print(f"Done. Results written to: {outdir}")
         print(f"Agentic output files: {output_files}")
+        missing_outputs = [path for path in output_files if not path.is_file()]
+        if missing_outputs:
+            raise FileNotFoundError(
+                "Agentic extraction completed without all required integrated JSONs: "
+                + ", ".join(str(path) for path in missing_outputs)
+            )
         return output_files
 ######################################################################################################
 

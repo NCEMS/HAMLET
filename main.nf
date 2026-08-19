@@ -34,10 +34,8 @@ PIPELINE PARAMS (this workflow)
         --num_pxds <N>                    Limit number of PXDs from CSV
 
     Agentic-only mode
-        --agentic_only true               Skip organism_id, determine_taxids, search;
-                                          create minimal aggregated results from
-                                          fetch/run_assessor/determine_acq_params
-                                          then run metadata extraction onwards
+        --agentic_only true               Reuse stored aggregated results and run
+                                          metadata extraction, judge, and SDRF finalization
                                           (requires --pxd or --pxd_csv)
         --aggregated_results_dir <dir>    Directory with *_aggregated_results.json files
                                           Default: store/aggregated_results_files
@@ -187,11 +185,10 @@ workflow {
     }
 
     // ==================== AGENTIC-ONLY WORKFLOW ====================
-    // Run fetch, run_assessor, determine_acquisition_params; create minimal aggregated results;
-    // skip organism_id, determine_taxids, search; run agentic metadata extraction
+    // Reuse stored full aggregated results and run only metadata extraction, judging, and SDRF finalization.
     if( params.agentic_only ) {
         log.info "=== AGENTIC-ONLY MODE ==="
-        log.info "Pipeline: fetch → run_assessor → determine_acquisition_params → create_minimal_aggregated_results → agentic_metadata_extraction → llm_judge → finalize_sdrf"
+        log.info "Pipeline: stored aggregated results → agentic_metadata_extraction → llm_judge → finalize_sdrf"
         
         // Build PXD list from CSV or single PXD
         def pxd_list_agentic = []
@@ -221,33 +218,19 @@ workflow {
         
         log.info "Will process ${pxd_list_agentic.size()} PXD(s) in parallel: ${pxd_list_agentic.join(', ')}"
         
-        // Initialize/reconcile manifest
-        "${params.stage_manifest}" as File  // Ensure it exists
-        
-        pxds_ch = Channel.from(pxd_list_agentic)
-        
-        // === AGENTIC-ONLY BIFURCATED PATH ===
-        fetch_results = fetch_pxd(pxds_ch)
-        
-        assessor_results = run_assessor(fetch_results)
-        
-        acq_params_results = determine_acquisition_params(assessor_results)
-        
-        // Combine outputs for minimal aggregation
-        // assessor_results = [pxd, fetched_dir, study_metadata]
-        // acq_params_results = [pxd, fetched_dir, detected_params.json]
-        // After join: [pxd, fetched_dir, study_metadata, fetched_dir, detected_params.json]
-        // Need to reshape to: [pxd, fetched_dir, study_metadata, detected_params.json]
-        minimal_agg_input_ch = assessor_results.join(acq_params_results, by: 0)
-            .map { pxd, fetched_dir1, study_metadata, fetched_dir2, detected_params ->
-                [ pxd, fetched_dir1, study_metadata, detected_params ]
+        def stored_aggregates = pxd_list_agentic.collect { pxd ->
+            def aggregate = file("${params.aggregated_results_dir}/${pxd}_aggregated_results.json")
+            if (!aggregate.exists()) {
+                error "Missing stored aggregate for ${pxd}: ${aggregate}"
             }
-        
-        minimal_agg_results = create_minimal_aggregated_results(minimal_agg_input_ch)
-        
-        // Agentic metadata extraction (uses minimal aggregated results)
+            tuple(pxd, aggregate)
+        }
+
+        aggregated_results_ch = Channel.fromList(stored_aggregates)
+
+        // Agentic metadata extraction reuses the stored full aggregate.
         // Outputs: [pxd, agentic_stage_output, aggregated_results]
-        agentic_results_ch_minimal = agentic_metadata_extraction(minimal_agg_results)
+        agentic_results_ch_minimal = agentic_metadata_extraction(aggregated_results_ch)
         
         // llm_judge expects only [pxd, agentic_stage_output], so select first 2 elements
         llm_judge_input_ch_minimal = agentic_results_ch_minimal
@@ -1306,7 +1289,7 @@ process agentic_metadata_extraction {
 
     cache false
 
-    errorStrategy 'ignore'  // Continue if metadata extraction fails
+    errorStrategy 'terminate'
 
     input:
     tuple val(pxd), path(aggregated_results)
@@ -1315,18 +1298,24 @@ process agentic_metadata_extraction {
     tuple val(pxd), path("agentic_stage_output"), path(aggregated_results)
 
     script:
+    def store_backed_agentic_args = params.agentic_only ? "--store_backed_agentic_only" : ""
+    def configuredOutdir = new File(params.outdir.toString())
+    def outputDir = configuredOutdir.isAbsolute() ? configuredOutdir.canonicalPath : new File(baseDir.toString(), params.outdir.toString()).canonicalPath
+    def configuredManifest = new File(params.stage_manifest.toString())
+    def manifestPath = configuredManifest.isAbsolute() ? configuredManifest.canonicalPath : new File(baseDir.toString(), params.stage_manifest.toString()).canonicalPath
     """
     # Initialize conda
     ${params.conda_init}
 
     MANIFEST_RC=0
     python ${baseDir}/src/python/stage_manifest.py prepare \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage agentic_metadata_extraction || MANIFEST_RC=\$?
+        --stage agentic_metadata_extraction \
+        ${store_backed_agentic_args} || MANIFEST_RC=\$?
     if [ \$MANIFEST_RC -eq 0 ]; then
         exit 0
     elif [ \$MANIFEST_RC -ne 3 ]; then
@@ -1346,29 +1335,27 @@ process agentic_metadata_extraction {
         --outdir agentic_stage_output \\
         --pride_cache ${baseDir}/pride_survey/pride_cache \\
         --pmc_cache ${baseDir}/pride_survey/pmc_cache \
-        --skip_sdrf_write || {
-        echo "WARNING: Agentic metadata extraction failed for ${pxd} - continuing"
-        mkdir -p agentic_stage_output
-    }
+        --skip_sdrf_write
 
     # Verify output
     ls -la agentic_stage_output/ || echo "No metadata extraction output"
 
     # Materialize only the canonical agentic output folders before manifest update.
-    mkdir -p ${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output
+    mkdir -p ${outputDir}/${pxd}/agentic_metadata/metadata_extraction_output
     for rel_path in integrated_output technical_metadata_output Biological_annotations experimental_design_output; do
         if [ -e "agentic_stage_output/\${rel_path}" ]; then
-            cp -r "agentic_stage_output/\${rel_path}" ${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output/ 2>/dev/null || true
+            cp -r "agentic_stage_output/\${rel_path}" ${outputDir}/${pxd}/agentic_metadata/metadata_extraction_output/
         fi
     done
 
     python ${baseDir}/src/python/stage_manifest.py mark-complete \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage agentic_metadata_extraction || true
+        --stage agentic_metadata_extraction \
+        ${store_backed_agentic_args} || true
     """
 }
 
@@ -1403,18 +1390,24 @@ process llm_judge {
     tuple val(pxd), path("judge_stage_output")
 
     script:
+    def store_backed_agentic_args = params.agentic_only ? "--store_backed_agentic_only" : ""
+    def configuredOutdir = new File(params.outdir.toString())
+    def outputDir = configuredOutdir.isAbsolute() ? configuredOutdir.canonicalPath : new File(baseDir.toString(), params.outdir.toString()).canonicalPath
+    def configuredManifest = new File(params.stage_manifest.toString())
+    def manifestPath = configuredManifest.isAbsolute() ? configuredManifest.canonicalPath : new File(baseDir.toString(), params.stage_manifest.toString()).canonicalPath
     """
     # Initialize conda
     ${params.conda_init}
 
     MANIFEST_RC=0
     python ${baseDir}/src/python/stage_manifest.py prepare \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage llm_judge || MANIFEST_RC=\$?
+        --stage llm_judge \
+        ${store_backed_agentic_args} || MANIFEST_RC=\$?
     if [ \$MANIFEST_RC -eq 0 ]; then
         exit 0
     elif [ \$MANIFEST_RC -ne 3 ]; then
@@ -1447,20 +1440,21 @@ process llm_judge {
     ls -la judge_stage_output/ || echo "No judge output"
 
     # Materialize only canonical judge outputs before manifest update.
-    mkdir -p ${params.outdir}/${pxd}/judge_output
+    mkdir -p ${outputDir}/${pxd}/judge_output
     for rel_path in json_outputs llm_judge_accuracy.png llm_judge_aggregate.png llm_judge_annotation_quality_counts.png llm_judge_annotation_review.csv llm_judge_coverage.csv llm_judge_per_paper.csv skipped.json; do
         if [ -e "judge_stage_output/\${rel_path}" ]; then
-            cp -r "judge_stage_output/\${rel_path}" ${params.outdir}/${pxd}/judge_output/ 2>/dev/null || true
+            cp -r "judge_stage_output/\${rel_path}" ${outputDir}/${pxd}/judge_output/
         fi
     done
 
     python ${baseDir}/src/python/stage_manifest.py mark-complete \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage llm_judge || true
+        --stage llm_judge \
+        ${store_backed_agentic_args} || true
     """
 }
 
@@ -1485,7 +1479,7 @@ process finalize_sdrf {
 
     cache false
 
-    errorStrategy 'ignore'
+    errorStrategy 'terminate'
 
     input:
     tuple val(pxd), path(agentic_stage_output), path(aggregated_results), path(judge_stage_output)
@@ -1495,17 +1489,23 @@ process finalize_sdrf {
     path("${pxd}.sdrf.tsv"), optional: true
 
     script:
+    def store_backed_agentic_args = params.agentic_only ? "--store_backed_agentic_only" : ""
+    def configuredOutdir = new File(params.outdir.toString())
+    def outputDir = configuredOutdir.isAbsolute() ? configuredOutdir.canonicalPath : new File(baseDir.toString(), params.outdir.toString()).canonicalPath
+    def configuredManifest = new File(params.stage_manifest.toString())
+    def manifestPath = configuredManifest.isAbsolute() ? configuredManifest.canonicalPath : new File(baseDir.toString(), params.stage_manifest.toString()).canonicalPath
     """
     ${params.conda_init}
 
     MANIFEST_RC=0
     python ${baseDir}/src/python/stage_manifest.py prepare \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage finalize_sdrf || MANIFEST_RC=\$?
+        --stage finalize_sdrf \
+        ${store_backed_agentic_args} || MANIFEST_RC=\$?
     if [ \$MANIFEST_RC -eq 0 ]; then
         exit 0
     elif [ \$MANIFEST_RC -ne 3 ]; then
@@ -1525,15 +1525,17 @@ process finalize_sdrf {
         --aggregated_json ${aggregated_results} \
         --output_dir finalize_stage_output \
         --pmc_cache ${baseDir}/pride_survey/pmc_cache \
-        \${judge_args} || {
-        echo "WARNING: SDRF finalization failed for ${pxd} - continuing"
-    }
+        \${judge_args}
 
     # Promote flat SDRF to task root so Nextflow can publish it directly to hamlet_sdrfs/
     if [ -f "finalize_stage_output/${pxd}.sdrf.tsv" ]; then
         cp finalize_stage_output/${pxd}.sdrf.tsv ${pxd}.sdrf.tsv
-        mkdir -p ${params.outdir}/${pxd}/agentic_metadata
-        cp finalize_stage_output/${pxd}.sdrf.tsv ${params.outdir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
+    fi
+    if [ -f "finalize_stage_output/${pxd}.confidence.sdrf.tsv" ]; then
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.confidence.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.confidence.sdrf.tsv
     fi
 
     # Publish the post_judge/ subtree (second-pass judge evaluation run after
@@ -1541,7 +1543,7 @@ process finalize_sdrf {
     # cannot reach into a nested subdirectory of a directory-type output (see
     # note above), so we copy it ourselves, excluding the internal prompt cache.
     if [ -d "finalize_stage_output/post_judge" ]; then
-        dest="${params.outdir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
+        dest="${outputDir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
         mkdir -p "\$dest"
         shopt -s nullglob
         post_judge_items=(finalize_stage_output/post_judge/*)
@@ -1558,12 +1560,13 @@ process finalize_sdrf {
     ls -la finalize_stage_output/ || echo "No finalized SDRF output"
 
     python ${baseDir}/src/python/stage_manifest.py mark-complete \
-        --manifest ${params.stage_manifest} \
+        --manifest ${manifestPath} \
         --base_dir ${baseDir} \
-        --outdir ${params.outdir} \
+        --outdir ${outputDir} \
         --central_dir ${params.central_mzml_dir} \
         --pxd ${pxd} \
-        --stage finalize_sdrf || true
+        --stage finalize_sdrf \
+        ${store_backed_agentic_args} || true
     """
 }
 
