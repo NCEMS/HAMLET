@@ -628,7 +628,14 @@ class AgenticToSDRF:
         return parse_alkylation_reagent(self._sample_proc, self._tech_text("alkylation_reagent"))
 
     def _get_mass_tolerances(self) -> tuple[str | None, str | None]:
-        return parse_mass_tolerances(self._ra_search, self._data_proc + " " + self._sample_proc)
+        derived_precursor, derived_fragment = parse_mass_tolerances(
+            self._ra_search,
+            self._data_proc + " " + self._sample_proc,
+        )
+        return (
+            self._override_field("precursor_tolerance") or derived_precursor,
+            self._override_field("fragment_tolerance") or derived_fragment,
+        )
 
     def _get_scan_range(self) -> str | None:
         return parse_scan_range(self._sample_proc)

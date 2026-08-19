@@ -222,6 +222,8 @@ SAFE_SDRF_OVERRIDE_FIELDS = {
     # Technical fields
     "instrument":          "instrument",
     "label":               "label",
+    "precursor_mass_tolerance": "precursor_tolerance",
+    "fragment_mass_tolerance":  "fragment_tolerance",
     # Experimental design fields
     "replicates":          "biological_replicate",
     "technical_replicates": "technical_replicate",

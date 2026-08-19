@@ -10,6 +10,12 @@ import sys
 from sdrf_builder import AgenticToSDRF
 
 
+POST_JUDGE_OVERRIDE_FIELDS = {
+    "precursor_mass_tolerance": "precursor_tolerance",
+    "fragment_mass_tolerance": "fragment_tolerance",
+}
+
+
 def _load_json(path: Path) -> dict | None:
     if not path.exists():
         return None
@@ -105,6 +111,29 @@ def _run_post_judge_evaluation(
     return dict(stats) if stats else None
 
 
+def _post_judge_overrides(output_dir: Path, pxd: str) -> dict[str, str]:
+    """Return unambiguous tolerance corrections from the post-finalization judge."""
+    document = _load_json(output_dir / "post_judge" / "json_outputs" / f"{pxd}.json")
+    if not document:
+        return {}
+
+    candidates: dict[str, set[str]] = {}
+    for annotation in document.get("annotations", []):
+        builder_field = POST_JUDGE_OVERRIDE_FIELDS.get(annotation.get("annotation_type"))
+        corrected_value = annotation.get("corrected_value")
+        if not builder_field or not isinstance(corrected_value, str):
+            continue
+        value = corrected_value.strip()
+        if value:
+            candidates.setdefault(builder_field, set()).add(value)
+
+    return {
+        field: next(iter(values))
+        for field, values in candidates.items()
+        if len(values) == 1
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Finalize SDRF generation using integrated metadata and optional llm_judge overrides.")
     parser.add_argument("--pxd", required=True, help="PXD accession")
@@ -128,19 +157,22 @@ def main() -> None:
     judge_stats = _load_judge_stats(judge_dir) if judge_dir else None
     applied_overrides, refinement_metrics = _build_applied_overrides(override_doc)
 
-    builder = AgenticToSDRF(
-        tech_json=tech_json,
-        bio_json=bio_json,
-        exp_json=exp_json,
-        aggregated_json=args.aggregated_json.resolve(),
-        overrides=applied_overrides,
-        judge_document=override_doc,
-    )
-
     sdrf_path = output_dir / f"{args.pxd}.sdrf.tsv"
-    builder.to_sdrf(sdrf_path)
     confidence_path = output_dir / f"{args.pxd}.confidence.sdrf.tsv"
-    builder.to_confidence_sidecar(confidence_path)
+
+    def write_sdrf(overrides: dict[str, str]) -> None:
+        builder = AgenticToSDRF(
+            tech_json=tech_json,
+            bio_json=bio_json,
+            exp_json=exp_json,
+            aggregated_json=args.aggregated_json.resolve(),
+            overrides=overrides,
+            judge_document=override_doc,
+        )
+        builder.to_sdrf(sdrf_path)
+        builder.to_confidence_sidecar(confidence_path)
+
+    write_sdrf(applied_overrides)
 
     # Run post-judge evaluation against the finalized SDRF.
     # This always runs (even when no overrides were applied) so post_judge reflects
@@ -162,6 +194,22 @@ def main() -> None:
     else:
         print("Skipping post-judge evaluation: pmc_cache path missing or does not exist.")
 
+    post_judge_overrides = _post_judge_overrides(output_dir, args.pxd)
+    if post_judge_overrides:
+        print(f"Applying post-judge tolerance overrides: {post_judge_overrides}")
+        applied_overrides.update(post_judge_overrides)
+        refinement_metrics["overrides_applied"] = len(applied_overrides)
+        refinement_metrics["fields_improved"] = len(applied_overrides)
+        refinement_metrics["post_judge_overrides_applied"] = len(post_judge_overrides)
+        write_sdrf(applied_overrides)
+        if args.pmc_cache and args.pmc_cache.exists():
+            post_judge_stats = _run_post_judge_evaluation(
+                pxd=args.pxd,
+                sdrf_path=sdrf_path,
+                pmc_cache=args.pmc_cache.resolve(),
+                output_dir=output_dir,
+            )
+
     report = {
         "paper_id": args.pxd,
         "final_sdrf": str(sdrf_path),
@@ -169,6 +217,7 @@ def main() -> None:
         "pre_judge_summary": judge_stats,
         "override_document": override_doc,
         "applied_overrides": applied_overrides,
+        "post_judge_overrides": post_judge_overrides,
         "post_refinement_metrics": refinement_metrics,
         "post_judge_summary": post_judge_stats,
     }

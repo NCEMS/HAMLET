@@ -163,6 +163,23 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             ("6 ppm", "20 ppm"),
         )
 
+    def test_mass_tolerance_overrides_precede_derived_values(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {
+            "precursor_tolerance": "10 ppm",
+            "fragment_tolerance": "0.7 Da",
+        }
+        builder._ra_search = {
+            "tolerances": {
+                "recommended overall precursor tolerance (ppm)": 3951,
+                "recommended overall fragment tolerance (ppm)": -0.488816,
+            },
+        }
+        builder._data_proc = ""
+        builder._sample_proc = ""
+
+        self.assertEqual(builder._get_mass_tolerances(), ("10 ppm", "0.7 Da"))
+
     def test_protocol_modification_parser_preserves_order_and_residues(self) -> None:
         modifications = parse_protocol_modifications(
             "Carbamidomethylation, oxidation and methylation on lysine and arginine were included.",
