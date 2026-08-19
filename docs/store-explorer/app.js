@@ -25,7 +25,7 @@ function table(title, note, rows) {
 
 function uniqueJudgeFiles(files) {
   const preferred = [...files].sort((left, right) => {
-    return Number(right.includes("judge_output/")) - Number(left.includes("judge_output/"));
+    return Number(right.includes("post_judge/")) - Number(left.includes("post_judge/"));
   });
   const seen = new Set();
   return preferred.filter(path => {

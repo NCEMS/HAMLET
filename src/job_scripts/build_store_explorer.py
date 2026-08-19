@@ -47,9 +47,9 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
                 continue
             if aggregate.is_file() and relative_source == Path("metadata_extraction_output") / f"{pxd}_aggregated_results.json":
                 continue
-            if relative_source.parts[:2] == ("metadata_extraction_output", "post_judge"):
-                judge_copy = agentic_source / "judge_output" / Path(*relative_source.parts[2:])
-                if judge_copy.is_file():
+            if relative_source.parts[:1] == ("judge_output",):
+                post_judge_copy = agentic_source / "metadata_extraction_output" / "post_judge" / Path(*relative_source.parts[1:])
+                if post_judge_copy.is_file():
                     continue
             relative_path = Path(pxd) / "agentic" / relative_source
             copy_file(source, output_data_dir / relative_path)
