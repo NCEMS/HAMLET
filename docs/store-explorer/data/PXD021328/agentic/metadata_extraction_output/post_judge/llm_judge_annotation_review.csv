@@ -1,0 +1,235 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD021328","","strict","Biological","disease","sars-cov-2","sars-cov-2","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a disease/infection state, which matches the field definition.
+SOURCE CHECK: The value is present in the text; the MS experiment was specifically designed to detect SARS-CoV-2 in clinical respiratory tract samples.
+TRUTH CHECK: The paper describes the detection of SARS-CoV-2 in clinical specimens, making this the correct disease state for the positive samples.
+COMPLETENESS CHECK: The full set contains ""sars-cov-2"", but the study also explicitly includes ""real-time RT-PCR negative"" samples (controls), which should be represented as ""healthy"" or ""no disease"" per the safe defaults.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: sars-cov-2, healthy","sars-cov-2, healthy"
+"PXD021328","","strict","Biological","organ","respiratory tract","respiratory tract","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""respiratory tract"" describes the anatomical origin of the sample, which fits the definition of the organ/tissue field.
+SOURCE CHECK: The paper explicitly states that ""Respiratory tract samples (combined materials from nasopharyngeal and oropharyngeal swabs)"" were the materials processed for both the shotgun proteomics and the targeted MS assays.
+TRUTH CHECK: The value is factually correct as it directly reflects the source of the clinical specimens analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set contains ""respiratory tract"", which accurately covers the biological source described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The value is reasonably inferable from the text, as the samples are ""nasopharyngeal and oropharyngeal swabs"" from ""patients/donors"" and the study detects ""SARS-CoV-2"" (a human virus) in ""clinical sample cohorts"".
+TRUTH CHECK: The samples are human clinical specimens, making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK: The full set contains only this value, which is the only source organism for the clinical samples analyzed by MS.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","ExperimentalDesign","factor_value","RT-PCR status (positive, negative)","RT-PCR status (positive, negative) | sars-cov-2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (RT-PCR status) and its levels (positive, negative), which is the correct category for a factor_value.
+SOURCE CHECK: The paper explicitly states that 985 specimens were ""previously analyzed by real-time RT-PCR"" and categorized as ""real-time RT-PCR positive"" and ""real-time RT-PCR negative"" for the purpose of validating the MS method.
+TRUTH CHECK: The value is factually correct as the study's primary design is to compare MS results against the RT-PCR gold standard status.
+COMPLETENESS CHECK: The full set of extracted values (""RT-PCR status (positive, negative)"" and ""sars-cov-2"") covers the primary experimental variable and the target analyte/disease.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","ExperimentalDesign","factor_value","sars-cov-2","RT-PCR status (positive, negative) | sars-cov-2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a specific disease/virus name, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The value ""SARS-CoV-2"" is explicitly mentioned throughout the paper as the target of the detection assay and the condition being tested in the clinical samples.
+TRUTH CHECK: The study is designed to detect the presence of SARS-CoV-2 in clinical swabs, making it the central experimental factor.
+COMPLETENESS CHECK: The full set of extracted values includes both the specific virus and the RT-PCR status (the method of classification), which together cover the experimental design.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The paper describes a direct analysis of tryptic digests via LC-MS/MS (both in the DDA and the high-throughput TFC-MS workflows) without any mention of offline peptide or protein fractionation.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation schemes are mentioned.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","ExperimentalDesign","replicates","985","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which matches the category for the replicates field.
+SOURCE CHECK: The value 985 refers to the total number of clinical specimens (samples) analyzed in the study, not to biological replicates of a single condition.
+TRUTH CHECK: The value is factually incorrect for this field; 985 is the total sample size (number_of_samples), not the number of biological replicates per group.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD021328","","strict","ExperimentalDesign","technical_replicates","5","5","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The value ""5"" appears in the ""Method validation"" section: ""All conditions were analyzed in quintuplicate in the same run"", referring specifically to the stability study.
+TRUTH CHECK: While the stability study used quintuplicates (5), this was a specific validation sub-experiment. The main clinical cohort analysis (985 samples) does not specify technical replicates for each sample.
+COMPLETENESS CHECK: The full set contains only this value, but it describes a specific validation subset rather than the general experimental design for the primary samples.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
+SOURCE CHECK: The value is explicitly mentioned in the ""Results"" section (""Data-dependent acquisition (DDA) analyses revealed..."") and ""Methods"" section (""Untargeted LC-MS/MS analysis... DDAs were obtained"").
+TRUTH CHECK: The value is factually correct as the paper describes using DDA for the initial untargeted analysis to create a spectral library.
+COMPLETENESS CHECK: While the paper also describes PRM (Parallel Reaction Monitoring) and SRM (Selected Reaction Monitoring) for the targeted assays, the extracted value ""data-dependent acquisition"" correctly identifies the scheme used for the untargeted phase. However, the full set of all_extracted_values is incomplete as it misses the targeted acquisition methods (PRM/SRM) used for the primary study objective.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: data-dependent acquisition, PRM, SRM","data-dependent acquisition, PRM, SRM"
+"PXD021328","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Nonautomated sample processing"" and ""Automated sample processing"" sections as the agent used to digest proteins from the clinical samples.
+TRUTH CHECK: The paper states ""Proteins were digested with trypsin"" and ""A solution of TPCK-treated trypsin... was dispensed,"" confirming its use.
+COMPLETENESS CHECK: Trypsin is the only cleavage agent mentioned for the sample digestion in the text; therefore, the set is complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","fragment_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""20 ppm"" is explicitly mentioned in the ""Selection of target peptides"" section of the methods.
+TRUTH CHECK: The paper states ""Mass tolerance values for MS and MS/MS... were set at 20 ppm"", meaning both the precursor (MS) and fragment (MS/MS) tolerances were 20 ppm.
+COMPLETENESS CHECK: The full set contains the only value mentioned in the text for this parameter.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The paper mentions ""CID gas (mTorr): 1.5"" in the context of the TSQ Altis Triple Quadrupole Mass Spectrometer used for the high-throughput screening.
+TRUTH CHECK: While the paper explicitly mentions ""CID"", it does not use the phrase ""beam-type collision-induced dissociation"". In the context of a Triple Quadrupole (TSQ Altis), CID is indeed beam-type, but the specific phrase ""beam-type collision-induced dissociation"" is not in the text.
+COMPLETENESS CHECK: The full set contains only this value, but it is an expansion/interpretation not literally present in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: CID","CID"
+"PXD021328","","strict","Technical","instrument","Q Exactive HF-X, TSQ Altis","Q Exactive HF-X, TSQ Altis","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains two mass spectrometer models, which matches the definition of the instrument field.
+SOURCE CHECK: Both instruments are explicitly mentioned in the text: the Q-Exactive HF-X was used for untargeted analysis and PRM, and the TSQ Altis was used for the high-throughput SRM screening.
+TRUTH CHECK: The values are factually correct as they appear in the ""Untargeted LC-MS/MS analysis"" and ""TFC coupled to MS detection"" sections.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers used for the proteomics experiments described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","mass_analyzer","orbitrap","orbitrap","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions a ""Q-Exactive HF-X mass spectrometer"", which is an Orbitrap-based instrument.
+TRUTH CHECK: The Q-Exactive series uses an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The paper describes two different MS setups: the Q-Exactive HF-X (Orbitrap) for untargeted/PRM and the TSQ Altis (Triple Quadrupole) for the high-throughput SRM assay. The current set only captures the Orbitrap.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: orbitrap, quadrupole","orbitrap, quadrupole"
+"PXD021328","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Methionine oxidation"" as a variable modification in the ""Selection of target peptides"" section.
+TRUTH CHECK: ""Oxidation (M)"" is a standard representation of ""Methionine oxidation"".
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text (e.g., Deamidation, Lysine oxidation), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","modification","Deamidation (NQ)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Deamidation (NQ)"" is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention deamidation as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text.
+TRUTH CHECK: The candidate value is not mentioned in the text; the only modifications explicitly listed are methionine oxidation and N-terminal acetylation.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","modification","2-amino-3-oxo-butanoic_acid (S)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical modification name, which matches the category for the modification field.
+SOURCE CHECK: The value ""2-amino-3-oxo-butanoic_acid (S)"" is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid modification for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","modification","not applicable","Oxidation (M)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is a placeholder indicating the absence of a modification, but the field expects specific modifications searched.
+SOURCE CHECK: The paper explicitly mentions ""Methionine oxidation and N-terminal acetylation as variable modifications"" in the ""Selection of target peptides"" section.
+TRUTH CHECK: The value ""not applicable"" is factually incorrect because the paper does explicitly list modifications used during the search.
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations (Deamidation, Lysine oxidation, etc.) and one correct value (Oxidation), but ""not applicable"" is incorrect as the field is applicable.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021328","","strict","Technical","precursor_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""20 ppm"" is explicitly mentioned in the ""Selection of target peptides"" section of the methods.
+TRUTH CHECK: The paper states ""Mass tolerance values for MS and MS/MS and the false discovery rate were set at 20 ppm and 1%, respectively."" This indicates that both the precursor (MS) and fragment (MS/MS) tolerances were set to the same value (20 ppm).
+COMPLETENESS CHECK: The full set contains the only value mentioned in the text for this parameter.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

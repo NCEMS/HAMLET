@@ -1,20 +1,20 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
 "PXD004983","","strict","Biological","cell_line","RAW 264.7, BV-2, HEK-293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
-SOURCE CHECK: RAW 264.7 and BV-2 are used in the proteomics experiments (whole cell lysates and m7GTP-Sepharose enrichment), but HEK-293T is explicitly mentioned only for ""indicated transfection experiments"" and validation of protease cleavage, not for the MS analysis.
-TRUTH CHECK: The inclusion of HEK-293T is factually incorrect as it was not the source of the MS samples.
-COMPLETENESS CHECK: The full set includes an unrelated cell line, making the extraction inaccurate.
+SOURCE CHECK: RAW 264.7 and BV-2 are used in the proteomics experiments (whole cell lysates and m7GTP-enrichment), but HEK-293T is explicitly mentioned only for ""indicated transfection experiments"" and validation of protease cleavage, not for the MS analysis.
+TRUTH CHECK: RAW 264.7 and BV-2 are correct sources for the MS samples; HEK-293T is not.
+COMPLETENESS CHECK: The full set includes an unrelated cell line (HEK-293T) and correctly identifies the MS sources.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: RAW 264.7, BV-2","RAW 264.7, BV-2"
-"PXD004983","","strict","Biological","cell_type","macrophage","macrophage","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""macrophage"" describes a cell lineage/type, which matches the field definition.
-SOURCE CHECK: The paper states that ""immortalized macrophage cells"" were used for infection experiments and specifically identifies the cell lines RAW264.7 and BV-2, which were analyzed by mass spectrometry (whole cell lysates and m7GTP-enriched samples).
-TRUTH CHECK: RAW264.7 and BV-2 are well-known macrophage cell lines; the text explicitly refers to them as ""immortalized macrophage cells"".
-COMPLETENESS CHECK: The full set contains ""macrophage"", which accurately covers the cell type of the biological material analyzed by MS in this study.
-
+"PXD004983","","strict","Biological","cell_type","macrophage","macrophage","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""macrophage"" is a cell type/lineage, which matches the field definition.
+SOURCE CHECK: The paper states that ""immortalized macrophage cells"" were used for the infection experiments and that RAW264.7 and BV-2 cell lines (both well-known macrophage lines) were used for the quantitative proteomics analysis.
+TRUTH CHECK: The value is factually correct as RAW264.7 and BV-2 are macrophage cell lines.
+COMPLETENESS CHECK: The full set contains ""macrophage"", which accurately describes the lineage of the cells analyzed by mass spectrometry.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -24,8 +24,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","Biological","disease","infected, mock","","low","True","factor_value","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value describes experimental conditions (infected vs mock) rather than a disease state or diagnosis.
 SOURCE CHECK: The values ""infected"" and ""mock"" are present in the text describing the MS samples.
-TRUTH CHECK: While the samples are ""infected"" with norovirus, ""infected"" and ""mock"" are descriptions of the experimental group/treatment, not the disease state of the subject/cell line. The study uses immortalized macrophage cell lines (RAW 264.7 and BV-2) to model infection; these are not ""diseased"" in the clinical sense, and the ""mock"" group is the healthy/normal control.
-COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TRUTH CHECK: While these are the conditions compared, they are not ""diseases"" in the sense of a diagnosis or disease state; they are treatment/infection statuses. However, in the context of an infection study, ""infected"" represents the diseased/pathological state and ""mock"" represents the healthy/control state.
+COMPLETENESS CHECK: The full set consists of only this value, which attempts to capture the contrast.
 
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: factor_value
@@ -33,22 +33,22 @@ VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
-CORRECTED_VALUE: normal","normal"
-"PXD004983","","strict","Biological","organ","brain","brain","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""brain"" is a valid organ/tissue type.
-SOURCE CHECK: The MS samples were derived from BV-2 cells, which are a well-known murine microglial (brain-derived) cell line.
-TRUTH CHECK: BV-2 cells are derived from the mouse brain (microglia), making ""brain"" a correct inference for the organ of origin.
-COMPLETENESS CHECK: The paper also uses RAW 264.7 cells (macrophage lineage, typically associated with bone marrow/spleen/lymph nodes), which are not covered by ""brain"".
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
+CORRECTED_VALUE: NONE",""
+"PXD004983","","strict","Biological","organ","cell culture","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""cell culture"" is a description of the sample environment/material, not an organ or tissue of origin.
+SOURCE CHECK: The MS samples were derived from RAW 264.7 and BV-2 cell lines grown in culture.
+TRUTH CHECK: ""Cell culture"" is not an organ; the organ/tissue should be inferred from the cell lines used (RAW 264.7 and BV-2 are macrophage/microglial lines, originating from bone marrow/brain).
+COMPLETENESS CHECK: The value is incorrect as it describes the material state rather than the organ of origin.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: organ
+VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
-VERDICT: medium
-CORRECTED_VALUE: brain, bone marrow","brain, bone marrow"
+VERDICT: low
+CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for an organism, which matches the species field definition.
-SOURCE CHECK: The paper describes the use of murine RAW 264.7 and BV-2 cells for the proteomics experiments, and the search was performed against the ""Uniprot Mouse database"".
-TRUTH CHECK: ""Mus musculus"" is the scientific name for mouse, which is the source of the cells analyzed by mass spectrometry.
-COMPLETENESS CHECK: The full set contains the single correct species used for the MS samples.
+SOURCE CHECK: The paper describes the use of murine RAW 264.7 and BV-2 cells for the proteomics experiments and searches against the ""Uniprot Mouse database"".
+TRUTH CHECK: ""Mus musculus"" is the scientific name for the mouse, which is the source of the cells used in the MS experiment.
+COMPLETENESS CHECK: The full set contains the only species involved in the MS analysis.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -56,10 +56,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","ExperimentalDesign","factor_value","time post-infection (0 h, 4 h, 9 h)","time post-infection (0 h, 4 h, 9 h) | infected, mock","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (time post-infection) and its specific levels, which is a correct category for factor_value.
-SOURCE CHECK: The value is explicitly stated in the ""Experimental Design and Statistical Rationale"" section: ""4 h... or 9 h postinfection samples were compared with a 0 h... control lysate.""
-TRUTH CHECK: The values (0 h, 4 h, 9 h) are factually correct based on the text.
-COMPLETENESS CHECK: Together with ""infected, mock"", the set of all_extracted_values covers the primary experimental axes (time and infection status) described in the proteomics experiments.
+"PXD004983","","strict","ExperimentalDesign","factor_value","time post-infection (0 h, 4 h, 9 h)","time post-infection (0 h, 4 h, 9 h) | infected, mock","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (time post-infection) and its specific levels, which is the correct category for a factor_value.
+SOURCE CHECK: The values are explicitly stated in the ""Experimental Design and Statistical Rationale"" section: ""4 h... or 9 h postinfection samples were compared with a 0 h... control lysate.""
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values (""time post-infection (0 h, 4 h, 9 h)"" and ""infected, mock"") covers the primary experimental axes (time and infection status) described in the proteomics experiments.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -70,8 +70,7 @@ CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","ExperimentalDesign","factor_value","infected, mock","time post-infection (0 h, 4 h, 9 h) | infected, mock","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental groups (infected vs mock), which is a correct category for a factor_value.
 SOURCE CHECK: The value is present in the text; the proteomics experiments compared ""mock or infected cells"" at various time points.
 TRUTH CHECK: The value is factually correct as the study compares norovirus-infected cells against mock-infected controls.
-COMPLETENESS CHECK: Together with the other extracted value (""time post-infection""), the set covers the primary experimental variables (infection status and time).
-
+COMPLETENESS CHECK: Together with the other extracted value (""time post-infection""), the set covers the primary experimental axes (infection status and time) described in the proteomics section.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -79,11 +78,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","ExperimentalDesign","fractions","10","10","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
-SOURCE CHECK: The text states, ""For the whole cell lysate experiments, the gel lane was cut into 10 slices and each slice subjected to in-gel tryptic digestion,"" which describes a form of fractionation (gel slicing).
-TRUTH CHECK: The value ""10"" accurately reflects the number of slices/fractions described for the whole cell lysate samples.
-COMPLETENESS CHECK: The full set contains ""10"", which covers the fractionation described for the whole cell lysate; however, the m7GTP pulldown samples were ""extracted as a single band,"" implying 1 fraction for those. Since the pipeline extracted ""10"" and the paper describes both 10-slice and 1-slice approaches, the set is technically incomplete but the value ""10"" is a correct extraction for the specific whole-cell experiment.
-
+"PXD004983","","strict","ExperimentalDesign","fractions","10","10","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper states that for whole cell lysate experiments, ""the gel lane was cut into 10 slices and each slice subjected to in-gel tryptic digestion"".
+TRUTH CHECK: Cutting a gel lane into 10 slices for separate digestion and analysis is a form of fractionation (geLC).
+COMPLETENESS CHECK: The value ""10"" correctly captures the fractionation described for the whole cell lysate samples. While the m7GTP samples were extracted as a single band (1 fraction), the set of extracted values is sufficient to describe the fractionation used in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -91,11 +89,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition of the replicates field.
+"PXD004983","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of biological replicates.
 SOURCE CHECK: The paper explicitly states in the ""Experimental Design and Statistical Rationale"" section: ""For both whole-cell lysate and m7GTP-Sepharose proteomic experiments, triplicate biological samples were used.""
-TRUTH CHECK: The value ""3"" is factually correct as ""triplicate"" means three.
-COMPLETENESS CHECK: The full set of extracted values (""3"") covers the biological replication described for both proteomics experiments in the paper.
-
+TRUTH CHECK: The value ""3"" is factually correct as ""triplicate"" means three replicates.
+COMPLETENESS CHECK: The full set of extracted values contains only ""3"", which exhaustively covers the biological replication described for the MS experiments.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -103,10 +100,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+"PXD004983","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention technical replicates; therefore, the safe default of ""1"" is applied.
 TRUTH CHECK: The value is correct as a safe default when the paper is silent on technical replication.
-COMPLETENESS CHECK: The full set contains only this value, which is complete given the absence of specific information in the text.
+COMPLETENESS CHECK: The full set consists of this single value, which is complete given the lack of information in the text.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -115,9 +113,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
-SOURCE CHECK: The value is explicitly stated in the methods section under ""Mass Spectrometry Analysis"" (""...operated in data-dependent acquisition mode"").
-TRUTH CHECK: The value is factually correct as per the paper text.
-COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+SOURCE CHECK: The value is explicitly stated in the ""Mass Spectrometry Analysis"" section of the methods (""operated in data-dependent acquisition mode"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -125,32 +123,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","Technical","fragment_mass_tolerance","-0.236605 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
-SOURCE CHECK: The value ""-0.236605 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The paper explicitly states that the ""MS/MS tolerance was set at 0.5 Da"".
-COMPLETENESS CHECK: The full set of extracted values is incorrect and does not reflect the value stated in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 0.5 Da","0.5 Da"
-"PXD004983","","strict","Technical","fragmentation","collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
-SOURCE CHECK: The paper mentions that tandem mass spectra were acquired in the ""LTQ linear ion trap"" of an ""LTQ-Orbitrap Velos"" instrument; CID is the standard fragmentation method for the LTQ linear ion trap, although the text does not explicitly use the words ""collision-induced dissociation"" or ""CID"".
-TRUTH CHECK: While the instrument (LTQ linear ion trap) implies CID, the field definition for fragmentation does not list it as an ""inferable"" field (unlike material_type or cell_type), and the rules for modifications explicitly state that the paper text is the only reference. However, for technical MS settings, if the specific method name is not written, it cannot be verified as present.
-COMPLETENESS CHECK: The full set contains only this value, but the value itself is not explicitly stated in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","Technical","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""Mass Spectrometry Analysis"" section as the instrument used for LC-MS/MS analysis.
-TRUTH CHECK: The paper states the analysis was performed on an ""Orbitrap Velos instrument"" and later refers to it as an ""LTQ-Orbitrap Velos mass spectrometer"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the proteomics experiments, so the extraction is complete.
+"PXD004983","","strict","Technical","fragment_mass_tolerance","0.5 Da","0.5 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.5 Da"" is explicitly stated in the ""Mass Spectrometry Analysis"" section of the methods.
+TRUTH CHECK: The text states ""MS/MS tolerance was set at 0.5 Da"", and MS/MS refers to the fragment/product ions.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -159,10 +135,35 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper explicitly mentions the use of an ""Orbitrap Velos instrument"" and an ""LTQ-Orbitrap Velos mass spectrometer"" for the MS analysis.
-TRUTH CHECK: The value is factually correct as the instrument used contains an Orbitrap mass analyzer.
-COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned in the text.
+"PXD004983","","strict","Technical","fragmentation","collision-induced dissociation","collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions that tandem mass spectra were acquired in the ""LTQ linear ion trap"" of an ""LTQ-Orbitrap Velos"" instrument; the LTQ linear ion trap typically uses collision-induced dissociation (CID).
+TRUTH CHECK: While the paper does not explicitly use the words ""collision-induced dissociation"" or ""CID"", it specifies the use of the ""LTQ linear ion trap"" for MS/MS and reports ""normalized collision energy"", which are definitive indicators of CID in this instrument configuration.
+COMPLETENESS CHECK: The full set contains this single value, which covers the fragmentation method used for the MS/MS analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD004983","","strict","Technical","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass Spectrometry Analysis"" section as the instrument used for LC-MS/MS analysis.
+TRUTH CHECK: The paper states the analysis was performed on an ""Orbitrap Velos instrument"" and later refers to it as an ""LTQ-Orbitrap Velos mass spectrometer"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD004983","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the text, which mentions an ""Orbitrap Velos instrument"" and an ""LTQ-Orbitrap Velos mass spectrometer"".
+TRUTH CHECK: The value is factually correct as the instrument used for the MS analysis is an Orbitrap Velos.
+COMPLETENESS CHECK: The full set contains ""orbitrap"", which is the primary mass analyzer for the instrument described.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -173,7 +174,7 @@ CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
 SOURCE CHECK: The text explicitly mentions ""Oxidation of methionine"" as a variable modification in the Mass Spectrometry Analysis section.
 TRUTH CHECK: ""Oxidation (M)"" is a standard representation of ""Oxidation of methionine"".
-COMPLETENESS CHECK: The full set of extracted values includes ""Oxidation (M)"" and ""Lysine oxidation to aminoadipic semialdehyde (K)""; however, the latter is not mentioned in the text. The set is not exhaustive of the modifications listed in the paper (it misses carbaminomethylation and N-terminal acetylation), and it contains a hallucination.
+COMPLETENESS CHECK: The full set includes ""Lysine oxidation to aminoadipic semialdehyde (K)"", which is not mentioned in the text; however, ""Oxidation (M)"" itself is correct.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -184,23 +185,24 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD004983","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
 SOURCE CHECK: The candidate value is not present in the paper text.
-TRUTH CHECK: The paper does not mention ""Lysine oxidation to aminoadipic semialdehyde"" or any modification on Lysine (K) other than N-terminal acetylation.
-COMPLETENESS CHECK: The full set of extracted values includes a hallucinated modification; the only modifications explicitly mentioned in the text are carbaminomethylation, oxidation of methionine, and N-terminal acetylation.
+TRUTH CHECK: The paper does not mention ""Lysine oxidation to aminoadipic semialdehyde""; it only mentions ""Oxidation of methionine"".
+COMPLETENESS CHECK: The full set of extracted values includes a hallucination; the only correct modification mentioned in the text is ""Oxidation of methionine"" (and carbaminomethylation/N-terminal acetylation).
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: no
+VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD004983","","strict","Technical","precursor_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""10 ppm"" is not present in the paper text; the text explicitly states ""Peptide precursor mass tolerance was set at 4.5 ppm"".
-TRUTH CHECK: The value is factually incorrect based on the provided text.
-COMPLETENESS CHECK: The full set contains only this incorrect value.
+"PXD004983","","strict","Technical","precursor_mass_tolerance","4.5 ppm","4.5 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which matches the definition for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Mass Spectrometry Analysis"" section of the methods.
+TRUTH CHECK: The text states ""Peptide precursor mass tolerance was set at 4.5 ppm"", confirming the value is correct for the precursor ions.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 4.5 ppm","4.5 ppm"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

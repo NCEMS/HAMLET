@@ -1,0 +1,250 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD056039","","strict","Biological","cell_line","RPMI8226, MM.1S, ARP-1, CAG, MCF7, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of cell line names, which matches the category for the `cell_line` field.
+SOURCE CHECK: Only RPMI8226 is the source of the material analyzed by mass spectrometry; the others are mentioned in the context of other assays (e.g., HEK293T for co-IP validation, MCF7 for growth assays, MM.1S/ARP-1/CAG for general myeloma studies).
+TRUTH CHECK: Only RPMI8226 is factually correct as the MS sample source. The inclusion of the other cell lines is incorrect based on the ""Experimental Context Rule.""
+COMPLETENESS CHECK: The set is not exhaustive of the correct value because it includes multiple incorrect entities.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: RPMI8226","RPMI8226"
+"PXD056039","","strict","Biological","cell_type","plasma cell","plasma cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""plasma cell"" describes a cell lineage/type, which matches the field definition.
+SOURCE CHECK: The MS experiment used lysates of HA-EZH2 transfected RPMI8226 cells; RPMI8226 is a well-known multiple myeloma cell line, and the paper explicitly compares myeloma cells to ""normal plasma cells"" in the results section.
+TRUTH CHECK: Multiple myeloma cells (like RPMI8226) are malignant plasma cells, making ""plasma cell"" the correct lineage.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the lineage of the cell line used for the MS analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Biological","disease","multiple myeloma","multiple myeloma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""multiple myeloma"" is a disease state, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the text (e.g., ""patients with multiple myeloma"") and refers to the biological context of the RPMI8226 cells used in the mass spectrometry experiment.
+TRUTH CHECK: The paper explicitly identifies the study as focusing on myeloma-induced bone destruction and uses myeloma cell lines for the MS analysis.
+COMPLETENESS CHECK: The full set contains ""multiple myeloma"", which accurately describes the disease state of the samples analyzed.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Biological","organ","bone marrow","bone marrow","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""bone marrow"" is a valid organ/tissue type.
+SOURCE CHECK: The MS sample was derived from lysates of HA-EZH2 transfected RPMI8226 cells; RPMI8226 is a myeloma cell line, and myeloma is a cancer of plasma cells originating in the bone marrow.
+TRUTH CHECK: The value is correct as RPMI8226 is a bone marrow-derived myeloma cell line.
+COMPLETENESS CHECK: The full set contains the single correct tissue of origin for the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value consists of organism names, which is the correct category for the species field.
+SOURCE CHECK: The MS experiment used lysates from HA-EZH2 transfected RPMI8226 cells (a human myeloma cell line), and the paper also describes extensive experiments using NSG mice (Mus musculus). However, the specific MS analysis described in the ""Mass spectrometry"" section only refers to the RPMI8226 cells.
+TRUTH CHECK: While both species are present in the paper, only the human cell line (RPMI8226) was analyzed by mass spectrometry. The mice were used for in vivo imaging, histology, and ELISA, not for the MS experiment.
+COMPLETENESS CHECK: The set is incorrect because it includes a species not analyzed by MS.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD056039","","strict","ExperimentalDesign","factor_value","transfection (HA-EZH2, empty vector), EZH2 knockdown (shEZH2), EZH2 overexpression, EZH2 inhibition (GSK343, DZNep), AP2α knockdown (shAP2α)","multiple myeloma","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes experimental conditions/treatments, which is a correct category for factor_value.
+SOURCE CHECK: The values are present in the text, but most refer to unrelated assays (Western blot, qPCR, cell viability, etc.) rather than the specific MS experiment. The MS experiment specifically used ""HA-EZH2 transfected RPMI8226 cells"" and ""RPMI8226 cells transfected with an empty vector"".
+TRUTH CHECK: While these conditions exist in the paper, the MS experiment only involved the transfection contrast (HA-EZH2 vs empty vector). The other conditions (knockdown, inhibition, etc.) were used for other assays, not the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set of extracted values is incorrect because it bundles multiple unrelated experimental arms into one value and includes conditions not used for the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: transfection (HA-EZH2, empty vector)","transfection (HA-EZH2, empty vector)"
+"PXD056039","","strict","ExperimentalDesign","factor_value","multiple myeloma","multiple myeloma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""multiple myeloma"" describes a disease state, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The paper explicitly identifies the disease as multiple myeloma (e.g., ""myeloma cells"", ""patients with multiple myeloma"").
+TRUTH CHECK: The value is factually correct as the study focuses on the role of EZH2 in multiple myeloma.
+COMPLETENESS CHECK: The full set of extracted values includes both the disease state and the various experimental perturbations (transfections, knockdowns, inhibitors), which together cover the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes a mass spectrometry experiment (""The tryptic peptides were then analyzed using a nano-LC/MS/MS""), but does not mention any offline fractionation steps.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains the single value ""1"", which is exhaustive for this paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment; it mentions ""at least three independent experiments"" for general results and ""five mice in each group"" for in vivo studies, but not for the MS analysis.
+TRUTH CHECK: The value ""2"" is not supported by the text. The mass spectrometry section describes the analysis of HA-EZH2 transfected RPMI8226 cells and an empty vector control, but does not specify the number of biological replicates used for these specific samples.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD056039","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.
+TRUTH CHECK: According to the safe defaults in the field definitions, ""1"" is correct when no replication is mentioned.
+COMPLETENESS CHECK: The full set contains the default value ""1"", which is complete given the absence of specific information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions ""nano-LC/MS/MS (Thermo Fisher Scientific)"" and the use of ""SEQUEST software"", but it does not explicitly state the acquisition method (e.g., DDA or DIA).
+TRUTH CHECK: The value is not explicitly mentioned in the text. While SEQUEST is commonly used with DDA, the specific term ""data-dependent acquisition"" or ""DDA"" does not appear in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section: ""Gel bands stained with Coomassie blue were excised separately, alkylated, and digested with trypsin.""
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","fragment_mass_tolerance","12 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""12 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as factually correct for this experiment.
+COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text. The ""Mass spectrometry"" section mentions ""nano-LC/MS/MS (Thermo Fisher Scientific)"" and ""SEQUEST software"", but does not specify the fragmentation method (e.g., HCD, CID, ETD).
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set is insufficient as the value is hallucinated.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions ""nano-LC/MS/MS (Thermo Fisher Scientific)"" but does not specify the model as ""Orbitrap Fusion Lumos"".
+TRUTH CHECK: The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper describes a mass spectrometry experiment (""The tryptic peptides were then analyzed using a nano-LC/MS/MS"") but does not mention any isobaric, metabolic, or chemical labeling methods.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned in the text, the ""label-free"" safe default is applicable.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling method is described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions ""nano-LC/MS/MS (Thermo Fisher Scientific)"", but it does not explicitly name the mass analyzer (e.g., Orbitrap, TOF, etc.). While many Thermo nano-LC/MS/MS systems use Orbitraps, the text does not state this.
+TRUTH CHECK: The value is not explicitly stated in the text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category (a protein modification).
+SOURCE CHECK: The candidate value is not present in the paper text.
+TRUTH CHECK: The paper does not mention oxidation of methionine or any other specific modifications searched during the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","modification","Deamidation (NQ)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value ""Deamidation (NQ)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The value is not present in the paper text; the mass spectrometry section only mentions that bands were ""alkylated, and digested with trypsin"" without specifying the modifications searched.
+TRUTH CHECK: The value is not mentioned or supported by the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications and ""not applicable,"" none of which are explicitly mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","modification","not applicable","","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is a placeholder indicating the absence of a value, but it does not belong to the category of a protein modification.
+SOURCE CHECK: The paper text does not mention any specific modifications (like Oxidation or Deamidation) being searched or analyzed during the mass spectrometry experiment.
+TRUTH CHECK: The candidate value is not a modification; however, the other values in `all_extracted_values` (Oxidation, Deamidation, etc.) are completely absent from the text.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications that are not mentioned in the text, and ""not applicable"" is not a valid modification.
+
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD056039","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance, which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the ""Mass spectrometry"" section mentions the instrument and software (SEQUEST, BioWorks Browser) but does not specify the precursor mass tolerance.
+COMPLETENESS CHECK: The full set of extracted values is not based on any information present in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

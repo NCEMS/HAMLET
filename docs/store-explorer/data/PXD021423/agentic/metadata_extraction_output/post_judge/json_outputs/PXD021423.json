@@ -1,0 +1,423 @@
+{
+  "paper_id": "PXD021423",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK-293T, HeLa",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HEK-293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "HEK-293T cells were used for the LFQ proteomics experiment (\"LFQ of lysine crotonylation in BspF-transfected HEK-293T cells\"), but HeLa cells were used only for siRNA silencing and infection assays to study Brucella survival, not for mass spectrometry.",
+        "TRUTH_CHECK": "HEK-293T is correct as the MS sample source; HeLa is incorrect as it was not analyzed by MS.",
+        "COMPLETENESS_CHECK": "The full set includes a non-MS sample (HeLa), making the extraction inaccurate."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The value \"kidney\" does not appear in the paper text, nor is it inferable from the MS samples used.",
+        "TRUTH_CHECK": "The MS samples were derived from HEK-293T cells (Human Embryonic Kidney cells). While \"kidney\" is the origin of the HEK line, the paper specifically uses HEK-293T cells. However, the field definition explicitly allows inferring the organ from a named cell line (e.g., HEK-293T -> kidney).",
+        "COMPLETENESS_CHECK": "The full set contains only \"kidney\", which correctly identifies the organ of origin for the HEK-293T cells used in the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment was performed on HEK-293T cells, and the database search was conducted against the \"SwissProt Human database\", confirming the source organism is human.",
+        "TRUTH_CHECK": "The value is factually correct as the samples (HEK-293T) are human-derived.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant species for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "transfection (BspF-transfected, HA-transfected)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental groups/conditions being compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is derived from the MS experiment context, where the authors explicitly state they used \"LFQ... to compare the crotonylation of host proteins in BspF-transfected and HA-transfected cells.\"",
+        "TRUTH_CHECK": "The value accurately reflects the two groups (BspF-transfected and HA-transfected) used in the proteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental contrast described for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a direct loading of peptides onto a reversed-phase analytical column after desalting with ZipTips, with no mention of offline fractionation.",
+        "TRUTH_CHECK": "Since no fractionation step is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" accurately reflects the lack of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates used for the LC-MS/MS proteomics experiment (BspF-transfected vs HA-transfected HEK-293T cells).",
+        "TRUTH_CHECK": "There is no evidence in the text to support the value \"2\"; the paper mentions \"two groups\" (BspF-transfected and HA-transfected), but this refers to the experimental conditions, not the number of biological replicates per group.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates performed for the LC-MS/MS analysis.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default for a silent paper."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"LC-MS/MS Analysis\" section (\"The data acquisition mode used a data-dependent scanning program\").",
+        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein Extraction and Digestion\" section of the methods (\"alkylated with 11 mM iodoacetamide\").",
+        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.",
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Trypsin was added\" in the Protein Extraction and Digestion section and \"tryptic digestion\" in the In-Gel Digestion section.",
+        "TRUTH_CHECK": "The value is factually correct as trypsin was used for the digestion of proteins in both the cell lysate and in-gel experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "0.02 Da",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"0.02 Da\" is explicitly stated in the \"Database Search\" section of the methods.",
+        "TRUTH_CHECK": "The text states \"the mass tolerance for fragment ions was set at 0.02 Da\", which matches the candidate value.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The specific phrase \"beam-type collision-induced dissociation\" is not present in the text; the paper mentions \"tandem mass spectrometry (MS/MS)\" and \"secondary spectra,\" but does not explicitly name the fragmentation method.",
+        "TRUTH_CHECK": "While the instrument used (Q Exactive Plus) typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the text does not explicitly state this.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive HF-X",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Q Exactive Plus",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The value is not present in the paper text; the text explicitly mentions \"Q ExactiveTM Plus (Thermo)\".",
+        "TRUTH_CHECK": "The candidate value \"Q Exactive HF-X\" is factually incorrect as the paper specifies the \"Q Exactive Plus\".",
+        "COMPLETENESS_CHECK": "The full set contains only the incorrect instrument model."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper explicitly states, \"We used label-free quantitative (LFQ) LC-MS/MS proteomics to compare the crotonylation of host proteins...\"",
+        "TRUTH_CHECK": "The value is factually correct as the paper specifies LFQ and does not mention any isobaric or metabolic labeling (TMT, SILAC, etc.).",
+        "COMPLETENESS_CHECK": "The full set contains the only labeling method mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper specifies the use of a \"Q Exactive™ Plus (Thermo)\", which is a well-known Orbitrap-based instrument.",
+        "TRUTH_CHECK": "The Q Exactive Plus uses an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct mass analyzer used in the study."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamidomethyl (C)\" is not explicitly mentioned in the text; only the reagent \"iodoacetamide\" is mentioned.",
+        "TRUTH_CHECK": "According to the modification rules, a modification is correct ONLY when its name is explicitly written in the text. Naming iodoacetamide does not make \"Carbamidomethyl (C)\" correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications not mentioned in the text (e.g., IMID d0, desthiobiotin)."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Database Search\" section of the methods, where it is listed as a variable modification.",
+        "TRUTH_CHECK": "The paper explicitly states \"variable modifications were methionine oxidation\", and \"Oxidation (M)\" is a standard representation of this.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several entries not mentioned in the text (e.g., \"IMID d0\", \"desthiobiotin\"), but the candidate value itself is a correct extraction of one of the modifications listed in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "IMID d0 (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"IMID d0 (K)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text; the paper explicitly lists \"Cysteine alkylation\", \"methionine oxidation\", \"N-terminal acetylation\", and \"lysine crotonylation\" as the modifications searched.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and is not an accurate representation of the modifications listed in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "desthiobiotin modification of lysine (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"desthiobiotin modification of lysine (K)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper describes lysine crotonylation, not desthiobiotin modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications not mentioned in the text (IMID d0, desthiobiotin) and fails to include the primary modification of interest (lysine crotonylation)."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"not applicable\" is not a valid modification name or target residue.",
+        "SOURCE_CHECK": "The paper explicitly lists several modifications in the \"Database Search\" section; \"not applicable\" is not mentioned.",
+        "TRUTH_CHECK": "The value is factually incorrect as the paper describes a proteomics experiment with specific searched modifications.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and an incorrect \"not applicable\" entry, failing to accurately reflect the modifications listed in the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "20 ppm, 5 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of mass tolerance values, which is the correct category for this field.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"Database Search\" section of the methods.",
+        "TRUTH_CHECK": "The paper states, \"The precursor ions mass error tolerance was 20 ppm for the first search and 5 ppm for the main search,\" which matches the candidate values.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the initial and main search tolerances mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a chemical used for reducing disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein Extraction and Digestion\" section (\"The protein solution was reduced with 5 mM dithiothreitol\") and the \"In-Gel Digestion\" section.",
+        "TRUTH_CHECK": "The value is factually correct as it was used for the reduction step of the proteomics sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
+      }
+    }
+  ]
+}

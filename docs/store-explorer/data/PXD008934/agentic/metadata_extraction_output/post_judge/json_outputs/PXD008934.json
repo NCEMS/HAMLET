@@ -4,25 +4,6 @@
     {
       "annotation_type": "cell_type",
       "extracted_value": "cardiomyocytes",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": true,
-      "hallucination": false,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "wrong_value",
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"cardiomyocytes\" is a primary cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the text; however, the mass spectrometry analysis was performed on \"left ventricle tissue\" (LV tissue), not on isolated cardiomyocytes.",
-        "TRUTH_CHECK": "While the paper focuses on cardiomyocytes and performs functional assays on isolated cardiomyocytes, the actual MS sample was homogenized LV tissue, which contains multiple cell types (though the authors note that myocytes are the dominant population).",
-        "COMPLETENESS_CHECK": "The full set contains only \"cardiomyocytes\", but the MS sample was actually whole tissue."
-      }
-    },
-    {
-      "annotation_type": "disease",
-      "extracted_value": "heart failure, normal",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +14,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains disease states and a healthy control, which fits the definition of the disease field.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the context of the mass spectrometry analysis of left ventricle tissue from failing and non-failing human hearts.",
-        "TRUTH_CHECK": "The paper describes a proteomic analysis comparing \"failing human hearts\" (heart failure) and \"non-failing (NF)\" hearts (normal).",
-        "COMPLETENESS_CHECK": "The full set captures the primary contrast (heart failure vs normal), although the paper further subdivides heart failure into specific etiologies (ICM, DCM, HCM). However, as a general description of the study groups, these are correct."
+        "TYPE_CHECK": "The candidate value \"cardiomyocytes\" is a primary cell type, which matches the field definition.",
+        "SOURCE_CHECK": "The paper states that \"Proteomic analysis of left ventricle tissue reveals a consistent upregulation... of intermediate filaments and MTs in failing human hearts\" and later notes that \"the dominant shifts in myocyte proteins likely arise from within that population,\" confirming that the MS analysis was performed on tissue dominated by cardiomyocytes.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on the proteome of the human heart's primary contractile cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"cardiomyocytes\") accurately represents the primary cell type of the biological material analyzed by mass spectrometry."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "heart failure, normal",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains disease states/diagnoses, which matches the field definition.",
+        "SOURCE_CHECK": "The values are present in the text; the MS analysis was performed on left ventricle tissue from both \"non-failing\" (normal) and \"failing\" (heart failure) human hearts.",
+        "TRUTH_CHECK": "The values are factually correct; the study compares failing hearts (heart failure) against non-failing/normal hearts.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly subdivides heart failure into several specific etiologies (ICM, DCM, HCMpEF, HCMrEF) and non-failing into normal and compensated hypertrophy (cHyp), all of which were included in the MS analysis."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"left ventricle\" is a valid organ/tissue name.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section as the source of the material used for mass spectrometry.",
-        "TRUTH_CHECK": "The paper states that \"Human left ventricular tissues... were used for mass spectrometry.\"",
-        "COMPLETENESS_CHECK": "The full set contains \"left ventricle\", which accurately and exhaustively describes the organ source for the MS experiment."
+        "TYPE_CHECK": "The candidate value \"left ventricle\" is a correct anatomical organ/tissue.",
+        "SOURCE_CHECK": "The paper explicitly states that \"Proteomic analysis of left ventricle tissue reveals...\" and \"Human left ventricular tissues... were used for mass spectrometry.\"",
+        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"left ventricle\") is exhaustive for the MS sample source."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states the use of \"human heart failure\" and \"human left ventricular tissues\" for mass spectrometry.",
-        "TRUTH_CHECK": "The value \"Homo sapiens\" is the correct scientific name for humans.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used in the MS experiment."
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states the use of \"human heart failure\" and \"human left ventricular tissues\" for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the study describes proteomics on human heart tissue.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factor (heart condition) and its specific levels, which is the correct category for this field.",
+        "TYPE_CHECK": "The candidate value describes the experimental factor (heart condition) and its associated levels, which is the correct category for this field.",
         "SOURCE_CHECK": "The values (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM) are explicitly stated in the \"Results\" and \"Methods\" sections as the classifications for the hearts used in the mass spectrometry analysis.",
-        "TRUTH_CHECK": "The values accurately reflect the patient groups analyzed by MS (7 normal, 6 cHyp, 4 HCMpEF, 5 HCMrEF, 6 DCM, 6 ICM).",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the detailed breakdown of etiologies and the broader contrast (heart failure vs normal), making the extraction exhaustive."
+        "TRUTH_CHECK": "The values accurately reflect the patient groups described in the paper (Normal, compensated hypertrophy, and various forms of cardiomyopathy).",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental groups; the candidate value specifically provides the detailed breakdown of the heart conditions."
       }
     },
     {
@@ -110,9 +110,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the disease states/conditions under study, which is the correct category for a factor_value.",
-        "SOURCE_CHECK": "The values \"heart failure\" (represented by the various cardiomyopathies) and \"normal\" are explicitly mentioned in the context of the MS analysis of left ventricle tissue.",
-        "TRUTH_CHECK": "The paper compares \"non-failing (NF)\" hearts (which include \"normal\") and \"failing human hearts\" (which include ICM, DCM, HCMpEF, and HCMrEF).",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both a detailed list of all etiologies and a broader contrast (\"heart failure, normal\"), which together exhaustively cover the experimental design described in the paper."
+        "SOURCE_CHECK": "The values \"heart failure\" (represented by the various cardiomyopathy groups) and \"normal\" are explicitly mentioned in the context of the MS analysis of left ventricle tissue.",
+        "TRUTH_CHECK": "The paper compares \"non-failing (NF)\" (which includes \"normal\") and \"failing human hearts\" (heart failure).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both a high-level contrast (\"heart failure, normal\") and a detailed list of the specific etiologies (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM), which exhaustively covers the experimental groups described in the MS results."
       }
     },
     {
@@ -129,28 +129,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes a sample preparation workflow (precipitation, urea denaturation, reduction, alkylation, and trypsin digestion) followed by direct analysis on a Q-Exactive instrument without any mention of offline fractionation.",
-        "TRUTH_CHECK": "Since no fractionation method (such as high-pH reverse phase or strong anion exchange) is described, the default value of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" accurately reflects the lack of fractionation described in the text."
+        "SOURCE_CHECK": "The paper describes the sample preparation and LC-MS/MS workflow but does not mention any offline fractionation steps (e.g., high-pH RP or SAX).",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the absence of fractionation described in the text."
       }
     },
     {
       "annotation_type": "replicates",
       "extracted_value": "34",
-      "verdict": "low",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
+      "value_correct": true,
       "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
+      "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for replicates.",
-        "SOURCE_CHECK": "The paper states \"34 hearts in total were used in mass spectrometry\", referring to the biological samples analyzed by MS.",
-        "TRUTH_CHECK": "While 34 is the total number of samples, the study is divided into multiple groups (Normal N=7, cHyp N=6, ICM N=6, HCMpEF N=4, HCMrEF N=5, DCM N=6). In proteomics, \"replicates\" typically refers to the number of biological replicates *per group* rather than the total sample size. However, the total number of biological samples processed is 34.",
-        "COMPLETENESS_CHECK": "The value 34 represents the total number of biological samples, but it does not capture the group-specific replication (which varies from 4 to 7)."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper states that \"34 hearts in total were used in mass spectrometry\", which refers to the biological samples analyzed by MS.",
+        "TRUTH_CHECK": "While 34 is the total number of samples, the replicates are distributed across different groups (7 normal, 6 cHyp, 4 HCMpEF, 5 HCMrEF, 6 DCM, 6 ICM). In proteomics, when multiple groups are compared, the \"replicates\" field typically refers to the number of biological replicates per group or the total number of biological samples if they are treated as a single cohort. However, the value 34 represents the total number of biological samples (hearts) used for the MS experiment.",
+        "COMPLETENESS_CHECK": "The value 34 covers the total number of biological samples used for the MS analysis."
       }
     },
     {
@@ -167,9 +167,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the mass spectrometry samples; therefore, the safe default of \"1\" is applied.",
-        "TRUTH_CHECK": "In the absence of explicit mention of technical replicates, \"1\" is the correct default value.",
-        "COMPLETENESS_CHECK": "The value \"1\" is complete as it represents the default state when no replication is specified."
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "According to the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the technical replication state given the absence of explicit information in the text."
       }
     },
     {
@@ -205,9 +205,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section (\"The solution was stored at room temperature in 25 mM iodoacetamide at the dark for 60 min\") as part of the sample preparation for the MS experiment.",
-        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"iodoacetamide\", which is the only alkylation reagent mentioned in the paper."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section: \"The solution was stored at room temperature in 25 mM iodoacetamide at the dark for 60 min.\"",
+        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only alkylation reagent mentioned in the text."
       }
     },
     {
@@ -223,34 +223,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section (\"...and then digested with trypsin (1:50 ratio) at 37°C...\").",
-        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
-        "COMPLETENESS_CHECK": "The full set contains the only cleavage agent mentioned in the text."
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section: \"then digested with trypsin (1:50 ratio) at 37°C\".",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned in the paper."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "16 ppm",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"16 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states \"fragment mass tolerance of 20 ppm\" in the \"Proteomics MS data analysis\" section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains a value not present in the text and misses the correct value."
-      }
-    },
-    {
-      "annotation_type": "fragmentation",
-      "extracted_value": "beam-type collision-induced dissociation",
+      "extracted_value": "20 ppm",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -261,10 +242,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states that ions were fragmented using \"higher-energy collisional dissociation (HCD)\".",
-        "TRUTH_CHECK": "\"Beam-type collision-induced dissociation\" is a technical synonym for HCD, but the paper specifically uses the term \"higher-energy collisional dissociation (HCD)\".",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the fragmentation method used."
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Proteomics MS data analysis\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Default search parameters were used, including precursor mass tolerance of 20 ppm, fragment mass tolerance of 20 ppm\", so \"20 ppm\" is correct for the fragment mass tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only value reported for this field in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HCD",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper text does not mention \"beam-type collision-induced dissociation\"; it explicitly states that \"Ions were fragmented using higher-energy collisional dissociation (HCD)\".",
+        "TRUTH_CHECK": "The value is factually incorrect for this experiment as the paper specifies HCD.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it contains a hallucinated value and misses the actual method mentioned in the text."
       }
     },
     {
@@ -281,7 +281,7 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Nano liquid chromatography and mass spectrometry\" section as \"Q-Exactive (Thermo Scientific)\".",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Nano liquid chromatography and mass spectrometry\" section of the methods (\"analyzed on a Q-Exactive (Thermo Scientific)\").",
         "TRUTH_CHECK": "The value is factually correct as per the text.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
@@ -301,8 +301,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"LFQ (Label-free quantification)\" in the \"Proteomics MS data analysis\" section.",
-        "TRUTH_CHECK": "The paper describes the use of LFQ and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC/dimethyl) labeling.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling method used in the study."
+        "TRUTH_CHECK": "The value is factually correct as the paper describes the use of LFQ and does not mention any isobaric, metabolic, or chemical labeling (like TMT or SILAC).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
       }
     },
     {
@@ -319,9 +319,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Nano liquid chromatography and mass spectrometry\" section which describes the MS analysis of the LV tissue samples.",
-        "TRUTH_CHECK": "The paper explicitly states \"Orbitrap detection was used\" for the MS2 scans.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned for the proteomics experiment."
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Nano liquid chromatography and mass spectrometry\" section (\"Orbitrap detection was used...\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly states Orbitrap detection was used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
       }
     },
     {
@@ -364,21 +364,21 @@
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "7 ppm",
-      "verdict": "low",
+      "extracted_value": "20 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states \"precursor mass tolerance of 20 ppm\" in the \"Proteomics MS data analysis\" section.",
-        "COMPLETENESS_CHECK": "The extracted value is incorrect; the correct value is present in the text."
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Proteomics MS data analysis\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Default search parameters were used, including precursor mass tolerance of 20 ppm, fragment mass tolerance of 20 ppm\". The candidate value correctly matches the precursor mass tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance value mentioned in the text."
       }
     },
     {
@@ -394,10 +394,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the definition of the reduction_reagent field.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry of human left ventricular tissues\" section under \"Sample preparation\" (\"Denaturation/reduction was performed in 8 M urea/5 mM dithiothreitol...\").",
-        "TRUTH_CHECK": "The value is factually correct as it was the reagent used for reduction in the MS sample preparation.",
-        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
+        "TRUTH_CHECK": "The value is factually correct as it was the reagent used for the reduction step of the MS sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text for the MS experiment."
       }
     }
   ]

@@ -1,8 +1,9 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD009602","","strict","Biological","age","27-85 years","27-85 years","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a range of ages, which fits the definition of the age field.
-SOURCE CHECK: The value is explicitly stated in the ""CRC patients (tissue cohort)"" section of the methods, referring to the patients from whom the CRC and NMC tissue samples analyzed by MS were obtained.
+"PXD009602","","strict","Biological","age","27-85 years","27-85 years","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a range of ages, which fits the category of the age field.
+SOURCE CHECK: The value is explicitly stated in the ""CRC patients (tissue cohort)"" section of the methods, which describes the patients whose tissue was analyzed by mass spectrometry.
 TRUTH CHECK: The text states the median age was 69 years and the range was ""27-85 years at surgery"".
 COMPLETENESS CHECK: The value correctly captures the age range of the donor cohort for the MS samples.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,10 +11,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009602","","strict","Biological","cell_type","malignant cells","malignant cells","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""malignant cells"" describes a cell type/state.
-SOURCE CHECK: The paper states that HLA-class I and II molecules were confirmed on ""malignant cells"" and that the MS analysis was performed on ""CRC"" (colorectal carcinoma) tissue, which consists of these malignant cells.
-TRUTH CHECK: The MS experiment specifically targeted the HLA-ligandome of colorectal cancer (CRC) tissue, which is composed of malignant cells.
-COMPLETENESS CHECK: The full set contains only ""malignant cells""; however, the paper also analyzes ""non-malignant colon (NMC) tissue,"" which contains non-malignant cells. The extraction is partial as it ignores the control group.
+"PXD009602","","strict","Biological","cell_type","malignant cells","malignant cells","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""malignant cells"" describes a cell type/state, which fits the definition of cell_type.
+SOURCE CHECK: The paper explicitly states that HLA-class I and II molecules were confirmed on ""malignant cells"" and that the MS analysis was performed on ""CRC"" (colorectal carcinoma) tissue, which consists of these malignant cells.
+TRUTH CHECK: The value is factually correct as the study focuses on the HLA-ligandome of malignant cells in colorectal cancer.
+COMPLETENESS CHECK: The study analyzes both CRC (malignant) and NMC (non-malignant) tissues. The full set of extracted values only includes ""malignant cells"", missing the non-malignant cell types present in the NMC samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -21,10 +22,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: malignant cells, non-malignant cells","malignant cells, non-malignant cells"
-"PXD009602","","strict","Biological","disease","colorectal carcinoma, normal","colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains disease states, which matches the definition for the disease field.
-SOURCE CHECK: The paper explicitly mentions ""colorectal carcinoma (CRC)"" and ""non-malignant colon (NMC) tissue"" as the materials analyzed by mass spectrometry.
-TRUTH CHECK: The values are factually correct; ""colorectal carcinoma"" is the disease and ""normal"" is a safe default for the non-malignant colon (NMC) samples.
-COMPLETENESS CHECK: The full set covers both the malignant and non-malignant conditions described in the MS experiment.
+"PXD009602","","strict","Biological","disease","colorectal carcinoma, normal","colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains disease states (""colorectal carcinoma"" and ""normal""), which matches the field definition.
+SOURCE CHECK: The values are explicitly mentioned in the text; the MS analysis was performed on colorectal carcinoma (CRC) and non-malignant colon (NMC) tissue.
+TRUTH CHECK: The values are factually correct; ""colorectal carcinoma"" is the disease and ""normal"" is the safe default for the non-malignant colon (NMC) samples.
+COMPLETENESS CHECK: The full set of extracted values covers both the diseased and non-diseased groups analyzed by mass spectrometry.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -33,9 +34,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009602","","strict","Biological","organ","colon","colon","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""colon"" is a valid organ/tissue name.
-SOURCE CHECK: The value is explicitly mentioned in the text; the MS analysis was performed on ""colorectal carcinoma (CRC)"" and ""non-malignant colon (NMC) tissue"".
-TRUTH CHECK: The value is factually correct as the samples were derived from the colon.
-COMPLETENESS CHECK: The full set contains ""colon"", which accurately describes the organ of origin for all MS samples in this study.
+SOURCE CHECK: The value is explicitly mentioned in the text; the MS analysis was performed on ""colorectal carcinoma (CRC) and corresponding non-malignant colon (NMC) tissue"".
+TRUTH CHECK: The value is factually correct as the samples were derived from the colon (specifically CRC and NMC).
+COMPLETENESS CHECK: The full set of extracted values (""colon"") covers the primary organ of origin for the MS samples described in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -44,7 +45,7 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009602","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper describes the analysis of colorectal cancer (CRC) and non-malignant colon (NMC) tissue from patients, and explicitly mentions searching the ""human proteome"" in the methods.
+SOURCE CHECK: The paper describes the analysis of colorectal cancer (CRC) and non-malignant colon (NMC) tissue from patients, and explicitly mentions searching the ""human proteome"" in the database search section.
 TRUTH CHECK: The samples are derived from human patients, making ""Homo sapiens"" factually correct.
 COMPLETENESS CHECK: The full set contains the only species involved in the MS experiment.
 TYPE_CORRECT: yes
@@ -54,21 +55,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009602","","strict","ExperimentalDesign","factor_value","tissue type (CRC, NMC)","tissue type (CRC, NMC) | colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (tissue type) and its levels (CRC, NMC), which is a correct category for factor_value.
-SOURCE CHECK: The value is derived from the MS experiment context, where CRC (colorectal carcinoma) and NMC (non-malignant colon) tissues were analyzed.
-TRUTH CHECK: The value is factually correct as the study compares the HLA-ligandomes of CRC and NMC tissues.
-COMPLETENESS CHECK: The full set of extracted values (""tissue type (CRC, NMC)"" and ""colorectal carcinoma, normal"") comprehensively covers the experimental design axis described in the paper.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD009602","","strict","ExperimentalDesign","factor_value","colorectal carcinoma, normal","tissue type (CRC, NMC) | colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the disease states/conditions being compared, which is the correct category for a factor_value.
-SOURCE CHECK: The values are present in the text; ""CRC"" (colorectal carcinoma) and ""NMC"" (non-malignant colon/normal) are the primary groups analyzed by mass spectrometry.
-TRUTH CHECK: The values are factually correct as the study compares the HLA-ligandome of colorectal cancer (CRC) against non-malignant colon (NMC) tissue.
-COMPLETENESS CHECK: The full set of extracted values covers the experimental contrast (CRC vs NMC) described in the paper.
+"PXD009602","","strict","ExperimentalDesign","factor_value","tissue condition (CRC, NMC)","tissue condition (CRC, NMC) | colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (tissue condition) and its levels (CRC, NMC), which is the correct category for factor_value.
+SOURCE CHECK: The value is directly derived from the MS experiment context, where the study compares colorectal carcinoma (CRC) and non-malignant colon (NMC) tissue.
+TRUTH CHECK: The value is factually correct; the paper explicitly compares CRC and NMC tissues using mass spectrometry.
+COMPLETENESS CHECK: The full set of extracted values (""tissue condition (CRC, NMC)"" and ""colorectal carcinoma, normal"") comprehensively covers the experimental groups described in the paper.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -77,10 +67,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009602","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper describes the LC-MS/MS workflow but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
+"PXD009602","","strict","ExperimentalDesign","factor_value","colorectal carcinoma, normal","tissue condition (CRC, NMC) | colorectal carcinoma, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the disease states (cancer vs. normal) being compared, which is the correct category for a factor_value.
+SOURCE CHECK: The values are present in the text; ""colorectal carcinoma"" (CRC) and ""non-malignant colon"" (NMC/normal) are the primary samples analyzed by mass spectrometry.
+TRUTH CHECK: The values are factually correct; the study compares the HLA-ligandome of CRC and NMC tissue.
+COMPLETENESS CHECK: The full set of extracted values covers the experimental contrast (CRC vs NMC) described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009602","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.
 TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" correctly represents the lack of fractionation for the samples described.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which is exhaustive for this experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -89,10 +90,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009602","","strict","ExperimentalDesign","replicates","104","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: The value ""104"" is not present in the text; it appears to be an incorrect summation of various sample counts (30+19+35+20 = 104).
-TRUTH CHECK: The value is factually incorrect. The ""replicates"" field refers to biological replicates per group/condition, not the total number of samples across all groups. The paper describes multiple groups (CRC HLA-I, CRC HLA-II, NMC HLA-I, NMC HLA-II) with different sample sizes (n=30, 19, 35, 20).
-COMPLETENESS CHECK: The value is incorrect and therefore not a complete or valid representation of biological replicates.
-
+SOURCE CHECK: The value ""104"" is not mentioned in the text as a number of biological replicates; it appears to be a hallucinated sum or a miscalculation.
+TRUTH CHECK: The paper describes multiple cohorts: CRC tissue (n=30 for HLA-I, n=19 for HLA-II) and NMC tissue (n=35 for HLA-I, n=20 for HLA-II). The total number of biological samples analyzed by MS is 104 (30+19+35+20), but this is the `number_of_samples`, not the number of `replicates` per group.
+COMPLETENESS CHECK: The value is incorrect, so completeness is not applicable.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -100,10 +100,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009602","","strict","ExperimentalDesign","technical_replicates","5","5","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK: The value is explicitly stated in the ""Analysis of HLA-ligands by LC-MS/MS"" and ""Relative quantitation of HLA-presented peptides"" sections, stating samples were analyzed in ""up to five technical replicates each"" and ""five technical replicates for each sample.""
-TRUTH CHECK: The value ""5"" accurately reflects the number of technical replicates described for the MS analysis.
-COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
+"PXD009602","","strict","ExperimentalDesign","technical_replicates","5","5","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for technical replicates.
+SOURCE CHECK: The paper explicitly states in the ""Analysis of HLA-ligands by LC-MS/MS"" and ""Relative quantitation of HLA-presented peptides"" sections that samples were analyzed in ""up to five technical replicates each"" and ""five technical replicates for each sample"".
+TRUTH CHECK: The value ""5"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the single value ""5"", which accurately reflects the technical replication described for the MS analysis.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -113,8 +113,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009602","","strict","Technical","instrument","LTQ Orbitrap XL","LTQ Orbitrap XL","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Analysis of HLA-ligands by LC-MS/MS"" section as the instrument used for the MS analysis.
-TRUTH CHECK: The paper states that eluting peptides were analyzed in an ""online coupled LTQ Orbitrap XL mass spectrometer (Thermo Fisher)"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the analysis of the samples; the set is exhaustive.
+TRUTH CHECK: The value ""LTQ Orbitrap XL"" is factually correct according to the text.
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the analysis, so the extraction is complete.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -124,9 +124,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009602","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper explicitly mentions ""label-free quantitation (LFQ)"" in the ""Relative quantitation of HLA-presented peptides"" section.
-TRUTH CHECK: The paper describes no isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC/dimethyl) labeling; it specifically uses label-free quantitation.
-COMPLETENESS CHECK: The full set of extracted values (""label free"") is exhaustive as no other labeling methods are mentioned.
+SOURCE CHECK: The paper explicitly mentions ""label-free quantitation (LFQ)"" in the ""Relative quantitation of HLA-presented peptides"" section of the methods.
+TRUTH CHECK: The value is factually correct as the paper describes a label-free approach and mentions no isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+COMPLETENESS CHECK: The full set of extracted values contains only ""label free"", which exhaustively covers the labeling method described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes

@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"3T3-L1\" is a name of an immortalized cell line, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states, \"we performed proteomic analyses with differentiated and treated 3T3-L1s\" and describes the lysis and MS workflow for these cells.",
-        "TRUTH_CHECK": "The value is factually correct as 3T3-L1 cells were the source of the proteomics and phosphoproteomics samples.",
-        "COMPLETENESS_CHECK": "The full set contains \"3T3-L1\", which covers the cell line used for the MS experiment described in the \"Proteomic Analyses\" section."
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly states, \"we performed proteomic analyses with differentiated and treated 3T3-L1s,\" and the \"Proteomic Analyses\" methods section describes the lysis and processing of 3T3-L1 cells for MS.",
+        "TRUTH_CHECK": "The value is factually correct as 3T3-L1 cells were the source of the proteomics and phosphoproteomics data.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the mass spectrometry experiments described."
       }
     },
     {
@@ -34,52 +34,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"adipocytes\" describes a cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the text; the proteomics analyses were performed on differentiated 3T3-L1 cells, which the paper explicitly describes as \"adipocytes\" (e.g., \"we performed proteomic analyses with differentiated and treated 3T3-L1s\" and \"induced expression of brite adipocyte genes\").",
-        "TRUTH_CHECK": "The value is factually correct as the 3T3-L1 cells were differentiated into adipocytes prior to the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains \"adipocytes\", which accurately describes the cell type of the material analyzed by mass spectrometry in this study."
+        "SOURCE_CHECK": "The value is present in the text; the proteomics analyses were performed on differentiated 3T3-L1 cells, which the paper explicitly describes as \"adipocytes\" (e.g., \"we performed proteomic analyses with differentiated and treated 3T3-L1s\" and \"induced expression of brite adipocyte genes... in mature adipocytes\").",
+        "TRUTH_CHECK": "The value is factually correct as the 3T3-L1 cells were differentiated into adipocytes before being analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set contains \"adipocytes\", which accurately describes the cell type of the MS sample."
       }
     },
     {
       "annotation_type": "organ",
-      "extracted_value": "inguinal adipose tissue",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "wrong_value",
-      "corrected_value": "adipose",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a tissue/organ, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"inguinal adipose tissue (IWAT)\" in the context of in vivo experiments (H&E staining and mRNA expression), but the actual proteomic analyses were performed on 3T3-L1 cells.",
-        "TRUTH_CHECK": "The proteomic analyses (LC-MS/MS) were explicitly conducted on \"differentiated and treated 3T3-L1s\", not on inguinal adipose tissue.",
-        "COMPLETENESS_CHECK": "The full set is incorrect because it identifies the wrong biological source for the MS experiment."
-      }
-    },
-    {
-      "annotation_type": "species",
-      "extracted_value": "Mus musculus, Homo sapiens",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "Mus musculus",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains species names, which matches the definition.",
-        "SOURCE_CHECK": "The paper describes proteomic analyses performed on 3T3-L1 cells (mouse-derived) and mentions the use of human primary pre-adipocytes, although the detailed \"Proteomic Analyses\" section specifically describes the workflow for 3T3-L1 cells and the use of the \"UniProt mouse database\".",
-        "TRUTH_CHECK": "While both mouse and human materials were used in the study, the \"Proteomic Analyses\" section explicitly states that the mass spectrometry data was searched using the \"UniProt mouse database\" and the samples were 3T3-L1 cells. There is no mention of the human primary pre-adipocytes being analyzed by mass spectrometry; they were used for qPCR, lipid accumulation, fatty acid uptake, and mitochondrial assays.",
-        "COMPLETENESS_CHECK": "The full set includes both species, but one is not part of the MS experiment."
-      }
-    },
-    {
-      "annotation_type": "factor_value",
-      "extracted_value": "treatment (Vh, Rosi, TPhP)",
+      "extracted_value": "adipose",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -90,10 +52,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factor (treatment) and its specific levels (Vh, Rosi, TPhP), which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The value is explicitly present in the paper text; the proteomics experiments were performed on 3T3-L1 cells treated with vehicle (Vh), rosiglitazone (Rosi), or triphenyl phosphate (TPhP).",
-        "TRUTH_CHECK": "The value is factually correct as these are the three treatment groups used in the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental variable (treatment) and all its levels described for the proteomics experiment."
+        "TYPE_CHECK": "The candidate value \"adipose\" is a type of tissue/organ, which matches the field definition.",
+        "SOURCE_CHECK": "The MS samples were derived from 3T3-L1 cells, which are a mouse-derived pre-adipocyte model; the paper also discusses inguinal adipose tissue in the in vivo context, but the proteomics was specifically performed on 3T3-L1 cells.",
+        "TRUTH_CHECK": "3T3-L1 cells are adipocytes (or pre-adipocytes), and \"adipose\" is the correct tissue of origin for these cells.",
+        "COMPLETENESS_CHECK": "The full set contains only \"adipose\", which accurately describes the tissue origin of the 3T3-L1 cells used for the proteomics analysis."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Mus musculus, Homo sapiens",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Mus musculus",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organism names, which matches the definition for the species field.",
+        "SOURCE_CHECK": "The paper describes proteomic analyses performed on 3T3-L1 cells (mouse-derived) and also describes experiments on human primary pre-adipocytes, although the \"Proteomic Analyses\" section specifically mentions using the \"UniProt mouse database\" for the MS search.",
+        "TRUTH_CHECK": "While both mouse and human cells were used in the study, the \"Proteomic Analyses\" section explicitly states that the mass spectrometry data were searched using the \"UniProt mouse database,\" indicating that the actual MS samples analyzed were of mouse origin (3T3-L1 cells). The human cells were used for phenotypic and gene expression (qPCR) analyses, not for the proteomics/phosphoproteomics MS experiment.",
+        "COMPLETENESS_CHECK": "The full set includes both species, but the human species is incorrect in the context of the MS experiment."
       }
     },
     {
@@ -109,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes the LC-MS/MS workflow but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to analysis.",
-        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" is complete as it accurately reflects the lack of fractionation described in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a proteomics workflow (TMT labeling, TiO2 enrichment, and LC-MS/MS) but does not mention any offline peptide or protein fractionation steps.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text."
       }
     },
     {
@@ -128,8 +109,8 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the proteomics/phosphoproteomics experiments performed on 3T3-L1 cells.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the proteomics/phosphoproteomics experiments conducted on 3T3-L1 cells.",
         "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned.",
         "COMPLETENESS_CHECK": "The full set contains only this value, and since the text is silent on the specific count for the MS experiment, this is the correct default."
       }
@@ -147,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.",
         "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replicates.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single default value, which is complete given the lack of explicit information in the text."
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default for a silent paper."
       }
     },
     {
@@ -166,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
-        "SOURCE_CHECK": "The value is present in the paper text, which states the mass spectrometer operated in \"automatic data dependent switching mode\".",
-        "TRUTH_CHECK": "The value \"data-dependent acquisition\" is a correct synonym/expansion of \"data dependent switching mode\".",
-        "COMPLETENESS_CHECK": "The full set contains the only acquisition method described in the paper."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Proteomic Analyses\" section: \"All data was acquired with the mass spectrometer operating in automatic data dependent switching mode.\"",
+        "TRUTH_CHECK": "The value is factually correct as it describes the data-dependent acquisition (DDA) mode used.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned in the paper."
       }
     },
     {
@@ -185,10 +166,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section of the methods (\"alkylated for 15 minutes with 20mM iodoacetamide at 30°C\") in the context of the MS sample preparation.",
         "TRUTH_CHECK": "The value is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only alkylation reagent mentioned in the paper."
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the paper."
       }
     },
     {
@@ -207,7 +188,7 @@
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section: \"samples were digested overnight at 37°C with 20 μg sequencing grade trypsin\".",
         "TRUTH_CHECK": "The value is factually correct as per the text.",
-        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
+        "COMPLETENESS_CHECK": "The full set contains the only cleavage agent mentioned in the paper."
       }
     },
     {
@@ -224,7 +205,7 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
+        "SOURCE_CHECK": "The value \"7 ppm\" is not mentioned anywhere in the provided paper text.",
         "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
         "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
       }
@@ -244,8 +225,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"HCD\" in the Proteomic Analyses section (\"MS/MS analysis using HCD\").",
-        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is the specific implementation of beam-type collision-induced dissociation used by Orbitrap instruments like the Q Exactive HFX. While technically a synonym, the paper explicitly uses the term \"HCD\".",
-        "COMPLETENESS_CHECK": "The full set contains only this value, but it is a descriptive synonym for the explicitly stated \"HCD\"."
+        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is the specific implementation of beam-type collision-induced dissociation used in Orbitrap instruments like the Q Exactive HFX. While technically accurate as a description of the physics, the paper uses the term \"HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the fragmentation method used."
       }
     },
     {
@@ -261,10 +242,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section of the methods (\"Samples were analyzed by a Q Exactive HFX mass spectrometer\").",
-        "TRUTH_CHECK": "The candidate value \"Q Exactive HF-X\" is a correct representation of the \"Q Exactive HFX\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer used for the proteomics analysis described in the paper."
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section as the instrument used to analyze the samples.",
+        "TRUTH_CHECK": "The paper states \"Samples were analyzed by a Q Exactive HFX mass spectrometer\", which is equivalent to \"Q Exactive HF-X\".",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned for the proteomics experiment, so the extraction is complete."
       }
     },
     {
@@ -281,9 +262,9 @@
       "corrected_value": "TMT",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel tags (e.g., TMT126).",
-        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific tag \"TMT126\" is not explicitly written in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific channel names appear in the provided text."
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (e.g., TMT126).",
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT126\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the provided text."
       }
     },
     {
@@ -299,10 +280,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (like TMT127N) in the text.",
-        "TRUTH_CHECK": "While TMT10plex consists of specific tags, the individual tag names are not written in the provided text; only the set name \"TMT10plex\" is mentioned.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but these are not explicitly mentioned in the text, making the extraction an over-specification/hallucination of the specific tags used."
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (like TMT127N).",
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT127N\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the text."
       }
     },
     {
@@ -319,7 +300,7 @@
       "corrected_value": "TMT",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (like TMT127C).",
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (e.g., TMT127C).",
         "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT127C\" is not explicitly written in the text.",
         "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the paper text."
       }
@@ -356,10 +337,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category for the label field.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (e.g., TMT128C).",
-        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT128C\" is not explicitly mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific channel names appear in the provided text."
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (like TMT128C).",
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT128C\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the text."
       }
     },
     {
@@ -375,10 +356,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (like TMT129N).",
-        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT129N\" is not explicitly written in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific channel names appear in the provided text."
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (like TMT129N).",
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT129N\" is not explicitly mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly named in the paper text."
       }
     },
     {
@@ -396,8 +377,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
         "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel names (e.g., TMT129C).",
-        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT129C\" is not mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists every individual channel of a 10plex set, but none of these specific channel names appear in the paper text."
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT129C\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the paper text."
       }
     },
     {
@@ -413,10 +394,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (like TMT130N).",
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (e.g., TMT130N).",
         "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT130N\" is not explicitly written in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the provided text."
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the paper text."
       }
     },
     {
@@ -432,9 +413,9 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
         "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not list the individual channel names (e.g., TMT130C).",
-        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific channel \"TMT130C\" is not explicitly written in the text.",
+        "TRUTH_CHECK": "While the paper uses a TMT10plex set, the specific label \"TMT130C\" is not explicitly written in the text.",
         "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the provided text."
       }
     },
@@ -452,9 +433,9 @@
       "corrected_value": "TMT",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\" in the Proteomic Analyses section.",
-        "TRUTH_CHECK": "While the paper specifies a \"TMT10plex\" set, it does not explicitly list the individual channel labels (e.g., TMT131) in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but these specific channel names are not written in the provided text."
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and specifically \"TMT10plex™ Isobaric Label Reagent Set\", but it does not explicitly list the individual channel tags (like TMT131) in the text.",
+        "TRUTH_CHECK": "While TMT131 is a standard channel in a TMT10plex set, it is not explicitly written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but the paper only mentions the \"TMT10plex™ Isobaric Label Reagent Set\" as a whole."
       }
     },
     {
@@ -472,7 +453,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for a mass analyzer.",
         "SOURCE_CHECK": "The paper states that samples were analyzed by a \"Q Exactive HFX mass spectrometer\", which is a well-known Orbitrap-based instrument.",
-        "TRUTH_CHECK": "The Q Exactive HFX uses an Orbitrap mass analyzer; therefore, the value is factually correct.",
+        "TRUTH_CHECK": "The Q Exactive HFX uses an Orbitrap mass analyzer, making this value factually correct.",
         "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
       }
     },
@@ -490,9 +471,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"Carbamidomethylation of cysteine residues was a fixed modification in the search\" in the Proteomic Analyses section.",
-        "TRUTH_CHECK": "\"Carbamidomethylation\" is an unambiguous synonym for \"Carbamidomethyl (C)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Oxidation, Phosphorylation), and together they cover the search parameters described."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section of the methods (\"Carbamidomethylation of cysteine residues was a fixed modification in the search\").",
+        "TRUTH_CHECK": "The candidate value \"Carbamidomethyl (C)\" is an unambiguous synonym for the \"Carbamidomethylation of cysteine residues\" stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Oxidation, Acetylation, Phosphorylation), though some in the set (like TMTpro or ubiquitinylation) are incorrect or not in the text. However, this specific candidate value is correct."
       }
     },
     {
@@ -509,9 +490,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a modification (TMT labeling), which fits the category of the field.",
-        "SOURCE_CHECK": "The paper mentions \"TMT10plex™ Isobaric Label Reagent Set\", not \"TMT6plex\".",
-        "TRUTH_CHECK": "The value is factually incorrect; the paper explicitly specifies TMT10plex, not TMT6plex.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple incorrect or unsupported modifications (e.g., TMTpro, ubiquitinylation residue)."
+        "SOURCE_CHECK": "The paper mentions \"TMT10plex™ Isobaric Label Reagent Set\", but does not mention \"TMT6plex\".",
+        "TRUTH_CHECK": "The value is factually incorrect; the paper explicitly specifies \"TMT10plex\", not \"TMT6plex\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple incorrect or hallucinated entries (e.g., TMTpro, ubiquitinylation) and does not accurately reflect the paper's described search parameters."
       }
     },
     {
@@ -528,9 +509,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category (a protein modification) for this field.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Proteomic Analyses\" section: \"...variable modifications of N-terminal acetylation and methionine oxidation.\"",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section of the methods (\"variable modifications of N-terminal acetylation and methionine oxidation\").",
         "TRUTH_CHECK": "\"methionine oxidation\" is an unambiguous synonym for \"Oxidation (M)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive and contains several incorrect entries (e.g., \"TMTpro\", \"ubiquitinylation\"), but the candidate value itself is a correct extraction of one of the modifications mentioned."
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Carbamidomethylation, N-terminal acetylation, and phosphorylation), though some values in the set (like TMTpro) are incorrect. However, \"Oxidation (M)\" itself is a correct individual extraction."
       }
     },
     {
@@ -546,10 +527,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a post-translational modification and its target residues, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the \"Proteomic Analyses\" section, which describes the MS experiment.",
-        "TRUTH_CHECK": "The paper explicitly states that \"protein phosphorylation at S, T, and Y residues were included as variable modifications in the phosphoproteomics data.\"",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains several incorrect entries (e.g., TMTpro, ubiquitinylation), but the candidate value itself is a correct extraction of one of the modifications described."
+        "TYPE_CHECK": "The candidate value describes a post-translational modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"protein phosphorylation at S, T, and Y residues were included as variable modifications\" in the Proteomic Analyses section.",
+        "TRUTH_CHECK": "The value \"Phospho (STY)\" is a correct representation of the phosphorylation at Serine, Threonine, and Tyrosine residues described in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several incorrect entries (e.g., TMTpro, ubiquitinylation), but the candidate value itself is a correct extraction of one of the modifications searched."
       }
     },
     {
@@ -566,9 +547,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\", but does not mention \"TMTpro\".",
-        "TRUTH_CHECK": "The paper explicitly specifies the use of \"TMT10plex\", not \"TMTpro\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains several incorrect or unsupported modifications."
+        "SOURCE_CHECK": "The paper mentions \"TMT (Tandem Mass Tag) labeling\" and \"TMT10plex™ Isobaric Label Reagent Set\", but it does not mention \"TMTpro\".",
+        "TRUTH_CHECK": "The value \"TMTpro\" is factually incorrect; the paper explicitly specifies \"TMT10plex\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and incorrect labels."
       }
     },
     {
@@ -585,9 +566,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
-        "SOURCE_CHECK": "The term \"ubiquitinylation residue (C)\" does not appear in the paper text; the paper mentions \"ubiquitination of proteasomes\" in the context of pathway enrichment analysis, not as a searched modification in the MS experiment.",
-        "TRUTH_CHECK": "The value is factually incorrect as it was not a modification searched during the mass spectrometry database search.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and errors (e.g., TMTpro, TMT6plex) and does not accurately reflect the modifications listed in the methods."
+        "SOURCE_CHECK": "The text mentions \"ubiquitination of proteasomes\" in the context of pathway enrichment analysis, but it does not state that ubiquitinylation was searched as a modification during the mass spectrometry database search.",
+        "TRUTH_CHECK": "The candidate value is not mentioned as a searched modification in the methods section; the searched modifications are explicitly listed as N-terminal acetylation, methionine oxidation, phosphorylation (S, T, Y), and carbamidomethylation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and incorrect labels (e.g., TMTpro, TMT6plex) and does not accurately reflect the search parameters described in the text."
       }
     },
     {
@@ -603,10 +584,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The value \"not applicable\" is not a protein modification.",
+        "TYPE_CHECK": "The value \"not applicable\" is not a valid modification name or residue target.",
         "SOURCE_CHECK": "The paper explicitly lists several modifications used in the MS search (Carbamidomethylation, N-terminal acetylation, methionine oxidation, and phosphorylation).",
-        "TRUTH_CHECK": "The value is factually incorrect as modifications were searched and are explicitly named in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains several correct modifications, but \"not applicable\" is an incorrect entry."
+        "TRUTH_CHECK": "The value is factually incorrect as modifications were explicitly searched and reported.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several correct modifications and several incorrect ones, but \"not applicable\" is fundamentally wrong."
       }
     },
     {
@@ -622,10 +603,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"6 ppm\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not supported by the text; the paper mentions \"standard settings\" for MaxQuant but does not explicitly state the precursor mass tolerance value.",
-        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"6 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify the precursor mass tolerance used during the MaxQuant search; it only mentions \"standard settings\".",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so it cannot be complete."
       }
     },
     {
@@ -643,7 +624,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteomic Analyses\" section of the methods (\"Samples were reduced for 30 minutes with 8 mM dithiothreitol\").",
-        "TRUTH_CHECK": "The value is factually correct as per the paper text.",
+        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for reduction in the proteomics workflow.",
         "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
       }
     }

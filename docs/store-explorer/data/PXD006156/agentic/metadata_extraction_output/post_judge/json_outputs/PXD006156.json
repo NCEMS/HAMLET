@@ -8,16 +8,16 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
+      "error_category": "hallucinated",
       "corrected_value": "HeLa",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category for this field.",
-        "SOURCE_CHECK": "The paper mentions these cell lines in the \"Cell culture, transfection and reagents\" section, but only HeLa cells were used for the mass spectrometry experiments.",
-        "TRUTH_CHECK": "Only HeLa cells were used for the MS analysis (both for the diGly peptide enrichment and the mapping of ubiquitination sites on NONO); U2OS, CHO, A549, and HEK-293 were used for other assays (e.g., clonogenic survival, Western blots, or general culture) but not for the proteomics workflow.",
-        "COMPLETENESS_CHECK": "The full set includes cell lines that were not analyzed by MS, making the extraction factually incorrect."
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category.",
+        "SOURCE_CHECK": "The paper mentions these cell lines in the \"Cell culture, transfection and reagents\" section, but only HeLa cells were used for the mass spectrometry experiments (both for the BirA-RNF8 substrate search and the NONO ubiquitination site mapping). U2OS, CHO, A549, and HEK-293 are mentioned as being maintained in culture but are not linked to the MS workflow.",
+        "TRUTH_CHECK": "Only \"HeLa\" is factually correct as the source of the MS samples; the other listed cell lines were not analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set includes several cell lines that were not used for MS, making the extraction inaccurate."
       }
     },
     {
@@ -34,8 +34,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
-        "SOURCE_CHECK": "The MS samples were derived from HeLa cells (stated in \"Affinity purification of biotinylated proteins\" and \"Protein digestion...\"), and HeLa is a well-known epithelial cell line.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma, which is of epithelial origin.",
+        "SOURCE_CHECK": "The MS samples were derived from HeLa cells (\"The biotinylated-ubiquitinated proteins were purified from HeLa cells...\"), and \"epithelial cell\" is the well-established lineage of the HeLa cell line.",
+        "TRUTH_CHECK": "HeLa cells are a human cervical epithelial cell line; therefore, \"epithelial cell\" is factually correct.",
         "COMPLETENESS_CHECK": "The full set contains the correct lineage for the cell line used in the MS experiment."
       }
     },
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The MS experiment used HeLa cells (\"The biotinylated-ubiquitinated proteins were purified from HeLa cells...\"), and \"cervical adenocarcinoma\" is the well-known disease origin of the HeLa cell line.",
-        "TRUTH_CHECK": "The value is factually correct as the origin of the HeLa cell line used in the proteomics analysis.",
-        "COMPLETENESS_CHECK": "The full set contains the correct disease origin for the cell line used in the MS experiment."
+        "TYPE_CHECK": "The candidate value \"cervical adenocarcinoma\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material used for the mass spectrometry experiments (specifically for the identification of RNF8 substrates and mapping ubiquitination sites on NONO).",
+        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the disease origin of the cell line used for the MS analysis."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"cervix\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The MS samples were derived from HeLa cells (\"The biotinylated-ubiquitinated proteins were purified from HeLa cells...\"), and the cervix is the well-established tissue of origin for the HeLa cell line.",
-        "TRUTH_CHECK": "Factually correct; HeLa is a cervical cancer cell line.",
-        "COMPLETENESS_CHECK": "The full set contains the correct tissue of origin for the cells used in the MS experiment."
+        "TYPE_CHECK": "The candidate value \"cervix\" is a valid organ/tissue of origin.",
+        "SOURCE_CHECK": "The MS samples were derived from HeLa cells (\"The biotinylated-ubiquitinated proteins were purified from HeLa cells...\"), and the cervix is the well-known tissue of origin for the HeLa cell line.",
+        "TRUTH_CHECK": "The value is factually correct as HeLa is a cervical adenocarcinoma cell line.",
+        "COMPLETENESS_CHECK": "The full set contains the correct tissue of origin for the cell line used in the MS experiment."
       }
     },
     {
@@ -91,9 +91,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper describes the use of human cell lines (HeLa, U2OS, etc.) and human cDNAs for the mass spectrometry experiments.",
-        "TRUTH_CHECK": "The materials used (HeLa cells, human cDNAs) are from *Homo sapiens*.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which is the only species used for the MS samples in this study."
+        "SOURCE_CHECK": "The paper describes the use of human cell lines (HeLa, U2OS, etc.) and human recombinant proteins for the mass spectrometry experiments.",
+        "TRUTH_CHECK": "The proteins and cell lines used are human, making \"Homo sapiens\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS analysis."
       }
     },
     {
@@ -109,29 +109,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the specific protein constructs used as variables in the experiment, which is a correct category for a factor_value.",
-        "SOURCE_CHECK": "The constructs (FLAG-BirA-RNF8, AP-HA-Ub, FLAG-NONO, HA-RNF8) are explicitly mentioned in the \"Results\" and \"Materials and Methods\" sections as the materials used for the MS experiments (e.g., \"cells were transfected with FLAG-BirA-RNF8 and AP-HA-Ub... Mass spectrometric analysis... identified peptides\").",
-        "TRUTH_CHECK": "The value is factually correct as these constructs were the primary variables manipulated to identify RNF8 substrates and map ubiquitination sites via MS.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the constructs and the disease state (cervical adenocarcinoma, inferred from HeLa), which covers the primary experimental variables (the \"what\" and the \"where\")."
+        "TYPE_CHECK": "The candidate value describes the specific protein constructs used in the experiment, which is a valid experimental factor (genotype/treatment/construct).",
+        "SOURCE_CHECK": "These constructs are explicitly mentioned in the \"RESULTS\" and \"MATERIALS AND METHODS\" sections as the materials used for the MS experiments (e.g., \"cells were transfected with FLAG-BirA-RNF8 and AP-HA-Ub... Mass spectrometric analysis... identified peptides\").",
+        "TRUTH_CHECK": "The value accurately lists the constructs used in the proteomics workflows described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the constructs and the disease state (cervical adenocarcinoma, inferable from HeLa), which covers the primary experimental variables for the MS samples."
       }
     },
     {
       "annotation_type": "factor_value",
       "extracted_value": "cervical adenocarcinoma",
-      "verdict": "medium",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "incomplete",
+      "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
-        "SOURCE_CHECK": "The value is not present in the text; it is an inference from the use of HeLa cells.",
-        "TRUTH_CHECK": "While HeLa cells are derived from cervical adenocarcinoma, the field definitions for factor_value state it must be judged by the same rules as the underlying characteristic (disease). The disease field definition allows inferring the disease from a named cell line (HeLa -> \"cervical adenocarcinoma\").",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive, as it includes a mix of materials and disease states, and misses other experimental factors (e.g., UV treatment)."
+        "SOURCE_CHECK": "The value \"cervical adenocarcinoma\" is not mentioned in the text; it is an inference based on the use of HeLa cells.",
+        "TRUTH_CHECK": "While HeLa cells are derived from cervical adenocarcinoma, the field definitions for `factor_value` state it must be judged by the same rules as the underlying characteristic (in this case, `disease`). The `disease` field definition explicitly allows inferring the disease origin from a named cell line (HeLa -> \"cervical adenocarcinoma\").",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the biological condition (disease) and the specific protein constructs used in the MS experiments, covering the primary experimental variables."
       }
     },
     {
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
         "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set contains only the safe default, which is exhaustive for this paper."
+        "COMPLETENESS_CHECK": "The value \"1\" accurately reflects the lack of fractionation described in the text."
       }
     },
     {
@@ -169,7 +169,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiments.",
         "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is the correct default for the provided text."
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for this field when the text is silent, and the full set is complete."
       }
     },
     {
@@ -187,8 +187,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.",
-        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when the paper is silent regarding replication.",
-        "COMPLETENESS_CHECK": "The full set contains only this default value, which is the standard way to handle missing replicate information."
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a single measurement per sample when not otherwise specified."
       }
     },
     {
@@ -205,9 +205,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", \"DIA\", or any other specific acquisition scheme in the provided text.",
-        "TRUTH_CHECK": "The value is not supported by the text.",
-        "COMPLETENESS_CHECK": "The full set is not supported by the text."
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; it only states that peptides were analyzed by \"nanoelectrospray LC–MS/MS on an LTQ Orbitrap Velos\".",
+        "TRUTH_CHECK": "While LTQ Orbitrap Velos instruments typically use data-dependent acquisition (DDA), the specific scheme is not explicitly stated in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
       }
     },
     {
@@ -221,12 +221,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "hallucinated",
-      "corrected_value": null,
+      "corrected_value": "N-ethylmaleimide",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The paper text does not mention \"iodoacetamide\"; it mentions \"N-ethylmaleimide\" (NEM) in the context of the in vivo ubiquitination assay, but the proteomics/MS sample preparation only states that proteins were \"reduced, alkylated, trypsinized\" without naming the specific alkylation reagent.",
-        "TRUTH_CHECK": "The value is not present in the text and cannot be inferred.",
-        "COMPLETENESS_CHECK": "The full set is incomplete as the actual reagent used for the MS sample is not specified."
+        "SOURCE_CHECK": "The paper mentions that proteins were \"reduced, alkylated, trypsinized\" in the \"Protein digestion and affinity purification of ubiquitinated peptides\" section, but it does not explicitly name the alkylation reagent used for those steps. However, in the \"In vivo ubiquitination assay\" section, it mentions the use of \"10 mM N-ethylmaleimide\" (NEM) in the lysis buffer.",
+        "TRUTH_CHECK": "The paper does not mention \"iodoacetamide\" anywhere in the text. It does mention \"N-ethylmaleimide\" (NEM), which is an alkylation reagent.",
+        "COMPLETENESS_CHECK": "The full set contains only \"iodoacetamide\", which is not present in the text."
       }
     },
     {
@@ -242,10 +242,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The paper explicitly mentions that biotin-labeled proteins were \"digested with trypsin\" and that immunoprecipitated proteins were \"trypsinized\" for mass spectrometric analysis.",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
+        "TYPE_CHECK": "The candidate value is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The paper explicitly mentions that proteins were \"digested with trypsin\" in the results section and \"trypsinized\" in the methods section.",
+        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
       }
     },
     {
@@ -262,28 +262,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions the use of an \"LTQ Orbitrap Velos\" for LC-MS/MS, but it does not explicitly name the fragmentation method (e.g., CID, HCD, or collision-induced dissociation) used for the analysis.",
-        "TRUTH_CHECK": "While the LTQ Orbitrap Velos typically uses collision-induced dissociation (CID), the specific method is not explicitly stated in the provided text.",
+        "SOURCE_CHECK": "The paper mentions the use of an \"LTQ Orbitrap Velos\" for LC-MS/MS, but it does not explicitly name the fragmentation method (e.g., CID, HCD, ETD) used during the analysis.",
+        "TRUTH_CHECK": "While the LTQ Orbitrap Velos commonly uses collision-induced dissociation (CID), the specific term \"collision-induced dissociation\" or its abbreviation \"CID\" does not appear in the provided text.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
     {
       "annotation_type": "instrument",
-      "extracted_value": "LTQ Orbitrap XL",
-      "verdict": "low",
+      "extracted_value": "LTQ Orbitrap Velos",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "LTQ Orbitrap Velos",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
-        "SOURCE_CHECK": "The value is not present in the text; the paper explicitly names the instrument as an \"LTQ Orbitrap Velos\".",
-        "TRUTH_CHECK": "The value is factually incorrect based on the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect instrument model."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry\" section of the methods, describing the instrument used to analyze the purified peptides.",
+        "TRUTH_CHECK": "The paper states the peptides were analyzed on an \"LTQ Orbitrap Velos (Thermo Fisher Scientific Inc.)\".",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the proteomics analysis."
       }
     },
     {
@@ -299,10 +299,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling for the mass spectrometry experiments.",
-        "TRUTH_CHECK": "Since no labeling is described, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this experiment."
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods for the mass spectrometry experiments.",
+        "TRUTH_CHECK": "Since no labeling is described, \"label-free\" is the correct safe default for the proteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
       }
     },
     {
@@ -319,9 +319,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the \"Mass spectrometry\" section, which describes the analysis of the purified peptides.",
-        "TRUTH_CHECK": "The paper explicitly mentions the use of an \"LTQ Orbitrap Velos\", confirming the mass analyzer is an Orbitrap.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Mass spectrometry\" section which mentions the \"LTQ Orbitrap Velos\".",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used is an Orbitrap-based system.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one mass analyzer is mentioned."
       }
     },
     {
@@ -338,8 +338,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is not mentioned in the text; the paper mentions \"alkylated\" and \"N-ethylmaleimide\" (NEM) in the methods, but not the modification name \"Carbamidomethyl\".",
-        "TRUTH_CHECK": "The value is not explicitly stated in the paper text.",
+        "SOURCE_CHECK": "The paper mentions that proteins were \"alkylated\" and \"reduced\", but the specific modification name \"Carbamidomethyl\" is not written in the text.",
+        "TRUTH_CHECK": "While carbamidomethylation is the standard result of alkylation with iodoacetamide, the field rules explicitly forbid inferring this modification from sample-prep reagents; it must be explicitly named.",
         "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
       }
     },
@@ -356,10 +356,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The paper discusses ubiquitination of NONO and mentions \"diGly peptides\" (which are the remnants of ubiquitin), but it does not list \"ubiquitinylation residue (C)\" as a searched modification.",
-        "TRUTH_CHECK": "The value is factually incorrect; ubiquitination occurs on lysine (K) residues, not cysteine (C) residues.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as neither is explicitly listed as a searched modification in the text."
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper discusses ubiquitination of NONO and identifies ubiquitination sites via mass spectrometry, but it does not mention a modification named \"ubiquitinylation residue (C)\".",
+        "TRUTH_CHECK": "The value is factually incorrect; ubiquitination occurs on lysine (K) residues, not cysteine (C). Furthermore, the specific term \"ubiquitinylation residue (C)\" does not appear in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as neither is explicitly named in the text."
       }
     },
     {
@@ -376,9 +376,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"1 mM DTT\" in the \"In vitro ubiquitination assay\" and \"1 mM DTT\" in the \"Chromatin fractionation\" sections, but it does not explicitly name the reduction reagent used in the proteomics/MS sample preparation workflow (which only states \"reduced, alkylated, trypsinized\"). DTT is a common synonym for dithiothreitol.",
-        "TRUTH_CHECK": "While DTT is mentioned in other assays, the text for the MS sample preparation (\"The biotinylated-ubiquitinated proteins... were reduced, alkylated, trypsinized\") does not explicitly name the reagent used for that specific step.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not explicitly linked to the MS sample preparation in the text."
+        "SOURCE_CHECK": "The paper mentions \"DTT\" in the \"In vitro ubiquitination assay\" and \"Chromatin fractionation\" sections, but it does not explicitly name the reduction reagent used in the proteomics/MS sample preparation workflow (it only states the proteins were \"reduced, alkylated, trypsinized\").",
+        "TRUTH_CHECK": "While DTT is a common reduction reagent, the text does not explicitly state that dithiothreitol (or DTT) was the reagent used for the MS sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not supported by the text for the MS experiment."
       }
     }
   ]

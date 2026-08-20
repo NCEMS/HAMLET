@@ -1,0 +1,442 @@
+{
+  "paper_id": "PXD043087",
+  "annotations": [
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "mesenchymal stem cells",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"mesenchymal stem cells\" describes a primary cell type/lineage, which matches the field definition.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the paper explicitly states that \"Phosphoproteomics analysis\" was performed on \"ANGPTL4-treated hUC-MSCs\" (human umbilical cord mesenchymal stem cells).",
+        "TRUTH_CHECK": "The value is factually correct as the phosphoproteomics was conducted on hUC-MSCs.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell type used for the phosphoproteomics experiment described in the text."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes a phosphoproteomics experiment on hUC-MSCs (human umbilical cord mesenchymal stem cells) treated with ANGPTL4; these cells are not described as having a disease state.",
+        "TRUTH_CHECK": "Since the cells used for the MS experiment are not from a disease model, \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which accurately reflects the state of the MS samples."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "umbilical cord, serum, interscapular brown adipose tissue, liver, white adipose tissue, skeletal muscle",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "serum, umbilical cord",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of tissues/organs, which matches the category for the 'organ' field.",
+        "SOURCE_CHECK": "The paper describes two distinct mass spectrometry experiments: one using serum samples (\"collected serum from the HO group... and sham controls... matrix-assisted laser desorption ionization time-of-flight mass spectrometry\") and one using hUC-MSCs (\"Phosphoproteomics analysis... in ANGPTL4-treated hUC-MSCs\"). The other tissues (iBAT, liver, WAT, skeletal muscle) were analyzed via qRT-PCR or immunofluorescence, not mass spectrometry.",
+        "TRUTH_CHECK": "Only \"serum\" and \"umbilical cord\" (via hUC-MSCs) are correct for the MS samples. The inclusion of iBAT, liver, WAT, and skeletal muscle is factually incorrect as they were not the source of the MS samples.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it includes tissues that were not analyzed by mass spectrometry."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "The paper describes two distinct mass spectrometry experiments: one using serum from mice (Mus musculus) to identify LepR-binding proteins, and a phosphoproteomics analysis using human umbilical cord MSCs (Homo sapiens).",
+        "TRUTH_CHECK": "Both species are explicitly mentioned and were used as the source material for the proteomics/MS analyses.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the mouse serum and human cell experiments described in the text."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (NC, ANGPTL4), genotype (wild-type, db/db, ob/ob, LepR-KO, ANGPTL4-KO), time point (3 wk, 8 wk, 16 wk)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "ANGPTL4",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (treatment, genotype, time point) and their corresponding values, which matches the definition of factor_value.",
+        "SOURCE_CHECK": "The values (NC, ANGPTL4, wild-type, db/db, ob/ob, LepR-KO, ANGPTL4-KO, 3 wk, 8 wk, 16 wk) are all explicitly mentioned in the text. However, the phosphoproteomics experiment (the actual MS sample) specifically used \"ANGPTL4-treated hUC-MSCs\" compared to a control (implied NC). The other genotypes (db/db, ob/ob, etc.) and time points (3, 8, 16 wk) refer to the in vivo mouse studies (Micro-CT, histology), not the MS experiment.",
+        "TRUTH_CHECK": "While the values exist in the paper, the \"Experimental Context Rule\" requires metadata to refer to the biological material actually analysed by mass spectrometry. The phosphoproteomics was performed on hUC-MSCs treated with ANGPTL4. The mouse genotypes and time points are part of the broader study but not the MS sample.",
+        "COMPLETENESS_CHECK": "The full set includes \"normal\", but the candidate value is an over-aggregation of every variable in the entire paper regardless of whether it applied to the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (mirroring a disease or health state).",
+        "SOURCE_CHECK": "The paper mentions \"wild-type negative controls (termed NC)\" and \"sham controls,\" which are equivalent to \"normal\" or \"healthy\" in the context of a disease/injury study.",
+        "TRUTH_CHECK": "According to the field definitions, \"normal\", \"healthy\", and \"no disease\" are safe defaults and are correct when subjects are healthy or serve as controls.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the specific treatments, genotypes, and time points, as well as the \"normal\" control state, covering the experimental design described."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) for the phosphoproteomics experiment.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only the safe default, which is exhaustive given the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "3",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper states in the \"Quantification and Statistical Analysis\" section that \"Data were presented as mean values ± SEM of at least three independent experiments.\"",
+        "TRUTH_CHECK": "The value \"3\" is factually correct as it represents the minimum number of independent experiments (biological replicates) performed for the data presented.",
+        "COMPLETENESS_CHECK": "The value \"3\" accurately reflects the replication described in the text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the phosphoproteomics experiment.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"Phosphoproteomics analysis\" and provides a PRIDE dataset identifier (PXD043087), but the provided text does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "The value is not explicitly mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The word \"iodoacetamide\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the category for the cleavage_agent field.",
+        "SOURCE_CHECK": "The paper mentions \"Phosphoproteomics analysis\" and provides a PRIDE dataset identifier (PXD043087), but the provided text does not explicitly name the cleavage agent used for the digestion of the hUC-MSCs samples.",
+        "TRUTH_CHECK": "The value is not explicitly stated in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "8 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"8 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions that phosphoproteomics data were deposited in PRIDE (PXD043087), but it does not explicitly state the fragment mass tolerance used for the database search.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"phosphoproteomics analysis\" and provides a PRIDE dataset identifier (PXD043087), but it does not explicitly state the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive HF-X",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category for the instrument field.",
+        "SOURCE_CHECK": "The candidate value \"Q Exactive HF-X\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value cannot be verified as correct because it is absent from the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper describes a phosphoproteomics analysis of hUC-MSCs but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling methods are described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TOF",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions \"matrix-assisted laser desorption ionization time-of-flight mass spectrometry\" (MALDI-TOF) for serum analysis and \"Phosphoproteomics analysis\" for hUC-MSCs, but it does not explicitly name the mass analyzer (e.g., Orbitrap) used for the phosphoproteomics experiment.",
+        "TRUTH_CHECK": "The text explicitly mentions \"time-of-flight\" (TOF) for the serum analysis; there is no mention of an Orbitrap analyzer anywhere in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only \"orbitrap\", which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamidomethyl (C)\" is not mentioned in the paper text.",
+        "TRUTH_CHECK": "The paper does not explicitly name this modification; it is not listed in the methods or results.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications, but \"Carbamidomethyl (C)\" is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Phospho (STY)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Phospho (STY)\" describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper describes a \"Phosphoproteomics analysis\" and identifies \"hyperphosphorylated\" proteins, confirming that phosphorylation was the modification of interest for the MS experiment.",
+        "TRUTH_CHECK": "The term \"phosphorylation\" (and \"phosphoproteomics\") is explicitly used in the text; \"Phospho (STY)\" is a standard representation of phosphorylation on Serine, Threonine, and Tyrosine.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications, but only \"Phospho (STY)\" is supported by the text. The others (Carbamidomethyl, Nitropyrimidyl ornithine, pyrophosphorylation) are not mentioned in the provided text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Arginine replacement by Nitropyrimidyl ornithine (R)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The candidate value is not mentioned or supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "pyrophosphorylation of Ser/Thr (S)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"phosphoproteomics\" and \"hyperphosphorylated\" proteins, but it never mentions \"pyrophosphorylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named in the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"6 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The value cannot be verified as correct because it is not mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not based on any information in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"dithiothreitol\" appears in the \"Co-IP\" section of the methods, describing the lysis buffer used for a co-immunoprecipitation validation experiment, not the phosphoproteomics MS experiment.",
+        "TRUTH_CHECK": "While the chemical is mentioned in the text, it is used in the context of a Co-IP assay to validate protein interaction, not as part of the sample preparation for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is associated with the wrong experimental context."
+      }
+    }
+  ]
+}

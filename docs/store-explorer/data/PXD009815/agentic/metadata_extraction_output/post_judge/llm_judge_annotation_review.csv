@@ -1,8 +1,9 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD009815","","strict","Biological","species","Saccharomyces cerevisiae","Saccharomyces cerevisiae","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper states the dataset was generated from a ""yeast lysate""; *Saccharomyces cerevisiae* is the standard species for ""yeast"" in proteomics contexts.
+"PXD009815","","strict","Biological","species","Saccharomyces cerevisiae","Saccharomyces cerevisiae","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK: The paper states the dataset was generated from a ""yeast lysate"", and ""Saccharomyces cerevisiae"" is the standard scientific name for common brewer's/baker's yeast used in such proteomics benchmarks.
 TRUTH CHECK: The text explicitly mentions ""yeast lysate"" as the base material for the MS samples.
-COMPLETENESS CHECK: The full set contains the primary organism used for the MS experiment.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the primary source organism of the lysate.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,10 +11,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","ExperimentalDesign","factor_value","UPS1 spike concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","UPS1 spike concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (spike concentration) and its specific levels, which fits the definition of a factor_value.
-SOURCE CHECK: The values are explicitly stated in the ""Experimental datasets"" section of the methods (0.01–0.05–0.1–0.250–0.5–1–5–10–25–50 fmol of the UPS1 equimolar mix).
-TRUTH CHECK: The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the complete list of concentrations used in the standard dataset described in the paper.
+"PXD009815","","strict","ExperimentalDesign","factor_value","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (concentration levels) and its specific values, which is the correct category for a factor_value.
+SOURCE CHECK: The value is explicitly stated in the ""Experimental datasets"" section of the methods, describing the spiked levels of the UPS1 mix used for the MS analysis.
+TRUTH CHECK: The values (0.01 to 50 fmol) match the text exactly.
+COMPLETENESS CHECK: The full set contains the single comprehensive description of the concentration factor used in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -21,10 +22,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation step for the samples analyzed by MS; it describes a direct nanoLC-MS/MS analysis of digested samples.
+"PXD009815","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation being performed on the samples before LC-MS/MS.
 TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is complete as it accurately reflects the lack of fractionation described in the text.
+COMPLETENESS CHECK: The value ""1"" fully represents the state of fractionation for the described experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -32,10 +33,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","ExperimentalDesign","replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
-SOURCE CHECK: The value is explicitly stated in the methods section: ""Trypsin digested samples were then analyzed in quadruplicate... to produce 40 raw MS files.""
-TRUTH CHECK: ""Quadruplicate"" means 4 replicates per condition.
-COMPLETENESS CHECK: The full set contains the single correct value ""4"", which is exhaustive for the described experiment.
+"PXD009815","","strict","ExperimentalDesign","replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of replicates.
+SOURCE CHECK: The value is explicitly stated in the methods section under ""Experimental datasets"": ""Trypsin digested samples were then analyzed in quadruplicate"".
+TRUTH CHECK: ""Quadruplicate"" means 4 replicates, making the value 4 factually correct.
+COMPLETENESS CHECK: The full set contains this single value, which accurately reflects the replication described for the experimental dataset.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -45,10 +46,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","ExperimentalDesign","technical_replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
-SOURCE CHECK: The paper states in Section 2.2 that ""Trypsin digested samples were then analyzed in quadruplicate by nanoLC–MS/MS"", which refers to the MS analysis of the samples.
-TRUTH CHECK: ""Analyzed in quadruplicate"" explicitly means 4 replicates were performed for the MS analysis.
-COMPLETENESS CHECK: The full set contains the single value ""4"", which exhaustively covers the replication described for the MS analysis.
-
+SOURCE CHECK: The paper states in Section 2.2 that ""Trypsin digested samples were then analyzed in quadruplicate by nanoLC–MS/MS... to produce 40 raw MS files.""
+TRUTH CHECK: ""Analyzed in quadruplicate"" means 4 injections/runs per sample, which corresponds to 4 technical replicates.
+COMPLETENESS CHECK: The value ""4"" covers the replication described for the MS analysis of the samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -59,7 +59,7 @@ CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
 SOURCE CHECK: The value is explicitly mentioned in the ""Materials and methods"" section (Section 2) in the context of the quantification workflow used for the MS samples.
 TRUTH CHECK: The paper explicitly states that datasets can be quantified using ""data dependent acquisition (DDA) label-free quantification"".
-COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the experimental data.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the proteomics experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -68,9 +68,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","alkylation_reagent","iodoacetamide","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
-SOURCE CHECK: The reagent ""iodoacetamide"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
-COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+SOURCE CHECK: The word ""iodoacetamide"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and cannot be inferred.
+COMPLETENESS CHECK: The full set is not based on any information in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -90,9 +90,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: The value ""8 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text.
-COMPLETENESS CHECK: The full set contains only this unsupported value.
+SOURCE CHECK: The value ""8 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and therefore cannot be verified as correct.
+COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -102,8 +102,8 @@ VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
 SOURCE CHECK: The value is not present in the provided paper text.
-TRUTH CHECK: The paper does not mention ""beam-type collision-induced dissociation"" or any specific fragmentation method (e.g., HCD, CID).
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TRUTH CHECK: The value is not mentioned in the text; while the instrument (Q-Exactive Plus) typically uses HCD (a form of beam-type CID), the specific term ""beam-type collision-induced dissociation"" is not written in the text.
+COMPLETENESS CHECK: The full set is incomplete as the value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -114,7 +114,7 @@ CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Materials and methods"" section (Section 2.2) as the instrument used to analyze the yeast lysate samples.
 TRUTH CHECK: The paper states the samples were analyzed using a ""Q-Exactive Plus mass spectrometer"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the text for the MS experiment, so the extraction is complete.
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the text for the MS experiment; the set is exhaustive.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -123,10 +123,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+"PXD009815","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
 SOURCE CHECK: The paper explicitly mentions ""label-free quantification"" and ""label-free DDA method"" multiple times in the results and methods sections.
-TRUTH CHECK: The paper describes a label-free workflow and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling.
-COMPLETENESS CHECK: The full set contains the only labeling method described in the paper.
+TRUTH CHECK: The paper describes a label-free workflow and does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately describes the labeling approach used in the experiment.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -135,9 +136,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper states the samples were analyzed using a ""Q-Exactive Plus mass spectrometer"", and the Q-Exactive series is well-known to use an Orbitrap mass analyzer.
-TRUTH CHECK: The value is factually correct based on the instrument model mentioned in the text.
-COMPLETENESS CHECK: The full set contains the only mass analyzer used in the study.
+SOURCE CHECK: The paper mentions the use of a ""Q-Exactive Plus mass spectrometer"", and it is well-established that the Q-Exactive series uses an Orbitrap mass analyzer.
+TRUTH CHECK: The value is factually correct based on the instrument model specified in the text.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used in the experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -145,10 +146,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+"PXD009815","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a peptide modification, which matches the field definition.
 SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the provided text.
 TRUTH CHECK: The text mentions ""Trypsin digested samples"" but does not explicitly name any modifications (fixed or variable) used during the database search.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values includes modifications not mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -157,10 +158,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The term ""Oxidation (M)"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text; the paper mentions ""post-translational modifications"" generally but does not list any specific modifications searched.
+SOURCE CHECK: The value ""Oxidation (M)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
-
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -169,9 +169,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009815","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: A search of the provided text (title, abstract, results, and methods) reveals no mention of ""6 ppm"" or any specific precursor mass tolerance value.
-TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+SOURCE CHECK: The value ""6 ppm"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the paper refers to a ""detailed description of the parameters"" being in the Supplementary Material, but the main text does not specify the precursor mass tolerance.
+COMPLETENESS CHECK: The full set of extracted values is insufficient as the value is not present in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -179,7 +179,7 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009815","","strict","Technical","reduction_reagent","dithiothreitol","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+"PXD009815","","strict","Technical","reduction_reagent","dithiothreitol","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical used for disulfide reduction, which matches the field definition.
 SOURCE CHECK: The candidate value ""dithiothreitol"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The value is not supported by the text.
 COMPLETENESS CHECK: The full set consists of a single value that is not present in the text.

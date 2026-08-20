@@ -1,19 +1,8 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD008108","","strict","Biological","age","E13.5","E13.5","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""E13.5"" is a valid representation of embryonic age.
-SOURCE CHECK: The paper states that mouse embryonic fibroblasts (MEFs) were generated from embryos dissected at E13.5, and these MEFs were the material used for the large-scale quantitative proteomic analysis.
-TRUTH CHECK: The value is factually correct as per the ""Derivation of mouse embryonic fibroblasts"" section.
-COMPLETENESS CHECK: The value ""E13.5"" correctly identifies the age of the source material for the MS sample.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Biological","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
-SOURCE CHECK: The value appears in the text, but it is used for an IP-MS experiment to identify Nudt21 interactors, whereas the primary ""large-scale quantitative proteomic analysis"" was performed on MEFs.
-TRUTH CHECK: While HEK293T cells were used for the IP-MS analysis (""immunoprecipitation for Nudt21 followed by mass-spectrometry using HEK293T cells""), the paper describes two distinct MS experiments: one for interactors (HEK293T) and one for quantitative proteomics (MEFs).
-COMPLETENESS CHECK: The full set only contains ""HEK293T"", missing the MEFs used for the main quantitative proteomics study.
+"PXD008108","","strict","Biological","cell_line","HEK293","HEK293","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""HEK293"" appears in the text, but it is used for an immunoprecipitation (IP) mass spectrometry experiment to identify Nudt21 associated proteins, whereas the primary ""large-scale quantitative proteomic analysis"" was performed on MEFs.
+TRUTH CHECK: While HEK293 cells were used for one of the MS experiments (IP-MS), the paper describes two distinct proteomics workflows: one for the global quantitative analysis (MEFs) and one for the interaction study (HEK293).
+COMPLETENESS CHECK: The full set only contains ""HEK293"", missing the MEFs used for the primary quantitative proteomics analysis.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -21,11 +10,22 @@ VALUE_CORRECT: yes
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
-CORRECTED_VALUE: HEK293T, MEFs","HEK293T, MEFs"
-"PXD008108","","strict","Biological","cell_type","fibroblasts","fibroblasts","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""fibroblasts"" is a cell type, which matches the field definition.
-SOURCE CHECK: The value comes from the MS experiment context; the paper describes ""large-scale quantitative proteomic analysis of MEFs"" (Mouse Embryonic Fibroblasts).
-TRUTH CHECK: The value is factually correct as MEFs are embryonic fibroblasts.
-COMPLETENESS CHECK: The full set of extracted values covers the primary cell type used for the quantitative proteomics experiment.
+CORRECTED_VALUE: HEK293, MEF","HEK293, MEF"
+"PXD008108","","strict","Biological","cell_type","embryonic fibroblasts","embryonic fibroblasts","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""embryonic fibroblasts"" describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK: The paper describes a ""large-scale quantitative proteomic analysis of MEFs [mouse embryonic fibroblasts] expressing OKSM"", confirming these cells were the material analyzed by mass spectrometry.
+TRUTH CHECK: The value is factually correct as the paper explicitly uses ""mouse embryonic fibroblasts (MEFs)"".
+COMPLETENESS CHECK: The full set contains ""embryonic fibroblasts"", which covers the primary cell type used for the main quantitative proteomics experiment. (Note: While HEK293T cells were used for a separate IP-MS experiment, the primary large-scale study focused on MEFs).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008108","","strict","Biological","disease","disease free","disease free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""disease free"" is a valid category for the disease field.
+SOURCE CHECK: The study uses mouse embryonic fibroblasts (MEFs) and other cell lines to study cell fate and reprogramming; there is no mention of a disease state or pathology in the experimental model.
+TRUTH CHECK: Since the subjects are not part of a disease study, ""disease free"" is a correct safe default.
+COMPLETENESS CHECK: The full set contains this single safe default, which is exhaustive for a non-disease study.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -34,10 +34,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
-SOURCE CHECK: The paper describes experiments using mouse embryonic fibroblasts (MEFs) and other cell lines in a study of cell fate and reprogramming, not a disease study.
-TRUTH CHECK: Since the study is not focused on a disease state, ""normal"" is a correct safe default.
-COMPLETENESS CHECK: The full set contains this single value, which is sufficient for a non-disease study.
+"PXD008108","","strict","Biological","organ","embryonic fibroblasts","embryonic fibroblasts","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""embryonic fibroblasts"" describes a tissue/cell type of origin, which fits the category for the organ/tissue field.
+SOURCE CHECK: The value comes from the MS experiment context; the ""Large-scale quantitative proteomic analysis"" was performed on ""MEFs expressing OKSM"" (mouse embryonic fibroblasts).
+TRUTH CHECK: The paper explicitly states that the proteomic analysis was performed on MEFs (mouse embryonic fibroblasts).
+COMPLETENESS CHECK: The full set contains ""embryonic fibroblasts"", which accurately describes the source material for the primary quantitative proteomics experiment.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -46,10 +46,32 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Biological","organ","embryonic fibroblasts","embryonic fibroblasts","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""embryonic fibroblasts"" describes a tissue/cell source, which fits the category of an organ/tissue of origin.
-SOURCE CHECK: The value comes from the MS experiment context; the ""large-scale quantitative proteomic analysis"" was performed on MEFs (mouse embryonic fibroblasts) expressing OKSM.
-TRUTH CHECK: The paper explicitly states that the proteomic analysis was performed on MEFs.
-COMPLETENESS CHECK: The full set contains ""embryonic fibroblasts"", which accurately describes the source of the primary proteomics experiment in this paper.
+"PXD008108","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Mus musculus"" is a scientific name for a species, which matches the required category.
+SOURCE CHECK: The paper describes the use of ""murine embryonic fibroblasts (MEFs)"" and ""mouse proteome"" for database searching in the proteomics analysis.
+TRUTH CHECK: The use of murine (mouse) cells for the large-scale quantitative proteomic analysis is explicitly stated.
+COMPLETENESS CHECK: The full set contains the only species used for the primary proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008108","","strict","ExperimentalDesign","factor_value","siRNA treatment (Nudt21, control)","siRNA treatment (Nudt21, control) | disease free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (siRNA treatment) and its levels (Nudt21, control), which fits the definition of a factor_value.
+SOURCE CHECK: The value is present in the MS experiment context; the paper describes ""large-scale quantitative proteomic analysis of MEFs expressing OKSM for 3 days in the presence of either Nudt21 or control siRNAs.""
+TRUTH CHECK: The value is factually correct as the study compares Nudt21-depleted cells against control siRNA-treated cells.
+COMPLETENESS CHECK: The full set of extracted values covers the primary experimental variable (siRNA treatment) and the health status (disease free), which is an exhaustive description of the factors for this experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008108","","strict","ExperimentalDesign","factor_value","disease free","siRNA treatment (Nudt21, control) | disease free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""disease free"" is a valid category for a factor_value (mirroring a disease state).
+SOURCE CHECK: The paper describes experiments using mouse embryonic fibroblasts (MEFs) and other cell lines; there is no mention of a disease state or a clinical diagnosis for the source animals.
+TRUTH CHECK: While ""disease free"" is a safe default for healthy subjects, the experimental design here is a knockdown study (Nudt21 vs control) in a cell-line/primary-cell model, not a disease study. However, the subjects (mice) are not described as having any disease.
+COMPLETENESS CHECK: The full set of extracted values includes the actual experimental variable (siRNA treatment), but ""disease free"" is a generic default that does not add specific experimental information to this particular study's design.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -58,44 +80,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper describes the use of murine embryonic fibroblasts (MEFs) and mouse embryonic stem cells (ESCs) for the quantitative proteomic analysis.
-TRUTH CHECK: The text explicitly mentions ""murine embryonic fibroblasts"" and ""mouse proteome downloaded from Uniprot"", confirming the species is Mus musculus.
-COMPLETENESS CHECK: The full set contains the single correct species used for the primary proteomics experiment.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","ExperimentalDesign","factor_value","siRNA treatment (Nudt21, control)","siRNA treatment (Nudt21, control) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (siRNA treatment) and the specific groups (Nudt21, control), which fits the definition of a factor_value.
-SOURCE CHECK: The value is derived from the MS experiment context, where MEFs expressing OKSM were treated with either Nudt21 or control siRNAs for quantitative proteomic analysis.
-TRUTH CHECK: The paper explicitly states that quantitative proteomic analysis was performed on MEFs expressing OKSM in the presence of either Nudt21 or control siRNAs.
-COMPLETENESS CHECK: The full set of extracted values (""siRNA treatment (Nudt21, control)"" and ""normal"") covers the primary experimental conditions described for the proteomics analysis.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","ExperimentalDesign","factor_value","normal","siRNA treatment (Nudt21, control) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid representation of a biological state (e.g., healthy/control) for a factor_value.
-SOURCE CHECK: The value ""normal"" is not explicitly written in the text, but the study uses ""control siRNAs"" as the baseline for comparison against ""Nudt21 siRNAs"" in the proteomics experiment.
-TRUTH CHECK: Per the field definitions, ""normal"", ""healthy"", and ""no disease"" are safe defaults and are CORRECT when subjects are healthy or serve as the control group in a study, even if the exact phrase is not used.
-COMPLETENESS CHECK: The full set of extracted values includes both the specific treatment (siRNA) and the control state, covering the experimental design.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","ExperimentalDesign","fractions","24","24","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The value is present in the ""Offline basic pH reversed-phase (BPRP) fractionation"" section of the methods.
-TRUTH CHECK: The text states, ""We fractionated into a total of 96 fractions, then consolidated samples into 24 fractions"", indicating that 24 fractions were ultimately used for the LC-MS/MS processing.
-COMPLETENESS CHECK: The full set of extracted values contains the final number of fractions used for analysis.
+"PXD008108","","strict","ExperimentalDesign","fractions","96","96","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The value is explicitly stated in the ""Offline basic pH reversed-phase (BPRP) fractionation"" section of the methods.
+TRUTH CHECK: The paper states, ""We fractionated into a total of 96 fractions,"" confirming the value is factually correct.
+COMPLETENESS CHECK: The full set contains the only fractionation count mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -105,9 +93,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD008108","","strict","ExperimentalDesign","replicates","6","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
 SOURCE CHECK: The paper states in the ""Proteomics analysis reveals enrichment..."" section: ""In total, we quantified 8,187 proteins... (n=3 replicates per sample)"".
-TRUTH CHECK: The paper explicitly mentions 3 replicates per sample for the quantitative proteomic analysis. The value ""6"" is not supported by the text.
-COMPLETENESS CHECK: The full set contains only the incorrect value ""6"".
-
+TRUTH CHECK: The paper explicitly mentions 3 replicates per sample, not 6.
+COMPLETENESS CHECK: The value is incorrect; the correct number of replicates per sample is 3.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -115,10 +102,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: 3","3"
-"PXD008108","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+"PXD008108","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the proteomics experiment.
-TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is correct when the paper is silent regarding the number of replicates.
-COMPLETENESS CHECK: The value ""1"" is a complete representation given the absence of explicit technical replicate counts in the text.
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The value ""1"" is the standard default for this field when no other information is provided.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -128,10 +115,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD008108","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
-SOURCE CHECK: The paper describes a ""multinotch MS3-based TMT method"" where ""The 10 most abundant MS1 ions... were selected for MS2/MS3 analysis,"" which is a specific implementation of data-dependent acquisition (DDA).
-TRUTH CHECK: The description of selecting the most abundant ions for subsequent fragmentation is the defining characteristic of data-dependent acquisition.
-COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition scheme used.
-
+SOURCE CHECK: The paper describes a ""multinotch MS3-based TMT method"" where the ""10 most abundant MS1 ions... were selected for MS2/MS3 analysis,"" which is a specific implementation of data-dependent acquisition (DDA).
+TRUTH CHECK: The described workflow (selecting the most abundant precursors for fragmentation) is the definition of data-dependent acquisition.
+COMPLETENESS CHECK: The full set contains the only acquisition method used for the proteomics experiments described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -139,10 +125,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Technical","cleavage_agent","Trypsin","Trypsin","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The value is explicitly mentioned in the ""Protein digestion and peptide labeling"" section of the methods, describing the processing of the MS samples.
-TRUTH CHECK: The paper states that proteins were digested with ""LysC... followed by trypsin"".
-COMPLETENESS CHECK: The full set of extracted values only contains ""Trypsin"", but the paper explicitly mentions both ""LysC"" and ""trypsin"" were used for digestion.
+"PXD008108","","strict","Technical","cleavage_agent","Trypsin","Trypsin","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Protein digestion and peptide labeling"" section of the methods.
+TRUTH CHECK: The paper states that proteins were digested with LysC followed by trypsin.
+COMPLETENESS CHECK: The full set of extracted values only contains ""Trypsin"", but the paper explicitly mentions both ""LysC"" and ""trypsin"" as cleavage agents.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -151,33 +137,11 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: LysC, trypsin","LysC, trypsin"
-"PXD008108","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
-SOURCE CHECK: The value ""9 ppm"" does not appear in the provided text.
-TRUTH CHECK: The paper explicitly states ""a fragment ion tolerance of 0.9 Da"" in the ""Large-scale Proteomic Data Analysis"" section.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it contains a hallucinated value and misses the actual value stated in the text.
+"PXD008108","","strict","Technical","fragment_mass_tolerance","0.9 Da","0.9 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.9 Da"" is explicitly stated in the ""Large-scale Proteomic Data Analysis"" section of the methods.
+TRUTH CHECK: The text states ""Searches were performed using peptide mass tolerance of 20 ppm, and a fragment ion tolerance of 0.9 Da,"" confirming that 0.9 Da refers to the fragment ions.
+COMPLETENESS CHECK: The full set of extracted values contains the only fragment mass tolerance mentioned in the paper.
 
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 0.9 Da","0.9 Da"
-"PXD008108","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The paper mentions ""collision-induced dissociation (CID)"" in the ""Liquid chromatography and tandem mass spectrometry"" section.
-TRUTH CHECK: The paper explicitly states ""collision-induced dissociation (CID)"", but it does not use the phrase ""beam-type"". While CID in an Orbitrap Fusion is typically beam-type, the specific term ""beam-type"" is not in the text.
-COMPLETENESS CHECK: The full set contains only this value; however, the paper also mentions ""high-energy collision-induced dissociation (HCD)"" for the MS3 scans.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: CID, HCD","CID, HCD"
-"PXD008108","","strict","Technical","instrument","Orbitrap Fusion","Orbitrap Fusion","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""Liquid chromatography and tandem mass spectrometry"" section as the instrument used for the proteomics analysis.
-TRUTH CHECK: The paper states ""Mass spectrometry data were collected using an Orbitrap Fusion mass spectrometer (Thermo Fischer Scientific)"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the proteomics experiments in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -185,10 +149,34 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Technical","label","TMT126","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value refers to a specific isobaric label, which fits the category of the 'label' field.
-SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" in the ""Protein digestion and peptide labeling"" section.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact tags used (e.g., TMT126, TMT127, etc.); it only refers to ""TMT reagents"" and mentions ""10 channels"" during normalization. The specific tag numbers (126, 127, etc.) are not written in the text.
-COMPLETENESS CHECK: The full set of extracted values attempts to list specific TMT channels, but since none of these specific tags are mentioned in the text, the set is based on hallucinated specifics.
+"PXD008108","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions ""collision-induced dissociation (CID)"" in the ""Liquid chromatography and tandem mass spectrometry"" section.
+TRUTH CHECK: While the paper explicitly states ""collision-induced dissociation (CID)"", it does not use the phrase ""beam-type"". Although CID in an Orbitrap Fusion is typically beam-type, the specific term ""beam-type"" is not written in the text.
+COMPLETENESS CHECK: The full set contains only this value, but it introduces a descriptor not present in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: CID","CID"
+"PXD008108","","strict","Technical","instrument","Orbitrap Fusion","Orbitrap Fusion","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Liquid chromatography and tandem mass spectrometry"" section as the instrument used for the proteomics analysis.
+TRUTH CHECK: The paper states ""Mass spectrometry data were collected using an Orbitrap Fusion mass spectrometer (Thermo Fischer Scientific)"".
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the proteomics experiments in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008108","","strict","Technical","label","TMT126","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of the label field.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" for peptide labeling in the ""Protein digestion and peptide labeling"" section.
+TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact tags (e.g., TMT126, TMT127) used; it only refers to ""TMT reagents"" and mentions ""10 channels"" in the normalization section.
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags that are not explicitly named in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -199,8 +187,8 @@ VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
 "PXD008108","","strict","Technical","label","TMT127","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific type of isobaric label, which fits the category for the label field.
 SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" and a ""multinotch MS3-based TMT method"" for the quantitative proteomic analysis of MEFs.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact TMT version or the specific tags (e.g., TMT126, TMT127) used; it only refers to them generally as ""TMT reagents"".
-COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags that are not mentioned in the text, making the set hallucinated.
+TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact version or the specific tags (e.g., TMT126, TMT127) used. It only refers to ""TMT reagents"".
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags that are not mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -209,10 +197,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
-"PXD008108","","strict","Technical","label","TMT128","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category for the label field.
-SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" and a ""multinotch MS3-based TMT method"" for the quantitative proteomic analysis of MEFs.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact TMT version or the specific tags (e.g., TMT126, TMT128) used. It only refers to ""TMT reagents"".
-COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags, but none of these specific tags are mentioned in the text.
+"PXD008108","","strict","Technical","label","TMT128","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific type of isobaric label, which fits the category for the label field.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" in the ""Protein digestion and peptide labeling"" section for the quantitative proteomic analysis.
+TRUTH CHECK: While the paper confirms the use of ""TMT"", it does not specify the exact version or number of channels (e.g., TMT6, TMT10, TMT128). The value ""TMT128"" is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values consists of various TMT versions (126-131), none of which are explicitly stated in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -222,9 +210,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
 "PXD008108","","strict","Technical","label","TMT129","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific type of isobaric label, which fits the category for the label field.
-SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" for peptide labeling in the ""Protein digestion and peptide labeling"" section.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact version or the specific tags used (e.g., TMT6plex, TMT10plex, or specific mass tags like TMT129). The text only says ""TMT reagents"".
-COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags (126-131), but these specific numbers are not mentioned anywhere in the provided text.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" and a ""multinotch MS3-based TMT method"" for the quantitative proteomic analysis of MEFs.
+TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact TMT version or the specific tags (e.g., TMT126, TMT129) used. It only refers to ""TMT reagents"" and ""TMT-labeled peptides"".
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags that are not mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -233,10 +221,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
-"PXD008108","","strict","Technical","label","TMT130","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of the label field.
-SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" and a ""multinotch MS3-based TMT method"" for the quantitative proteomic analysis of MEFs.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not specify the exact TMT version (e.g., TMT6plex, TMT10plex) or the specific mass tags (e.g., TMT130) used.
-COMPLETENESS CHECK: The full set of extracted values lists individual TMT tags, but these specific tags are not mentioned in the text.
+"PXD008108","","strict","Technical","label","TMT130","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value refers to a specific isobaric label, which fits the category of the 'label' field.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" in the ""Protein digestion and peptide labeling"" section for the quantitative proteomic analysis of MEFs.
+TRUTH CHECK: While the paper confirms the use of ""TMT"", it does not explicitly list the specific TMT channel numbers (e.g., TMT130) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT channels, but these specific numbers are not present in the provided text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -245,10 +233,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
-"PXD008108","","strict","Technical","label","TMT131","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of the label field.
+"PXD008108","","strict","Technical","label","TMT131","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of the 'label' field.
 SOURCE CHECK: The paper explicitly mentions the use of ""TMT reagents"" and a ""multinotch MS3-based TMT method"" for the quantitative proteomic analysis of MEFs.
-TRUTH CHECK: While the paper confirms the use of TMT, it does not explicitly list the specific TMT channel tags (e.g., TMT131) used. It only refers to ""TMT reagents"" and ""10 channels"".
-COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but these specific channel numbers are not mentioned in the text.
+TRUTH CHECK: While the paper confirms the use of TMT, it does not explicitly list the specific TMT channel numbers (e.g., TMT131) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but these specific channel numbers are not mentioned in the provided text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -258,9 +246,10 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
 "PXD008108","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The value is present in the paper text, specifically in the ""Liquid chromatography and tandem mass spectrometry"" section which describes the MS instrument used for the proteomics experiment.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""Liquid chromatography and tandem mass spectrometry"" section which describes the MS instrument used for the proteomics analysis.
 TRUTH CHECK: The paper explicitly states that an ""Orbitrap Fusion mass spectrometer"" was used.
-COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiments.
+COMPLETENESS CHECK: The full set of extracted values contains ""orbitrap"", which is the only mass analyzer mentioned for the MS experiments.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -270,7 +259,7 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD008108","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Large-scale Proteomic Data Analysis"" section of the methods.
-TRUTH CHECK: The text states ""oxidation of methionine residues (+15.995 Da) was set as a variable modification,"" which is equivalent to ""Oxidation (M)"".
+TRUTH CHECK: The paper states ""oxidation of methionine residues (+15.995 Da) was set as a variable modification,"" which is equivalent to ""Oxidation (M)"".
 COMPLETENESS CHECK: The full set of extracted values includes ""Deamidation (NQ)"" and ""Cysteine mercaptoethanol (C)"", neither of which are mentioned in the text; however, the candidate value itself is correct.
 
 TYPE_CORRECT: yes
@@ -292,8 +281,8 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD008108","","strict","Technical","modification","Cysteine mercaptoethanol (C)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
-SOURCE CHECK: The value is not present in the text; ""beta-mercaptoethanol"" is mentioned as a culture medium supplement, not as a searched protein modification.
+"PXD008108","","strict","Technical","modification","Cysteine mercaptoethanol (C)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The value is not present in the paper text; while beta-mercaptoethanol is mentioned as a growth medium supplement, it is not listed as a searched modification.
 TRUTH CHECK: The value is factually incorrect; the paper explicitly lists ""carbamidomethylation of cysteine residues"" as the static modification, not mercaptoethanol.
 COMPLETENESS CHECK: The full set of extracted values is incorrect as it includes hallucinated modifications and misses the explicitly stated ones.
 TYPE_CORRECT: yes
@@ -303,15 +292,15 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: Carbamidomethyl (C)","Carbamidomethyl (C)"
-"PXD008108","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""6 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The paper explicitly states ""Searches were performed using peptide mass tolerance of 20 ppm"" in the Large-scale Proteomic Data Analysis section.
-COMPLETENESS CHECK: The extracted value is incorrect; the correct value is present in the text.
+"PXD008108","","strict","Technical","precursor_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Large-scale Proteomic Data Analysis"" section of the methods.
+TRUTH CHECK: The paper states ""Searches were performed using peptide mass tolerance of 20 ppm, and a fragment ion tolerance of 0.9 Da""; ""peptide mass tolerance"" refers to the precursor (MS1) ions.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 20 ppm","20 ppm"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

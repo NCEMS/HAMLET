@@ -1,20 +1,20 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD017351","","strict","Biological","cell_line","E14, J1, HEK 293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of cell lines, which matches the field definition.
-SOURCE CHECK: The paper mentions E14, J1, and HEK 293T cells; however, only E14 ESCs were used for the mass spectrometry analysis (""E14 ESCs expressing 3HA-Ssrp1... were... loaded to... mass spectrometry""). J1 ESCs and HEK 293T cells were used for other assays (shRNA depletion and co-IP validation) but not for the MS experiment.
-TRUTH CHECK: Only ""E14"" is factually correct as the source of the MS sample; ""J1"" and ""HEK 293T"" are mentioned in unrelated contexts.
-COMPLETENESS CHECK: The full set includes non-MS samples, making it incorrect.
+"PXD017351","","strict","Biological","cell_line","E14, J1, HEK 293T","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper mentions E14, J1, and HEK 293T cells; however, only E14 ESCs were used for the mass spectrometry analysis (""E14 ESCs expressing 3HA-Ssrp1... were used... and loaded to... mass spectrometry""). J1 cells were used for shRNA depletion/qPCR, and HEK 293T cells were used for co-IP validation of the Ssrp1-Usp7 interaction, not for MS.
+TRUTH CHECK: Only E14 is the correct cell line for the MS experiment; J1 and HEK 293T are mentioned in unrelated contexts.
+COMPLETENESS CHECK: The full set includes non-MS samples, making it factually incorrect.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
-HALLUCINATED: yes
+HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: E14","E14"
-"PXD017351","","strict","Biological","cell_type","embryonic stem cells","embryonic stem cells","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""embryonic stem cells"" describes a cell type/lineage, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the text; the MS experiment used E14 ESCs (embryonic stem cells) expressing 3HA-Ssrp1.
-TRUTH CHECK: The value is factually correct as the paper identifies the cells as ""E14 ESCs"" and ""embryonic stem cells"".
-COMPLETENESS CHECK: The full set contains the only cell type used for the mass spectrometry analysis.
+"PXD017351","","strict","Biological","cell_type","ESCs","ESCs","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""ESCs"" (Embryonic Stem Cells) refers to a cell type/lineage.
+SOURCE CHECK: The value comes from the MS experiment context; the ""Protein co-immunoprecipitation (co-IP) and mass spectrometry"" section explicitly states that ""E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA"" were used for the MS analysis.
+TRUTH CHECK: The value is factually correct as the samples analyzed by mass spectrometry were embryonic stem cells.
+COMPLETENESS CHECK: The full set of extracted values (""ESCs"") covers the biological source of the MS samples described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,10 +23,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
-SOURCE CHECK: The paper describes experiments using embryonic stem cells (E14 and J1) and HEK 293T cells without any mention of a disease state or pathology.
-TRUTH CHECK: Since the study is not a disease study and uses standard cell lines, ""normal"" is a correct safe default.
-COMPLETENESS CHECK: The full set contains only this value, which is sufficient for a study without a disease focus.
-
+SOURCE CHECK: The MS experiment used E14 ESCs (embryonic stem cells), which are not described as having a disease state.
+TRUTH CHECK: Since the study is not a disease study and the cells are standard embryonic stem cells, the safe default ""normal"" is correct.
+COMPLETENESS CHECK: The full set contains only ""normal"", which is exhaustive for this study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -34,12 +33,12 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Biological","organ","cell culture","","low","True","material_type","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""cell culture"" is a description of the sample environment/material, not an organ or tissue of origin.
+"PXD017351","","strict","Biological","organ","cell culture","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""cell culture"" is a description of the sample environment/material, but not an organ or tissue of origin.
 SOURCE CHECK: The MS experiment used E14 ESCs (embryonic stem cells), which are grown in cell culture.
-TRUTH CHECK: The field ""organ"" requires the tissue or organ of origin. For embryonic stem cells (ESCs), the origin is the embryo. ""Cell culture"" is a material type or state, not an organ.
-COMPLETENESS CHECK: The value is incorrect as it provides the method of growth rather than the organ of origin.
+TRUTH CHECK: ""Cell culture"" is not an organ; the organ/tissue of origin for embryonic stem cells is the embryo (specifically the inner cell mass).
+COMPLETENESS CHECK: The value is incorrect as it describes the material state rather than the organ of origin.
 TYPE_CORRECT: no
-CORRECT_TYPE_NAME: material_type
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
@@ -47,8 +46,8 @@ VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper describes the use of mouse E14 and J1 embryonic stem cells (ESCs) for the co-immunoprecipitation and mass spectrometry analysis.
-TRUTH CHECK: The use of ""Mus musculus"" is factually correct as the study uses mouse ESCs.
-COMPLETENESS CHECK: The full set contains the only species used for the MS experiment.
+TRUTH CHECK: The text explicitly mentions ""Mouse E14 and J1 ESCs"" and refers to the ""mouse mm10 genome assembly,"" confirming the species is Mus musculus.
+COMPLETENESS CHECK: The full set contains the single correct species used for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -56,10 +55,22 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","ExperimentalDesign","factor_value","expression (3HA-Ssrp1, pCAG-3HA)","expression (3HA-Ssrp1, pCAG-3HA) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental conditions (expression of a tagged protein vs. a control vector), which is a correct category for a factor_value.
-SOURCE CHECK: The value is derived from the ""Protein co-immunoprecipitation (co-IP) and mass spectrometry"" section, which explicitly states that ""E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA"" were used for the MS analysis.
-TRUTH CHECK: The value accurately reflects the two groups compared in the proteomics experiment.
-COMPLETENESS CHECK: The full set includes the experimental contrast and a ""normal"" (control) value; together they cover the groups analyzed by MS.
+"PXD017351","","strict","ExperimentalDesign","factor_value","expression of 3HA-Ssrp1 (3HA-Ssrp1, pCAG-3HA control), Ssrp1 knockout, Ssrp1 depletion, Supt16 depletion, Usp7 depletion, Usp7 inhibitor treatment","normal","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes experimental conditions/treatments, which is the correct category for factor_value.
+SOURCE CHECK: These conditions (3HA-Ssrp1 expression, Ssrp1 knockout, Ssrp1/Supt16/Usp7 depletion, and Usp7 inhibitor) are all mentioned in the paper; however, only the ""expression of 3HA-Ssrp1"" (and its control) is linked to the mass spectrometry experiment (""E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA were used... for mass spectrometry""). The other conditions (knockouts, shRNA depletions, inhibitors) are used for RNA-seq, qPCR, and Western blots, not the MS analysis.
+TRUTH CHECK: The value is factually present in the text, but it incorrectly groups non-MS conditions with the MS condition.
+COMPLETENESS CHECK: The full set includes ""normal"", but the candidate value is a conglomerate of multiple different experimental arms, some of which are not part of the proteomics experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 3HA-Ssrp1, pCAG-3HA control","3HA-Ssrp1, pCAG-3HA control"
+"PXD017351","","strict","ExperimentalDesign","factor_value","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, mirroring a characteristic like disease state or genotype.
+SOURCE CHECK: The paper describes ""wild-type (WT) ESCs"" and ""control E14 ESCs expressing pCAG-3HA"" as the baseline for comparisons against knockouts and depletion; ""normal"" is a safe default for these control/WT states.
+TRUTH CHECK: The value is factually correct as a representation of the control/wild-type samples used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values includes both the specific experimental conditions (knockouts, depletion, etc.) and the baseline ""normal"" state, covering the experimental design.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,10 +78,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","ExperimentalDesign","factor_value","normal","expression (3HA-Ssrp1, pCAG-3HA) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, mirroring a characteristic like disease state or genotype.
-SOURCE CHECK: The value ""normal"" is not explicitly mentioned in the text, but the study uses ""control E14 ESCs expressing pCAG-3HA"" as the baseline for the MS experiment.
-TRUTH CHECK: Under the ""safe defaults"" rule, ""normal"", ""healthy"", or ""no disease"" are acceptable for subjects that are not part of a disease study or serve as the healthy/baseline control.
-COMPLETENESS CHECK: The full set of extracted values includes both the specific experimental contrast (expression of 3HA-Ssrp1 vs pCAG-3HA) and the general baseline state.
+"PXD017351","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper mentions that ""spectra from each fraction were searched,"" implying that fractionation occurred, but it does not specify the number of fractions.
+TRUTH CHECK: While the paper mentions ""each fraction,"" it does not provide a specific number. According to the field definition, ""1"" is the default when no fractionation is mentioned or the number is not specified.
+COMPLETENESS CHECK: The full set contains only the default value ""1"", which is appropriate given the lack of a specific count in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -79,32 +90,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The paper mentions ""the resulting spectra from each fraction"" in the mass spectrometry section, but it does not specify the number of fractions generated.
-TRUTH CHECK: Since the paper does not explicitly state the number of fractions, the safe default of ""1"" is applied.
-COMPLETENESS CHECK: The full set of extracted values consists of the safe default ""1"", which is appropriate when the text is silent.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: The paper does not explicitly state the number of biological replicates used for the mass spectrometry analysis of the Ssrp1 co-immunoprecipitation.
-TRUTH CHECK: Since the paper is silent on the number of replicates for the MS experiment, the safe default of ""1"" is applied.
-COMPLETENESS CHECK: The full set contains only the safe default, which is complete given the lack of explicit information in the text.
+"PXD017351","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The paper mentions ""two Ssrp1 knockout ESC lines"" and ""two shRNAs for each gene"", but it does not explicitly state the number of biological replicates used for the mass spectrometry experiment.
+TRUTH CHECK: There is no explicit statement in the text that the mass spectrometry analysis was performed on 2 biological replicates. The mention of ""two knockout cell lines"" refers to the genetic clones created, not necessarily the number of biological replicates processed for the MS experiment.
+COMPLETENESS CHECK: The value is not supported by the text; the paper is silent on the number of biological replicates for the MS analysis.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
 "PXD017351","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.
-TRUTH CHECK: Per the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent about replicates.
 COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or lack thereof) in the text.
 
 TYPE_CORRECT: yes
@@ -115,8 +115,8 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
-SOURCE CHECK: The paper mentions the use of a Q Exactive HF-X mass spectrometer and Proteome Discoverer 2.2, but it does not explicitly state the acquisition method (e.g., ""DDA"" or ""data-dependent acquisition"").
-TRUTH CHECK: While Q Exactive instruments typically use DDA, the specific term ""data-dependent acquisition"" is not written in the provided text.
+SOURCE CHECK: The paper mentions the use of a Q Exactive HF-X mass spectrometer and Proteome Discoverer 2.2, but it does not explicitly state the acquisition method (e.g., DDA or DIA).
+TRUTH CHECK: While Q Exactive instruments are commonly used for data-dependent acquisition (DDA), the text does not explicitly name the method.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -128,7 +128,7 @@ CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Technical","fragment_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
 SOURCE CHECK: The value ""7 ppm"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -136,10 +136,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" is not present in the provided paper text.
-TRUTH CHECK: The paper mentions the use of a ""Q Exactive HF-X mass spectrometer,"" which typically uses HCD (Higher-energy Collisional Dissociation), but the specific fragmentation method is not explicitly named in the text.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+"PXD017351","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the paper mentions the instrument (Q Exactive HF-X) but does not explicitly state the fragmentation method used.
+COMPLETENESS CHECK: The full set is not exhaustive because the value is hallucinated.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -150,7 +150,7 @@ CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Technical","instrument","Q Exactive HF-X","Q Exactive HF-X","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Protein co-immunoprecipitation (co-IP) and mass spectrometry"" section as the instrument used for the MS analysis.
 TRUTH CHECK: The paper states the samples were ""loaded to EASY-nLC 1200 UHPLC system coupled with a Q Exactive HF-X mass spectrometer (Thermo Scientific)"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the paper for the proteomics experiment.
+COMPLETENESS CHECK: Only one mass spectrometer is mentioned in the text, and it has been extracted.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -159,10 +159,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Technical","label","label free","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper mentions that proteins were ""digested, labeled and loaded"" for mass spectrometry, but it does not specify the type of label used.
-TRUTH CHECK: The text explicitly states that proteins were ""labeled"" before being loaded into the Q Exactive HF-X mass spectrometer. According to the field definition, ""label-free"" is only correct when NO labeling is described. Since the paper explicitly mentions that proteins were labeled, ""label free"" is factually incorrect.
-COMPLETENESS CHECK: The full set contains only ""label free"", which is incorrect based on the text.
+"PXD017351","","strict","Technical","label","label free","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper mentions that proteins were ""digested, labeled and loaded"" for mass spectrometry, but it does not specify the name of the labeling method used.
+TRUTH CHECK: The text explicitly states that proteins were ""labeled"" (""proteins were digested, labeled and loaded to EASY-nLC 1200...""), which contradicts a ""label-free"" approach.
+COMPLETENESS CHECK:The full set contains only ""label free"", which is incorrect based on the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -171,8 +171,8 @@ HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The value is inferable from the instrument model ""Q Exactive HF-X"" mentioned in the ""Protein co-immunoprecipitation (co-IP) and mass spectrometry"" section, which is the instrument used for the MS analysis of the E14 ESC samples.
-TRUTH CHECK: The Q Exactive HF-X is an Orbitrap-based mass spectrometer.
+SOURCE CHECK: The value is inferable from the instrument ""Q Exactive HF-X"", which is an Orbitrap-based mass spectrometer.
+TRUTH CHECK: The paper explicitly mentions the use of a ""Q Exactive HF-X mass spectrometer (Thermo Scientific)"", which uses an Orbitrap mass analyzer.
 COMPLETENESS CHECK: The full set contains the only mass analyzer used for the proteomics experiment described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -181,11 +181,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Technical","modification","Phospho (STY)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Phospho (STY)"" is the correct category for a protein modification.
-SOURCE CHECK: The candidate value is not present in the paper text; the study focuses on ubiquitination (H2Bub) and histone chaperones, not phosphorylation.
-TRUTH CHECK: The value is factually incorrect as there is no mention of searching for phosphorylation modifications in the mass spectrometry analysis.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
-
+"PXD017351","","strict","Technical","modification","Phospho (STY)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Phospho (STY)"" is not mentioned anywhere in the paper text.
+TRUTH CHECK: The paper does not describe a phosphoproteomics experiment or a search for phosphorylation modifications; it focuses on a co-IP/MS study of the FACT complex.
+COMPLETENESS CHECK:The full set of extracted values contains modifications not mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -193,9 +192,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Technical","modification","S-(2-succinyl) cysteine (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+"PXD017351","","strict","Technical","modification","S-(2-succinyl) cysteine (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the required category for this field.
 SOURCE CHECK: The value ""S-(2-succinyl) cysteine (C)"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and is therefore not factually supported for this experiment.
+TRUTH CHECK: The value is not present in the text and is therefore not factually supported by this experiment.
 COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
 
 TYPE_CORRECT: yes
@@ -206,9 +205,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD017351","","strict","Technical","modification","Iodoacetic acid derivative (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The value is not present in the paper text; the text mentions ""mass spectrometry"" but does not list the specific modifications searched for in the database search.
-TRUTH CHECK: The value is not mentioned in the text.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+SOURCE CHECK: The value is not present in the paper text; the text mentions ""proteins were digested, labeled"" but does not name the labeling reagent or the resulting modification.
+TRUTH CHECK: The value is not mentioned in the text and cannot be inferred from the provided methods.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -217,10 +216,11 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD017351","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct type for this field.
-SOURCE CHECK: The value ""7 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
+"PXD017351","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: Since the value is not present in the text, it cannot be verified as factually correct for this experiment.
 COMPLETENESS CHECK: The full set contains only this hallucinated value.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

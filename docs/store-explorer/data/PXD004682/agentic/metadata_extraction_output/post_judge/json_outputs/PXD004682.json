@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "disease",
-      "extracted_value": "lung squamous cell carcinoma, normal",
+      "extracted_value": "lung squamous cell carcinoma",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains disease states, which matches the definition of the field.",
-        "SOURCE_CHECK": "The values are present in the text; the paper describes \"lung squamous cell carcinomas\" and \"adjacent tissues\" (which serves as the normal/control).",
-        "TRUTH_CHECK": "The values are factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the disease and the control groups described in the study."
+        "TYPE_CHECK": "The candidate value is a disease diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"4 frozen lung squamous cell carcinomas\") and results section as the source of the MS samples.",
+        "TRUTH_CHECK": "The value is factually correct based on the paper text.",
+        "COMPLETENESS_CHECK": "The full set contains the primary disease studied; however, the paper also describes \"adjacent tissues\" (the control group), which are typically represented as \"normal\" or \"healthy\" in this field. While \"lung squamous cell carcinoma\" is the primary disease, the full experimental design involves a comparison with adjacent non-tumor tissue."
       }
     },
     {
@@ -34,9 +34,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"lung\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text; the MS samples were derived from \"frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
+        "SOURCE_CHECK": "The value is explicitly stated in the text; the MS samples were derived from \"frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
         "TRUTH_CHECK": "The value is factually correct as the study focuses on lung tumor proteomes.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the biological source of the MS samples described in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the biological source of the samples described in the paper."
       }
     },
     {
@@ -53,14 +53,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper states that database searches were conducted against \"human entries in UniProt\" and the samples were \"lung squamous cell carcinomas\" from patients.",
-        "TRUTH_CHECK": "The samples are human lung tissues, making \"Homo sapiens\" factually correct.",
+        "SOURCE_CHECK": "The paper explicitly states that database searches were conducted against \"human entries in UniProt\" and describes the samples as \"lung squamous cell carcinomas\" from patients.",
+        "TRUTH_CHECK": "The use of human lung tissue samples confirms the species is Homo sapiens.",
         "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "tissue type (lung squamous cell carcinoma, adjacent tissue); analysis method (DDA, DIA, LF, TMT 6-plex)",
+      "extracted_value": "tissue type (lung squamous cell carcinoma, adjacent tissue); analysis platform (DDA, DIA, LF, TMT 6-plex)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -71,15 +71,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factors (tissue type and analysis method) and their respective levels, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values \"lung squamous cell carcinoma\", \"adjacent tissue\", \"DDA\", \"DIA\", \"LF\", and \"TMT 6-plex\" are all explicitly mentioned in the text as the primary variables being compared in the MS experiments.",
-        "TRUTH_CHECK": "The values are factually correct; the study compares these specific tissue types across these four specific MS analysis platforms.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the biological contrast (tumor vs adjacent) and the technical contrast (the four platforms), which are the two main axes of the study."
+        "TYPE_CHECK": "The candidate value describes the experimental factors (tissue type and analysis platform) and their respective levels, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"lung squamous cell carcinomas\", \"adjacent tissues\", \"DDA\", \"DIA\", \"LF\", and \"TMT 6-plex\" are all explicitly mentioned in the text as the primary variables being compared in the MS experiments.",
+        "TRUTH_CHECK": "The values accurately reflect the experimental design described in the abstract and results sections.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the grouped description and the individual tissue type, covering the experimental design axes."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "lung squamous cell carcinoma, normal",
+      "extracted_value": "lung squamous cell carcinoma",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the disease states/conditions being compared, which is a correct category for factor_value.",
-        "SOURCE_CHECK": "The paper explicitly states the study compared \"4 frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
-        "TRUTH_CHECK": "\"Lung squamous cell carcinoma\" is explicitly mentioned. \"Normal\" is a safe default for \"adjacent tissues\" in the context of a tumor study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the biological contrast (tumor vs adjacent) and the technical contrast (DDA, DIA, LF, TMT), covering the experimental design described in the paper."
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid characteristic for a factor_value.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract and results as the tumor type analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study compares lung squamous cell carcinomas to adjacent tissues.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific disease state and a broader description of the experimental contrasts (tissue type and analysis platform), which together exhaustively cover the experimental factors described."
       }
     },
     {
@@ -110,9 +110,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper explicitly states in the \"bRPLC Separation\" section: \"Twelve concatenated fractions were analyzed with LC-MS/MS for the LF and TMT experiments.\"",
-        "TRUTH_CHECK": "The value \"12\" is factually correct as per the text.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"12\", which accurately reflects the fractionation described for the primary quantitative experiments (LF and TMT)."
+        "SOURCE_CHECK": "The text explicitly states \"Twelve concatenated fractions were analyzed with LC-MS/MS for the LF and TMT experiments\" in the bRPLC Separation section.",
+        "TRUTH_CHECK": "The value \"12\" is factually correct as per the methods section.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the text."
       }
     },
     {
@@ -130,8 +130,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper states that the strategies were applied to \"the same set of 4 frozen lung squamous cell carcinomas and 4 adjacent tissues,\" totaling 8 biological samples.",
-        "TRUTH_CHECK": "The value 8 correctly represents the total number of biological samples (replicates across the two conditions) analyzed in the study.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"8\", which accurately covers the biological sample count described in the text."
+        "TRUTH_CHECK": "The value 8 correctly represents the total number of biological samples (replicates of the condition/tissue pair) analyzed in the study.",
+        "COMPLETENESS_CHECK": "The full set contains the value 8, which accurately reflects the total number of biological samples described."
       }
     },
     {
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly state the number of technical replicates for the primary experiments; however, it mentions \"concordance of LF and single sample DDA technical replicates\" and \"concordance of technical replicates\" for Pinnacle DIA, implying they exist, but does not provide a specific number.",
-        "TRUTH_CHECK": "Per the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent on the number of replicates.",
-        "COMPLETENESS_CHECK": "The value \"1\" is a safe default and is complete given the lack of explicit counts in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of technical replicates for the primary experiments; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct as a safe default when the paper is silent on technical replication.",
+        "COMPLETENESS_CHECK": "The full set contains only the safe default, which is complete given the absence of specific technical replicate counts in the text."
       }
     },
     {
@@ -164,12 +164,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "incomplete",
-      "corrected_value": "data-dependent acquisition, data-independent acquisition",
+      "corrected_value": "data-dependent acquisition, data independent acquisition",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract and methods as one of the strategies used for the MS experiments.",
-        "TRUTH_CHECK": "The paper describes using both data-dependent acquisition (DDA) and data-independent acquisition (DIA).",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly describes two different acquisition methods (DDA and DIA), but only one is listed."
+        "TYPE_CHECK": "The candidate value is an MS acquisition scheme, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"single sample LC-MS/MS with data dependent acquisition (DDA)\") and methods section.",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using DDA for one of its discovery platforms.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly describes and compares four different strategies, including \"data independent acquisition (DIA)\"."
       }
     },
     {
@@ -186,9 +186,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a chemical reagent used for alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein Extraction and Digestion\" section of the methods.",
-        "TRUTH_CHECK": "The text states that proteins were reduced with DTT \"followed by alkylation with 11 mM iodoacetamide\".",
-        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein Extraction and Digestion\" section of the methods (\"alkylation with 11 mM iodoacetamide\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only alkylation reagent mentioned in the paper."
       }
     },
     {
@@ -205,9 +205,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"trypsin digestion was carried out overnight\" in the Protein Extraction and Digestion section.",
-        "TRUTH_CHECK": "The value is factually correct as stated in the methods.",
-        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
+        "SOURCE_CHECK": "The text explicitly states \"trypsin digestion was carried out overnight at 37 °C\" in the Protein Extraction and Digestion section.",
+        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned in the paper."
       }
     },
     {
@@ -221,12 +221,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "hallucinated",
-      "corrected_value": "0.05 Da",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"11 ppm\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper mentions a \"mass error of 10 ppm\" in the MaxQuant section and a \"15 ppm mass tolerance\" in the IDPicker section, as well as a \"precursor mass tolerance was set to 10 ppm\" and \"MS/MS mass tolerance was 0.05 Da\" in the Pinnacle section. There is no mention of \"11 ppm\".",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
+        "SOURCE_CHECK": "The value \"11 ppm\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions a mass error of \"10 ppm\" in the MaxQuant section and a \"15 ppm mass tolerance\" in the IDPicker section, but \"11 ppm\" is not mentioned.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as the value is not present in the text."
       }
     },
     {
@@ -243,9 +243,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value is not mentioned in the provided text; the paper mentions \"normalized collision energy\" and \"tandem mass spectrometry,\" but does not explicitly name the fragmentation method as \"beam-type collision-induced dissociation.\"",
-        "TRUTH_CHECK": "While the QExactive Plus instrument typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" does not appear in the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"normalized collision energy\" (NCE) and the use of a \"QExactive Plus\" instrument, which typically uses HCD (Higher-energy Collisional Dissociation), but the specific phrase \"beam-type collision-induced dissociation\" does not appear in the text.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
       }
     },
     {
@@ -262,8 +262,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"DDA LC-MS/MS Analysis...\" section as a \"QExactive Plus, Thermo\".",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used for the proteomics experiments.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"DDA LC-MS/MS Analysis...\" section as the instrument used for tandem mass spectrometry.",
+        "TRUTH_CHECK": "The paper states \"electrospray quadrupole-orbital ion trap mass spectrometer (QExactive Plus, Thermo, San Jose, CA)\".",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer model mentioned in the text."
       }
     },
@@ -281,9 +281,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The paper explicitly mentions the use of a \"QExactive Plus\" instrument, which is described as an \"electrospray quadrupole-orbital ion trap mass spectrometer\".",
-        "TRUTH_CHECK": "The value is factually correct as the QExactive Plus uses an Orbitrap mass analyzer.",
-        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the mass analyzer used in the study."
+        "SOURCE_CHECK": "The paper explicitly mentions the use of a \"quadrupole-orbital ion trap mass spectrometer (QExactive Plus, Thermo)\".",
+        "TRUTH_CHECK": "The QExactive Plus instrument uses an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
       }
     },
     {
@@ -299,10 +299,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The modification is explicitly mentioned in the text under \"IDPicker Data Analysis\" (\"carbamidomethylation (cysteine)\") and \"Pinnacle Data Analysis\" (\"cysteine carbamidomethylation\").",
-        "TRUTH_CHECK": "\"Carbamidomethyl (C)\" is a standard representation of the \"carbamidomethylation (cysteine)\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Oxidation and TMT), making the set exhaustive."
+        "TYPE_CHECK": "The candidate value is a peptide modification, which matches the field definition.",
+        "SOURCE_CHECK": "The modification is explicitly mentioned in the \"IDPicker Data Analysis\" section (\"carbamidomethylation (cysteine)\") and the \"Pinnacle Data Analysis\" section (\"cysteine carbamidomethylation\").",
+        "TRUTH_CHECK": "The value \"Carbamidomethyl (C)\" is an unambiguous synonym for the \"carbamidomethylation (cysteine)\" mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Oxidation, TMT), making the set exhaustive."
       }
     },
     {
@@ -318,10 +318,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a chemical modification (isobaric labeling) on a specific residue, which fits the category of the modification field.",
-        "SOURCE_CHECK": "The paper mentions \"TMT 6-plex\" as a labeling strategy, but it does not explicitly name \"TMT6plex (K)\" as a searched modification with a target residue.",
-        "TRUTH_CHECK": "While TMT labeling occurs on lysines (K), the field definition strictly forbids inferring modifications; the specific modification name and target residue must be explicitly written in the text. The text mentions \"TMT 6-plex\" as a method, not as a searched modification entry like \"TMT6plex (K)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications, but this specific candidate is not explicitly supported by the text."
+        "TYPE_CHECK": "The candidate value describes a chemical modification (isobaric labeling) on a specific residue, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The paper mentions \"TMT 6-plex\" as a labeling method used for the proteomics experiment.",
+        "TRUTH_CHECK": "While \"TMT 6-plex\" is mentioned as the labeling method, the specific modification name \"TMT6plex (K)\" (indicating the modification of Lysine residues) is not explicitly written in the text. The text describes the method as \"TMT 6-plex\" or \"isobaric labeling\", but does not explicitly name the modification as \"TMT6plex (K)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications, but this specific value is not explicitly supported by the text."
       }
     },
     {
@@ -338,28 +338,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the paper text under \"IDPicker Data Analysis\" (\"oxidation (methionine)\") and \"Pinnacle Data Analysis\" (\"methionine oxidation\").",
-        "TRUTH_CHECK": "The candidate value \"Oxidation (M)\" is a standard representation of the \"oxidation (methionine)\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (carbamidomethylation and pyroglutamic acid), though \"pyroglutamic acid\" is missing from the set. However, the candidate value itself is correct."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"IDPicker Data Analysis\" section (\"oxidation (methionine)\") and the \"Pinnacle Data Analysis\" section (\"methionine oxidation\").",
+        "TRUTH_CHECK": "\"Oxidation (M)\" is a correct representation of \"oxidation (methionine)\" or \"methionine oxidation\" as described in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (carbamidomethylation and pyroglutamic acid), though \"pyroglutamic acid\" is missing from the set. However, the candidate value itself is a correct individual extraction."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "6 ppm",
-      "verdict": "low",
+      "extracted_value": "10 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "10 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"6 ppm\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper mentions a mass error of \"10 ppm\" in the MaxQuant section, a \"15 ppm mass tolerance\" in the IDPicker section, and a \"precursor mass tolerance was set to 10 ppm\" in the Pinnacle section. There is no mention of 6 ppm.",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value; the actual values mentioned in the text (10 ppm and 15 ppm) are missing."
+        "SOURCE_CHECK": "The value \"10 ppm\" is explicitly mentioned in the \"MaxQuant Data Analysis\" section (\"mass error of 10 ppm\") and the \"Pinnacle Data Analysis\" section (\"precursor mass tolerance was set to 10 ppm\").",
+        "TRUTH_CHECK": "The value is factually correct as it refers to the precursor mass tolerance used in the database searches.",
+        "COMPLETENESS_CHECK": "The full set contains \"10 ppm\", which covers the precursor tolerance mentioned for the primary analysis pipelines (MaxQuant and Pinnacle). While the IDPicker section mentions \"15 ppm\", the extracted value \"10 ppm\" is a correct instance of the precursor tolerance used in the study."
       }
     },
     {
@@ -375,9 +375,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a chemical used for reducing disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"The proteins were reduced with 4.5 mM DTT\", and DTT is the standard abbreviation for dithiothreitol.",
-        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used for protein reduction in the MS sample preparation.",
+        "TYPE_CHECK": "The candidate value is a chemical used for the reduction of disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"The proteins were reduced with 4.5 mM DTT\" in the Protein Extraction and Digestion section, and DTT is the standard abbreviation for dithiothreitol.",
+        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used for reduction in the MS sample preparation.",
         "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
       }
     }

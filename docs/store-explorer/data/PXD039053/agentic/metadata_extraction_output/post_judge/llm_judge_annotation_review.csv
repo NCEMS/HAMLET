@@ -1,0 +1,227 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD039053","","strict","Biological","cell_line","SW480, HEK293, HeLa, MHCC97H, HT29, MDA231, TCC, T24, T47D","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of immortalized cell line names, which matches the required category for this field.
+SOURCE CHECK: While all these cell lines are mentioned in the paper, only SW480 was actually analyzed by LC-MS/MS; the others were used for immunoblotting assays.
+TRUTH CHECK: The value is factually incorrect because it includes cell lines that were not used for the proteomics/MS experiment.
+COMPLETENESS CHECK: The full set is incorrect as it conflates immunoblotting samples with the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: SW480","SW480"
+"PXD039053","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" is a correct category for the cell_type field.
+SOURCE CHECK: The MS experiment was performed on SW480 cells (""Next, we employed an integrated Nt-peptide enrichment method followed by liquid chromatography–tandem mass spectrometry (LC–MS/MS) to further probe the cytosolic production of Nt-formylated proteins in SW480 cells"").
+TRUTH CHECK: SW480 is a well-established colorectal adenocarcinoma cell line, which is of epithelial lineage. According to the field definition, the lineage of a named cell line analyzed by MS is inferable and correct.
+COMPLETENESS CHECK: The full set contains only this value, which correctly describes the lineage of the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Biological","disease","colorectal carcinoma, cervical carcinoma, hepatocellular carcinoma, bladder carcinoma, breast carcinoma","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of disease states/diagnoses, which matches the field definition.
+SOURCE CHECK: The values are derived from the human cell lines (SW480, HT29, HeLa, MHCC97H, T24, TCC, MDA231, T47D) used in the study. While many were used for immunoblotting, the paper explicitly states that the LC-MS/MS analysis (the actual proteomics experiment) was performed on SW480 cells, which are described as ""colon cancer cells"" (colorectal carcinoma).
+TRUTH CHECK: The values are factually correct based on the paper's description of the cell lines used (e.g., ""SW480 and HT29 (colorectal carcinoma)"", ""HeLa (cervical carcinoma)"", etc.).
+COMPLETENESS CHECK: The full set of extracted values covers all the disease types associated with the human cell lines mentioned in the study. However, only the SW480 line was actually analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: colorectal carcinoma","colorectal carcinoma"
+"PXD039053","","strict","Biological","organ","colon","colon","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""colon"" is a valid organ/tissue type.
+SOURCE CHECK: The value is derived from the MS experiment context; the paper explicitly states that ""Nt-peptide enrichment method followed by liquid chromatography–tandem mass spectrometry (LC–MS/MS)"" was performed on SW480 cells, which are described as ""colon cancer cells"".
+TRUTH CHECK: The value is factually correct as SW480 is a well-known colorectal carcinoma cell line, and the paper explicitly refers to them as ""SW480 colon cancer cells"".
+COMPLETENESS CHECK: The full set of extracted values contains only ""colon"", which accurately describes the origin of the material used for the LC-MS/MS analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Biological","species","Homo sapiens, Escherichia coli, Saccharomyces cerevisiae","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of species names, which matches the required category for this field.
+SOURCE CHECK: The paper describes proteomics/MS analysis specifically for SW480 cells (Homo sapiens). While E. coli and S. cerevisiae are used for antibody generation, validation, and immunoblotting, they were not analyzed by LC-MS/MS.
+TRUTH CHECK: Only Homo sapiens is the correct species for the mass spectrometry experiment described in the ""Nt-peptide analyses"" section.
+COMPLETENESS CHECK: The full set includes species that were not part of the MS analysis, making the set factually incorrect for the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD039053","","strict","ExperimentalDesign","factor_value","cell line, actinonin treatment","cell line, actinonin treatment","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes experimental variables (cell line and treatment), which fits the definition of a factor_value.
+SOURCE CHECK: The values are present in the paper; the MS experiment specifically used SW480 cells (a cell line) and the paper discusses the effect of actinonin treatment on fMet proteins.
+TRUTH CHECK: The values are factually correct as the study investigates the presence of Nt-formylated proteins across different cell lines and the effect of the PDF inhibitor actinonin.
+COMPLETENESS CHECK: The full set of extracted values covers both the cell line variety (the different carcinomas) and the treatment variable (actinonin), which together describe the experimental design factors.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","ExperimentalDesign","factor_value","colorectal carcinoma, cervical carcinoma, hepatocellular carcinoma, bladder carcinoma, breast carcinoma","cell line, actinonin treatment","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value consists of disease states/diagnoses, which is a correct category for factor_value.
+SOURCE CHECK: These values are present in the paper text; however, they describe cell lines used for immunoblotting (Fig 5A), not the material analyzed by LC-MS/MS.
+TRUTH CHECK: While these diseases are mentioned in the paper, the only sample that underwent the proteomics workflow (Nt-peptide enrichment and LC-MS/MS) was the SW480 cell line (colorectal carcinoma). The other carcinomas were only used for immunoblotting.
+COMPLETENESS CHECK: The full set of extracted values is incorrect because it includes conditions/materials not analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: colorectal carcinoma","colorectal carcinoma"
+"PXD039053","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK: The paper describes an ""integrated Nt-peptide enrichment method followed by liquid chromatography–tandem mass spectrometry (LC–MS/MS)"" but does not mention any offline fractionation steps.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" correctly represents the lack of fractionation described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","ExperimentalDesign","replicates","3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the LC-MS/MS experiment performed on SW480 cells.
+TRUTH CHECK: There is no mention of ""3"" biological replicates in the text; the only mentions of ""3"" refer to time points (0, 1, and 3 h) for E. coli immunoblotting or the 3xFLAG tag.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD039053","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis of SW480 cells.
+TRUTH CHECK: According to the safe defaults in the field definitions, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The full set of extracted values consists of this single default value, which is complete given the absence of specific information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions ""LC-MS/MS"" and ""Nt-proteome analysis"" but does not explicitly state the acquisition method (e.g., DDA or DIA) used.
+TRUTH CHECK: The value is not mentioned in the text.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention any specific mass tolerance values for either precursor or fragment ions.
+COMPLETENESS CHECK: The full set of extracted values is not based on any information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions ""LC-MS/MS"" and ""Nt-peptide enrichment method... as previously described,"" but it does not explicitly state the fragmentation method used.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","instrument","Q Exactive","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category for the instrument field.
+SOURCE CHECK: The paper mentions that LC-MS/MS was used for Nt-proteome analysis of SW480 cells, but it does not explicitly name the instrument model used; it states the analysis was performed ""as previously described.""
+TRUTH CHECK: The instrument ""Q Exactive"" is not mentioned anywhere in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is a valid category for the label field.
+SOURCE CHECK: The paper describes an LC-MS/MS analysis of SW480 cells using an ""integrated Nt-peptide enrichment method"" but does not mention any isobaric or metabolic labeling.
+TRUTH CHECK: The paper does not mention TMT, iTRAQ, SILAC, or other chemical labeling for the MS experiment; therefore, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only ""label free"", which is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions ""LC-MS/MS"" was used for Nt-proteome analysis of SW480 cells, but it does not specify the instrument model or the mass analyzer used.
+TRUTH CHECK: The value is not present in the text; the specific mass analyzer is not mentioned.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","modification","Acetate labeling reagent (N-term & K) (heavy form, +3amu) (H)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical labeling modification, which fits the category of a searched modification.
+SOURCE CHECK: The value is not present in the paper text; the text mentions ""D3-acetyl (+45.029395 Da) on Lys"" as a fixed modification, but not the specific phrasing of the candidate value.
+TRUTH CHECK: The candidate value is not factually supported by the text. While the text mentions ""D3-acetyl"", it does not use the terminology ""Acetate labeling reagent (heavy form, +3amu)"".
+COMPLETENESS CHECK: The full set of extracted values contains hallucinations and ""not applicable"", failing to accurately reflect the modifications explicitly listed in the ""Nt-peptide analyses"" section.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: D3-acetyl (K)","D3-acetyl (K)"
+"PXD039053","","strict","Technical","modification","Succinic anhydride labeling reagent light form (N-term & K) (K)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification/labeling reagent, which fits the category of a modification.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions ""D3-acetyl"" and ""acetyl"" but not ""succinic anhydride"".
+TRUTH CHECK: The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains labels and reagents not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","modification","not applicable","","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is not a valid modification name or residue-specific modification.
+SOURCE CHECK: The paper explicitly lists several modifications used in the database search for the LC-MS/MS analysis of SW480 cells.
+TRUTH CHECK: The candidate value is factually incorrect as the paper describes a specific set of fixed and variable modifications.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and does not match the modifications listed in the ""Nt-peptide analyses"" section of the methods.
+
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039053","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""6 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper mentions the use of the MS-GF+ program for database search but does not specify the precursor mass tolerance used.
+COMPLETENESS CHECK: The full set of extracted values is insufficient as the value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

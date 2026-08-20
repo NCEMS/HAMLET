@@ -1,0 +1,194 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD027729","","strict","Biological","disease","trypanosomiasis","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""trypanosomiasis"" is a disease name, which matches the required category for this field.
+SOURCE CHECK: The paper describes identifying inhibitors for Trypanothione synthetase (Try) from pathogens like *Trypanosoma brucei*, *T. cruzi*, and *L. infantum*, which cause trypanosomiasis; however, the actual MS sample was recombinant enzyme (TbTry) expressed and purified from *E. coli*.
+TRUTH CHECK: The MS experiment was performed on purified recombinant protein (TbTry) to study the covalent modification by Ebselen, not on biological samples from a diseased host or infected tissue. While the study's goal is to treat trypanosomiasis, the material analyzed by MS does not have a ""disease state"" in the clinical sense.
+COMPLETENESS CHECK: The full set contains only this value, but it is conceptually misapplied to the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: no disease","no disease"
+"PXD027729","","strict","Biological","species","T. brucei, T. cruzi, L. infantum","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains organism names, which is the correct category for the species field.
+SOURCE CHECK: The mass spectrometry analysis was specifically performed on recombinant Trypanothione synthetase (Try) from Trypanosoma brucei (TbTry) to identify the Ebselen modification site; while T. cruzi and L. infantum enzymes were used in biochemical assays, they were not analyzed by MS.
+TRUTH CHECK: Only T. brucei is the source of the material actually analyzed by mass spectrometry in this paper.
+COMPLETENESS CHECK: The full set includes species that were not part of the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: T. brucei","T. brucei"
+"PXD027729","","strict","ExperimentalDesign","factor_value","treatment (Ebselen-treated, untreated)","treatment (Ebselen-treated, untreated)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental groups (treated vs untreated), which is a correct category for a factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context, where TbTry was incubated with Ebselen (Sample A) or used as a control (Sample B).
+TRUTH CHECK: The paper explicitly describes comparing TbTry treated with Ebselen against an untreated control for mass spectrometry analysis.
+COMPLETENESS CHECK: The full set of extracted values includes the treatment contrast and the disease context, covering the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","ExperimentalDesign","factor_value","trypanosomiasis","treatment (Ebselen-treated, untreated)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a disease name, which is a valid category for a factor_value.
+SOURCE CHECK: The value ""trypanosomiasis"" is not explicitly mentioned in the text; the paper discusses ""trypanosomatids"" and specific pathogens (T. brucei, T. cruzi, L. donovani) that cause such diseases.
+TRUTH CHECK: While the study targets enzymes from pathogens that cause trypanosomiasis, the actual MS experiment was performed on recombinant proteins (TbTry) purified from E. coli, not on infected subjects or diseased tissues.
+COMPLETENESS CHECK: The full set includes a treatment contrast and a disease, but the disease value is not applicable to the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes a proteomics workflow (trypsin digestion, ZipTip desalting, and LC-MS/MS) but mentions no offline fractionation step.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The value ""2"" is not mentioned as the number of biological replicates for the mass spectrometry experiment; the paper mentions ""duplicate"" for the pilot screening and ""quadruplicate"" for hit validation, but these are biochemical assays, not the MS experiment.
+TRUTH CHECK: The mass spectrometry section describes treating samples (A, B, C) but does not explicitly state the number of biological replicates used for the LC-MS/MS analysis.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD027729","","strict","ExperimentalDesign","technical_replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical_replicates.
+SOURCE CHECK: The paper mentions that a pilot screening was ""performed in duplicate"" and that some DRC studies were ""tested in duplicate"", but these refer to the HTS/biochemical assays, not the mass spectrometry experiment.
+TRUTH CHECK: The mass spectrometry section does not specify the number of technical replicates for the LC-MS/MS analysis of the TbTry enzyme.
+COMPLETENESS CHECK: The value is not supported by the text for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The value is explicitly stated in the ""Mass spectrometry assays"" section (""A top-12 data-dependent method was used for mass data acquisition"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set of extracted values contains the only acquisition method mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry assays"" section (""digested overnight at 37 °C using sequencing grade trypsin"").
+TRUTH CHECK: The value is factually correct as the paper states trypsin was used for the protein digestion prior to MS analysis.
+COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper does not specify a fragment mass tolerance value; it mentions resolution (17,500 at 200 m/z) but not a ppm tolerance for fragments.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions ""high-energy collision dissociation cell"" (HCD) in the methods section under ""Liquid chromatography-MS/MS analysis"".
+TRUTH CHECK: ""Beam-type collision-induced dissociation"" is a technical synonym for HCD (Higher-energy Collisional Dissociation), but the paper explicitly uses the term ""high-energy collision dissociation"".
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the fragmentation method used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry assays"" section as the instrument used for the LC-MS/MS analysis of the recombinant enzyme.
+TRUTH CHECK: The paper states ""Liquid chromatography-MS/MS analysis was performed with an UltiMate 3000 liquid chromatography system (Thermo Fisher Scientific) coupled to a Q Exactive Plus mass spectrometer"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of recombinant TbTry treated with Ebselen and a control, but mentions no isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl).
+TRUTH CHECK: Since no labeling methods are described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as there is only one labeling condition.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of a ""Q Exactive Plus mass spectrometer"", which is a well-known Orbitrap-based instrument.
+TRUTH CHECK: The Q Exactive Plus uses an Orbitrap mass analyzer, making this value factually correct.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is mentioned in the ""Computational analysis"" section describing the search parameters for the mass spectrometry data.
+TRUTH CHECK: The paper explicitly states ""cysteine carbamidomethylation"" was defined as a variable modification.
+COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and ""Oxidation (M)""; the text also mentions ""cysteine di and tri oxidation"" and ""Ebselen covalent modification"", but the candidate value itself is a correct individual extraction.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027729","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M)","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Computational analysis"" section as a search parameter for the mass spectrometry data.
+TRUTH CHECK: The paper explicitly states ""methionine oxidation"" was defined as a variable modification. ""Oxidation (M)"" is a standard equivalent representation.
+COMPLETENESS CHECK: The full set of extracted values (""Carbamidomethyl (C)"", ""Oxidation (M)"") is incomplete because the paper also explicitly lists ""cysteine di and tri oxidation"" and ""Ebselen covalent modification (+274.985 Da) in cysteine/lysine"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Carbamidomethyl (C)"", ""Oxidation (M)"", ""cysteine di oxidation"", ""cysteine tri oxidation"", ""Ebselen covalent modification""]","Carbamidomethyl (C), Oxidation (M), cysteine di oxidation, cysteine tri oxidation, Ebselen covalent modification"
+"PXD027729","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: A search of the paper text reveals no mention of ""6 ppm"" or any other specific precursor mass tolerance value.
+TRUTH CHECK: The value is not present in the text and cannot be inferred.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

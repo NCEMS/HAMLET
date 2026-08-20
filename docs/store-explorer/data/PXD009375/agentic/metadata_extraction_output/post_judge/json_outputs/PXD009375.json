@@ -16,27 +16,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"midlog phase\" describes a growth stage/physiological state, not a chronological age or developmental time point.",
         "SOURCE_CHECK": "The value is present in the text (\"Cells were harvested when they reached midlog phase\") and refers to the MS sample.",
-        "TRUTH_CHECK": "While the cells were harvested at midlog phase, this is a description of the culture's growth phase, not the \"age\" of the organism as defined by the field (which typically refers to chronological age or specific developmental stages like P30 or E14.5).",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch for the age field."
-      }
-    },
-    {
-      "annotation_type": "cell_line",
-      "extracted_value": "mat3-4 (strain CC-3994)",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": true,
-      "hallucination": false,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "type_mismatch",
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific strain of an organism, which is the biological source of the sample.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Cell Culture\" and \"Whole-Cell Mass Spectrometry\" sections as the source for the proteomics experiment.",
-        "TRUTH_CHECK": "The paper states that \"Chlamydomonas mat3-4 cells\" (strain CC-3994) were used for the whole-cell mass spectrometry.",
-        "COMPLETENESS_CHECK": "This is the only strain mentioned as the source for the MS analysis, so the extraction is complete."
+        "TRUTH_CHECK": "While the cells were harvested at midlog phase, this is a description of the growth phase of a unicellular culture, not an \"age\" in the sense of the field definition (e.g., days, years, or specific developmental stages like P30).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
       }
     },
     {
@@ -52,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the biological nature/lineage of the organism/cell.",
-        "SOURCE_CHECK": "The value comes from the MS experiment context; the \"Whole-Cell Mass Spectrometry\" section confirms the use of Chlamydomonas mat3-4 cells, which the abstract explicitly describes as a \"unicellular alga\".",
-        "TRUTH_CHECK": "The value is factually correct as the sample is derived from the unicellular alga Chlamydomonas reinhardtii.",
-        "COMPLETENESS_CHECK": "The full set contains the only relevant description of the cell type for the MS sample."
+        "TYPE_CHECK": "The candidate value describes the biological nature/lineage of the organism, which fits the category of cell type for a unicellular organism.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"unicellular alga Chlamydomonas reinhardtii\") and the methods, referring to the cells used for the whole-cell mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study uses Chlamydomonas reinhardtii, which is a unicellular alga.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant cell type described for the MS sample."
       }
     },
     {
@@ -72,9 +53,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
-        "SOURCE_CHECK": "The paper describes a study on the native cellular environment of *Chlamydomonas reinhardtii* without any mention of disease or pathological conditions.",
-        "TRUTH_CHECK": "Since the subjects are not part of a disease study, \"normal\" is a correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a study with no disease focus."
+        "SOURCE_CHECK": "The paper describes a study on the native cellular environment of *Chlamydomonas reinhardtii* without any mention of a disease state or pathology.",
+        "TRUTH_CHECK": "Since the study uses standard wild-type/non-diseased cells for the proteomics experiment, \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is exhaustive for this study."
       }
     },
     {
@@ -90,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the definition of the species field.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the source of the cells used for \"fluorescence imaging, proteomics, and in situ cryo-ET\".",
-        "TRUTH_CHECK": "The value is factually correct as the paper describes the study of the unicellular alga Chlamydomonas reinhardtii.",
-        "COMPLETENESS_CHECK": "The full set contains the only species analyzed in the study, making it exhaustive."
+        "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the source of the cells used for \"proteomics\" and \"whole-cell mass spectrometry\".",
+        "TRUTH_CHECK": "The value \"Chlamydomonas reinhardtii\" is factually correct based on the paper.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiment."
       }
     },
     {
@@ -109,10 +90,10 @@
       "error_category": "wrong_value",
       "corrected_value": "mat3-4",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a list of experimental conditions/strains, which fits the category of factor values.",
-        "SOURCE_CHECK": "The strain (mat3-4) and the inhibitors (MG132, tunicamycin, NMS-873) are mentioned in the text; however, the inhibitors were used for fluorescence microscopy experiments, not for the whole-cell mass spectrometry experiment.",
+        "TYPE_CHECK": "The candidate value is a list of experimental conditions/factors (strain and drugs), which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The strain (mat3-4) and the drugs (MG132, tunicamycin, NMS-873) are mentioned in the text; however, the drugs were used for fluorescence microscopy experiments, not for the whole-cell mass spectrometry experiment.",
         "TRUTH_CHECK": "The whole-cell mass spectrometry was performed only on the mat3-4 strain to verify Cdc48 abundance; the pharmacological treatments (MG132, tunicamycin, NMS-873) were used exclusively for live-cell fluorescence imaging and were not analyzed by MS.",
-        "COMPLETENESS_CHECK": "The full set includes \"normal\", but the candidate value incorrectly groups MS-analyzed material with non-MS-analyzed materials."
+        "COMPLETENESS_CHECK": "The full set includes \"normal\", but the candidate value incorrectly groups MS-relevant and non-MS-relevant factors."
       }
     },
     {
@@ -128,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid representation of a biological state (healthy/control) for a factor_value.",
-        "SOURCE_CHECK": "The value is a safe default for the control group in the MS experiment, as the paper describes whole-cell mass spectrometry on Chlamydomonas mat3-4 cells to verify protein abundance.",
-        "TRUTH_CHECK": "The value is factually correct as a representation of the baseline/control state of the cells analyzed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the strain and the inhibitors used in the fluorescence experiments, but the MS experiment itself was a single-condition verification of protein abundance (Cdc48 vs others) in the mat3-4 strain."
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value, mirroring a \"healthy\" or \"disease-free\" state.",
+        "SOURCE_CHECK": "The value is a safe default for a study where the biological material (Chlamydomonas reinhardtii) is not described as having a disease or specific pathology.",
+        "TRUTH_CHECK": "The value is factually correct as the baseline state for the cells used in the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the strain and the pharmacological treatments (MG132, tunicamycin, NMS-873), and \"normal\" serves as the baseline/control state, covering the experimental design."
       }
     },
     {
@@ -147,7 +128,7 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
         "SOURCE_CHECK": "The value is present in the \"Whole-Cell Mass Spectrometry\" section, which describes the MS experiment.",
         "TRUTH_CHECK": "The text explicitly states, \"All three fractions from the purification were loaded into a 15-cm-long and 75-µm-wide column,\" confirming 3 fractions were generated.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains this single correct value, which is exhaustive."
@@ -167,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper describes the \"Whole-Cell Mass Spectrometry\" experiment using a single cell pellet (\"The cell pellet was lysed...\"), and does not mention any biological replicates for the MS analysis.",
-        "TRUTH_CHECK": "Since no biological replication is mentioned for the proteomics experiment, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" correctly reflects the lack of mentioned replicates in the text."
+        "SOURCE_CHECK": "The paper describes a \"whole-cell mass spectrometry\" experiment where a single cell pellet was lysed and processed; there is no mention of multiple biological replicates for the MS analysis.",
+        "TRUTH_CHECK": "Since the paper is silent on biological replication for the proteomics experiment, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it represents the single sample processed."
       }
     },
     {
@@ -188,7 +169,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.",
         "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when no replication is mentioned.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default for a silent paper."
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a single measurement per sample when the paper is silent."
       }
     },
     {
@@ -204,16 +185,16 @@
       "error_category": "hallucinated",
       "corrected_value": "data-dependent acquisition",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"Data-dependent acquisition was employed\" in the Whole-Cell Mass Spectrometry section; it does NOT mention data-independent acquisition.",
-        "TRUTH_CHECK": "The candidate value is factually incorrect as the paper describes a data-dependent (DDA) experiment, not a data-independent (DIA) one.",
-        "COMPLETENESS_CHECK": "The full set is incorrect because it includes a hallucinated method (DIA) and the correct method (DDA)."
+        "TYPE_CHECK": "The candidate value \"data-independent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Data-dependent acquisition was employed\" in the \"Whole-Cell Mass Spectrometry\" section; it does not mention data-independent acquisition.",
+        "TRUTH_CHECK": "The candidate value is factually incorrect as the paper specifies data-dependent acquisition.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect because it includes a method not used in the study."
       }
     },
     {
       "annotation_type": "acquisition_method",
       "extracted_value": "data-dependent acquisition",
-      "verdict": "medium",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
       "value_complete": true,
@@ -221,12 +202,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "correct_explicit",
-      "corrected_value": "data-dependent acquisition",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Whole-Cell Mass Spectrometry\" section (\"Data-dependent acquisition was employed\").",
-        "TRUTH_CHECK": "The value is factually correct as per the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect because it includes \"data-independent acquisition\", which is not mentioned in the paper; only \"data-dependent acquisition\" is described."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct scheme name for the acquisition_method field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Whole-Cell Mass Spectrometry\" section: \"Data-dependent acquisition was employed\".",
+        "TRUTH_CHECK": "The value is factually correct as it describes the MS acquisition scheme used in the experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both \"data-independent acquisition\" and \"data-dependent acquisition\", but the paper only mentions \"Data-dependent acquisition\"; there is no mention of DIA."
       }
     },
     {
@@ -262,9 +243,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper text explicitly mentions \"HCD-based fragmentation\" in the \"Whole-Cell Mass Spectrometry\" section.",
-        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is a specific form of beam-type collision-induced dissociation. While the candidate value is a technically accurate description of HCD, the paper explicitly uses the term \"HCD\".",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which covers the fragmentation method described."
+        "SOURCE_CHECK": "The paper explicitly mentions \"HCD-based fragmentation\" in the \"Whole-Cell Mass Spectrometry\" section.",
+        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is a specific form of beam-type collision-induced dissociation; however, the paper uses the term \"HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains one value, but it uses a descriptive synonym rather than the specific term used in the text."
       }
     },
     {
@@ -281,9 +262,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Whole-Cell Mass Spectrometry\" section of the methods (\"directly sprayed into a bench top orbitrap mass spectrometer (Q Exactive HF; Thermo Fisher)\").",
-        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Whole-Cell Mass Spectrometry\" section of the methods as the instrument used for the proteomics analysis.",
+        "TRUTH_CHECK": "The paper states the sample was \"directly sprayed into a bench top orbitrap mass spectrometer (Q Exactive HF; Thermo Fisher)\".",
+        "COMPLETENESS_CHECK": "Only one mass spectrometer is mentioned for the proteomics experiment, so the extraction is complete."
       }
     },
     {
@@ -299,10 +280,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper describes a proteomics experiment using a Q Exactive HF mass spectrometer but does not mention any isobaric, metabolic, or chemical labeling methods.",
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes a whole-cell mass spectrometry experiment but does not mention any isobaric, metabolic, or chemical labeling methods.",
         "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this experiment."
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling method is described."
       }
     },
     {
@@ -319,28 +300,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Whole-Cell Mass Spectrometry\" section (\"...directly sprayed into a bench top orbitrap mass spectrometer\").",
-        "TRUTH_CHECK": "The value is factually correct as the paper specifies an orbitrap mass spectrometer (Q Exactive HF).",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Whole-Cell Mass Spectrometry\" section (\"...directly sprayed into a bench top orbitrap mass spectrometer (Q Exactive HF; Thermo Fisher)\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly names the instrument as an orbitrap mass spectrometer.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one value, which is the only mass analyzer mentioned for the MS experiment."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "7 ppm",
-      "verdict": "low",
+      "extracted_value": "6 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "6 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value is not present in the paper text; the text explicitly states \"initial parent ion mass deviation of 6 ppm\".",
-        "TRUTH_CHECK": "The value \"7 ppm\" is factually incorrect as the paper reports 6 ppm.",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect value."
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which matches the definition for precursor_mass_tolerance.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Whole-Cell Mass Spectrometry\" section of the methods, describing the database search parameters for the MS experiment.",
+        "TRUTH_CHECK": "The paper states the search was performed \"using an Andromeda search engine with initial parent ion mass deviation of 6 ppm,\" where \"parent ion\" is a synonym for precursor ion.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance mentioned in the text."
       }
     }
   ]

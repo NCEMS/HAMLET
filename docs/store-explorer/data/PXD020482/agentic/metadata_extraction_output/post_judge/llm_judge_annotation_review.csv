@@ -1,0 +1,264 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD020482","","strict","Biological","disease","alzheimer’s disease, normal","alzheimer’s disease, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of disease states, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Alzheimer’s disease (AD)"" and ""control subjects"" (which are ""asymptomatic"" or ""unaffected"") as the groups analyzed by mass spectrometry.
+TRUTH CHECK: The values are factually correct; ""normal"" is a safe default for the control group.
+COMPLETENESS CHECK: The full set covers both the disease group and the control group described in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Biological","organ","brain","brain","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""brain"" is a valid organ/tissue type.
+SOURCE CHECK: The value is explicitly mentioned in the text; the MS samples were derived from ""postmortem human tissue"" and specifically ""postmortem brain tissue"" (BA39 angular gyrus and BA46 frontal gyrus).
+TRUTH CHECK: The value is factually correct as the study analyzed Tau from human brain regions.
+COMPLETENESS CHECK: The full set of extracted values (""brain"") is exhaustive as it covers the primary organ source for all MS experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""postmortem human tissue"" and searching against a ""Homo sapiens proteome database"".
+TRUTH CHECK: The value is factually correct as the study analyzed human brain tissue.
+COMPLETENESS CHECK: The full set contains the only species analyzed in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","ExperimentalDesign","factor_value","diagnosis (AD, control), brain region (BA39, BA46)","diagnosis (AD, control), brain region (BA39, BA46) | alzheimer’s disease, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factors (diagnosis and brain region) and their respective levels, which is a correct category for factor_value.
+SOURCE CHECK: The values ""AD"", ""control"", ""BA39"", and ""BA46"" are all explicitly mentioned in the text as the primary variables used to group the MS samples.
+TRUTH CHECK: The values are factually correct; the study compares AD vs control subjects and analyzes the BA39 and BA46 brain regions.
+COMPLETENESS CHECK: The full set of extracted values (including the candidate and ""alzheimer's disease, normal"") covers the primary experimental axes described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","ExperimentalDesign","factor_value","alzheimer’s disease, normal","diagnosis (AD, control), brain region (BA39, BA46) | alzheimer’s disease, normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of disease states, which is the correct category for a factor_value.
+SOURCE CHECK: The values are present in the text; ""AD"" (Alzheimer's Disease) and ""control"" (which maps to the safe default ""normal"") are the primary groups analyzed by MS.
+TRUTH CHECK: The values are factually correct as the study compares AD patients against control subjects.
+COMPLETENESS CHECK: The full set of extracted values includes both the disease status and the brain regions (BA39, BA46), which comprehensively covers the experimental factors described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes several different sample types (sarkosyl-soluble, sarkosyl-insoluble, SEC-fractionated, and MC1-isolated), but for the primary proteomics/SRM analysis of these samples, there is no mention of an offline peptide fractionation step (e.g., high-pH RP) being applied to each sample.
+TRUTH CHECK: Since no offline peptide fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" correctly represents the lack of peptide fractionation for the samples analyzed.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","ExperimentalDesign","replicates","110","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The value is not explicitly stated as a replicate count, but is the sum of the biological samples (49 AD + 42 control = 91 for the first cohort; however, the text also mentions a second cohort and BA46 samples).
+TRUTH CHECK: The value ""110"" is incorrect. The paper describes 49 AD and 42 control subjects in the main cohort (91 total), and an additional analysis of 10 AD and 9 control patients in the BA46 region (19 total). 91 + 19 = 110. However, these are distinct biological samples (subjects), not replicates of a single condition. In proteomics metadata, ""replicates"" refers to the number of biological replicates per group/condition, not the total number of samples in the study.
+COMPLETENESS CHECK: The value is a total sample count, not a replicate count.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","ExperimentalDesign","technical_replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper explicitly states in the ""FLEXITau measurements and data analysis"" section: ""samples were run in randomized order (three technical replicates per sample).""
+TRUTH CHECK: The value ""3"" matches the text exactly.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
+SOURCE CHECK: The paper explicitly mentions ""positive DDA top 20 mode"" and ""data-dependent acquisition experiments"" in the LC-MS/MS and MC1-isolated Tau sections.
+TRUTH CHECK: The value is factually correct as the paper describes using DDA (Data-Dependent Acquisition) for PTM mapping.
+COMPLETENESS CHECK: The full set contains ""data-dependent acquisition"", which covers the DDA experiments; however, the paper also describes SRM (Selected Reaction Monitoring) for the FLEXITau workflow, which is a different acquisition method.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: data-dependent acquisition, SRM","data-dependent acquisition, SRM"
+"PXD020482","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the methods section under ""Preparation of high and low molecular weight Tau and mass spectrometric analysis"" (""proteins were alkylated with 100 μL 0.05 M iodoacetamide solution"").
+TRUTH CHECK: The value is factually correct as it was the reagent used for alkylation in the described MS workflow.
+COMPLETENESS CHECK: The full set contains ""iodoacetamide"", which is the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","cleavage_agent","Trypsin","Trypsin","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The paper explicitly mentions the use of ""trypsin"" for protein digestion in multiple sections of the methods (e.g., ""Protein mixtures were digested with 12.5 μg/ml trypsin"").
+TRUTH CHECK: The value is factually correct as trypsin was the primary protease used for the MS samples.
+COMPLETENESS CHECK: While the paper also mentions ""GluC"" and ""AspN"" for a second batch of samples, ""Trypsin"" is a correct extraction, and the full set of extracted values is missing the other two proteases.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: Trypsin, GluC, AspN","Trypsin, GluC, AspN"
+"PXD020482","","strict","Technical","fragment_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""20 ppm"" is explicitly mentioned in the methods section under ""LC-MS/MS measurements and data analysis"" as the ""allowed fragment mass deviation"".
+TRUTH CHECK: The value is factually correct as it is explicitly linked to the fragment mass deviation in the text.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The term ""beam-type collision-induced dissociation"" does not appear in the provided text.
+TRUTH CHECK: The paper explicitly mentions ""higher-energy c-trap dissociation (HCD)"" multiple times as the fragmentation method used for the Q Exactive instruments.
+COMPLETENESS CHECK: The full set is incorrect as it contains a value not present in the text and misses the actual method used.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD020482","","strict","Technical","instrument","Q Exactive HF, Q Exactive, 5500 QTRAP","Q Exactive HF, Q Exactive, 5500 QTRAP","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value lists mass spectrometer models, which matches the definition of the instrument field.
+SOURCE CHECK: All three instruments are explicitly mentioned in the methods section as being used for the MS analysis of the brain tissue samples (Q Exactive, Q Exactive HF, and 5500 QTRAP).
+TRUTH CHECK: The values are factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers mentioned in the experimental workflow.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","label","label free","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper explicitly mentions ""Label-free quantification was done using the XIC-based in-built label-free quantification (LFQ) algorithm integrated into MaxQuant"" in the methods section.
+TRUTH CHECK: While the paper uses label-free quantification for the biological samples, it also describes the use of a ""heavy Tau standard"" produced in a cell-free wheat germ expression system ""in the presence of heavy isotope (i.e., 13C and 15N) labeled lysine, arginine and aspartate"". According to the field definition, ""label-free"" is INCORRECT if the paper describes ANY metabolic/chemical labeling, including heavy/light amino acids.
+COMPLETENESS CHECK: The full set contains only ""label free"", which is incorrect given the use of heavy isotope standards.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: heavy isotope labeled lysine, arginine and aspartate","heavy isotope labeled lysine, arginine and aspartate"
+"PXD020482","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the text, as the paper mentions using a ""quadrupole Orbitrap tandem mass spectrometer (Q Exactive, Thermo Fisher Scientific)"".
+TRUTH CHECK: The value is factually correct; the Q Exactive and Q Exactive HF instruments use an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as the Orbitrap is the primary analyzer used for the DDA and SRM-related optimization experiments described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The term ""carbamidomethylation of cysteine"" is explicitly mentioned in the ""Preparation of high and low molecular weight Tau and mass spectrometric analysis"" section.
+TRUTH CHECK: The paper explicitly states ""carbamidomethylation of cysteine as static modification"" for the high/low molecular weight Tau analysis.
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Oxidation, Phosphorylation, etc.), and together they cover the modifications described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS measurements and data analysis"" and ""Preparation of high and low molecular weight Tau"" sections as ""Oxidation of M"".
+TRUTH CHECK: The candidate value ""Oxidation (M)"" is a correct representation of the ""Oxidation of M"" described in the text.
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Phosphorylation, Acetylation, Ubiquitination), but ""Oxidation (M)"" is one of the correctly identified modifications.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a post-translational modification with target residues, which matches the field definition.
+SOURCE CHECK: The value is present in the MS experiment context; the paper explicitly mentions ""phosphorylation of S, T, Y"" and ""phosphorylation of STY"" in the MaxQuant search settings.
+TRUTH CHECK: The value is factually correct as the paper describes searching for phosphorylation on Serine (S), Threonine (T), and Tyrosine (Y).
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Oxidation, etc.), and together they cover the modifications described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","modification","Acrylamide adduct (C)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification with a target residue, which matches the field definition.
+SOURCE CHECK: The paper mentions ""1% acrylamide for cysteine alkylation"" in the methods, but it does not name the resulting modification.
+TRUTH CHECK: The modification name ""Acrylamide adduct"" is not explicitly written in the text; only the reagent (acrylamide) is mentioned. Per the rules, modifications must be explicitly named and not inferred from reagents.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive and contains unsupported inferences.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","modification","not applicable","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a valid representation of a protein modification.
+SOURCE CHECK: The paper explicitly describes numerous modifications (phosphorylation, acetylation, ubiquitination, etc.) searched during MS analysis.
+TRUTH CHECK: The value is factually incorrect as the experiment specifically focused on mapping PTMs.
+COMPLETENESS CHECK: The full set of extracted values is incomplete and contains errors, but this specific candidate value is fundamentally wrong.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","precursor_mass_tolerance","7 ppm","7 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" is explicitly mentioned in the text under the MaxQuant analysis section (""Peptide identification was performed with an allowed initial precursor mass deviation up to 7 ppm"").
+TRUTH CHECK: The value is factually correct as it refers specifically to the precursor mass deviation (MS1).
+COMPLETENESS CHECK: The full set of extracted values contains this single correct value, which covers the precursor tolerance described for the MaxQuant search.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","","strict","Technical","reduction_reagent","tris(2-carboxyethyl)phosphine","tris(2-carboxyethyl)phosphine","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical used for the reduction of disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Preparation of high and low molecular weight Tau and mass spectrometric analysis"" section, where it is used to denature and reduce proteins.
+TRUTH CHECK: The paper explicitly mentions ""200 mM tris (2-carboxyethyl) phosphine (TCEP)"" as the reduction agent.
+COMPLETENESS CHECK: The full set of extracted values contains this single correct reagent mentioned for the SEC fractions; while DTT is mentioned for the initial brain tissue homogenization, TCEP is the specific reduction reagent used during the FASP sample preparation for the MS analysis of the HMW/LMW fractions.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

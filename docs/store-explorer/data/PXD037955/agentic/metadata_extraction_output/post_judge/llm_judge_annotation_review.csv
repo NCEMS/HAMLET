@@ -1,0 +1,206 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD037955","","strict","Biological","organ","cell culture","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""cell culture"" is a general description of a sample source, but the field ""organ"" specifically requires the tissue or organ of origin.
+SOURCE CHECK: The MS experiments (Ligandome LC-MS/MS) were performed on HLA-peptide complexes purified from aAPCs, which are Cos-7 cells (a monkey kidney cell line).
+TRUTH CHECK: ""Cell culture"" is not an organ or tissue; it is a method of growing cells. The actual organ of origin for the Cos-7 cell line is the kidney.
+COMPLETENESS CHECK: The full set contains only ""cell culture"", which is a type mismatch for the ""organ"" field.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: organ
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: kidney","kidney"
+"PXD037955","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains organism names, which matches the definition for the species field.
+SOURCE CHECK: The paper describes mass spectrometry on HLA-peptide complexes purified from Cos-7 cells (derived from African green monkey, though often used in humanized contexts) and mentions PBMCs from human volunteers; however, the ""Mus musculus"" part refers to mice used for antibody production and infection models, not the MS samples.
+TRUTH CHECK: The MS experiments were performed on HLA-peptide complexes from aAPCs (Cos-7 cells transfected with human HLA) and HBV/SARS-CoV-2 peptides. While human proteins (HLA) were the target, the source cells were Cos-7 (Cercopithecus aethiops). The mice (Mus musculus) were used for antibody generation and in vivo infection studies, but were not the source of the material analyzed by mass spectrometry.
+COMPLETENESS CHECK: The set is incorrect because it includes a species (mouse) not used for the MS experiment and misses the actual source cell line species.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","ExperimentalDesign","factor_value","variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*24:02)","variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*24:02)","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value describes the experimental variables (virus variants and HLA alleles) being compared, which fits the definition of a factor_value.
+SOURCE CHECK: The values are present in the text: the study compares Delta and BA.1 Omicron variants, and uses PBMCs from individuals with specific HLA alleles (HLA-A*02:01, HLA-A*11:01, and HLA-A*24:02).
+TRUTH CHECK: The values are factually correct based on the ""Results"" and ""Methods"" sections.
+COMPLETENESS CHECK: The full set is slightly incomplete as it omits HLA-A*11:01, which is explicitly mentioned as one of the three haplotypes used for the PBMC isolation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*11:01, HLA-A*24:02)","variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*11:01, HLA-A*24:02)"
+"PXD037955","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper does not explicitly mention a fractionation step for the HLA-peptide complexes (ligandome) or the metabolomics samples.
+TRUTH CHECK: Since no fractionation is described in the methods for the MS experiments, the safe default of ""1"" is applicable.
+COMPLETENESS CHECK: The full set contains only the default value, which is exhaustive given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","ExperimentalDesign","replicates","4","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The value ""4"" is not mentioned in the text as a number of biological replicates for any of the mass spectrometry experiments.
+TRUTH CHECK: The paper mentions ""ten convalescent individuals"" for the peptidome MS and ""nine volunteers"" for the metabolomics, but does not specify a replicate count of 4 for any MS sample group.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the MS experiments.
+TRUTH CHECK: According to the safe defaults in the field definitions, ""1"" is correct when no replication is mentioned.
+COMPLETENESS CHECK: The value ""1"" is the standard default for a silent paper and is complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""Ligandome LC-MS/MS analysis"" section for the Delta/Omicron BA.1 peptides experiment (""A data-dependent procedure..."").
+TRUTH CHECK: The value is factually correct as the paper explicitly describes a data-dependent procedure.
+COMPLETENESS CHECK: The full set contains the only acquisition method described for the primary proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The paper mentions ""tryptic peptides"" in the ""Ligandome LC-MS/MS analysis"" section for the Delta/Omicron BA.1 peptides experiment.
+TRUTH CHECK: The use of ""tryptic peptides"" explicitly indicates that trypsin was used as the cleavage agent for that specific MS experiment.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which covers the digestion method described for the primary ligandome MS analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","fragment_mass_tolerance","0.05 Da, 0.02 Da","0.05 Da, 0.02 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of mass tolerance measurements, which is the correct category for this field.
+SOURCE CHECK: The values are explicitly stated in the ""Ligandome data analysis"" section of the methods.
+TRUTH CHECK: The paper describes two separate MS experiments: one for HBV peptides (fragment mass tolerance 0.05 Da) and one for Delta/Omicron peptides (fragment mass tolerance 0.02 Da).
+COMPLETENESS CHECK: The full set of extracted values covers both MS experiments described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions ""CID"" in the ""Ligandome LC-MS/MS analysis"" section for the HBV peptides (""The precursors were fragmented in CID"").
+TRUTH CHECK: While the paper explicitly states ""CID"", it does not use the phrase ""beam-type collision-induced dissociation"". ""Beam-type CID"" is a specific technical implementation of CID, but the text only provides the abbreviation ""CID"".
+COMPLETENESS CHECK: The full set contains only this value, but it is an over-specification of the text provided.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: CID","CID"
+"PXD037955","","strict","Technical","instrument","Q Exactive Plus, timsTOF Pro2","Q Exactive Plus, timsTOF Pro2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains two mass spectrometer models, which matches the definition of the instrument field.
+SOURCE CHECK: Both instruments are explicitly mentioned in the ""Ligandome LC-MS/MS analysis"" section as being used for the MS experiments (timsTOF Pro2 for HBV peptides and Q Exactive Plus for Delta/Omicron peptides).
+TRUTH CHECK: The values ""timsTOF Pro2"" and ""Q Exactive Plus"" are factually correct as stated in the text.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper describes LC-MS/MS analysis of HLA-peptide complexes and metabolomics profiling without mentioning any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the labeling state for the experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","mass_analyzer","orbitrap","orbitrap","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for a mass analyzer.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""Ligandome LC-MS/MS analysis"" section describing the Q Exactive Plus instrument (""intact peptides were detected in the Orbitrap"").
+TRUTH CHECK: The value is factually correct as the Q Exactive Plus uses an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set contains ""orbitrap"", but the paper also mentions a ""timsTOF Pro2"" (which uses a Time-of-Flight analyzer). Therefore, the set is incomplete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: orbitrap, TOF","orbitrap, TOF"
+"PXD037955","","strict","Technical","modification","Carbamidomethyl (C)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The paper does not list carbamidomethylation as a searched modification; it only lists Methionine oxidation, Met-loss, and N-terminal acetylation.
+COMPLETENESS CHECK: The full set of extracted values includes modifications not mentioned in the text (Carbamidomethyl, Deamidation).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Ligandome data analysis"" section for both the HBV and Delta/Omicron peptide MS experiments (""Methionine oxidation (+15.995 Da)"").
+TRUTH CHECK: The value is factually correct as ""Methionine oxidation"" is an unambiguous synonym for ""Oxidation (M)"".
+COMPLETENESS CHECK: The full set of extracted values includes several modifications not mentioned in the text (Carbamidomethyl, Deamidation), but the candidate value itself is a correct extraction of one of the modifications described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","modification","Acetyl (K)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Acetyl (K)"" is the correct category for a protein modification.
+SOURCE CHECK: The paper mentions ""N-terminal acetylation (+42.011 Da)"" in the ""Ligandome data analysis"" section for Delta/Omicron BA.1 peptides.
+TRUTH CHECK: The paper explicitly mentions ""N-terminal acetylation"", but it does not specify that the acetylation occurs on Lysine (K). N-terminal acetylation typically occurs on the alpha-amino group of the first residue, not as a side-chain modification of Lysine.
+COMPLETENESS CHECK: The full set of extracted values includes modifications not mentioned in the text (Carbamidomethyl, Deamidation) and a specific residue assignment (K) not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: N-terminal acetylation","N-terminal acetylation"
+"PXD037955","","strict","Technical","modification","Deamidation (NQ)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Deamidation (NQ)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037955","","strict","Technical","precursor_mass_tolerance","10 ppm, 20 ppm","10 ppm, 20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains numeric mass tolerances, which is the correct category for this field.
+SOURCE CHECK: The values are present in the ""Ligandome data analysis"" section of the methods.
+TRUTH CHECK: The paper describes two separate MS experiments with different tolerances: one using a timsTOF Pro2 (precursor mass tolerance 20 ppm) and one using a Q Exactive Plus (precursor mass tolerance 10 ppm).
+COMPLETENESS CHECK: The full set correctly captures the precursor tolerances for both distinct MS workflows described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

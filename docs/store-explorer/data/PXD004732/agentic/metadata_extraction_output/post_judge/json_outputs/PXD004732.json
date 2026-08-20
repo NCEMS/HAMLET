@@ -15,14 +15,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states the project is based on a \"complete synthetic human proteome\" and mentions \"human gene products\" and \"human Uniprot/SwissProt annotated genes\" as the source of the peptides analyzed by MS.",
-        "TRUTH_CHECK": "\"Homo sapiens\" is the scientific name for humans, and the study focuses on the human proteome.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which completely covers the source organism described for the MS experiment."
+        "SOURCE_CHECK": "The paper explicitly states the project is based on a \"synthetic human proteome\" and mentions \"human gene products\" and \"human Uniprot/SwissProt annotated genes\" as the source for the synthetic peptides analyzed by MS.",
+        "TRUTH_CHECK": "The value \"Homo sapiens\" is the scientific name for humans, which is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which exhaustively covers the source organism of the synthetic peptides analyzed in this study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "peptide set (proteotypic, missing proteome, SRMAtlas), fragmentation method (HCD, IT, ETD)",
+      "extracted_value": "acquisition type (HCD, IT, ETD), peptide set (proteotypic, missing proteome, SRMAtlas)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (peptide sets and fragmentation methods) being compared or analyzed, which fits the definition of a factor_value.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the text: the three peptide sets (\"proteotypic\", \"missing proteome\", \"SRMAtlas\") and the three acquisition/fragmentation methods (\"HCD\", \"IT\", \"ETD\").",
-        "TRUTH_CHECK": "The values are factually correct as they represent the primary axes of the experimental design in this synthetic proteome study.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental factors described in the study."
+        "TYPE_CHECK": "The candidate value describes the experimental variables (acquisition methods and peptide sets) being compared or analyzed, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Mass spectrometry\" section (HCD, IT, ETD methods) and the \"Synthetic peptide sets\" section (proteotypic, missing proteome, SRMAtlas).",
+        "TRUTH_CHECK": "The values are factually correct as they represent the primary axes of variation in the experimental design of this synthetic proteome study.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental factors described in the paper."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes the analysis of peptide pools; there is no mention of offline peptide/protein fractionation (e.g., high-pH RP or SAX) being performed on these pools prior to LC-MS.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes the analysis of peptide pools; there is no mention of offline peptide/protein fractionation (e.g., high-pH RP or SAX) being performed on the samples prior to LC-MS.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" correctly represents the lack of fractionation for the samples in this study."
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation schemes are mentioned."
       }
     },
     {
@@ -71,7 +71,7 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper describes the analysis of synthetic peptide pools; there is no mention of biological replicates (as these are synthetic materials, not biological samples).",
         "TRUTH_CHECK": "Since no replication is mentioned, the safe default of \"1\" is correct.",
         "COMPLETENESS_CHECK": "The value \"1\" is complete as no other replication information is provided in the text."
@@ -79,21 +79,21 @@
     },
     {
       "annotation_type": "technical_replicates",
-      "extracted_value": "4",
-      "verdict": "high",
+      "extracted_value": "3",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
       "technical_origin": false,
       "inference": null,
-      "error_category": "correct_explicit",
+      "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper describes a \"survey method\" followed by \"three subsequent LC-MS measurements\" (HCD, IT, and ETD methods), totaling 4 measurements per peptide pool.",
-        "TRUTH_CHECK": "The text states: \"Each peptide pool was first measured using a 'survey method'... and used for three subsequent LC-MS measurements focusing on different acquisition types.\" This indicates 4 separate MS injections/runs per sample pool.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately reflects the number of times each sample pool was analyzed."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical_replicates.",
+        "SOURCE_CHECK": "The paper mentions that for each pool, \"three subsequent LC-MS measurements\" were performed focusing on different acquisition types (HCD, IT, and ETD), but these are different methods/acquisition schemes, not technical replicates of the same measurement.",
+        "TRUTH_CHECK": "The value \"3\" refers to the number of different acquisition methods used per pool, not technical replicates (identical measurements of the same sample). There is no mention of technical replicates in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
       }
     },
     {
@@ -111,8 +111,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry\" section as the instrument used for the LC-MS analysis of the peptide pools.",
-        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set contains the primary instrument used for the study's main data generation; while a 5600 TripleTOF is mentioned for comparison, the Fusion Lumos is the central instrument of the experiment."
+        "TRUTH_CHECK": "The value \"Orbitrap Fusion Lumos\" is factually correct according to the text.",
+        "COMPLETENESS_CHECK": "The full set contains the primary instrument used for the study's main data generation. While a \"5600 TripleTOF\" is mentioned for a comparison, the Fusion Lumos is the central instrument of the experiment."
       }
     },
     {
@@ -129,9 +129,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
-        "SOURCE_CHECK": "The paper describes the analysis of synthetic peptide pools and mentions the use of \"13C-labelled peptides\" specifically as retention time (RT) standards, not as a labeling method for the experimental samples themselves.",
-        "TRUTH_CHECK": "The experimental samples (the synthetic peptide pools) were not labeled with isobaric, metabolic, or chemical labels; they were analyzed as-is. The use of a few labeled peptides as internal standards for retention time calibration does not constitute a labeling method (like SILAC or TMT) for the proteome/peptide set.",
-        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which accurately describes the lack of sample-wide labeling in this experiment."
+        "SOURCE_CHECK": "The paper describes the analysis of synthetic peptide pools; while it mentions using 13C-labelled peptides as retention time standards, these are external standards and not a labeling method applied to the experimental samples themselves.",
+        "TRUTH_CHECK": "The experimental samples (synthetic peptide pools) were not isobarically, metabolically, or chemically labeled; they were analyzed using a label-free approach.",
+        "COMPLETENESS_CHECK": "The full set contains the only applicable value for this experiment."
       }
     },
     {
@@ -148,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The paper explicitly mentions the use of an \"Orbitrap Fusion Lumos mass spectrometer\" and \"Orbitrap full MS scan\" for the MS analysis.",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used is an Orbitrap-based system.",
-        "COMPLETENESS_CHECK": "The full set contains \"orbitrap\", which covers the primary mass analyzer used for the main experiment."
+        "SOURCE_CHECK": "The value is present in the text, as the samples were analyzed using an \"Orbitrap Fusion Lumos mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model used for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains \"orbitrap\", which is the primary analyzer used; while the instrument also contains an ion trap, \"orbitrap\" is a correct and representative extraction."
       }
     }
   ]

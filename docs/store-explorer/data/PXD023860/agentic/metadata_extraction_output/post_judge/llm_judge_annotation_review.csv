@@ -1,0 +1,218 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD023860","","strict","Biological","cell_line","AML12, HepG2, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: AML12 is explicitly used for the MS analysis (""Mass spectrometry analysis of three separate AML12 cell EV samples""). HepG2 is mentioned as a source of EV preparations to confirm FN1 association, and while the text says ""similar EV preparations were purified from... HepG2"", it does not explicitly state these were analyzed by mass spectrometry (only that FN1 was associated, likely via the mentioned Western blots/ELISA). HEK293T is mentioned only in the context of lentivirus production (""Lentiviruses were produced by transfecting HEK293T cells""), which is an unrelated production context, not the MS sample source.
+TRUTH CHECK: AML12 is correct. HepG2 is mentioned in the context of EV purification but not explicitly as an MS sample. HEK293T is used for virus production and is not an MS sample.
+COMPLETENESS CHECK: The set includes a hallucinated value (HEK293T) and a value (HepG2) not confirmed as an MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: AML12","AML12"
+"PXD023860","","strict","Biological","cell_type","hepatocytes","hepatocytes","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""hepatocytes"" describes a cell type, which matches the field definition.
+SOURCE CHECK: The value is present in the text; the proteomics analysis was performed on EVs derived from AML12 cells, which are explicitly described as a ""mouse hepatocyte line"".
+TRUTH CHECK: The value is factually correct as AML12 cells are hepatocytes.
+COMPLETENESS CHECK: The full set contains ""hepatocytes"", which accurately describes the lineage of the cells used for the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Biological","disease","normal, hepatic fibrosis","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes disease states, which matches the field definition.
+SOURCE CHECK: The paper describes both ""normal"" (implied by WT/non-injured hepatocytes) and ""CCl4-induced hepatic fibrosis"" in mice. However, the MS experiment specifically analyzed EVs from AML12 cells (a mouse hepatocyte line), which are not described as having a disease state in the proteomics context.
+TRUTH CHECK: While hepatic fibrosis is a central part of the overall study's in vivo experiments, the proteomics analysis was performed on AML12 cell EVs. The ""hepatic fibrosis"" state refers to the mice treated with CCl4, not the samples analyzed by mass spectrometry.
+COMPLETENESS CHECK: The extraction incorrectly groups the in vivo disease model with the MS sample source.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: normal","normal"
+"PXD023860","","strict","Biological","organ","liver","liver","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""liver"" is a valid organ/tissue type.
+SOURCE CHECK: The MS samples were derived from EVs produced by AML12 cells (mouse hepatocyte line), and the paper explicitly describes these as ""hepatocyte EVs""; hepatocytes are liver cells.
+TRUTH CHECK: The value is factually correct as AML12 and HepG2 are liver-derived cell lines.
+COMPLETENESS CHECK: The full set of extracted values (""liver"") covers the origin of the biological material analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Biological","species","Mus musculus, Homo sapiens","Mus musculus, Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains species names, which is the correct category for this field.
+SOURCE CHECK: The paper describes proteomic analysis of EVs from AML12 cells (mouse) and mentions that similar EV preparations were purified from primary mouse hepatocytes and the human hepatocyte HepG2 cell line.
+TRUTH CHECK: The text explicitly mentions ""human or mouse hepatocytes"" and specifically names the AML12 (mouse) and HepG2 (human) lines in the context of EV purification and association with FN1.
+COMPLETENESS CHECK: The full set covers both the mouse and human sources described in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","ExperimentalDesign","factor_value","cell type, FN1 expression (WT vs knockout)","cell type, FN1 expression (WT vs knockout) | normal, hepatic fibrosis","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes experimental factors (cell type and genotype/expression status), which is the correct category for this field.
+SOURCE CHECK: The paper describes proteomics on AML12 cells (cell type) and compares wild type (EVWT) vs FN1 knockout (EVΔFN1) EVs.
+TRUTH CHECK: The value accurately reflects the experimental variables described in the study.
+COMPLETENESS CHECK: The full set of extracted values covers both the cellular/genotypic factors and the disease state (normal vs fibrosis) mentioned in the in vivo part of the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","ExperimentalDesign","factor_value","normal, hepatic fibrosis","cell type, FN1 expression (WT vs knockout) | normal, hepatic fibrosis","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes disease states/conditions, which is a correct category for factor_value.
+SOURCE CHECK: The paper describes a comparison between ""control mice"" (normal) and ""CCl4-induced hepatic fibrosis"" in the context of testing the therapeutic effect of EVs.
+TRUTH CHECK: The values ""normal"" (safe default for control) and ""hepatic fibrosis"" are factually correct based on the experimental design described in the ""CCl4-Induced Hepatic Fibrosis in Mice"" section.
+COMPLETENESS CHECK: The full set of extracted values covers both the genotype/protein expression axis (WT vs knockout) and the disease axis (normal vs fibrosis), which comprehensively describes the experimental factors.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes the proteomics workflow (""Extracellular vesicles Protein Digestion and Mass Spectrometry"") and does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the lack of fractionation described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for replicates.
+SOURCE CHECK: The paper explicitly states in the Results section: ""Mass spectrometry analysis of three separate AML12 cell EV samples...""
+TRUTH CHECK: The value ""3"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""3"", which accurately reflects the number of biological replicates for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention technical replicates for the mass spectrometry analysis; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK: Applying the safe default ""1"" when the paper is silent on technical replication is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as it represents the default state for the experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The paper describes an MS/MS scan that generates product ion spectra by selecting the ""most abundant peaks in the spectrum, and then selecting the next nine most abundant peaks,"" which is the definition of a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The described method of selecting the top N most abundant peaks for fragmentation is factually equivalent to data-dependent acquisition.
+COMPLETENESS CHECK: The full set contains the only acquisition method described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","fragment_mass_tolerance","15 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""15 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: Since the value is not present in the text, it cannot be verified as factually correct for this experiment.
+COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided paper text.
+TRUTH CHECK: The paper mentions the use of a ""Thermo Scientific Q Exactive mass spectrometer,"" which typically uses HCD (Higher-energy Collisional Dissociation), but the text does not explicitly name the fragmentation method used.
+COMPLETENESS CHECK: The value is not present in the text, so the extraction is not based on the provided source.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","instrument","Q Exactive Plus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper mentions a ""Thermo Scientific Q Exactive mass spectrometer"" in the ""Extracellular vesicles protein identification"" section.
+TRUTH CHECK: The paper specifies a ""Q Exactive"", but it does not explicitly state it is the ""Plus"" model.
+COMPLETENESS CHECK: The full set contains only this value, but it adds a specific model suffix (""Plus"") not present in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Q Exactive","Q Exactive"
+"PXD023860","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes a proteomics experiment using LC-MS/MS but does not mention any isobaric, metabolic, or chemical labeling reagents (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of a ""Thermo Scientific Q Exactive mass spectrometer,"" and the Q Exactive is well-known to use an Orbitrap mass analyzer.
+TRUTH CHECK: The value is factually correct based on the instrument model specified in the text.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","modification","Gln->Trp substitution (Q)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification/substitution, which fits the category of the modification field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention a Gln->Trp substitution or any such modification.
+COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","modification","Propionate labeling reagent heavy form (+3amu), N-term & K (K)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification/labeling, which fits the category of a protein modification.
+SOURCE CHECK: The candidate value is not present in the paper text; there is no mention of propionate labeling or any heavy-form labeling reagents.
+TRUTH CHECK: The value is factually incorrect as the paper describes a standard LC-MS/MS proteomics workflow without this specific labeling.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023860","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.
+SOURCE CHECK: The value ""7 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the paper does not specify the precursor mass tolerance used during the Mascot search.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

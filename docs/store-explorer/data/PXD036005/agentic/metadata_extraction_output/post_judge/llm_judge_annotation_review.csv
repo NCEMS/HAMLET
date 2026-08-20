@@ -1,0 +1,216 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD036005","","strict","Biological","cell_type","yeast cells, HeLa cells, HEK293T cells, primary human vein endothelial cells","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains a list of cell types/lines, which fits the general category of the field.
+SOURCE CHECK: Only the yeast cells were actually analyzed by mass spectrometry (IP-MS of Glc7-FLAG); HeLa, HEK293T, and HUVECs were used for ChIP, RT-qPCR, and other assays, but not for MS.
+TRUTH CHECK: The value is factually incorrect because it includes cells that were not part of the MS experiment.
+COMPLETENESS CHECK: The full set is incorrect as it includes non-MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: yeast cells","yeast cells"
+"PXD036005","","strict","Biological","species","Saccharomyces cerevisiae, Homo sapiens","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value contains organism names, which matches the definition for the species field.
+SOURCE CHECK: The paper describes mass spectrometry (IP-MS) performed on yeast cells (Saccharomyces cerevisiae) to identify Glc7 interaction partners. While the paper also performs experiments in HeLa and HUVEC cells (Homo sapiens), these mammalian experiments involve ChIP-qPCR, Co-IP, and immunoblotting, but the ""Sample preparation and MS analysis"" section explicitly describes only the yeast workflow.
+TRUTH CHECK: The yeast species is correct; however, the mammalian cells (Homo sapiens) were not analyzed by mass spectrometry in this study.
+COMPLETENESS CHECK: The full set includes a species not analyzed by MS.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Saccharomyces cerevisiae","Saccharomyces cerevisiae"
+"PXD036005","","strict","ExperimentalDesign","factor_value","bait protein (Glc7-FLAG)","bait protein (Glc7-FLAG)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the specific protein used as the bait for the immunoprecipitation, which is a valid experimental factor/variable.
+SOURCE CHECK: The value comes from the MS experiment context; the text states ""we immunoprecipitated the endogenous FLAG-tagged Glc7 (Glc7-FLAG) from yeast cells, and mass spectrometry (IP-MS) analysis detected..."".
+TRUTH CHECK: The value is factually correct as the paper explicitly uses Glc7-FLAG as the bait for the IP-MS experiment.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the primary variable (the bait) for the IP-MS analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes the MS workflow (Sample preparation and MS analysis) but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) before loading onto the LC-MS/MS system.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as it accurately reflects the absence of fractionation described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","ExperimentalDesign","replicates","3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper mentions ""Three biological replicates were performed for WT and glc7-12 mutant"" in the RNA-seq section, but the MS analysis section (""Sample preparation and MS analysis"") does not explicitly state the number of replicates for the IP-MS experiment.
+TRUTH CHECK: While the paper mentions 3 replicates for RNA-seq, it does not specify the number of biological replicates for the mass spectrometry experiment. According to the field definition, ""1"" is correct when no replication is mentioned for the MS sample.
+COMPLETENESS CHECK: The value ""3"" is extracted from the RNA-seq context, not the MS context.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD036005","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the MS analysis.
+TRUTH CHECK: Per the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The full set contains only the safe default value, which is complete given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper text does not mention ""data-dependent acquisition"", ""DDA"", ""DIA"", or any other specific acquisition scheme in the ""Sample preparation and MS analysis"" section or elsewhere.
+TRUTH CHECK: The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation and MS analysis"" section: ""alkylated by adding 50 mM iodoacetamide"".
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the described MS experiment.
+COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation and MS analysis"" section (""digested with sequencing-grade trypsin"").
+TRUTH CHECK: The value is factually correct as it is the protease used for the MS sample digestion.
+COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention ""beam-type collision-induced dissociation"" or any other specific fragmentation method.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","instrument","Q Exactive HF-X","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper mentions a ""Q Exactive HF mass spectrometer"" in the ""Sample preparation and MS analysis"" section.
+TRUTH CHECK: The paper explicitly states ""Q Exactive HF"", not ""Q Exactive HF-X"". These are different instrument models.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Q Exactive HF","Q Exactive HF"
+"PXD036005","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper describes an IP-MS experiment using a Q Exactive HF mass spectrometer, but does not mention any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling method is described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of a ""Q Exactive HF mass spectrometer"", and the Q Exactive series uses an Orbitrap mass analyzer.
+TRUTH CHECK: The value is factually correct as the Q Exactive HF is an Orbitrap-based instrument.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this instrument.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The paper mentions the use of ""iodoacetamide"" for alkylation in the ""Sample preparation and MS analysis"" section, but it does not explicitly name the resulting modification.
+TRUTH CHECK: The modification ""Carbamidomethyl (C)"" is not explicitly written in the text; it is only implied by the use of iodoacetamide.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","modification","Deamidation (NQ)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Deamidation (NQ)"" is the correct category (a protein modification).
+SOURCE CHECK: The term ""deamidation"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","modification","S-homocysteinylation (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""S-homocysteinylation (C)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","precursor_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values is not present in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD036005","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The paper text explicitly mentions ""25 mM DTT"" in the ""Sample preparation and MS analysis"" section; DTT is the standard abbreviation for dithiothreitol.
+TRUTH CHECK: The value is factually correct as DTT was used for disulfide reduction of the MS sample.
+COMPLETENESS CHECK: The full set contains the only reduction reagent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

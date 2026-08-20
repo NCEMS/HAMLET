@@ -1,0 +1,385 @@
+{
+  "paper_id": "PXD021514",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK 293, HeLa, HEI-OC1",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HEK 293",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions HEK 293, HeLa, and HEI-OC1 in the context of immunofluorescence assays to visualize protein distribution; however, only HEK 293 cells were used for the affinity purification and subsequent LC-MS/MS analysis.",
+        "TRUTH_CHECK": "Only HEK 293 is the correct source for the proteomics experiment; HeLa and HEI-OC1 were used for imaging/localization assays and were not analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set includes cell lines that were not part of the MS experiment, making the extraction factually incorrect."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "embryonic kidney cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a cell lineage/type, which matches the definition of the cell_type field.",
+        "SOURCE_CHECK": "The value is inferable from the MS experiment context; the paper states that HEK 293 cells were transfected and analyzed by LC-MS/MS to identify interactors.",
+        "TRUTH_CHECK": "HEK 293 stands for Human Embryonic Kidney 293, making \"embryonic kidney cell\" a factually correct description of the cell type.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell type used for the proteomics experiment described in the paper."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "dfna67, normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains disease states/diagnoses, which matches the field definition.",
+        "SOURCE_CHECK": "The values are present in the text; \"DFNA67\" is the disease caused by OSBPL2 mutations, and \"normal\" is a safe default for the control samples (WT OSBPL2).",
+        "TRUTH_CHECK": "The values are factually correct; the study compares mutant OSBPL2 (DFNA67) against wild-type (normal) controls.",
+        "COMPLETENESS_CHECK": "The full set covers the primary disease state and the control state described in the experiment."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The value is inferable from the use of HEK 293 cells (\"human embryonic kidney 293\"), which were the cells used for the affinity purification and subsequent LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The MS experiment used proteins extracted from HEK 293 cells; these cells are derived from the human kidney.",
+        "COMPLETENESS_CHECK": "The full set contains only \"kidney\", which correctly identifies the organ of origin for the MS sample."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which matches the species field definition.",
+        "SOURCE_CHECK": "The proteomics experiment (LC-MS/MS) used HEK 293 cells (human) to identify interactors of WT and mutant OSBPL2; while mice were used in the study, the MS analysis specifically used human cell lines.",
+        "TRUTH_CHECK": "The MS analysis was performed on HEK 293 cells, which are human (Homo sapiens). There is no mention of mass spectrometry being performed on mouse (Mus musculus) samples.",
+        "COMPLETENESS_CHECK": "The set is incorrect because it includes a species not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "OSBPL2 variant (WT, p.Q53Rfs*100, bacterial alkaline phosphatase), rapamycin treatment, mouse genotype (osbpl2 KO, HsQ53R-TG, HsWT-TG)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "WT, p.Q53Rfs*100, bacterial alkaline phosphatase",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (variants, treatments, genotypes), which is the correct category for this field.",
+        "SOURCE_CHECK": "The values are present in the text; however, the \"mouse genotype\" and \"rapamycin treatment\" factors refer to the animal studies, whereas the MS experiment specifically used HEK 293 cells transfected with WT, p.Q53Rfs*100, or bacterial alkaline phosphatase.",
+        "TRUTH_CHECK": "While these factors exist in the paper, the \"mouse genotype\" and \"rapamycin treatment\" were not the variables for the samples analyzed by mass spectrometry (the MS was performed on transfected HEK 293 cells).",
+        "COMPLETENESS_CHECK": "The full set includes \"dfna67, normal\", but the candidate value incorrectly bundles all experimental variables from the entire paper instead of focusing on the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "dfna67, normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes disease states/conditions, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"dfna67\" (referring to the disease/mutation) and \"normal\" (safe default for healthy controls) are present in the context of the study's overall experimental design.",
+        "TRUTH_CHECK": "The paper describes the study of DFNA67 (caused by OSBPL2 mutations) compared to normal/wild-type controls.",
+        "COMPLETENESS_CHECK": "The full set of all_extracted_values covers the various experimental axes (protein variants, drug treatment, and mouse genotypes), making the set exhaustive."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes the LC-MS/MS analysis of protein eluates but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS/MS.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it accurately reflects the absence of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the proteomics experiment (the interactome analysis using HEK 293 cells).",
+        "TRUTH_CHECK": "There is no mention of \"4\" replicates in the text; the \"Statistical analysis\" section mentions \"at least three independent experiments\" for quantitative data, but this is a general statement and not specific to the MS experiment.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the LC-MS/MS experiment.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The full set contains only the default value, which is sufficient when no other information is provided."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes the use of an Orbitrap Fusion Lumos for LC-MS/MS, but it does not explicitly state whether DDA or DIA was used.",
+        "TRUTH_CHECK": "While the Orbitrap Fusion Lumos is commonly used for data-dependent acquisition (DDA), the text does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\".",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "200 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"200 ppm\" is explicitly mentioned in the \"Identification of WT and mutant OSBPL2 interactors\" section of the methods, specifically referring to the fragment ion mass error.",
+        "TRUTH_CHECK": "The paper states \"a precursor mass error of 5 ppm and a fragment ion mass error of 200 ppm\", confirming that 200 ppm is the fragment mass tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions the use of an \"Orbitrap Fusion Lumos mass spectrometer,\" which is capable of various fragmentation methods, but the text does not explicitly state which fragmentation method was used for the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Identification of WT and mutant OSBPL2 interactors\" section as the instrument used for the LC-MS/MS analysis of protein eluates.",
+        "TRUTH_CHECK": "The value \"Orbitrap Fusion Lumos\" is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned for the proteomics experiment, so the extraction is complete."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes a proteomics experiment using LC-MS/MS on protein eluates from affinity purification, but it does not mention any isobaric, metabolic, or chemical labeling.",
+        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Identification of WT and mutant OSBPL2 interactors\" section, which describes the LC-MS/MS analysis of the MS samples.",
+        "TRUTH_CHECK": "The paper explicitly mentions the use of an \"Orbitrap Fusion Lumos mass spectrometer\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQ)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Deamidation (NQ)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamidomethyl (C)\" is not mentioned anywhere in the paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; no alkylation reagents (like iodoacetamide) are even mentioned in the methods to imply it, and the modification name itself is absent.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains unsupported modifications."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The value \"not applicable\" is a placeholder indicating the absence of a value, but the field expects a specific modification name.",
+        "SOURCE_CHECK": "There is no mention of \"not applicable\" as a modification in the text; however, the text does not explicitly list any searched modifications.",
+        "TRUTH_CHECK": "The candidate value is not a valid modification. Furthermore, the other values in `all_extracted_values` (\"Deamidation (NQ)\", \"Carbamidomethyl (C)\") are not mentioned in the text and are therefore hallucinated.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as none of these modifications are explicitly stated in the paper."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "5 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Identification of WT and mutant OSBPL2 interactors\" section of the methods, specifically referring to the LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The paper states \"a precursor mass error of 5 ppm\", which matches the candidate value.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance mentioned in the text."
+      }
+    }
+  ]
+}

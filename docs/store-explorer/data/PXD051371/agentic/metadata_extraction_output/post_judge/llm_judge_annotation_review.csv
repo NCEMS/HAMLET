@@ -1,0 +1,244 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD051371","","strict","Biological","age","1-day-old, eight-week-old, postnatal day 56","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains age/developmental time points, which is the correct category for this field.
+SOURCE CHECK: The values are present in the text: ""eight-week-old male... mice"", ""postnatal day 56 (P56) mice"", and ""1-day-old neonatal ICR mice"".
+TRUTH CHECK: The paper describes two distinct MS experiments: one using NMCMs (derived from 1-day-old mice) and one using HEK-293T cells (which are an immortalized line, not aged). The ""eight-week-old"" and ""postnatal day 56"" mice were used for the in vivo MI models, but the IP-MS was specifically performed on lysates of NMCMs (1-day-old) and HEK-293T cells.
+COMPLETENESS CHECK: The full set includes ages for animals used in the overall study, but the MS sample specifically came from NMCMs (1-day-old) and HEK-293T cells.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 1-day-old","1-day-old"
+"PXD051371","","strict","Biological","cell_line","HEK-293T, AC16","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the required category.
+SOURCE CHECK: The paper mentions HEK-293T and AC16 cell lines, but the MS experiment (IP-MS) was specifically performed using lysates of NMCMs (neonatal mouse cardiomyocytes) or HEK-293T cells. AC16 was used for OGD simulations and expression analysis, not for MS.
+TRUTH CHECK: HEK-293T is a correct source for the IP-MS experiment (""lysates of NMCMs or HEK-293T cells were prepared... The proteins were analyzed by WB and MS""). However, AC16 is not mentioned as a source for MS analysis.
+COMPLETENESS CHECK: The full set includes AC16, which is incorrect, and it misses NMCMs (though NMCMs are primary cells, not a cell line, the field specifically asks for cell lines).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HEK-293T","HEK-293T"
+"PXD051371","","strict","Biological","cell_type","cardiomyocytes","cardiomyocytes","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""cardiomyocytes"" is a cell type, which matches the field definition.
+SOURCE CHECK: The value comes from the MS experiment context; the paper states that ""immunoprecipitation-mass spectrometry (IP-MS) was employed to identify potential downstream targets of NLRC5"" using lysates of NMCMs (neonatal mouse cardiomyocytes).
+TRUTH CHECK: The value is factually correct as NMCMs are neonatal mouse cardiomyocytes.
+COMPLETENESS CHECK: The full set of extracted values (""cardiomyocytes"") covers the primary cell type used for the IP-MS experiment described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Biological","disease","cardiovascular system disease","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes a disease state, which matches the category for the `disease` field.
+SOURCE CHECK: The paper focuses on myocardial infarction (MI), which is a specific cardiovascular disease, and mentions ""various cardiovascular diseases"" in the abstract.
+TRUTH CHECK: While ""cardiovascular system disease"" is a broad category, the paper specifically investigates ""myocardial infarction"" (MI). The candidate value is a supertype of the actual disease studied.
+COMPLETENESS CHECK: The full set contains only this broad term, failing to capture the specific disease (myocardial infarction) explicitly named throughout the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: myocardial infarction","myocardial infarction"
+"PXD051371","","strict","Biological","organ","heart","heart","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""heart"" is a valid organ/tissue name.
+SOURCE CHECK: The value comes from the MS experiment context; the paper states that ""immunoprecipitation-mass spectrometry (IP-MS) was employed"" using lysates of NMCMs (neonatal mouse cardiomyocytes), which are isolated from the hearts of neonatal mice.
+TRUTH CHECK: The value is factually correct as the cardiomyocytes used for the IP-MS were derived from heart tissue.
+COMPLETENESS CHECK: The full set of extracted values (""heart"") covers the biological source of the MS samples described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Biological","species","Mus musculus, Homo sapiens","Mus musculus, Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains species names, which matches the field definition.
+SOURCE CHECK: The paper describes IP-MS experiments performed on lysates of NMCMs (neonatal mouse cardiomyocytes) and HEK-293T cells (human).
+TRUTH CHECK: The text explicitly mentions ""neonatal mouse cardiomyocytes (NMCMs)"" and ""HEK-293T cell line"" (which is human) in the context of the Co-IP and MS analysis (""The proteins identified by MS in Co-IP experiments using anti-NLRC5 or IgG antibody in NMCMs are provided in Supplementary Data 1 and 2"" and ""lysates of NMCMs or HEK-293T cells were prepared... analyzed by WB and MS"").
+COMPLETENESS CHECK: The full set covers both the mouse and human sources used for the mass spectrometry analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","ExperimentalDesign","factor_value","expression level (NC, OE), pull-down target (NLRC5, IgG)","expression level (NC, OE), pull-down target (NLRC5, IgG) | cardiovascular system disease","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes experimental conditions (expression levels and pull-down targets), which are valid categories for factor_value.
+SOURCE CHECK: The values are present in the text: ""OE"" (overexpression) and ""NC"" (implied by control/shRNAi), and the pull-down targets ""NLRC5"" and ""IgG"" are explicitly mentioned in the Co-IP/MS section.
+TRUTH CHECK: The values accurately reflect the experimental design of the IP-MS experiment (comparing NLRC5-precipitated proteins against an IgG control in different expression contexts).
+COMPLETENESS CHECK: The full set of extracted values includes both the technical factors of the MS experiment and the broader disease context, covering the experimental design described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","ExperimentalDesign","factor_value","cardiovascular system disease","expression level (NC, OE), pull-down target (NLRC5, IgG) | cardiovascular system disease","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The paper focuses on myocardial infarction (MI), which is a cardiovascular system disease, and the MS experiment was performed on NMCMs (neonatal mouse cardiomyocytes) to identify targets of NLRC5.
+TRUTH CHECK: While the study is about myocardial infarction, the specific MS experiment (IP-MS) was performed using lysates of NMCMs or HEK-293T cells to identify binding partners of NLRC5; the ""disease"" state is the broader context of the paper, but the MS samples themselves are cell lines/primary cells.
+COMPLETENESS CHECK: The full set of extracted values includes the specific experimental conditions (expression levels and pull-down targets), but ""cardiovascular system disease"" is a very broad supertype of the actual condition (MI) described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes an IP-MS experiment (""immunoprecipitation-mass spectrometry"") but does not mention any offline peptide or protein fractionation steps.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the IP-MS experiment; it only mentions ""at least six mice per group"" for histological measurements, but not for the MS analysis.
+TRUTH CHECK: According to the field definition, ""1"" is the correct safe default when no replication is mentioned for the specific experiment.
+COMPLETENESS CHECK: The full set contains only the safe default, which is appropriate given the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The full set contains only this value, which is the appropriate default for a silent paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
+SOURCE CHECK: The paper mentions that ""immunoprecipitation-mass spectrometry (IP-MS) was employed"" and that proteins were ""analyzed by WB and MS (OE Biotech, Shanghai, China)"", but it does not explicitly state the acquisition scheme (e.g., DDA or DIA) used.
+TRUTH CHECK: The value is not mentioned or reasonably inferable from the provided text.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The paper text does not mention ""9 ppm"" or any other specific mass tolerance value for fragment ions.
+TRUTH CHECK: The value is not present in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions that proteins were analyzed by MS (OE Biotech, Shanghai, China), but it does not specify the fragmentation method used.
+TRUTH CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided text.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","instrument","Q Exactive Plus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper mentions that proteins were analyzed by ""MS (OE Biotech, Shanghai, China)"", but it does not specify the make or model of the instrument used.
+TRUTH CHECK: The value ""Q Exactive Plus"" is not mentioned anywhere in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes an immunoprecipitation-mass spectrometry (IP-MS) experiment to identify binding partners of NLRC5, but it does not mention any isobaric, metabolic, or chemical labeling reagents (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling methods are mentioned, ""label-free"" is the correct safe default for this experiment.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions that proteins were analyzed by MS at ""OE Biotech, Shanghai, China"", but it does not specify the instrument model or the type of mass analyzer used.
+TRUTH CHECK: There is no mention of an Orbitrap mass analyzer in the provided text.
+COMPLETENESS CHECK: The full set contains only one value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for a protein modification.
+SOURCE CHECK: The paper text does not mention ""Oxidation (M)"" or any other specific peptide modifications searched during the mass spectrometry analysis.
+TRUTH CHECK: The value is not supported by the text; the paper mentions that MS was performed by ""OE Biotech"", but it does not list the search parameters or modifications.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","modification","Formylation (K)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Formylation (K)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","modification","not applicable","","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is a placeholder indicating the absence of a value, but the field expects specific protein modifications.
+SOURCE CHECK: The paper text does not mention any specific modifications (e.g., Oxidation, Formylation, Carbamidomethylation) searched during the mass spectrometry analysis.
+TRUTH CHECK: The paper mentions ""immunoprecipitation-mass spectrometry (IP-MS)"" but provides no details regarding the search parameters or modifications used in the database search.
+COMPLETENESS CHECK: The full set of extracted values includes ""Oxidation (M)"" and ""Formylation (K)"", neither of which appear in the text. ""not applicable"" is an attempt to signal absence, but the other values in the set are hallucinations.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051371","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The paper mentions that proteins were analyzed by MS (OE Biotech, Shanghai, China), but it does not provide any specific mass spectrometry parameters, including precursor mass tolerance.
+TRUTH CHECK: The value ""6 ppm"" is not mentioned anywhere in the provided text.
+COMPLETENESS CHECK: The value is not present in the text, so the extraction is not based on the provided source.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

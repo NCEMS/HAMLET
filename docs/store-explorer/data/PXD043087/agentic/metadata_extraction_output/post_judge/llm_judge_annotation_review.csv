@@ -1,0 +1,259 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD043087","","strict","Biological","cell_type","mesenchymal stem cells","mesenchymal stem cells","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""mesenchymal stem cells"" describes a primary cell type/lineage, which matches the field definition.
+SOURCE CHECK: The value comes from the MS experiment context; the paper explicitly states that ""Phosphoproteomics analysis"" was performed on ""ANGPTL4-treated hUC-MSCs"" (human umbilical cord mesenchymal stem cells).
+TRUTH CHECK: The value is factually correct as the phosphoproteomics was conducted on hUC-MSCs.
+COMPLETENESS CHECK: The full set contains the only cell type used for the phosphoproteomics experiment described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes a phosphoproteomics experiment on hUC-MSCs (human umbilical cord mesenchymal stem cells) treated with ANGPTL4; these cells are not described as having a disease state.
+TRUTH CHECK: Since the cells used for the MS experiment are not from a disease model, ""normal"" is a correct safe default.
+COMPLETENESS CHECK: The full set contains only ""normal"", which accurately reflects the state of the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Biological","organ","umbilical cord, serum, interscapular brown adipose tissue, liver, white adipose tissue, skeletal muscle","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of tissues/organs, which matches the category for the 'organ' field.
+SOURCE CHECK: The paper describes two distinct mass spectrometry experiments: one using serum samples (""collected serum from the HO group... and sham controls... matrix-assisted laser desorption ionization time-of-flight mass spectrometry"") and one using hUC-MSCs (""Phosphoproteomics analysis... in ANGPTL4-treated hUC-MSCs""). The other tissues (iBAT, liver, WAT, skeletal muscle) were analyzed via qRT-PCR or immunofluorescence, not mass spectrometry.
+TRUTH CHECK: Only ""serum"" and ""umbilical cord"" (via hUC-MSCs) are correct for the MS samples. The inclusion of iBAT, liver, WAT, and skeletal muscle is factually incorrect as they were not the source of the MS samples.
+COMPLETENESS CHECK: The full set is incorrect because it includes tissues that were not analyzed by mass spectrometry.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: serum, umbilical cord","serum, umbilical cord"
+"PXD043087","","strict","Biological","species","Homo sapiens, Mus musculus","Homo sapiens, Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of organism names, which is the correct category for the species field.
+SOURCE CHECK: The paper describes two distinct mass spectrometry experiments: one using serum from mice (Mus musculus) to identify LepR-binding proteins, and a phosphoproteomics analysis using human umbilical cord MSCs (Homo sapiens).
+TRUTH CHECK: Both species are explicitly mentioned and were used as the source material for the proteomics/MS analyses.
+COMPLETENESS CHECK: The full set of extracted values covers both the mouse serum and human cell experiments described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","ExperimentalDesign","factor_value","treatment (NC, ANGPTL4), genotype (wild-type, db/db, ob/ob, LepR-KO, ANGPTL4-KO), time point (3 wk, 8 wk, 16 wk)","normal","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes experimental factors (treatment, genotype, time point) and their corresponding values, which matches the definition of factor_value.
+SOURCE CHECK: The values (NC, ANGPTL4, wild-type, db/db, ob/ob, LepR-KO, ANGPTL4-KO, 3 wk, 8 wk, 16 wk) are all explicitly mentioned in the text. However, the phosphoproteomics experiment (the actual MS sample) specifically used ""ANGPTL4-treated hUC-MSCs"" compared to a control (implied NC). The other genotypes (db/db, ob/ob, etc.) and time points (3, 8, 16 wk) refer to the in vivo mouse studies (Micro-CT, histology), not the MS experiment.
+TRUTH CHECK: While the values exist in the paper, the ""Experimental Context Rule"" requires metadata to refer to the biological material actually analysed by mass spectrometry. The phosphoproteomics was performed on hUC-MSCs treated with ANGPTL4. The mouse genotypes and time points are part of the broader study but not the MS sample.
+COMPLETENESS CHECK: The full set includes ""normal"", but the candidate value is an over-aggregation of every variable in the entire paper regardless of whether it applied to the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: ANGPTL4","ANGPTL4"
+"PXD043087","","strict","ExperimentalDesign","factor_value","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value (mirroring a disease or health state).
+SOURCE CHECK: The paper mentions ""wild-type negative controls (termed NC)"" and ""sham controls,"" which are equivalent to ""normal"" or ""healthy"" in the context of a disease/injury study.
+TRUTH CHECK: According to the field definitions, ""normal"", ""healthy"", and ""no disease"" are safe defaults and are correct when subjects are healthy or serve as controls.
+COMPLETENESS CHECK: The full set of extracted values includes the specific treatments, genotypes, and time points, as well as the ""normal"" control state, covering the experimental design described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) for the phosphoproteomics experiment.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only the safe default, which is exhaustive given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The paper states in the ""Quantification and Statistical Analysis"" section that ""Data were presented as mean values ± SEM of at least three independent experiments.""
+TRUTH CHECK: The value ""3"" is factually correct as it represents the minimum number of independent experiments (biological replicates) performed for the data presented.
+COMPLETENESS CHECK: The value ""3"" accurately reflects the replication described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the phosphoproteomics experiment.
+TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or lack thereof) in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions ""Phosphoproteomics analysis"" and provides a PRIDE dataset identifier (PXD043087), but the provided text does not explicitly state the acquisition method (e.g., DDA or DIA).
+TRUTH CHECK: The value is not explicitly mentioned in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","alkylation_reagent","iodoacetamide","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The word ""iodoacetamide"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","cleavage_agent","Trypsin","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the category for the cleavage_agent field.
+SOURCE CHECK: The paper mentions ""Phosphoproteomics analysis"" and provides a PRIDE dataset identifier (PXD043087), but the provided text does not explicitly name the cleavage agent used for the digestion of the hUC-MSCs samples.
+TRUTH CHECK: The value is not explicitly stated in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, but it is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper mentions that phosphoproteomics data were deposited in PRIDE (PXD043087), but it does not explicitly state the fragment mass tolerance used for the database search.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions ""phosphoproteomics analysis"" and provides a PRIDE dataset identifier (PXD043087), but it does not explicitly state the fragmentation method used.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","instrument","Q Exactive HF-X","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category for the instrument field.
+SOURCE CHECK: The candidate value ""Q Exactive HF-X"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value cannot be verified as correct because it is absent from the text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is a valid category for the label field.
+SOURCE CHECK: The paper describes a phosphoproteomics analysis of hUC-MSCs but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling methods are described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions ""matrix-assisted laser desorption ionization time-of-flight mass spectrometry"" (MALDI-TOF) for serum analysis and ""Phosphoproteomics analysis"" for hUC-MSCs, but it does not explicitly name the mass analyzer (e.g., Orbitrap) used for the phosphoproteomics experiment.
+TRUTH CHECK: The text explicitly mentions ""time-of-flight"" (TOF) for the serum analysis; there is no mention of an Orbitrap analyzer anywhere in the provided text.
+COMPLETENESS CHECK: The full set contains only ""orbitrap"", which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TOF","TOF"
+"PXD043087","","strict","Technical","modification","Carbamidomethyl (C)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the paper text.
+TRUTH CHECK: The paper does not explicitly name this modification; it is not listed in the methods or results.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications, but ""Carbamidomethyl (C)"" is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Phospho (STY)"" describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The paper describes a ""Phosphoproteomics analysis"" and identifies ""hyperphosphorylated"" proteins, confirming that phosphorylation was the modification of interest for the MS experiment.
+TRUTH CHECK: The term ""phosphorylation"" (and ""phosphoproteomics"") is explicitly used in the text; ""Phospho (STY)"" is a standard representation of phosphorylation on Serine, Threonine, and Tyrosine.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications, but only ""Phospho (STY)"" is supported by the text. The others (Carbamidomethyl, Nitropyrimidyl ornithine, pyrophosphorylation) are not mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","modification","Arginine replacement by Nitropyrimidyl ornithine (R)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The candidate value is not mentioned or supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","modification","pyrophosphorylation of Ser/Thr (S)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions ""phosphoproteomics"" and ""hyperphosphorylated"" proteins, but it never mentions ""pyrophosphorylation"".
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""6 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The value cannot be verified as correct because it is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values is not based on any information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD043087","","strict","Technical","reduction_reagent","dithiothreitol","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value ""dithiothreitol"" appears in the ""Co-IP"" section of the methods, describing the lysis buffer used for a co-immunoprecipitation validation experiment, not the phosphoproteomics MS experiment.
+TRUTH CHECK: While the chemical is mentioned in the text, it is used in the context of a Co-IP assay to validate protein interaction, not as part of the sample preparation for the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set contains only this value, which is associated with the wrong experimental context.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""

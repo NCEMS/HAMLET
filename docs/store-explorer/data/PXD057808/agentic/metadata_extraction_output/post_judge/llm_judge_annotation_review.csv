@@ -1,0 +1,193 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD057808","","strict","Biological","cell_line","HEK293 FreeStyle cells","HEK293 FreeStyle cells","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
+SOURCE CHECK: The paper states that recombinant Mannitou Fab was produced in HEK293 FreeStyle cells, and this purified protein was subsequently analysed by MALDI-TOF and LC-MS-MS.
+TRUTH CHECK: The value is factually correct as the source of the protein analysed by mass spectrometry.
+COMPLETENESS CHECK: The full set contains the only cell line used to produce the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Biological","organ","kidney","kidney","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""kidney"" is the correct category (organ/tissue) for this field.
+SOURCE CHECK: The value is not present in the text; the MS sample was derived from recombinant Mannitou Fab produced in HEK293 FreeStyle cells.
+TRUTH CHECK: HEK293 cells are derived from human embryonic kidney cells, making ""kidney"" a correct inference based on the cell line used for the MS sample.
+COMPLETENESS CHECK: The full set contains the only relevant organ of origin for the sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Biological","species","Homo sapiens","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a species name, which matches the field definition.
+SOURCE CHECK: The candidate value ""Homo sapiens"" is not the source of the MS sample; the paper states the antibody ""Mannitou"" is a ""murine IgM"" (mouse) and the recombinant Fab was produced in ""HEK293 FreeStyle cells"" (human cell line).
+TRUTH CHECK: The MS sample is the recombinant Mannitou Fab. While produced in human cells, the protein itself is a murine antibody fragment. More importantly, the ""species"" field refers to the source organism of the biological material. In the context of a recombinant protein produced in a cell line, the species of the protein (mouse) or the species of the expression system (human) could be argued, but the candidate ""Homo sapiens"" refers to the expression host, not the origin of the antibody being studied. However, the text explicitly identifies Mannitou as a ""murine IgM"".
+COMPLETENESS CHECK: The full set contains only ""Homo sapiens"", which is incorrect as it ignores the murine origin of the antibody.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Mus musculus","Mus musculus"
+"PXD057808","","strict","ExperimentalDesign","factor_value","protein (Mannitou Fab)","protein (Mannitou Fab)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the specific protein being studied, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The value is explicitly mentioned throughout the paper as the subject of the proteomics and biophysical analysis.
+TRUTH CHECK: The protein analyzed by mass spectrometry is indeed the recombinant Mannitou Fab.
+COMPLETENESS CHECK: The full set contains only this value; while the study also looks at monomeric vs dimeric states, the primary experimental factor is the protein itself.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The paper describes the use of SEC (size-exclusion chromatography) to separate the sample into peaks (A and B), but it does not describe an offline fractionation protocol (like high-pH RP) where a single sample is split into multiple fractions for subsequent MS analysis.
+TRUTH CHECK: Since no explicit offline fractionation scheme is described for the LC-MS/MS workflow, the safe default of ""1"" is applicable.
+COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation counts are mentioned.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly mention the number of biological replicates for the LC-MS-MS or MALDI-TOF experiments.
+TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
+COMPLETENESS CHECK: The value ""1"" is the standard default for a study where replication is not specified, and it is the only value extracted.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","ExperimentalDesign","technical_replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not mention the number of technical replicates performed for the LC-MS/MS or MALDI-TOF experiments.
+TRUTH CHECK: There is no evidence in the text to support the value ""2"".
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions ""LC-MS-MS"" and ""Orbitrap Q-Exactive plus"", but it does not explicitly state whether the acquisition was data-dependent (DDA) or data-independent (DIA).
+TRUTH CHECK: While DDA is the most common mode for the Q-Exactive Plus in glycoproteomics, the text does not explicitly mention ""data-dependent acquisition"" or ""DDA"".
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""8 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
+COMPLETENESS CHECK: The full set of extracted values is insufficient as the value is not in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions the use of an Orbitrap Q-Exactive plus and LC-MS-MS, but it does not explicitly name the fragmentation method (e.g., HCD, CID, or beam-type CID).
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""MALDI-TOF and LC-MS-MS glycoproteomics"" section as the instrument used for the LC-MS-MS analysis of the Mannitou Fab samples.
+TRUTH CHECK: The paper states the mass was analysed using ""nanoelectrospray on an Orbitrap Q-Exactive plus (Thermo Scientific)"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the proteomics/glycoproteomics analysis (excluding the MALDI-TOF instrument, which is a separate modality).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper describes a glycoproteomics analysis using LC-MS/MS and MALDI-TOF, but does not mention any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the text, as the LC-MS-MS analysis was performed using an ""Orbitrap Q-Exactive plus"".
+TRUTH CHECK: The value is factually correct based on the instrument model mentioned.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for the LC-MS-MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","modification","Deamidation (NQ)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Deamidation (NQ)"" is the correct category (a protein modification).
+SOURCE CHECK: The term ""deamidation"" does not appear in the provided paper text.
+TRUTH CHECK: The paper does not mention searching for or identifying deamidation; it focuses on N-glycosylation.
+COMPLETENESS CHECK: The full set of extracted values is incorrect as none of these modifications are explicitly mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the paper text.
+TRUTH CHECK: The paper does not explicitly name this modification; while trypsin digestion is mentioned, no alkylation reagent (like iodoacetamide) or the resulting modification name is stated.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD057808","","strict","Technical","modification","not applicable","","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a protein modification; it is a placeholder indicating the absence of a value.
+SOURCE CHECK: The paper explicitly describes the analysis of ""N-glycosylation"" and ""complex glycan"" using LC-MS-MS and Byonic.
+TRUTH CHECK: The value is incorrect because the paper explicitly identifies and analyzes a specific modification (glycosylation).
+COMPLETENESS CHECK: The full set of extracted values is incorrect; it includes common ""default"" modifications (Deamidation, Carbamidomethyl) that are not mentioned in the text, and a ""not applicable"" value despite the presence of glycosylation.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: glycosylation","glycosylation"
+"PXD057808","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which matches the required category for this field.
+SOURCE CHECK: A search of the paper text reveals no mention of ""6 ppm"" or any other specific precursor mass tolerance value.
+TRUTH CHECK: The value is not present in the text and cannot be inferred.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive because the value is hallucinated.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

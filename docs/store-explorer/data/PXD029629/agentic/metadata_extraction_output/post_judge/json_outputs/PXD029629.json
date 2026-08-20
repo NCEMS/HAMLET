@@ -1,0 +1,385 @@
+{
+  "paper_id": "PXD029629",
+  "annotations": [
+    {
+      "annotation_type": "disease",
+      "extracted_value": "wildtype, cgyps1-11δ",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "type_mismatch",
+      "corrected_value": "healthy",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of strain names/genotypes, not a disease state or diagnosis.",
+        "SOURCE_CHECK": "The values \"wildtype\" and \"Cgyps1-11Δ\" are present in the text, but they describe the genetic background of the yeast strains used in the MS experiment, not a disease.",
+        "TRUTH_CHECK": "The values are genotypes/strains, which is a different category of metadata than \"disease\".",
+        "COMPLETENESS_CHECK": "The full set contains only these genotype values, failing to provide a disease state."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "membrane",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "type_mismatch",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"membrane\" refers to a subcellular fraction, not an organ or tissue.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context (\"total membrane fractions\"), but it describes a cellular component, not an organ.",
+        "TRUTH_CHECK": "The MS sample was derived from *Candida glabrata* cells (a unicellular fungus), which do not have organs.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it confuses a subcellular fraction with an organ."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Nakaseomyces glabratus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name of a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper repeatedly refers to the organism as \"Candida glabrata\"; \"Nakaseomyces glabratus\" is the current scientific name for this species.",
+        "TRUTH_CHECK": "The value is factually correct as \"Nakaseomyces glabratus\" is the reclassified name for \"Candida glabrata\".",
+        "COMPLETENESS_CHECK": "The full set contains the single correct species used in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "strain (wildtype, Cgyps1-11Δ)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental factor (strain) and its specific levels (wildtype, Cgyps1-11Δ), which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The value is explicitly stated in the text; the proteomics analysis was performed on total membrane fractions of \"wt\" (wildtype) and \"Cgyps1-11Δ\" strains.",
+        "TRUTH_CHECK": "The value is factually correct as these are the two strains compared in the mass spectrometry experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the strains used in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "wildtype, cgyps1-11δ",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value represents the genotypes/strains being compared, which is a correct category for a factor_value.",
+        "SOURCE_CHECK": "The values \"wildtype\" (wt) and \"Cgyps1-11Δ\" are explicitly mentioned as the two strains whose total membrane proteomes were analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The values are factually correct; the study compares the wildtype C. glabrata strain with the 11 proteases-deficient mutant strain Cgyps1-11Δ.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental contrast (wildtype vs mutant) described in the proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes the isolation of \"total membrane fraction pellets\" but does not mention any subsequent offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.",
+        "TRUTH_CHECK": "Since no fractionation step is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" correctly represents the lack of fractionation for the samples described."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "2",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper explicitly states \"two biological replicate samples\" for the global proteome analysis and \"in duplicates\" for the label-free quantitative analysis.",
+        "TRUTH_CHECK": "The value \"4\" is incorrect; the paper specifies 2 biological replicates per strain.",
+        "COMPLETENESS_CHECK": "The value is incorrect, so completeness is not applicable."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper states that for global membrane proteomes, \"two biological replicate samples\" were used, and for label-free quantitative analysis, samples were processed \"in duplicates.\"",
+        "TRUTH_CHECK": "The text mentions \"duplicates\" in the context of the label-free quantitative analysis, but it specifically identifies the \"two biological replicate samples\" for the global proteome. In proteomics, \"duplicates\" often refers to biological replicates unless specified as technical replicates of the same sample. There is no explicit mention of technical replicates (multiple injections/runs of the same biological sample).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but the value itself is likely a misinterpretation of biological replicates."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition method field.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Mass spectrometry analysis\" section which describes the LC-MS/MS workflow (\"the data-dependent top10 method was used to acquire MS data\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly mentions a \"data-dependent top10 method\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one acquisition scheme is described for the quantitative proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry analysis\" section for both the global proteome analysis (\"proteins were digested with trypsin\") and the label-free quantitative analysis (\"followed by trypsin digestion\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "0.5 Da",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"0.5 Da\" is explicitly mentioned in the \"Mass spectrometry analysis\" section as the fragment mass tolerance for the Sequest search.",
+        "TRUTH_CHECK": "The paper states \"precursor and fragment mass tolerances set at 10 ppm and 0.5 Da, respectively\", confirming 0.5 Da is the fragment tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"peptide fragmentation data\" and \"data-dependent top10 method\" using a QExactive mass spectrometer, but it never explicitly names the fragmentation method (e.g., HCD or CID).",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the provided source."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive, Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains mass spectrometer models, which matches the field definition.",
+        "SOURCE_CHECK": "Both \"Orbitrap\" and \"QExactive\" are explicitly mentioned in the \"Mass spectrometry analysis\" section as the instruments used for the two different proteomics analyses (global and label-free quantitative).",
+        "TRUTH_CHECK": "The paper states that global proteome analysis used an \"Orbitrap mass spectrometer\" and the label-free quantitative analysis used a \"QExactive mass spectrometer (Thermo Scientific)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both instruments used in the study."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantitative membrane proteome analysis\" and \"label-free quantitative proteomics\" in the abstract and results sections.",
+        "TRUTH_CHECK": "The paper describes a label-free approach for its primary quantitative analysis. While it mentions a previous study by Ng et al. that used iTRAQ, the current experiment's quantitative proteomics was performed using a label-free method.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of only this value, which accurately describes the labeling method used for the MS samples in this study."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for the mass_analyzer field.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry analysis\" section (\"analyzed using the Orbitrap mass spectrometer\" and \"coupled to the QExactive mass spectrometer\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper specifies the use of an Orbitrap and a QExactive (which is an Orbitrap-based instrument).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one mass analyzer type is described for the experiments."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Thr->Pro substitution (T)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category for the modification field.",
+        "SOURCE_CHECK": "The value \"Thr->Pro substitution (T)\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text; the paper does not describe any specific amino acid substitutions searched for during the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"not applicable\", neither of which are explicitly mentioned in the text as searched modifications."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamidomethyl (C)\" is not mentioned in the text; while the paper mentions \"TCEP solution\" for reduction and \"trypsin digestion\", it never explicitly names the alkylation reagent or the resulting modification.",
+        "TRUTH_CHECK": "The value is not explicitly stated in the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as they are not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The value \"not applicable\" is a placeholder indicating the absence of a modification, which is a valid response type when no modifications are found.",
+        "SOURCE_CHECK": "The paper text does not explicitly name any modifications (fixed or variable) searched during the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The paper mentions the use of TCEP for reduction and trypsin for digestion, but it never explicitly names a modification like \"Carbamidomethyl (C)\" or \"Oxidation (M)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Thr->Pro substitution (T)\" and \"Carbamidomethyl (C)\", neither of which are explicitly mentioned in the text. \"not applicable\" is the only accurate assessment of the text's content regarding this field."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "10 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Mass spectrometry analysis\" section of the methods, specifically for the label-free quantitative analysis.",
+        "TRUTH_CHECK": "The paper states \"precursor and fragment mass tolerances set at 10 ppm and 0.5 Da, respectively\", confirming 10 ppm is the precursor tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance mentioned for the quantitative proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "dithiothreitol, TCEP",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Total membrane fraction isolation\" section (\"...2 mM dithiothreitol (DTT)...\") as part of the sample preparation for the MS experiment.",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\"; however, the \"Mass spectrometry analysis\" section also mentions that for the label-free quantitative analysis, \"protein samples were reduced with TCEP solution\". Therefore, the set is incomplete."
+      }
+    }
+  ]
+}

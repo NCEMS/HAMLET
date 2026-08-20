@@ -1,20 +1,19 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD011999","","strict","Biological","cell_line","BT474","BT474","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation for LC-MS/MS"" section as the cell line treated, lysed, and analyzed by mass spectrometry.
-TRUTH CHECK: The paper states that BT474 cells were used for the TMT LC-MS/MS experiment.
-COMPLETENESS CHECK: The full set contains only ""BT474"", which is the only cell line used for the mass spectrometry analysis described in the methods.
-
+"PXD011999","","strict","Biological","cell_line","BT474, SKBR3, HCC1419, MDA-MB453, UACC893, MDA-MB361","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of cell line names, which matches the required category.
+SOURCE CHECK: While all these cell lines are mentioned in the paper, only BT474 was used for the LC-MS/MS proteomics experiment; the others (SKBR3, HCC1419, MDA-MB453, UACC893, MDA-MB361) were used for Western blot analysis and proliferation/cell death assays.
+TRUTH CHECK: The value is factually incorrect because it includes cell lines that were not analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set is incorrect as it conflates the MS sample source with validation sample sources.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
 HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" describes a cell lineage, which matches the definition of cell_type.
-SOURCE CHECK: The MS experiment used the BT474 cell line (""BT474 cells were treated... and analyzed by LC-MS/MS""), and BT474 is a well-established breast cancer cell line of epithelial origin.
-TRUTH CHECK: BT474 is an epithelial-derived mammary carcinoma cell line; therefore, ""epithelial cell"" is a factually correct lineage.
-COMPLETENESS CHECK: The full set contains the correct lineage for the cell line used in the MS experiment.
+VERDICT: low
+CORRECTED_VALUE: BT474","BT474"
+"PXD011999","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" describes a cell lineage, which matches the definition of the cell_type field.
+SOURCE CHECK: The MS sample was derived from the BT474 cell line, which is a well-known human breast cancer cell line of epithelial origin.
+TRUTH CHECK: BT474 is an epithelial cell line; therefore, ""epithelial cell"" is a factually correct lineage for the analyzed sample.
+COMPLETENESS CHECK: The full set contains this single value, which accurately describes the lineage of the cell line used for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,9 +22,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Biological","disease","breast carcinoma","breast carcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""breast carcinoma"" is a disease state, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human mammary carcinoma cell lines"" and ""HER2-positive breast cancer"" in the context of the BT474 cells used for the MS experiment.
-TRUTH CHECK: ""Breast carcinoma"" is a synonym for ""breast cancer"" and ""mammary carcinoma,"" both of which are explicitly stated in the text.
-COMPLETENESS CHECK: The full set contains this value, which accurately describes the disease state of the cell lines analyzed by MS.
+SOURCE CHECK: The paper explicitly mentions ""human mammary carcinoma cell lines"" and ""HER2-positive breast cancer"" in the context of the BT474 cells used for the TMT LC-MS/MS experiment.
+TRUTH CHECK: The value is factually correct; ""breast carcinoma"" is a synonym for ""breast cancer"" and ""mammary carcinoma"" as described in the text.
+COMPLETENESS CHECK: The full set contains this single value, which accurately describes the disease state of the cell lines analyzed by MS.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -35,9 +34,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Biological","organ","breast","breast","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""breast"" is a valid organ/tissue type.
 SOURCE CHECK: The MS sample was derived from the BT474 cell line, which the paper explicitly describes as a ""HER2-dependent breast cancer cell model"".
-TRUTH CHECK: BT474 is a well-known breast cancer cell line, and the text explicitly links the model to breast cancer.
-COMPLETENESS CHECK: The full set contains ""breast"", which accurately describes the organ of origin for the analyzed samples.
-
+TRUTH CHECK: BT474 is a well-known breast cancer cell line, and the paper explicitly links the model to breast cancer.
+COMPLETENESS CHECK: The full set contains the correct organ of origin for the analyzed samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -46,9 +44,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper states that raw mass spectral data files were searched against the SwissProt database containing ""Homo sapiens protein sequences"" and uses human mammary carcinoma cell lines (BT474).
-TRUTH CHECK: The value is factually correct as the experiment uses human cell lines.
-COMPLETENESS CHECK: The full set contains the only relevant species mentioned for the MS experiment.
+SOURCE CHECK: The paper explicitly states that the raw mass spectral data files were searched against the SwissProt database containing ""Homo sapiens protein sequences"".
+TRUTH CHECK: The study uses human breast cancer cell lines (BT474, etc.), confirming the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the single correct species mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -56,32 +54,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","ExperimentalDesign","factor_value","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T combination), time (6h, 48h)","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T combination), time (6h, 48h) | breast carcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variables (treatment and time) and their specific levels, which is the correct category for a factor_value.
-SOURCE CHECK: The treatments (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, and the A+T combination) and the time points (6h and 48h) are explicitly stated in the ""Sample preparation for LC-MS/MS"" and ""TMT peptide labeling"" sections as the conditions for the MS samples.
-TRUTH CHECK: The values are factually correct; the paper describes these specific agents and time points used to treat the BT474 cells analyzed by MS.
-COMPLETENESS CHECK: The full set of extracted values includes the experimental factors (treatment/time) and the disease context (breast carcinoma), which together cover the primary design axes of the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","ExperimentalDesign","factor_value","breast carcinoma","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T combination), time (6h, 48h) | breast carcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a disease/condition, which is a valid category for a factor_value.
-SOURCE CHECK: The paper describes the use of ""human mammary carcinoma cell lines"" (BT474, etc.) for the MS experiment.
-TRUTH CHECK: ""Breast carcinoma"" is a correct description of the disease state of the BT474 cell line used in the proteomics analysis.
-COMPLETENESS CHECK: The full set of extracted values covers both the experimental conditions (treatment and time) and the disease context.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The paper describes a sample preparation workflow (IP and IMAC) but does not mention any offline peptide or protein fractionation into multiple fractions before LC-MS/MS.
-TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" fully represents the state of fractionation for this experiment.
+"PXD011999","","strict","ExperimentalDesign","factor_value","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T), time (6h, 48h)","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T), time (6h, 48h) | breast carcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factors (treatment and time) and their respective levels, which is the correct category for factor_value.
+SOURCE CHECK: The treatments (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, and the combination A+T) and the time points (6h, 48h) are explicitly stated in the ""Sample preparation for LC-MS/MS"" section as the conditions for the BT474 cells analyzed by MS.
+TRUTH CHECK: The values are factually correct; the paper describes these specific agents and time points used in the TMT LC-MS/MS experiment.
+COMPLETENESS CHECK: The full set of extracted values includes the experimental conditions and the disease state (""breast carcinoma""), which together cover the primary factors of the study.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -90,10 +66,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","ExperimentalDesign","replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
-SOURCE CHECK: The value is explicitly stated in the ""RESULTS"" section: ""We manually verified 471 unique phospho-Tyr (p-Tyr) peptides from two biological replicates"".
-TRUTH CHECK: The value ""2"" is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the biological replicates used for the TMT LC-MS/MS experiment.
+"PXD011999","","strict","ExperimentalDesign","factor_value","breast carcinoma","treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T), time (6h, 48h) | breast carcinoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""breast carcinoma"" describes a disease state, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The paper describes using human mammary carcinoma cell lines (BT474, etc.) for the MS experiment.
+TRUTH CHECK: The value is factually correct as the study uses breast cancer cell lines.
+COMPLETENESS CHECK: The full set of extracted values covers both the experimental conditions (treatment and time) and the biological context (disease), which is exhaustive for the study design.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -101,10 +77,34 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+"PXD011999","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes a sample preparation workflow (lysis, reduction, alkylation, digestion, and IMAC enrichment) but does not mention any offline peptide or protein fractionation step before LC-MS.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the absence of fractionation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","ExperimentalDesign","replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The value is explicitly stated in the ""RESULTS"" section under ""Experimental setup for quantitative pathway profiling"" regarding the TMT LC-MS/MS experiment (""We manually verified 471 unique phospho-Tyr (p-Tyr) peptides from two biological replicates"").
+TRUTH CHECK: The value ""2"" accurately reflects the number of biological replicates used for the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention technical replicates for the LC-MS/MS experiment; therefore, the safe default of ""1"" is applied.
-TRUTH CHECK: In the absence of explicit mention of technical replicates, ""1"" is the correct default value.
-COMPLETENESS CHECK: The full set contains only the default value, which is complete given the text.
+TRUTH CHECK: The value is correct as a safe default when the paper is silent on technical replication.
+COMPLETENESS CHECK: The full set contains the single safe default value, which is complete for this field.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -112,8 +112,8 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
-SOURCE CHECK: The value is present in the paper text, specifically in the LC-MS/MS section (""information-dependent acquisition mode"").
+"PXD011999","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The value is present in the paper text under the LC-MS/MS section (""information-dependent acquisition mode"").
 TRUTH CHECK: ""Information-dependent acquisition"" (IDA) is a synonym for ""data-dependent acquisition"" (DDA).
 COMPLETENESS CHECK: The full set contains the only acquisition method described for the MS experiment.
 TYPE_CORRECT: yes
@@ -123,10 +123,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation for LC-MS/MS"" section: ""Afterwards, ~400 μg of sample was digested with trypsin overnight..."".
-TRUTH CHECK: The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
+"PXD011999","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation for LC-MS/MS"" section as the agent used to digest the BT474 cell lysates.
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -136,8 +136,9 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Technical","fragment_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
 SOURCE CHECK: The value ""7 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
+TRUTH CHECK: Since the value is not present in the text, it cannot be verified as factually correct for this experiment.
 COMPLETENESS CHECK: The full set contains only this hallucinated value.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -145,9 +146,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The value is not mentioned in the provided paper text.
-TRUTH CHECK: The paper does not specify the fragmentation method used on the Thermo Q Exactive instrument.
+"PXD011999","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not mentioned in the provided paper text.
+TRUTH CHECK: The paper mentions the use of a ""Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer,"" which typically uses HCD (Higher-energy Collisional Dissociation), but the text does not explicitly name the fragmentation method.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -156,10 +157,33 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","instrument","Thermo Q Exactive","Thermo Q Exactive","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer make and model, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS"" section of the methods (""Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer"").
-TRUTH CHECK: The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the proteomics experiment described.
+"PXD011999","","strict","Technical","instrument","Q Exactive Plus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper mentions a ""Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer"" in the LC-MS/MS section.
+TRUTH CHECK: The paper specifies a ""Thermo Q Exactive Hybrid Quadrupole-Orbitrap"", but it does not explicitly state the ""Plus"" model. While ""Q Exactive"" is present, ""Q Exactive Plus"" is a specific sub-model not mentioned in the text.
+COMPLETENESS CHECK: The full set contains only this value, which is slightly more specific than the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Thermo Q Exactive Hybrid Quadrupole-Orbitrap","Thermo Q Exactive Hybrid Quadrupole-Orbitrap"
+"PXD011999","","strict","Technical","label","TMT126","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of a labeling method.
+SOURCE CHECK: The value is derived from the ""TMT peptide labeling"" section of the methods, which describes the actual MS experiment.
+TRUTH CHECK: The paper states ""Peptides were labeled with TMT10plex Mass Tag Labeling Kits"" and lists ""DMSO_6h (126)"" as one of the channels. However, ""TMT126"" is a specific channel/tag, not the name of the labeling method itself.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels rather than the overarching labeling method (""TMT"" or ""TMT10plex"").
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD011999","","strict","Technical","label","TMT127N","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT reporter tag, which is a type of isobaric labeling method.
+SOURCE CHECK: The value is present in the paper text under ""TMT peptide labeling and p-Tyr peptide IP"", where it is explicitly linked to the 6L1G_6h sample analyzed by LC-MS/MS.
+TRUTH CHECK: The value is factually correct as the paper states ""6L1G_6h (127N)"" using ""TMT10plex Mass Tag Labeling Kits"".
+COMPLETENESS CHECK: The full set of extracted values lists every individual reporter tag used in the 10-plex experiment; together they exhaustively describe the labeling scheme.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -167,34 +191,56 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","label","TMT126","TMT128N | TMT128C | TMT130N | TMT130C","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value is a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the paper text within the ""TMT peptide labeling and p-Tyr peptide IP"" section, describing the MS experiment.
-TRUTH CHECK: While the paper mentions the use of TMT10plex and specific tags (e.g., 126), the ""label"" field should describe the labeling method (TMT), not the individual tags used for specific samples.
-COMPLETENESS CHECK: The full set of extracted values lists individual tags rather than the overarching labeling method.
+"PXD011999","","strict","Technical","label","TMT127C","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
+SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section of the methods, describing the labeling of the MS samples.
+TRUTH CHECK: While ""TMT127C"" is a specific tag used, the ""label"" field should describe the labeling method/technology (e.g., ""TMT"") rather than the individual channel tags.
+COMPLETENESS CHECK: The full set of extracted values lists every individual TMT channel used; however, the field definition requires the labeling method (TMT), not a list of the specific tags.
 
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD011999","","strict","Technical","label","TMT128N","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
+SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section, where ""ARRY_6h (128N)"" is listed as part of the TMT10plex labeling scheme.
+TRUTH CHECK: The value is factually correct as the paper explicitly uses TMT10plex labeling, and 128N is one of the tags used.
+COMPLETENESS CHECK: The full set of extracted values lists every individual tag used in the TMT10plex kit; however, the labeling method itself is ""TMT"" (or ""TMT10plex""). Listing individual tags is a more granular representation of the same method.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","Technical","label","TMT128C","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT reporter ion, which falls under the category of isobaric labeling methods.
+SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section, where ""ARRY_6h (128C)"" is listed as part of the TMT10plex labeling scheme for the MS samples.
+TRUTH CHECK: The value is factually correct as it describes one of the labels used in the TMT10plex experiment.
+COMPLETENESS CHECK: The full set of extracted values lists all ten individual TMT reporter ions used in the 10plex kit; together they exhaustively describe the labeling used for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","Technical","label","TMT129N","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","low","True","","False","True","False","False","","type_mismatch","TYPE CHECK: The candidate value refers to a specific TMT tag, which is a type of isobaric labeling method.
+SOURCE CHECK: The value is present in the paper text under ""TMT peptide labeling and p-Tyr peptide IP"", where it is linked to the TZB_48h sample.
+TRUTH CHECK: The value is factually correct as the paper explicitly lists ""TZB_48h (129N)"" as part of the TMT10plex labeling scheme.
+COMPLETENESS CHECK: The full set of extracted values lists all individual TMT tags used in the 10-plex experiment; however, the field ""label"" should describe the labeling method (TMT) rather than the individual channel tags.
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: label
 VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: TMT","TMT"
-"PXD011999","","strict","Technical","label","TMT127N","TMT128N | TMT128C | TMT130N | TMT130C","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section of the methods, describing the labeling of the MS samples.
-TRUTH CHECK: While the specific tag ""127N"" is used, the labeling method itself is ""TMT"" (or ""TMT10plex""). The field definition asks for the labeling method (e.g., ""TMT""), not the individual channel tags.
-COMPLETENESS CHECK: The full set of extracted values lists every individual TMT channel used; however, the method is collectively ""TMT"".
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
 VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
-"PXD011999","","strict","Technical","label","TMT127C","TMT128N | TMT128C | TMT130N | TMT130C","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
+"PXD011999","","strict","Technical","label","TMT129C","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which is a type of isobaric labeling method.
 SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section of the methods, describing the labeling of the MS samples.
-TRUTH CHECK: While ""TMT127C"" is a specific tag used, the labeling method itself is ""TMT"" (or ""TMT10plex""). The candidate value is a specific channel, not the method name.
-COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels rather than the overarching labeling method (""TMT"").
+TRUTH CHECK: The paper explicitly mentions ""TMT10plex Mass Tag Labeling Kits"" and lists ""DMSO_48h (129C)"" as one of the labels used.
+COMPLETENESS CHECK: The full set of extracted values lists the individual tags used in the 10-plex experiment; however, the field ""label"" should describe the labeling method (TMT) rather than the individual tags.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -203,90 +249,44 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
-"PXD011999","","strict","Technical","label","TMT128N","TMT128N | TMT128C | TMT130N | TMT130C","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section, where ""ARRY_6h (128N)"" is listed as part of the TMT10plex labeling scheme for the MS experiment.
-TRUTH CHECK: The value is factually correct as the paper explicitly uses TMT10plex labels, including 128N.
-COMPLETENESS CHECK: The full set of extracted values lists every individual tag used in the TMT10plex kit; however, the labeling method itself is ""TMT"" (or ""TMT10plex""). Listing individual tags is overly granular, but together they describe the TMT labeling used.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","label","TMT128C","TMT128N | TMT128C | TMT130N | TMT130C","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the paper text within the ""TMT peptide labeling and p-Tyr peptide IP"" section, describing the MS experiment.
-TRUTH CHECK: The paper explicitly mentions ""TMT10plex Mass Tag Labeling Kits"" and lists ""ARRY_6h (128C)"" as one of the labels used.
-COMPLETENESS CHECK: The full set of extracted values lists every individual TMT tag used in the 10-plex experiment; together they exhaustively describe the labeling scheme.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","label","TMT129N","TMT128N | TMT128C | TMT130N | TMT130C","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
+"PXD011999","","strict","Technical","label","TMT130N","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which is a type of isobaric labeling method.
 SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section, describing the labeling of the MS samples.
-TRUTH CHECK: While the specific tag ""129N"" is used, the labeling method itself is ""TMT"" (specifically TMT10plex). The candidate value is a specific channel/tag rather than the name of the labeling method.
-COMPLETENESS CHECK: The full set of extracted values lists individual TMT tags rather than the overarching labeling method ""TMT"".
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: TMT","TMT"
-"PXD011999","","strict","Technical","label","TMT129C","TMT128N | TMT128C | TMT130N | TMT130C","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section of the methods, describing the labeling of the MS samples.
-TRUTH CHECK: While ""TMT129C"" is a specific tag used, the ""label"" field should describe the labeling method (TMT) rather than the individual tags used for specific samples.
-COMPLETENESS CHECK: The full set of extracted values lists every individual tag used in the TMT10plex kit; however, the field ""label"" should be the name of the method (""TMT"") rather than a list of the tags.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: TMT","TMT"
-"PXD011999","","strict","Technical","label","TMT130N","TMT128N | TMT128C | TMT130N | TMT130C","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
-SOURCE CHECK: The value is present in the paper text within the ""TMT peptide labeling and p-Tyr peptide IP"" section, describing the labeling of the MS samples.
 TRUTH CHECK: The paper explicitly mentions ""TMT10plex Mass Tag Labeling Kits"" and lists ""130N"" as one of the tags used for the ARRY_48h sample.
-COMPLETENESS CHECK: The full set of extracted values lists all individual TMT tags used in the 10plex experiment; together they exhaustively describe the labeling scheme.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","label","TMT130C","TMT128N | TMT128C | TMT130N | TMT130C","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific isobaric tag, which falls under the category of labeling methods.
-SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section of the methods, describing the MS experiment.
-TRUTH CHECK: The paper explicitly mentions the use of ""TMT10plex Mass Tag Labeling Kits"" and lists ""130C"" as one of the tags used for the 6L1G_48h sample.
-COMPLETENESS CHECK: The full set of extracted values lists every individual TMT tag used in the 10-plex experiment; together they exhaustively describe the labeling used.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","label","TMT131","TMT128N | TMT128C | TMT130N | TMT130C","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value refers to a specific TMT tag, which is a type of isobaric labeling method.
-SOURCE CHECK: The value is present in the ""TMT peptide labeling and p-Tyr peptide IP"" section, where it is listed as the tag for the A + T_48h sample.
-TRUTH CHECK: While the specific tag ""131"" was used, the ""label"" field should describe the labeling method (TMT) rather than the individual channel tags.
-COMPLETENESS CHECK: The full set of extracted values lists every individual TMT channel used; however, the correct way to represent this in the ""label"" field is as the method ""TMT"" or ""TMT10plex"".
+COMPLETENESS CHECK: The full set of extracted values lists all the individual TMT tags used in the 10-plex experiment; however, the field ""label"" should describe the labeling method (TMT) rather than the individual tags.
 
-TYPE_CORRECT: no
-CORRECT_TYPE_NAME: label
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: TMT","TMT"
+"PXD011999","","strict","Technical","label","TMT130C","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which is a type of isobaric labeling method.
+SOURCE CHECK: The value is present in the paper text under ""TMT peptide labeling and p-Tyr peptide IP"", where it is used to label the 6L1G_48h sample.
+TRUTH CHECK: The value is factually correct as the paper explicitly lists ""6L1G_48h (130C)"" as part of the TMT10plex labeling scheme.
+COMPLETENESS CHECK: The full set of extracted values lists all individual TMT tags used in the 10-plex experiment; however, the field ""label"" should describe the labeling method (TMT) rather than listing every individual channel/tag.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","Technical","label","TMT131","TMT127N | TMT128N | TMT128C | TMT130C | TMT131","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to a specific TMT tag, which falls under the category of isobaric labeling methods.
+SOURCE CHECK: The value is present in the paper text under ""TMT peptide labeling and p-Tyr peptide IP"", where it is listed as part of the labeling scheme (A + T_48h (131)).
+TRUTH CHECK: The value is factually correct as the paper explicitly uses TMT10plex labels, including the 131 tag.
+COMPLETENESS CHECK: The full set of extracted values lists every individual TMT tag used in the 10plex experiment; together they exhaustively describe the labeling used.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The value is present in the paper text, specifically in the LC-MS/MS section describing the ""Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer"".
-TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap.
+SOURCE CHECK: The value is present in the paper text, specifically in the LC-MS/MS section (""Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer"").
+TRUTH CHECK: The value is factually correct as the instrument used is a Q Exactive, which utilizes an Orbitrap analyzer.
 COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -295,10 +295,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions measuring ""peptide tryrosine (Tyr) phosphorylation"" and ""phospho-Tyr (p-Tyr) peptides"" analyzed by TMT LC-MS/MS.
-TRUTH CHECK: The paper focuses on the phosphoproteome, specifically tyrosine phosphorylation (p-Tyr), and mentions Ser/Thr phosphorylation in the context of the peptide chip array. ""Phospho (STY)"" is a correct representation of the phosphorylation modifications studied.
-COMPLETENESS CHECK: The full set of extracted values contains several hallucinations (e.g., ""pyrophosphorylation"", ""Oxidized arginine biotinylated""), but the candidate value ""Phospho (STY)"" correctly captures the primary modification of interest.
+"PXD011999","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Phospho (STY)"" describes a post-translational modification, which is the correct category for this field.
+SOURCE CHECK: The paper explicitly describes measuring ""peptide tryrosine (Tyr) phosphorylation"" and ""phosphoproteome"" using TMT LC-MS/MS.
+TRUTH CHECK: The paper focuses on the phosphoproteome, specifically tyrosine phosphorylation (p-Tyr), and mentions serine/threonine phosphorylation in the context of the peptide chip array. While the TMT MS experiment specifically targeted p-Tyr, the general term ""phospho"" is factually supported by the study's objective to quantify the phosphoproteome.
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations (e.g., ""pyrophosphorylation"", ""Oxidized arginine biotinylated""), but the candidate value itself is a valid representation of the modification studied.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -307,10 +307,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","modification","TMTpro (K)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The paper mentions ""TMT10plex Mass Tag Labeling Kits"" and ""isobaric tagging using tandem mass tag"", but it does not mention ""TMTpro"".
-TRUTH CHECK: The paper specifies TMT10plex, not TMTpro. Furthermore, the specific modification name ""TMTpro (K)"" is not written in the text.
-COMPLETENESS CHECK: The full set of extracted values contains several hallucinations (e.g., ""pyrophosphorylation"", ""Oxidized arginine biotinylated"") that are not present in the text.
+"PXD011999","","strict","Technical","modification","TMTpro (K)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a modification, which matches the required category for this field.
+SOURCE CHECK: The paper mentions ""TMT LC-MS/MS"" and ""TMT10plex Mass Tag Labeling Kits"", but it does not explicitly name the modification ""TMTpro (K)"".
+TRUTH CHECK: The paper uses TMT10plex, not TMTpro. Furthermore, the specific modification name ""TMTpro (K)"" is not written in the text.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications (e.g., ""pyrophosphorylation"", ""Oxidized arginine..."") that are not mentioned anywhere in the provided text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -319,10 +319,21 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","modification","pyrophosphorylation of Ser/Thr (S)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+"PXD011999","","strict","Technical","modification","pyrophosphorylation of Ser/Thr (S)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
 SOURCE CHECK: The term ""pyrophosphorylation of Ser/Thr (S)"" does not appear in the paper text.
-TRUTH CHECK: The paper describes phosphorylation of tyrosine (Tyr) and serine/threonine (Ser/Thr), but it does not mention ""pyrophosphorylation"".
-COMPLETENESS CHECK: The full set of extracted values contains multiple hallucinations and incorrect entries.
+TRUTH CHECK: The paper describes phosphorylation of tyrosine (Tyr) and serine/threonine (Ser/Thr), but it never mentions ""pyrophosphorylation"".
+COMPLETENESS CHECK: The full set of extracted values contains multiple hallucinations and incorrect terms not found in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD011999","","strict","Technical","modification","Oxidized arginine biotinylated with biotin-LC-hydrazide (R)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the paper text; the paper describes TMT labeling and phosphotyrosine enrichment, but does not mention arginine oxidation or biotin-LC-hydrazide.
+TRUTH CHECK: The value is factually incorrect for this experiment as it is not mentioned anywhere in the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and incorrect entries.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -331,21 +342,11 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","modification","Oxidized arginine biotinylated with biotin-LC-hydrazide (R)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
-SOURCE CHECK: The candidate value is not present in the paper text; the paper describes TMT labeling and phosphotyrosine enrichment, but not biotin-LC-hydrazide or oxidized arginine.
-TRUTH CHECK: The value is factually incorrect for this experiment as it is not mentioned in the text.
-COMPLETENESS CHECK: The full set of extracted values contains multiple hallucinations and incorrect entries.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD011999","","strict","Technical","modification","not applicable","Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is not a modification name; it is a placeholder indicating the absence of a value.
-SOURCE CHECK: The paper does not state that modifications are ""not applicable""; it describes a phosphoproteomics experiment.
-TRUTH CHECK: The value is incorrect because the experiment specifically targets phosphorylation, and the text mentions ""phospho-Tyr (p-Tyr) peptides"".
-COMPLETENESS CHECK:The full set of extracted values contains several hallucinations and ""not applicable"", failing to accurately reflect the modifications mentioned in the text.
+"PXD011999","","strict","Technical","modification","not applicable","Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a modification name or a valid representation of a searched modification.
+SOURCE CHECK: The paper describes a phosphoproteomics experiment using TMT labeling and p-Tyr enrichment, but ""not applicable"" is not a value found in the text.
+TRUTH CHECK: The value is factually incorrect as the experiment explicitly involved modifications (phosphorylation and TMT labeling).
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and ""not applicable"", failing to accurately reflect the modifications explicitly named in the text.
+
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -356,7 +357,7 @@ CORRECTED_VALUE: NONE",""
 "PXD011999","","strict","Technical","precursor_mass_tolerance","7.9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
 SOURCE CHECK: The value ""7.9 ppm"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set contains only this hallucinated value; the paper does not mention the precursor mass tolerance.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

@@ -8,21 +8,21 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
+      "error_category": "hallucinated",
       "corrected_value": "HepG2",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions HepG2, Huh7, and Cos-1, but only HepG2 was used for the mass spectrometry experiment (enriching complexes from HepG2 cell nuclear extracts). Huh7 was used for reporter gene assays and siRNA knockdown, and Cos-1 was used for CoIP validation.",
-        "TRUTH_CHECK": "Only HepG2 is the correct source for the MS sample; Huh7 and Cos-1 are mentioned in unrelated experimental contexts.",
-        "COMPLETENESS_CHECK": "The full set includes cell lines that were not analyzed by mass spectrometry."
+        "SOURCE_CHECK": "Only HepG2 was used for the mass spectrometry experiment (enriching complexes from HepG2 nuclear extracts); Huh7 and Cos-1 were used for reporter assays, siRNA knockdown, and CoIP validation, but not for MS.",
+        "TRUTH_CHECK": "The inclusion of Huh7 and Cos-1 is factually incorrect for the MS sample source.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it includes cell lines not analyzed by MS."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "hepatocyte",
+      "extracted_value": "hepatocellular carcinoma cells",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"hepatocyte\" is a cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The MS experiment used nuclear protein extractions from HepG2 cells (\"HepG2 cells were seeded and exposed to low glucose or high glucose conditions... followed by nuclear protein extractions... followed by mass spectroscopic analysis\"). HepG2 is a well-known human hepatoma-derived cell line, and hepatocytes are the corresponding liver cell type.",
-        "TRUTH_CHECK": "HepG2 cells are derived from hepatocellular carcinoma; therefore, \"hepatocyte\" (or hepatoma cell) is the correct lineage/cell type.",
-        "COMPLETENESS_CHECK": "The full set contains \"hepatocyte\", which accurately describes the lineage of the HepG2 cells used for the MS analysis."
+        "TYPE_CHECK": "The candidate value describes a cell lineage/type, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Materials and methods\" section (\"Human liver hepatocellular carcinoma cells Huh7, HepG2...\") and these cells (specifically HepG2) were the source of the nuclear extracts used for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the paper identifies HepG2 and Huh7 as human liver hepatocellular carcinoma cells.",
+        "COMPLETENESS_CHECK": "The full set contains the correct cell type for the MS sample."
       }
     },
     {
@@ -53,9 +53,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"hepatocellular carcinoma\" is a disease/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is inferable from the MS experiment context; the proteomics analysis was performed on HepG2 cells, which are explicitly described in the methods as \"Human liver hepatocellular carcinoma cells\".",
-        "TRUTH_CHECK": "The value is factually correct as the paper explicitly identifies HepG2 as a hepatocellular carcinoma cell line.",
-        "COMPLETENESS_CHECK": "The full set contains the correct disease associated with the cell line used for the MS analysis."
+        "SOURCE_CHECK": "The value is inferable from the MS experiment context; the proteomics analysis was performed on HepG2 cells, which the paper explicitly describes as \"human hepatoma-derived HepG2 cells\" and \"Human liver hepatocellular carcinoma cells Huh7, HepG2\".",
+        "TRUTH_CHECK": "The value is factually correct as HepG2 is a well-known hepatocellular carcinoma cell line, and the text explicitly mentions \"hepatocellular carcinoma cells\" in the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the disease state of the cell lines used for the MS analysis."
       }
     },
     {
@@ -72,9 +72,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"liver\" is a valid organ/tissue name.",
-        "SOURCE_CHECK": "The MS sample was derived from HepG2 cells, which are human liver hepatocellular carcinoma cells, and the paper explicitly refers to them as \"human liver cells\".",
-        "TRUTH_CHECK": "HepG2 is a well-established liver-derived cell line, and the text confirms the liver origin.",
-        "COMPLETENESS_CHECK": "The full set contains \"liver\", which accurately describes the organ of origin for the MS sample."
+        "SOURCE_CHECK": "The MS sample was derived from HepG2 cells (\"HepG2 cell nuclear extracts\"), and the paper explicitly refers to these as \"human liver cells\" and \"human liver hepatocellular carcinoma cells\".",
+        "TRUTH_CHECK": "HepG2 is a well-known liver-derived cell line, and the text explicitly links the cells to the liver.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant organ for the MS experiment."
       }
     },
     {
@@ -90,15 +90,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The value is correct as the MS experiment used nuclear extracts from HepG2 cells, which are human liver hepatocellular carcinoma cells.",
-        "TRUTH_CHECK": "The paper explicitly mentions \"human liver hepatocellular carcinoma cells HepG2\" and \"human liver cells\".",
+        "TRUTH_CHECK": "The paper explicitly mentions \"human liver cells\" and \"human liver hepatocellular carcinoma cells HepG2\".",
         "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS analysis."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "glucose concentration (low glucose 40 mg/dl, normal glucose 140 mg/dl, high glucose 450 mg/dl)",
+      "extracted_value": "glucose concentration (40 mg/dl, 450 mg/dl), bait type (DR1_RORE enhancer, control)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (glucose concentration) and its specific levels, which is the correct category for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Results\" section (\"Low glucose (40 mg/dl), normal glucose (140 mg/dl) and high glucose (450 mg/dl)\") and these conditions were used for the HepG2 cells analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The values and concentrations accurately reflect the experimental conditions described in the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the primary experimental variable (glucose) and the disease state of the cell line (hepatocellular carcinoma), which covers the key factors of the MS experiment."
+        "TYPE_CHECK": "The candidate value describes experimental variables (glucose concentration and bait type), which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The glucose concentrations (40 mg/dl and 450 mg/dl) and the use of the SULT1E1 enhancer as bait for the MS experiment are explicitly mentioned in the text.",
+        "TRUTH_CHECK": "The values are factually correct; the paper compares low (40 mg/dl) and high (450 mg/dl) glucose conditions using a biotinylated enhancer bait to enrich complexes for mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the disease state (\"hepatocellular carcinoma\") and the experimental conditions; together they cover the primary factors of the study."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a disease state, which is a valid category for a factor_value.",
-        "SOURCE_CHECK": "The value is inferable from the \"Materials and methods\" section, which explicitly describes HepG2 and Huh7 as \"Human liver hepatocellular carcinoma cells\".",
-        "TRUTH_CHECK": "The value is factually correct as the MS samples were derived from HepG2 cells, which are a hepatocellular carcinoma cell line.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the experimental variable (glucose concentration) and the biological characteristic of the sample (disease state)."
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is derived from the use of HepG2 cells, which are described in the methods as \"Human liver hepatocellular carcinoma cells\". These cells were the source of the nuclear protein extractions analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as HepG2 is a hepatocellular carcinoma cell line.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental conditions (glucose/bait) and the biological characteristic of the cells; together they cover the experimental design."
       }
     },
     {
@@ -148,28 +148,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes a protein enrichment process using biotinylated DNA baits and Dynabeads, but does not mention any subsequent peptide or protein fractionation (e.g., high-pH RP or SAX) before mass spectrometry.",
+        "SOURCE_CHECK": "The paper describes a protein enrichment process using biotinylated DNA baits followed by elution and mass spectrometry, but it does not mention any offline peptide or protein fractionation steps.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
         "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation information is provided in the text."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "2",
-      "verdict": "low",
+      "extracted_value": "1",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "1",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment; it mentions \"low glucose\" and \"high glucose\" conditions, but not the number of independent biological replicates per condition.",
-        "TRUTH_CHECK": "There is no evidence in the text to support the value \"2\" as the number of biological replicates.",
-        "COMPLETENESS_CHECK": "The value is not supported by the text, so the set is not correct."
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default for the provided text."
       }
     },
     {
@@ -187,8 +187,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.",
-        "TRUTH_CHECK": "According to the safe defaults, \"1\" is correct when the paper is silent regarding replication.",
-        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
+        "TRUTH_CHECK": "Per the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information (or lack thereof) provided in the text."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition_method field.",
-        "SOURCE_CHECK": "The paper mentions that mass spectroscopic analysis was performed and a dataset was submitted to ProteomeXchange (PXD016385), but it does not explicitly state the acquisition method (e.g., DDA or DIA) in the text.",
-        "TRUTH_CHECK": "The value is not explicitly mentioned in the provided text; while DDA is common, it cannot be verified as the specific method used here.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"mass spectroscopic analysis\" and provides a ProteomeXchange identifier (PXD016385), but the text does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "There is no mention of \"data-dependent acquisition\" or \"DDA\" in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
       }
     },
     {
@@ -224,9 +224,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the category for the cleavage_agent field.",
-        "SOURCE_CHECK": "There is no mention of trypsin or any other cleavage agent in the provided paper text.",
-        "TRUTH_CHECK": "The value is not supported by the text.",
-        "COMPLETENESS_CHECK": "The full set is not based on any information in the text."
+        "SOURCE_CHECK": "The paper text does not mention trypsin or any other protease used for protein digestion in the mass spectrometry workflow.",
+        "TRUTH_CHECK": "There is no evidence in the text to support the use of trypsin.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
       }
     },
     {
@@ -242,10 +242,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
         "SOURCE_CHECK": "The value \"14 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
       }
     },
     {
@@ -261,7 +261,7 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
         "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
         "TRUTH_CHECK": "The paper mentions \"mass spectroscopic analysis\" and provides a ProteomeXchange ID (PXD016385), but it does not explicitly state the fragmentation method used.",
         "COMPLETENESS_CHECK": "The value is not present in the text, so the extraction is not based on the provided source."
@@ -282,8 +282,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The candidate value \"Q Exactive Plus\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as correct.",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+        "TRUTH_CHECK": "The paper mentions that mass spectroscopic analysis was performed and that data was submitted to ProteomeXchange (PXD016385), but it does not name the instrument used.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so it cannot be correct or complete."
       }
     },
     {
@@ -300,9 +300,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper describes a mass spectrometry analysis of enriched protein complexes from HepG2 cells, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
-        "TRUTH_CHECK": "Since no labeling method is mentioned, the \"label-free\" safe default is applicable.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this paper."
+        "SOURCE_CHECK": "The paper describes a mass spectrometry analysis of enriched complexes from HepG2 cell nuclear extracts, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling method is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of labeling described in the text."
       }
     },
     {
@@ -321,7 +321,7 @@
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
         "SOURCE_CHECK": "The paper mentions mass spectroscopic analysis and provides a ProteomeXchange identifier (PXD016385), but the text of the paper does not explicitly name the mass analyzer or the instrument model.",
         "TRUTH_CHECK": "While the dataset PXD016385 might be associated with an Orbitrap, the provided paper text does not contain this information.",
-        "COMPLETENESS_CHECK": "The value is not present in the text."
+        "COMPLETENESS_CHECK": "The value is not supported by the provided text."
       }
     },
     {
@@ -337,7 +337,7 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category for the modification field.",
+        "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category for a protein modification.",
         "SOURCE_CHECK": "The value \"Oxidation (M)\" is not mentioned anywhere in the provided paper text.",
         "TRUTH_CHECK": "The value is not supported by the text; there is no mention of methionine oxidation being searched or analyzed.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
@@ -358,8 +358,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Deamidation (NQ)\" is the correct category (a protein modification).",
         "SOURCE_CHECK": "The term \"deamidation\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not factually supported for this experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
       }
     },
     {
@@ -395,9 +395,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
+        "SOURCE_CHECK": "The value \"7 ppm\" is not mentioned anywhere in the provided paper text.",
         "TRUTH_CHECK": "The value is not supported by the text.",
-        "COMPLETENESS_CHECK": "The full set consists of a single value that is not present in the text."
+        "COMPLETENESS_CHECK": "The value is hallucinated; there is no mass tolerance information provided in the text."
       }
     }
   ]

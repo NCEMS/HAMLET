@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD023860",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "AML12, HepG2, HEK293T",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "AML12",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "AML12 is explicitly used for the MS analysis (\"Mass spectrometry analysis of three separate AML12 cell EV samples\"). HepG2 is mentioned as a source of EV preparations to confirm FN1 association, and while the text says \"similar EV preparations were purified from... HepG2\", it does not explicitly state these were analyzed by mass spectrometry (only that FN1 was associated, likely via the mentioned Western blots/ELISA). HEK293T is mentioned only in the context of lentivirus production (\"Lentiviruses were produced by transfecting HEK293T cells\"), which is an unrelated production context, not the MS sample source.",
+        "TRUTH_CHECK": "AML12 is correct. HepG2 is mentioned in the context of EV purification but not explicitly as an MS sample. HEK293T is used for virus production and is not an MS sample.",
+        "COMPLETENESS_CHECK": "The set includes a hallucinated value (HEK293T) and a value (HepG2) not confirmed as an MS sample."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "hepatocytes",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"hepatocytes\" describes a cell type, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; the proteomics analysis was performed on EVs derived from AML12 cells, which are explicitly described as a \"mouse hepatocyte line\".",
+        "TRUTH_CHECK": "The value is factually correct as AML12 cells are hepatocytes.",
+        "COMPLETENESS_CHECK": "The full set contains \"hepatocytes\", which accurately describes the lineage of the cells used for the MS samples."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal, hepatic fibrosis",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "normal",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes disease states, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes both \"normal\" (implied by WT/non-injured hepatocytes) and \"CCl4-induced hepatic fibrosis\" in mice. However, the MS experiment specifically analyzed EVs from AML12 cells (a mouse hepatocyte line), which are not described as having a disease state in the proteomics context.",
+        "TRUTH_CHECK": "While hepatic fibrosis is a central part of the overall study's in vivo experiments, the proteomics analysis was performed on AML12 cell EVs. The \"hepatic fibrosis\" state refers to the mice treated with CCl4, not the samples analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The extraction incorrectly groups the in vivo disease model with the MS sample source."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "liver",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"liver\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The MS samples were derived from EVs produced by AML12 cells (mouse hepatocyte line), and the paper explicitly describes these as \"hepatocyte EVs\"; hepatocytes are liver cells.",
+        "TRUTH_CHECK": "The value is factually correct as AML12 and HepG2 are liver-derived cell lines.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"liver\") covers the origin of the biological material analyzed by mass spectrometry."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Mus musculus, Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains species names, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper describes proteomic analysis of EVs from AML12 cells (mouse) and mentions that similar EV preparations were purified from primary mouse hepatocytes and the human hepatocyte HepG2 cell line.",
+        "TRUTH_CHECK": "The text explicitly mentions \"human or mouse hepatocytes\" and specifically names the AML12 (mouse) and HepG2 (human) lines in the context of EV purification and association with FN1.",
+        "COMPLETENESS_CHECK": "The full set covers both the mouse and human sources described in the study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "cell type, FN1 expression (WT vs knockout)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (cell type and genotype/expression status), which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper describes proteomics on AML12 cells (cell type) and compares wild type (EVWT) vs FN1 knockout (EVΔFN1) EVs.",
+        "TRUTH_CHECK": "The value accurately reflects the experimental variables described in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the cellular/genotypic factors and the disease state (normal vs fibrosis) mentioned in the in vivo part of the study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal, hepatic fibrosis",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes disease states/conditions, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The paper describes a comparison between \"control mice\" (normal) and \"CCl4-induced hepatic fibrosis\" in the context of testing the therapeutic effect of EVs.",
+        "TRUTH_CHECK": "The values \"normal\" (safe default for control) and \"hepatic fibrosis\" are factually correct based on the experimental design described in the \"CCl4-Induced Hepatic Fibrosis in Mice\" section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the genotype/protein expression axis (WT vs knockout) and the disease axis (normal vs fibrosis), which comprehensively describes the experimental factors."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The paper describes the proteomics workflow (\"Extracellular vesicles Protein Digestion and Mass Spectrometry\") and does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "3",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for replicates.",
+        "SOURCE_CHECK": "The paper explicitly states in the Results section: \"Mass spectrometry analysis of three separate AML12 cell EV samples...\"",
+        "TRUTH_CHECK": "The value \"3\" is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"3\", which accurately reflects the number of biological replicates for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the mass spectrometry analysis; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "Applying the safe default \"1\" when the paper is silent on technical replication is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it represents the default state for the experiment described."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes an MS/MS scan that generates product ion spectra by selecting the \"most abundant peaks in the spectrum, and then selecting the next nine most abundant peaks,\" which is the definition of a data-dependent acquisition (DDA) scheme.",
+        "TRUTH_CHECK": "The described method of selecting the top N most abundant peaks for fragmentation is factually equivalent to data-dependent acquisition.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method described in the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "15 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"15 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions the use of a \"Thermo Scientific Q Exactive mass spectrometer,\" which typically uses HCD (Higher-energy Collisional Dissociation), but the text does not explicitly name the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the extraction is not based on the provided source."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Q Exactive",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions a \"Thermo Scientific Q Exactive mass spectrometer\" in the \"Extracellular vesicles protein identification\" section.",
+        "TRUTH_CHECK": "The paper specifies a \"Q Exactive\", but it does not explicitly state it is the \"Plus\" model.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it adds a specific model suffix (\"Plus\") not present in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes a proteomics experiment using LC-MS/MS but does not mention any isobaric, metabolic, or chemical labeling reagents (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling is described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Thermo Scientific Q Exactive mass spectrometer,\" and the Q Exactive is well-known to use an Orbitrap mass analyzer.",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model specified in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Gln->Trp substitution (Q)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention a Gln->Trp substitution or any such modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Propionate labeling reagent heavy form (+3amu), N-term & K (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification/labeling, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; there is no mention of propionate labeling or any heavy-form labeling reagents.",
+        "TRUTH_CHECK": "The value is factually incorrect as the paper describes a standard LC-MS/MS proteomics workflow without this specific labeling.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "7 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper does not specify the precursor mass tolerance used during the Mascot search.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+      }
+    }
+  ]
+}

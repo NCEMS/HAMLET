@@ -3,26 +3,7 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "HeLa, 2fTGH, U5A, LoVo",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "HeLa",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "Only HeLa cells were used for the SILAC/LC-MS/MS experiment; 2fTGH and U5A were used for interferon-responsiveness assays, and LoVo cells were used for RNASeq.",
-        "TRUTH_CHECK": "The candidate value is factually incorrect because it includes cell lines (2fTGH, U5A, LoVo) that were not analyzed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The set is incorrect as it conflates the MS sample source with other cell lines used for different assays in the paper."
-      }
-    },
-    {
-      "annotation_type": "cell_type",
-      "extracted_value": "epithelial cell",
+      "extracted_value": "HeLa",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +14,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"epithelial cell\" describes a cell lineage, which matches the definition of the cell_type field.",
-        "SOURCE_CHECK": "The MS experiment used HeLa cells (\"We made use of SILAC coupled with LC-MS/MS and compared cells that express empty vector, cells that express ISG15...\"), and HeLa cells are a well-established epithelial cell line.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma and are categorized as epithelial cells.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the lineage of the cell line used for the proteomics analysis."
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; the \"SILAC and His-affinity purification\" section describes the use of \"stably transduced cell lines\" (referring to the pBabe-Puro system used to create ISG15-expressing cells) and the \"Cloning, transfection, viral transduction, and permeabilization\" section explicitly states that these retroviral particles were \"applied to HeLa cells\". These cells were then lysed and analyzed by LC-MS/MS.",
+        "TRUTH_CHECK": "The text confirms that HeLa cells were the biological source for the SILAC-based proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only \"HeLa\", which is the only cell line used for the mass spectrometry analysis described in the paper."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell, fibroblasts",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "epithelial cell",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains cell types/lineages, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment used HeLa cells (epithelial lineage) and the paper also mentions MEFs (fibroblasts), but the SILAC/LC-MS/MS workflow specifically used \"stably transduced cell lines\" (HeLa) to identify ISGylated proteins.",
+        "TRUTH_CHECK": "HeLa cells are epithelial cells. While MEFs (fibroblasts) were used for other experiments (bacterial load assays), the proteomics experiment (SILAC/LC-MS/MS) was performed on the transduced cell lines (HeLa).",
+        "COMPLETENESS_CHECK": "The full set includes \"fibroblasts\", which were not the source of the MS sample; the MS sample was derived from HeLa cells."
       }
     },
     {
@@ -53,9 +53,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a disease/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material analyzed by LC-MS/MS (as described in the \"SILAC and His-affinity purification\" and \"LC-MS/MS\" sections).",
+        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material used for the SILAC/LC-MS/MS experiment.",
         "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the disease origin of the cell line used for the proteomics experiment."
+        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the disease origin of the cell line used for the proteomics analysis."
       }
     },
     {
@@ -72,9 +72,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"cervix\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The MS sample was derived from HeLa cells (\"We made use of SILAC coupled with LC-MS/MS... [using] HeLa cells\"), and the cervix is the well-known tissue of origin for the HeLa cell line.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; therefore, \"cervix\" is factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the origin of the cells used for the proteomics experiment."
+        "SOURCE_CHECK": "The MS experiment used HeLa cells (\"SILAC coupled with LC-MS/MS and compared cells that express empty vector...\"), and HeLa is a well-known cervical cancer cell line.",
+        "TRUTH_CHECK": "HeLa cells are derived from the cervix; therefore, \"cervix\" is a correct organ of origin.",
+        "COMPLETENESS_CHECK": "The full set contains only \"cervix\", which correctly describes the origin of the cells used in the proteomics experiment."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The proteomics experiment used HeLa cells (human) and searched against the \"human proteins in the Uniprot/Swiss-Prot database\".",
-        "TRUTH_CHECK": "The value is factually correct as the MS analysis was performed on human cell lines.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the proteomics analysis."
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a valid species name.",
+        "SOURCE_CHECK": "The proteomics experiment used HeLa cells (human) and the search was performed against the \"human proteins in the Uniprot/Swiss-Prot database\".",
+        "TRUTH_CHECK": "The value is factually correct as the cells analyzed by LC-MS/MS were human HeLa cells.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS analysis."
       }
     },
     {
@@ -110,9 +110,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the experimental conditions/groups being compared, which is a correct category for factor_value.",
-        "SOURCE_CHECK": "The value is derived from the MS experiment context; the paper states they compared \"cells that express empty vector, cells that express ISG15 and cells that express ISG15 that were treated with interferon\" using SILAC and LC-MS/MS.",
-        "TRUTH_CHECK": "The value accurately reflects the three experimental arms described in the proteomics section of the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the experimental conditions and the disease state (cervical adenocarcinoma, inferred from HeLa), which together cover the primary design factors of the MS experiment."
+        "SOURCE_CHECK": "The value is present in the MS experiment context; the \"SILAC and His-affinity purification\" and \"LC-MS/MS\" sections explicitly describe comparing \"cells that express empty vector, cells that express ISG15 and cells that express ISG15 that were treated with interferon\".",
+        "TRUTH_CHECK": "The value accurately reflects the three experimental arms used in the proteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the experimental conditions and the disease state (cervical adenocarcinoma, inferred from HeLa), which together cover the primary factors of the MS experiment."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
-        "SOURCE_CHECK": "The value is not explicitly mentioned in the text; it is inferred from the use of HeLa cells.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma, making this a factually correct inference for the biological source of the MS sample.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental conditions and the disease origin of the cell line, covering the relevant factors."
+        "TYPE_CHECK": "The candidate value \"cervical adenocarcinoma\" describes a disease state, which is a valid characteristic for a factor_value.",
+        "SOURCE_CHECK": "The value is not explicitly mentioned in the text; it is inferred from the use of HeLa cells in the MS experiment.",
+        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma, and the field definitions explicitly state that \"disease\" (and by extension factor_value mirroring disease) is inferable from a named cell line's well-known disease origin.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental conditions and the disease origin of the cell line, covering the relevant factors described for the MS experiment."
       }
     },
     {
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes the LC-MS/MS workflow but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the injection of the eluate.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes the LC-MS/MS workflow but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS/MS analysis.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation information is provided in the text."
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the absence of fractionation."
       }
     },
     {
@@ -167,9 +167,9 @@
       "corrected_value": "1",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the LC-MS/MS experiment; it mentions \"two large 500 cm2 per condition\" and that \"lysates from two dishes were combined for each condition,\" but this describes sample pooling rather than biological replication.",
-        "TRUTH_CHECK": "There is no evidence in the text to support the value \"3\" for the proteomics experiment. The value \"triplicate\" appears only in the context of the RNASeq experiment (\"The experiment was performed in triplicate\"), not the MS experiment.",
-        "COMPLETENESS_CHECK": "The value is not supported by the text for the MS experiment."
+        "SOURCE_CHECK": "The paper mentions that for the RNASeq experiment, \"The experiment was performed in triplicate,\" but it does not explicitly state the number of biological replicates for the LC-MS/MS proteomics experiment.",
+        "TRUTH_CHECK": "While the RNASeq was done in triplicate, the proteomics section describes the SILAC experiment using \"two large 500 cm2 per condition\" and \"The lysates from two dishes were combined for each condition,\" which suggests a pooling of samples rather than three independent biological replicates for the MS analysis.",
+        "COMPLETENESS_CHECK": "The value \"3\" is extracted from the RNASeq context, not the MS context. For the MS experiment, the text does not explicitly state a number of biological replicates."
       }
     },
     {
@@ -185,10 +185,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.",
-        "TRUTH_CHECK": "Per the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
-        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the technical_replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the LC-MS/MS experiment.",
+        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a silent paper and is complete."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS\" section of the methods (\"The mass spectrometer was operated in data-dependent mode\").",
-        "TRUTH_CHECK": "The value is factually correct as the paper describes the instrument operating in data-dependent mode.",
-        "COMPLETENESS_CHECK": "The full set contains the only acquisition method described in the paper."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" describes an MS acquisition scheme, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states in the LC-MS/MS section: \"The mass spectrometer was operated in data-dependent mode\".",
+        "TRUTH_CHECK": "The value is factually correct as it accurately reflects the \"data-dependent mode\" described in the text.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which is the only acquisition method mentioned for the MS experiment."
       }
     },
     {
@@ -223,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a chemical reagent used for alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC and His-affinity purification\" section of the methods (\"...reduced and alkylated by incubation with 5 mM tris(2-carboxyethyl)phosphine (TCEP) and 10 mM chloroacetamide...\").",
-        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the proteomics workflow.",
-        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+        "TYPE_CHECK": "The candidate value \"chloroacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC and His-affinity purification\" section of the methods: \"proteins were reduced and alkylated by incubation with 5 mM tris(2-carboxyethyl)phosphine (TCEP) and 10 mM chloroacetamide\".",
+        "TRUTH_CHECK": "The value is factually correct as the reagent used for alkylation in the proteomics workflow.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only alkylation reagent mentioned in the text."
       }
     },
     {
@@ -242,48 +242,48 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS\" section of the methods (\"proteins were digested with 20 μg trypsin\").",
-        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
-        "COMPLETENESS_CHECK": "The full set contains the only cleavage agent mentioned in the text."
+        "TYPE_CHECK": "The candidate value is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the LC-MS/MS section (\"proteins were digested with 20 μg trypsin\").",
+        "TRUTH_CHECK": "The value is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only cleavage agent mentioned in the paper."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "7 ppm",
-      "verdict": "low",
+      "extracted_value": "20 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states: \"a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively\". The fragment mass tolerance is 20 ppm, not 7 ppm.",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect value."
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Data analysis\" section of the methods, where it specifies \"a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively\".",
+        "TRUTH_CHECK": "The value \"20 ppm\" correctly corresponds to the fragment ions as per the \"respectively\" mapping in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the paper."
       }
     },
     {
       "annotation_type": "fragmentation",
       "extracted_value": "beam-type collision-induced dissociation",
-      "verdict": "low",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "CID",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states that ions were isolated \"for fragmentation by CID\".",
-        "TRUTH_CHECK": "While the paper uses the abbreviation \"CID\" (Collision-Induced Dissociation), it does not specify that it was \"beam-type\" CID. In the context of a Q Exactive instrument (which uses a quadrupole-ion trap), CID typically refers to trap-based CID, not beam-type CID (which is characteristic of Q-TOF or Triple Quad instruments).",
-        "COMPLETENESS_CHECK": "The full set contains only this value, but the value itself is an over-specification not supported by the text."
+        "SOURCE_CHECK": "The paper explicitly states that ions were isolated \"for fragmentation by CID\" in the LC-MS/MS section.",
+        "TRUTH_CHECK": "\"CID\" is the standard abbreviation for Collision-Induced Dissociation; \"beam-type\" is a specific implementation of CID common in Orbitrap instruments (like the Q Exactive used here), although the paper only explicitly writes \"CID\".",
+        "COMPLETENESS_CHECK": "The full set contains the single correct fragmentation method mentioned in the text."
       }
     },
     {
@@ -301,7 +301,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS\" section of the methods (\"...connected to a Q Exactive mass spectrometer\").",
-        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -319,9 +319,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The paper mentions the use of a \"Q Exactive mass spectrometer\", and the Q Exactive is a well-known Orbitrap-based instrument.",
-        "TRUTH_CHECK": "The value is factually correct as the Q Exactive uses an Orbitrap mass analyzer.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the LC-MS/MS experiment described."
+        "SOURCE_CHECK": "The value is reasonably inferable from the instrument model \"Q Exactive\" mentioned in the LC-MS/MS section.",
+        "TRUTH_CHECK": "The Q Exactive is an Orbitrap-based mass spectrometer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the proteomics experiment."
       }
     },
     {
@@ -338,9 +338,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data analysis\" section of the methods (\"Carbamidomethyl formation of cysteine residues was set as a fixed modification\").",
-        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification and the variable modifications mentioned in the text (Oxidation, pyroglutamate), although \"4,4,5,5-D4 Lysine\" is a SILAC label rather than a PTM. However, for the specific candidate \"Carbamidomethyl (C)\", it is correct and complete."
+        "SOURCE_CHECK": "The text explicitly states \"Carbamidomethyl formation of cysteine residues was set as a fixed modification\" in the Data analysis section.",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly mentioned in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification and the variable modifications (Oxidation, Pyroglutamate, and GlyGly) mentioned in the text; however, the candidate value itself is a correct individual entry."
       }
     },
     {
@@ -357,47 +357,47 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data analysis\" section of the methods (\"oxidation of methionine residues\").",
-        "TRUTH_CHECK": "The value is factually correct as it is explicitly listed as a variable modification used in the MaxQuant search.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the fixed and variable modifications mentioned in the text."
+        "SOURCE_CHECK": "The text explicitly mentions \"oxidation of methionine residues\" in the Data analysis section of the methods.",
+        "TRUTH_CHECK": "\"Oxidation (M)\" is a standard representation of \"oxidation of methionine residues\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Carbamidomethyl and pyroglutamate, though the candidate set lists a SILAC label instead of pyroglutamate), but \"Oxidation (M)\" itself is a correct individual extraction."
       }
     },
     {
       "annotation_type": "modification",
       "extracted_value": "4,4,5,5-D4 Lysine (A)",
       "verdict": "low",
-      "type_mismatch": false,
+      "type_mismatch": true,
       "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
+      "error_category": "type_mismatch",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a specific amino acid isotope/modification, which fits the category of a protein modification.",
-        "SOURCE_CHECK": "The text mentions \"4,4,5,5-D4-L-Lysine HCl\" in the SILAC labeling section, but this is a labeling reagent used for sample preparation, not a modification searched for during database search.",
-        "TRUTH_CHECK": "The candidate value is not listed as a searched modification in the \"Data analysis\" section; the searched modifications are GlyGly, oxidation, pyroglutamate, and carbamidomethyl.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes correct searched modifications, but this specific candidate is incorrect."
+        "TYPE_CHECK": "The candidate value describes a specific amino acid isotope, which is a type of modification/labeling used in mass spectrometry.",
+        "SOURCE_CHECK": "The value \"4,4,5,5-D4-L-Lysine HCl\" is explicitly mentioned in the \"SILAC and His-affinity purification\" section of the methods.",
+        "TRUTH_CHECK": "While the paper mentions the use of 4,4,5,5-D4-L-Lysine for SILAC labeling, the \"modification\" field specifically refers to modifications searched during the database search (fixed or variable). The \"Data analysis\" section explicitly lists the searched modifications: \"Variable modifications were set to GlyGly modification of lysine residues, oxidation of methionine residues, and pyroglutamate formation of N-terminal glutamine residues. Carbamidomethyl formation of cysteine residues was set as a fixed modification.\" The SILAC labels are handled by the \"multiplicity\" setting in MaxQuant, not as a \"modification\" in the sense of a PTM or chemical modification searched against the sequence. Furthermore, the candidate value lists the target residue as \"(A)\" (Alanine), but the text specifies it is a Lysine.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the actual searched modifications (Carbamidomethyl, Oxidation), but the inclusion of the SILAC label as a \"modification\" is a type error."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "6 ppm",
-      "verdict": "low",
+      "extracted_value": "4.5 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "4.5 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"6 ppm\" does not appear in the paper text; the text explicitly states \"a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively\".",
-        "TRUTH_CHECK": "The value is factually incorrect based on the provided text.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it provides a value not found in the text."
+        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Data analysis\" section of the methods, specifically referring to the mass spectrometry search parameters.",
+        "TRUTH_CHECK": "The text states \"a mass tolerance for precursor and fragment ions of 4.5 and 20 ppm, respectively,\" confirming 4.5 ppm is the precursor tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance value mentioned in the paper."
       }
     },
     {
@@ -413,10 +413,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC and His-affinity purification\" section as being used to reduce proteins prior to LC-MS/MS analysis.",
+        "TYPE_CHECK": "The candidate value is a chemical used for the reduction of disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC and His-affinity purification\" section as the reagent used to reduce proteins before LC-MS/MS analysis.",
         "TRUTH_CHECK": "The value \"tris(2-carboxyethyl)phosphine\" is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned for the MS sample preparation."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only reduction reagent mentioned in the proteomics workflow."
       }
     }
   ]

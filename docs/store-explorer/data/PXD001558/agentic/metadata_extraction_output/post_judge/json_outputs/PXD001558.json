@@ -3,21 +3,21 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "LM2",
-      "verdict": "medium",
+      "extracted_value": "LM2, MDA-MB-231, BrM2a, BoM1, MDA-MB-468, SUM149PT, MDA-MB-453, HUVECs, EA.hy926, HEK 293FT",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
+      "value_correct": false,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "incomplete",
+      "error_category": "wrong_value",
       "corrected_value": "LM2, HUVECs",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"LM2\" is a name of an immortalized cell line, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states that LM2 cells were used in the SILAC-labeling and phosphoproteomic analysis (\"To study the LM2 cells phosphoproteome... Heavy-labeled LM2 cells... were plated onto light-labeled HUVECs... cancer cells that had attached to the endothelial layer were lysed together with the HUVECs\").",
-        "TRUTH_CHECK": "The value is factually correct as LM2 is the specific lung metastatic derivative of MDA-MB-231 cells analyzed by MS.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because HUVECs (Human Umbilical Vein Endothelial Cells) were also analyzed by mass spectrometry in the same bidirectional study."
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category for this field.",
+        "SOURCE_CHECK": "While all these names appear in the text, only LM2 and HUVECs were used for the primary phosphoproteomic and proteomic MS experiments. MDA-MB-231 (parental), BrM2a, BoM1, MDA-MB-468, SUM149PT, and MDA-MB-453 were used for validation assays (migration, adhesion, western blots, or targeted SRM of a single protein), and HEK 293FT was used for an in vitro kinase assay. EA.hy926 was used to condition medium for HUVEC labeling.",
+        "TRUTH_CHECK": "The value is factually incorrect because it includes cell lines that were not the source of the global proteomics/phosphoproteomics MS samples.",
+        "COMPLETENESS_CHECK": "The set is over-inclusive, containing many lines not analyzed by the main MS workflow."
       }
     },
     {
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value consists of cell types/lineages, which matches the field definition.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the text as the components of the co-culture analyzed by mass spectrometry (\"cell-specific phosphoproteomic analysis... triggered by contact between breast cancer cells and endothelial cells\").",
-        "TRUTH_CHECK": "The paper describes the MS analysis of LM2 cells (breast cancer cells) and HUVECs (endothelial cells).",
-        "COMPLETENESS_CHECK": "The full set covers both cell types involved in the primary proteomics experiment described in the paper."
+        "TYPE_CHECK": "The candidate value describes cell types/lineages, which matches the field definition.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the text as the biological materials analyzed by mass spectrometry (\"cell-specific phosphoproteomic analysis... triggered by contact between breast cancer cells and endothelial cells\").",
+        "TRUTH_CHECK": "The paper describes the use of HUVECs (endothelial cells) and LM2 cells (breast cancer cells) for the SILAC-based proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both cell types involved in the bidirectional MS analysis described in the paper."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"breast cancer\" is a disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text (e.g., \"breast cancer cells\") in the context of the MS experiment (LM2 cells used for phosphoproteomic analysis).",
-        "TRUTH_CHECK": "The paper describes the use of LM2 cells, which are a derivative of MDA-MB-231 breast cancer cells, for the proteomics study.",
-        "COMPLETENESS_CHECK": "The full set contains \"breast cancer\", which accurately describes the disease state of the tumor cells analyzed."
+        "TYPE_CHECK": "The candidate value \"breast cancer\" is a valid disease state/diagnosis.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text (e.g., \"breast cancer cells\") in the context of the MS experiment involving LM2 cells.",
+        "TRUTH_CHECK": "The paper describes the use of LM2 cells, which are a lung metastatic derivative of MDA-MB-231 breast cancer cells, for the phosphoproteomic analysis.",
+        "COMPLETENESS_CHECK": "The full set contains \"breast cancer\", which accurately describes the disease origin of the tumor cells analyzed by MS."
       }
     },
     {
@@ -74,7 +74,7 @@
         "TYPE_CHECK": "The candidate value \"breast\" is a valid organ/tissue type.",
         "SOURCE_CHECK": "The MS samples were derived from LM2 cells, which the paper explicitly describes as a \"lung metastatic derivative of MDA-MB-231 cells\" and \"breast cancer cells\".",
         "TRUTH_CHECK": "MDA-MB-231 is a well-known breast cancer cell line; the paper explicitly refers to them as \"breast cancer cells\".",
-        "COMPLETENESS_CHECK": "The full set contains \"breast\", which correctly identifies the tissue of origin for the cancer cell component of the MS experiment."
+        "COMPLETENESS_CHECK": "The full set contains \"breast\", which correctly identifies the tissue of origin for the cancer cell component of the MS experiment. (Note: HUVECs are also used, but \"breast\" is a correct extraction for the tumor cell samples)."
       }
     },
     {
@@ -91,14 +91,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The value is reasonably inferable from the text, as the study uses human cell lines (MDA-MB-231, HUVECs, etc.) and searches against the \"SwissProt human database\".",
+        "SOURCE_CHECK": "The value is reasonably inferable from the text, as the study uses human cell lines (MDA-MB-231, HUVECs) and searches against the \"SwissProt human database\".",
         "TRUTH_CHECK": "The biological materials analyzed by mass spectrometry (LM2 cells and HUVECs) are of human origin.",
-        "COMPLETENESS_CHECK": "The full set contains the only species involved in the proteomics experiments."
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which is the only species used for the proteomics samples in this study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "cell type (LM2, HUVECs), condition (co-culture, monoculture)",
+      "extracted_value": "cell type (LM2, HUVEC), condition (co-culture, monoculture)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factors (cell type and condition) and their specific levels, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the context of the MS experiment: LM2 and HUVECs are the cell lines analyzed, and the comparison is between co-culture (contact) and monoculture (suspension/control).",
-        "TRUTH_CHECK": "The values are factually correct based on the experimental design described in the \"SILAC co-culture for analysis of contact-initiated signaling\" section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental axes (cell type, condition, and disease/cell line origin), making the extraction exhaustive."
+        "TYPE_CHECK": "The candidate value describes the experimental factors (cell type and condition) and their respective levels, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"LM2\", \"HUVEC\", \"co-culture\", and \"monoculture\" are all explicitly mentioned in the context of the SILAC phosphoproteomics experiment.",
+        "TRUTH_CHECK": "The values are factually correct; the study compares LM2 cells and HUVECs under conditions of co-culture versus monoculture.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental axes (cell type, condition, and the disease context \"breast cancer\")."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"breast cancer\" is a valid factor value as it describes the disease state of the samples.",
-        "SOURCE_CHECK": "The value is present in the text; the MS experiment analyzed LM2 cells, which are described as a \"cancer cell model system\" derived from breast cancer cells (MDA-MB-231).",
-        "TRUTH_CHECK": "The value is factually correct based on the paper's description of the cell lines used in the proteomics analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the disease state and the experimental conditions (co-culture vs monoculture), covering the primary axes of the study."
+        "TYPE_CHECK": "The candidate value \"breast cancer\" is a valid category for a factor_value (representing the disease state of the samples).",
+        "SOURCE_CHECK": "The paper explicitly describes the use of breast cancer cell lines (LM2, MDA-MB-231, etc.) as the biological material for the MS experiments.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on breast cancer cells and their interaction with endothelial cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the disease state and the experimental conditions (co-culture vs monoculture), which together cover the primary axes of the experimental design."
       }
     },
     {
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Fractionation and LC-MS for quantitative analysis of cellular proteome\" section: \"The 186 resulting fractions were pooled... into 19 final fractions for LC-MS analysis.\"",
-        "TRUTH_CHECK": "The value is factually correct as it describes the number of pooled fractions analyzed by MS for the global proteome quantification.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"19\", which accurately reflects the fractionation described for the global proteome analysis."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Fractionation and LC-MS for quantitative analysis of cellular proteome\" section, where it describes pooling 186 fractions into 19 final fractions.",
+        "TRUTH_CHECK": "The paper states that for the global protein quantification (the parallel analysis to normalize phosphopeptides), the samples were pooled into \"19 final fractions for LC-MS analysis\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains this single value, which accurately reflects the fractionation described for the proteome analysis."
       }
     },
     {
@@ -167,9 +167,9 @@
       "corrected_value": "4",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper states, \"we conducted a minimum of four independent biological experiments for each cell type,\" and the study analyzed two cell types (LM2 and HUVECs) in the main phosphoproteomic analysis.",
-        "TRUTH_CHECK": "The value \"8\" is an arithmetic sum of the replicates for the two cell types (4 for LM2 + 4 for HUVECs), but the 'replicates' field typically refers to the number of biological replicates per condition/group, not the total sum across different cell types. The paper explicitly mentions \"a minimum of four independent biological experiments for each cell type.\"",
-        "COMPLETENESS_CHECK": "The value \"8\" does not accurately represent the biological replication per group as described in the text."
+        "SOURCE_CHECK": "The paper states \"we conducted a minimum of four independent biological experiments for each cell type\" for the two separate SILAC co-culture experimental setups (LM2 and HUVECs).",
+        "TRUTH_CHECK": "The paper describes 4 biological replicates for the LM2 cells and 4 for the HUVECs. While the total number of experiments across both cell types is 8, the \"replicates\" field typically refers to the number of biological replicates per condition/group. The value \"8\" is an incorrect summation of replicates across different biological entities (cell types) rather than the number of replicates for a single sample group.",
+        "COMPLETENESS_CHECK": "The value is incorrect, and therefore the set is not exhaustive of the correct replicate count per group."
       }
     },
     {
@@ -188,7 +188,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the MS experiments; therefore, the safe default of \"1\" is applied.",
         "TRUTH_CHECK": "In the absence of explicit mention of technical replicates, \"1\" is the correct default value.",
-        "COMPLETENESS_CHECK": "The full set contains only the default value, which is complete given the text."
+        "COMPLETENESS_CHECK": "The full set contains the only applicable value for this field."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
         "SOURCE_CHECK": "The paper explicitly states that the mass spectrometer was \"operated in the data-dependent mode\" for both the LTQ Orbitrap Velos and the Q-Exactive Plus.",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only acquisition method described for the discovery proteomics experiments."
+        "TRUTH_CHECK": "The value is factually correct as described in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
       }
     },
     {
@@ -224,9 +224,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" section: \"...subsequently alkylated in 50 mM iodoacetamide (IAA)...\"",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" section: \"subsequently alkylated in 50 mM iodoacetamide (IAA)\".",
         "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"iodoacetamide\", which is the only alkylation reagent mentioned in the text."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"iodoacetamide\", which is the only alkylation reagent mentioned in the text."
       }
     },
     {
@@ -245,7 +245,7 @@
         "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the definition of a cleavage agent.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" section as being used for digestion.",
         "TRUTH_CHECK": "The paper states \"Digestion was performed with Lys-C... followed by addition of trypsin\", confirming Lys-C was used.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly states that trypsin was also used for digestion following Lys-C."
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Lys-C\", but the paper explicitly mentions both \"Lys-C\" and \"trypsin\" were used for the digestion of the MS samples."
       }
     },
     {
@@ -262,9 +262,9 @@
       "corrected_value": "higher-energy collisional dissociation",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly mentions \"higher-energy collisional dissociation\" (HCD) in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" and \"Fractionation and LC-MS for quantitative analysis of cellular proteome\" sections.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it contains a hallucinated value and misses the actual method used."
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided text; the text explicitly mentions \"higher-energy collisional dissociation\" (HCD).",
+        "TRUTH_CHECK": "The value is factually incorrect for this experiment as the paper specifies HCD.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it fails to capture the actual method used."
       }
     },
     {
@@ -281,8 +281,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains mass spectrometer models, which matches the field definition.",
-        "SOURCE_CHECK": "Both instruments are explicitly mentioned in the methods section: \"LTQ Orbitrap Velos mass spectrometer (Thermo Scientific)\" for phosphopeptide analysis and \"Q-Exactive Plus mass spectrometer (Thermo Scientific)\" for cellular proteome analysis.",
-        "TRUTH_CHECK": "The values are factually correct as stated in the text.",
+        "SOURCE_CHECK": "Both instruments are explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" and \"Fractionation and LC-MS\" sections as being used for the MS analysis.",
+        "TRUTH_CHECK": "The paper states that phosphopeptide enriched samples were run on an \"LTQ Orbitrap Velos\" and cellular proteome samples were run on a \"Q-Exactive Plus\".",
         "COMPLETENESS_CHECK": "The full set of extracted values covers all mass spectrometers used for the proteomics experiments described in the paper."
       }
     },
@@ -299,10 +299,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for the mass_analyzer field.",
-        "SOURCE_CHECK": "The value is present in the text, as the paper mentions the use of an \"LTQ Orbitrap Velos\" and a \"Q-Exactive Plus\" mass spectrometer.",
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the text, as the paper mentions using an \"LTQ Orbitrap Velos\" and a \"Q-Exactive Plus\" mass spectrometer.",
         "TRUTH_CHECK": "The value is factually correct; both instruments mentioned utilize Orbitrap mass analyzers.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as it covers the mass analyzer technology used for both the phosphoproteomic and global proteomic analyses."
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as the Orbitrap is the primary mass analyzer used for the proteomics experiments described."
       }
     },
     {
@@ -319,9 +319,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section of the methods.",
-        "TRUTH_CHECK": "The paper states \"Static modifications were limited to carbamidomethylation of cysteine\", which is an unambiguous synonym for \"Carbamidomethyl (C)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl, Oxidation, Phospho, Deamidation) covers all modifications explicitly listed in the search parameters section of the paper."
+        "SOURCE_CHECK": "The value is present in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section of the methods, where it is listed as a static modification.",
+        "TRUTH_CHECK": "The paper explicitly states \"Static modifications were limited to carbamidomethylation of cysteine\", which is an unambiguous synonym for \"Carbamidomethyl (C)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl, Oxidation, Phospho, Deamidation) covers all modifications explicitly listed in the \"Discovery LC-MS/MS\" section of the methods."
       }
     },
     {
@@ -338,9 +338,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section of the methods.",
-        "TRUTH_CHECK": "The paper explicitly lists \"oxidation of methionine\" as a variable modification used in the database search.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl (C), Oxidation (M), Phospho (STY), Deamidation (NQ)) covers all modifications explicitly listed in the text (carbamidomethylation of cysteine, oxidation of methionine, deamidation of asparagine and glutamine, and phosphorylation of serine, threonine, and tyrosine)."
+        "SOURCE_CHECK": "The text explicitly mentions \"oxidation of methionine\" in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section.",
+        "TRUTH_CHECK": "\"Oxidation (M)\" is a standard representation of \"oxidation of methionine\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl (C), Oxidation (M), Phospho (STY), Deamidation (NQ)) covers all modifications explicitly listed in the search parameters section of the paper."
       }
     },
     {
@@ -356,10 +356,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a post-translational modification with its target residues, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section, where it states \"variable modifications used were... phosphorylation of serine, threonine, and tyrosine residues.\"",
-        "TRUTH_CHECK": "The candidate value \"Phospho (STY)\" is a correct representation of the \"phosphorylation of serine, threonine, and tyrosine residues\" explicitly mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers all modifications explicitly listed in the \"Discovery LC-MS/MS\" section (carbamidomethylation, SILAC labels, oxidation, deamidation, and phosphorylation)."
+        "TYPE_CHECK": "The candidate value describes a post-translational modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section, where the authors state that \"phosphorylation of serine, threonine, and tyrosine residues\" were used as variable modifications.",
+        "TRUTH_CHECK": "The paper explicitly lists phosphorylation of serine, threonine, and tyrosine as a searched modification. \"Phospho (STY)\" is a standard abbreviation for this.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl, Oxidation, Phospho, Deamidation) covers all modifications explicitly listed in the \"Discovery LC-MS/MS\" section of the methods."
       }
     },
     {
@@ -377,27 +377,27 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with target residues, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section of the methods.",
-        "TRUTH_CHECK": "The paper states \"variable modifications used were... deamidation of asparagine and glutamine\", which is equivalent to \"Deamidation (NQ)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values (Carbamidomethyl, Oxidation, Phospho, Deamidation) covers all modifications explicitly listed in the search parameters of the paper."
+        "TRUTH_CHECK": "The paper states \"deamidation of asparagine and glutamine\" were used as variable modifications, which is equivalent to \"Deamidation (NQ)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all modifications mentioned in the text (carbamidomethylation, SILAC labels, oxidation, deamidation, and phosphorylation)."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "600.9 ppm",
-      "verdict": "low",
+      "extracted_value": "20 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"600.9 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is factually incorrect; the paper explicitly states a precursor mass tolerance of \"20 ppm\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and does not reflect the data in the paper."
+        "SOURCE_CHECK": "The value \"20 ppm\" is explicitly mentioned in the \"Discovery LC-MS/MS of phosphopeptide enriched samples\" section of the methods.",
+        "TRUTH_CHECK": "The paper states, \"Searches were performed with a precursor mass tolerance of 20 ppm, a fragment mass tolerance of 0.05 Da\", confirming that 20 ppm refers specifically to the precursor ions.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance value mentioned in the text."
       }
     },
     {
@@ -414,9 +414,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" section (\"proteins were reduced in 20 mM dithiothreitol (DTT)\").",
-        "TRUTH_CHECK": "The value is factually correct as per the paper text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only reduction reagent mentioned for the MS sample preparation."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and phosphoproteomic analysis\" section: \"proteins were reduced in 20 mM dithiothreitol (DTT)\".",
+        "TRUTH_CHECK": "The value is factually correct as it was the reagent used for reduction in the MS sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
       }
     }
   ]

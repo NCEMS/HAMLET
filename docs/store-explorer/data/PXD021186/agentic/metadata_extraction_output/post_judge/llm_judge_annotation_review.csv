@@ -1,0 +1,230 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD021186","","strict","Biological","age","P0","P0","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""P0"" is a valid representation of age/developmental time point.
+SOURCE CHECK: The value comes from the MS experiment context; the text states ""Comparable reduction of Acly... was detected by mass spectrometry in the vesiculome of P0 Elp1 KO brains"".
+TRUTH CHECK: The value is factually correct as it matches the age of the mice used for the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set contains the only age explicitly linked to the MS sample in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Biological","cell_type","neurons, fibroblasts","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value consists of cell types, which matches the field definition.
+SOURCE CHECK: The paper describes a proteomics experiment (""proteomic analysis of cortical extracts from newborn mice"") and a separate mass spectrometry analysis of the ""vesiculome of P0 Elp1 KO brains""; both refer to brain/cortical tissue (neurons). While fibroblasts are used extensively in the paper for other assays, they were NOT analyzed by mass spectrometry.
+TRUTH CHECK: The MS samples were derived from mouse brain/cortex (neurons), but there is no mention of fibroblasts being analyzed by mass spectrometry.
+COMPLETENESS CHECK: The set is incorrect because it includes a cell type (fibroblasts) not used in the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: neurons","neurons"
+"PXD021186","","strict","Biological","disease","familial dysautonomia, normal","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains disease states, which matches the field definition.
+SOURCE CHECK: The paper describes a proteomics analysis of ""pooled vesicles isolated from the brain cortex of WT or Elp1 KD mice""; while ""Familial Dysautonomia"" (FD) is the human disease being modeled, the MS samples are from WT (normal) and Elp1 KD (disease model) mice.
+TRUTH CHECK: The candidate value ""familial dysautonomia"" refers to the human disease, but the actual MS experiment was performed on mouse models (WT and Elp1 KD). While the study is about FD, the specific samples analyzed by MS are mouse brain vesicles. However, ""normal"" is a safe default for the WT group.
+COMPLETENESS CHECK: The full set is incomplete because it conflates the human disease name with the mouse model's state and does not explicitly capture the ""Elp1 KD"" state of the MS samples.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: normal, Elp1 KD","normal, Elp1 KD"
+"PXD021186","","strict","Biological","organ","brain cortex","brain cortex","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""brain cortex"" is a valid organ/tissue type.
+SOURCE CHECK: The value is present in the ""Mass spectrometry analysis"" section, which states ""Pellets from three independent samples of pooled vesicles isolated from the brain cortex of WT or Elp1 KD mice"".
+TRUTH CHECK: The value is factually correct as the MS analysis was performed on vesicles isolated from the brain cortex.
+COMPLETENESS CHECK: The full set of extracted values contains only ""brain cortex"", which is the only tissue used for the proteomics experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Biological","species","Mus musculus, Drosophila melanogaster, Homo sapiens","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains organism names, which matches the definition of the species field.
+SOURCE CHECK: The paper describes a proteomics experiment (""proteomic analysis of cortical extracts from newborn mice"" and ""mass spectrometry in the vesiculome of P0 Elp1 KO brains"") using mouse samples. While Drosophila and humans are mentioned in other assays (imaging, WB, etc.), the specific mass spectrometry proteomics experiment described in the ""Mass spectrometry analysis"" section only used mouse brain cortex.
+TRUTH CHECK: The proteomics/MS experiment was performed exclusively on Mus musculus. Drosophila melanogaster and Homo sapiens were used for other biological assays, but not for the MS proteomics analysis.
+COMPLETENESS CHECK: The full set includes species that were not part of the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Mus musculus","Mus musculus"
+"PXD021186","","strict","ExperimentalDesign","factor_value","genotype (WT, Elp1 KD)","genotype (WT, Elp1 KD)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes an experimental factor (genotype) and its specific levels (WT, Elp1 KD), which matches the definition of factor_value.
+SOURCE CHECK: The value is present in the ""Mass spectrometry analysis"" section, which specifies that pellets were isolated from ""WT or Elp1 KD mice"".
+TRUTH CHECK: The value is factually correct as the MS experiment compared these two genotypes.
+COMPLETENESS CHECK: The full set of extracted values covers the primary biological contrasts described in the paper (the mouse genotype contrast and the human disease contrast).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","ExperimentalDesign","factor_value","familial dysautonomia, normal","genotype (WT, Elp1 KD)","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value describes disease states (a pathological condition and its healthy counterpart), which is a correct category for factor_value.
+SOURCE CHECK: The values are present in the paper; ""familial dysautonomia"" (FD) is the disease studied, and ""normal"" (or ""healthy controls"") is the comparison group. However, these refer to the human fibroblast experiments, whereas the mass spectrometry proteomics experiment specifically used ""WT or Elp1 KD mice"" (vesicles from brain cortex).
+TRUTH CHECK: While the values are factually present in the paper, they describe the human cell study, not the MS experiment. The MS experiment compared WT and Elp1 KD mouse brain vesicles.
+COMPLETENESS CHECK: The full set of extracted values includes the correct mouse genotypes, but the inclusion of the human disease state is an error in experimental context.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes the LC-MS/MS workflow but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" correctly reflects the lack of fractionation described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","ExperimentalDesign","replicates","6","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper states in the ""Mass spectrometry analysis"" section: ""Pellets from three independent samples of pooled vesicles isolated from the brain cortex of WT or Elp1 KD mice were solubilized..."". This indicates 3 replicates per group.
+TRUTH CHECK: The candidate value ""6"" appears to be the sum of replicates for both groups (3 WT + 3 Elp1 KD), but the 'replicates' field typically refers to the number of biological replicates per condition/group. Even if interpreted as total, the text explicitly mentions ""three independent samples"" for the groups.
+COMPLETENESS CHECK: The value ""6"" does not accurately reflect the biological replication described (which is 3 per group).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 3","3"
+"PXD021186","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is the correct value when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The value ""1"" is a complete representation of the information (or lack thereof) provided in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The value is reasonably inferable from the text, which describes ""repetitively full MS scan followed by high collision-induced dissociation (HCD, at 35 normalized collision energy) of the 10 most dominant ions"", which is the definition of a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The description of selecting the top 10 most dominant ions for fragmentation is a standard DDA workflow.
+COMPLETENESS CHECK: The full set contains the only acquisition method used for the proteomics experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry analysis"" section (""digested... with modified trypsin (Promega)"").
+TRUTH CHECK: The value is factually correct as the paper states trypsin was used for digestion.
+COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","fragment_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which matches the required category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Mass spectrometry analysis"" section of the methods, referring to the proteomics experiment on brain cortex vesicles.
+TRUTH CHECK: The paper states ""a mass tolerance of 20 ppm for the precursor masses and 20 ppm for the fragment ions""; therefore, 20 ppm is the correct value for fragment ions.
+COMPLETENESS CHECK: The full set contains the only value mentioned for fragment mass tolerance in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""high collision-induced dissociation (HCD)"" in the Mass spectrometry analysis section.
+TRUTH CHECK: ""Beam-type collision-induced dissociation"" is a technical synonym for HCD, but the paper specifically uses the term ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the fragmentation method used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry analysis"" section as the instrument used for the proteomics analysis of brain cortex vesicles.
+TRUTH CHECK: The paper states ""Samples were analyzed by LC-MS/MS using Q Exactive plus mass spectrometer (Thermo)"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the proteomics experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly states in the Mass spectrometry analysis section: ""The data were quantified by label-free analysis using the same software"".
+TRUTH CHECK: The value is factually correct; no isobaric, metabolic, or chemical labeling (like TMT or SILAC) is mentioned in the proteomics workflow.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one method was used.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is inferable from the instrument ""Q Exactive plus"", which is a well-known Orbitrap-based mass spectrometer.
+TRUTH CHECK: The instrument used for the proteomics analysis is the Q Exactive plus, which utilizes an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","modification","Deamidation (NQ)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Deamidation (NQ)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is not present in the text; while the reagent ""iodoacetamide"" is mentioned in the mass spectrometry section, the modification name ""Carbamidomethyl"" is not.
+TRUTH CHECK: The value is unsupported because the modification name is not explicitly written in the paper text.
+COMPLETENESS CHECK: The full set of extracted values is incorrect as neither ""Carbamidomethyl (C)"" nor ""Deamidation (NQ)"" appear in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD021186","","strict","Technical","precursor_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Mass spectrometry analysis"" section of the methods.
+TRUTH CHECK: The paper states ""a mass tolerance of 20 ppm for the precursor masses and 20 ppm for the fragment ions""; therefore, 20 ppm is correct for the precursor mass tolerance.
+COMPLETENESS CHECK: The full set of extracted values contains the only precursor mass tolerance mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

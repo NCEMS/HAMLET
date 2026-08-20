@@ -1,0 +1,255 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD027352","","strict","Biological","cell_line","U2OS, hTERT BJ, hTERT RPE1, hTERT RPE1 p53 KO","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of immortalized cell line names, which matches the field definition.
+SOURCE CHECK: The paper mentions these cell lines in the ""Cell lines and culture"" section, but only U2OS cells were used for the BioID/mass spectrometry experiment (""U2OS cells stably expressing BirA-HAUS6 or BirA alone... were incubated... lysed... streptavidin affinity capture... coupled to mass spectrometry""). The other lines (hTERT BJ, hTERT RPE1, etc.) were used for immunofluorescence, RNAi, and ciliogenesis assays.
+TRUTH CHECK: Only U2OS is the correct cell line for the MS sample; the others are unrelated to the proteomics workflow.
+COMPLETENESS CHECK: The full set includes cell lines that were not analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: U2OS","U2OS"
+"PXD027352","","strict","Biological","cell_type","fibroblasts, neurons","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value consists of cell types, which matches the field definition.
+SOURCE CHECK: The value ""neurons"" is mentioned in the context of a conditional Haus6 KO, but the text does not state that these neurons were analyzed by mass spectrometry; the only MS experiment described is the BioID using U2OS cells. ""Fibroblasts"" are mentioned in the context of ciliogenesis assays, not the MS experiment.
+TRUTH CHECK: The actual MS sample was derived from U2OS cells (a bone osteosarcoma cell line), not fibroblasts or neurons.
+COMPLETENESS CHECK: The full set is incorrect as it identifies cell types from unrelated assays rather than the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: osteosarcoma cell","osteosarcoma cell"
+"PXD027352","","strict","Biological","disease","microcephaly with chorioretinopathy","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a medical diagnosis, which matches the definition of the disease field.
+SOURCE CHECK: The value is explicitly mentioned in the abstract and results (""patient suffering from microcephaly with chorioretinopathy"") and refers to the source of the GCP4 mutant fibroblasts used in the study. However, the mass spectrometry experiment (BioID) was performed using U2OS cells, not these fibroblasts.
+TRUTH CHECK: While the disease is mentioned in the paper, it describes a different experimental arm (ciliogenesis assays in fibroblasts) and not the biological material analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set contains only this value, but it is incorrect because it does not describe the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: healthy","healthy"
+"PXD027352","","strict","Biological","organ","bone","bone","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""bone"" is a valid organ/tissue type.
+SOURCE CHECK: The candidate value is not present in the text; the MS experiment used U2OS cells (osteosarcoma), but the word ""bone"" does not appear in the text.
+TRUTH CHECK: While U2OS is an osteosarcoma cell line (derived from bone), the field definition allows inferring the organ from a well-known cell line.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the tissue of origin for the U2OS cells used in the BioID MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value consists of organism names, which matches the species field definition.
+SOURCE CHECK: The paper describes a BioID mass spectrometry experiment using U2OS cells (human) and also describes experiments using mouse hippocampal neurons (Mus musculus).
+TRUTH CHECK: While both species are mentioned in the paper, the mass spectrometry analysis section specifically describes the BioID experiment using U2OS cells and mentions searching against the ""SwissProt Human release 2021 01"" database. There is no mention of mass spectrometry being performed on the mouse hippocampal neurons.
+COMPLETENESS CHECK: The set includes a species (mouse) that was not analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD027352","","strict","ExperimentalDesign","factor_value","bait (BirA-HAUS6, BirA alone), CEP192 depletion, HAUS6 depletion, NEDD1 depletion, POC5 depletion, GCP4 depletion, GCP4 mutation, Haus6 conditional KO","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes experimental conditions (baits, knockdowns, mutations, and knockouts), which are valid representations of experimental factors.
+SOURCE CHECK: The values are present in the text; however, only ""BirA-HAUS6"" and ""BirA alone"" refer to the biological material actually analyzed by mass spectrometry (the BioID experiment). The other values (CEP192, HAUS6, NEDD1, POC5, GCP4 depletions/mutations and Haus6 cKO) refer to microscopy, western blot, or ciliogenesis assays, not the MS experiment.
+TRUTH CHECK: While the values are mentioned in the paper, the majority are not associated with the MS sample.
+COMPLETENESS CHECK: The full set of extracted values includes the disease state, but the candidate value itself is a mix of MS-relevant and non-MS-relevant factors.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: BirA-HAUS6, BirA alone","BirA-HAUS6, BirA alone"
+"PXD027352","","strict","ExperimentalDesign","factor_value","microcephaly with chorioretinopathy","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value is a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The value is present in the text, but it refers to the clinical diagnosis of the patient whose fibroblasts were used for ciliogenesis assays and imaging, not the sample analyzed by mass spectrometry.
+TRUTH CHECK: While the patient has this condition, the mass spectrometry experiment (BioID) was performed using U2OS cells expressing BirA-HAUS6 or BirA alone.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive of the MS experiment and includes values from unrelated assays.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes a proteomics workflow (BioID) but does not mention any offline peptide or protein fractionation steps; therefore, the default value of 1 is applicable.
+TRUTH CHECK: Since no fractionation is described, the value ""1"" is factually correct.
+COMPLETENESS CHECK: The value ""1"" is complete as it accurately reflects the absence of fractionation described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK: The paper states in the Statistics and reproducibility section that ""The BioID was performed once,"" referring to the proximity labeling experiment that fed into the mass spectrometry analysis.
+TRUTH CHECK: The value is factually correct as the experiment was performed once.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the single performance of the BioID-MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","ExperimentalDesign","technical_replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for technical replicates.
+SOURCE CHECK: The paper states in the ""Mass spectrometry analysis"" section: ""Samples were injected in duplicate (5 μl per injection).""
+TRUTH CHECK: ""In duplicate"" means 2 technical replicates per sample.
+COMPLETENESS CHECK: The full set contains the single correct value identified in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The value is explicitly stated in the ""Mass spectrometry analysis"" section (""The mass spectrometer was operated in a data-dependent acquisition mode"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry analysis"" section: ""Samples were digested with 2 μg trypsin..."".
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","fragment_mass_tolerance","0.6 Da","0.6 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.6 Da"" is explicitly stated in the ""Mass spectrometry analysis"" section of the methods.
+TRUTH CHECK: The text states ""the MS/MS tolerance was 0.6 Da"", and MS/MS refers to fragment ions.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","fragmentation","collision-induced dissociation","collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is present in the paper text (""ions were fragmented by CID"").
+TRUTH CHECK: ""collision-induced dissociation"" is the full name for the abbreviation ""CID"" used in the text.
+COMPLETENESS CHECK: The full set contains the only fragmentation method mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry analysis"" section of the methods.
+TRUTH CHECK: The paper states the sample was analyzed using an ""Orbitrap Fusion Lumos™ Tribrid (Thermo Scientific)"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes a BioID experiment followed by streptavidin affinity capture and mass spectrometry, but does not mention any isobaric, metabolic, or chemical labeling (TMT, SILAC, etc.).
+TRUTH CHECK: Since no labeling method is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as there is only one labeling condition.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of an ""Orbitrap Fusion Lumos™ Tribrid"", which contains an Orbitrap mass analyzer.
+TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap-based system.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for the modification field.
+SOURCE CHECK: The text explicitly mentions ""oxidation in M"" in the Mass spectrometry analysis section.
+TRUTH CHECK: The candidate value is factually correct as it matches the ""oxidation in M"" stated in the paper.
+COMPLETENESS CHECK: The full set of extracted values contains ""Oxidation (M)"", but also includes ""Deamidation (NQ)"" and a crosslinker modification, neither of which are mentioned in the text; only ""oxidation in M"" and ""acetylation in protein N-terminus"" are explicitly listed as search parameters.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","modification","Deamidation (NQ)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text.
+TRUTH CHECK: The paper does not mention deamidation as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","modification","Ammonium-quenched monolink of BS2-G crosslinker (K)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification (crosslinker residue), which fits the category of the modification field.
+SOURCE CHECK: The candidate value is not present in the paper text; the paper describes a BioID proximity labeling experiment, not a BS3/BS2 crosslinking experiment.
+TRUTH CHECK: The value is factually incorrect for this experiment as no crosslinking with BS2-G is mentioned.
+COMPLETENESS CHECK: The full set of extracted values contains hallucinations and is not based on the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","modification","not applicable","Oxidation (M)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is a placeholder indicating the absence of a value, but the field definition requires specific modifications searched.
+SOURCE CHECK: The paper text explicitly mentions ""oxidation in M"" and ""acetylation in protein N-terminus"" in the Mass spectrometry analysis section.
+TRUTH CHECK: The candidate value ""not applicable"" is factually incorrect because the paper does explicitly list modifications used in the database search.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; it includes hallucinations (Deamidation, BS2-G crosslinker) and a placeholder, while missing the explicitly mentioned N-terminal acetylation.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: modification
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD027352","","strict","Technical","precursor_mass_tolerance","10 ppm","10 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which matches the definition for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Mass spectrometry analysis"" section of the methods.
+TRUTH CHECK: The paper states ""Peptide mass tolerance was 10 ppm"", which refers to the precursor (MS1) tolerance.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

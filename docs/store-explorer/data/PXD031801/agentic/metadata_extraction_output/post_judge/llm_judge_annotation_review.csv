@@ -1,0 +1,253 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD031801","","strict","Biological","cell_line","HEK293T, B16-F10, MC38, LLC, NIH-3T3, A549, SW480","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of cell line names, which matches the category for the cell_line field.
+SOURCE CHECK: While these cell lines are mentioned in the paper, only the material used for the mass spectrometry (MS) analysis is valid; the MS section describes analyzing ""pulldown samples"" to identify E3 ubiquitin ligases interacting with TGF-β1 and PKA, and phosphorylation of TGF-β1. The text mentions that for these specific MS experiments, TGF-β1 was overexpressed in HEK293T cells (e.g., ""PRKACA overexpression increased total and K63-linked ubiquitination of TGF-β1 in HEK293T cells"" and ""MS analysis of the protein content and Ser/Thr phosphorylation of TGF-β1 was performed by using a Q Exactive system""). The other cell lines (B16-F10, MC38, LLC, NIH-3T3, A549, SW480) were used for tumor growth, transfection, or functional assays, not as the source for the MS analysis.
+TRUTH CHECK: Only HEK293T is the correct source for the MS analysis described; the others are used in unrelated experimental contexts.
+COMPLETENESS CHECK: The full set includes multiple cell lines, most of which are not the MS sample source.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HEK293T","HEK293T"
+"PXD031801","","strict","Biological","disease","colon cancer","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""colon cancer"" is a disease state, which matches the field definition.
+SOURCE CHECK: The value is present in the text; the paper describes the use of MC38 colon cancer cells and SW480 human colon cancer cells.
+TRUTH CHECK: The paper explicitly mentions ""MC38 colon cancer cells"" and ""SW480 human colon cancer cells"". However, the MS experiment specifically analyzed protein interactions with TGF-β1 and PKA, and the text states ""we analyzed protein interactions with TGF-β1 and PKA by mass spectrometry (MS)"". The samples used for this MS analysis were pulldown samples (likely from the HEK293T or NIH-3T3 cells used for the interaction screens, as these are the standard systems for the described plasmid transfections and pulldowns), not the colon cancer cells themselves. The colon cancer cells were used for tumor growth and supernatant assays, not the MS interaction analysis.
+COMPLETENESS CHECK: The full set contains only ""colon cancer"", but this does not reflect the material actually analyzed by MS.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Biological","organ","kidney","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""kidney"" is a valid category for the organ field.
+SOURCE CHECK: The word ""kidney"" does not appear in the provided paper text, nor is any kidney-derived material used in the MS experiment.
+TRUTH CHECK: The value is not supported by the text; the MS analysis was performed on pulldown samples (likely from cell lines like HEK293T or T cells, as described in the context of the protein interaction studies).
+COMPLETENESS CHECK: The full set consists of a single hallucinated value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Biological","species","Homo sapiens, Mus musculus","Homo sapiens, Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains organism names, which matches the definition of the species field.
+SOURCE CHECK: The paper describes mass spectrometry (MS) analysis of protein interactions and phosphorylation of TGF-β1; the materials used for these MS experiments include HEK293T cells (human) and CD4+ T cells (mouse).
+TRUTH CHECK: The text explicitly mentions the use of human cells (HEK293T) and mouse cells (CD4+ T cells) in the context of the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values covers both the human and mouse sources used for the MS experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","ExperimentalDesign","factor_value","PKA treatment/overexpression (Control, PKA)","PKA treatment/overexpression (Control, PKA)","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value describes an experimental condition/contrast, which is a valid category for factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context; the paper describes using MS to analyze protein interactions with TGF-β1 and PKA, and specifically mentions PRKACA (PKA catalytic subunit) overexpression in HEK293T cells to study phosphorylation and ubiquitination.
+TRUTH CHECK: The paper explicitly describes experiments comparing control conditions to those with PRKACA overexpression (e.g., ""PRKACA overexpression increased total and K63-linked ubiquitination of TGF-β1 in HEK293T cells"").
+COMPLETENESS CHECK: The full set of extracted values includes ""colon cancer"" and this PKA condition, but it misses other key factors mentioned in the MS context (such as the comparison between TGF-β1 and its mutants T282A or K315R, or the use of UDCA).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: PKA treatment/overexpression (Control, PKA), colon cancer, UDCA treatment, TGF-β1 mutants (T282A, K315R)","PKA treatment/overexpression (Control, PKA), colon cancer, UDCA treatment, TGF-β1 mutants (T282A, K315R)"
+"PXD031801","","strict","ExperimentalDesign","factor_value","colon cancer","PKA treatment/overexpression (Control, PKA)","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""colon cancer"" is a valid category for a factor_value as it describes a disease state/characteristic of the sample.
+SOURCE CHECK: The value is present in the text; however, it refers to MC38 colon cancer cells used in tumor growth and EV experiments, not the material analyzed by mass spectrometry. The MS analysis was performed on pulldown samples to identify E3 ligases interacting with TGF-β1 and PKA, and to identify phosphorylation sites on TGF-β1, using HEK293T cells (as indicated in the ""Mass spectrometry"" and ""TGF-β1 with T282 phosphorylation by PKA binds increased CHIP"" sections).
+TRUTH CHECK: The value is factually present in the paper but is incorrect for the MS experiment context.
+COMPLETENESS CHECK: The full set of extracted values is incorrect because it includes a disease state unrelated to the MS sample and a treatment factor that is not the primary focus of the MS pulldown.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes a mass spectrometry workflow (""Each pulldown sample was run just in the separation gel... subjected to in-gel trypsin digestion... loaded onto the column using an autosampler"") but does not mention any offline fractionation step.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as it accurately reflects the lack of fractionation described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the mass spectrometry experiments.
+TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
+COMPLETENESS CHECK: The full set contains only this value, which is the appropriate default for this paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.
+TRUTH CHECK: According to the safe defaults in the field definitions, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The value ""1"" is the standard default for a silent paper and is complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions the use of a ""Q Exactive system"" for mass spectrometry, but it does not explicitly state the acquisition method (e.g., DDA or DIA).
+TRUTH CHECK: There is no mention of ""data-dependent acquisition"" or any other specific acquisition scheme in the provided text.
+COMPLETENESS CHECK: The full set contains only one value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section: ""...then subjected to in-gel trypsin digestion and dried.""
+TRUTH CHECK: The value is factually correct as the paper states trypsin was used for digestion.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","fragment_mass_tolerance","17 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""17 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The value is hallucinated; therefore, the set is not correct.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided paper text.
+TRUTH CHECK: The paper mentions the use of a ""Q Exactive system (Thermo Fisher)"" for MS analysis, but it does not explicitly state the fragmentation method used (e.g., HCD or CID).
+COMPLETENESS CHECK: The value is not present in the text, so the set is not based on the provided source.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is not present in the paper text; the text explicitly mentions a ""Q Exactive system (Thermo Fisher)"" for the MS analysis.
+TRUTH CHECK: The value is factually incorrect as the paper specifies a Q Exactive, not an Orbitrap Fusion Lumos.
+COMPLETENESS CHECK: The full set is incorrect and does not reflect the instrument described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Q Exactive","Q Exactive"
+"PXD031801","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of pulldown samples but does not mention any isobaric, metabolic, or chemical labeling reagents or methods.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the lack of labeling described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The paper states that MS analysis was performed using a ""Q Exactive system (Thermo Fisher)"", and the Q Exactive is a well-known Orbitrap-based instrument.
+TRUTH CHECK: The value is factually correct as the Q Exactive uses an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the MS experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","modification","Oxidation (M)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category (a protein modification) for this field.
+SOURCE CHECK: The term ""Oxidation (M)"" or any mention of methionine oxidation is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text; it is not a reported modification for the MS experiments described.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications, none of which are explicitly mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Phospho (STY)"" describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Ser/Thr phosphorylation of TGF-β1"" and ""phosphorylation of TGF-β1 at T282"" in the context of the mass spectrometry (MS) analysis.
+TRUTH CHECK: The paper confirms that MS was used to identify phosphorylation sites (specifically T282) on TGF-β1.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications; however, the paper only explicitly mentions phosphorylation in the MS context. Other values like ""Oxidation (M)"" or ""replacement of proton with ammonium ion"" are not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The phrase ""Lysine oxidation to aminoadipic semialdehyde (K)"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not supported.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text as being searched for in the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","modification","replacement of proton with ammonium ion (D)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification, which is the correct category for the modification field.
+SOURCE CHECK: The phrase ""replacement of proton with ammonium ion (D)"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is not a known standard modification for the described experiment.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","modification","not applicable","Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a valid modification name or a description of a protein modification.
+SOURCE CHECK: The paper does not state that modifications are ""not applicable""; rather, it explicitly mentions phosphorylation and ubiquitination in the context of MS.
+TRUTH CHECK: The value is factually incorrect as the paper describes MS analysis specifically to identify phosphorylation sites (T282).
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text and one ""not applicable"" value, failing to accurately reflect the paper.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031801","","strict","Technical","precursor_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which matches the required category for this field.
+SOURCE CHECK: The value ""9 ppm"" is not present in the provided paper text.
+TRUTH CHECK: The paper mentions the use of a ""Q Exactive system (Thermo Fisher)"" for mass spectrometry, but it does not specify the precursor mass tolerance used during the database search.
+COMPLETENESS CHECK: The value is not present in the text, so it cannot be correct or complete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

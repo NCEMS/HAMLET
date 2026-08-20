@@ -1,0 +1,328 @@
+{
+  "paper_id": "PXD027729",
+  "annotations": [
+    {
+      "annotation_type": "disease",
+      "extracted_value": "trypanosomiasis",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "no disease",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"trypanosomiasis\" is a disease name, which matches the required category for this field.",
+        "SOURCE_CHECK": "The paper describes identifying inhibitors for Trypanothione synthetase (Try) from pathogens like *Trypanosoma brucei*, *T. cruzi*, and *L. infantum*, which cause trypanosomiasis; however, the actual MS sample was recombinant enzyme (TbTry) expressed and purified from *E. coli*.",
+        "TRUTH_CHECK": "The MS experiment was performed on purified recombinant protein (TbTry) to study the covalent modification by Ebselen, not on biological samples from a diseased host or infected tissue. While the study's goal is to treat trypanosomiasis, the material analyzed by MS does not have a \"disease state\" in the clinical sense.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is conceptually misapplied to the MS sample."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "T. brucei, T. cruzi, L. infantum",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "T. brucei",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "The mass spectrometry analysis was specifically performed on recombinant Trypanothione synthetase (Try) from Trypanosoma brucei (TbTry) to identify the Ebselen modification site; while T. cruzi and L. infantum enzymes were used in biochemical assays, they were not analyzed by MS.",
+        "TRUTH_CHECK": "Only T. brucei is the source of the material actually analyzed by mass spectrometry in this paper.",
+        "COMPLETENESS_CHECK": "The full set includes species that were not part of the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (Ebselen-treated, untreated)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental groups (treated vs untreated), which is a correct category for a factor_value.",
+        "SOURCE_CHECK": "The value is derived from the MS experiment context, where TbTry was incubated with Ebselen (Sample A) or used as a control (Sample B).",
+        "TRUTH_CHECK": "The paper explicitly describes comparing TbTry treated with Ebselen against an untreated control for mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the treatment contrast and the disease context, covering the experimental design."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "trypanosomiasis",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease name, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value \"trypanosomiasis\" is not explicitly mentioned in the text; the paper discusses \"trypanosomatids\" and specific pathogens (T. brucei, T. cruzi, L. donovani) that cause such diseases.",
+        "TRUTH_CHECK": "While the study targets enzymes from pathogens that cause trypanosomiasis, the actual MS experiment was performed on recombinant proteins (TbTry) purified from E. coli, not on infected subjects or diseased tissues.",
+        "COMPLETENESS_CHECK": "The full set includes a treatment contrast and a disease, but the disease value is not applicable to the MS sample."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The paper describes a proteomics workflow (trypsin digestion, ZipTip desalting, and LC-MS/MS) but mentions no offline fractionation step.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" fully represents the lack of fractionation described in the paper."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The value \"2\" is not mentioned as the number of biological replicates for the mass spectrometry experiment; the paper mentions \"duplicate\" for the pilot screening and \"quadruplicate\" for hit validation, but these are biochemical assays, not the MS experiment.",
+        "TRUTH_CHECK": "The mass spectrometry section describes treating samples (A, B, C) but does not explicitly state the number of biological replicates used for the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical_replicates.",
+        "SOURCE_CHECK": "The paper mentions that a pilot screening was \"performed in duplicate\" and that some DRC studies were \"tested in duplicate\", but these refer to the HTS/biochemical assays, not the mass spectrometry experiment.",
+        "TRUTH_CHECK": "The mass spectrometry section does not specify the number of technical replicates for the LC-MS/MS analysis of the TbTry enzyme.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Mass spectrometry assays\" section (\"A top-12 data-dependent method was used for mass data acquisition\").",
+        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only acquisition method mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry assays\" section (\"digested overnight at 37 °C using sequencing grade trypsin\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper states trypsin was used for the protein digestion prior to MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "8 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"8 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify a fragment mass tolerance value; it mentions resolution (17,500 at 200 m/z) but not a ppm tolerance for fragments.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"high-energy collision dissociation cell\" (HCD) in the methods section under \"Liquid chromatography-MS/MS analysis\".",
+        "TRUTH_CHECK": "\"Beam-type collision-induced dissociation\" is a technical synonym for HCD (Higher-energy Collisional Dissociation), but the paper explicitly uses the term \"high-energy collision dissociation\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the fragmentation method used."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry assays\" section as the instrument used for the LC-MS/MS analysis of the recombinant enzyme.",
+        "TRUTH_CHECK": "The paper states \"Liquid chromatography-MS/MS analysis was performed with an UltiMate 3000 liquid chromatography system (Thermo Fisher Scientific) coupled to a Q Exactive Plus mass spectrometer\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry analysis of recombinant TbTry treated with Ebselen and a control, but mentions no isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl).",
+        "TRUTH_CHECK": "Since no labeling methods are described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as there is only one labeling condition."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q Exactive Plus mass spectrometer\", which is a well-known Orbitrap-based instrument.",
+        "TRUTH_CHECK": "The Q Exactive Plus uses an Orbitrap mass analyzer, making this value factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is mentioned in the \"Computational analysis\" section describing the search parameters for the mass spectrometry data.",
+        "TRUTH_CHECK": "The paper explicitly states \"cysteine carbamidomethylation\" was defined as a variable modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"Oxidation (M)\"; the text also mentions \"cysteine di and tri oxidation\" and \"Ebselen covalent modification\", but the candidate value itself is a correct individual extraction."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "Carbamidomethyl (C), Oxidation (M), cysteine di oxidation, cysteine tri oxidation, Ebselen covalent modification",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Computational analysis\" section as a search parameter for the mass spectrometry data.",
+        "TRUTH_CHECK": "The paper explicitly states \"methionine oxidation\" was defined as a variable modification. \"Oxidation (M)\" is a standard equivalent representation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") is incomplete because the paper also explicitly lists \"cysteine di and tri oxidation\" and \"Ebselen covalent modification (+274.985 Da) in cysteine/lysine\"."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "A search of the paper text reveals no mention of \"6 ppm\" or any other specific precursor mass tolerance value.",
+        "TRUTH_CHECK": "The value is not present in the text and cannot be inferred.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+      }
+    }
+  ]
+}

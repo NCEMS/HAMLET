@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "age",
-      "extracted_value": "42 to 78",
+      "extracted_value": "28 to 81 years, 42 to 78 years, 31 to 78 years",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -14,29 +14,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric range representing age, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Sample Set Composition\" section of the methods, specifically referring to the eight patients in Sample set 1 used for the 2D-DIGE and label-free LC-MS experiments.",
-        "TRUTH_CHECK": "The value \"42 to 78\" correctly reflects the age range of the patients whose tissues were analyzed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The full set contains the age range for the MS samples; per the field definition, a single matching value/range is sufficient."
+        "TYPE_CHECK": "The candidate value consists of age ranges, which matches the required category for the age field.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"Clinical Data\" and \"Sample Set Composition\" sections of the methods.",
+        "TRUTH_CHECK": "The values are factually correct: \"28 to 81 years\" refers to the total patient pool, \"42 to 78\" refers to Sample Set 1 (used for MS), and \"31 to 78\" refers to Sample Set 2.",
+        "COMPLETENESS_CHECK": "The full set includes the specific range for the MS samples (Sample Set 1: 42 to 78) as well as the broader cohorts. Per the field definition, a single matching value for the MS sample is sufficient, but providing the ranges mentioned is also accurate."
       }
     },
     {
       "annotation_type": "disease",
       "extracted_value": "cholangiocellular carcinoma",
-      "verdict": "medium",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "incomplete",
-      "corrected_value": "cholangiocellular carcinoma, normal",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease name, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the title, abstract, and methods as the disease state of the tumorous tissue analyzed by mass spectrometry.",
+        "TYPE_CHECK": "The candidate value is a disease/diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the title and throughout the text as the disease state of the tumorous tissue analyzed by mass spectrometry.",
         "TRUTH_CHECK": "The value is factually correct as the study focuses on identifying biomarkers for cholangiocellular carcinoma (CCC).",
-        "COMPLETENESS_CHECK": "The full set contains the primary disease under study; however, the study also analyzed \"non-tumorous liver tissue\" (controls), which would typically be represented as \"normal\" or \"healthy\" in a complete set."
+        "COMPLETENESS_CHECK": "The full set contains the primary disease studied; however, the study also includes \"non-tumorous liver tissue\" as a control group. While \"cholangiocellular carcinoma\" is the primary disease, the control group is typically represented by a safe default like \"normal\" or \"healthy\" in this field. However, since the candidate value correctly identifies the disease of interest, it is accurate."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"liver\" is a valid organ/tissue name.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text; the MS samples were derived from \"tumorous tissue and adjacent non-tumorous liver tissue from eight CCC patients\".",
-        "TRUTH_CHECK": "The value is factually correct as the study analyzed liver tissue (both tumorous and non-tumorous).",
-        "COMPLETENESS_CHECK": "The full set contains \"liver\", which accurately describes the organ of origin for all samples analyzed by mass spectrometry in this study."
+        "TYPE_CHECK": "The candidate value \"liver\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The paper explicitly states that \"Tumorous tissue and adjacent non-tumorous liver tissue from eight CCC patients were analyzed by means of... mass-spectrometry-based label-free proteomics.\"",
+        "TRUTH_CHECK": "The value is factually correct as the samples were derived from the liver.",
+        "COMPLETENESS_CHECK": "The full set contains \"liver\", which covers the biological source of the MS samples described in the paper."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper describes analyzing tissue from \"CCC patients\" and \"University Hospital of Essen,\" which clearly indicates human samples.",
-        "TRUTH_CHECK": "The samples are from human patients, making \"Homo sapiens\" factually correct.",
-        "COMPLETENESS_CHECK": "Only one species is involved in the study, and it has been correctly extracted."
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes samples from \"CCC patients\" and \"University Hospital of Essen,\" and mentions \"human\" in the context of patients, making \"Homo sapiens\" a correct and reasonable inference.",
+        "TRUTH_CHECK": "The study uses human tissue from patients with cholangiocellular carcinoma.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the species involved in the MS experiment."
       }
     },
     {
@@ -91,9 +91,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the experimental groups/conditions being compared, which is a correct category for factor_value.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Results\" and \"Methods\" sections as the two groups analyzed by 2D-DIGE and label-free LC-MS/MS.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental design comparing CCC tumor tissue and non-tumorous liver tissue.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental contrast and the specific disease state."
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Quantitative Proteomic Analysis\" section, describing the comparison of CCC tumor tissue and non-tumorous liver tissue.",
+        "TRUTH_CHECK": "The value accurately reflects the experimental design described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (including the specific disease name and the group contrast) covers the experimental factors described."
       }
     },
     {
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease state, which is a valid characteristic for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the disease state of the tumorous tissue analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on identifying biomarkers for cholangiocellular carcinoma (CCC).",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific disease and a description of the contrast (tumor vs non-tumorous), which together exhaustively cover the experimental factors described."
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is explicitly mentioned as the disease state of the tumor tissue analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study compares CCC tumor tissue to non-tumorous liver tissue.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific disease and a description of the contrast (CCC vs non-tumorous), which together exhaustively cover the experimental factor."
       }
     },
     {
@@ -129,14 +129,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes a label-free LC-MS/MS workflow and a 2D-DIGE workflow, neither of which mentions an offline fractionation step (such as high-pH RP or SAX) prior to the LC-MS/MS analysis.",
+        "SOURCE_CHECK": "The paper describes a label-free LC-MS/MS workflow and a 2D-DIGE workflow; neither mentions any offline peptide or protein fractionation steps.",
         "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set contains only the value \"1\", which accurately reflects the lack of fractionation described in the text."
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "8",
+      "extracted_value": "16",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper states that \"Tumorous tissue and adjacent non-tumorous liver tissue from eight CCC patients were analyzed\" and later confirms \"CCC tumor tissue (n = 8) in comparison to that of non-tumorous liver tissue (n = 8)\".",
-        "TRUTH_CHECK": "The value 8 correctly reflects the number of biological replicates (patients) used in the primary proteomics experiments (Sample Set 1).",
-        "COMPLETENESS_CHECK": "The full set contains the value 8, which accurately covers the biological replication for the MS analysis described."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The value \"16\" is the sum of the two groups in Sample Set 1 (8 CCC tumor tissue and 8 non-tumorous liver tissue) used for the proteomics experiments.",
+        "TRUTH_CHECK": "The paper states \"CCC tumor tissue (n = 8) in comparison to that of non-tumorous liver tissue (n = 8)\", totaling 16 biological samples.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly represents the total number of biological replicates across the two primary experimental groups for the MS analysis."
       }
     },
     {
@@ -166,10 +166,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the LC-MS/MS or MALDI-TOF-MS experiments.",
-        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when no replication is mentioned.",
-        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a study where technical replicates are not specified."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the LC-MS/MS or MALDI-TOF-MS experiments.",
+        "TRUTH_CHECK": "According to the field definitions, \"1\" is the correct safe default when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it represents the default state for a study where no technical replication is described."
       }
     },
     {
@@ -185,29 +185,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the LC-MS/MS Analysis section (\"The mass spectrometer was operated in data-dependent mode\").",
-        "TRUTH_CHECK": "The value is factually correct as the paper explicitly states the use of data-dependent mode.",
+        "TYPE_CHECK": "The candidate value describes a mass spectrometry acquisition scheme, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states in the LC-MS/MS Analysis section: \"The mass spectrometer was operated in data-dependent mode.\"",
+        "TRUTH_CHECK": "\"Data-dependent acquisition\" is a standard synonym for \"data-dependent mode.\"",
         "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned for the LC-MS/MS experiment."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "-0.264059 ppm",
-      "verdict": "low",
+      "extracted_value": "0.4 Da",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "0.4 Da",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"-0.264059 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text; the paper explicitly states a fragment ion mass tolerance of \"0.4 Da\" for the label-free analysis.",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value and fails to capture the actual value mentioned in the text."
+        "SOURCE_CHECK": "The value \"0.4 Da\" is explicitly stated in the \"Protein Identification\" section of the Label-free Analysis as the fragment ion mass tolerance.",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly linked to the fragment ion mass tolerance in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned for the LC-MS/MS experiment."
       }
     },
     {
@@ -225,8 +225,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS Analysis\" section as the method used for peptide fragmentation.",
-        "TRUTH_CHECK": "The paper states that tandem mass spectra were measured \"after peptide fragmentation by collision-induced dissociation.\"",
-        "COMPLETENESS_CHECK": "This is the only fragmentation method mentioned for the MS/MS analysis, so the set is exhaustive."
+        "TRUTH_CHECK": "The paper states that tandem mass spectra were measured \"after peptide fragmentation by collision-induced dissociation\".",
+        "COMPLETENESS_CHECK": "This is the only fragmentation method mentioned for the MS/MS analysis; the set is exhaustive."
       }
     },
     {
@@ -242,9 +242,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains two mass spectrometer models, which fits the definition of the instrument field.",
+        "TYPE_CHECK": "The candidate value contains mass spectrometer models, which is the correct category for this field.",
         "SOURCE_CHECK": "Both instruments are explicitly mentioned in the methods section as being used for the proteomics analysis (UltraFlex II for MALDI-TOF-MS and LTQ Orbitrap Elite for LC-MS/MS).",
-        "TRUTH_CHECK": "The paper mentions \"UltraFlex II instrument (Bruker Daltonics)\" and \"LTQ Orbitrap Elite (Thermo Scientific)\".",
+        "TRUTH_CHECK": "The paper mentions \"UltraFlexTM II instrument (Bruker Daltonics)\" and \"LTQ Orbitrap Elite (Thermo Scientific)\".",
         "COMPLETENESS_CHECK": "The full set of extracted values covers both mass spectrometers used in the study."
       }
     },
@@ -261,10 +261,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
         "SOURCE_CHECK": "The paper explicitly mentions \"mass-spectrometry-based label-free proteomics\" and \"label-free LC-MS/MS\" in the abstract and results sections.",
-        "TRUTH_CHECK": "The value is factually correct as the LC-MS/MS experiment was label-free. While the 2D-DIGE part of the study used cyanine dyes, these are fluorescent dyes for gel imaging, not the isobaric or metabolic peptide labels (like TMT or SILAC) that would invalidate a \"label-free\" designation for the mass spectrometry analysis.",
-        "COMPLETENESS_CHECK": "The full set contains \"label free\", which accurately describes the LC-MS/MS proteomics experiment."
+        "TRUTH_CHECK": "The value is factually correct as the paper describes a label-free LC-MS/MS experiment. While the paper also uses 2D-DIGE (which uses Cy-dyes), these are gel-based dyes and not the isobaric, metabolic, or chemical peptide labeling (like TMT or SILAC) that would disqualify a \"label-free\" designation for the LC-MS/MS proteomics workflow.",
+        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which accurately describes the LC-MS/MS portion of the study."
       }
     },
     {
@@ -281,28 +281,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the text, specifically referring to the \"LTQ Orbitrap Elite\" used for the label-free LC-MS/MS analysis.",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used is an Orbitrap.",
-        "COMPLETENESS_CHECK": "The full set contains \"orbitrap\", which covers the mass analyzer used for the primary LC-MS/MS experiment (though a MALDI-TOF was also used for 2D-DIGE spots, \"orbitrap\" is a correct extraction for the main proteomics workflow)."
+        "SOURCE_CHECK": "The value is present in the text, specifically in the \"LC-MS/MS Analysis\" section which describes the instrument used for the label-free proteomics experiment (\"LTQ Orbitrap Elite\").",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used was an Orbitrap.",
+        "COMPLETENESS_CHECK": "The full set contains \"orbitrap\", which covers the mass analyzer used for the LC-MS/MS analysis. (Note: The paper also mentions MALDI-TOF-MS, but \"orbitrap\" is a correct extraction for the primary LC-MS/MS workflow)."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "8 ppm",
-      "verdict": "low",
+      "extracted_value": "5 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "5 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"8 ppm\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states a \"precursor ion mass tolerance of 5 ppm\" for the label-free analysis and a \"mass tolerance of 100 ppm\" for the MALDI-TOF-MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains only a value that is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Protein Identification\" section of the Label-free Analysis, referring to the LC-MS/MS experiment.",
+        "TRUTH_CHECK": "The paper explicitly states \"precursor ion mass tolerance of 5 ppm\".",
+        "COMPLETENESS_CHECK": "This is the only precursor mass tolerance reported for the LC-MS/MS experiment; the MALDI-TOF-MS experiment reports a general \"mass tolerance of 100 ppm\", but \"5 ppm\" is a correct extraction for the label-free proteomics workflow."
       }
     }
   ]

@@ -11,6 +11,8 @@
     "material_type",
     "instrument",
     "label",
+    "precursor_mass_tolerance",
+    "fragment_mass_tolerance",
     "replicates",
     "technical_replicates",
     "fractions",
@@ -60,20 +62,20 @@
     "disease": {
       "builder_field": "disease",
       "pipeline_values": [
-        "AD + CVD, normal"
+        "AD + CVD"
       ],
-      "selected_value": "AD + CVD, normal",
-      "selection_source": "judge_high_confidence",
-      "apply_override": false,
+      "selected_value": "AD + CVD, healthy",
+      "selection_source": "judge_corrected_value",
+      "apply_override": true,
       "judge_rows": [
         {
-          "extracted_value": "AD + CVD, normal",
-          "verdict": "high",
+          "extracted_value": "AD + CVD",
+          "verdict": "medium",
           "value_correct": true,
-          "value_complete": true,
+          "value_complete": false,
           "hallucination": false,
           "type_mismatch": false,
-          "corrected_value": null
+          "corrected_value": "AD + CVD, healthy"
         }
       ]
     },
@@ -140,15 +142,15 @@
     "replicates": {
       "builder_field": "biological_replicate",
       "pipeline_values": [
-        "12",
-        "3 biological replicates per experimental condition"
+        "3 biological replicates per condition",
+        "6"
       ],
-      "selected_value": "3 biological replicates per experimental condition",
+      "selected_value": "3 biological replicates per condition",
       "selection_source": "judge_high_confidence",
       "apply_override": true,
       "judge_rows": [
         {
-          "extracted_value": "3 biological replicates per experimental condition",
+          "extracted_value": "3 biological replicates per condition",
           "verdict": "high",
           "value_correct": true,
           "value_complete": true,
@@ -157,11 +159,31 @@
           "corrected_value": null
         },
         {
-          "extracted_value": "12",
+          "extracted_value": "6",
           "verdict": "low",
           "value_correct": false,
           "value_complete": false,
-          "hallucination": true,
+          "hallucination": false,
+          "type_mismatch": false,
+          "corrected_value": "3"
+        }
+      ]
+    },
+    "technical_replicates": {
+      "builder_field": "technical_replicate",
+      "pipeline_values": [
+        "1"
+      ],
+      "selected_value": "1",
+      "selection_source": "judge_high_confidence",
+      "apply_override": false,
+      "judge_rows": [
+        {
+          "extracted_value": "1",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
+          "hallucination": false,
           "type_mismatch": false,
           "corrected_value": null
         }
@@ -170,14 +192,14 @@
     "factor_value": {
       "builder_field": "factor_value",
       "pipeline_values": [
-        "diagnosis (AD + CVD, healthy age-matched control), fraction (soluble, particulate)"
+        "condition (AD + CVD, Ctrl), fraction (soluble, particulate)"
       ],
-      "selected_value": "diagnosis (AD + CVD, healthy age-matched control), fraction (soluble, particulate)",
+      "selected_value": "condition (AD + CVD, Ctrl), fraction (soluble, particulate)",
       "selection_source": "judge_high_confidence",
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "diagnosis (AD + CVD, healthy age-matched control), fraction (soluble, particulate)",
+          "extracted_value": "condition (AD + CVD, Ctrl), fraction (soluble, particulate)",
           "verdict": "high",
           "value_correct": true,
           "value_complete": true,

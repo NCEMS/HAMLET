@@ -1,0 +1,232 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD039401","","strict","Biological","cell_line","MOLT4, K562, NCI-H1299, NCI-H2228, LNCaP, 22RV1, PC3, DU145, HEK 293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of cell line names, which matches the required category for this field.
+SOURCE CHECK: While all these cell lines are mentioned in the paper, only MOLT4 and HEK 293T were used for the actual mass spectrometry experiments (Competitive ABPP and TurboID-bait assay). K562, NCI-H1299, NCI-H2228, LNCaP, 22RV1, PC3, and DU145 were used for viability assays, immunoblotting, or RNA-seq, but not for MS analysis.
+TRUTH CHECK: The value is factually incorrect because it includes cell lines that were not analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set is incorrect as it conflates all cell lines used in the study with those used specifically for the proteomics experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: MOLT4, HEK 293T","MOLT4, HEK 293T"
+"PXD039401","","strict","Biological","cell_type","T-cell, epithelial kidney, lung cancer, prostate cancer","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains a list of cell types/lineages, which matches the category for the `cell_type` field.
+SOURCE CHECK: The paper describes three distinct proteomics experiments: 1) Competitive ABPP using MOLT4 cells (T-cell acute lymphoblastic leukemia), 2) TurboID-bait assay using 293T cells (epithelial kidney), and 3) TMT-based proteomics using MOLT4 cells. Other cell lines (LNCaP, PC3, DU145, H1299, NCI-H2228) were used for viability assays, immunoblotting, or RNA-seq, but not for the MS experiments.
+TRUTH CHECK: ""T-cell"" (MOLT4) and ""epithelial kidney"" (293T) are correct for the MS samples. However, ""lung cancer"" and ""prostate cancer"" refer to cell lines used in viability and immunoblotting assays, not the proteomics samples.
+COMPLETENESS CHECK: The full set includes values that are not part of the MS experimental context.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: T-cell, epithelial kidney","T-cell, epithelial kidney"
+"PXD039401","","strict","Biological","disease","acute lymphoblastic leukemia, prostate cancer, non-small cell lung cancer","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of disease states, which matches the category for the disease field.
+SOURCE CHECK: The values are present in the text: ""MOLT4 human T-cell acute lymphoblastic leukemia (T-ALL) cells"", ""prostate cancer cell lines"", and ""NSCLC"" (non-small cell lung cancer).
+TRUTH CHECK: The values are factually correct; however, the field definition requires that the value refers to the biological material that was ACTUALLY ANALYSED BY MASS SPECTROMETRY.
+COMPLETENESS CHECK: The full set of extracted values includes diseases associated with cell lines used in various assays, but not all were used for MS.
+
+Detailed Analysis:
+1. The paper describes three distinct proteomics/MS experiments:
+ - Competitive ABPP: Used MOLT4 cells (T-ALL).
+ - TurboID-bait: Used 293T cells (epithelial kidney).
+ - TMT-based proteomics: Used MOLT4 cells (T-ALL).
+2. Prostate cancer cell lines (LNCaP, 22RV1, PC3, DU145) and NSCLC cells (NCI-H2228) were used for viability assays, immunoblotting, and NanoBRET, but there is no mention of them being analyzed by mass spectrometry.
+3. 293T cells were used for the TurboID MS experiment. While 293T is often considered a ""normal"" or ""transformed"" line rather than a specific cancer disease model in this context, the T-ALL (MOLT4) is explicitly linked to the MS data.
+
+Therefore, ""prostate cancer"" and ""non-small cell lung cancer"" are from unrelated experimental contexts (viability/immunoblotting) and are hallucinated for the purpose of describing the MS samples.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: acute lymphoblastic leukemia","acute lymphoblastic leukemia"
+"PXD039401","","strict","Biological","organ","kidney","kidney","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The value is inferable from the ""HEK 293T"" cell line, which is explicitly listed as ""epithelial kidney HEK 293T"" in the Experimental Model and Subject Details and was used for the TurboID-bait MS experiment.
+TRUTH CHECK: The value is factually correct as HEK 293T cells are derived from human embryonic kidney cells.
+COMPLETENESS CHECK: The paper describes three distinct proteomics experiments: one using MOLT4 cells (T-cell leukemia), one using 293T cells (kidney), and one using MOLT4 cells for TMT-based proteomics. The current set only includes ""kidney"", missing the ""T-cell"" or ""blood/bone marrow"" origin for the MOLT4 samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""kidney"", ""T-cell""]","kidney, T-cell"
+"PXD039401","","strict","Biological","sex","male","male","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""male"" is a valid entry for the sex field.
+SOURCE CHECK: The value is present in the ""Experimental Model and Subject Details"" section, where several cell lines used in the study (e.g., MOLT4, NCI-H1299, LNCaP) are listed as having a donor sex of ""male"".
+TRUTH CHECK: The value is factually correct as it is explicitly stated for multiple cell lines used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also explicitly lists several cell lines as ""female"" (e.g., K562, NCI-H2228, 293T).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""male"", ""female""]","male, female"
+"PXD039401","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a valid species name.
+SOURCE CHECK: The value is present in the paper text; the MS analysis was performed on human cell lines (MOLT4, 293T) and the database search was explicitly set to ""Homo sapiens"".
+TRUTH CHECK: The value is factually correct as the biological materials analyzed by mass spectrometry were human cell lines.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for the species involved in the MS experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","ExperimentalDesign","factor_value","treatment (DMSO, PL, 955, SNS-032), time point, cell type","treatment (DMSO, PL, 955, SNS-032), time point, cell type | acute lymphoblastic leukemia, prostate cancer, non-small cell lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variables (treatment, time, cell type) and their specific levels, which is the correct category for factor_value.
+SOURCE CHECK: These factors are explicitly described in the context of the MS experiments: the TMT-based proteomics compared 955 vs SNS-032 (treatments) at 1h and 6h (time points) in MOLT4 cells (cell type).
+TRUTH CHECK: The values are factually correct; the paper uses DMSO as vehicle, PL, 955, and SNS-032 as treatments, and evaluates them across different time points and cell lines.
+COMPLETENESS CHECK: The full set of extracted values includes both the technical experimental variables and the disease/cell types (leukemia, prostate cancer, NSCLC), covering the primary axes of the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","ExperimentalDesign","factor_value","acute lymphoblastic leukemia, prostate cancer, non-small cell lung cancer","treatment (DMSO, PL, 955, SNS-032), time point, cell type | acute lymphoblastic leukemia, prostate cancer, non-small cell lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value lists disease states/cancer types, which are valid categories for factor_value.
+SOURCE CHECK: These values are present in the text: MOLT4 is described as ""T-cell acute lymphoblastic leukemia"", prostate cancer cell lines (LNCaP, etc.) are used, and NCI-H2228 is an ""NSCLC"" (non-small cell lung cancer) cell line.
+TRUTH CHECK: The values are factually correct based on the cell lines used in the study.
+COMPLETENESS CHECK: The full set of extracted values covers both the treatment/time/cell-type factors and the disease/cancer type factors described in the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","ExperimentalDesign","fractions","18","18","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The value is present in the ""TMT-based proteomics"" section of the methods, describing the offline separation of the labeled peptide multiplex.
+TRUTH CHECK: The text explicitly states that the labeled peptide multiplex was separated into 46 fractions and then ""consolidated into 18 super-fractions,"" which were then analyzed by MS.
+COMPLETENESS CHECK: The value ""18"" correctly identifies the final number of fractions (super-fractions) analyzed per sample group in the TMT experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the proteomics experiments (Competitive ABPP, TurboID-bait, or TMT-based proteomics).
+TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive based on the provided text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the technical_replicates field.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.
+TRUTH CHECK: According to the field definitions, ""1"" is the correct safe default when the paper is silent regarding replication.
+COMPLETENESS CHECK: The full set of extracted values consists of this single default value, which is complete given the absence of specific information in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper describes a ""TopTen™ method"" for the first MS experiment and ""synchronous precursor selection"" (SPS) for the TMT-based proteomics; both are specific implementations of data-dependent acquisition (DDA).
+TRUTH CHECK: While the literal phrase ""data-dependent acquisition"" is not used, the ""TopTen"" method and ""synchronous precursor selection"" are standard DDA workflows.
+COMPLETENESS CHECK: The full set contains only this value, which accurately summarizes the acquisition schemes used across the different MS experiments in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","instrument","Orbitrap Eclipse, Thermo Scientific Q Exactive HF Orbitrap","Orbitrap Eclipse, Thermo Scientific Q Exactive HF Orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains mass spectrometer models, which matches the field definition.
+SOURCE CHECK: Both instruments are explicitly mentioned in the ""METHOD DETAILS"" section as being used for LC-MS/MS analysis of the proteomics samples.
+TRUTH CHECK: The paper mentions a ""Thermo Scientific Q Exactive HF Orbitrap mass spectrometer"" for the competitive ABPP assay and an ""Orbitrap Eclipse Tribrid mass spectrometer (Thermo)"" for the TurboID-bait and TMT-based proteomics.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers used for the proteomics experiments described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the text; the paper mentions the use of a ""Thermo Scientific Q Exactive HF Orbitrap mass spectrometer"" and an ""Orbitrap Eclipse Tribrid mass spectrometer"" for the MS experiments.
+TRUTH CHECK: The value is factually correct as both instruments used for the proteomics analyses utilize Orbitrap mass analyzers.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as all MS instruments mentioned in the proteomics workflows are Orbitraps.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","modification","formaldehyde adduct (C)","Carbamidomethyl (C)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the required category for this field.
+SOURCE CHECK: The value ""formaldehyde adduct (C)"" is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not factually supported for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","modification","Nethylmaleimidehydrolysis (C)","Carbamidomethyl (C)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the required category for this field.
+SOURCE CHECK: The value ""Nethylmaleimidehydrolysis (C)"" is not present in the paper text.
+TRUTH CHECK: The value is not mentioned in the text; the paper describes the use of iodoacetamide (IA) in a gel-based assay, but the search parameters for the LC-MS/MS experiments do not list this modification.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Data processing and analysis"" section of the ""Competitive ABPP and LC-MS/MS"" method.
+TRUTH CHECK: The text explicitly states ""Carbamidomethyl of cysteine was specified in Sequest as a fixed modification.""
+COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and several others; however, the other values (""formaldehyde adduct"", ""Nethylmaleimidehydrolysis"") are not mentioned in the text, and ""not applicable"" is irrelevant. While the set contains hallucinations, the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","modification","not applicable","Carbamidomethyl (C)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a valid modification name or target residue.
+SOURCE CHECK: The paper explicitly lists several modifications used in the database searches (e.g., ""Carbamidomethyl of cysteine"", ""oxidation of methionine"").
+TRUTH CHECK: The value is factually incorrect as modifications were explicitly searched and reported.
+COMPLETENESS CHECK: The full set of extracted values contains several incorrect/hallucinated modifications and a ""not applicable"" placeholder, failing to accurately reflect the text.
+
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD039401","","strict","Technical","precursor_mass_tolerance","10.0 ppm, 2.5 ppm, 3 ppm","10.0 ppm, 2.5 ppm, 3 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a list of mass tolerance values, which is the correct category for this field.
+SOURCE CHECK: The values are present in the paper text across three different MS experiments: the competitive ABPP assay (""parent ion tolerance of 10.0 ppm""), the TurboID-bait assay (""parent ion tolerance of 2.5 ppm""), and the TMT-based proteomics (""parent ion tolerance of 3 ppm"").
+TRUTH CHECK: All three values are factually correct as they are explicitly listed as the parent (precursor) ion tolerances for the respective experiments.
+COMPLETENESS CHECK: The full set of extracted values covers all three distinct MS experiments described in the methods section.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

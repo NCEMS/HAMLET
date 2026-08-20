@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 
 
-SUPPORTED_SUFFIXES = {".csv", ".json", ".png", ".tsv"}
+SUPPORTED_SUFFIXES = {".csv", ".json", ".md", ".png", ".tsv"}
 MAX_PUBLISHED_FILE_BYTES = 1 * 1024 * 1024
 RELEASE_VERSION_PATTERN = re.compile(r'"pipeline_version"\s*:\s*"(v\d+\.\d+\.\d+)"')
 HAMLET_VERSION_PATTERN = re.compile(r'HAMLET_VERSION\s*=\s*"(v\d+\.\d+\.\d+)"')
@@ -64,7 +64,15 @@ def collect_pxds(store_path: Path, requested_pxds: list[str]) -> list[str]:
 
 
 def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
-    record = {"pxd": pxd, "version": None, "available": False, "aggregated": None, "agentic": []}
+    record = {
+        "pxd": pxd,
+        "version": None,
+        "available": False,
+        "aggregated": None,
+        "agentic": [],
+        "pride": None,
+        "conflict": [],
+    }
     pxd_data_dir = output_data_dir / pxd
     aggregate = store_path / "aggregated_results_files" / f"{pxd}_aggregated_results.json"
     agentic_source = store_path / "agentic_results_files" / pxd
@@ -92,6 +100,24 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
             relative_path = Path(pxd) / "agentic" / relative_source
             copy_file(source, output_data_dir / relative_path)
             record["agentic"].append(relative_path.as_posix())
+
+    conflict_source = Path("reports") / "conflict_assessment" / pxd
+    pride_sdrf = conflict_source / "pride.sdrf.tsv"
+    if pride_sdrf.is_file() and pride_sdrf.stat().st_size <= MAX_PUBLISHED_FILE_BYTES:
+        relative_path = Path(pxd) / "pride.sdrf.tsv"
+        copy_file(pride_sdrf, output_data_dir / relative_path)
+        record["pride"] = relative_path.as_posix()
+
+    comparison_source = conflict_source / "store_vs_pride"
+    if comparison_source.is_dir():
+        for source in sorted(comparison_source.rglob("*")):
+            if not source.is_file() or source.suffix.lower() not in SUPPORTED_SUFFIXES:
+                continue
+            if source.stat().st_size > MAX_PUBLISHED_FILE_BYTES:
+                continue
+            relative_path = Path(pxd) / "conflict" / source.relative_to(comparison_source)
+            copy_file(source, output_data_dir / relative_path)
+            record["conflict"].append(relative_path.as_posix())
 
     if not record["available"]:
         shutil.rmtree(pxd_data_dir, ignore_errors=True)

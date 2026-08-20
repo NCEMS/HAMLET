@@ -1,30 +1,30 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD009298","","strict","Biological","age","14th Century","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a time period/date, which is a type of age/temporal descriptor.
-SOURCE CHECK: The value ""14th Century"" is present in the title, describing the era of the wall painting.
-TRUTH CHECK: The ""age"" field refers to the age of the biological donor/animal at the time of sample collection; ""14th Century"" refers to the historical period of the artwork, not the biological age of the sheep, cow, chicken, or duck.
-COMPLETENESS CHECK: The full set contains only this value, which is factually incorrect for the biological age of the donors.
-TYPE_CORRECT: yes
+"PXD009298","","strict","Biological","age","14th Century","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value is a time period/date, which is not the age of the biological donor/animal.
+SOURCE CHECK: The text mentions a ""14th Century Italian Wall Painting"", referring to the date of the artwork, not the age of the animals (sheep, cow, chicken, duck) that provided the proteins.
+TRUTH CHECK: The value is factually incorrect as it describes the era of the painting, not the age of the biological source material.
+COMPLETENESS CHECK:The full set is incorrect as it misidentifies the painting's date as the donor's age.
+TYPE_CORRECT: no
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","Biological","organ","glue","","low","True","material_type","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""glue"" is a material/product, not an organ or tissue of origin.
-SOURCE CHECK: The value ""glue"" is present in the text and refers to the MS sample (sheep and cow glue).
-TRUTH CHECK: ""Glue"" is a processed animal product, not an organ. The organs of origin for the glue (e.g., skin, bone, connective tissue) are not specified in the text.
-COMPLETENESS CHECK:The full set contains only ""glue"", which is a material type rather than an organ.
+"PXD009298","","strict","Biological","organ","glue","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""glue"" is a material/product, not an organ or tissue of origin.
+SOURCE CHECK: The value ""glue"" is present in the text and refers to the material analyzed by mass spectrometry.
+TRUTH CHECK: While ""glue"" is the material analyzed, it is not an organ (e.g., skin, bone, connective tissue) from which the glue was derived.
+COMPLETENESS CHECK: The full set contains only ""glue"", which is a material type rather than an organ.
 TYPE_CORRECT: no
-CORRECT_TYPE_NAME: material_type
+CORRECT_TYPE_NAME: organ
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","Biological","species","Sheep, cow, chicken, duck","Sheep, cow, chicken, duck","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains a list of animal species, which matches the definition of the species field.
-SOURCE CHECK: The values are explicitly mentioned in the abstract as the protein components revealed by mass spectrometry (""sheep and cow glue and chicken and duck egg white"").
-TRUTH CHECK: The values are factually correct based on the paper's findings.
-COMPLETENESS CHECK: The full set of extracted values covers all species identified by the MS analysis in the text.
+"PXD009298","","strict","Biological","species","Sheep, cow, chicken, duck","Sheep, cow, chicken, duck","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value lists organisms, which is the correct category for the species field.
+SOURCE CHECK: The values are explicitly mentioned in the abstract as the protein components revealed by mass spectrometry analysis of the painting layer.
+TRUTH CHECK: The paper states the analysis revealed ""sheep and cow glue and chicken and duck egg white,"" confirming these four species.
+COMPLETENESS CHECK: The full set of extracted values covers all species identified by MS in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -32,10 +32,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","ExperimentalDesign","factor_value","non-original layer","non-original layer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the specific material/condition being analyzed, which is a valid type for a factor_value.
-SOURCE CHECK: The value ""non-original layer"" is explicitly mentioned in the abstract as the subject of the analysis (""a non‐original layer was observed on the surface... Mass spectrometry was used to better characterise this layer"").
-TRUTH CHECK: The value is factually correct as it identifies the specific sample layer analyzed by mass spectrometry.
-COMPLETENESS CHECK: The full set contains the primary subject of the study; no other experimental factors or contrasting groups are mentioned in the provided text.
+"PXD009298","","strict","ExperimentalDesign","factor_value","conservation layer (non-original layer)","conservation layer (non-original layer)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the specific material/condition under study, which is a valid category for a factor_value.
+SOURCE CHECK: The value is explicitly mentioned in the abstract (""a non‐original layer was observed on the surface... Mass spectrometry was used to better characterise this layer"").
+TRUTH CHECK: The value accurately reflects the subject of the proteomics analysis described in the paper.
+COMPLETENESS CHECK: The full set contains the primary subject of the study; no other experimental factors or groups are mentioned.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -46,17 +46,6 @@ CORRECTED_VALUE: NONE",""
 "PXD009298","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
 SOURCE CHECK: The paper text does not mention any offline peptide or protein fractionation process.
 TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which is exhaustive for this experiment.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: The paper does not mention any biological replicates for the analysis of the painting layers.
-TRUTH CHECK: Since no replication is mentioned, the safe default of ""1"" is correct.
 COMPLETENESS CHECK: The full set of extracted values is exhaustive as it correctly applies the safe default.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -65,8 +54,19 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
+"PXD009298","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK: The paper text does not mention any biological replicates for the analysis of the painting layers.
+TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as it correctly applies the default for a single-sample/non-replicated analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD009298","","strict","ExperimentalDesign","technical_replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
-SOURCE CHECK: The provided text (title, abstract, and methods) does not mention the number of technical replicates.
+SOURCE CHECK: The provided paper text (title, abstract, and methods) does not mention the number of technical replicates.
 TRUTH CHECK: There is no evidence in the text to support the value ""2"".
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT: yes
@@ -79,33 +79,11 @@ CORRECTED_VALUE: NONE",""
 "PXD009298","","strict","Technical","cleavage_agent","Lys-C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Lys-C"" is a protease, which is the correct category for the cleavage_agent field.
 SOURCE CHECK: The provided paper text (title, abstract, and results/methods sections) does not mention ""Lys-C"" or any other protease used for digestion.
 TRUTH CHECK: The value is not supported by the provided text.
-COMPLETENESS CHECK: The full set of extracted values is not present in the text.
+COMPLETENESS CHECK: The full set of extracted values is not based on the provided text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","Technical","instrument","QE3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a model name for a mass spectrometer.
-SOURCE CHECK: The value ""QE3"" is not present in the provided paper text (title, abstract, and methods).
-TRUTH CHECK: The value cannot be verified as correct because it is absent from the text.
-COMPLETENESS CHECK: The full set of extracted values is insufficient as the value is not in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD009298","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper does not mention any isobaric, metabolic, or chemical labeling (TMT, SILAC, etc.), making ""label-free"" a safe default.
-TRUTH CHECK: The value is factually correct as no labeling is described in the text.
-COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for this experiment.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
 CORRECTED_VALUE: NONE",""

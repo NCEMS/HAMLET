@@ -15,14 +15,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The value is correct; the mass spectrometry analysis was performed on a recombinant PER2 protein fragment using a \"full-length Uniprot Mouse database\" for identification.",
-        "TRUTH_CHECK": "The paper explicitly mentions \"mice\" and the use of a \"Mouse database\" for the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiment."
+        "SOURCE_CHECK": "The value is present in the text; the mass spectrometry analysis was performed on a recombinant PER2 protein fragment using a \"full-length Uniprot Mouse database\" for identification.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"mice\" and uses a \"Mouse database\" for the MS analysis, making \"Mus musculus\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "ATP presence (with, without), TiO2 enrichment (with, without)",
+      "extracted_value": "ATP presence (with ATP, without ATP)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes experimental conditions/variables, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The text mentions \"Samples without ATP were used as negative control\" and \"Phosphopeptides were enriched by metal oxide affinity enrichment using titanium dioxide\", confirming these as experimental variables in the MS context.",
-        "TRUTH_CHECK": "The values are factually correct based on the \"Filter-aided in vitro kinase assays, phosphopeptide enrichment and mass spectrometry analyses\" section.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variables (ATP for the kinase reaction and TiO2 for the enrichment) used for the MS analysis."
+        "TYPE_CHECK": "The candidate value describes the experimental condition (presence vs absence of a reagent) used to differentiate samples, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is present in the \"Filter-aided in vitro kinase assays...\" section, which describes the sample preparation for the mass spectrometry analysis (\"Samples without ATP were used as negative control\").",
+        "TRUTH_CHECK": "The text explicitly states that samples were incubated with ATP and that \"Samples without ATP were used as negative control,\" confirming this as the experimental variable for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains this single factor, which accurately captures the primary contrast used in the in vitro kinase assay analyzed by MS."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes the LC-MS/MS workflow but does not mention any offline peptide or protein fractionation step prior to the LC-MS analysis.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS measurements but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS analysis.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text."
+        "COMPLETENESS_CHECK": "The value \"1\" correctly represents the lack of fractionation for the samples described."
       }
     },
     {
@@ -71,9 +71,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment (the in vitro kinase assay of PER2 fragments).",
-        "TRUTH_CHECK": "According to the field definitions, \"1\" is the correct safe default when no replication is mentioned.",
+        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct safe default when no replication is mentioned.",
         "COMPLETENESS_CHECK": "The full set contains only the safe default, which is complete given the absence of explicit replicate counts in the text for the MS analysis."
       }
     },
@@ -91,28 +91,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the LC-MS/MS experiment.",
         "TRUTH_CHECK": "According to the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
-        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a single measurement per sample when not otherwise specified."
+        "COMPLETENESS_CHECK": "The full set contains only this default value, which is complete given the absence of specific information in the text."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "7 ppm",
-      "verdict": "low",
+      "extracted_value": "20 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states \"The MS/MS tolerance was set to 20 ppm\", not 7 ppm.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it does not match the value stated in the text."
+        "TYPE_CHECK": "The candidate value is a mass tolerance expressed in ppm, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Filter-aided in vitro kinase assay, phosphopeptide enrichment and mass spectrometry analyses\" section of the methods.",
+        "TRUTH_CHECK": "The text states \"The MS/MS tolerance was set to 20 ppm\", and MS/MS refers to fragment/product ions.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance mentioned in the paper."
       }
     },
     {
@@ -129,9 +129,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The value is not mentioned in the paper text; the text mentions \"normalized collision energy of 25%\" and a \"QExactive Plus\" instrument, but does not explicitly name the fragmentation method.",
+        "SOURCE_CHECK": "The value is not mentioned in the paper text; the text mentions \"normalized collision energy of 25%\" and a \"QExactive Plus\" instrument, but does not explicitly name the fragmentation method as \"beam-type collision-induced dissociation\".",
         "TRUTH_CHECK": "While a QExactive Plus typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" is not in the text.",
-        "COMPLETENESS_CHECK": "The full set is not exhaustive because the value is not present in the text."
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
     {
@@ -150,7 +150,7 @@
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Filter-aided in vitro kinase assay, phosphopeptide enrichment and mass spectrometry analyses\" section of the methods.",
         "TRUTH_CHECK": "The paper states \"LC-MS/MS measurements were performed on a QExactive Plus mass spectrometer\".",
-        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper; the extraction is complete."
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper, so the extraction is complete."
       }
     },
     {
@@ -166,9 +166,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper does not mention any isobaric (TMT, iTRAQ), metabolic (SILAC), or chemical (dimethyl) labeling methods in the LC-MS/MS section.",
-        "TRUTH_CHECK": "Since no labeling is described, \"label-free\" is the correct safe default.",
+        "TYPE_CHECK": "The candidate value \"label free\" is a valid category for the label metadata field.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS measurements but does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods.",
+        "TRUTH_CHECK": "Since no labeling is described, the safe default \"label-free\" is factually correct.",
         "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling method is mentioned."
       }
     },
@@ -185,10 +185,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is inferable from the instrument \"QExactive Plus\" mentioned in the LC-MS/MS measurements section.",
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for the mass_analyzer field.",
+        "SOURCE_CHECK": "The value is inferable from the instrument model \"QExactive Plus\" mentioned in the \"Filter-aided in vitro kinase assay, phosphopeptide enrichment and mass spectrometry analyses\" section.",
         "TRUTH_CHECK": "The QExactive Plus is an Orbitrap-based mass spectrometer.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the MS experiment."
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one instrument was used for the MS analysis."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Phospho (STY)\" describes a post-translational modification and its target residues, which matches the field definition.",
-        "SOURCE_CHECK": "The paper text explicitly mentions \"serine-, threonine- and tyrosine-phosphorylation\" as variable modifications in the mass spectrometry analysis section.",
-        "TRUTH_CHECK": "\"Phospho (STY)\" is a standard abbreviation/representation for phosphorylation on Serine (S), Threonine (T), and Tyrosine (Y), which is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Deamidation (NQ)\" and \"Replacement of proton by potassium (D)\", neither of which are mentioned in the text; however, the candidate value itself is correct."
+        "TYPE_CHECK": "The candidate value describes a post-translational modification with target residues, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Filter-aided in vitro kinase assay, phosphopeptide enrichment and mass spectrometry analyses\" section of the methods.",
+        "TRUTH_CHECK": "The paper explicitly states that \"serine-, threonine- and tyrosine-phosphorylation\" were set as variable modifications. \"Phospho (STY)\" is a standard abbreviation for these three residues.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Deamidation (NQ)\" and \"Replacement of proton by potassium (D)\", neither of which are mentioned in the text. However, the candidate value itself is a correct extraction of one of the modifications described."
       }
     },
     {
@@ -224,8 +224,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"Deamidation (NQ)\" is not present in the paper text.",
-        "TRUTH_CHECK": "The paper does not mention deamidation as a searched modification; it lists carbamidomethylcysteine, amino-terminal acetylation, phosphorylation (S, T, Y), and oxidation of methionine.",
+        "SOURCE_CHECK": "The value \"Deamidation (NQ)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not factually correct for this experiment as it is not listed in the mass spectrometry search parameters.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
       }
     },
@@ -242,10 +242,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a chemical modification of a residue, which fits the category of a protein modification.",
-        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not mention \"Replacement of proton by potassium (D)\" as a searched modification.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes modifications not mentioned in the text."
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"Replacement of proton by potassium (D)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text and is not a standard modification described in the provided methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
       }
     },
     {
@@ -262,9 +262,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"6.9 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text; the only mass tolerance mentioned is \"The MS/MS tolerance was set to 20 ppm\".",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value and fails to capture the actual tolerance mentioned in the text (which is for fragments)."
+        "SOURCE_CHECK": "The value \"6.9 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention a precursor mass tolerance of 6.9 ppm; it only specifies an MS/MS (fragment) tolerance of 20 ppm.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value and does not cover the actual data in the paper."
       }
     },
     {
@@ -280,10 +280,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used for reducing disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"DTT\" in the \"Nuclear/cytoplasmic fractionation\" section (\"100 mM Tris-HCl pH 8.8/10 mM DTT\") and in the \"Filter-aided in vitro kinase assays and mass spectrometry analyses\" section (\"0.625 mM DTT\"). DTT is the standard abbreviation for dithiothreitol.",
-        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used in the sample preparation workflow leading to the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\", which covers the reduction reagent mentioned in the text."
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"DTT\" in the \"Nuclear/cytoplasmic fractionation\" section (\"100 mM Tris-HCl pH 8.8/10 mM DTT\") and in the \"Filter-aided in vitro kinase assays... and mass spectrometry analyses\" section (\"0.625 mM DTT\"), the latter of which is the direct context of the MS experiment.",
+        "TRUTH_CHECK": "DTT is the standard abbreviation for dithiothreitol; the value is factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\", which covers the reduction reagent mentioned in the MS workflow."
       }
     }
   ]

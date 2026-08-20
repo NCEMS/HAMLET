@@ -8,21 +8,21 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
+      "error_category": "wrong_value",
       "corrected_value": "E14",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains names of cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions E14, J1, and HEK 293T cells; however, only E14 ESCs were used for the mass spectrometry analysis (\"E14 ESCs expressing 3HA-Ssrp1... were... loaded to... mass spectrometry\"). J1 ESCs and HEK 293T cells were used for other assays (shRNA depletion and co-IP validation) but not for the MS experiment.",
-        "TRUTH_CHECK": "Only \"E14\" is factually correct as the source of the MS sample; \"J1\" and \"HEK 293T\" are mentioned in unrelated contexts.",
-        "COMPLETENESS_CHECK": "The full set includes non-MS samples, making it incorrect."
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions E14, J1, and HEK 293T cells; however, only E14 ESCs were used for the mass spectrometry analysis (\"E14 ESCs expressing 3HA-Ssrp1... were used... and loaded to... mass spectrometry\"). J1 cells were used for shRNA depletion/qPCR, and HEK 293T cells were used for co-IP validation of the Ssrp1-Usp7 interaction, not for MS.",
+        "TRUTH_CHECK": "Only E14 is the correct cell line for the MS experiment; J1 and HEK 293T are mentioned in unrelated contexts.",
+        "COMPLETENESS_CHECK": "The full set includes non-MS samples, making it factually incorrect."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "embryonic stem cells",
+      "extracted_value": "ESCs",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"embryonic stem cells\" describes a cell type/lineage, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text; the MS experiment used E14 ESCs (embryonic stem cells) expressing 3HA-Ssrp1.",
-        "TRUTH_CHECK": "The value is factually correct as the paper identifies the cells as \"E14 ESCs\" and \"embryonic stem cells\".",
-        "COMPLETENESS_CHECK": "The full set contains the only cell type used for the mass spectrometry analysis."
+        "TYPE_CHECK": "The candidate value \"ESCs\" (Embryonic Stem Cells) refers to a cell type/lineage.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section explicitly states that \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\" were used for the MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the samples analyzed by mass spectrometry were embryonic stem cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"ESCs\") covers the biological source of the MS samples described in the paper."
       }
     },
     {
@@ -53,9 +53,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
-        "SOURCE_CHECK": "The paper describes experiments using embryonic stem cells (E14 and J1) and HEK 293T cells without any mention of a disease state or pathology.",
-        "TRUTH_CHECK": "Since the study is not a disease study and uses standard cell lines, \"normal\" is a correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a study without a disease focus."
+        "SOURCE_CHECK": "The MS experiment used E14 ESCs (embryonic stem cells), which are not described as having a disease state.",
+        "TRUTH_CHECK": "Since the study is not a disease study and the cells are standard embryonic stem cells, the safe default \"normal\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is exhaustive for this study."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "type_mismatch",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"cell culture\" is a description of the sample environment/material, not an organ or tissue of origin.",
+        "TYPE_CHECK": "The candidate value \"cell culture\" is a description of the sample environment/material, but not an organ or tissue of origin.",
         "SOURCE_CHECK": "The MS experiment used E14 ESCs (embryonic stem cells), which are grown in cell culture.",
-        "TRUTH_CHECK": "The field \"organ\" requires the tissue or organ of origin. For embryonic stem cells (ESCs), the origin is the embryo. \"Cell culture\" is a material type or state, not an organ.",
-        "COMPLETENESS_CHECK": "The value is incorrect as it provides the method of growth rather than the organ of origin."
+        "TRUTH_CHECK": "\"Cell culture\" is not an organ; the organ/tissue of origin for embryonic stem cells is the embryo (specifically the inner cell mass).",
+        "COMPLETENESS_CHECK": "The value is incorrect as it describes the material state rather than the organ of origin."
       }
     },
     {
@@ -92,27 +92,27 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The paper describes the use of mouse E14 and J1 embryonic stem cells (ESCs) for the co-immunoprecipitation and mass spectrometry analysis.",
-        "TRUTH_CHECK": "The use of \"Mus musculus\" is factually correct as the study uses mouse ESCs.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiment."
+        "TRUTH_CHECK": "The text explicitly mentions \"Mouse E14 and J1 ESCs\" and refers to the \"mouse mm10 genome assembly,\" confirming the species is Mus musculus.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct species used for the MS experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "expression (3HA-Ssrp1, pCAG-3HA)",
-      "verdict": "high",
+      "extracted_value": "expression of 3HA-Ssrp1 (3HA-Ssrp1, pCAG-3HA control), Ssrp1 knockout, Ssrp1 depletion, Supt16 depletion, Usp7 depletion, Usp7 inhibitor treatment",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
+      "value_correct": false,
+      "value_complete": false,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "correct_explicit",
-      "corrected_value": null,
+      "error_category": "wrong_value",
+      "corrected_value": "3HA-Ssrp1, pCAG-3HA control",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental conditions (expression of a tagged protein vs. a control vector), which is a correct category for a factor_value.",
-        "SOURCE_CHECK": "The value is derived from the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section, which explicitly states that \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\" were used for the MS analysis.",
-        "TRUTH_CHECK": "The value accurately reflects the two groups compared in the proteomics experiment.",
-        "COMPLETENESS_CHECK": "The full set includes the experimental contrast and a \"normal\" (control) value; together they cover the groups analyzed by MS."
+        "TYPE_CHECK": "The candidate value describes experimental conditions/treatments, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "These conditions (3HA-Ssrp1 expression, Ssrp1 knockout, Ssrp1/Supt16/Usp7 depletion, and Usp7 inhibitor) are all mentioned in the paper; however, only the \"expression of 3HA-Ssrp1\" (and its control) is linked to the mass spectrometry experiment (\"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA were used... for mass spectrometry\"). The other conditions (knockouts, shRNA depletions, inhibitors) are used for RNA-seq, qPCR, and Western blots, not the MS analysis.",
+        "TRUTH_CHECK": "The value is factually present in the text, but it incorrectly groups non-MS conditions with the MS condition.",
+        "COMPLETENESS_CHECK": "The full set includes \"normal\", but the candidate value is a conglomerate of multiple different experimental arms, some of which are not part of the proteomics experiment."
       }
     },
     {
@@ -129,9 +129,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value, mirroring a characteristic like disease state or genotype.",
-        "SOURCE_CHECK": "The value \"normal\" is not explicitly mentioned in the text, but the study uses \"control E14 ESCs expressing pCAG-3HA\" as the baseline for the MS experiment.",
-        "TRUTH_CHECK": "Under the \"safe defaults\" rule, \"normal\", \"healthy\", or \"no disease\" are acceptable for subjects that are not part of a disease study or serve as the healthy/baseline control.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific experimental contrast (expression of 3HA-Ssrp1 vs pCAG-3HA) and the general baseline state."
+        "SOURCE_CHECK": "The paper describes \"wild-type (WT) ESCs\" and \"control E14 ESCs expressing pCAG-3HA\" as the baseline for comparisons against knockouts and depletion; \"normal\" is a safe default for these control/WT states.",
+        "TRUTH_CHECK": "The value is factually correct as a representation of the control/wild-type samples used in the experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific experimental conditions (knockouts, depletion, etc.) and the baseline \"normal\" state, covering the experimental design."
       }
     },
     {
@@ -147,29 +147,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper mentions \"the resulting spectra from each fraction\" in the mass spectrometry section, but it does not specify the number of fractions generated.",
-        "TRUTH_CHECK": "Since the paper does not explicitly state the number of fractions, the safe default of \"1\" is applied.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of the safe default \"1\", which is appropriate when the text is silent."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper mentions that \"spectra from each fraction were searched,\" implying that fractionation occurred, but it does not specify the number of fractions.",
+        "TRUTH_CHECK": "While the paper mentions \"each fraction,\" it does not provide a specific number. According to the field definition, \"1\" is the default when no fractionation is mentioned or the number is not specified.",
+        "COMPLETENESS_CHECK": "The full set contains only the default value \"1\", which is appropriate given the lack of a specific count in the text."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "1",
-      "verdict": "high",
+      "extracted_value": "2",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
       "technical_origin": false,
       "inference": null,
-      "error_category": "correct_explicit",
-      "corrected_value": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates used for the mass spectrometry analysis of the Ssrp1 co-immunoprecipitation.",
-        "TRUTH_CHECK": "Since the paper is silent on the number of replicates for the MS experiment, the safe default of \"1\" is applied.",
-        "COMPLETENESS_CHECK": "The full set contains only the safe default, which is complete given the lack of explicit information in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper mentions \"two Ssrp1 knockout ESC lines\" and \"two shRNAs for each gene\", but it does not explicitly state the number of biological replicates used for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "There is no explicit statement in the text that the mass spectrometry analysis was performed on 2 biological replicates. The mention of \"two knockout cell lines\" refers to the genetic clones created, not necessarily the number of biological replicates processed for the MS experiment.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text; the paper is silent on the number of biological replicates for the MS analysis."
       }
     },
     {
@@ -187,7 +187,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.",
-        "TRUTH_CHECK": "Per the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
+        "TRUTH_CHECK": "According to the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent about replicates.",
         "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
       }
     },
@@ -205,8 +205,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper mentions the use of a Q Exactive HF-X mass spectrometer and Proteome Discoverer 2.2, but it does not explicitly state the acquisition method (e.g., \"DDA\" or \"data-dependent acquisition\").",
-        "TRUTH_CHECK": "While Q Exactive instruments typically use DDA, the specific term \"data-dependent acquisition\" is not written in the provided text.",
+        "SOURCE_CHECK": "The paper mentions the use of a Q Exactive HF-X mass spectrometer and Proteome Discoverer 2.2, but it does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "While Q Exactive instruments are commonly used for data-dependent acquisition (DDA), the text does not explicitly name the method.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
@@ -226,7 +226,7 @@
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
         "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
         "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
-        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
       }
     },
     {
@@ -242,10 +242,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper mentions the use of a \"Q Exactive HF-X mass spectrometer,\" which typically uses HCD (Higher-energy Collisional Dissociation), but the specific fragmentation method is not explicitly named in the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"beam-type collision-induced dissociation\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper mentions the instrument (Q Exactive HF-X) but does not explicitly state the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The full set is not exhaustive because the value is hallucinated."
       }
     },
     {
@@ -264,7 +264,7 @@
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section as the instrument used for the MS analysis.",
         "TRUTH_CHECK": "The paper states the samples were \"loaded to EASY-nLC 1200 UHPLC system coupled with a Q Exactive HF-X mass spectrometer (Thermo Scientific)\".",
-        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the proteomics experiment."
+        "COMPLETENESS_CHECK": "Only one mass spectrometer is mentioned in the text, and it has been extracted."
       }
     },
     {
@@ -280,9 +280,9 @@
       "error_category": "wrong_value",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper mentions that proteins were \"digested, labeled and loaded\" for mass spectrometry, but it does not specify the type of label used.",
-        "TRUTH_CHECK": "The text explicitly states that proteins were \"labeled\" before being loaded into the Q Exactive HF-X mass spectrometer. According to the field definition, \"label-free\" is only correct when NO labeling is described. Since the paper explicitly mentions that proteins were labeled, \"label free\" is factually incorrect.",
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper mentions that proteins were \"digested, labeled and loaded\" for mass spectrometry, but it does not specify the name of the labeling method used.",
+        "TRUTH_CHECK": "The text explicitly states that proteins were \"labeled\" (\"proteins were digested, labeled and loaded to EASY-nLC 1200...\"), which contradicts a \"label-free\" approach.",
         "COMPLETENESS_CHECK": "The full set contains only \"label free\", which is incorrect based on the text."
       }
     },
@@ -300,8 +300,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is inferable from the instrument model \"Q Exactive HF-X\" mentioned in the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section, which is the instrument used for the MS analysis of the E14 ESC samples.",
-        "TRUTH_CHECK": "The Q Exactive HF-X is an Orbitrap-based mass spectrometer.",
+        "SOURCE_CHECK": "The value is inferable from the instrument \"Q Exactive HF-X\", which is an Orbitrap-based mass spectrometer.",
+        "TRUTH_CHECK": "The paper explicitly mentions the use of a \"Q Exactive HF-X mass spectrometer (Thermo Scientific)\", which uses an Orbitrap mass analyzer.",
         "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the proteomics experiment described."
       }
     },
@@ -318,10 +318,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Phospho (STY)\" is the correct category for a protein modification.",
-        "SOURCE_CHECK": "The candidate value is not present in the paper text; the study focuses on ubiquitination (H2Bub) and histone chaperones, not phosphorylation.",
-        "TRUTH_CHECK": "The value is factually incorrect as there is no mention of searching for phosphorylation modifications in the mass spectrometry analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Phospho (STY)\" is not mentioned anywhere in the paper text.",
+        "TRUTH_CHECK": "The paper does not describe a phosphoproteomics experiment or a search for phosphorylation modifications; it focuses on a co-IP/MS study of the FACT complex.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
       }
     },
     {
@@ -337,9 +337,9 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
         "SOURCE_CHECK": "The value \"S-(2-succinyl) cysteine (C)\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text and is therefore not factually supported for this experiment.",
+        "TRUTH_CHECK": "The value is not present in the text and is therefore not factually supported by this experiment.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
       }
     },
@@ -357,9 +357,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is not present in the paper text; the text mentions \"mass spectrometry\" but does not list the specific modifications searched for in the database search.",
-        "TRUTH_CHECK": "The value is not mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+        "SOURCE_CHECK": "The value is not present in the paper text; the text mentions \"proteins were digested, labeled\" but does not name the labeling reagent or the resulting modification.",
+        "TRUTH_CHECK": "The value is not mentioned in the text and cannot be inferred from the provided methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
       }
     },
     {
@@ -375,9 +375,9 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct type for this field.",
-        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"7 ppm\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
         "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
       }
     }
