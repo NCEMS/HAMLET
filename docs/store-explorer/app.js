@@ -5,6 +5,7 @@ const filter = document.querySelector("#pxd-filter");
 const versionFilter = document.querySelector("#version-filter");
 const prideFilter = document.querySelector("#pride-filter");
 const overviewButton = document.querySelector("#overview-button");
+const NON_FINITE_PREFIX = "__HAMLET_NON_FINITE__";
 
 function esc(value) {
   return String(value).replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
@@ -97,6 +98,25 @@ function jsonKey(key) {
   return key === null ? "root" : JSON.stringify(String(key));
 }
 
+function parseJsonDocument(text) {
+  try {
+    return JSON.parse(text);
+  } catch (parseError) {
+    let replacedNonFiniteToken = false;
+    const compatibleText = text.replace(/([:\[,]\s*)(-Infinity|Infinity|NaN)(?=\s*[,}\]])/g, (_, prefix, token) => {
+      replacedNonFiniteToken = true;
+      return `${prefix}"${NON_FINITE_PREFIX}${token}"`;
+    });
+    if (!replacedNonFiniteToken) throw parseError;
+    return JSON.parse(compatibleText, (_, value) => {
+      if (typeof value === "string" && value.startsWith(NON_FINITE_PREFIX)) {
+        return Number(value.slice(NON_FINITE_PREFIX.length));
+      }
+      return value;
+    });
+  }
+}
+
 function jsonTree(value, key = null, expandRoot = false, suffix = "") {
   const property = key === null
     ? ""
@@ -114,13 +134,15 @@ function jsonTree(value, key = null, expandRoot = false, suffix = "") {
   }
 
   const type = value === null ? "null" : typeof value;
-  return `<div class="json-row">${property}<span class="json-value json-${esc(type)}">${esc(JSON.stringify(value))}</span><span class="json-punctuation">${suffix}</span></div>`;
+  const nonFiniteNumber = type === "number" && !Number.isFinite(value);
+  const renderedValue = nonFiniteNumber ? String(value) : JSON.stringify(value);
+  return `<div class="json-row">${property}<span class="json-value json-${nonFiniteNumber ? "nonfinite" : esc(type)}">${esc(renderedValue)}</span><span class="json-punctuation">${suffix}</span></div>`;
 }
 
 async function renderJson(path, title) {
   const text = await fetchText(path);
   try {
-    const document = JSON.parse(text);
+    const document = parseJsonDocument(text);
     return `<details class="json-viewer"><summary>${esc(title)}</summary><div class="json-tree">${jsonTree(document, null, true)}</div></details>`;
   } catch (error) {
     const content = `Raw JSON document (contains non-standard JSON values)\n\n${text}`;
