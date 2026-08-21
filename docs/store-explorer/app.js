@@ -93,15 +93,39 @@ function uniqueJudgeFiles(files) {
   });
 }
 
+function jsonKey(key) {
+  return key === null ? "root" : JSON.stringify(String(key));
+}
+
+function jsonTree(value, key = null, expandRoot = false, suffix = "") {
+  const property = key === null
+    ? ""
+    : `<span class="json-key">${esc(jsonKey(key))}</span><span class="json-punctuation">: </span>`;
+  if (value !== null && typeof value === "object") {
+    const isArray = Array.isArray(value);
+    const entries = isArray ? value.map((item, index) => [index, item]) : Object.entries(value);
+    const kind = isArray ? `array (${entries.length})` : `object (${entries.length})`;
+    const opening = isArray ? "[" : "{";
+    const closing = isArray ? "]" : "}";
+    if (!entries.length) {
+      return `<div class="json-row">${property}<span class="json-value json-empty">${opening}${closing}</span><span class="json-punctuation">${suffix}</span></div>`;
+    }
+    return `<details class="json-node"${expandRoot ? " open" : ""}><summary>${property}<span class="json-punctuation">${opening}</span><span class="json-kind">${esc(kind)}</span></summary><div class="json-children">${entries.map(([childKey, childValue], index) => jsonTree(childValue, childKey, false, index < entries.length - 1 ? "," : "")).join("")}</div><div class="json-closing"><span class="json-punctuation">${closing}${suffix}</span></div></details>`;
+  }
+
+  const type = value === null ? "null" : typeof value;
+  return `<div class="json-row">${property}<span class="json-value json-${esc(type)}">${esc(JSON.stringify(value))}</span><span class="json-punctuation">${suffix}</span></div>`;
+}
+
 async function renderJson(path, title) {
   const text = await fetchText(path);
-  let content = text;
   try {
-    content = JSON.stringify(JSON.parse(text), null, 2);
+    const document = JSON.parse(text);
+    return `<details class="json-viewer"><summary>${esc(title)}</summary><div class="json-tree">${jsonTree(document, null, true)}</div></details>`;
   } catch (error) {
-    content = `Raw JSON document (contains non-standard JSON values)\n\n${text}`;
+    const content = `Raw JSON document (contains non-standard JSON values)\n\n${text}`;
+    return `<details class="json-viewer"><summary>${esc(title)}</summary><pre>${esc(content)}</pre></details>`;
   }
-  return `<details class="json-viewer"><summary>${esc(title)}</summary><pre>${esc(content)}</pre></details>`;
 }
 
 function section(title, note, content) {
