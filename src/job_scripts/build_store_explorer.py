@@ -2,9 +2,12 @@
 """Build the static data bundle consumed by the HAMLET Store Explorer."""
 
 import argparse
+import csv
 import json
+import math
 import re
 import shutil
+from collections import Counter, defaultdict
 from pathlib import Path
 
 
@@ -13,6 +16,16 @@ MAX_PUBLISHED_FILE_BYTES = 1 * 1024 * 1024
 RELEASE_VERSION_PATTERN = re.compile(r'"pipeline_version"\s*:\s*"(v\d+\.\d+\.\d+)"')
 HAMLET_VERSION_PATTERN = re.compile(r'HAMLET_VERSION\s*=\s*"(v\d+\.\d+\.\d+)"')
 HAMLET_VERSION_FILE = Path(__file__).resolve().parents[1] / "python" / "hamlet_version.py"
+SDRF_TERMS_FILE = Path(__file__).resolve().parents[2] / "assets" / "sdrf-terms.csv"
+SDRF_HEADER_PATTERN = re.compile(r"^(characteristics|comment|factor value)\[(.+)]$")
+
+HAMLET_SDRF_HEADER_METADATA = {
+    "comment[sdrf version]": ("sdrf version", "REQUIRED", "comment", "HAMLET", "Version of the SDRF structure written by HAMLET."),
+    "comment[sdrf annotation tool]": ("sdrf annotation tool", "REQUIRED", "comment", "HAMLET", "Tool and release that generated the SDRF annotation."),
+    "comment[ms1 scan range]": ("MS1 scan range", "OPTIONAL", "comment", "MS:1000501", "Lower and upper m/z limits acquired for MS1 scans."),
+    "characteristics[treatment]": ("treatment", "OPTIONAL", "characteristics", "EFO:0000727", "Treatment or perturbation applied to the analyzed sample."),
+    "factor value[experimental design]": ("experimental design", "OPTIONAL", "factor value", "OBI:0000471", "Experimental variable or study-group label assigned to the sample."),
+}
 
 
 def canonical_hamlet_version() -> str:
@@ -124,6 +137,140 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
     return record
 
 
+def final_sdrf_path(record: dict, output_data_dir: Path) -> Path | None:
+    suffix = f"/{record['pxd']}.sdrf.tsv"
+    path = next((path for path in record["agentic"] if path.endswith(suffix)), None)
+    return output_data_dir / path if path else None
+
+
+def judge_summary_paths(record: dict, output_data_dir: Path) -> list[Path]:
+    return [
+        output_data_dir / path
+        for path in record["agentic"]
+        if path.endswith("/llm_judge_per_paper.csv")
+    ]
+
+
+def load_sdrf_terms() -> dict[tuple[str, str], dict]:
+    terms: dict[tuple[str, str], dict] = {}
+    with SDRF_TERMS_FILE.open(encoding="utf-8", newline="") as handle:
+        for row in csv.DictReader(handle):
+            terms[(row["TERM"].lower(), row["TYPE"].lower())] = row
+    return terms
+
+
+def category_metadata(header: str, terms: dict[tuple[str, str], dict]) -> dict:
+    if header in HAMLET_SDRF_HEADER_METADATA:
+        term, requirement, category_type, accession, description = HAMLET_SDRF_HEADER_METADATA[header]
+        return {
+            "header": header,
+            "term": term,
+            "requirement": requirement,
+            "type": category_type,
+            "ontology_accession": accession,
+            "catalog_description": description,
+        }
+    match = SDRF_HEADER_PATTERN.match(header)
+    if match:
+        category_type, term = match.groups()
+    else:
+        category_type, term = "other", header
+    term_row = terms.get((term.lower(), category_type))
+    if not term_row:
+        term_row = terms.get((term.lower(), "other"))
+    if not term_row:
+        return {
+            "header": header,
+            "term": term,
+            "requirement": "",
+            "type": category_type,
+            "ontology_accession": "",
+            "catalog_description": "HAMLET SDRF field without a matching entry in the bundled SDRF term catalog.",
+        }
+    return {
+        "header": header,
+        "term": term_row["TERM"],
+        "requirement": term_row["REQUIREMENT"],
+        "type": term_row["TYPE"],
+        "ontology_accession": term_row["ONTOLOGY ACCESSION"],
+        "catalog_description": term_row["DESCRIPTION"],
+    }
+
+
+def histogram(values: list[float]) -> list[dict]:
+    if not values:
+        return []
+    minimum, maximum = min(values), max(values)
+    if minimum == maximum:
+        return [{"label": f"{minimum:g}", "count": len(values)}]
+    bins = 10
+    if 0 <= minimum and maximum <= 1:
+        minimum, maximum = 0.0, 1.0
+    width = (maximum - minimum) / bins
+    counts = [0] * bins
+    for value in values:
+        index = min(int((value - minimum) / width), bins - 1)
+        counts[index] += 1
+    return [
+        {
+            "label": f"{minimum + index * width:.2f}-{minimum + (index + 1) * width:.2f}",
+            "count": count,
+        }
+        for index, count in enumerate(counts)
+    ]
+
+
+def build_site_summary(records: list[dict], output_data_dir: Path) -> dict:
+    versions: Counter[str] = Counter()
+    headers: Counter[str] = Counter()
+    judge_values: dict[str, list[float]] = defaultdict(list)
+    judge_rows = 0
+    for record in records:
+        sdrf_path = final_sdrf_path(record, output_data_dir)
+        if sdrf_path:
+            versions[record["version"] or "Unknown"] += 1
+            with sdrf_path.open(encoding="utf-8", newline="") as handle:
+                headers.update(next(csv.reader(handle, delimiter="\t"), []))
+        for judge_path in judge_summary_paths(record, output_data_dir):
+            with judge_path.open(encoding="utf-8", newline="") as handle:
+                for row in csv.DictReader(handle):
+                    judge_rows += 1
+                    for field, raw_value in row.items():
+                        try:
+                            value = float(raw_value)
+                        except (TypeError, ValueError):
+                            continue
+                        if math.isfinite(value):
+                            judge_values[field].append(value)
+
+    terms = load_sdrf_terms()
+    categories = [
+        {**category_metadata(header, terms), "pxd_count": count}
+        for header, count in sorted(headers.items(), key=lambda item: item[0].lower())
+    ]
+    judge_fields = [
+        {
+            "field": field,
+            "count": len(values),
+            "minimum": min(values),
+            "maximum": max(values),
+            "mean": sum(values) / len(values),
+            "histogram": histogram(values),
+        }
+        for field, values in sorted(judge_values.items())
+    ]
+    return {
+        "total_pxds": len(records),
+        "sdrf_versions": [
+            {"version": version, "count": count}
+            for version, count in sorted(versions.items())
+        ],
+        "judge_records": judge_rows,
+        "judge_fields": judge_fields,
+        "metadata_categories": categories,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--store", type=Path, default=Path("store"))
@@ -141,6 +288,10 @@ def main() -> None:
     records = [record for record in records if record["available"]]
     (output_data_dir / "store-index.json").write_text(
         json.dumps({"pxds": records}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (output_data_dir / "site-summary.json").write_text(
+        json.dumps(build_site_summary(records, output_data_dir), indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"Built Store Explorer data for {len(records)} PXDs in {output_data_dir}")

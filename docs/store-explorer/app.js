@@ -1,9 +1,10 @@
-const state = { records: [], selected: null };
+const state = { records: [], selected: null, summary: null, tableDefinitions: null };
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
 const filter = document.querySelector("#pxd-filter");
 const versionFilter = document.querySelector("#version-filter");
 const prideFilter = document.querySelector("#pride-filter");
+const overviewButton = document.querySelector("#overview-button");
 
 function esc(value) {
   return String(value).replace(/[&<>"]/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[character]);
@@ -58,10 +59,13 @@ async function fetchText(path) {
 
 function headerDefinition(tableKey, header) {
   const normalizedHeader = header.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
-  return state.tableDefinitions?.tables?.[tableKey]?.[header]
+  const category = state.summary?.metadata_categories?.find(item => item.header === header);
+  return state.tableDefinitions?.sdrf_headers?.[header]
+    || state.tableDefinitions?.tables?.[tableKey]?.[header]
     || state.tableDefinitions?.tables?.[tableKey]?.[normalizedHeader]
     || state.tableDefinitions?.defaults?.[header]
     || state.tableDefinitions?.defaults?.[normalizedHeader]
+    || category?.catalog_description
     || state.tableDefinitions?.defaults?.unknown
     || "";
 }
@@ -157,6 +161,45 @@ function conflictMetricMethodology() {
   return `<aside class="metric-methodology"><h4>Metric methodology</h4><p>For a comparison unit, let <code>M</code> be matched entities, <code>A</code> HAMLET-only entities, and <code>G</code> PRIDE-only entities. Precision is <code>M / (M + A)</code>; recall is <code>M / (M + G)</code>; and F1 is <code>2PR / (P + R)</code>.</p><p><strong>Micro</strong> metrics pool entity counts before applying those formulas. <strong>Macro</strong> metrics are the arithmetic mean of the contributing unit metrics, so every unit has equal weight. <strong>Mean</strong> metrics are likewise arithmetic means of the reported precision, recall, or F1 values. Empty comparisons without a defined denominator are excluded rather than treated as zero.</p></aside>`;
 }
 
+function formatNumber(value) {
+  return new Intl.NumberFormat().format(value);
+}
+
+function formatStatistic(value) {
+  return Number.isInteger(value) ? formatNumber(value) : Number(value).toFixed(3);
+}
+
+function histogramCard(field) {
+  const maximum = Math.max(...field.histogram.map(bucket => bucket.count), 1);
+  const bars = field.histogram.map(bucket => {
+    const height = Math.max(3, (bucket.count / maximum) * 100);
+    return `<div class="histogram-bin" title="${esc(`${bucket.label}: ${bucket.count} PXDs`)}"><span class="histogram-bar" style="height:${height}%"></span><span class="histogram-label">${esc(bucket.label)}</span></div>`;
+  }).join("");
+  return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
+}
+
+function renderOverview() {
+  state.selected = null;
+  history.replaceState(null, "", `${location.pathname}${location.search}`);
+  renderCatalog();
+  const summary = state.summary;
+  if (!summary) {
+    detail.innerHTML = `<div class="empty-state">Store summary data is unavailable.</div>`;
+    return;
+  }
+  const versionCards = summary.sdrf_versions.map(item => `<article class="stat-card"><span>HAMLET ${esc(item.version)}</span><strong>${esc(formatNumber(item.count))}</strong><small>PXDs with final SDRFs</small></article>`).join("");
+  const categories = summary.metadata_categories.map(item => [
+    item.header,
+    headerDefinition("SDRF", item.header),
+    item.requirement || "Not specified",
+    item.type || "Not specified",
+    item.ontology_accession || "Not specified",
+    formatNumber(item.pxd_count),
+  ]);
+  const categoryRows = [["SDRF header", "Definition", "Requirement", "Type", "Ontology accession", "PXDs"], ...categories];
+  detail.innerHTML = `<header class="record-header overview-header"><div><p class="eyebrow">Store overview</p><h2>HAMLET record summary</h2></div><span class="availability">${esc(formatNumber(summary.total_pxds))} catalogued PXDs</span></header>${section("HAMLET SDRFs by version", "Counts include PXDs with a final HAMLET SDRF, grouped by the schema version detected in the store.", `<div class="stat-grid">${versionCards}</div>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(summary.judge_records)} final per-paper judge records. Hover a bar to see its bin count.`, `<div class="histogram-grid">${summary.judge_fields.map(histogramCard).join("")}</div>`)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs. Definitions are sourced from the editable table-definitions.json glossary, with term metadata from the SDRF catalog.", tableContent(categoryRows, "SDRF metadata categories"))}`;
+}
+
 async function renderRecord(record) {
   state.selected = record.pxd;
   location.hash = record.pxd;
@@ -210,7 +253,7 @@ function renderCatalog() {
 }
 
 async function initialize() {
-  const [response, definitionsResponse] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json")]);
+  const [response, definitionsResponse, summaryResponse] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json"), fetch("data/site-summary.json")]);
   if (!response.ok) {
     throw new Error(`Could not load store index (${response.status} ${response.statusText})`);
   }
@@ -220,17 +263,21 @@ async function initialize() {
   }
   const index = await response.json();
   if (!definitionsResponse.ok) throw new Error(`Could not load table definitions (${definitionsResponse.status} ${definitionsResponse.statusText})`);
+  if (!summaryResponse.ok) throw new Error(`Could not load site summary (${summaryResponse.status} ${summaryResponse.statusText})`);
   state.tableDefinitions = await definitionsResponse.json();
+  state.summary = await summaryResponse.json();
   state.records = index.pxds;
   const versions = [...new Set(state.records.map(record => record.version || "Unknown"))].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
   versionFilter.innerHTML += versions.map(version => `<option value="${esc(version)}">${esc(version)}</option>`).join("");
   filter.addEventListener("input", renderCatalog);
   versionFilter.addEventListener("change", renderCatalog);
   if (prideFilter) prideFilter.addEventListener("change", renderCatalog);
+  overviewButton.addEventListener("click", renderOverview);
   renderCatalog();
   const selected = location.hash.slice(1);
-  const initial = state.records.find(record => record.pxd === selected) || state.records[0];
+  const initial = state.records.find(record => record.pxd === selected);
   if (initial) renderRecord(initial);
+  else renderOverview();
 }
 
 initialize().catch(error => { detail.innerHTML = `<div class="empty-state">${esc(error.message)}</div>`; });
