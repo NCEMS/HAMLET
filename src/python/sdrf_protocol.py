@@ -1,6 +1,7 @@
 """Pure protocol parsing helpers used by the SDRF evidence adapters."""
 
 import re
+import warnings
 from typing import Any
 
 
@@ -13,7 +14,7 @@ CLEAVAGE_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
-def _format_tolerance(value: object, unit: str) -> str | None:
+def _format_tolerance(value: object, unit: str, warning_context: str = "") -> str | None:
     if value is None:
         return None
     try:
@@ -23,29 +24,46 @@ def _format_tolerance(value: object, unit: str) -> str | None:
         if not match:
             return None
         number = float(match.group(1))
+    if number <= 0:
+        context = f"{warning_context}: " if warning_context else ""
+        warnings.warn(
+            f"{context}ignoring non-positive recommended tolerance {number:g} {unit}",
+            UserWarning,
+            stacklevel=2,
+        )
+        return None
     return f"{int(number) if number.is_integer() else number:g} {unit}"
 
 
-def parse_mass_tolerances(search_criteria: dict[str, Any], protocol_text: str) -> tuple[str | None, str | None]:
+def parse_mass_tolerances(
+    search_criteria: dict[str, Any],
+    protocol_text: str,
+    warning_context: str = "",
+) -> tuple[str | None, str | None]:
     """Prefer structured RunAssessor tolerances, then parse protocol text."""
     tolerances = search_criteria.get("tolerances", {}) if isinstance(search_criteria, dict) else {}
     if isinstance(tolerances, dict):
         items = [(str(key), value) for key, value in tolerances.items()]
 
         def pick(kind: str) -> str | None:
-            for key in (
-                f"recommended overall {kind} tolerance (ppm)",
-                f"recommended_overall_{kind}_tolerance_ppm",
-            ):
-                value = _format_tolerance(tolerances.get(key), "ppm")
-                if value:
-                    return value
             for key, value in items:
                 lowered = key.lower()
-                if kind not in lowered or "tolerance" not in lowered:
+                if "recommended" not in lowered or kind not in lowered or "tolerance" not in lowered:
                     continue
-                unit = "Da" if " da" in lowered or "(da" in lowered or lowered.endswith("_da") or " dalton" in lowered else "mmu" if "mmu" in lowered else "ppm"
-                formatted = _format_tolerance(value, unit)
+                if "unit" in lowered:
+                    continue
+                unit = (
+                    "m/z" if "m/z" in lowered or "_mz" in lowered else
+                    "Da" if " da" in lowered or "(da" in lowered or lowered.endswith("_da") or " dalton" in lowered else
+                    "mmu" if "mmu" in lowered else
+                    "ppm" if "ppm" in lowered else None
+                )
+                if unit is None:
+                    unit_key = f"recommended {kind} tolerance units"
+                    unit = str(tolerances.get(unit_key) or "").strip()
+                if not unit:
+                    continue
+                formatted = _format_tolerance(value, unit, warning_context)
                 if formatted:
                     return formatted
             return None
@@ -58,7 +76,7 @@ def parse_mass_tolerances(search_criteria: dict[str, Any], protocol_text: str) -
         for pattern in patterns:
             match = re.search(pattern, protocol_text, re.I)
             if match:
-                return f"{match.group(1)} {match.group(2)}"
+                return _format_tolerance(match.group(1), match.group(2), warning_context)
         return None
 
     return (

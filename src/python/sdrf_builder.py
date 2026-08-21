@@ -19,6 +19,7 @@ from sdrf_resolution import resolve_field
 from sdrf_schema import flatten_internal_header, render_columns, rule_for_header, source_precedence_for
 from sdrf_protocol import parse_alkylation_reagent, parse_cleavage_agent, parse_collision_energy, parse_mass_tolerances, parse_reduction_reagent, parse_scan_range
 from sdrf_modifications import parse_protocol_modifications
+from hamlet_version import HAMLET_VERSION
 
 
 class AgenticToSDRF:
@@ -289,20 +290,12 @@ class AgenticToSDRF:
     def _build_experiment_evidence(self) -> tuple[FieldEvidence, ...]:
         """Normalize experimental-design values before renderer-specific checks."""
         structured_fields = {
-            "number_of_biological_replicates",
-            "number_of_technical_replicates",
-            "number_of_fractions",
             "factor_value",
         }
         return agentic_evidence(
             {key: value for key, value in self._exp.items() if key in structured_fields},
             source="experimental_design_agent",
             scope="study",
-            field_aliases={
-                "number_of_biological_replicates": "biological_replicate",
-                "number_of_technical_replicates": "technical_replicate",
-                "number_of_fractions": "fraction_identifier",
-            },
         )
 
     def _resolve_experiment_field(self, field: str) -> str | None:
@@ -414,31 +407,13 @@ class AgenticToSDRF:
     # ------------------------------------------------------------------ #
 
     def _get_biological_replicate(self) -> str:
-        override = self._override_field("biological_replicate")
-        if override and override.isdigit():
-            return override
-        val = self._resolve_experiment_field("biological_replicate")
-        if val and val.isdigit():
-            return val
-        return "1"
+        return "not available"
 
     def _get_technical_replicate(self) -> str:
-        override = self._override_field("technical_replicate")
-        if override and override.isdigit():
-            return override
-        val = self._resolve_experiment_field("technical_replicate")
-        if val and val.isdigit():
-            return val
-        return "1"
+        return "not available"
 
     def _get_fraction_identifier(self) -> str:
-        override = self._override_field("fraction_identifier")
-        if override and override.isdigit():
-            return override
-        val = self._resolve_experiment_field("fraction_identifier")
-        if val and val.isdigit():
-            return val
-        return "1"
+        return "not available"
 
     def _get_factor_value(self) -> str | None:
         return self._override_field("factor_value") or self._resolve_experiment_field("factor_value")
@@ -631,6 +606,7 @@ class AgenticToSDRF:
         derived_precursor, derived_fragment = parse_mass_tolerances(
             self._ra_search,
             self._data_proc + " " + self._sample_proc,
+            warning_context=getattr(self, "pxd_id", ""),
         )
         return (
             self._override_field("precursor_tolerance") or derived_precursor,
@@ -935,7 +911,7 @@ class AgenticToSDRF:
                 row["comment[collision energy]"] = collision_energy or "not available"
             row["comment[data file]"] = pf["raw_file"]
             row["comment[sdrf version]"] = "v1.1.0"
-            row["comment[sdrf annotation tool]"] = "HAMLET-agentic v0.1.0"
+            row["comment[sdrf annotation tool]"] = f"HAMLET-agentic {HAMLET_VERSION}"
             row["factor value[disease]"] = disease
             if has_fv_organism_part:
                 row["factor value[organism part]"] = organism_part

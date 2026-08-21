@@ -5,6 +5,7 @@ import csv
 import sys
 import tempfile
 import unittest
+import warnings
 from pathlib import Path
 
 
@@ -18,11 +19,15 @@ from sdrf_resolution import resolve_field
 from sdrf_schema import SDRF_MAPPING_RULES, render_columns, source_precedence_for
 from sdrf_protocol import parse_mass_tolerances
 from sdrf_modifications import parse_protocol_modifications
+from hamlet_version import HAMLET_VERSION
 
 
 class AgenticToSdrfParityTest(unittest.TestCase):
     def _builder_from_archive(self, pxd: str) -> AgenticToSDRF:
-        metadata_dir = REPO_ROOT / "store" / "agentic_results_files" / pxd / "integrated_output"
+        result_dir = REPO_ROOT / "store" / "agentic_results_files" / pxd
+        metadata_dir = result_dir / "metadata_extraction_output" / "integrated_output"
+        if not metadata_dir.exists():
+            metadata_dir = result_dir / "integrated_output"
         return AgenticToSDRF(
             tech_json=metadata_dir / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
             bio_json=metadata_dir / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
@@ -163,6 +168,33 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             ("6 ppm", "20 ppm"),
         )
 
+    def test_mass_tolerance_parser_uses_recommended_value_not_diagnostic_bound(self) -> None:
+        self.assertEqual(
+            parse_mass_tolerances(
+                {"tolerances": {
+                    "recommended overall fragment tolerance (m/z)": 0.5,
+                    "overall_lower_fragment_tolerance_m/z": -0.448627,
+                }},
+                "",
+            ),
+            (None, "0.5 m/z"),
+        )
+
+    def test_mass_tolerance_parser_warns_and_rejects_non_positive_recommendation(self) -> None:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            self.assertEqual(
+                parse_mass_tolerances(
+                    {"tolerances": {"recommended overall fragment tolerance (ppm)": -0.5}},
+                    "",
+                    warning_context="PXDTEST",
+                ),
+                (None, None),
+            )
+
+        self.assertEqual(len(caught), 1)
+        self.assertIn("PXDTEST: ignoring non-positive recommended tolerance -0.5 ppm", str(caught[0].message))
+
     def test_mass_tolerance_overrides_precede_derived_values(self) -> None:
         builder = AgenticToSDRF.__new__(AgenticToSDRF)
         builder._overrides = {
@@ -219,6 +251,56 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         self.assertEqual(rows[0]["comment[label]#1"], "AC=PRIDE:0000617;NT=SILAC heavy K:13C(6)15N(2)")
         self.assertEqual(rows[1]["comment[label]#0"], "AC=PRIDE:0000611;NT=SILAC light R:12C(6)14N(4)")
         self.assertEqual(rows[1]["comment[label]#1"], "AC=PRIDE:0000613;NT=SILAC light K:12C(6)14N(2)")
+
+    def test_aggregate_biological_replicate_count_is_not_sample_identifier(self) -> None:
+        builder = self._builder_from_archive("PXD005463")
+        self.assertEqual(builder._exp["number_of_biological_replicates"]["resolved"], "2")
+
+        _, rows = builder.build_rows()
+
+        self.assertTrue(rows)
+        self.assertTrue(all(
+            row["characteristics[biological replicate]"] == "not available"
+            for row in rows
+        ))
+
+    def test_aggregate_fraction_and_technical_replicate_counts_are_not_identifiers(self) -> None:
+        builder = self._builder_from_archive("PXD005463")
+        self.assertEqual(builder._exp["number_of_fractions"]["resolved"], "6")
+        self.assertEqual(builder._exp["number_of_technical_replicates"]["resolved"], "2")
+
+        _, rows = builder.build_rows()
+
+        self.assertTrue(rows)
+        self.assertTrue(all(
+            row["comment[fraction identifier]"] == "not available"
+            and row["comment[technical replicate]"] == "not available"
+            for row in rows
+        ))
+
+    def test_scalar_biological_replicate_override_is_not_broadcast(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {"biological_replicate": "2"}
+
+        self.assertEqual(builder._get_biological_replicate(), "not available")
+
+    def test_scalar_fraction_and_technical_replicate_overrides_are_not_broadcast(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {"fraction_identifier": "6", "technical_replicate": "2"}
+
+        self.assertEqual(builder._get_fraction_identifier(), "not available")
+        self.assertEqual(builder._get_technical_replicate(), "not available")
+
+    def test_annotation_tool_uses_canonical_hamlet_version(self) -> None:
+        builder = self._builder_from_archive("PXD005463")
+
+        _, rows = builder.build_rows()
+
+        self.assertTrue(rows)
+        self.assertEqual(
+            {row["comment[sdrf annotation tool]"] for row in rows},
+            {f"HAMLET-agentic {HAMLET_VERSION}"},
+        )
 
     def test_silac_channel_expansion_requires_per_file_modification_evidence(self) -> None:
         builder = self._builder_from_archive("PXD005463")

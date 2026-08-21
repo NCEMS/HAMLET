@@ -82,6 +82,7 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
         "version": None,
         "available": False,
         "aggregated": None,
+        "aggregate_omission": None,
         "agentic": [],
         "pride": None,
         "conflict": [],
@@ -95,6 +96,12 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
         relative_path = Path(pxd) / "aggregated_results.json"
         copy_file(aggregate, output_data_dir / relative_path)
         record["aggregated"] = relative_path.as_posix()
+    elif aggregate.is_file():
+        record["aggregate_omission"] = {
+            "reason": "file exceeds Explorer publish limit",
+            "size_bytes": aggregate.stat().st_size,
+            "limit_bytes": MAX_PUBLISHED_FILE_BYTES,
+        }
 
     if agentic_source.is_dir():
         record["available"] = True
