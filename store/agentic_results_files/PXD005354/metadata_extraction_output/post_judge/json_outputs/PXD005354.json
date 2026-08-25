@@ -3,21 +3,21 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "CRC65 panel",
-      "verdict": "high",
+      "extracted_value": "CaCo-2, CC07, HDC-143, SK-CO-1, C10, T84, RKO, LS-180, OXCO-1, HDC-111, HT55, C125-PM, SW480",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "correct_explicit",
+      "error_category": "incomplete",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value refers to a group/panel of cell lines, which fits the category of the cell_line field.",
-        "SOURCE_CHECK": "The text explicitly states that the authors \"profiled the proteomes of 65 colorectal cancer (CRC) cell lines\" and refers to this group as the \"CRC65 panel\" throughout the MS experimental description.",
-        "TRUTH_CHECK": "The CRC65 panel is the actual source of the biological material lysed and analysed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The \"CRC65 panel\" represents the entire set of cell lines used for the primary proteomics experiment described in the paper."
+        "TYPE_CHECK": "The candidate value is a list of immortalized cell line names, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that the proteomes of \"65 CRC cell lines\" (the CRC65 panel) were measured using LC-MS/MS. The listed cell lines (e.g., CaCo-2, C10, SW480) are explicitly mentioned as part of this panel or used in the MS-based predictions and validations.",
+        "TRUTH_CHECK": "The listed cell lines are all part of the CRC65 panel analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is a subset of the 65 cell lines analyzed. While it lists many of the specific lines mentioned in the text (especially those used for drug sensitivity validation), it does not list all 65 lines (which are likely in the referenced Table EV6A). However, the extraction captures the specific lines named in the provided text."
       }
     },
     {
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
-        "SOURCE_CHECK": "The paper describes the proteomic profiling of 65 colorectal cancer (CRC) cell lines; colorectal cancer is an adenocarcinoma, and these cell lines are of epithelial origin.",
-        "TRUTH_CHECK": "Colorectal cancer cell lines (such as CaCo-2, T84, etc., mentioned in the text) are well-established as epithelial cells.",
-        "COMPLETENESS_CHECK": "The full set contains \"epithelial cell\", which correctly describes the lineage of the CRC cell lines analyzed by MS."
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The paper describes the proteomics analysis of 65 colorectal cancer (CRC) cell lines; these are well-established as being of epithelial lineage.",
+        "TRUTH_CHECK": "Colorectal cancer cell lines are derived from the intestinal epithelium, making \"epithelial cell\" a factually correct lineage.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the lineage of the CRC cell lines analyzed by MS."
       }
     },
     {
@@ -52,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"colorectal cancer\" is a disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly stated in the title (\"human colon and rectal cancer\") and abstract (\"65 colorectal cancer (CRC) cell lines\").",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on the proteomic characterization of colorectal cancer.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"colorectal cancer\", which exhaustively covers the disease state described for the MS samples."
+        "TYPE_CHECK": "The candidate value \"colorectal cancer\" is a disease state/diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly stated in the title (\"human colon and rectal cancer\") and abstract (\"65 colorectal cancer (CRC) cell lines\") in the context of the samples analysed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on colorectal cancer (CRC) cell lines and patients.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"colorectal cancer\") covers the disease state described for the MS samples in the paper."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value consists of organs/tissues, which matches the definition of the 'organ' field.",
-        "SOURCE_CHECK": "The paper explicitly describes profiling the proteomes of \"human colon and rectal cancer\" (title) and \"colorectal cancer (CRC) cell lines\" and \"CRC patients\" (abstract).",
-        "TRUTH_CHECK": "The values \"colon\" and \"rectum\" are factually correct as the source of the colorectal cancer samples analysed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The full set covers the primary organs described in the study."
+        "TYPE_CHECK": "The candidate value \"colon, rectum\" describes the organs of origin, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human colon and rectal cancer\" in the title and describes profiling \"colorectal cancer (CRC) cell lines\" and \"CRC patients\" (which are the actual MS samples).",
+        "TRUTH_CHECK": "The values are factually correct as the study focuses on colorectal cancer (colon and rectum).",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the colon and rectum, which is exhaustive for the \"colorectal\" scope of the study."
       }
     },
     {
@@ -90,15 +90,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human colon and rectal cancer\", \"human colorectal cancer cell lines\", and \"human reference proteome\".",
-        "TRUTH_CHECK": "The study focuses on human CRC cell lines and patients, making \"Homo sapiens\" factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which exhaustively covers the species analyzed in this study."
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human colon and rectal cancer\" in the title and \"human reference proteome\" in the processing section.",
+        "TRUTH_CHECK": "The study focuses on human colorectal cancer cell lines and patients.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "proteomic subtype (FPA, FPB, FPC)",
+      "extracted_value": "sample source (CRC cell lines, CRC patients)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factor (proteomic subtypes) and its specific levels, which is the correct category for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text; the authors identified three \"integrated Full Proteome Subtypes (short: FPSs, namely FPA, FPB and FPC)\".",
-        "TRUTH_CHECK": "The value is factually correct as it accurately reflects the subtypes defined by the authors' clustering analysis of the MS data.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific experimental grouping (FPS) and the general disease context (colorectal cancer), which together cover the primary factors of the study."
+        "TYPE_CHECK": "The candidate value describes the source of the samples, which is a valid characteristic for a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly states that the study profiled the proteomes of 65 CRC cell lines and 90 CRC patients.",
+        "TRUTH_CHECK": "The value accurately reflects the two primary groups of biological material analyzed by mass spectrometry in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the sample source and the disease state (\"colorectal cancer\"), which together cover the primary experimental factors."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"colorectal cancer\" is a disease state, which is a valid characteristic for a factor_value.",
-        "SOURCE_CHECK": "The paper explicitly states the study is a \"Pharmacoproteomic characterisation of human colon and rectal cancer\" and profiles \"colorectal cancer (CRC) cell lines\" and \"CRC patients\".",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on colorectal cancer.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the disease state and the specific proteomic subtypes identified, which covers the primary experimental factors described."
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the disease state of both the cell lines and patients analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct; the study focuses on colorectal cancer (CRC).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"colorectal cancer\" and a descriptive string \"sample source (CRC cell lines, CRC patients)\"; together they cover the disease and sample source factors described."
       }
     },
     {
@@ -149,8 +149,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
         "SOURCE_CHECK": "The paper explicitly states in the \"hSAX chromatography\" section: \"We started collecting 48 fractions... which were subsequently combined to form 24 fractions\".",
-        "TRUTH_CHECK": "The value \"24\" is factually correct as it represents the final number of fractions per sample used for the full proteome analysis.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the text for the main proteomics experiment."
+        "TRUTH_CHECK": "The value \"24\" is factually correct as it represents the final number of fractions generated per sample for the full proteome analysis.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the text for the fractionation process."
       }
     },
     {
@@ -164,12 +164,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "wrong_value",
-      "corrected_value": null,
+      "corrected_value": "3",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The value \"155\" appears in the text, but it refers to the median number of human kinases identified per cell line (\"235 human kinases (median/cell line = 155...\"), not to biological replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect as a measure of biological replicates.",
-        "COMPLETENESS_CHECK": "The full set consists only of this incorrect value."
+        "TRUTH_CHECK": "The value is factually incorrect as it represents a protein count per sample, not the number of times the experiment was replicated.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
       }
     },
     {
@@ -179,15 +179,15 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
+      "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The paper mentions \"technical triplicates\" specifically in the context of \"Cell viability assays\", which are in vitro functional tests, not the mass spectrometry experiment.",
-        "TRUTH_CHECK": "The value \"3\" refers to the cell viability assays, not the proteomics/MS workflow. There is no mention of technical replicates for the MS samples.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical_replicates.",
+        "SOURCE_CHECK": "The paper mentions \"technical triplicates\" specifically in the context of \"in vitro cell viability assays\" (under the \"Cell viability assays\" section), not in the context of the mass spectrometry experiments.",
+        "TRUTH_CHECK": "The value \"3\" refers to the cell viability assays, not the proteomics/MS samples. For the Kinobeads MS experiment, the paper mentions \"biological triplicates,\" not technical replicates.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is incorrectly attributed to the MS experiment."
       }
     },
@@ -243,28 +243,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The paper explicitly mentions the use of \"trypsin (Roche)\" for in-solution digestion and \"tryptic in-gel digestion\" for Kinobeads.",
-        "TRUTH_CHECK": "The value is factually correct as stated in the \"In-solution digestion\" and \"Kinobeads\" sections of the methods.",
-        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
+        "SOURCE_CHECK": "The paper explicitly mentions the use of \"trypsin (Roche)\" for in-solution digestion and \"fully tryptic\" digestion in the MaxQuant search settings.",
+        "TRUTH_CHECK": "The value is factually correct as trypsin was the protease used for protein digestion in this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "14 ppm",
-      "verdict": "low",
+      "extracted_value": "20 ppm, 0.4 Da, 120 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "20 ppm, 0.4 Da, 120 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"14 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states fragment ion tolerances of \"20 ppm\" (for CRC65 full proteomes), \"0.4 Da\" (for CPTAC spectra), and \"120 ppm\" (for Kinobeads spectra).",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and misses all the actual fragment tolerances mentioned in the text."
+        "TYPE_CHECK": "The candidate value consists of mass tolerance measurements, which is the correct category for this field.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"Processing of LC-MS/MS raw data\" section for the different experimental sets (CRC65, CPTAC, and Kinobeads).",
+        "TRUTH_CHECK": "The paper states \"The fragment ion tolerance was set to 20 ppm for FTMS (CRC65) and 0.4 Da for ITMS spectra (CPTAC)\" and \"The fragment ion tolerance was set to 120 ppm for FTMS spectra\" for Kinobeads.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all fragment mass tolerances mentioned in the text for the different datasets analyzed."
       }
     },
     {
@@ -281,9 +281,9 @@
       "corrected_value": "HCD",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"beam-type collision-induced dissociation\" is not present in the paper text; the paper explicitly states \"higher-energy collisional dissociation (HCD)\".",
+        "SOURCE_CHECK": "The value \"beam-type collision-induced dissociation\" is not present in the text; the paper explicitly states \"higher-energy collisional dissociation (HCD)\".",
         "TRUTH_CHECK": "The value is factually incorrect for this experiment as the paper specifies HCD.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it contains a hallucinated value and misses the actual method used."
+        "COMPLETENESS_CHECK": "The full set is incorrect as it contains a hallucinated value and misses the actual method mentioned in the text."
       }
     },
     {
@@ -302,7 +302,7 @@
         "TYPE_CHECK": "The candidate value lists mass spectrometer models, which matches the definition of the instrument field.",
         "SOURCE_CHECK": "Both instruments are explicitly mentioned in the \"LC-MS/MS data acquisition\" section as being used for the full proteome and Kinobeads experiments, respectively.",
         "TRUTH_CHECK": "The paper states that full proteome fractions were measured using an \"Orbitrap Velos\" and Kinobeads eluates were measured using an \"Orbitrap Elite\".",
-        "COMPLETENESS_CHECK": "The full set contains both mass spectrometers used in the study, making it exhaustive."
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all mass spectrometers used for the proteomics experiments described in the text."
       }
     },
     {
@@ -319,9 +319,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification (LFQ) intensities\" in the results section when describing the quantification of kinomes.",
-        "TRUTH_CHECK": "The paper describes the use of iBAQ and LFQ (label-free quantification) and does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods.",
-        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which accurately reflects the labeling status described in the paper."
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification (LFQ) intensities\" in the results section.",
+        "TRUTH_CHECK": "The paper describes the use of LFQ and does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling approach used for the MS experiments."
       }
     },
     {
@@ -338,9 +338,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the text; the paper explicitly mentions using an \"Orbitrap Velos\" and an \"Orbitrap Elite\" for the MS experiments.",
-        "TRUTH_CHECK": "The value is factually correct as both instruments used in the study utilize Orbitrap mass analyzers.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only Orbitrap-based instruments are mentioned for the MS analysis."
+        "SOURCE_CHECK": "The paper explicitly mentions the use of \"Orbitrap Velos\" and \"Orbitrap Elite\" mass spectrometers.",
+        "TRUTH_CHECK": "The value is factually correct as both instruments used for the MS analysis are Orbitrap-based.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"orbitrap\") is exhaustive as no other mass analyzer types were used."
       }
     },
     {
@@ -358,8 +358,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Processing of LC-MS/MS raw data\" section (\"Carbamidomethylation of cysteines was set as a fixed modification\").",
-        "TRUTH_CHECK": "The candidate value \"Carbamidomethyl (C)\" is an unambiguous synonym for the \"Carbamidomethylation of cysteines\" described in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") is incomplete as the text also explicitly mentions \"acetylation of protein N-termini\"."
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") is incomplete because \"acetylation of protein N-termini\" is also explicitly mentioned as a variable modification in the text."
       }
     },
     {
@@ -368,36 +368,36 @@
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "Carbamidomethyl (C), Oxidation (M), Acetylation (protein N-termini)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Processing of LC-MS/MS raw data\" section as a variable modification used during the database search.",
+        "TRUTH_CHECK": "The paper states \"oxidation of methionines... were set as variable modifications\", which is equivalent to \"Oxidation (M)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") is incomplete because the paper also explicitly lists \"acetylation of protein N-termini\" as a variable modification."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "4.5 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
       "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
       "error_category": "correct_explicit",
-      "corrected_value": "Carbamidomethyl (C), Oxidation (M), Acetylation (N-term)",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Processing of LC-MS/MS raw data\" section (\"oxidation of methionines... were set as variable modifications\").",
-        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") is incomplete because \"acetylation of protein N-termini\" is also explicitly mentioned as a variable modification."
-      }
-    },
-    {
-      "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "9 ppm",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "4.5 ppm",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"9 ppm\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states that after recalibration, the data were searched with a precursor ion tolerance of \"4.5 ppm\".",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect value \"9 ppm\" and misses the correct value stated in the text."
+        "TYPE_CHECK": "The candidate value is a mass tolerance expressed in ppm, which matches the definition for precursor mass tolerance.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Processing of LC-MS/MS raw data\" section of the methods.",
+        "TRUTH_CHECK": "The text states, \"After recalibration, the data were searched with a precursor ion tolerance of 4.5 ppm,\" confirming the value is correct for the precursor ions.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance mentioned for the primary analysis."
       }
     }
   ]

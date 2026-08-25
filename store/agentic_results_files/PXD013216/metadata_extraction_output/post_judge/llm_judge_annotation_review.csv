@@ -1,41 +1,30 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD013216","","strict","Biological","cell_line","HEK293T, INS-1, NIH3T3, COS7","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
-SOURCE CHECK: HEK293T and INS-1 were used for PRM MS quantification of endogenous PKD1; however, NIH3T3 and COS7 were used only for transfection/activation assays and membrane translocation assays, not for mass spectrometry.
-TRUTH CHECK: Only HEK293T and INS-1 are correct as sources for the MS experiment; NIH3T3 and COS7 are unrelated to the MS analysis.
-COMPLETENESS CHECK: The set is over-inclusive, containing cell lines that were not analyzed by MS.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: HEK293T, INS-1","HEK293T, INS-1"
-"PXD013216","","strict","Biological","cell_type","fibroblasts, pancreatic beta-cells","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value describes cell types, which matches the field definition.
-SOURCE CHECK: The value is derived from NIH3T3 (fibroblasts) and INS-1 (pancreatic beta-cells), but only INS-1 was analyzed by MS; NIH3T3 was used for transfection/activation assays (Western blotting), not MS.
-TRUTH CHECK: The inclusion of ""fibroblasts"" is incorrect because the NIH3T3 cells were not the material analyzed by mass spectrometry. The INS-1 cells were analyzed by PRM MS.
-COMPLETENESS CHECK: The full set is incorrect because it includes a cell type from an unrelated assay.
+"PXD013216","","strict","Biological","cell_line","HEK293T, INS-1, NIH3T3, COS7","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper mentions these cell lines, but only HEK293T and INS-1 were used for the MS experiments (PRM MS to quantify endogenous PKD1); NIH3T3 and COS7 were used for transfection/activation and translocation assays, respectively, and were not analyzed by MS.
+TRUTH CHECK: Only HEK293T and INS-1 are correct for the MS sample source; NIH3T3 and COS7 are unrelated to the MS analysis.
+COMPLETENESS CHECK: The full set includes cell lines that were not analyzed by MS, making the extraction factually incorrect.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
-CORRECTED_VALUE: pancreatic beta-cells","pancreatic beta-cells"
-"PXD013216","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
-SOURCE CHECK: The MS experiments used HEK293T and INS-1 cell lines; there is no mention of a disease state or pathology associated with the experimental goal.
-TRUTH CHECK: Since the study is not a disease-focused study and uses standard cell lines to quantify endogenous protein levels, the safe default ""normal"" is applicable.
-COMPLETENESS CHECK: The full set contains only this value, which is sufficient for a non-disease study.
+CORRECTED_VALUE: HEK293T, INS-1","HEK293T, INS-1"
+"PXD013216","","strict","Biological","cell_type","epithelial cell","epithelial cell","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""epithelial cell"" is a correct category for the cell_type field.
+SOURCE CHECK: The value is inferred from the cell line HEK293T, which was used for the PRM MS quantification of endogenous PKD1.
+TRUTH CHECK: HEK293T is a well-established human embryonic kidney cell line, and kidney cells are of epithelial lineage.
+COMPLETENESS CHECK: The full set contains only this value; however, the paper also mentions INS-1 cells (pancreatic $\beta$-cells) being analyzed by MS, which are also epithelial/endocrine cells.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VERDICT: medium
+CORRECTED_VALUE: epithelial cell, pancreatic beta cell","epithelial cell, pancreatic beta cell"
 "PXD013216","","strict","Biological","organ","kidney","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
-SOURCE CHECK: The word ""kidney"" does not appear in the provided paper text.
-TRUTH CHECK: The MS experiments used HEK293T cells (human embryonic kidney) and INS-1 cells (pancreatic beta-cells). While HEK293T is derived from kidney, the text does not explicitly mention ""kidney"", and the candidate value ""kidney"" is not the only relevant organ (pancreas for INS-1).
-COMPLETENESS CHECK: The full set consists only of ""kidney"", which ignores the INS-1 (pancreas) samples and is not explicitly stated in the text.
+SOURCE CHECK: The word ""kidney"" does not appear in the provided text, nor is there any mention of kidney-derived samples being analyzed by mass spectrometry.
+TRUTH CHECK: The MS experiments in the paper used HEK293T cells (human embryonic kidney) and INS-1 cells (pancreatic $\beta$-cells). While HEK293T is derived from the kidney, the text does not explicitly mention ""kidney"", and the extraction of ""kidney"" as a standalone organ for the MS sample is not supported by the text provided.
+COMPLETENESS CHECK: The full set contains only ""kidney"", which is incorrect/unsupported.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -43,11 +32,11 @@ VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
-CORRECTED_VALUE: NONE",""
+CORRECTED_VALUE: kidney","kidney"
 "PXD013216","","strict","Biological","species","Homo sapiens, Caenorhabditis elegans, Rattus norvegicus","Homo sapiens, Caenorhabditis elegans, Rattus norvegicus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a list of species names, which matches the required category for this field.
-SOURCE CHECK: All three species are used in the MS experiments: human (Homo sapiens) for PRM quantification in HEK293T cells and intact MS of recombinant proteins, C. elegans for intact MS of the purified DKF-1 construct, and rat (Rattus norvegicus) for PRM quantification in INS-1 cells.
-TRUTH CHECK: The paper explicitly mentions human PKD1, C. elegans DKF-1, and R. norvegicus (rat) INS-1 cells in the context of mass spectrometry analysis.
-COMPLETENESS CHECK: The full set of extracted values covers all organisms whose proteins were analyzed by mass spectrometry in this study.
+SOURCE CHECK: All three species are used in the context of mass spectrometry: *C. elegans* (DKF-1 protein mass confirmed by MS), *Homo sapiens* (PKD1 quantification in HEK293T cells by PRM MS and PKD1CAT phosphorylation state by intact MS), and *Rattus norvegicus* (PKD1 quantification in INS-1 cells by PRM MS).
+TRUTH CHECK: The paper explicitly mentions the use of *C. elegans* (DKF-1), human (*Homo sapiens*), and rat (*Rattus norvegicus*) proteins/cells for MS analysis.
+COMPLETENESS CHECK: The full set of extracted values covers all species whose materials were analyzed by mass spectrometry in this study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,22 +44,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","ExperimentalDesign","factor_value","HEK293T, INS-1, NIH3T3, COS7","normal","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of cell lines, which is a valid category for a factor_value (mirroring the cell_line or cell_type characteristic).
-SOURCE CHECK: The values appear in the text, but only HEK293T and INS-1 were actually analyzed by mass spectrometry (PRM MS to quantify PKD1); NIH3T3 and COS7 were used for transfection/confocal microscopy assays and were not analyzed by MS.
-TRUTH CHECK: The inclusion of NIH3T3 and COS7 is factually incorrect for the MS experiment context.
-COMPLETENESS CHECK: The full set includes ""normal"" and the cell lines, but it incorrectly includes non-MS samples.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: HEK293T, INS-1","HEK293T, INS-1"
-"PXD013216","","strict","ExperimentalDesign","factor_value","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, specifically as a safe default for disease state.
-SOURCE CHECK: The value ""normal"" is not explicitly mentioned in the text, but the study uses standard cell lines (HEK293T, INS-1) to estimate endogenous protein levels and test activation; there is no disease state being compared.
-TRUTH CHECK: According to the field definitions, ""normal"", ""healthy"", and ""disease free"" are safe defaults and are CORRECT when the subjects are not part of a disease study.
-COMPLETENESS CHECK: The full set of extracted values includes both the cell lines used and the ""normal"" state; together they describe the experimental conditions.
+"PXD013216","","strict","ExperimentalDesign","factor_value","cell line (HEK293T, INS-1)","cell line (HEK293T, INS-1)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the biological source (cell lines) used in the experiment, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The value is present in the text; both HEK293T and INS-1 cell lysates were analyzed by parallel reaction monitoring (PRM) MS to quantify endogenous PKD1.
+TRUTH CHECK: The value is factually correct as these are the two cell lines used for the MS quantification experiment.
+COMPLETENESS CHECK:The full set contains both cell lines mentioned in the MS context, making it exhaustive.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -79,10 +56,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
-SOURCE CHECK: The paper describes intact protein MS and targeted MS (PRM) of cell lysates, but does not mention any offline peptide or protein fractionation steps.
-TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation information is provided in the text.
-
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the default value of 1 is applicable.
+TRUTH CHECK: Since no fractionation is described in the methods for the MS experiments, ""1"" is factually correct.
+COMPLETENESS CHECK: The value ""1"" fully covers the state of fractionation for the experiments described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -90,22 +66,22 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
-SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the MS experiments (intact MS or PRM quantification); therefore, the safe default of ""1"" is applied.
-TRUTH CHECK: In the absence of explicit replication counts, ""1"" is the correct representation according to the field definitions.
-COMPLETENESS CHECK: The full set contains only the safe default, which is complete given the lack of information in the text.
+"PXD013216","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the MS experiments (PRM quantification of PKD1 in HEK293T and INS-1 cells, or intact MS of purified proteins).
+TRUTH CHECK: There is no mention of ""2"" replicates in the text; the value is not supported by the provided paper text.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the technical_replicates field.
-SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the MS experiments.
-TRUTH CHECK: According to the safe defaults rule, ""1"" is correct when the paper is silent regarding replication.
-COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or lack thereof) in the text.
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD013216","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the MS experiments (PRM or intact MS).
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is correct when the paper is silent regarding replicates.
+COMPLETENESS CHECK: The value ""1"" is a sufficient default for this field when no other information is provided.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -117,7 +93,7 @@ CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
 SOURCE CHECK: The paper mentions ""parallel reaction monitoring (PRM) MS"" and ""targeted MS"" for the quantification of PKD1 in HEK293T and INS-1 cells, but it does not explicitly mention ""data-dependent acquisition"" (DDA).
 TRUTH CHECK: The paper describes the use of Parallel Reaction Monitoring (PRM), which is a targeted acquisition method, not a data-dependent acquisition (DDA) method.
-COMPLETENESS CHECK: The full set contains only this value, which is factually incorrect based on the text.
+COMPLETENESS CHECK: The full set is incorrect as it does not reflect the targeted nature of the PRM experiment described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -128,7 +104,7 @@ CORRECTED_VALUE: parallel reaction monitoring","parallel reaction monitoring"
 "PXD013216","","strict","Technical","alkylation_reagent","iodoacetamide","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
 SOURCE CHECK: The word ""iodoacetamide"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
-COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -136,10 +112,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+"PXD013216","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
 SOURCE CHECK: The value ""10 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The paper does not mention a fragment mass tolerance of 10 ppm; it only mentions that peptide MS and PRM details are in the ""supporting Experimental procedures,"" which were not provided in the text.
-COMPLETENESS CHECK: The value is not supported by the text.
+TRUTH CHECK: The paper does not mention a fragment mass tolerance of 10 ppm; it only mentions ""intact MS"" and ""targeted MS (PRM)"" without specifying the search tolerances.
+COMPLETENESS CHECK: The full set of extracted values is not based on any information present in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -147,10 +123,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
-SOURCE CHECK: The candidate value is not mentioned in the provided paper text.
-TRUTH CHECK: The paper does not specify the fragmentation method used for the MS experiments.
-COMPLETENESS CHECK: The full set contains a value that is not present in the text.
+"PXD013216","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text; the text mentions ""targeted MS"" and ""parallel reaction monitoring (PRM)"" but does not specify the fragmentation method used.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set is not exhaustive as the value is hallucinated.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -158,8 +134,8 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value ""Q Exactive HF"" is not mentioned anywhere in the provided paper text.
+"PXD013216","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The value ""Q Exactive HF"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The paper explicitly states that mass spectra were recorded on a ""Waters Synapt G2-Si"".
 COMPLETENESS CHECK: The full set contains only this incorrect value.
 TYPE_CORRECT: yes
@@ -169,10 +145,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: Waters Synapt G2-Si","Waters Synapt G2-Si"
-"PXD013216","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
-SOURCE CHECK: The paper describes the use of parallel reaction monitoring (PRM) and targeted MS for quantification of PKD1 in HEK293T and INS-1 cells, and intact MS for protein mass confirmation; no isobaric or metabolic labeling is mentioned.
+"PXD013216","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes the use of parallel reaction monitoring (PRM) MS for quantifying endogenous PKD1 in HEK293T and INS-1 cells, and intact MS for protein mass confirmation; no isobaric or metabolic labeling is mentioned.
 TRUTH CHECK: Since no TMT, iTRAQ, SILAC, or other chemical labeling is described for the MS experiments, ""label-free"" is the correct safe default.
-COMPLETENESS CHECK: The full set contains only this value, which accurately describes the labeling state of the experiments.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the labeling state of the MS experiments in the paper.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -183,12 +159,12 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
 SOURCE CHECK: The paper mentions a ""Waters Synapt G2-Si"" for intact protein MS, but does not mention an Orbitrap instrument.
-TRUTH CHECK: The Waters Synapt G2-Si is a Quadrupole Time-of-Flight (Q-TOF) instrument, not an Orbitrap.
-COMPLETENESS CHECK: The full set is incorrect as it identifies the wrong mass analyzer.
+TRUTH CHECK: The Waters Synapt G2-Si is a Quadrupole-TOF (Time-of-Flight) instrument, not an Orbitrap.
+COMPLETENESS CHECK: The full set is incorrect as it identifies the wrong analyzer.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: TOF","TOF"
@@ -206,20 +182,20 @@ VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","Technical","modification","Oxidation (M)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for a protein modification.
 SOURCE CHECK: The term ""oxidation"" or ""Oxidation (M)"" does not appear in the provided paper text.
-TRUTH CHECK: The value is not mentioned in the text and cannot be inferred from the described reagents.
-COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (including ""Oxidation (M)"") are explicitly named in the text.
+TRUTH CHECK: The value is not supported by the text; there is no mention of searching for methionine oxidation.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named as search parameters in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification, which matches the field definition.
+"PXD013216","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Phospho (STY)"" describes a post-translational modification, which matches the field definition.
 SOURCE CHECK: The paper describes ""phosphopeptide mapping"" and ""phosphorylation of Ser738 and Ser742"" in the context of MS analysis of the PKD1 kinase domain.
-TRUTH CHECK: The paper explicitly mentions phosphorylation on Serine (S) and Threonine (T) residues (specifically Ser738 and Ser742), making ""Phospho (STY)"" a correct representation of the modification studied.
-COMPLETENESS CHECK: The full set of extracted values includes several modifications; however, ""Phospho (STY)"" is a correct individual extraction for the phosphorylation described.
+TRUTH CHECK: The paper explicitly mentions ""phosphorylation"" and ""phosphopeptide mapping"" multiple times; ""Phospho (STY)"" is a standard representation of phosphorylation on Serine, Threonine, and Tyrosine.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications (Carbamidomethyl, Oxidation, dihydroxy) that are NOT explicitly mentioned in the text, but ""Phospho (STY)"" itself is a correct extraction of the phosphorylation described.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -236,25 +212,25 @@ COMPLETENESS CHECK: The full set of extracted values contains multiple modificat
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: no
+VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","Technical","modification","not applicable","Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is a placeholder indicating the absence of a modification, but the field expects specific modifications searched.
-SOURCE CHECK: The paper describes phosphopeptide mapping and the use of ""phospho-Ser738/Ser742-specific antibody"", and explicitly mentions ""incorporation of one phosphate group"" and ""phosphopeptide mapping"" in the MS context.
-TRUTH CHECK: The value ""not applicable"" is factually incorrect because the experiment specifically analyzed phosphorylation.
-COMPLETENESS CHECK: The full set of extracted values contains several modifications, but ""not applicable"" is contradictory to the others and the text.
+SOURCE CHECK: The paper describes phosphopeptide mapping and the use of ""intact MS"" to identify phosphorylation, but it does not explicitly list the search parameters (fixed/variable modifications) for the peptide MS.
+TRUTH CHECK: The paper mentions ""phosphorylation"" and ""phosphopeptide mapping,"" which implies a phosphorylation modification was searched. Therefore, ""not applicable"" is factually incorrect.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications (Carbamidomethyl, Oxidation, etc.) that are not explicitly mentioned in the text, and ""not applicable"" is contradictory to the presence of these other values.
 
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
-HALLUCINATED: yes
+HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD013216","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+"PXD013216","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (ppm), which is the correct category for this field.
 SOURCE CHECK: The value ""6 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: Since the value is not present in the text, it cannot be verified as factually correct for this experiment.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
 COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -264,9 +240,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD013216","","strict","Technical","reduction_reagent","dithiothreitol","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
-SOURCE CHECK: The term ""dithiothreitol"" does not appear in the provided paper text; however, ""TCEP"" is explicitly mentioned multiple times in the protein purification and MS sample preparation sections.
-TRUTH CHECK: The value is factually incorrect for this experiment as the paper specifies the use of TCEP, not dithiothreitol.
-COMPLETENESS CHECK: The full set is incorrect as it contains a hallucinated reagent and misses the actual reagent used.
+SOURCE CHECK: The candidate value ""dithiothreitol"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text; the paper explicitly mentions ""TCEP"" as the reducing agent in multiple buffers (e.g., ""1 mm TCEP"" in lysis and SEC buffers).
+COMPLETENESS CHECK: The full set contains only ""dithiothreitol"", which is incorrect and fails to capture the actual reagent used.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

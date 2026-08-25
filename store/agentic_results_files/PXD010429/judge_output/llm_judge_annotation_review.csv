@@ -1,6 +1,6 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD010429","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human hematopoietic cell phenotypes"" and ""human reference genome,"" and describes a cohort of lung cancer patients, making ""Homo sapiens"" clearly inferable.
+SOURCE CHECK: The paper explicitly mentions ""human hematopoietic cell phenotypes"" and ""human reference genome,"" and describes a cohort of lung cancer patients, making ""Homo sapiens"" a correct and inferable value.
 TRUTH CHECK: The study is performed on human patients with squamous cell lung cancer.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
 
@@ -11,22 +11,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD010429","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK: The candidate value ""lung"" is a valid organ/tissue type.
-SOURCE CHECK: The paper explicitly mentions ""lung squamous cell carcinoma tumor tissues"" and ""primary lung cancer.""
-TRUTH CHECK: The samples are derived from the lung.
-COMPLETENESS CHECK: The full set of extracted values (""lung"") accurately and exhaustively describes the organ of origin for the samples in this study.
-
-TYPE_CORRECT: yes
+"PXD010429","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is a valid organ/tissue name.
+SOURCE CHECK:      The paper explicitly mentions ""lung squamous cell carcinoma tumor tissues"" and ""primary lung cancer.""
+TRUTH CHECK:       The value is factually correct as the study focuses on squamous cell lung cancer.
+COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the organ of origin described in the paper.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD010429","BiologicalAgent","disease","squamous cell lung cancer","squamous cell lung cancer","high","False","","True","True","False","TYPE CHECK: The candidate value is a disease diagnosis, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the title (""Proteogenomic landscape of squamous cell lung cancer"") and throughout the text.
-TRUTH CHECK: The paper describes a cohort of 108 patients with squamous cell lung cancer (SCC).
-COMPLETENESS CHECK: The full set contains the primary disease studied in the cohort.
+TRUTH CHECK: The value is factually correct as the study focuses on a cohort of 108 squamous cell lung cancer (SCC) patients.
+COMPLETENESS CHECK: The full set of extracted values contains the primary disease studied in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -34,19 +33,19 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD010429","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" refers to the human subjects, not the broad material class (e.g., tissue, biofluid) as required by the definition.
-SOURCE CHECK:      The paper mentions patients, but the material actually used for the proteomics experiment was ""snap frozen tumor tissues"".
-TRUTH CHECK:       The value is incorrect because ""patients"" is the source of the material, not the material type itself.
-COMPLETENESS CHECK:The full set contains only ""patients"", which fails to identify the actual material used (tissue).
+"PXD010429","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is a subject description, not a broad material class (e.g., tissue, cell line, biofluid) as required by the definition.
+SOURCE CHECK:      The paper mentions ""108 squamous cell lung cancer (SCC) patients"", but the material actually used for the proteomics was ""snap frozen tumor tissues"".
+TRUTH CHECK:       The material analyzed was tumor tissue, not the patients themselves.
+COMPLETENESS CHECK: The full set contains only ""patients"", which is the wrong category of entity.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""tissue""]","tissue"
+CORRECTED_VALUE:   tissue","tissue"
 "PXD010429","BiologicalAgent","age","mean age = 69.1","mean age = 69.1","high","False","","True","True","False","TYPE CHECK:        The candidate value provides a numeric age measure, which fits the definition of the age field.
-SOURCE CHECK:      The value is explicitly stated in the ""Results"" section: ""older patients (mean age = 69.1)"".
+SOURCE CHECK:      The value is explicitly stated in the ""Clinical and molecular features"" section of the results (""mean age = 69.1"").
 TRUTH CHECK:       The value is factually correct as per the text.
 COMPLETENESS CHECK: The full set contains the only age-related metric provided in the text.
 TYPE_CORRECT:      yes
@@ -56,21 +55,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD010429","BiologicalAgent","anatomic_site_tumor","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is an anatomical location, which matches the definition of the anatomic_site_tumor field.
-SOURCE CHECK:      The paper explicitly mentions ""lung squamous cell carcinoma tumor tissues"" and ""primary lung cancer.""
-TRUTH CHECK:       The value is factually correct as the tumors were collected from the lung.
-COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the anatomical site described in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD010429","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""electrospray quadrupole-orbital ion trap mass spectrometer (Q Exactive Plus, Thermo, San Jose, CA)"".
-TRUTH CHECK: The value is factually correct as stated in the methods section.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned in the paper.
+"PXD010429","BiologicalAgent","anatomic_site_tumor","lung","lung","high","False","","True","True","False","TYPE CHECK: The candidate value ""lung"" is an anatomical location, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""squamous cell lung cancer"" and ""primary lung cancer"" multiple times.
+TRUTH CHECK: The tumors were collected from patients with ""surgically resected stage I–III SCC of the lung,"" making ""lung"" factually correct.
+COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the anatomical site described in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -78,10 +66,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD010429","TechnicalAgent","label","tandem mass tag (TMT)","tandem mass tag (TMT)","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific isobaric labeling method, which matches the definition of the 'label' field.
-SOURCE CHECK:      The text explicitly mentions ""tandem mass tag (TMT) chemical labeling experiments"" in the Results section and ""TMT labeling"" in the Methods section.
-TRUTH CHECK:       The value is factually correct as described in the paper.
-COMPLETENESS CHECK: The full set of extracted values contains the only labeling method used for the proteomics analysis described.
+"PXD010429","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text explicitly mentions an ""electrospray quadrupole-orbital ion trap mass spectrometer (Q Exactive Plus, Thermo, San Jose, CA)"".
+TRUTH CHECK:       The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -89,21 +77,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD010429","ExperimentalDesignAgent","replicates","108 patients","108","low","True","number_of_samples","False","False","False","TYPE CHECK:        The candidate value ""108 patients"" describes the number of subjects/samples, not the number of biological replicates per sample.
+"PXD010429","TechnicalAgent","label","TMT","TMT","high","False","","True","True","False","TYPE CHECK:        The candidate value ""TMT"" is a valid labeling method, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""tandem mass tag (TMT) chemical labeling experiments"" in the Results section and describes the TMT experimental design in the Methods section.
+TRUTH CHECK:       The value is factually correct as the study used TMT for its proteomic analysis.
+COMPLETENESS CHECK: The full set of extracted values contains ""TMT"", which is the only labeling method described for the proteomics experiments in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD010429","ExperimentalDesignAgent","replicates","108 patients","108","low","True","number_of_samples","False","False","False","TYPE CHECK:        The candidate value ""108 patients"" refers to the number of subjects/samples, not the number of biological replicates per sample.
 SOURCE CHECK:      The number 108 is present in the text as the total number of patients/samples.
-TRUTH CHECK:       The value is factually incorrect for the field 'replicates'; 108 is the total number of samples (number_of_samples), not the number of biological replicates per sample.
-COMPLETENESS CHECK: The full set of extracted values refers to the total sample size, not biological replication.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'; 108 is the total sample size (number_of_samples), not the number of biological replicates per sample.
+COMPLETENESS CHECK:The full set of extracted values consists of the total sample size, which is the wrong metadata category.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: number_of_samples
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
+CORRECTED_VALUE:   NONE","1"
 "PXD010429","ExperimentalDesignAgent","replicates","108","108","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper states ""we integrate... expression proteomics in a cohort of 108 squamous cell lung cancer (SCC) patients"" and ""We identified 108 SCC snap frozen tumor tissues from patients"".
-TRUTH CHECK:       In a clinical cohort study, each patient/tumor sample typically represents a unique biological replicate.
-COMPLETENESS CHECK: The full set of extracted values (""108 patients"", ""108"") correctly and exhaustively identifies the number of biological replicates (samples) used in the study.
+SOURCE CHECK:      The paper states ""a cohort of 108 squamous cell lung cancer (SCC) patients"" and ""We identified 108 SCC snap frozen tumor tissues from patients"".
+TRUTH CHECK:       In a clinical cohort study of this nature, each patient/tumor sample represents a unique biological entity (biological replicate).
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the total number of biological samples/patients used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -111,33 +110,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD010429","ExperimentalDesignAgent","technical_replicates","tumor pool replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""tumor pool replicates"" is a description of a sample type, not a numeric count of technical replicates.
-SOURCE CHECK:      The text mentions ""two tumor pool replicates"" in the Protein assembly section, but these are pool samples used for normalization across TMT batches, not technical replicates of the individual patient samples.
-TRUTH CHECK:       The value is factually incorrect as a measure of technical replicates per sample; it refers to a specific experimental control (pools).
-COMPLETENESS CHECK: The full set includes ""2"", which likely refers to the number of pool replicates, but the paper does not explicitly state the number of technical replicates performed for each individual tumor sample.
-
+"PXD010429","ExperimentalDesignAgent","technical_replicates","injection replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""injection replicates"" is a description of a type of replicate, not a numeric count as required by the field definition.
+SOURCE CHECK:      The text mentions ""injection replicates"" in the context of normalization and averaging, but it does not provide a specific number of technical replicates per sample.
+TRUTH CHECK:       The value is not a count; it is a term used in the methods.
+COMPLETENESS CHECK: The full set contains only this non-numeric term and fails to provide the actual number of replicates.
 TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: NONE
+CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD010429","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The text mentions ""two tumor pool replicates"" within each TMT 6-plex, but these are pool replicates used for normalization across batches, not technical replicates of the individual patient samples.
-TRUTH CHECK:       The paper does not state that each individual sample was analyzed in technical duplicate; the ""2"" refers to the number of pool replicates per TMT batch.
-COMPLETENESS CHECK: The full set includes ""tumor pool replicates"" and ""2"", but neither accurately describes technical replicates for the samples.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD010429","ExperimentalDesignAgent","experimental_design","proteomic subtype classification (Inflamed, Redox, Mixed)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a classification result rather than a study design type (e.g., cross-sectional, case-control).
-SOURCE CHECK:      The subtypes (Inflamed, Redox, Mixed) are present in the text, but they are the outcome of the analysis, not the design of the experiment.
-TRUTH CHECK:       The value is factually a result of the study, but it does not represent the ""experimental design"" as defined.
-COMPLETENESS CHECK: The full set contains only this value, which is a category error.
+"PXD010429","ExperimentalDesignAgent","experimental_design","proteomic subtype classification (Inflamed, Redox, Mixed)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the goal/outcome of the analysis rather than the study design type (e.g., cross-sectional, case-control).
+SOURCE CHECK:      The text describes the identification of these subtypes, but ""proteomic subtype classification"" is not a study design.
+TRUTH CHECK:       The study is a cross-sectional proteogenomic analysis of a patient cohort, not a ""classification"" design.
+COMPLETENESS CHECK: The full set contains only this value, which is a misidentification of the experimental design.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
@@ -147,8 +134,8 @@ VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD010429","ExperimentalDesignAgent","factor_value","proteomic subtype (Inflamed, Redox, Mixed)","proteomic subtype (Inflamed, Redox, Mixed)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (proteomic subtypes) used to group the samples, which fits the definition of a factor_value.
 SOURCE CHECK:      The paper explicitly identifies and analyzes three proteomic subtypes: ""Inflamed"", ""Redox"", and ""Mixed"".
-TRUTH CHECK:       The value is factually correct as these are the primary variables used to categorize the 108 patients in the study.
-COMPLETENESS CHECK: The full set contains the primary experimental factor used for the proteomic analysis described in the paper.
+TRUTH CHECK:       The value is factually correct as the study focuses on the differences between these three identified proteomic subtypes.
+COMPLETENESS CHECK: The full set contains the primary experimental factor used for the comparative analysis in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -157,9 +144,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD010429","ExperimentalDesignAgent","fractions","12","12","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper explicitly states, ""Twelve concatenated fractions were analyzed with LC-MS/MS for each TMT experiment.""
-TRUTH CHECK: The value ""12"" is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set of extracted values contains ""12"", which is the only value mentioned for fractionation in the text.
+SOURCE CHECK: The paper explicitly states in the ""Expression proteomics"" section: ""Twelve concatenated fractions were analyzed with LC-MS/MS for each TMT experiment.""
+TRUTH CHECK: The value ""12"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""12"", which is the only fractionation count mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -167,14 +154,14 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD010429","ExperimentalDesignAgent","number_of_samples","108","108","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK: The paper explicitly states ""a cohort of 108 squamous cell lung cancer (SCC) patients"" and ""We identified 108 SCC snap frozen tumor tissues"".
-TRUTH CHECK: The value 108 is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the single correct value mentioned in the paper.
-TYPE_CORRECT: yes
+"PXD010429","ExperimentalDesignAgent","number_of_samples","108","108","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper explicitly states ""a cohort of 108 squamous cell lung cancer (SCC) patients"" and ""We identified 108 SCC snap frozen tumor tissues"".
+TRUTH CHECK:       The value 108 is factually correct based on the text.
+COMPLETENESS CHECK:The full set contains the single correct value mentioned in the paper.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

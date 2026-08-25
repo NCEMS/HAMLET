@@ -1,30 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD000561","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human proteome"", ""human samples"", and ""human reference genome"" throughout the text.
-TRUTH CHECK: The study is explicitly about the human proteome, making ""Homo sapiens"" factually correct.
+"PXD000561","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human proteome"", ""human samples"", and ""human genome"" throughout the text.
+TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans and is factually correct for this study.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD000561","BiologicalAgent","organ","kidney","kidney","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""kidney"" is an organ/tissue, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""kidney"" in the ""Comparison of human proteome map data with resources"" section when listing 10 tissues downloaded from the Broad Institute.
-TRUTH CHECK:       The paper describes the profiling of 30 human samples, including 17 adult tissues; while the specific list of 30 is not fully enumerated in the methods, kidney is explicitly listed as one of the tissues used for comparison and data analysis.
-COMPLETENESS CHECK: The full set of extracted values contains only ""kidney"", but the paper mentions many other tissues (e.g., ""adult retina"", ""fetal ovary"", ""adult testis"", ""pancreas"", ""adrenal glands"", ""liver"", ""heart"", ""brain"", ""lung"", ""colon"", ""prostate""). The current set is not exhaustive.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""kidney"", ""retina"", ""ovary"", ""testis"", ""pancreas"", ""adrenal glands"", ""liver"", ""heart"", ""brain"", ""lung"", ""colon"", ""prostate""]",""
-"PXD000561","BiologicalAgent","cell_type","hematopoietic cells","hematopoietic cells","high","False","","True","True","False","TYPE CHECK:        The candidate value ""hematopoietic cells"" describes a primary cell lineage, which matches the definition of cell_type.
-SOURCE CHECK:      The text explicitly mentions ""6 purified primary hematopoietic cells"" and ""Hematopoietic cells were isolated from leukopaks"".
-TRUTH CHECK:       The value is factually correct as the study used primary hematopoietic cells.
-COMPLETENESS CHECK: The paper also specifies the exact subpopulations isolated (CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells), but ""hematopoietic cells"" is the overarching primary cell type used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,10 +10,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000561","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field as per the definition for healthy controls.
-SOURCE CHECK:      The paper explicitly states that ""All tissues were histologically confirmed to be normal prior to analysis"" and that hematopoietic cells were from ""healthy volunteers"".
-TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values (""normal"") covers the disease state of the subjects described in the paper.
+"PXD000561","BiologicalAgent","organ","tissues","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""tissues"" is a general category, not a specific organ or tissue name.
+SOURCE CHECK:      The word ""tissues"" appears frequently in the text, but it is used as a collective noun for the samples.
+TRUTH CHECK:       The value is not a specific organ; the paper mentions 17 adult tissues and 7 fetal tissues, and specifically names organs like ""pancreas"", ""adult retina"", ""fetal ovary"", ""adult testis"", ""adrenal glands"", ""lung"", ""colon"", ""liver"", ""heart"", ""brain"", and ""kidney"".
+COMPLETENESS CHECK: The full set contains only the generic term ""tissues"", failing to capture any of the specific organs mentioned in the text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: organ
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""pancreas"", ""retina"", ""ovary"", ""testis"", ""adrenal glands"", ""lung"", ""colon"", ""liver"", ""heart"", ""brain"", ""kidney""]",""
+"PXD000561","BiologicalAgent","cell_type","hematopoietic cells","hematopoietic cells","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""hematopoietic cells"" describes a primary cell lineage, which matches the definition of cell_type.
+SOURCE CHECK:      The text explicitly mentions ""6 purified primary hematopoietic cells"" in the abstract and describes the isolation of ""Hematopoietic cells"" in the methods.
+TRUTH CHECK:       The value is factually correct as the study used primary hematopoietic cells.
+COMPLETENESS CHECK: The paper further specifies the hematopoietic cell populations as ""CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells"" and ""Platelets"". The current set only contains the broad category.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""hematopoietic cells"", ""CD14+ Monocytes"", ""pan CD56+ NK Cells"", ""CD20+ B cells"", ""CD8+ T cells"", ""pan CD4+ T cells"", ""Platelets""]",""
+"PXD000561","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper explicitly states that ""All tissues were histologically confirmed to be normal prior to analysis"" and that hematopoietic cells were from ""healthy volunteers.""
+TRUTH CHECK:       The value is factually correct as the study focused on a map of the normal human proteome.
+COMPLETENESS CHECK: The full set of extracted values (""normal"") covers the disease state of all samples described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -46,7 +46,7 @@ CORRECTED_VALUE:   NONE",""
 "PXD000561","BiologicalAgent","material_type","adult donors","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""adult donors"" refers to the source of the material (the subjects), not the broad material class (e.g., tissue, primary cells) as required by the definition.
 SOURCE CHECK:      The text mentions ""adult donors"" as the source of the tissues, but this is not a material type.
 TRUTH CHECK:       The value is factually present in the text but is the wrong category of information for this field.
-COMPLETENESS CHECK: The full set is incorrect as it identifies the donor rather than the material type.
+COMPLETENESS CHECK: The full set consists only of this incorrect value; the actual material types (tissue, primary cells) are missing.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -54,20 +54,20 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue"", ""primary cells""]","tissue, primary cells"
-"PXD000561","BiologicalAgent","age","adult","adult","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""adult"" describes a developmental time point/age group.
-SOURCE CHECK:      The text explicitly mentions ""adult tissues"" and ""adult donors"".
-TRUTH CHECK:       The value is factually correct as the study used adult donors.
-COMPLETENESS CHECK: The full set contains ""adult"", but the paper also explicitly mentions ""fetal tissues"", which is a distinct age/developmental time point.
+"PXD000561","BiologicalAgent","age","adult, fetal","adult, fetal","high","False","","True","True","False","TYPE CHECK:        The candidate value describes developmental stages/age groups, which fits the category for the age field.
+SOURCE CHECK:      The text explicitly mentions ""17 adult tissues"" and ""7 fetal tissues"".
+TRUTH CHECK:       The values are factually correct based on the paper's description of the samples.
+COMPLETENESS CHECK: The full set captures the two age/developmental categories mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""adult"", ""fetal""]","adult, fetal"
-"PXD000561","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD000561","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The text explicitly mentions ""LTQ-Orbitrap Velos"" in the LC-MS/MS section.
-TRUTH CHECK:       The value is factually correct based on the provided text.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
 COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also mentions the ""LTQ-Orbitrap Elite"".
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -76,10 +76,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""LTQ-Orbitrap Velos"", ""LTQ-Orbitrap Elite""]","LTQ-Orbitrap Velos, LTQ-Orbitrap Elite"
-"PXD000561","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The experimental description (spectral counting for quantitation) is consistent with a label-free approach.
-COMPLETENESS CHECK:The full set of extracted values is exhaustive as no other labeling methods were used.
+"PXD000561","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC), making ""label-free"" a safe default.
+TRUTH CHECK:       The experimental design uses spectral counting for quantitation, which is a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -87,33 +87,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000561","ExperimentalDesignAgent","replicates","3 donors per adult tissue (pooled)","3 donors per adult tissue (pooled)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of donors (biological sources), which fits the category of biological replicates.
-SOURCE CHECK:      The text explicitly states ""Human tissues were harvested postmortem... from three adult donors for each tissue"".
-TRUTH CHECK:       The value is factually correct based on the text, including the detail that they were pooled.
-COMPLETENESS CHECK: The full set includes ""30"", which refers to the total number of samples/tissues, not the number of replicates per sample. The value ""3"" correctly identifies the biological replication for the adult tissues.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+"PXD000561","ExperimentalDesignAgent","replicates","30 histologically normal human samples","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of samples, not a numeric count of biological replicates for a single condition.
+SOURCE CHECK:      The text mentions ""30 histologically normal human samples"", but these are different tissues/cell types, not replicates of the same biological condition.
+TRUTH CHECK:       The value is factually incorrect as a ""replicate"" count; 30 is the total number of unique samples (tissues/cells), not the number of biological replicates per sample.
+COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the total sample size as the replicate count.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD000561","ExperimentalDesignAgent","replicates","30","3 donors per adult tissue (pooled)","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for biological replicates.
-SOURCE CHECK:      The paper mentions ""30 histologically normal human samples"" and ""three adult donors for each tissue"", but ""30"" refers to the total number of distinct sample types/tissues, not the number of replicates per sample.
-TRUTH CHECK:       The value ""30"" is the total number of samples (tissues/cell types), not the number of biological replicates. The text states ""three adult donors for each tissue"", indicating 3 biological replicates for the adult tissues.
-COMPLETENESS CHECK: The full set of extracted values confuses the total sample count (30) with the number of replicates per sample (3).
-
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD000561","ExperimentalDesignAgent","replicates","30","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""30 histologically normal human samples"" in the abstract, but these are distinct samples (17 adult tissues, 7 fetal tissues, 6 hematopoietic cells), not biological replicates of a single condition.
+TRUTH CHECK:       The value ""30"" refers to the total number of unique samples/tissues analyzed, not the number of biological replicates per sample. The methods section states ""three adult donors for each tissue,"" which indicates 3 biological replicates for the adult tissues.
+COMPLETENESS CHECK:    The full set of extracted values incorrectly identifies the total sample size as the number of replicates.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""3""]","3"
+CORRECTED_VALUE:   3","3"
 "PXD000561","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper does not mention technical replicates; per the safe defaults rule, ""1"" is correct when the paper is silent.
-TRUTH CHECK:       The value is a valid default for this experiment.
-COMPLETENESS CHECK: The full set contains the single default value, which is exhaustive given the text.
+SOURCE CHECK:      The paper does not explicitly mention technical replicates; per the safe defaults rule, ""1"" is correct when the paper is silent.
+TRUTH CHECK:       The value is a valid application of the safe default for this experiment.
+COMPLETENESS CHECK: The full set contains the safe default value, which is exhaustive given the lack of explicit mention in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,21 +120,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000561","ExperimentalDesignAgent","experimental_design","Proteomic profiling of 30 normal human samples (adult tissues, fetal tissues, and hematopoietic cells)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the scope of the study rather than the study design type (e.g., ""cross-sectional"" or ""case-control"").
-SOURCE CHECK:      The information is present in the text, but it is a description of the samples, not the experimental design.
-TRUTH CHECK:       The value is a factual description of the samples used, but it does not answer ""what is the study design?"".
-COMPLETENESS CHECK: The full set provides a description of the samples but fails to categorize the experimental design.
+"PXD000561","ExperimentalDesignAgent","experimental_design","Proteomic profiling of 30 normal human samples (adult tissues, fetal tissues, and hematopoietic cells)","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       yes
+COMPLETENESS CHECK:The value describes the sample set and the goal, but not the study design type.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD000561","ExperimentalDesignAgent","factor_value","sample type (adult tissues, fetal tissues, hematopoietic cells)","sample type (adult tissues, fetal tissues, hematopoietic cells)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (different types of human samples) being compared/mapped, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly mentions profiling ""30 histologically normal human samples including 17 adult tissues, 7 fetal tissues and 6 purified primary hematopoietic cells"".
-TRUTH CHECK:       The value accurately reflects the categories of samples used to create the proteome map.
-COMPLETENESS CHECK: The full set captures the primary experimental variable (the different source materials) used in the study.
+CORRECTED_VALUE:   cross-sectional",""
+"PXD000561","ExperimentalDesignAgent","factor_value","tissue/cell type (17 adult tissues, 7 fetal tissues, 6 hematopoietic cells)","tissue/cell type (17 adult tissues, 7 fetal tissues, 6 hematopoietic cells)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue and cell types) being compared/mapped.
+SOURCE CHECK:      The text explicitly mentions ""30 histologically normal human samples including 17 adult tissues, 7 fetal tissues and 6 purified primary hematopoietic cells"".
+TRUTH CHECK:       The value accurately reflects the experimental design of mapping the proteome across these different biological sources.
+COMPLETENESS CHECK: The full set captures the primary factor (tissue/cell type) and the specific breakdown mentioned in the abstract.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,10 +142,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000561","ExperimentalDesignAgent","fractions","24","24","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The text explicitly states, ""A total of 96 fractions were collected which were then concatenated to 24 fractions.""
+"PXD000561","ExperimentalDesignAgent","fractions","24","24","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of fractions, which matches the field definition.
+SOURCE CHECK:      The text explicitly states, ""A total of 96 fractions were collected which were then concatenated to 24 fractions"".
 TRUTH CHECK:       The value 24 is factually correct as the final number of fractions used for LC-MS analysis.
-COMPLETENESS CHECK: The full set contains the single value ""24"", which accurately reflects the fractionation described in the paper.
+COMPLETENESS CHECK: The full set of extracted values contains ""24"", which accurately reflects the fractionation described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -157,7 +156,7 @@ CORRECTED_VALUE:   NONE",""
 "PXD000561","ExperimentalDesignAgent","number_of_samples","30","30","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The abstract explicitly states ""profiling of 30 histologically normal human samples"".
 TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the single value ""30"", which exhaustively covers the total count of samples mentioned in the paper.
+COMPLETENESS CHECK: The full set of extracted values contains the single correct total count mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

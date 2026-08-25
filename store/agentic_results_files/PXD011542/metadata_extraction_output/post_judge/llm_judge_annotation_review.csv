@@ -1,8 +1,8 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD011542","","strict","Biological","organ","pistils, inflorescence","pistils, inflorescence","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value refers to plant organs/tissues, which matches the definition of the 'organ' field.
-SOURCE CHECK: The paper explicitly states that proteins extracted from ""pistils"" and ""inflorescence tissues"" were subjected to mass spectrometry (Mass-Spec) to identify ILP1-interacting proteins.
-TRUTH CHECK: The values are factually correct as they are the biological sources of the material analyzed by MS.
-COMPLETENESS CHECK: The full set of extracted values covers both tissues mentioned in the ""Protein–protein interactions"" section as sources for the Mass-Spec analysis.
+"PXD011542","","strict","Biological","organ","pistils","pistils","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""pistils"" is a type of organ/tissue, which matches the field definition.
+SOURCE CHECK: The value is present in the text; the ""Protein–protein interactions"" section explicitly states that ""Protein extracts prepared from pistils... were subjected to mass spectrometry (Mass-Spec) to identify ILP1-interacting proteins"".
+TRUTH CHECK: The value is factually correct as the paper identifies pistils as the source of the protein extracts used for the MS analysis.
+COMPLETENESS CHECK: The full set contains ""pistils"", which covers the tissue used for the MS identification of ILP1-interacting proteins. (Note: while inflorescence tissues were used for other assays, the specific ""Mass-Spec"" for identification is linked to pistils).
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -12,10 +12,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Biological","species","Arabidopsis thaliana","Arabidopsis thaliana","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of an organism, which matches the species field definition.
-SOURCE CHECK: The value is explicitly mentioned in the title and throughout the text as the organism used for the mass spectrometry analysis of ILP1-GFP immunoprecipitates.
+SOURCE CHECK: The value is explicitly mentioned in the title and throughout the text as the source of the biological material analyzed by mass spectrometry.
 TRUTH CHECK: The paper describes the study of proteins in *Arabidopsis thaliana*.
-COMPLETENESS CHECK: The full set contains the only species used for the MS experiment.
-
+COMPLETENESS CHECK: The full set contains the only species used for the proteomics experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,10 +22,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","ExperimentalDesign","factor_value","bait protein (ILP1-GFP, GFP control)","bait protein (ILP1-GFP, GFP control)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (the bait protein used for enrichment), which is a valid category for a factor_value.
-SOURCE CHECK: The value is present in the text; the ""Protein–protein interactions"" section explicitly states that ""ILP1-GFP and GFP control proteins were immunoprecipitated by GFP-trap beads"" for Mass-Spec analysis.
-TRUTH CHECK: The value is factually correct as it accurately identifies the two groups (bait and control) used in the proteomics experiment.
-COMPLETENESS CHECK: The full set contains the primary experimental contrast for the MS experiment.
+"PXD011542","","strict","ExperimentalDesign","factor_value","bait protein (ILP1-GFP, GFP control)","bait protein (ILP1-GFP, GFP control)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental groups (bait vs control) used in the pull-down, which is a valid representation of a factor value.
+SOURCE CHECK: The value is derived from the ""Protein–protein interactions"" section, where ILP1-GFP and GFP control proteins were immunoprecipitated and analyzed by mass spectrometry.
+TRUTH CHECK: The paper explicitly states that ""ILP1-GFP and GFP control proteins were immunoprecipitated by GFP-trap beads"" for the Mass-Spec analysis.
+COMPLETENESS CHECK: The full set captures the primary contrast (bait vs control) for the proteomics experiment described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -35,9 +34,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
-SOURCE CHECK: The paper describes a mass spectrometry analysis of immunoprecipitated proteins, but it does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of immunoprecipitated proteins, but it does not mention any offline peptide or protein fractionation (such as high-pH RP or SAX) prior to LC-MS/MS.
 TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation schemes are mentioned.
+COMPLETENESS CHECK: The value ""1"" fully covers the state of fractionation for this experiment.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -46,21 +45,20 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
-SOURCE CHECK: The paper mentions ""two biological replicates"" specifically in the context of the small RNA-seq assay (""we conducted a small RNA-seq assay using ilp1-1 and Col-0 inflorescences (two biological replicates)""). However, the mass spectrometry experiment (the focus of the proteomics metadata) is described as an immunoprecipitation of ILP1-GFP followed by Mass-spec analysis, and the text does not specify the number of biological replicates for this specific MS experiment.
-TRUTH CHECK: The value ""2"" refers to the small RNA-seq experiment, not the mass spectrometry experiment.
-COMPLETENESS CHECK: The value is not applicable to the MS experiment.
-
+"PXD011542","","strict","ExperimentalDesign","replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper explicitly mentions ""two biological replicates"" in the context of the small RNA-seq assay using ilp1-1 and Col-0 inflorescences.
+TRUTH CHECK: The value ""2"" is factually correct based on the text.
+COMPLETENESS CHECK: The value ""2"" is the only biological replicate count explicitly mentioned for the sequencing/analysis experiments in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 1","1"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.
-TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is correct when the paper is silent regarding replicates.
+TRUTH CHECK: According to the ""SAFE DEFAULTS"" rule, ""1"" is correct when the paper is silent regarding the number of replicates.
 COMPLETENESS CHECK: The value ""1"" is the standard default for a silent paper and is complete.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -69,10 +67,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition_method field.
-SOURCE CHECK: The paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" multiple times, but it does not explicitly state the acquisition scheme (e.g., DDA or DIA) used.
-TRUTH CHECK: There is no mention of ""data-dependent acquisition"" or ""DDA"" in the provided text.
-COMPLETENESS CHECK: The value is not present in the text, so the set is not based on evidence.
+"PXD011542","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" for identifying ILP1-interacting proteins, but it does not explicitly state the acquisition method (e.g., DDA or DIA).
+TRUTH CHECK: The value is not mentioned in the text; while DDA is common for in-gel digestion of co-IP samples, it is not explicitly stated.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -80,10 +78,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","Technical","alkylation_reagent","iodoacetamide","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
+"PXD011542","","strict","Technical","alkylation_reagent","iodoacetamide","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a chemical used for cysteine alkylation, which matches the field definition.
 SOURCE CHECK: The candidate value ""iodoacetamide"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
-COMPLETENESS CHECK: The full set contains only this hallucinated value.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive because the value is hallucinated.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -92,9 +90,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The value is explicitly mentioned in the ""Protein–protein interactions"" section: ""The immunoprecipitated proteins were subjected to in-gel digestion with trypsin.""
-TRUTH CHECK: The value is factually correct as it is the protease used for the MS sample digestion.
-COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the text.
+SOURCE CHECK: The text explicitly states that immunoprecipitated proteins were subjected to ""in-gel digestion with trypsin"" for the Mass-Spec analysis.
+TRUTH CHECK: The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -102,9 +100,9 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct type for this field.
+"PXD011542","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
 SOURCE CHECK: The value ""9 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -114,9 +112,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The candidate value is not mentioned in the provided paper text.
-TRUTH CHECK: The paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" but does not specify the fragmentation method used.
-COMPLETENESS CHECK: The value is not present in the text, so the extraction is not based on the provided source.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions ""Mass-spec analysis"" and ""in-gel digestion with trypsin,"" but it does not specify the fragmentation method used (e.g., CID, HCD, ETD).
+COMPLETENESS CHECK: The value is not supported by the text, so the set is not correct.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -125,9 +123,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","instrument","Orbitrap Elite","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
-SOURCE CHECK: The candidate value is not present in the provided paper text; the text mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" but does not name the instrument model.
-TRUTH CHECK: The value is not supported by the text.
-COMPLETENESS CHECK: The full set is insufficient as the value is hallucinated.
+SOURCE CHECK: The candidate value ""Orbitrap Elite"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text; the paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" but does not specify the instrument model.
+COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -136,9 +134,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper describes a mass spectrometry analysis of immunoprecipitated proteins (ILP1-GFP) but does not mention any isobaric, metabolic, or chemical labeling reagents.
-TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, ""label-free"" is the correct safe default.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the lack of labeling described in the text.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of immunoprecipitated ILP1-GFP proteins but does not mention any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, the ""label-free"" safe default applies.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -147,9 +145,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" multiple times, but it does not name the specific instrument model or the mass analyzer used.
+SOURCE CHECK: The paper mentions ""Mass-spec analysis"" and ""Mass-Spec assay"" multiple times, but it does not explicitly name the instrument model or the mass analyzer used.
 TRUTH CHECK: There is no mention of an Orbitrap mass analyzer in the provided text.
-COMPLETENESS CHECK: The full set contains a value that is not supported by the text.
+COMPLETENESS CHECK: The value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -158,19 +156,8 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The candidate value is not mentioned in the paper text; the text mentions ""in-gel digestion with trypsin"" but does not list the modifications searched during mass spectrometry.
-TRUTH CHECK: The value is not explicitly stated in the text. While iodoacetamide is a common reagent for carbamidomethylation, the rules explicitly forbid inferring this modification from reagents or common practice if the name is not written.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category (a protein modification) for this field.
-SOURCE CHECK: The candidate value is not present in the paper text.
-TRUTH CHECK: The candidate value is not mentioned in the text; there is no mention of oxidation being searched or identified.
+SOURCE CHECK: The candidate value is not mentioned in the paper text; while the methods mention ""in-gel digestion with trypsin"", no alkylation reagent or modification name is explicitly stated.
+TRUTH CHECK: The modification ""Carbamidomethyl (C)"" is not explicitly written in the text.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 
 TYPE_CORRECT: yes
@@ -180,10 +167,22 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD011542","","strict","Technical","precursor_mass_tolerance","6.9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct type for this field.
+"PXD011542","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The modification ""Oxidation (M)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD011542","","strict","Technical","precursor_mass_tolerance","6.9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.
 SOURCE CHECK: The value ""6.9 ppm"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set contains only this hallucinated value.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -192,9 +191,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD011542","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
-SOURCE CHECK: The value is present in the ""Gel filtration"" section of the methods, where the protein extraction buffer is described as containing ""2 mM Dithiothreitol [DTT]"".
-TRUTH CHECK: The value is factually correct as it is explicitly listed as a component of the buffer used for the proteins that were subsequently analyzed.
-COMPLETENESS CHECK: The full set contains the only reduction reagent mentioned in the text.
+SOURCE CHECK: The value is explicitly mentioned in the ""Gel filtration"" section of the methods, where the protein extraction buffer contains ""2 mM Dithiothreitol [DTT]"".
+TRUTH CHECK: The value is factually correct as it is listed as a component of the buffer used for protein extraction from the tissues analyzed.
+COMPLETENESS CHECK: The full set contains only this value, and no other reduction reagents are mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes

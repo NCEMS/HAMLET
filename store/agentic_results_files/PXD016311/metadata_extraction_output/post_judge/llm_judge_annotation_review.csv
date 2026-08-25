@@ -1,6 +1,6 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD016311","","strict","Biological","age","3-year-old","3-year-old","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a description of age, which matches the field definition.
-SOURCE CHECK: The value is explicitly stated in the ""Samples collection"" section, referring to the dog from which the *O. lupi* specimens (analysed by MS) were isolated.
+"PXD016311","","strict","Biological","age","3-year-old","3-year-old","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric age with a unit, which matches the definition for the age field.
+SOURCE CHECK: The value is explicitly stated in the ""Samples collection"" section, referring to the dog from which the *Onchocerca lupi* specimens (the MS samples) were isolated.
 TRUTH CHECK: The paper states the dog was ""3-year-old"".
 COMPLETENESS CHECK: This is the only age mentioned for the source animal of the MS sample, making the extraction complete.
 
@@ -11,10 +11,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Biological","organ","eye, skin","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value consists of organs/tissues, which matches the definition of the field.
-SOURCE CHECK: The paper states that adult nematodes were isolated from the ""eye"" and microfilariae (mfs) were collected from the ""skin""; however, the actual MS sample was derived specifically from ""proteins extracted from an adult female of O. lupi"" (which came from the eye).
-TRUTH CHECK: The MS analysis was performed on proteins from an adult female worm isolated from the eye. While skin was used to collect microfilariae, the ""In gel protein digestion"" and ""LC-MS/MS analysis"" sections specify that ""Two bands identified by SDS-PAGE and Western blotting were cut from gel"", and those bands were derived from the ""O. lupi female protein"" (eye source). There is no mention of MS analysis being performed on the skin-derived microfilariae.
-COMPLETENESS CHECK: The full set includes ""skin"", which is not the source of the MS sample.
+"PXD016311","","strict","Biological","organ","eye, skin","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value consists of anatomical sites/organs, which matches the definition.
+SOURCE CHECK: The paper states that adult nematodes were isolated from the ""eye"" and microfilariae (mfs) were obtained from the ""skin""; however, the actual MS sample was derived specifically from ""proteins extracted from an adult female of O. lupi"" (which came from the eye).
+TRUTH CHECK: While both eye and skin are mentioned as sources of the parasite, the proteomics workflow (SDS-PAGE and nLC-MS/MS) was performed specifically on the adult female protein extract (isolated from the eye). The skin-derived microfilariae were used for RNA/cDNA synthesis and microscopy, but not for the mass spectrometry analysis described in the ""Liquid chromatography–tandem MS (LC–MS/MS) analysis"" section.
+COMPLETENESS CHECK: The set includes ""skin"", which was not the source of the MS sample.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -23,10 +23,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: eye","eye"
-"PXD016311","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is the correct category for the sex field.
+"PXD016311","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is a valid entry for the sex metadata field.
 SOURCE CHECK: The value comes from the description of the dog from which the *O. lupi* specimens (the MS sample source) were isolated (""infected dog (3-year-old, male)"").
 TRUTH CHECK: The paper explicitly states the dog was male.
-COMPLETENESS CHECK: Only one dog was used as the source for the proteins analyzed by MS, so this value is exhaustive.
+COMPLETENESS CHECK: The full set contains the only donor sex mentioned for the source of the MS sample.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -34,21 +34,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Biological","species","Homo sapiens","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a scientific name of a species, which matches the field definition.
-SOURCE CHECK: While the abstract mentions that *Onchocerca lupi* parasitizes humans, the actual mass spectrometry experiment was performed on proteins extracted from *Onchocerca lupi* (a nematode) isolated from a dog.
-TRUTH CHECK: The MS sample was derived from *Onchocerca lupi*, not *Homo sapiens*.
-COMPLETENESS CHECK: The extraction is incorrect; the actual species analyzed by MS is not covered.
+"PXD016311","","strict","Biological","species","Homo sapiens","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a species name, which matches the required category.
+SOURCE CHECK: While the abstract mentions that *Onchocerca lupi* parasitizes humans, there is no evidence that human samples were analyzed by mass spectrometry; the MS analysis was performed on *Onchocerca lupi* proteins extracted from a dog.
+TRUTH CHECK: The candidate value is factually incorrect for the MS experiment described in the paper.
+COMPLETENESS CHECK: The full set is incorrect as it identifies the wrong species.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
-HALLUCINATED: no
+HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: Onchocerca lupi","Onchocerca lupi"
 "PXD016311","","strict","ExperimentalDesign","factor_value","species (Onchocerca lupi)","species (Onchocerca lupi)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the species of the sample, which is a valid characteristic for a factor_value.
 SOURCE CHECK: The value is present in the paper; the MS analysis was performed on proteins extracted from *Onchocerca lupi*.
 TRUTH CHECK: The value is factually correct as the study focuses on identifying proteins from *Onchocerca lupi*.
-COMPLETENESS CHECK: The full set contains only this value; while the study compares this species to others in the microarray/bioinformatics phase, the actual MS sample was derived from *O. lupi*.
+COMPLETENESS CHECK: The full set contains only this value; however, the study also compares these proteins against other filarioids (D. repens, D. immitis, etc.) in the serological assays, but for the MS sample itself, *O. lupi* is the sole species.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -57,9 +57,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD016311","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The paper describes the analysis of ""Two bands identified by SDS-PAGE and Western blotting"" which were cut and analyzed; there is no mention of offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.
+SOURCE CHECK: The paper describes the analysis of ""two bands"" cut from a gel, but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.
 TRUTH CHECK: Since no fractionation method is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation is mentioned.
+COMPLETENESS CHECK: The value ""1"" correctly reflects the lack of fractionation described in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -68,10 +68,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK: The paper describes the extraction of proteins from ""an adult female of O. lupi"" for the SDS-PAGE and subsequent nLC-MS/MS analysis, indicating a single biological source was used for the proteomics.
-TRUTH CHECK: Since only one adult female specimen was used for the protein extraction and MS analysis, and no other biological replicates are mentioned for the MS experiment, ""1"" is the correct value.
-COMPLETENESS CHECK: The value ""1"" accurately reflects the single-sample nature of the MS experiment described.
+"PXD016311","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK: The paper describes the extraction of proteins from ""an adult female of O. lupi"" for the SDS-PAGE and subsequent nLC-MS/MS analysis, indicating a single biological source.
+TRUTH CHECK: Since only one adult female worm was used for the protein extraction that fed into the mass spectrometry analysis, the value ""1"" is factually correct.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the single sample described for the MS experiment.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -82,7 +83,7 @@ CORRECTED_VALUE: NONE",""
 "PXD016311","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
 TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replicates.
-COMPLETENESS CHECK: The value ""1"" is the standard default for a single measurement per sample when not otherwise specified.
+COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or lack thereof) in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -92,9 +93,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD016311","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
-SOURCE CHECK: The value is explicitly mentioned in the ""Liquid chromatography–tandem MS (LC–MS/MS) analysis"" section (""MS data were acquired using a data-dependent top 12 method"").
-TRUTH CHECK: The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the only acquisition method described in the paper.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""Liquid chromatography–tandem MS (LC–MS/MS) analysis"" section (""MS data were acquired using a data-dependent top 12 method"").
+TRUTH CHECK: The value is factually correct as the paper explicitly describes a data-dependent acquisition method.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -113,21 +114,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
-SOURCE CHECK: The value ""9 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The paper explicitly states ""peptide tolerance 10 ppm"" (precursor) and ""MS/MS tolerance 20 mmu"" (fragment).
-COMPLETENESS CHECK: The full set contains only a value that is not present in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 20 mmu","20 mmu"
-"PXD016311","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""HCD spectra"" in the LC-MS/MS analysis section; ""beam-type collision-induced dissociation"" is the technical name for HCD.
-TRUTH CHECK: HCD (Higher-energy Collisional Dissociation) is indeed beam-type collision-induced dissociation.
-COMPLETENESS CHECK: The full set contains the only fragmentation method mentioned in the paper.
+"PXD016311","","strict","Technical","fragment_mass_tolerance","20 mmu","20 mmu","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value ""20 mmu"" is explicitly stated in the ""Protein identification"" section of the methods as the ""MS/MS tolerance"".
+TRUTH CHECK: The value is factually correct as it refers to the MS/MS (fragment) tolerance used during the database search.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -136,10 +126,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+"PXD016311","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions ""HCD spectra"" in the LC-MS/MS analysis section; ""beam-type collision-induced dissociation"" is a technical synonym for HCD.
+TRUTH CHECK: The paper explicitly states ""For HCD spectra resolution was set to 35000"", confirming HCD was used.
+COMPLETENESS CHECK: The full set contains the correct fragmentation method used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD016311","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The paper mentions a ""quadrupole Orbitrap Q-Exactive mass spectrometer (Thermo Scientific)"", but it does not specify the ""HF"" (High Field) model.
-TRUTH CHECK: The text specifies ""Q-Exactive"", but the addition of ""HF"" is not supported by the provided text.
-COMPLETENESS CHECK: The full set contains only this value, which is an over-specification of the instrument mentioned in the text.
+TRUTH CHECK: The text specifies ""Q-Exactive"", but adding ""HF"" is an unsupported specific model designation not present in the text.
+COMPLETENESS CHECK: The full set contains only this value, which is more specific than the text allows.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -147,11 +148,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: Q-Exactive","Q-Exactive"
-"PXD016311","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+"PXD016311","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
 SOURCE CHECK: The paper describes an nLC-MS/MS analysis of gel bands without any mention of isobaric, metabolic, or chemical labeling.
-TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is described, ""label-free"" is the correct safe default.
-COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for this experiment.
-
+TRUTH CHECK: Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned, the experiment is label-free by default.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -159,10 +159,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+"PXD016311","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for a mass analyzer.
 SOURCE CHECK: The value is explicitly mentioned in the text (""quadrupole Orbitrap Q-Exactive mass spectrometer"").
-TRUTH CHECK: The value is factually correct as the instrument used for the MS analysis is an Orbitrap.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TRUTH CHECK: The value is factually correct as the instrument used was an Orbitrap.
+COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -171,9 +171,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD016311","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""Protein identification"" section of the methods under the Mascot search parameters.
-TRUTH CHECK: The paper explicitly states ""fixed modification carbamidomethylation (C)"", which is an unambiguous synonym for ""Carbamidomethyl (C)"".
-COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (""oxidation (M)"" and ""protein N-terminal acetylation""), although ""Replacement of 3 protons by iron (D)"" is not in the text and ""not applicable"" is a filler. However, the candidate value itself is a correct individual extraction.
+SOURCE CHECK: The value is explicitly mentioned in the ""Protein identification"" section of the methods (""fixed modification carbamidomethylation (C)"").
+TRUTH CHECK: The value ""Carbamidomethyl (C)"" is an unambiguous synonym for the ""carbamidomethylation (C)"" stated in the text.
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Oxidation (M) and protein N-terminal acetylation), although ""Replacement of 3 protons by iron (D)"" and ""not applicable"" are not supported by the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -185,8 +185,7 @@ CORRECTED_VALUE: NONE",""
 "PXD016311","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Protein identification"" section of the methods.
 TRUTH CHECK: The paper states ""variable modification oxidation (M)"" was used during the Mascot search.
-COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and ""Oxidation (M)"", which are both explicitly mentioned in the text; however, ""not applicable"" and ""Replacement of 3 protons by iron (D)"" are not mentioned and are incorrect.
-
+COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and ""Oxidation (M)"", which are both explicitly mentioned in the text; however, ""not applicable"" and ""Replacement of 3 protons by iron (D)"" are not in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -194,11 +193,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","modification","not applicable","Carbamidomethyl (C) | Oxidation (M)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a valid modification name or target residue.
-SOURCE CHECK: The paper explicitly lists modifications used in the Mascot search (carbamidomethylation and oxidation), making ""not applicable"" factually incorrect.
-TRUTH CHECK: The paper states ""fixed modification carbamidomethylation (C), variable modification oxidation (M) and protein N-terminal acetylation"", so modifications were indeed applied.
-COMPLETENESS CHECK: The full set of extracted values contains both correct modifications and incorrect ones (""not applicable"" and ""Replacement of 3 protons by iron (D)"").
-
+"PXD016311","","strict","Technical","modification","not applicable","Carbamidomethyl (C) | Oxidation (M)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""not applicable"" is not a valid modification name or target residue.
+SOURCE CHECK: The paper explicitly lists modifications used in the Mascot search; ""not applicable"" is not mentioned.
+TRUTH CHECK: The candidate value is incorrect as the paper specifies several modifications.
+COMPLETENESS CHECK: The full set of extracted values contains both correct modifications and incorrect/hallucinated ones.
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -206,10 +204,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","modification","Replacement of 3 protons by iron (D)","Carbamidomethyl (C) | Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification of a residue, which fits the category for the modification field.
-SOURCE CHECK: The value ""Replacement of 3 protons by iron (D)"" is not present in the paper text.
-TRUTH CHECK: The value is not mentioned in the text and is not a valid modification for the described experiment.
-COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and an ""not applicable"" entry; it does not accurately reflect the paper.
+"PXD016311","","strict","Technical","modification","Replacement of 3 protons by iron (D)","Carbamidomethyl (C) | Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification of a residue, which fits the category of a protein modification.
+SOURCE CHECK: The value is not present in the paper text; the text mentions carbamidomethylation and oxidation, but not iron replacement.
+TRUTH CHECK: The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and an incorrect ""not applicable"" entry.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -217,14 +215,14 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD016311","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance, which is the correct category for this field.
-SOURCE CHECK: The value ""6 ppm"" does not appear in the provided paper text.
-TRUTH CHECK: The paper explicitly states ""peptide tolerance 10 ppm"" and ""MS/MS tolerance 20 mmu"" in the Protein identification section.
-COMPLETENESS CHECK: The extracted value is incorrect and does not reflect the data in the paper.
+"PXD016311","","strict","Technical","precursor_mass_tolerance","10 ppm","10 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Protein identification"" section of the methods, describing the Mascot search parameters for the MS experiment.
+TRUTH CHECK: The paper states ""peptide tolerance 10 ppm"", which refers to the precursor mass tolerance used during the database search.
+COMPLETENESS CHECK: The full set contains the only precursor tolerance value mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 10 ppm","10 ppm"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

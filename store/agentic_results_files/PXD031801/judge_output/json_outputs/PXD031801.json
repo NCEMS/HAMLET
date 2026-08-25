@@ -1,0 +1,197 @@
+{
+  "paper_id": "PXD031801",
+  "annotations": [
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "Homo sapiens, Mus musculus",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human lung tissue samples\", \"human Treg cells\", and \"human lung cancer cells\", making \"Homo sapiens\" a correct extraction.",
+        "TRUTH_CHECK": "The value is factually correct as the study utilizes human samples and cell lines.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Homo sapiens\", but the paper also extensively uses mice (C57BL/6J, BALB/c, etc.). Therefore, the set is incomplete."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is an organ, which matches the field definition.",
+        "SOURCE_CHECK": "The word \"kidney\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "There is no mention of kidney tissue or organs being used in the experiments described.",
+        "COMPLETENESS_CHECK": "The full set contains only a hallucinated value."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "HEK293T cells",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "cell line, tissue, primary cells, serum",
+      "issue_summary": {
+        "TYPE_CHECK": "No. The candidate value \"HEK293T cells\" is a specific cell line name, not a broad material class as required by the definition.",
+        "SOURCE_CHECK": "Yes. The paper mentions using HEK293T cells in the methods and results.",
+        "TRUTH_CHECK": "Yes. HEK293T cells were used in the experiments.",
+        "COMPLETENESS_CHECK": "No. The full set only contains a specific cell line name rather than the broad category \"cell line\", and it misses other materials used in the study (e.g., tissue, serum, primary cells)."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "HEK293T, B16-F10, MC38, LLC, NIH-3T3, A549, SW480",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"HEK293T\" is explicitly mentioned multiple times in the \"Mice and cell lines\" and \"Mass spectrometry\" sections of the methods.",
+        "TRUTH_CHECK": "The value is factually correct as it was used in the experiments (e.g., for protein expression and MS analysis).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also uses B16-F10, MC38, LLC, NIH-3T3, A549, and SW480 cell lines."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions a \"Q Exactive system (Thermo Fisher)\" in the Mass spectrometry section, but it does not mention an \"Orbitrap Fusion Lumos\".",
+        "TRUTH_CHECK": "The value is factually incorrect as it is not the instrument used in this study.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it contains a hallucinated instrument."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label-free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the mass spectrometry section; therefore, \"label-free\" is a safe default.",
+        "TRUTH_CHECK": "The extraction is factually correct based on the absence of other labeling methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling schemes were used."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "pulldown samples",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "No, the candidate value \"pulldown samples\" is a description of the sample type, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The phrase \"Each pulldown sample\" appears in the mass spectrometry section, but it does not specify the number of replicates.",
+        "TRUTH_CHECK": "The value is not a count of replicates; it is a reference to the material being analyzed.",
+        "COMPLETENESS_CHECK": "The full set contains \"pulldown samples\" (incorrect type) and \"1\" (the safe default for when replication is not mentioned)."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"1\" is a numeric count, which matches the required category for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiments; therefore, \"1\" is a safe default.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for when replication is not mentioned.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"pulldown samples\" (which is a type mismatch) and \"1\". While \"1\" is a correct default, the presence of \"pulldown samples\" in the set indicates a pipeline error, but the numeric value \"1\" itself is the correct representation of the missing information."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "comparison of protein interactions and phosphorylation of TGF-β1 with and without PKA",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a specific experimental comparison, which fits the category of \"experimental design\" (similar to \"treated vs control\").",
+        "SOURCE_CHECK": "The paper describes experiments comparing the effects of PKA (via PRKACA overexpression or inhibitors like H89) on TGF-β1 phosphorylation and its interaction with CHIP.",
+        "TRUTH_CHECK": "The value is factually correct based on the results section describing PKA's role in TGF-β1 phosphorylation and CHIP binding.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive; the paper includes multiple other designs, such as \"treated vs control\" for UDCA in tumor-bearing mice and \"case-control\" for the retrospective analysis of NSCLC patients."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "PKA treatment/overexpression (Control, PKA)",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes an experimental variable (treatment/overexpression), which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper describes experiments using PRKACA (PKA catalytic subunit) overexpression and PKA inhibitors (H89), as well as the TGR5-cAMP-PKA axis.",
+        "TRUTH_CHECK": "The paper explicitly tests the effect of PRKACA overexpression (e.g., \"PRKACA overexpression increased total and K63-linked ubiquitination of TGF-β1\") and PKA inhibition.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive; the study also investigates UDCA treatment, CHIP knockout/overexpression, and anti-PD-1 therapy as primary experimental factors."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry workflow (\"Each pulldown sample was run just in the separation gel... subjected to in-gel trypsin digestion... loaded onto the column\") but does not mention any offline fractionation steps.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"1\", which accurately reflects the lack of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "number_of_samples",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
+        "SOURCE_CHECK": "The value \"4\" is not mentioned in the text as the total count of samples processed in the study.",
+        "TRUTH_CHECK": "The paper describes numerous experiments involving multiple mouse strains (C57BL/6J, BALB/c, NSG, etc.), various cell lines (B16-F10, MC38, LLC, etc.), and a retrospective analysis of 211 human patients. A value of \"4\" does not represent the total count of samples.",
+        "COMPLETENESS_CHECK": "The full set of extracted values does not cover the total number of samples processed in the study."
+      }
+    }
+  ]
+}

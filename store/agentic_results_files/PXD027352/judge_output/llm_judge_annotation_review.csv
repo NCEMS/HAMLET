@@ -1,0 +1,178 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD027352","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human cells"", ""human fibroblasts"", and ""SwissProt Human release 2021 01"".
+TRUTH CHECK:       The use of human cell lines (U2OS, RPE1, BJ) and human patient fibroblasts confirms the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which covers the primary source organism for the proteomics experiment (BioID). Note: while mouse neurons were used for imaging, the mass spectrometry analysis was performed on U2OS cells (human).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE","Homo sapiens, Mus musculus"
+"PXD027352","BiologicalAgent","organ","bone","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""bone"" is a valid category for the organ/tissue field.
+SOURCE CHECK:      The word ""bone"" does not appear in the paper text, nor is it inferable from the cell lines (U2OS, RPE1, BJ) or the mouse hippocampal neurons used.
+TRUTH CHECK:       The value is not factually correct as the study uses osteosarcoma cells (U2OS), retinal pigment epithelial cells (RPE1), fibroblasts (BJ), and hippocampal neurons, but does not use bone tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD027352","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a valid category for cell_type.
+SOURCE CHECK:      The paper mentions U2OS (osteosarcoma), RPE1 (retinal pigment epithelial), and fibroblasts, but it does not explicitly use the term ""epithelial cell"" to describe the cells.
+TRUTH CHECK:       While RPE1 cells are epithelial, the paper refers to them specifically as ""hTERT RPE1 cells"" or ""RPE1 cells""; ""epithelial cell"" is a supertype drift/inference not explicitly stated as the cell type.
+COMPLETENESS CHECK: The full set only contains ""epithelial cell"", missing the explicitly mentioned ""fibroblasts"" and ""neurons"" (hippocampal neurons).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""fibroblasts"", ""neurons""]","fibroblasts, neurons"
+"PXD027352","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""osteosarcoma"" is a disease state, which matches the field definition.
+SOURCE CHECK:      The paper mentions U2OS cells (which are derived from osteosarcoma), but the text does not explicitly name ""osteosarcoma"" as the disease state being studied.
+TRUTH CHECK:       While U2OS is an osteosarcoma cell line, the study focuses on centriole biogenesis and a specific patient with ""microcephaly with chorioretinopathy."" The experimental focus is not on osteosarcoma.
+COMPLETENESS CHECK:    The full set contains only ""osteosarcoma,"" but the paper explicitly mentions ""microcephaly with chorioretinopathy"" in the context of patient fibroblasts.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:    [""microcephaly with chorioretinopathy""]","microcephaly with chorioretinopathy"
+"PXD027352","BiologicalAgent","material_type","U2OS cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""U2OS cells"" is a specific cell line name, not a broad material class as required by the definition.
+SOURCE CHECK:      The value is present in the text; U2OS cells were used extensively.
+TRUTH CHECK:       While U2OS cells were used, the field requires the broad category (e.g., ""cell line"").
+COMPLETENESS CHECK: The full set contains only the specific cell line, missing the broad material class and other materials used (e.g., RPE1 cells, fibroblasts, mouse hippocampal neurons).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""primary cells""]","cell line, primary cells"
+"PXD027352","BiologicalAgent","cell_line","U2OS","U2OS","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""U2OS"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""U2OS"" is explicitly mentioned multiple times in the ""Cell lines and culture"" and ""Results"" sections.
+TRUTH CHECK:       The value is factually correct as U2OS cells were used in the experiments.
+COMPLETENESS CHECK:The full set of extracted values is incomplete; the paper also uses ""hTERT BJ"", ""hTERT RPE1"", and ""hTERT RPE1 p53 KO"" cell lines.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""U2OS"", ""hTERT BJ"", ""hTERT RPE1"", ""hTERT RPE1 p53 KO""]","U2OS, hTERT BJ, hTERT RPE1, hTERT RPE1 p53 KO"
+"PXD027352","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Orbitrap Fusion Lumos™ Tribrid (Thermo Scientific)"" in the Mass spectrometry analysis section.
+TRUTH CHECK: The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027352","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK:      The paper describes a BioID experiment followed by mass spectrometry but does not mention any isobaric or metabolic labeling (like TMT or SILAC).
+TRUTH CHECK:       Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set consists of a single value that accurately reflects the labeling state of the experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","replicates","U2OS cells stably expressing BirA-HAUS6 or BirA alone","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of cell lines/conditions, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions these cell lines were used for the BioID experiment, but this is not a replicate count.
+TRUTH CHECK:       The value is factually a description of the samples, not the number of replicates.
+COMPLETENESS CHECK: The full set contains a numeric value ""2"" (likely from ""injected in duplicate""), but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper states ""Samples were injected in duplicate (5 μl per injection)"" in the Mass spectrometry analysis section.
+TRUTH CHECK:       The text mentions injections in duplicate, which refers to technical replicates, not biological replicates. For the BioID experiment, the text explicitly states ""The BioID was performed once,"" indicating a biological replicate count of 1.
+COMPLETENESS CHECK:    The full set of extracted values is incorrect; it includes a sample description and a value derived from technical replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD027352","ExperimentalDesignAgent","technical_replicates","injected in duplicate","injected in duplicate | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value ""injected in duplicate"" describes the number of technical replicates, but it is a phrase rather than a numeric count.
+SOURCE CHECK:      The text explicitly states ""Samples were injected in duplicate (5 μl per injection)"" in the Mass spectrometry analysis section.
+TRUTH CHECK:       ""Injected in duplicate"" is factually correct and means 2 technical replicates.
+COMPLETENESS CHECK: The full set of extracted values [""injected in duplicate"", ""2""] covers the information provided in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","technical_replicates","2","injected in duplicate | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The text states ""Samples were injected in duplicate (5 μl per injection)"" in the Mass spectrometry analysis section.
+TRUTH CHECK:       ""Injected in duplicate"" means there were 2 technical replicates per sample.
+COMPLETENESS CHECK:    The full set of extracted values (""injected in duplicate"", ""2"") accurately and exhaustively captures the technical replication described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","experimental_design","BioID proximity labeling comparison between BirA-HAUS6 and BirA control","BioID proximity labeling comparison between BirA-HAUS6 and BirA control","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison, which fits the category of study design (treated vs control).
+SOURCE CHECK:      The paper explicitly describes a BioID experiment using ""U2OS cells stably expressing BirA-HAUS6 or BirA alone (negative control)"".
+TRUTH CHECK:       The value accurately reflects the design of the proximity labeling experiment described in the BioID and Mass spectrometry analysis sections.
+COMPLETENESS CHECK: The full set contains only this value; while the paper contains many other experiments (RNAi, KO, etc.), this specific extraction focuses on the proteomics/MS part of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","factor_value","bait (BirA-HAUS6, BirA alone)","bait (BirA-HAUS6, BirA alone)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variable (the bait used in BioID), which fits the definition of a factor value.
+SOURCE CHECK:      The text explicitly mentions ""U2OS cells stably expressing BirA-HAUS6 or BirA alone (negative control)"" in the BioID section.
+TRUTH CHECK:       The value accurately reflects the experimental groups compared in the proximity labeling experiment.
+COMPLETENESS CHECK:    The full set of extracted values only includes this one, but the paper contains many other experimental factors (e.g., siRNA depletion of CEP192, HAUS6, NEDD1, POC5, GCP4; GCP4 mutations in patient fibroblasts; Haus6 KO in neurons). The current set is not exhaustive.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""bait (BirA-HAUS6, BirA alone)"", ""CEP192 depletion"", ""HAUS6 depletion"", ""NEDD1 depletion"", ""POC5 depletion"", ""GCP4 depletion"", ""GCP4 mutation"", ""Haus6 conditional KO""]","bait (BirA-HAUS6, BirA alone), CEP192 depletion, HAUS6 depletion, NEDD1 depletion, POC5 depletion, GCP4 depletion, GCP4 mutation, Haus6 conditional KO"
+"PXD027352","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a mass spectrometry workflow where peptides were eluted from SCX columns, but it does not specify the number of fractions collected; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK:       The value is correct based on the absence of a specified fractionation scheme.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as it correctly applies the default for a non-fractionated or unspecified sample.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the mass spectrometry experiment; it mentions ""samples were injected in duplicate,"" but not the total number of distinct biological samples.
+TRUTH CHECK:       There is no evidence in the text to support the value ""4"" as the total number of samples.
+COMPLETENESS CHECK:The full set contains only one value that is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

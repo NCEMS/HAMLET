@@ -1,19 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD007555","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human subjects"" and ""human proteome database"".
-TRUTH CHECK: The study was conducted on human subjects, making ""Homo sapiens"" factually correct.
-COMPLETENESS CHECK: The full set contains the only species involved in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD007555","BiologicalAgent","organ","cerebrospinal fluid","cerebrospinal fluid","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cerebrospinal fluid"" is a biofluid, which falls under the definition of organ/tissue of origin.
-SOURCE CHECK:      The paper explicitly mentions ""cerebrospinal fluid"" throughout the title, abstract, and methods.
-TRUTH CHECK:       The value is factually correct as the source material analyzed in the study.
-COMPLETENESS CHECK: The full set contains the only source material mentioned for the proteomics analysis.
+"PXD007555","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human subjects"" and ""human proteome database"".
+TRUTH CHECK:       The study uses cerebrospinal fluid from human subjects, making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK:   The full set contains the only species involved in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,10 +10,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field, specifically for healthy controls.
-SOURCE CHECK:      The paper explicitly states the study group consisted of ""12 healthy control subjects"" and ""neurologically healthy individuals.""
-TRUTH CHECK:       The value is factually correct as the subjects were neurologically unimpaired and healthy.
-COMPLETENESS CHECK: The full set of extracted values (""normal"") accurately covers the disease state of the subjects described in the paper.
+"PXD007555","BiologicalAgent","organ","cerebrospinal fluid","cerebrospinal fluid","high","False","","True","True","False","TYPE CHECK:        The candidate value is a biofluid, which falls under the definition of organ/tissue of origin.
+SOURCE CHECK:      The paper explicitly states ""Cerebrospinal fluid is investigated"" and ""CSF was obtained from the subarachnoid space"".
+TRUTH CHECK:       The value is factually correct as the source material for the proteomics analysis.
+COMPLETENESS CHECK: The full set contains the only organ/tissue mentioned as the source of the proteins.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,21 +21,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","BiologicalAgent","material_type","volunteer CSF donors","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""volunteer CSF donors"" describes the source of the samples (the people), not the broad material class (the substance) as required by the definition.
-SOURCE CHECK:      The phrase ""volunteer CSF donors"" is present in the text, but it refers to the subjects, not the material type.
-TRUTH CHECK:       The material actually analyzed was cerebrospinal fluid (CSF), which is a biofluid.
-COMPLETENESS CHECK: The full set contains only the subject description and fails to identify the actual material type.
+"PXD007555","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper explicitly describes the subjects as ""12 healthy control subjects"" and ""neurologically unimpaired healthy subjects.""
+TRUTH CHECK:       The value is factually correct as the study specifically used healthy individuals to establish baseline variability.
+COMPLETENESS CHECK: The full set of extracted values (""normal"") completely covers the disease state of the study population.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007555","BiologicalAgent","material_type","volunteer CSF donors","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       no
+COMPLETENESS CHECK:The full set contains only a description of the donors, not the material type.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""biofluid""]","biofluid"
-"PXD007555","BiologicalAgent","age","65","65","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric age, which matches the field definition.
-SOURCE CHECK:      The paper explicitly states, ""The median age of human subjects was 65 at the beginning of the study"".
-TRUTH CHECK:       The value is factually correct as the median age reported in the text.
-COMPLETENESS CHECK:The full set contains the only age-related value mentioned for the study group.
+CORRECTED_VALUE:   biofluid","biofluid"
+"PXD007555","BiologicalAgent","age","65","65","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric age, which matches the required category for the age field.
+SOURCE CHECK:      The paper explicitly states, ""The median age of human subjects was 65 at the beginning of the study.""
+TRUTH CHECK:       The value ""65"" is factually correct as the median age reported in the text.
+COMPLETENESS CHECK: The full set contains the median age provided in the text; no other specific ages or ranges are mentioned for the group.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -55,20 +55,20 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD007555","BiologicalAgent","sex","female","female","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""female"" is a valid category for the sex field.
-SOURCE CHECK:      The text explicitly mentions that ""39.1% of the subjects being female"" in the Characteristics of the study group section.
-TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The paper mentions females and implies the presence of males (since only 39.1% were female), but the extracted set only lists ""female"". However, in the context of donor characteristics for a group, listing the sexes present is correct.
+SOURCE CHECK:      The paper states in the ""Characteristics of the study group"" section that ""39.1% of the subjects being female.""
+TRUTH CHECK:       The value is factually correct as the study included female subjects.
+COMPLETENESS CHECK: The paper mentions females (39.1%), which implies the remainder are male; however, the extraction of ""female"" is a correct representation of the sex distribution described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""female"", ""male""]",""
-"PXD007555","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD007555","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The text explicitly mentions a ""quadrupole orbitrap mass spectrometer (Q Exactive, Thermo Fisher Scientific, Bremen, Germany)"".
-TRUTH CHECK:       The value is factually correct as stated in the methods section.
-COMPLETENESS CHECK:   The full set contains the only mass spectrometer mentioned in the paper.
+TRUTH CHECK:       The value ""Q Exactive"" is factually correct as per the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -76,10 +76,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK:      The paper explicitly mentions ""label-free quantification (LFQ)"" in the abstract and ""label-free quantification (LFQ,)"" in the Protein quantification section.
-TRUTH CHECK:       The value is factually correct as the study used LFQ.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one labeling method was used.
+"PXD007555","TechnicalAgent","label","label-free quantification (LFQ)","label-free quantification (LFQ)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the labeling method used, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""analyzed by label-free quantification (LFQ) via LC-MS/MS"" in the abstract and ""label-free quantification (LFQ)"" in the Protein quantification section.
+TRUTH CHECK:       The value is factually correct as per the paper.
+COMPLETENESS CHECK: The full set contains the only labeling method mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -87,22 +87,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","replicates","12 healthy control subjects","12","high","True","","False","True","False","TYPE CHECK:        The candidate value contains the number of subjects, but includes descriptive text (""healthy control subjects"") which is not a numeric count.
-SOURCE CHECK:      The paper explicitly states ""12 healthy control subjects"" and ""12 human subjects"".
-TRUTH CHECK:       The number of biological replicates (subjects) is indeed 12.
-COMPLETENESS CHECK:   The full set of extracted values includes both the descriptive phrase and the numeric value ""12"", which together accurately capture the biological replication.
-TYPE_CORRECT:      no
+"PXD007555","ExperimentalDesignAgent","replicates","12 healthy control subjects","12 healthy control subjects | 12","high","False","","True","True","False","TYPE CHECK:        The candidate value contains the correct category (number of biological replicates), although it includes descriptive text.
+SOURCE CHECK:      The paper explicitly states ""12 healthy control subjects"" in the abstract and ""12 human subjects"" in the methods.
+TRUTH CHECK:       The value is factually correct; there were 12 biological subjects/replicates.
+COMPLETENESS CHECK:   The full set of extracted values (""12 healthy control subjects"", ""12"") is exhaustive and covers the biological replication described.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","replicates","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of subjects, which fits the definition of biological replicates.
+"PXD007555","ExperimentalDesignAgent","replicates","12","12 healthy control subjects | 12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of subjects, which fits the definition of biological replicates.
 SOURCE CHECK:      The paper explicitly states ""12 healthy control subjects"" and ""12 human subjects"".
-TRUTH CHECK:       The study used 12 distinct human subjects as the biological replicates for the inter-individual variability analysis.
-COMPLETENESS CHECK:   The full set of extracted values (""12 healthy control subjects"", ""12"") correctly identifies the number of biological replicates.
-
+TRUTH CHECK:       The study used 12 distinct human subjects as the biological units of analysis.
+COMPLETENESS CHECK:   The full set of extracted values (""12 healthy control subjects"", ""12"") correctly and exhaustively identifies the number of biological replicates.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -111,9 +110,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD007555","ExperimentalDesignAgent","technical_replicates","4 technical replicates","4 technical replicates | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of technical replicates, which matches the field definition.
-SOURCE CHECK:      The text explicitly states, ""To calculate the analytical variability CVa, pooled samples were measured four times"" and ""in this paper, 4 technical replicates were used.""
-TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values (""4 technical replicates"", ""4"") correctly and exhaustively captures the information provided in the paper.
+SOURCE CHECK:      The text explicitly states, ""To this end, in this paper, 4 technical replicates were used"" in the section discussing analytical variability (CVa).
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK:   The full set of extracted values (""4 technical replicates"", ""4"") correctly and exhaustively captures the information provided in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,10 +120,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","technical_replicates","4","4 technical replicates | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for technical replicates.
-SOURCE CHECK:      The text explicitly states, ""To calculate the analytical variability CVa, pooled samples were measured four times"" and later, ""in this paper, 4 technical replicates were used.""
-TRUTH CHECK:       The value ""4"" is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set of extracted values (""4 technical replicates"", ""4"") accurately and exhaustively captures the information provided in the paper.
+"PXD007555","ExperimentalDesignAgent","technical_replicates","4","4 technical replicates | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper explicitly states, ""To this end, in this paper, 4 technical replicates were used"" in the section describing the calculation of analytical variability (CVa).
+TRUTH CHECK:       The value ""4"" is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set of extracted values (""4 technical replicates"", ""4"") refers to the same single piece of information and is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,10 +131,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","experimental_design","longitudinal design with 12 human subjects evaluated at three different time points","longitudinal design with 12 human subjects evaluated at three different time points","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design, which matches the field definition.
+"PXD007555","ExperimentalDesignAgent","experimental_design","longitudinal design with 12 human subjects evaluated at three different time points","longitudinal design with 12 human subjects evaluated at three different time points","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design, which fits the definition of experimental_design.
 SOURCE CHECK:      The text explicitly states, ""This CSF core proteome study has a longitudinal design with 12 human subjects evaluated at three different time points.""
 TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains the complete description of the experimental design as stated in the paper.
+COMPLETENESS CHECK: The full set contains the complete description of the study design as mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,10 +142,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","factor_value","time points (T0, T24, T48)","time points (T0, T24, T48)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (time points) being studied, which matches the definition of factor_value.
-SOURCE CHECK:      The paper explicitly mentions a longitudinal design with three time points: T0, T24, and T48.
-TRUTH CHECK:       The value is factually correct as per the ""Subjects and samples"" and ""Results"" sections.
-COMPLETENESS CHECK: The full set contains the primary experimental factor (time) and its specific levels; it covers the study design described.
+"PXD007555","ExperimentalDesignAgent","factor_value","time points (T0, T24, T48)","time points (T0, T24, T48)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (time points) under study, which matches the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions ""three different time points"" and identifies them as ""T0, T24 and T48"" in the Subjects and samples and Results sections.
+TRUTH CHECK:       The value is factually correct as the study is a longitudinal design evaluating subjects at these specific time points.
+COMPLETENESS CHECK: The full set contains the primary experimental factor (time) and its specific levels, covering the study design described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -154,10 +153,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD007555","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; it describes a direct injection of the protein digest into the nanoHPLC system.
-TRUTH CHECK:       Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The full set contains the single correct value for this experiment.
+"PXD007555","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK:      The paper describes a nanoHPLC separation but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) prior to LC-MS/MS.
+TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -166,8 +165,8 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD007555","ExperimentalDesignAgent","number_of_samples","36","36","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text explicitly states ""the three time points, T0, T24 and T48, together with 36 samples, were analyzed.""
-TRUTH CHECK:       The value is factually correct as the study analyzed 12 subjects at 3 time points each (12 * 3 = 36).
+SOURCE CHECK:      The text explicitly states ""together with 36 samples, were analyzed"" in the Results section.
+TRUTH CHECK:       The study involved 12 subjects evaluated at 3 different time points (T0, T24, T48), totaling 36 samples.
 COMPLETENESS CHECK: The full set contains the total count of samples processed in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE

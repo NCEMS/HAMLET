@@ -1,19 +1,20 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD003977","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions the ""UniProt Reference Homo sapiens database"" and ""human proteins"" in the results section.
-TRUTH CHECK:       The study uses the MCF-7 breast cancer cell line, which is a well-known human cell line, and the text confirms the use of the Homo sapiens database.
+"PXD003977","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name of a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions the ""UniProt Reference Homo sapiens database"" and ""human proteins"" in the Results and Data Analysis sections.
+TRUTH CHECK: The study uses MCF-7 cells, which are a well-known human breast cancer cell line, and the authors explicitly use the Homo sapiens database for identification.
 COMPLETENESS CHECK: The full set contains the only species involved in the experiment.
-TYPE_CORRECT:      yes
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD003977","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" refers to an organ/tissue, which matches the field definition.
 SOURCE CHECK:      The paper mentions ""MCF-7 breast cancer cells,"" from which the organ ""breast"" is reasonably inferable.
 TRUTH CHECK:       The cells used (MCF-7) are a well-known breast cancer cell line.
-COMPLETENESS CHECK:   The full set contains only ""breast"", which accurately describes the origin of the cells used in the study.
+COMPLETENESS CHECK: The full set contains ""breast"", which accurately describes the organ of origin for the cells used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,10 +22,11 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""MCF-7 breast cancer cells"". While MCF-7 is a well-known epithelial breast cancer cell line, the text itself does not explicitly use the word ""epithelial"".
-TRUTH CHECK:       The value is biologically true for MCF-7 cells, but it is not explicitly stated in the provided text.
-COMPLETENESS CHECK:    The full set contains only this value, but it is an inference not explicitly supported by the text.
+"PXD003977","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""MCF-7 breast cancer cells,"" but it does not explicitly use the term ""epithelial cell."" While MCF-7 is an epithelial cell line, the term is not in the text.
+TRUTH CHECK:       While biologically true that MCF-7 are epithelial, the extraction should be based on the provided text. The text specifies ""breast cancer cells"" and ""MCF-7.""
+COMPLETENESS CHECK: The full set contains only ""epithelial cell,"" which is an inference not explicitly stated in the text.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -32,10 +34,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD003977","BiologicalAgent","disease","breast carcinoma","breast carcinoma","high","False","","True","True","False","TYPE CHECK:        Yes, ""breast carcinoma"" is a disease state/diagnosis.
-SOURCE CHECK:      The paper mentions ""MCF-7 breast cancer cells"" multiple times.
-TRUTH CHECK:       ""Breast carcinoma"" is a synonym for ""breast cancer"".
-COMPLETENESS CHECK:The full set contains ""breast carcinoma"", which accurately describes the disease state of the MCF-7 cell line used in the study.
+"PXD003977","BiologicalAgent","disease","breast carcinoma","breast carcinoma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast carcinoma"" is a disease state, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""MCF-7 breast cancer cells"" in the abstract and methods. ""Carcinoma"" is a scientific synonym for ""cancer"" in this context.
+TRUTH CHECK:       The value is factually correct as the study uses the MCF-7 cell line, which is derived from breast cancer.
+COMPLETENESS CHECK:    The full set contains only this value, which accurately describes the disease state of the cells used.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -43,21 +45,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","BiologicalAgent","material_type","total cell lysate","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""total cell lysate"" describes the state of the material, but it is not one of the broad material classes defined for this field (e.g., ""cell line"", ""tissue"").
-SOURCE CHECK:      The text mentions ""prepared a total cell lysate of MCF-7 cells"", confirming the material was a lysate of a cell line.
-TRUTH CHECK:       While factually present, ""total cell lysate"" is a description of the sample preparation rather than the broad material class. The source material is the MCF-7 cell line.
-COMPLETENESS CHECK: The full set contains only ""total cell lysate"", which fails to identify the actual material class (""cell line"") as required by the definition.
+"PXD003977","BiologicalAgent","material_type","MCF-7 breast cancer cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""MCF-7 breast cancer cells"" is a specific cell line/cell type, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The text explicitly mentions ""MCF-7 breast cancer cells"" and ""MCF-7 breast cancer cell line"".
+TRUTH CHECK:       The value is factually correct regarding the source material.
+COMPLETENESS CHECK:The full set contains only this value, which is a specific entity rather than the broad material class required by the definition.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""cell line""]","cell line"
-"PXD003977","BiologicalAgent","cell_line","MCF-7","MCF-7","high","False","","True","True","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""MCF-7 breast cancer cells"" and ""MCF-7 cell line"" multiple times.
-TRUTH CHECK:       The value is factually correct as per the paper.
-COMPLETENESS CHECK: The full set contains the only cell line mentioned in the study.
+CORRECTED_VALUE:   cell line","cell line"
+"PXD003977","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" describes an anatomical location of a tumor, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""MCF-7 breast cancer cells,"" from which the anatomical site ""breast"" is reasonably inferable.
+TRUTH CHECK:       The cells used are a breast cancer cell line (MCF-7), making ""breast"" the correct anatomical site.
+COMPLETENESS CHECK: The full set contains the only relevant anatomical site mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -65,10 +67,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+"PXD003977","BiologicalAgent","cell_line","MCF-7","MCF-7","high","False","","True","True","False","TYPE CHECK:        The candidate value ""MCF-7"" is a name of an immortalized cell line.
+SOURCE CHECK:      The value is explicitly mentioned multiple times in the text (e.g., ""MCF-7 breast cancer cells"").
+TRUTH CHECK:       The value is factually correct as the source material for the experiment.
+COMPLETENESS CHECK:The full set of extracted values contains only ""MCF-7"", which is the only cell line mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003977","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The text explicitly mentions ""Orbitrap Fusion (Lumos) mass spectrometer"" and ""Orbitrap Fusion Lumos instrument"".
-TRUTH CHECK:       The value is factually correct as per the paper.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -76,10 +89,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK:      No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The experiment describes a standard LC-MS/MS workflow without any labeling reagents.
-COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+"PXD003977","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The experiment describes a discovery-based proteomics approach using high-pH prefractionation and CHOPIN acquisition without any mentioned labels.
+COMPLETENESS CHECK: The full set contains the only applicable value for this field.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -88,7 +101,7 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD003977","ExperimentalDesignAgent","replicates","MCF-7 breast cancer cells","1","low","True","","False","False","False","TYPE CHECK:        The candidate value is a cell line name, not a numeric count of biological replicates.
-SOURCE CHECK:      The value ""MCF-7 breast cancer cells"" is present in the text, but it refers to the sample source, not the number of replicates.
+SOURCE CHECK:      The value ""MCF-7 breast cancer cells"" is present in the text, but it describes the sample source, not the number of replicates.
 TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
 COMPLETENESS CHECK: The full set contains both a cell line name and the value ""1""; while ""1"" is a correct default for this paper, the inclusion of the cell line name is a type error.
 TYPE_CORRECT:      no
@@ -98,11 +111,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""1""]",""
-"PXD003977","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of biological replicates.
+"PXD003977","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
 SOURCE CHECK:      The paper describes the use of a single cell line (MCF-7) and does not mention multiple biological replicates for the main experiments; therefore, ""1"" is a safe default.
 TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set of extracted values contains ""1"" (correct) and ""MCF-7 breast cancer cells"" (incorrect type). While the numeric value is correct, the set contains a type mismatch.
-
+COMPLETENESS CHECK: The full set of extracted values contains ""1"" (correct) and ""MCF-7 breast cancer cells"" (incorrect type). While the numeric value is correct, the set contains a value that does not belong in this field. However, the numeric extraction itself is complete.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -112,8 +124,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD003977","ExperimentalDesignAgent","technical_replicates","technical triplicates","technical triplicates | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""technical triplicates"" describes the number of technical replicates, which matches the field definition.
 SOURCE CHECK:      The text explicitly states, ""analyzing one tryptic fraction in technical triplicates with CHOPIN and Universal Method"".
-TRUTH CHECK:       The value is factually correct as it directly reflects the text.
-COMPLETENESS CHECK: The full set of extracted values (""technical triplicates"", ""3"") is exhaustive and covers the information provided in the paper.
+TRUTH CHECK:       ""Technical triplicates"" is factually correct and equivalent to 3 technical replicates.
+COMPLETENESS CHECK:    The full set of extracted values (""technical triplicates"", ""3"") is exhaustive and correctly captures the information in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -122,9 +134,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD003977","ExperimentalDesignAgent","technical_replicates","3","technical triplicates | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper explicitly mentions ""analyzing one tryptic fraction in technical triplicates"" in the Results section.
+SOURCE CHECK:      The paper explicitly mentions analyzing ""one tryptic fraction in technical triplicates"".
 TRUTH CHECK:       ""Technical triplicates"" means 3 technical replicates, so the value ""3"" is factually correct.
-COMPLETENESS CHECK: The full set of extracted values (""technical triplicates"", ""3"") covers the information provided in the text.
+COMPLETENESS CHECK:   The full set of extracted values (""technical triplicates"", ""3"") covers the information provided in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,10 +144,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","ExperimentalDesignAgent","experimental_design","Comparison of CHOPIN and Universal Method across different protease digests (trypsin, elastase, and post-digest mix)","Comparison of CHOPIN and Universal Method across different protease digests (trypsin, elastase, and post-digest mix)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup and comparison, which fits the general nature of a study design.
-SOURCE CHECK:      The paper explicitly compares the ""CHOPIN"" and ""Universal Method"" using ""trypsin, elastase, and Post Digest Mix"" to evaluate proteome coverage and identification rates.
-TRUTH CHECK:       The value accurately reflects the core objective and design of the experiment as described in the results and methods.
-COMPLETENESS CHECK: The full set contains this single value, which comprehensively summarizes the comparative nature of the study.
+"PXD003977","ExperimentalDesignAgent","experimental_design","Comparison of protease specificity (trypsin, elastase, mix) and MS acquisition methods (CHOPIN vs Universal Method)","Comparison of protease specificity (trypsin, elastase, mix) and MS acquisition methods (CHOPIN vs Universal Method)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables and goals, which aligns with the definition of study design.
+SOURCE CHECK:      The text explicitly describes comparing different proteases (trypsin, elastase, and a mix) and two acquisition methods (CHOPIN and the Universal Method).
+TRUTH CHECK:       The value accurately reflects the core objective and design of the study as described in the results and methods sections.
+COMPLETENESS CHECK: The full set of extracted values captures the primary experimental design of the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,10 +155,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","ExperimentalDesignAgent","factor_value","protease (trypsin, elastase, Post Digest Mix), acquisition method (CHOPIN, Universal Method)","protease (trypsin, elastase, Post Digest Mix), acquisition method (CHOPIN, Universal Method)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (protease and acquisition method) being compared, which fits the definition of a factor value.
+"PXD003977","ExperimentalDesignAgent","factor_value","protease (trypsin, elastase, Post Digest Mix), acquisition method (CHOPIN, Universal Method)","protease (trypsin, elastase, Post Digest Mix), acquisition method (CHOPIN, Universal Method)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (protease and acquisition method) being compared, which fits the definition of factor_value.
 SOURCE CHECK:      The paper explicitly compares different proteases (trypsin, elastase, and a mix) and different acquisition methods (CHOPIN and the Universal Method).
 TRUTH CHECK:       The values are factually correct based on the results and methods sections.
-COMPLETENESS CHECK: The full set captures the primary experimental variables investigated in the study.
+COMPLETENESS CHECK: The full set captures the primary experimental variables studied in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -154,10 +166,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","ExperimentalDesignAgent","fractions","30","30","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper explicitly states ""prefractionated via high-pH reversed phase chromatography (C18, 30 fractions)"".
-TRUTH CHECK:       The value 30 is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values contains ""30"", which accurately reflects the number of fractions generated per sample as described in the paper.
+"PXD003977","ExperimentalDesignAgent","fractions","30","30","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count representing the number of fractions, which matches the field definition.
+SOURCE CHECK:      The paper explicitly states that individual digests were ""prefractionated via high-pH reversed phase chromatography (C18, 30 fractions)"".
+TRUTH CHECK:       The value ""30"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""30"", which exhaustively covers the number of fractions generated per sample as described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -165,14 +177,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003977","ExperimentalDesignAgent","number_of_samples","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes the analysis of a ""single cell line"" (MCF-7), and the methods describe preparing ""a total cell lysate of MCF-7 cells"".
-TRUTH CHECK:       The study focuses on the deep proteome of one specific biological sample (MCF-7 cell line), although this sample was split into different digests and fractions for technical analysis.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the number of biological samples (one cell line) processed.
+"PXD003977","ExperimentalDesignAgent","number_of_samples","120","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The paper does not mention a total of 120 samples. It mentions 30 fractions for the high-pH prefractionation, 15 concatenated fraction pools, and various data sets (six sets of 15 analyses and one set of 30 analyses), but no total sample count of 120.
+TRUTH CHECK:       The value 120 is not supported by the text.
+COMPLETENESS CHECK: The value is incorrect and therefore the set is not exhaustive or accurate.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
 CORRECTED_VALUE:   NONE",""

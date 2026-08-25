@@ -1,41 +1,64 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD015800","BiologicalAgent","species","Mycoplasmoides pneumoniae","","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name of a species, which matches the field definition.
-SOURCE CHECK:      The paper repeatedly mentions ""M. pneumoniae"" and ""Mycoplasma pneumoniae"", but does not use the name ""Mycoplasmoides pneumoniae"".
-TRUTH CHECK:       While ""Mycoplasmoides pneumoniae"" is the current taxonomically correct name for ""Mycoplasma pneumoniae"", the paper explicitly uses ""Mycoplasma pneumoniae"".
-COMPLETENESS CHECK:    The full set only contains one species, but the paper actually describes an experiment involving two species: M. pneumoniae and M. agalactiae.
-TYPE_CORRECT:      yes
+"PXD015800","BiologicalAgent","species","M. agalactiae","M. agalactiae","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name of a bacterial species, which matches the field definition.
+SOURCE CHECK: The value ""M. agalactiae"" is explicitly mentioned throughout the paper text.
+TRUTH CHECK: The value is factually correct as one of the primary organisms studied in the experiment.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also performs quantitative proteomics on ""M. pneumoniae"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""M. agalactiae"", ""M. pneumoniae""]","M. agalactiae, M. pneumoniae"
+"PXD015800","BiologicalAgent","disease","wild-type","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""wild-type"" describes the genetic status/strain of the organism, not a disease state or diagnosis.
+SOURCE CHECK:      The term ""wild-type"" is present in the text (e.g., ""wild-type M. agalactiae"").
+TRUTH CHECK:       While the organisms are wild-type, this is a description of the strain/genotype, not a ""disease"" or ""healthy/normal"" state in the context of a disease study.
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
-HALLUCINATED:      yes
+HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""Mycoplasma pneumoniae"", ""Mycoplasma agalactiae""]","Mycoplasma pneumoniae, Mycoplasma agalactiae"
-"PXD015800","BiologicalAgent","material_type","wild-type M. pneumoniae","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific organism/strain name, not a broad material class as required by the definition.
-SOURCE CHECK:      The text mentions ""wild-type M. pneumoniae"", but this is the identity of the sample, not its material type.
-TRUTH CHECK:       The value is factually present in the text, but it is the wrong category of information for this field.
-COMPLETENESS CHECK:The full set contains only this value, which is a type mismatch; the actual material type (whole organism/cells) is not correctly captured.
+CORRECTED_VALUE:   NONE",""
+"PXD015800","BiologicalAgent","material_type","strain 7784","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""strain 7784"" is a specific strain name, not a broad material class as required by the definition (e.g., ""whole organism"", ""primary cells"").
+SOURCE CHECK:      The value ""strain 7784"" is present in the text as the wild-type M. agalactiae strain.
+TRUTH CHECK:       While the strain is correct, it is not the correct category of information for the material_type field.
+COMPLETENESS CHECK: The full set contains only a specific strain name and fails to provide the broad material class.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE","whole organism"
-"PXD015800","BiologicalAgent","strain","M129","M129","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a strain identifier for a bacterium.
-SOURCE CHECK:      The text explicitly mentions ""the strain M129, for wild-type M. pneumoniae"".
+CORRECTED_VALUE:   whole organism",""
+"PXD015800","BiologicalAgent","age","48 h","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""48 h"" is a time duration/point, but in the context of this experiment, it refers to the growth duration of a bacterial culture, not the age of a donor or a developmental stage of the organism.
+SOURCE CHECK:      The value ""48 h"" is present in the text (e.g., ""grown for 48 h"").
+TRUTH CHECK:       The value is factually present but refers to the incubation/growth time of the bacteria, which is not the ""age"" of the subject as defined for this field.
+COMPLETENESS CHECK:The full set contains only this value, which is a miscategorization of growth time as subject age.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD015800","BiologicalAgent","strain","7784","7784","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a strain identifier for a bacterial species.
+SOURCE CHECK:      The text explicitly states, ""The strain 7784 was used for wild-type M. agalactiae"".
 TRUTH CHECK:       The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set of extracted values only contains M129, but the paper also mentions ""strain 7784"" for M. agalactiae.
+COMPLETENESS CHECK: The full set of extracted values only contains ""7784"", but the paper also mentions ""strain M129"" for M. pneumoniae.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""M129"", ""7784""]","M129, 7784"
+CORRECTED_VALUE:   [""7784"", ""M129""]","7784, M129"
 "PXD015800","TechnicalAgent","instrument","Orbitrap Velos Pro","Orbitrap Velos Pro","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""LTQ-Orbitrap Velos Pro-mass spectrometer"".
-TRUTH CHECK: The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+SOURCE CHECK: The text explicitly mentions ""LTQ-Orbitrap Velos Pro-mass spectrometer (Thermo Fisher Scientific)"".
+TRUTH CHECK: The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -44,9 +67,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD015800","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly states ""we performed free-label mass spectrometry analyses of M. agalactiae and M. pneumoniae"" in the results section.
-TRUTH CHECK:       The value is factually correct as the study used a label-free approach for quantitative proteomics.
-COMPLETENESS CHECK:The full set of extracted values contains ""label-free"", which exhaustively covers the labeling method described in the paper.
+SOURCE CHECK:      The text explicitly states ""we performed free-label mass spectrometry analyses of M. agalactiae and M. pneumoniae"".
+TRUTH CHECK:       The statement ""free-label"" is equivalent to ""label-free"".
+COMPLETENESS CHECK: The full set contains the only labeling method used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -56,8 +79,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD015800","ExperimentalDesignAgent","replicates","two biological replicates per species","two biological replicates per species","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
 SOURCE CHECK:      The text explicitly states, ""using two biological replicates per species"" in the Data analysis section.
-TRUTH CHECK:       The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set of extracted values includes both the descriptive ""two biological replicates per species"" and the total count ""4"" (2 species * 2 replicates), which together exhaustively cover the information in the paper.
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values includes ""two biological replicates per species"" and ""4"" (which is the total across two species). Together, these accurately reflect the replication described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -66,32 +89,32 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD015800","ExperimentalDesignAgent","replicates","4","two biological replicates per species","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of biological replicates.
-SOURCE CHECK:      The paper explicitly states ""two biological replicates were performed for each species"" and ""using two biological replicates per species"". The value ""4"" is likely a summation of replicates across the two species (2+2), but the field definition asks for the number of biological replicates (typically per condition/group).
-TRUTH CHECK:       The paper specifies 2 biological replicates per species, not 4.
-COMPLETENESS CHECK: The full set contains both the correct description (""two biological replicates per species"") and an incorrect summation (""4"").
-
+SOURCE CHECK:      The paper explicitly states ""two biological replicates were performed for each species"" and ""using two biological replicates per species"".
+TRUTH CHECK:       The value ""4"" is incorrect; the paper specifies 2 replicates per species, not 4 total or 4 per species.
+COMPLETENESS CHECK: The full set of extracted values is contradictory and contains an incorrect value (""4"").
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
-HALLUCINATED:      no
+HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   [""2""]","2"
-"PXD015800","ExperimentalDesignAgent","experimental_design","comparative quantitative proteome overview of M. agalactiae and M. pneumoniae","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the goal/nature of the analysis rather than a standard study design type (e.g., ""comparative"" or ""case-control"").
-SOURCE CHECK:      The text mentions performing ""free-label mass spectrometry analyses of M. agalactiae and M. pneumoniae to obtain a quantitative proteome overview of both species.""
-TRUTH CHECK:       While the analysis is comparative, the value provided is a descriptive phrase of the result/objective rather than the ""study design type"" as defined.
-COMPLETENESS CHECK: The full set contains only this descriptive phrase, which does not map to a standard experimental design category.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: experimental_design
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD015800","ExperimentalDesignAgent","factor_value","species (M. agalactiae, M. pneumoniae)","species (M. agalactiae, M. pneumoniae)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the experimental variable (species) being compared.
-SOURCE CHECK:      Yes, the paper explicitly compares *Mycoplasma pneumoniae* and *Mycoplasma agalactiae*.
-TRUTH CHECK:       Yes, the study is designed to identify differences in metabolic pathways between these two species.
-COMPLETENESS CHECK: The full set correctly identifies the primary experimental factor (species) and the specific values associated with it.
+"PXD015800","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention technical replicates; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK: The value is correct based on the safe default rule for silent technical replication.
+COMPLETENESS CHECK: The full set contains the single default value, which is exhaustive for this paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD015800","ExperimentalDesignAgent","experimental_design","comparative quantitative proteomics between M. agalactiae and M. pneumoniae","comparative quantitative proteomics between M. agalactiae and M. pneumoniae","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental approach and the entities compared, which fits the general nature of a study design.
+SOURCE CHECK:      The paper explicitly states it performs ""free-label mass spectrometry analyses of M. agalactiae and M. pneumoniae to obtain a quantitative proteome overview of both species"" and compares their protein abundances.
+TRUTH CHECK:       The value accurately reflects that the study is a comparative quantitative proteomics analysis between these two specific bacterial species.
+COMPLETENESS CHECK:    The full set contains this single value, which captures the primary design of the proteomics experiment described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -99,23 +122,35 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD015800","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; it describes a direct LC-MS/MS analysis after desalting.
-TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is factually correct.
+"PXD015800","ExperimentalDesignAgent","factor_value","species (M. agalactiae, M. pneumoniae)","species (M. agalactiae, M. pneumoniae)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variable (species) and the specific levels (M. agalactiae, M. pneumoniae), which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly compares these two bacterial species throughout the text.
+TRUTH CHECK:       The value is factually correct as the study is a comparative analysis between M. agalactiae and M. pneumoniae.
+COMPLETENESS CHECK: The full set captures the primary experimental variable used to compare the proteomes and metabolic pathways.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD015800","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK: Since no fractionation is described, the value ""1"" is factually correct.
 COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the text.
-TYPE_CORRECT:      yes
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD015800","ExperimentalDesignAgent","number_of_samples","4","4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The text states ""two biological replicates were performed for each species"" for the urea samples, and the ""Preparing samples for mass spectrometry analysis"" section describes processing for both M. pneumoniae and M. agalactiae.
-TRUTH CHECK:       The study processed 2 biological replicates for M. pneumoniae and 2 biological replicates for M. agalactiae, totaling 4 samples for the quantitative proteomics analysis.
-COMPLETENESS CHECK: The full set of extracted values (4) correctly covers the total number of biological samples processed for the main proteomics experiment.
+TRUTH CHECK:       The study processed 2 replicates for M. pneumoniae and 2 replicates for M. agalactiae, totaling 4 samples for the quantitative proteomics analysis.
+COMPLETENESS CHECK: The full set of extracted values (4) accurately reflects the total number of biological samples processed for the proteomics experiment described.
 TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
+CORRECT_TYPE_NAME:  NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no

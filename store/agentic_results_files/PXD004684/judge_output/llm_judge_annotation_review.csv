@@ -10,10 +10,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004684","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is a valid organ/tissue type.
+"PXD004684","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is a valid organ/tissue name.
 SOURCE CHECK:      The paper explicitly mentions ""lung squamous cell carcinomas"" and ""lung tissues"" multiple times.
-TRUTH CHECK:       The value is factually correct as the samples were derived from lung tissue.
-COMPLETENESS CHECK: The full set contains ""lung"", which exhaustively covers the organ of origin described in the paper.
+TRUTH CHECK:       The value is factually correct as the study focuses on lung tumor proteomes.
+COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the organ of origin described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,22 +21,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004684","BiologicalAgent","disease","lung squamous cell carcinoma","lung squamous cell carcinoma","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""lung squamous cell carcinomas"" in the abstract.
-TRUTH CHECK:       The value is factually correct based on the paper.
-COMPLETENESS CHECK: The paper describes experiments on lung squamous cell carcinomas and ""adjacent tissues"" (which serve as the control/normal state). While ""normal"" or ""adjacent"" is missing from the extracted set, the primary disease under study is correctly captured. However, for a complete picture of the experimental groups, the control state should also be listed.
-
+"PXD004684","BiologicalAgent","disease","lung squamous cell carcinoma","lung squamous cell carcinoma","high","False","","True","True","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""lung squamous cell carcinomas"" in the abstract and ""lung SCC"" (squamous cell carcinoma) throughout the results.
+TRUTH CHECK:       The value is factually correct as the study focuses on lung squamous cell carcinoma.
+COMPLETENESS CHECK: The full set contains the primary disease studied; however, the paper also mentions ""adjacent tissues"" (controls), which are typically represented as ""normal"" or ""healthy"" in this field.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""lung squamous cell carcinoma"", ""normal""]","lung squamous cell carcinoma, normal"
-"PXD004684","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        No, ""patients"" refers to the donor/subject, not the broad material class (e.g., tissue, biofluid).
-SOURCE CHECK:      The text mentions ""patients"" as the source of the samples, but the material itself is described as ""frozen lung squamous cell carcinomas and 4 adjacent tissues"".
-TRUTH CHECK:       The candidate value is a subject type, not a material type. The actual material used was tissue.
-COMPLETENESS CHECK:The full set contains only ""patients"", which is the wrong category and fails to capture the actual material type (""tissue"").
+CORRECTED_VALUE:   [""lung squamous cell carcinoma"", ""normal""]",""
+"PXD004684","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        No, ""patients"" refers to the donor/subject, not the broad material class (e.g., tissue, biofluid) as required by the definition.
+SOURCE CHECK:      The text mentions ""patients"" and ""lung tissues,"" but the candidate value ""patients"" is not a valid material type.
+TRUTH CHECK:       The material actually used was ""frozen lung squamous cell carcinomas and 4 adjacent tissues,"" which falls under the ""tissue"" material type.
+COMPLETENESS CHECK:The full set contains only an incorrect value and fails to capture the actual material type described in the paper.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -44,10 +43,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue""]","tissue"
-"PXD004684","BiologicalAgent","anatomic_site_tumor","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" describes the anatomical location of the tumor, which matches the field definition.
+"PXD004684","BiologicalAgent","anatomic_site_tumor","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is an anatomical location, which matches the field definition.
 SOURCE CHECK:      The paper explicitly mentions ""lung squamous cell carcinomas"" and ""lung tissues"" multiple times.
-TRUTH CHECK:       The value is factually correct as the study focuses on lung tumor proteomes.
-COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the anatomical site described in the paper.
+TRUTH CHECK:       The tumor is located in the lung, making this value factually correct.
+COMPLETENESS CHECK: The full set contains ""lung"", which is the only anatomical site mentioned for the tumors in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -55,65 +54,67 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004684","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""electrospray quadrupole-orbital ion trap mass spectrometer (QExactive Plus, Thermo, San Jose, CA)"".
-TRUTH CHECK:       The value is factually correct as per the methods section.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+"PXD004684","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The text explicitly mentions an ""electrospray quadrupole-orbital ion trap mass spectrometer (QExactive Plus, Thermo, San Jose, CA)"".
+TRUTH CHECK: The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD004684","TechnicalAgent","label","label-free","label-free","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions ""label-free quantification (LF)"" and ""LF approach"" in the abstract and results.
+TRUTH CHECK:       The value is factually correct as one of the primary experimental strategies compared in the study.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also explicitly uses ""TMT 6-plex"" (isobaric labeling) as a primary comparison method.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD004684","TechnicalAgent","label","label-free, TMT 6-plex","label-free, TMT 6-plex","high","False","","True","True","False","TYPE CHECK:        The candidate value contains labeling methods, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""label-free quantification (LF)"" and ""isobaric labeling... (TMT 6-plex)"".
-TRUTH CHECK:       Both label-free and TMT 6-plex were used in the experimental comparison.
-COMPLETENESS CHECK: The full set of extracted values covers both labeling strategies described in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD004684","ExperimentalDesignAgent","replicates","4 frozen lung squamous cell carcinomas and 4 adjacent tissues","8","low","True","","False","False","False","TYPE CHECK:        No. The candidate value is a description of the sample groups, not a numeric count of biological replicates.
-SOURCE CHECK:      Yes. The text mentions ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues"".
-TRUTH CHECK:       No. The field ""replicates"" requires a numeric count of biological replicates, not a description of the sample types.
-COMPLETENESS CHECK:The full set contains both a descriptive string and a number (""8""), but the descriptive string is a type mismatch.
+VERDICT:           medium
+CORRECTED_VALUE:   [""label-free"", ""TMT""]","label-free, TMT"
+"PXD004684","ExperimentalDesignAgent","replicates","4 lung squamous cell carcinomas and 4 adjacent tissues","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample groups rather than a numeric count of biological replicates.
+SOURCE CHECK:      The text states ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues,"" which supports the count.
+TRUTH CHECK:       The value is factually correct regarding the sample composition, but it is not the correct format for the 'replicates' field, which requires a numeric count.
+COMPLETENESS CHECK: The full set includes ""8"", which is the correct numeric total of biological samples/replicates used in the study.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD004684","ExperimentalDesignAgent","replicates","8","","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper states ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues,"" totaling 8 samples.
+TRUTH CHECK:       The value ""8"" represents the total number of samples, but the experimental design is a paired study of 4 tumor samples and 4 adjacent tissues. In proteomics metadata, ""replicates"" typically refers to the number of biological replicates per group/condition. Here, there are 4 biological replicates per condition (tumor vs. adjacent).
+COMPLETENESS CHECK:    The full set of extracted values includes both the descriptive breakdown and the total count, but neither correctly identifies the number of biological replicates per group.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""8""]","8"
-"PXD004684","ExperimentalDesignAgent","replicates","8","8","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper states ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues"", totaling 8 samples.
-TRUTH CHECK:       The study uses 4 pairs of tumor and adjacent tissues (plus 2 unpaired samples for patients 4 and 5), totaling 8 biological samples. In this experimental design, these are the biological replicates/samples.
-COMPLETENESS CHECK:    The full set of extracted values includes both the descriptive breakdown and the total count, which exhaustively covers the biological sample count described.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD004684","ExperimentalDesignAgent","technical_replicates","technical replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""technical replicates"" is a label/name, not a numeric count as required by the field definition.
+CORRECTED_VALUE:   4",""
+"PXD004684","ExperimentalDesignAgent","technical_replicates","technical replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""technical replicates"" is a label/name of a field, not a numeric count as required by the definition.
 SOURCE CHECK:      The phrase ""technical replicates"" appears in the text, but it is not a value for the number of replicates.
-TRUTH CHECK:       The value is not a count; it is the name of the concept.
-COMPLETENESS CHECK: The full set contains ""technical replicates"" (incorrect type) and ""2"" (correct type). While ""2"" is present, the inclusion of the label ""technical replicates"" as a value is incorrect.
+TRUTH CHECK:       The value is not a factual count of replicates.
+COMPLETENESS CHECK: The full set contains ""2"", which is a numeric value, but ""technical replicates"" itself is an invalid entry.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""2""]",""
-"PXD004684","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for technical_replicates.
-SOURCE CHECK:      The paper mentions ""concordance of LF and single sample DDA technical replicates"" and ""correlation of the MS data between experimental replicates,"" but it does not explicitly state the number of technical replicates per sample.
-TRUTH CHECK:       The text does not provide a specific number (e.g., ""2"") for the technical replicates; it only mentions that they were performed.
-COMPLETENESS CHECK: The full set of extracted values (""technical replicates"", ""2"") is not supported by the text; ""technical replicates"" is a label, not a count, and ""2"" is not mentioned as the count.
+CORRECTED_VALUE:   NONE",""
+"PXD004684","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper mentions ""Concordance of LF and single sample DDA technical replicates were measured using Pearson’s correlation"" and ""Concordance of technical replicates was measured using Pearson’s correlation of log2-transformed peptide peak areas (Figure S5)"", but it does not explicitly state the number of technical replicates was 2.
+TRUTH CHECK:       The text mentions technical replicates exist, but it never specifies the number as ""2"".
+COMPLETENESS CHECK: The full set of extracted values (""technical replicates"", ""2"") does not provide a factually supported number from the text.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -121,10 +122,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004684","ExperimentalDesignAgent","experimental_design","Comparison of four LC-MS/MS platforms (DDA, DIA, LF, TMT) analyzing tumor vs adjacent lung tissues","Comparison of four LC-MS/MS platforms (DDA, DIA, LF, TMT) analyzing tumor vs adjacent lung tissues","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design, although it includes technical platform comparisons.
-SOURCE CHECK:      The paper explicitly states the comparison of four platforms (DDA, DIA, LF, TMT) applied to ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues"".
-TRUTH CHECK:       The value accurately reflects the experimental setup described in the abstract and methods.
-COMPLETENESS CHECK: The full set captures the dual nature of the study (platform comparison and tumor vs adjacent tissue comparison).
+"PXD004684","ExperimentalDesignAgent","experimental_design","Comparison of four proteomics platforms (DDA, DIA, LF, TMT) analyzing tumor vs adjacent lung tissues","Comparison of four proteomics platforms (DDA, DIA, LF, TMT) analyzing tumor vs adjacent lung tissues","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design, although it is phrased as a summary of the experiment rather than a standard design category.
+SOURCE CHECK:      The value is clearly inferable from the title and abstract, which state the comparison of four platforms using tumor and adjacent tissues.
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set captures the essence of the experimental design (comparing platforms and comparing tumor vs adjacent tissue).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,10 +133,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004684","ExperimentalDesignAgent","factor_value","tissue type (lung squamous cell carcinoma, adjacent tissue); MS platform (DDA, DIA, LF, TMT)","tissue type (lung squamous cell carcinoma, adjacent tissue); MS platform (DDA, DIA, LF, TMT)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue type and MS platform) being compared, which fits the definition of factor_value.
-SOURCE CHECK:      The paper explicitly compares four MS platforms (DDA, DIA, LF, TMT) and two tissue types (lung squamous cell carcinomas and adjacent tissues).
+"PXD004684","ExperimentalDesignAgent","factor_value","tissue type (lung squamous cell carcinoma, adjacent tissue); analysis method (DDA, DIA, LF, TMT 6-plex)","tissue type (lung squamous cell carcinoma, adjacent tissue); analysis method (DDA, DIA, LF, TMT 6-plex)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue type and analysis method) being compared in the study.
+SOURCE CHECK:      The paper explicitly compares ""4 frozen lung squamous cell carcinomas and 4 adjacent tissues"" across four platforms: ""DDA"", ""DIA"", ""LF"", and ""TMT 6-plex"".
 TRUTH CHECK:       The values are factually correct based on the abstract and methods.
-COMPLETENESS CHECK: The full set captures both the biological variable (tumor vs adjacent) and the technical variable (the four MS strategies) being evaluated in the study.
+COMPLETENESS CHECK: The full set captures both the biological variable (tumor vs adjacent) and the technical variable (the four MS methods) being evaluated.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -145,8 +146,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD004684","ExperimentalDesignAgent","fractions","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
 SOURCE CHECK:      The text explicitly states, ""Twelve concatenated fractions were analyzed with LC-MS/MS for the LF and TMT experiments.""
-TRUTH CHECK:       The value ""12"" is factually correct as per the methods section.
-COMPLETENESS CHECK: The full set contains the value ""12"", which accurately reflects the fractionation described for the LF and TMT experiments. While the DDA and DIA single-sample experiments did not use fractionation (which would be ""1""), the extracted value ""12"" correctly identifies the fractionation used in the primary comparative arms.
+TRUTH CHECK:       The value ""12"" is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values (""12"") accurately reflects the fractionation described for the primary experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -155,9 +156,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD004684","ExperimentalDesignAgent","number_of_samples","8","8","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK: The abstract states ""These strategies were applied to the same set of 4 frozen lung squamous cell carcinomas and 4 adjacent tissues,"" and the methods section mentions ""Six of the eight clinical samples are paired sets..."".
-TRUTH CHECK: The total number of samples is 8 (4 tumor + 4 adjacent).
-COMPLETENESS CHECK: The full set of extracted values contains ""8"", which is the total count of samples processed.
+SOURCE CHECK: The text explicitly states ""These strategies were applied to the same set of 4 frozen lung squamous cell carcinomas and 4 adjacent tissues,"" and later mentions ""Eight of the eight clinical samples"" (though there is a typo in the text ""Six of the eight"", the total is clearly 8).
+TRUTH CHECK: The total count of samples is 4 tumors + 4 adjacent tissues = 8.
+COMPLETENESS CHECK: The full set contains the single correct value ""8"", which is exhaustive.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes

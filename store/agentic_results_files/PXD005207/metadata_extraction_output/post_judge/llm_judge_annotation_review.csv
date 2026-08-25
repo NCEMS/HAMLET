@@ -1,20 +1,20 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD005207","","strict","Biological","cell_type","erythrocytes","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""erythrocytes"" is a cell type, which matches the field definition.
-SOURCE CHECK: The MS sample was derived from *P. falciparum* parasites (specifically late schizont lysates) which were cultured in and harvested from erythrocytes.
-TRUTH CHECK: While the parasites are the target of the proteomics, they are intracellular and the sample preparation involves lysing the infected erythrocytes. However, the ""cell type"" of the biological material being analyzed is the malaria parasite (*Plasmodium falciparum*), not the host erythrocyte. The erythrocytes are the host cells, not the primary cell type of the organism under study in the proteomics experiment.
-COMPLETENESS CHECK: The full set only contains ""erythrocytes"", which is incorrect as it identifies the host cell rather than the parasite.
-
+"PXD005207","","strict","Biological","cell_type","schizont","schizont","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""schizont"" refers to a specific life-cycle stage of the parasite, which functions as the cell type/state for the analyzed sample.
+SOURCE CHECK: The text explicitly states that ""late schizont lysates were prepared for phosphoproteomic analysis,"" confirming this is the material analyzed by MS.
+TRUTH CHECK: The value is factually correct as the paper focuses on the phosphoproteome of the schizont stage.
+COMPLETENESS CHECK: The full set contains ""schizont"", which accurately describes the biological state/cell type of the MS sample.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
 HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: Plasmodium falciparum","Plasmodium falciparum"
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Biological","disease","malaria","malaria","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""malaria"" describes a disease state, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""malaria parasite"" and ""Plasmodium falciparum"" (the causative agent of malaria) as the subject of the phosphoproteomic analysis.
-TRUTH CHECK: The experiment is conducted on *Plasmodium falciparum*, which is the pathogen causing malaria; therefore, ""malaria"" is a correct description of the disease context.
-COMPLETENESS CHECK: The full set contains ""malaria"", which accurately captures the disease state associated with the biological material analyzed.
+SOURCE CHECK: The paper explicitly mentions ""malaria parasite"" in the abstract and focuses on *Plasmodium falciparum*, the causative agent of malaria.
+TRUTH CHECK: The study is centered on the signaling and proteomics of the malaria parasite *P. falciparum*.
+COMPLETENESS CHECK: The full set contains ""malaria"", which accurately captures the disease context of the study.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,9 +23,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Biological","organ","blood","blood","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""blood"" is a valid organ/tissue type.
-SOURCE CHECK: The MS sample was derived from *P. falciparum* parasites cultured in ""O+ erythrocytes"" (red blood cells) during ""asexual blood stage reproduction,"" and the text explicitly mentions ""blood stage development.""
-TRUTH CHECK: The value is factually correct as the parasites were grown in and harvested from blood/erythrocytes.
-COMPLETENESS CHECK: The full set of extracted values (""blood"") accurately describes the tissue source of the MS sample.
+SOURCE CHECK: The MS sample was derived from *P. falciparum* parasites cultured in ""O+ erythrocytes"" (red blood cells) during ""asexual blood stage reproduction,"" and the text explicitly mentions ""blood stage"" multiple times in the context of the phosphoproteomic analysis.
+TRUTH CHECK: The parasites were grown in and harvested from blood (erythrocytes), making ""blood"" a factually correct description of the organ/tissue of origin for the sample.
+COMPLETENESS CHECK: The full set contains ""blood,"" which accurately covers the source of the biological material analyzed by MS.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -33,10 +33,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Biological","species","P. falciparum","P. falciparum","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of an organism, which matches the species field definition.
-SOURCE CHECK: The value comes from the MS experiment context; the paper describes a ""mass spectrometry-based quantitative phosphoproteomic and proteomic approach"" using *P. falciparum* parasites.
-TRUTH CHECK: The value is factually correct as the study focuses on *Plasmodium falciparum*.
-COMPLETENESS CHECK: The full set of extracted values contains the only organism analyzed by mass spectrometry in this study.
+"PXD005207","","strict","Biological","species","P. falciparum","P. falciparum","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a species name, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned throughout the text as the organism being studied and analyzed by mass spectrometry (e.g., ""P. falciparum proteins"").
+TRUTH CHECK: The value ""P. falciparum"" is factually correct as the source organism for the proteomics experiment.
+COMPLETENESS CHECK: The full set contains the only species analyzed in the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -44,10 +44,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","ExperimentalDesign","factor_value","Shld-1 (presence, absence)","Shld-1 (presence, absence)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (presence or absence of the ligand Shld-1) used to regulate protein expression, which is a correct category for factor_value.
-SOURCE CHECK: The value is explicitly mentioned in the ""Results"" and ""Methods"" sections as the means of achieving conditional knockdown of PfCDPK1 for the phosphoproteomic analysis.
-TRUTH CHECK: The paper states that the phosphoproteome was compared ""in the presence or absence of Shld-1"" to measure differences upon PfCDPK1 knockdown.
-COMPLETENESS CHECK: The full set of extracted values includes the primary experimental variable (Shld-1) and the disease context (malaria), which covers the key design factors of the MS experiment.
+"PXD005207","","strict","ExperimentalDesign","factor_value","Shld-1 (presence, absence)","Shld-1 (presence, absence) | malaria","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental condition (presence or absence of a ligand) used to regulate protein expression, which is a correct category for a factor_value.
+SOURCE CHECK: The value is explicitly mentioned in the text; the phosphoproteomic analysis compared PfCDPK1-3HA-DD parasites ""in the presence or absence of Shld-1"".
+TRUTH CHECK: The value is factually correct as the study uses the removal of Shld-1 to achieve conditional knockdown of PfCDPK1 for the MS experiment.
+COMPLETENESS CHECK: The full set of extracted values includes the primary experimental variable (Shld-1) and the disease context (malaria), which covers the experimental design described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,32 +55,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","ExperimentalDesign","factor_value","malaria","Shld-1 (presence, absence)","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value ""malaria"" is a disease state, which is a valid category for a factor_value.
-SOURCE CHECK: The paper describes the study of *Plasmodium falciparum*, the causative agent of malaria, in the context of the MS experiment.
-TRUTH CHECK: While the parasite is the malaria parasite, the experimental factor being varied in the MS study is the presence or absence of the ligand Shld-1 to achieve PfCDPK1 knockdown, not the presence or absence of malaria itself.
-COMPLETENESS CHECK: The full set includes the actual experimental variable (Shld-1), but ""malaria"" is not a factor being tested or compared in this experimental design.
+"PXD005207","","strict","ExperimentalDesign","factor_value","malaria","Shld-1 (presence, absence) | malaria","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""malaria"" refers to a disease state, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The paper describes the study of *Plasmodium falciparum*, the causative agent of malaria, and the samples are malaria-infected erythrocytes.
+TRUTH CHECK: The study is focused on the malaria parasite; however, the experimental design is specifically comparing the presence and absence of the ligand Shld-1 to achieve conditional knockdown of PfCDPK1.
+COMPLETENESS CHECK: The full set of extracted values includes the actual experimental variable (Shld-1 presence/absence) and the general disease context (malaria). Together they cover the experimental design.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","ExperimentalDesign","fractions","12","12","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The value is explicitly stated in the ""Basic RPLC and phosphopeptide enrichment"" section: ""A total of 96 fractions were concatenated into 12 fractions"".
-TRUTH CHECK: The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values contains the single correct number of fractions described in the paper.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
 VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","ExperimentalDesign","replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK: The value is explicitly stated in the ""Protein digestion and iTRAQ labeling"" section: ""The analysis was carried out on four independent biological replicates"".
-TRUTH CHECK: The value ""4"" is factually correct based on the text.
+"PXD005207","","strict","ExperimentalDesign","fractions","12","12","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count of fractions, which matches the field definition.
+SOURCE CHECK: The value is explicitly stated in the ""Basic RPLC and phosphopeptide enrichment"" section: ""A total of 96 fractions were concatenated into 12 fractions"".
+TRUTH CHECK: The value is factually correct as per the text.
 COMPLETENESS CHECK: The full set contains the single correct value mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -89,10 +78,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","ExperimentalDesign","technical_replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical_replicates.
-SOURCE CHECK: The value is present in the ""Protein digestion and iTRAQ labeling"" section, which describes the MS sample preparation.
-TRUTH CHECK: The text explicitly states, ""The analysis was carried out on four independent biological replicates and one of the replicate was further processed and analyzed as technical duplicates,"" and later mentions that peptides from wild type and knockdown parasites were labeled in ""technical replicates with 114 and 115"" and ""116 and 117"" respectively, confirming 2 technical replicates for those samples.
-COMPLETENESS CHECK: The full set contains the value ""2"", which accurately reflects the technical replication described for the analyzed samples.
+"PXD005207","","strict","ExperimentalDesign","replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of biological replicates.
+SOURCE CHECK: The value is explicitly stated in the ""Protein digestion and iTRAQ labeling"" section: ""The analysis was carried out on four independent biological replicates"".
+TRUTH CHECK: The value ""4"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD005207","","strict","ExperimentalDesign","technical_replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the technical_replicates field.
+SOURCE CHECK: The paper explicitly states in the ""Protein digestion and iTRAQ labeling"" section that ""one of the replicate was further processed and analyzed as technical duplicates.""
+TRUTH CHECK: ""Technical duplicates"" is equivalent to 2 technical replicates.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the technical replication described for the analyzed sample.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -101,11 +101,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
-SOURCE CHECK: The paper describes the use of ""top speed mode"" on an Orbitrap Fusion Tribrid, which is a specific implementation of data-dependent acquisition (DDA).
-TRUTH CHECK: While the literal phrase ""data-dependent acquisition"" is not used, ""top speed mode"" (where the instrument performs MS2 scans until the list of precursors diminishes to zero) is the definition of DDA.
-COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition scheme used.
-
+"PXD005207","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
+SOURCE CHECK: The paper states that the instrument was operated in ""top speed mode with 3 s cycles, which would allow the instrument to continuously perform MS2 scans until the list of precursors diminish to zero"", which is the definition of a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The description of the MS2 acquisition process (selecting the most intense precursor ions and fragmenting them) confirms the use of a data-dependent acquisition method.
+COMPLETENESS CHECK: The full set contains the only acquisition method used in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -113,10 +112,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The value is explicitly mentioned in the ""Protein digestion and iTRAQ labeling"" section as the agent used for digestion of the MS samples.
-TRUTH CHECK: The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned for the proteomics experiment.
+"PXD005207","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the definition of the cleavage_agent field.
+SOURCE CHECK: The value is explicitly mentioned in the ""Protein digestion and iTRAQ labeling"" section (""Trypsin was added in a ratio of 1 unit of trypsin per 20 unit of sample"") and the ""MS data analysis"" section (""Trypsin was set as the protease"").
+TRUTH CHECK: The value is factually correct as per the paper text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -124,32 +123,33 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Technical","fragment_mass_tolerance","15 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: The value ""15 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The paper explicitly states ""fragment mass tolerance of 0.1 Da was allowed"" in the MS data analysis section.
-COMPLETENESS CHECK: The full set of extracted values is incorrect and does not cover the value described in the paper.
+"PXD005207","","strict","Technical","fragment_mass_tolerance","0.1 Da","0.1 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.1 Da"" is explicitly stated in the ""MS data analysis"" section of the methods as the fragment mass tolerance.
+TRUTH CHECK: The paper states ""fragment mass tolerance of 0.1 Da was allowed,"" which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 0.1 Da","0.1 Da"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The value is not present in the text; the paper explicitly states that ""Most intense precursor ions were selected and fragmented using higher-energy collisional dissociation (HCD)"".
-TRUTH CHECK: The value is factually incorrect for this experiment; the method used was HCD, not beam-type CID.
-COMPLETENESS CHECK: The full set is incorrect as it does not reflect the method stated in the paper.
+SOURCE CHECK: The paper explicitly states that precursor ions were ""fragmented using higher-energy collisional dissociation (HCD)"".
+TRUTH CHECK: ""Higher-energy collisional dissociation (HCD)"" is the specific term used in the text; ""beam-type collision-induced dissociation"" is a technical description of HCD, but the paper uses the standard abbreviation HCD.
+COMPLETENESS CHECK: The full set contains only this value, but it uses a descriptive term rather than the specific term ""HCD"" mentioned in the text.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: no
+VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: HCD","HCD"
 "PXD005207","","strict","Technical","instrument","Orbitrap Fusion","Orbitrap Fusion","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value is present in the ""LC-MS/MS analysis"" section, where it states the samples were analyzed on an ""Orbitrap Fusion Tribrid mass spectrometer"".
-TRUTH CHECK: The candidate value ""Orbitrap Fusion"" is a correct shorthand for the ""Orbitrap Fusion Tribrid"" mentioned in the text.
-COMPLETENESS CHECK: The full set of extracted values includes ""LTQ Orbitrap Velos"", but this instrument is NOT mentioned anywhere in the provided paper text. The only instrument mentioned is the Orbitrap Fusion Tribrid.
+SOURCE CHECK: The paper explicitly mentions the ""Orbitrap Fusion Tribrid mass spectrometer"" in the LC-MS/MS analysis section.
+TRUTH CHECK: ""Orbitrap Fusion"" is a correct shorthand for the ""Orbitrap Fusion Tribrid"" mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values includes ""LTQ Orbitrap Velos"", but this instrument is not mentioned anywhere in the provided paper text. The only instrument mentioned is the Orbitrap Fusion Tribrid.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -161,7 +161,7 @@ CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Technical","instrument","LTQ Orbitrap Velos","Orbitrap Fusion","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value ""LTQ Orbitrap Velos"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The paper explicitly states that the analysis was performed on an ""Orbitrap Fusion Tribrid mass spectrometer"".
-COMPLETENESS CHECK: The full set of extracted values includes a hallucinated instrument; the only correct instrument is the Orbitrap Fusion Tribrid.
+COMPLETENESS CHECK: The full set of extracted values is incorrect because it includes a hallucinated instrument and an incomplete name for the actual instrument.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -170,9 +170,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: Orbitrap Fusion Tribrid","Orbitrap Fusion Tribrid"
 "PXD005207","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper explicitly states that ""Both MS and MS/MS was acquired using Orbitrap mass analyzer"" in the LC-MS/MS analysis section.
-TRUTH CHECK: The value is factually correct according to the text.
-COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiment.
+SOURCE CHECK: The paper explicitly states that the ""Orbitrap mass analyzer"" was used for both MS and MS/MS acquisition.
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains the only mass analyzer mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -181,9 +181,10 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | iTRAQ4plex (K) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""MS data analysis"" section of the methods.
-TRUTH CHECK: The paper states that the data were searched ""with carbamidomethylation of cysteine residues,"" which is an unambiguous synonym for ""Carbamidomethyl (C)"".
-COMPLETENESS CHECK: The full set of extracted values covers the fixed modifications (carbamidomethylation, iTRAQ) and dynamic modifications (oxidation, phosphorylation) explicitly listed in the text.
+SOURCE CHECK: The value is explicitly mentioned in the ""MS data analysis"" section of the methods (""with carbamidomethylation of cysteine residues"").
+TRUTH CHECK: The paper explicitly states that carbamidomethylation of cysteine residues was used as a fixed modification.
+COMPLETENESS CHECK: The full set of extracted values (Carbamidomethyl, iTRAQ, Oxidation, and Phosphorylation) covers all the fixed and dynamic modifications explicitly listed in the MS data analysis section.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -191,10 +192,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Technical","modification","iTRAQ4plex (K)","Carbamidomethyl (C) | iTRAQ4plex (K) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a chemical modification (labeling) on a specific residue, which fits the definition of the modification field.
-SOURCE CHECK: The value is derived from the MS experiment context; the paper explicitly mentions ""iTRAQ labeling of the peptides"" and ""lysine side chain of iTRAQ as fixed modification"".
-TRUTH CHECK: The paper states ""lysine side chain of iTRAQ as fixed modification"". While the candidate value ""iTRAQ4plex (K)"" adds ""4plex"", the text mentions ""four samples were pooled"" and ""114 and 115... 116 and 117 reporter ions"", confirming a 4-plex setup.
-COMPLETENESS CHECK: The full set of extracted values (Carbamidomethyl, iTRAQ, Oxidation, Phospho) covers all modifications explicitly listed in the ""MS data analysis"" section.
+"PXD005207","","strict","Technical","modification","iTRAQ4plex (K)","Carbamidomethyl (C) | iTRAQ4plex (K) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a chemical modification (iTRAQ labeling) on a specific residue (K), which fits the category of a searched modification.
+SOURCE CHECK: The paper explicitly mentions ""iTRAQ labeling"" and specifies that ""peptide N-terminal and lysine side chain of iTRAQ"" were set as fixed modifications in the MS data analysis.
+TRUTH CHECK: The value ""iTRAQ4plex (K)"" is factually correct as the paper uses iTRAQ labeling on lysine (K) residues. While the paper mentions ""iTRAQ"" and the use of four reporter ions (114, 115, 116, 117), ""iTRAQ4plex"" is a standard synonym for this setup.
+COMPLETENESS CHECK: The full set of extracted values (Carbamidomethyl, iTRAQ, Oxidation, Phospho) covers all modifications explicitly listed in the ""MS data analysis"" section of the methods.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -203,9 +204,10 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | iTRAQ4plex (K) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for a protein modification.
-SOURCE CHECK: The value is explicitly mentioned in the ""MS data analysis"" section of the methods.
-TRUTH CHECK: The paper states ""Oxidation of methionine... was selected as dynamic modifications,"" which is equivalent to ""Oxidation (M)"".
-COMPLETENESS CHECK: The full set of extracted values covers all fixed and dynamic modifications explicitly listed in the text (carbamidomethylation, iTRAQ, oxidation, and phosphorylation of S, T, and Y).
+SOURCE CHECK: The value is explicitly mentioned in the ""MS data analysis"" section of the methods (""Oxidation of methionine... was selected as dynamic modifications"").
+TRUTH CHECK: The value is factually correct as it matches the text's description of methionine oxidation.
+COMPLETENESS CHECK: The full set of extracted values (Carbamidomethyl, iTRAQ, Oxidation, Phospho) covers all modifications explicitly listed in the MS data analysis section.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -214,9 +216,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD005207","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | iTRAQ4plex (K) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification and its target residues, which matches the field definition.
-SOURCE CHECK: The value is present in the MS experiment context; the text explicitly mentions ""phosphorylation of serine, threonine and tyrosine was selected as dynamic modifications.""
-TRUTH CHECK: The candidate value ""Phospho (STY)"" is a correct representation of the phosphorylation of serine (S), threonine (T), and tyrosine (Y) described in the text.
-COMPLETENESS CHECK: The full set of extracted values covers all modifications explicitly mentioned in the ""MS data analysis"" section (carbamidomethylation, iTRAQ, oxidation, and phosphorylation).
+SOURCE CHECK: The paper explicitly mentions ""phosphorylation of serine, threonine and tyrosine"" in the MS data analysis section.
+TRUTH CHECK: The value ""Phospho (STY)"" is a correct representation of the phosphorylation of serine (S), threonine (T), and tyrosine (Y) described in the text.
+COMPLETENESS CHECK: The full set of extracted values covers the fixed and dynamic modifications explicitly listed in the ""MS data analysis"" section of the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -224,14 +226,15 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD005207","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.
-SOURCE CHECK: The value ""7 ppm"" is not present in the paper text; the text explicitly states ""Precursor mass tolerance was set to 20 ppm"".
-TRUTH CHECK: The value is factually incorrect based on the provided text.
-COMPLETENESS CHECK: The full set is incorrect as it does not match the value reported in the paper.
+"PXD005207","","strict","Technical","precursor_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value ""20 ppm"" is explicitly mentioned in the ""MS data analysis"" section of the methods.
+TRUTH CHECK: The paper states, ""Precursor mass tolerance was set to 20 ppm"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 20 ppm","20 ppm"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -12,7 +12,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| Biological | 0.333 | 0.333 | 0.333 | 0.333 | 0.333 | 0.333 |
+| Biological | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 | Technical | 0.357 | 0.625 | 0.455 | 0.357 | 0.625 | 0.455 |
 | ExperimentalDesign | 0.200 | 1.000 | 0.333 | 0.200 | 1.000 | 0.333 |
 
@@ -20,10 +20,10 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Metadata type | Category | Mean precision | Mean recall | Mean F1 |
 |---|---|---:|---:|---:|
-| `characteristics[age]` | Biological | NA | NA | NA |
+| `characteristics[age]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[disease]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[organism part]` | Biological | 0.000 | 0.000 | 0.000 |
-| `characteristics[organism]` | Biological | 1.000 | 1.000 | 1.000 |
+| `characteristics[organism]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[sex]` | Biological | NA | NA | NA |
 | `characteristics[biological replicate]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `comment[fraction identifier]` | ExperimentalDesign | 1.000 | 1.000 | 1.000 |

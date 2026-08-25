@@ -1,19 +1,19 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD000999","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human proteins"" and the use of the ""UniProt Human Complete Proteome database"".
-TRUTH CHECK:       The use of HeLa cells (a human cell line) and the human proteome database confirms the species is Homo sapiens.
-COMPLETENESS CHECK: The full set contains the only species used in the experiment.
-TYPE_CORRECT:      yes
+"PXD000999","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for an organism, which matches the species field definition.
+SOURCE CHECK: The paper explicitly mentions ""human proteins"" and the use of the ""UniProt Human Complete Proteome database"".
+TRUTH CHECK: The use of HeLa cells (a human cell line) and the human proteome database confirms the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species mentioned in the study.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD000999","BiologicalAgent","organ","cervix","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""cervix"" is a type of organ/tissue, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""HeLa cell lysate"" and ""HeLa cell line,"" but it does not explicitly mention the ""cervix"" as the organ of origin.
-TRUTH CHECK:       While HeLa cells are derived from a cervical cancer biopsy, the paper describes the material used as a ""cell line"" or ""cell lysate,"" not as an organ.
-COMPLETENESS CHECK: The full set contains only ""cervix,"" which is not supported by the text provided.
+SOURCE CHECK:      The paper mentions ""HeLa cell lysate"" and ""HeLa cell line,"" but it does not explicitly mention the ""cervix"" or the origin of the HeLa cells.
+TRUTH CHECK:       While HeLa cells are derived from a cervical cancer biopsy, the paper text itself does not state this; it only refers to the ""HeLa cell line.""
+COMPLETENESS CHECK: The full set contains only ""cervix,"" which is not mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -22,9 +22,9 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD000999","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""HeLa cell line"" and ""HeLa cell lysate,"" but it does not explicitly state that these are ""epithelial cells."" While HeLa cells are derived from cervical epithelial cells, this specific term is not in the text.
-TRUTH CHECK:       The value is biologically true for HeLa cells, but it is not mentioned or reasonably inferable from the provided text alone.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+SOURCE CHECK:      The paper mentions ""HeLa cell line"" multiple times, but does not explicitly use the term ""epithelial cell"". While HeLa cells are derived from cervical epithelial cells, this specific term is not in the text.
+TRUTH CHECK:       The value is biologically true for HeLa cells, but the field definition for `cell_type` refers to primary cell types or lineages, and the paper explicitly identifies the material as a ""cell line"".
+COMPLETENESS CHECK:The full set contains only this value, which is not explicitly mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -33,9 +33,9 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD000999","BiologicalAgent","disease","cervical adenocarcinoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a disease state, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""HeLa cell lysate"" and ""HeLa cell line,"" but it does not explicitly mention ""cervical adenocarcinoma."" While HeLa cells are derived from cervical adenocarcinoma, the text does not state this diagnosis.
-TRUTH CHECK:       The value is factually true regarding the origin of HeLa cells, but it is not mentioned in the provided text.
-COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text.
+SOURCE CHECK:      The term ""cervical adenocarcinoma"" does not appear in the provided paper text.
+TRUTH CHECK:       The paper uses HeLa cell lysate; while HeLa cells are derived from cervical adenocarcinoma, the text itself does not mention this diagnosis.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -43,10 +43,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD000999","BiologicalAgent","material_type","HeLa cell lysate","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HeLa cell lysate"" describes the specific material used, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
-SOURCE CHECK:      The text explicitly mentions ""HeLa cell lysate"" and ""HeLa cell line"".
-TRUTH CHECK:       The value is factually correct regarding what was used.
-COMPLETENESS CHECK: The full set contains only this value, which is too specific (subtype drift) and does not use the broad category required by the definition.
+"PXD000999","BiologicalAgent","material_type","HeLa cell lysate","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HeLa cell lysate"" describes the material used, but it is a specific sample description rather than a broad material class defined in the field definitions.
+SOURCE CHECK:      The text explicitly mentions ""We used the HeLa cell lysate to test the performance of the DeMix workflow"" and ""HeLa cell line was grown..."".
+TRUTH CHECK:       The value is factually correct regarding what was used in the experiment.
+COMPLETENESS CHECK: The full set contains only this value, which is accurate but uses a specific entity instead of the required broad category.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -56,7 +56,7 @@ VERDICT:           low
 CORRECTED_VALUE:   cell line","cell line"
 "PXD000999","BiologicalAgent","cell_line","HeLa","HeLa","high","False","","True","True","False","TYPE CHECK: The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""HeLa cell lysate"" in the Results section and ""HeLa cell line"" in the Experimental Procedures section.
-TRUTH CHECK: The value is factually correct as the experiment was performed using HeLa cells.
+TRUTH CHECK: The value is factually correct as the experiment used HeLa cells.
 COMPLETENESS CHECK: The full set of extracted values contains only ""HeLa"", which is the only cell line mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -65,43 +65,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD000999","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""Orbitrap Q Exactive mass spectrometer (Thermo Scientific)"" and ""Q-Exactive workbench"".
-TRUTH CHECK: The value is factually correct as per the paper.
-COMPLETENESS CHECK: The full set contains the only instrument used in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD000999","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK: No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
-TRUTH CHECK: The experimental description of a standard DDA shotgun proteomics workflow without mentioned labels confirms this is a label-free experiment.
-COMPLETENESS CHECK: The full set contains the only applicable value for this field.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD000999","ExperimentalDesignAgent","replicates","3 HeLa cell pellets","3","low","True","","False","True","False","TYPE CHECK:        The candidate value contains a numeric count but includes descriptive text (""HeLa cell pellets"") which is not part of the requested numeric count for replicates.
-SOURCE CHECK:      The paper states ""Three separate cell pellets were lysed"" and ""In a triplicate experiment"", confirming three replicates.
-TRUTH CHECK:       The number of replicates is indeed 3.
-COMPLETENESS CHECK: The full set of extracted values includes ""3"", which is the correct numeric representation.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: replicates
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of biological replicates.
-SOURCE CHECK:      The text explicitly mentions ""In a triplicate experiment"" and ""Three separate cell pellets were lysed,"" confirming three biological replicates.
-TRUTH CHECK:       The value ""3"" is factually correct based on the experimental description.
-COMPLETENESS CHECK:   The full set of extracted values includes ""3"" and ""3 HeLa cell pellets,"" which together exhaustively cover the information provided in the paper.
+"PXD000999","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text explicitly mentions ""Orbitrap Q Exactive mass spectrometer (Thermo Scientific)"" and ""Q-Exactive workbench"".
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only instrument used for the experiments described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -109,10 +76,44 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","technical_replicates","replicated experiments with four different isolation widths","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a descriptive phrase about experimental conditions, not a numeric count of technical replicates per sample.
-SOURCE CHECK:      The text mentions ""replicated experiments were performed with four different isolation widths,"" but this refers to testing different instrument parameters, not technical replicates of a single sample.
-TRUTH CHECK:       The value is factually incorrect; the ""four different isolation widths"" are experimental variables (factors), not technical replicates.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it confuses experimental conditions with technical replication.
+"PXD000999","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The experiment describes a standard shotgun proteomics approach using DDA on HeLa cell lysates without any mention of labels.
+COMPLETENESS CHECK: The full set contains the only correct value for this experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000999","ExperimentalDesignAgent","replicates","3 HeLa cell pellets","3 HeLa cell pellets | 3","low","True","","False","True","False","TYPE CHECK:        The candidate value contains the correct category (numeric count), but includes unnecessary descriptive text (""HeLa cell pellets"").
+SOURCE CHECK:      The paper states ""Three separate cell pellets were lysed"" and ""In a triplicate experiment"", confirming three replicates.
+TRUTH CHECK:       The number of replicates is indeed 3.
+COMPLETENESS CHECK:   The full set of extracted values (""3 HeLa cell pellets"", ""3"") correctly identifies the number of replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD000999","ExperimentalDesignAgent","replicates","3","3 HeLa cell pellets | 3","high","False","","True","True","False","TYPE CHECK: The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The paper explicitly mentions ""In a triplicate experiment"" and ""Three separate cell pellets were lysed,"" confirming three biological replicates.
+TRUTH CHECK: The value ""3"" is factually correct based on the experimental description.
+COMPLETENESS CHECK: The full set of extracted values includes ""3"" and ""3 HeLa cell pellets""; together they accurately and exhaustively capture the number of biological replicates described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000999","ExperimentalDesignAgent","technical_replicates","replicated experiments with four different isolation widths","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a descriptive phrase about experimental conditions, not a numeric count of technical replicates.
+SOURCE CHECK:      The phrase ""replicated experiments with four different isolation widths"" is present in the text, but it refers to the number of different settings tested, not technical replicates per sample.
+TRUTH CHECK:       The value is factually incorrect; the ""four"" refers to the number of isolation width settings (±1.0, ±2.0, ±3.0, and ±4.0 Th), not the number of technical replicates.
+COMPLETENESS CHECK:    The full set of extracted values is incorrect as it confuses experimental conditions with technical replication.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
@@ -120,32 +121,32 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","technical_replicates","4","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper mentions ""replicated experiments were performed with four different isolation widths,"" but these are different experimental conditions (isolation widths), not technical replicates of the same sample.
-TRUTH CHECK:       The value ""4"" refers to the number of different isolation window settings tested, not the number of technical replicates per sample.
-COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the number of experimental conditions as technical replicates.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
+"PXD000999","ExperimentalDesignAgent","technical_replicates","4","","low","False","","False","False","False","TYPE CHECK:        No, the candidate value refers to the number of different experimental conditions (isolation widths) tested, not the number of technical replicates per sample.
+SOURCE CHECK:      The value ""4"" is present in the text, but it refers to ""four different isolation widths"" used to test precursor selectivity.
+TRUTH CHECK:       The value is factually incorrect for this field; the paper describes ""three replicate experiments"" (biological replicates), but does not mention technical replicates.
+COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the number of isolation width settings as technical replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","experimental_design","Performance testing of DeMix workflow using HeLa cell lysate with varying precursor isolation widths","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the purpose and setup of the experiment rather than a standard study design type (e.g., ""case-control"", ""time course"").
-SOURCE CHECK:      The information is present in the text; the authors used HeLa cell lysate to test the DeMix workflow and specifically compared different isolation widths.
-TRUTH CHECK:       The value is factually accurate regarding what was done in the paper.
-COMPLETENESS CHECK: The full set contains this single value, which accurately summarizes the experimental approach.
+"PXD000999","ExperimentalDesignAgent","experimental_design","Performance testing of DeMix workflow using HeLa cell lysate with varying precursor isolation widths","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the objective and setup of the experiment rather than a study design type (e.g., ""case-control"", ""time course"").
+SOURCE CHECK:      The information is present in the text, as the authors used HeLa cell lysate to test the DeMix workflow and varied isolation widths.
+TRUTH CHECK:       The description is factually accurate regarding the paper's content.
+COMPLETENESS CHECK: The full set contains only this value, which is a description of the experiment rather than a design category.
 TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","factor_value","isolation width (±1.0, ±2.0, ±3.0, ±4.0 Th)","isolation width (±1.0, ±2.0, ±3.0, ±4.0 Th)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes an experimental variable (isolation width) being tested, which fits the definition of a factor_value.
-SOURCE CHECK:      The paper explicitly mentions testing ""ascending widths of isolation, ±1.0, ±2.0, ±3.0, and ±4.0 Th"" in the Results section.
-TRUTH CHECK:       The value is factually correct as it accurately reflects the variable manipulated to investigate the limit of complexity for deconvolution.
-COMPLETENESS CHECK: The full set contains the primary experimental variable studied in the comparison section of the paper.
+"PXD000999","ExperimentalDesignAgent","factor_value","isolation width (±1.0, ±2.0, ±3.0, ±4.0 Th)","isolation width (±1.0, ±2.0, ±3.0, ±4.0 Th)","high","False","","True","True","False","TYPE CHECK:        yes
+SOURCE CHECK:      yes
+TRUTH CHECK:       yes
+COMPLETENESS CHECK:yes
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -153,20 +154,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
-SOURCE CHECK:      The paper describes ""single-dimensional LC-MS/MS shotgun experiments"" and does not mention any offline fractionation steps.
-TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is factually correct.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
-TYPE_CORRECT:      yes
+"PXD000999","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK: The paper describes ""single-dimensional LC-MS/MS shotgun experiments"" and does not mention any offline fractionation steps.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values contains only ""1"", which accurately reflects the experimental setup described.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD000999","ExperimentalDesignAgent","number_of_samples","12","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
-SOURCE CHECK:      The paper mentions ""In a triplicate experiment"" and ""three replicate experiments"" using HeLa cell lysate, and later refers to ""three .RAW files"". There is no mention of 12 samples.
-TRUTH CHECK:       The value ""12"" is factually incorrect; the study used 3 replicates of a single sample type (HeLa cell lysate).
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000999","ExperimentalDesignAgent","number_of_samples","12","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The paper mentions ""three separate cell pellets"" and ""a triplicate experiment"" (three replicate experiments), but does not mention 12 samples.
+TRUTH CHECK:       The value ""12"" is not supported by the text; the study used 3 replicates of HeLa cell lysate.
 COMPLETENESS CHECK:The full set contains only the incorrect value ""12"".
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -174,4 +176,4 @@ VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
+CORRECTED_VALUE:   3","3"

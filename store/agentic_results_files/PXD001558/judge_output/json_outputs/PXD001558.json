@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"Human Umbilical Vein Endothelial Cells (HUVECs)\" and \"human\" databases/proteins, making \"Homo sapiens\" clearly present and inferable.",
-        "TRUTH_CHECK": "The cells used (HUVECs, MDA-MB-231, etc.) are human-derived.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which covers the source organism for the proteomics experiments."
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes the use of human cell lines (MDA-MB-231, HUVECs, etc.) and explicitly mentions searching against the \"SwissProt human database\".",
+        "TRUTH_CHECK": "The experimental materials (human breast cancer cells and human umbilical vein endothelial cells) are indeed from Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which covers the source organism for the proteomics experiments described."
       }
     },
     {
@@ -28,9 +28,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast\" refers to an organ/tissue, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"breast cancer cells\" and \"breast cancer cell lines\" multiple times, but it does not state that the samples were derived from breast tissue/organ; they are immortalized cell lines (MDA-MB-231, SUM149PT, etc.).",
-        "TRUTH_CHECK": "The experiment used cell lines (in vitro models) rather than primary organ tissue. While the cancer type is breast cancer, the \"organ of origin\" for the actual material used in the MS experiment is the cell line, not the breast organ itself.",
-        "COMPLETENESS_CHECK": "The full set contains only \"breast\", which is incorrect as the material is cell-based."
+        "SOURCE_CHECK": "The paper mentions \"breast cancer cells\" multiple times, but these are immortalized cell lines (MDA-MB-231, SUM149PT, etc.) and HUVECs, not primary tissue samples.",
+        "TRUTH_CHECK": "The experiment was performed using cell lines (in vitro) and nude mice (in vivo), but the proteomics analysis was conducted on cell lysates, not on breast tissue.",
+        "COMPLETENESS_CHECK": "The full set contains only \"breast\", which is an incorrect attribution of the cell line's origin to the sample material."
       }
     },
     {
@@ -46,7 +46,7 @@
         "TYPE_CHECK": "The candidate value \"endothelial cells\" describes a primary cell lineage, which matches the definition of cell_type.",
         "SOURCE_CHECK": "The paper explicitly mentions \"endothelial cells\" throughout the text (e.g., in the abstract and results).",
         "TRUTH_CHECK": "The value is factually correct as the study investigates signaling between tumor cells and endothelial cells.",
-        "COMPLETENESS_CHECK": "The full set contains \"endothelial cells\", but the paper also extensively uses \"breast cancer cells\" (or \"tumor cells\") as a primary cell type in the same experiments."
+        "COMPLETENESS_CHECK": "The full set contains \"endothelial cells\", but the paper also uses \"breast cancer cells\" (or \"tumor cells\") as a primary cell type in the same experimental context."
       }
     },
     {
@@ -61,24 +61,24 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast cancer\" is a disease state, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"breast cancer cells\" and \"breast cancer cell lines\" multiple times throughout the abstract and results.",
-        "TRUTH_CHECK": "The study uses breast cancer cell lines (MDA-MB-231, SUM149PT, MDA-MB-468, MDA-MB-453) to model tumor-endothelial signaling.",
+        "TRUTH_CHECK": "The study uses breast cancer cell lines (MDA-MB-231, SUM149PT, etc.) to model tumor-endothelial signaling.",
         "COMPLETENESS_CHECK": "The full set contains \"breast cancer\", which accurately describes the disease state of the tumor cells used in the experiment."
       }
     },
     {
       "annotation_type": "material_type",
-      "extracted_value": "HUVECs",
+      "extracted_value": "in vivo-selected lung metastatic derivative of MDA-MB-231 cells",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "primary cells, cell line",
+      "corrected_value": "cell line",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"HUVECs\" is a specific cell type/line, not a broad material class as required by the definition (e.g., \"cell line\", \"primary cells\").",
-        "SOURCE_CHECK": "HUVECs are mentioned in the text as being used in the experiments.",
-        "TRUTH_CHECK": "While HUVECs were used, the value provided is the name of the cell, not the material category.",
-        "COMPLETENESS_CHECK": "The full set contains only the specific cell name and fails to provide the broad material class."
+        "TYPE_CHECK": "The candidate value is a specific cell line description, but the field definition requires a \"Broad material class\" (e.g., \"cell line\").",
+        "SOURCE_CHECK": "The text mentions \"an in vivo-selected lung metastatic derivative of MDA-MB-231 cells (subpopulation LM2)\", so the entity is present.",
+        "TRUTH_CHECK": "The entity is correct, but it is a specific instance of a cell line, not the broad category requested.",
+        "COMPLETENESS_CHECK": "The full set contains only this specific description, failing to provide the broad material class required by the definition."
       }
     },
     {
@@ -92,9 +92,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"lung\" describes an anatomical location, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"lung metastatic derivative of MDA-MB-231 cells\" and \"lung metastatic potential,\" and describes an in vivo assay where cells were injected into the tail vein and \"whole lungs were excised\" to analyze tumor cell retention.",
+        "SOURCE_CHECK": "The paper mentions \"lung metastatic derivative of MDA-MB-231 cells\" and \"lung metastatic potential,\" and describes an in vivo assay where cells were injected into the tail vein and analyzed for \"number of tumor cells residing in the lung.\"",
         "TRUTH_CHECK": "The study specifically focuses on the lung as the site of metastasis for the LM2 cell line.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") accurately captures the anatomical site of the tumor/metastasis discussed in the experimental context."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") accurately captures the anatomical site of the tumor/metastasis described in the study."
       }
     },
     {
@@ -105,12 +105,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "LM2, MDA-MB-231, BrM2a, BoM1, MDA-MB-468, SUM149PT, MDA-MB-453, HUVECs, EA.hy926, HEK 293FT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"LM2\" as a lung metastatic derivative of MDA-MB-231 cells.",
-        "TRUTH_CHECK": "The value is factually correct as described in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper mentions several other cell lines used in the experiments (MDA-MB-231, HUVECs, SUM149PT, MDA-MB-468, MDA-MB-453, EA.hy926, and HEK 293FT)."
+        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"an in vivo-selected lung metastatic derivative of MDA-MB-231 cells (subpopulation LM2-4175, hereafter referred to as LM2)\".",
+        "TRUTH_CHECK": "The value \"LM2\" is factually correct as it is the shorthand used throughout the paper for the cell line.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive; the paper mentions several other cell lines used in the experiments (MDA-MB-231, BrM2a, BoM1, MDA-MB-468, SUM149PT, MDA-MB-453, HUVECs, EA.hy926, and HEK 293FT)."
       }
     },
     {
@@ -123,15 +123,15 @@
       "hallucination": false,
       "corrected_value": "LTQ Orbitrap Velos, Q-Exactive Plus",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The text explicitly mentions \"run on a LTQ Orbitrap Velos mass spectrometer (Thermo Scientific)\".",
         "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
-        "COMPLETENESS_CHECK": "The paper mentions two different mass spectrometers: the \"LTQ Orbitrap Velos\" for phosphopeptide analysis and the \"Q-Exactive Plus\" for cellular proteome analysis. The full set of extracted values only contains one of these."
+        "COMPLETENESS_CHECK": "The paper mentions two instruments: the LTQ Orbitrap Velos (for phosphopeptides) and the Q-Exactive Plus (for global protein quantification). The full set of extracted values only contains one of these."
       }
     },
     {
       "annotation_type": "label",
-      "extracted_value": "SILAC",
+      "extracted_value": "Stable Isotope Labeling by Amino acids in Cell culture (SILAC)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -139,10 +139,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"SILAC\" is a metabolic labeling method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"Stable Isotope Labeling by Amino acids in Cell culture (SILAC)\" in the abstract and methods.",
-        "TRUTH_CHECK": "The use of SILAC for cell-specific phosphoproteomic analysis is factually correct as described in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"SILAC\", which is the only labeling method used in the study."
+        "TYPE_CHECK": "The candidate value is a metabolic labeling method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract and the \"SILAC labeling\" section of the methods.",
+        "TRUTH_CHECK": "The value is factually correct as the study used SILAC to distinguish between tumor and endothelial cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only labeling method used in the study."
       }
     },
     {
@@ -157,8 +157,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the number of biological replicates, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly states, \"we conducted a minimum of four independent biological experiments for each cell type.\"",
-        "TRUTH_CHECK": "The value is factually correct based on the \"Results\" section.",
-        "COMPLETENESS_CHECK": "The full set includes \"4 independent biological experiments per cell type\" and \"8\". The \"8\" is likely a hallucination or a misinterpretation of the 2 cell types (LM2 and HUVECs) multiplied by 4, but the \"4\" per cell type is the primary reported replication. Together, they cover the reported replication."
+        "TRUTH_CHECK": "The value is factually correct based on the results section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"4 independent biological experiments per cell type\" and \"8\". The \"8\" is likely a misinterpretation of the 8 animals used in the in vivo assay (6 animals/group for 2 groups), which is a different experiment from the main phosphoproteomic analysis. The value \"4\" correctly captures the biological replication for the primary proteomics data."
       }
     },
     {
@@ -172,14 +172,14 @@
       "corrected_value": "4",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of biological replicates.",
-        "SOURCE_CHECK": "The paper states, \"we conducted a minimum of four independent biological experiments for each cell type.\" There is no mention of \"8\" as a total or specific replicate count for the proteomics experiments.",
-        "TRUTH_CHECK": "The value \"8\" is not supported by the text; the text explicitly mentions \"four independent biological experiments for each cell type.\"",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains a contradiction (\"4...\" and \"8\"), and the \"8\" is not supported by the source text."
+        "SOURCE_CHECK": "The paper states \"we conducted a minimum of four independent biological experiments for each cell type\" for the phosphoproteomic analysis. There is no mention of \"8\" biological replicates in the text.",
+        "TRUTH_CHECK": "The value \"8\" is not supported by the text; the text explicitly mentions a minimum of four independent biological experiments per cell type.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains a contradiction (\"4...\" and \"8\"), and the value \"8\" is factually incorrect based on the source text."
       }
     },
     {
-      "annotation_type": "factor_value",
-      "extracted_value": "cell type (LM2, HUVECs), condition (co-culture, monoculture)",
+      "annotation_type": "experimental_design",
+      "extracted_value": "SILAC-based phosphoproteomic comparison of tumor (LM2) and endothelial (HUVEC) cells in co-culture versus monoculture",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -187,10 +187,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (cell types and conditions) being compared, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly describes using LM2 cells and HUVECs and comparing co-culture (contact-initiated signaling) versus monoculture (suspension/control).",
+        "TYPE_CHECK": "The candidate value describes the experimental setup and comparison, which fits the category of experimental design.",
+        "SOURCE_CHECK": "The text explicitly describes using SILAC to compare LM2 cells in co-culture with HUVECs versus LM2 cells in monoculture (suspension), and similarly for HUVECs.",
+        "TRUTH_CHECK": "The value accurately reflects the core experimental design used for the phosphoproteomic mapping.",
+        "COMPLETENESS_CHECK": "The full set captures the primary design of the proteomics experiment described in the paper."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "cell type (LM2, HUVEC), condition (co-culture, monoculture)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variables (cell types and conditions) being compared, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly describes the use of LM2 cells and HUVECs, and compares their signaling in co-culture versus monoculture (suspension/control).",
         "TRUTH_CHECK": "The values are factually correct based on the experimental design described in the results and methods.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variables used for the phosphoproteomic analysis."
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental factors (the specific cell lines and the interaction state) used in the phosphoproteomic analysis."
       }
     },
     {
@@ -203,26 +219,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
-        "SOURCE_CHECK": "The text explicitly states that 186 resulting fractions were pooled into \"19 final fractions for LC-MS analysis.\"",
-        "TRUTH_CHECK": "The value is factually correct based on the \"Fractionation and LC-MS for quantitative analysis of cellular proteome\" section.",
-        "COMPLETENESS_CHECK": "The full set contains the only mentioned number of final fractions used for the quantitative analysis."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
+        "SOURCE_CHECK": "The paper explicitly states in the \"Fractionation and LC-MS for quantitative analysis of cellular proteome\" section that \"The 186 resulting fractions were pooled... into 19 final fractions for LC-MS analysis.\"",
+        "TRUTH_CHECK": "The value \"19\" is factually correct as it represents the final number of fractions analyzed per sample for the global proteome quantification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"19\", which accurately reflects the fractionation described in the text."
       }
     },
     {
       "annotation_type": "number_of_samples",
-      "extracted_value": "8",
+      "extracted_value": "16",
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of samples.",
-        "SOURCE_CHECK": "The paper does not explicitly state a total number of samples processed for the entire study. It mentions \"a minimum of four independent biological experiments for each cell type\" for the phosphoproteomic analysis (LM2 and HUVECs), which would imply at least 8 samples for that specific part of the experiment.",
-        "TRUTH_CHECK": "While 8 is an inference based on \"four independent biological experiments for each cell type\" (LM2 and HUVECs), the paper describes multiple experimental setups (co-cultures, monocultures, and different cell lines like SUM149PT, MDA-MB-468, etc.), making a total count of \"8\" for the whole study likely incorrect or an undercount.",
-        "COMPLETENESS_CHECK": "The value \"8\" only accounts for one specific part of the phosphoproteomic analysis and does not represent the total count of samples processed in the study."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
+        "SOURCE_CHECK": "The paper does not explicitly state a total number of samples as \"16\". It mentions \"a minimum of four independent biological experiments for each cell type\" for two separate SILAC setups (LM2 and HUVECs), and mentions 19 final fractions for the global proteome, but no total sample count of 16 is provided.",
+        "TRUTH_CHECK": "The value \"16\" is not supported by the text. While one might calculate 4 experiments * 2 cell types * 2 setups = 16, this is an inference not explicitly stated as the total sample count.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     }
   ]

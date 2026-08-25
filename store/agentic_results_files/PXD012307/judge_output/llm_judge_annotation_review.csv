@@ -1,6 +1,6 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD012307","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name of a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""young and old mice"" and ""C57BL/6 mice"" throughout the text.
+"PXD012307","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""mice"" and ""mouse lung"" throughout the text.
 TRUTH CHECK: ""Mus musculus"" is the scientific name for the mouse, which is the organism used in this study.
 COMPLETENESS CHECK: The full set contains the only species used in the experiment.
 TYPE_CORRECT: yes
@@ -10,10 +10,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD012307","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is an organ, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""whole lungs"" and ""mouse lung"" throughout the text.
+"PXD012307","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is a valid organ/tissue name.
+SOURCE CHECK:      The paper explicitly mentions ""whole lungs"" and ""mouse lung"" throughout the title, abstract, and methods.
 TRUTH CHECK:       The experiment was performed on lung tissue from mice.
-COMPLETENESS CHECK: The full set of extracted values (""lung"") covers the organ of origin described in the paper.
+COMPLETENESS CHECK: The full set contains ""lung"", which exhaustively covers the organ of origin described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,10 +21,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","BiologicalAgent","disease","aging","aging","high","False","","True","True","False","TYPE CHECK:        The candidate value ""aging"" describes the biological state/condition being studied, which fits the category of a disease state or diagnosis in the context of this study.
+"PXD012307","BiologicalAgent","disease","aging","aging","high","False","","True","True","False","TYPE CHECK:        The candidate value ""aging"" describes the biological state/condition being studied, which fits the category of disease state or diagnosis.
 SOURCE CHECK:      The paper explicitly focuses on ""aging"" and ""the aging lung"" throughout the title, abstract, and results.
 TRUTH CHECK:       The study compares young and old mice to map the effects of aging on the lung proteome and transcriptome.
-COMPLETENESS CHECK: The full set contains ""aging"", which accurately captures the primary condition/state under investigation.
+COMPLETENESS CHECK:    The full set of extracted values (""aging"") covers the primary condition under investigation in this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,31 +32,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","BiologicalAgent","material_type","C57BL/6 mice","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value is a mouse strain, not a broad material class (e.g., tissue, whole organism).
-SOURCE CHECK:      The value ""C57BL/6 mice"" is present in the text, but it describes the strain/organism, not the material type.
-TRUTH CHECK:       The value is factually a strain, which is incorrect for the `material_type` field.
-COMPLETENESS CHECK: The full set contains only this incorrect value; the actual material used for proteomics was lung tissue.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: material_type
+"PXD012307","BiologicalAgent","material_type","mice","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""mice"" refers to the whole organism, which is a category listed in the definition.
+SOURCE CHECK:      The paper explicitly states that the study used ""young and old mice"" and ""whole lungs"" from these mice.
+TRUTH CHECK:       While mice were the subjects, the proteomics experiments specifically used ""fresh frozen total tissue (wet weight) of mouse lungs"" and ""whole lung tissue"". The material actually processed for the mass spectrometry was the lung tissue, not the whole organism.
+COMPLETENESS CHECK:    The full set contains only ""mice"", which is a supertype drift; it describes the subject rather than the specific material type (tissue) used for the proteomics analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue""]","tissue"
-"PXD012307","BiologicalAgent","age","3 months, 24 months","3 months, 24 months","medium","False","","True","False","False","TYPE CHECK:        The candidate value represents the age of the donor mice, which matches the field definition.
+"PXD012307","BiologicalAgent","age","3 months, 24 months","3 months, 24 months","medium","False","","True","False","False","TYPE CHECK:        The candidate value represents the age of the donors, which matches the field definition.
 SOURCE CHECK:      The paper explicitly mentions ""3-month-old mice"" and ""24-month-old mice"" in the Results section.
 TRUTH CHECK:       The values are factually correct as stated in the text.
-COMPLETENESS CHECK: The full set contains the primary age groups used for the single-cell and proteomics cohorts. While ""22 months"" is mentioned for the bulk RNA-seq cohort, the candidate value captures the main experimental groups.
+COMPLETENESS CHECK: The full set of extracted values covers the primary age groups used in the study (though 22 months is also mentioned for bulk RNA-seq, the proteomics and scRNA-seq focus on 3 and 24 months).
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""3 months"", ""22 months"", ""24 months""]","3 months, 22 months, 24 months"
+VERDICT:           high
+CORRECTED_VALUE:   NONE","3 months, 22 months, 24 months"
 "PXD012307","BiologicalAgent","strain","C57BL/6","C57BL/6","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific animal strain, which matches the field definition.
-SOURCE CHECK:      The text explicitly states ""Pathogen-free C57BL/6 mice were obtained from Charles River"" in the Methods section.
-TRUTH CHECK:       The value is factually correct as per the paper.
+SOURCE CHECK:      The text explicitly mentions ""Pathogen-free C57BL/6 mice were obtained from Charles River"" in the Methods section.
+TRUTH CHECK:       The value is factually correct based on the provided text.
 COMPLETENESS CHECK: The full set contains the only strain mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -67,7 +68,7 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD012307","TechnicalAgent","instrument","Q-Exactive","Q-Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK:      The text explicitly mentions ""Mass Spectrometer (Q-Exactive, Thermo Scientific)"".
-TRUTH CHECK:       The value is factually correct as per the methods section.
+TRUTH CHECK:       The value is factually correct as stated in the methods section.
 COMPLETENESS CHECK: The full set contains the only instrument mentioned for the proteomics experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -76,33 +77,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly mentions ""For label-free quantification in MaxQuant the minimum ratio count was set to two.""
-TRUTH CHECK:       The value is factually correct as the study used label-free quantification.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive.
-TYPE_CORRECT:      yes
+"PXD012307","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: The paper explicitly mentions ""For label-free quantification in MaxQuant the minimum ratio count was set to two.""
+TRUTH CHECK: The value is factually correct as the study used label-free quantification.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD012307","ExperimentalDesignAgent","replicates","4 mice per group","4 mice per group | 8","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
-SOURCE CHECK:      The text mentions ""four replicates of young (3 months) and old mice (24 months)"" in the ""Multi-omics data integration"" section.
-TRUTH CHECK:       The value ""4 mice per group"" is factually correct for the proteomics experiment.
-COMPLETENESS CHECK: The full set includes ""4 mice per group"" (proteomics) and ""8"" (scRNA-seq young group), but it misses the ""7"" for the scRNA-seq old group and the ""3"" for bulk RNA-seq. The set is not exhaustive.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""4"", ""8"", ""7"", ""3""]",""
-"PXD012307","ExperimentalDesignAgent","replicates","8","4 mice per group | 8","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012307","ExperimentalDesignAgent","replicates","4 mice per group","8","high","False","","True","True","False","TYPE CHECK:        The candidate value describes",""
+"PXD012307","ExperimentalDesignAgent","replicates","8","8","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
 SOURCE CHECK:      The value ""8"" is present in the text (""Single-cell suspensions of whole lungs were generated from 3-month-old mice (n = 8)"").
-TRUTH CHECK:       The value is factually correct for the scRNA-seq part of the experiment.
-COMPLETENESS CHECK: The full set of extracted values (""4 mice per group"", ""8"") is incomplete because the paper describes multiple cohorts with different replicate counts: scRNA-seq (8 young, 7 old), bulk RNA-seq (3 replicates), and shotgun proteomics (4 replicates).
-
+TRUTH CHECK:       The value is factually correct for the scRNA-seq part of the experiment, but the paper describes multiple cohorts with different replicate numbers (n=8 and n=7 for scRNA-seq, n=3 for bulk RNA-seq, n=4 for proteomics).
+COMPLETENESS CHECK: The full set of extracted values (""4 mice per group"", ""8"") is incomplete and inconsistent; it misses the n=7 for old mice in scRNA-seq and the n=3 for bulk RNA-seq, and ""4 mice per group"" is ambiguous.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -110,10 +100,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""8"", ""7"", ""3"", ""4""]","8, 7, 3, 4"
-"PXD012307","ExperimentalDesignAgent","experimental_design","young vs old mouse lung comparison","young vs old mouse lung comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing two age groups), which fits the category of experimental design.
-SOURCE CHECK:      The paper explicitly compares ""young and old mice"" (3-month-old vs 24-month-old) across multiple modalities (scRNA-seq, bulk RNA-seq, and proteomics).
-TRUTH CHECK:       The value is factually correct as the study is designed to chart the aging lung by comparing young and old cohorts.
-COMPLETENESS CHECK: The full set contains this single value, which accurately captures the primary experimental design of the study.
+"PXD012307","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not explicitly mention technical replicates for the proteomics experiments; therefore, ""1"" is a safe default.
+TRUTH CHECK:       The value is correct as a default when no replication is specified.
+COMPLETENESS CHECK: The full set of extracted values consists of this single default value, which is exhaustive given the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,10 +111,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","ExperimentalDesignAgent","factor_value","age (young 3 months, old 24 months)","age (young 3 months, old 24 months)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (age) and its specific levels, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly mentions comparing ""young (3 months)"" and ""old (24 months)"" mice in the proteomics section.
-TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set captures the primary experimental factor (age) and the specific groups used in the proteomics experiment.
+"PXD012307","ExperimentalDesignAgent","experimental_design","young vs old mouse lung proteome comparison","young vs old mouse lung proteome comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental comparison, which fits the category of study design.
+SOURCE CHECK:      The paper explicitly compares ""young and old mice"" (3-month-old vs 24-month-old) across transcriptomics and proteomics.
+TRUTH CHECK:       The value is factually correct as the study compares the lung proteomes of young and old mice.
+COMPLETENESS CHECK: The full set captures the primary experimental design of the proteomics study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,10 +122,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","ExperimentalDesignAgent","fractions","4","4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK:      The paper describes a ""quantitative detergent solubility profiling (QDSP)"" method where proteins were extracted in three steps (buffer 1, 2, and 3) and the initial PBS homogenate was pooled with buffer 1, resulting in ""a total of three soluble fractions and one insoluble pellet"" (total of 4 fractions) that were subjected to LC-MS/MS.
-TRUTH CHECK:       The text explicitly states that the process resulted in ""a total of three soluble fractions and one insoluble pellet,"" which equals 4 fractions.
-COMPLETENESS CHECK: The full set of extracted values contains ""4"", which accurately covers the fractionation described in the QDSP method.
+"PXD012307","ExperimentalDesignAgent","factor_value","age (young: 3 months, old: 24 months)","age (young: 3 months, old: 24 months)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variable (age) and its specific levels, which fits the definition of a factor value.
+SOURCE CHECK: The paper explicitly mentions comparing ""young (3 months)"" and ""old (24 months)"" mice in the proteomics section.
+TRUTH CHECK: The value is factually correct based on the ""Multi-omics data integration"" section of the results.
+COMPLETENESS CHECK: The full set contains the primary experimental factor (age) and its levels; this is exhaustive for the main study design.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012307","ExperimentalDesignAgent","fractions","4","4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the ""fractions"" field.
+SOURCE CHECK:      The paper describes the QDSP protocol where proteins were extracted in ""three steps using buffers with increasing stringency,"" resulting in ""three soluble fractions and one insoluble pellet.""
+TRUTH CHECK:       The text explicitly states that these resulted in ""a total of three soluble fractions and one insoluble pellet,"" which equals 4 fractions per sample.
+COMPLETENESS CHECK: The full set of extracted values (""4"") accurately captures the total number of fractions described for the proteomics experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,10 +145,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012307","ExperimentalDesignAgent","number_of_samples","32","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes several cohorts: scRNA-seq (8 young + 7 old = 15), bulk RNA-seq (3 young + 3 old = 6), and shotgun proteomics (4 young + 4 old = 8), plus flow-sorted bulk RNA-seq (4 young + 4 old = 8). Summing these (15+6+8+8) equals 37, not 32.
-TRUTH CHECK:       The value ""32"" is not explicitly stated as the total sample count and does not match the sum of the described cohorts.
-COMPLETENESS CHECK: The full set contains only one value which is factually incorrect based on the text.
+"PXD012307","ExperimentalDesignAgent","number_of_samples","32","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions several cohorts: scRNA-seq (8 young + 7 old = 15), bulk RNA-seq (3 young + 3 old = 6), and shotgun proteomics (4 young + 4 old = 8). Additionally, it mentions a flow-sorted bulk RNA-seq cohort (4 young + 4 old = 8). Summing these (15 + 6 + 8 + 8) equals 37, not 32.
+TRUTH CHECK:       The value ""32"" is not explicitly stated in the text nor does it accurately sum the mentioned cohorts.
+COMPLETENESS CHECK: The full set contains only this value, which is factually incorrect based on the provided text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no

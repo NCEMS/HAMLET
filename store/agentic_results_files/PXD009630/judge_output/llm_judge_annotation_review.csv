@@ -1,15 +1,15 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD009630","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""human database"" and ""patients diagnosed with melanoma"", making ""Homo sapiens"" a correct and inferable value.
-TRUTH CHECK:       The study is performed on human patients with malignant melanoma.
-COMPLETENESS CHECK:   The full set contains the only species involved in the primary experiment.
-TYPE_CORRECT:      yes
+"PXD009630","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""human database"" and ""melanoma patients,"" making ""Homo sapiens"" a correct and reasonable inference.
+TRUTH CHECK: The study is performed on human patients with malignant melanoma.
+COMPLETENESS CHECK: The full set contains the only relevant species for the main experiment.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD009630","BiologicalAgent","organ","lymph node","lymph node","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lymph node"" is a valid organ/tissue type.
 SOURCE CHECK:      The paper explicitly mentions ""melanoma lymph node metastases"" and ""lymph node metastasis samples"" multiple times.
 TRUTH CHECK:       The samples used for the proteomics analysis were indeed lymph node metastases.
@@ -21,10 +21,76 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD009630","BiologicalAgent","cell_type","melanocytes","melanocytes","high","False","","True","True","False","TYPE CHECK: The candidate value ""melanocytes"" is a cell type, which matches the field definition.
-SOURCE CHECK: The paper mentions that ""The samples were mostly composed of epithelioid shaped melanocytes infiltrating the lymph nodes"".
-TRUTH CHECK: The value is factually correct as the study analyzes melanoma lymph node metastases, which are composed of malignant melanocytes.
-COMPLETENESS CHECK: The full set contains ""melanocytes"", which accurately describes the primary cell type of the tumor samples analyzed.
+"PXD009630","BiologicalAgent","cell_type","melanocytes","melanocytes","high","False","","True","True","False","TYPE CHECK:        The candidate value ""melanocytes"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions that ""The samples were mostly composed of epithelioid shaped melanocytes infiltrating the lymph nodes"".
+TRUTH CHECK:       The value is factually correct as the study analyzes melanoma metastases, which originate from melanocytes.
+COMPLETENESS CHECK: The full set contains ""melanocytes"", which accurately describes the primary cell lineage of the tumor cells studied.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009630","BiologicalAgent","disease","malignant melanoma","malignant melanoma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""malignant melanoma"" is a diagnosis/disease state, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""malignant melanoma"" in the title and the ""Tissue samples and sample preparation"" section.
+TRUTH CHECK:       The study specifically analyzes lymph node metastases from patients with malignant melanoma.
+COMPLETENESS CHECK:   The full set of extracted values contains ""malignant melanoma"", which exhaustively describes the disease state of the subjects in this study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009630","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        No, ""patients"" refers to the donor/subject, not the broad material class (e.g., tissue, cell line) as required by the definition.
+SOURCE CHECK:      The paper mentions patients, but the material actually used for proteomics was ""frozen tissue samples"" from lymph node metastases.
+TRUTH CHECK:       The candidate value is incorrect because it describes the source organism/subject rather than the material type.
+COMPLETENESS CHECK: The full set is incorrect and incomplete as it fails to identify the actual material used.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   tissue","tissue"
+"PXD009630","BiologicalAgent","age","62.4 ± 13.7 (25–89) years","62.4 ± 13.7 (25–89) years","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric representation of age with mean, standard deviation, and range, which fits the definition.
+SOURCE CHECK:      The value is explicitly stated in the ""Clinical data"" section of the results: ""Average age ± standard deviation (range) at diagnosis of lymph node metastasis was 62.4 ± 13.7 (25–89) years.""
+TRUTH CHECK:       The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the complete age description provided in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009630","BiologicalAgent","anatomic_site_tumor","lymph node","lymph node","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lymph node"" describes an anatomical location of the tumor, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""melanoma lymph node metastases"" and ""lymph node metastasis samples"" throughout the text.
+TRUTH CHECK:       The value is factually correct as the study specifically analyzes tumors located in the lymph nodes.
+COMPLETENESS CHECK:    The full set of extracted values (""lymph node"") covers the anatomical site described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009630","BiologicalAgent","sex","men and women","men and women","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the sex of the donors, which matches the field definition.
+SOURCE CHECK:      The paper explicitly states, ""There were 68 men and 43 women among the investigated cases.""
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set captures the sex distribution mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009630","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""coupled online to a Q-Exactive Plus mass spectrometer (Thermo Scientific, San José, CA)"".
+TRUTH CHECK: The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -32,98 +98,32 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009630","BiologicalAgent","disease","malignant melanoma","malignant melanoma","high","False","","True","True","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""malignant melanoma"" in the title and methods section.
-TRUTH CHECK:       The study focuses on patients with malignant melanoma lymph node metastases.
-COMPLETENESS CHECK: The full set contains the primary disease studied in the paper.
-TYPE_CORRECT:      yes
+"PXD009630","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: The paper explicitly states ""Label-free LC-MS/MS analysis allowed the quantitation of 4963 proteins"" in the Proteomics data section.
+TRUTH CHECK: The value is factually correct as the study used a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one labeling method was used.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD009630","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is a subject/source, not a broad material class as defined (e.g., ""tissue"", ""cell line"").
-SOURCE CHECK:      The paper mentions patients, but the material actually analyzed was ""frozen tissue samples"" (lymph node metastases).
-TRUTH CHECK:       The material used for the proteomics experiment was tissue, not the patients themselves.
-COMPLETENESS CHECK:The full set contains only ""patients"", which is the wrong category of entity.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: material_type
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   [""tissue""]","tissue"
-"PXD009630","BiologicalAgent","age","25–89 years","25–89 years","high","False","","True","True","False","TYPE CHECK:        The candidate value is a range of years, which matches the definition of age.
-SOURCE CHECK:      The text explicitly states ""Average age ± standard deviation (range) at diagnosis of lymph node metastasis was 62.4 ± 13.7 (25–89) years.""
-TRUTH CHECK:       The value ""25–89 years"" accurately reflects the range provided in the paper.
-COMPLETENESS CHECK: The full set contains the only range mentioned for the patient cohort's age.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD009630","BiologicalAgent","anatomic_site_tumor","lymph node","lymph node","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lymph node"" describes an anatomical location of a tumor, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""melanoma lymph node metastases"" and ""lymph node metastasis samples"" multiple times.
-TRUTH CHECK:       The value is factually correct as the study specifically analyzes tumors located in the lymph nodes.
-COMPLETENESS CHECK: The full set of extracted values contains ""lymph node"", which is the only anatomical site of the tumors described in the study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD009630","BiologicalAgent","sex","men, women","men, women","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the sex of the donors, which matches the field definition.
-SOURCE CHECK:      The paper explicitly states, ""There were 68 men and 43 women among the investigated cases.""
-TRUTH CHECK:       The values ""men"" and ""women"" are factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values covers all sexes mentioned in the study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD009630","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""coupled online to a Q-Exactive Plus mass spectrometer (Thermo Scientific, San José, CA)"".
-TRUTH CHECK:       The value is factually correct as stated in the methods section.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD009630","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly states ""Label-free LC-MS/MS analysis allowed the quantitation of 4963 proteins"" in the Proteomics data section.
-TRUTH CHECK:       The value is factually correct as the study used a label-free approach.
-COMPLETENESS CHECK: The full set contains the only labeling method used in the study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD009630","ExperimentalDesignAgent","replicates","111 patients","111","low","True","number_of_samples","False","False","False","TYPE CHECK:        No, the candidate value is a description of the sample size (number of patients), not the number of biological replicates per condition/sample.
 SOURCE CHECK:      The number 111 is present in the text, but it refers to the total number of patients/samples.
-TRUTH CHECK:       The value is factually incorrect for the field 'replicates'; 111 is the total number of samples, not the number of replicates per sample.
-COMPLETENESS CHECK: The full set consists of the total sample count, which is a different metric than biological replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'; 111 is the 'number_of_samples'. There is no mention of biological replicates for each patient.
+COMPLETENESS CHECK: The full set consists of the total sample count, which does not address biological replication.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: number_of_samples
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD009630","ExperimentalDesignAgent","replicates","111","111","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the category for the replicates field.
-SOURCE CHECK:      The paper states ""A total of 111 patients diagnosed with melanoma metastasis... were evaluated in the study.""
-TRUTH CHECK:       In a clinical study of this nature, each patient represents a unique biological sample/replicate.
-COMPLETENESS CHECK: The full set of extracted values correctly identifies the total number of biological samples/patients used.
+CORRECTED_VALUE:   1","1"
+"PXD009630","ExperimentalDesignAgent","replicates","111","111","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper explicitly states ""A total of 111 patients diagnosed with melanoma metastasis... were evaluated in the study.""
+TRUTH CHECK:       In a clinical study of this nature, each patient sample typically represents a unique biological replicate.
+COMPLETENESS CHECK:    The full set of extracted values (""111 patients"", ""111"") correctly identifies the total number of biological samples/replicates used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -131,10 +131,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD009630","ExperimentalDesignAgent","experimental_design","prognostic study correlating protein expression with patient survival","prognostic study correlating protein expression with patient survival","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design and objective, which fits the category of experimental design.
-SOURCE CHECK:      The paper explicitly states the goal is ""Improved survival prognostication"" and describes relating protein expression to patient survival using PLS-Cox and clustering.
-TRUTH CHECK:       The value accurately reflects the nature of the study as a prognostic analysis.
-COMPLETENESS CHECK: The full set contains this single value, which comprehensively describes the experimental design of the study.
+"PXD009630","ExperimentalDesignAgent","experimental_design","correlation of protein expression with patient survival and histopathological features","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the analytical goal/objective rather than the study design type (e.g., ""case-control"", ""cross-sectional"").
+SOURCE CHECK:      The text does describe correlating protein expression with survival and histopathology, but this is the analysis performed, not the design of the study.
+TRUTH CHECK:       While the analysis is correct, it is not a ""study design type"" as defined by the field.
+COMPLETENESS CHECK: The full set contains only this value, which is a description of the analysis rather than the design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD009630","ExperimentalDesignAgent","factor_value","survival (short, intermediate, long), BRAF status (wild type, V600E, V600A, V600K), tumor cell content","survival (short, intermediate, long), BRAF status (wild type, V600E, V600A, V600K), tumor cell content","high","False","","True","True","False","TYPE CHECK:        The candidate value lists experimental variables (survival, BRAF status, tumor cell content) which fits the definition of factor_value.
+SOURCE CHECK:      All three factors are explicitly discussed in the text: survival clusters (short, intermediate, long), BRAF mutation status (wild type, V600E, V600A, V600K), and tumor cell content.
+TRUTH CHECK:       The values are factually correct based on the ""Clinical data"", ""Histopathological data"", and ""Relating proteomics data to survival"" sections.
+COMPLETENESS CHECK:    The full set covers the primary variables used to analyze the proteomic data in this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -142,10 +153,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD009630","ExperimentalDesignAgent","factor_value","survival (long, intermediate, short survival clusters)","survival (long, intermediate, short survival clusters)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variable (survival clusters) being studied, which fits the definition of a factor value.
-SOURCE CHECK: The paper explicitly describes the use of unsupervised and supervised clustering to group patients into ""three patient clusters which show distinct differences in survival"" (long, intermediate, and short survival).
-TRUTH CHECK: The value is factually correct as the study focuses on relating protein expression to these survival outcomes.
-COMPLETENESS CHECK: The full set contains this value, which captures the primary experimental factor (survival) and its specific levels (the clusters) described in the study.
+"PXD009630","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes an ""Online chromatography"" setup where peptides were loaded onto a trap column and then separated on an analytical column; there is no mention of offline fractionation.
+TRUTH CHECK: Since no offline fractionation is mentioned, the default value of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -154,10 +165,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009630","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper describes an ""Online chromatography"" setup where peptides were loaded onto a trap column and then separated on an analytical column; there is no mention of offline fractionation. Per the safe defaults, ""1"" is correct when the paper is silent on fractionation.
-TRUTH CHECK: The value is factually correct as no offline fractionation was performed.
-COMPLETENESS CHECK: The full set contains only ""1"", which accurately reflects the experimental design described.
+"PXD009630","ExperimentalDesignAgent","number_of_samples","111","111","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK: The paper explicitly states ""A total of 111 patients diagnosed with melanoma metastasis... were evaluated in the study"" and ""111 lymph node metastasis samples... were obtained"".
+TRUTH CHECK: The value 111 is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""111"", which is the total count of samples processed.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -165,14 +176,3 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009630","ExperimentalDesignAgent","number_of_samples","111","111","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper explicitly states ""A total of 111 patients diagnosed with melanoma metastasis... were evaluated in the study"" and ""111 lymph node metastasis samples... were obtained"".
-TRUTH CHECK:       The value 111 is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values contains the total count of samples processed in the study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""

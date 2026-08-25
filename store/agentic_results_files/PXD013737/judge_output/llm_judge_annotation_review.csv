@@ -1,19 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD013737","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human pluripotent stem cells"" and ""human embryonic stem cells"" in the abstract and results.
-TRUTH CHECK: ""Homo sapiens"" is the scientific name for humans.
-COMPLETENESS CHECK: The full set contains the only species mentioned in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD013737","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is a valid organ/tissue type.
-SOURCE CHECK:      The paper describes the differentiation of human pluripotent stem cells towards the ""hepatic lineage"" and the study of ""liver cells"" and ""hepatocytes"".
-TRUTH CHECK:       The experiment focuses on the differentiation of stem cells into liver-like cells (hepatocytes/hepatic progenitors), making ""liver"" the correct organ of origin for the resulting cells.
-COMPLETENESS CHECK: The full set contains ""liver"", which accurately captures the organ system being modeled/studied.
+"PXD013737","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human pluripotent stem cells"" and ""human embryonic stem cells"" in the abstract and results.
+TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans and is factually correct for this study.
+COMPLETENESS CHECK: The full set contains the only species used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,10 +10,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
+"PXD013737","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK: The candidate value ""liver"" is a valid organ/tissue type.
+SOURCE CHECK: The paper describes the differentiation of human pluripotent stem cells towards the ""hepatic lineage"" and the study of ""liver cells"" and ""hepatocyte specification.""
+TRUTH CHECK: While the cells are stem-cell derived (hepatocyte-like cells/hepatic progenitors), they are intended to model the liver, and the text explicitly mentions ""study the effect of editing HNF4α in liver cells.""
+COMPLETENESS CHECK: The full set contains ""liver,"" which accurately reflects the organ of origin/target being modeled in this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD013737","BiologicalAgent","cell_type","hepatic progenitor","hepatic progenitor","high","False","","True","True","False","TYPE CHECK:        The candidate value ""hepatic progenitor"" describes a cell lineage/type, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""hepatic progenitor specification"" and ""hepatic progenitor stage (day 9)"" multiple times.
-TRUTH CHECK:       The experiment specifically analyzes the proteome and transcriptome of cells at the hepatic progenitor stage.
-COMPLETENESS CHECK:   The full set contains ""hepatic progenitor"", which accurately captures the primary cell type analyzed in the proteomics and transcriptomics experiments.
+SOURCE CHECK:      The text explicitly mentions ""hepatic progenitors (differentiation day 9)"" and ""hepatic progenitor stage cells"".
+TRUTH CHECK:       The value is factually correct as the study specifically analyzes the proteome and transcriptome of cells at the hepatic progenitor stage.
+COMPLETENESS CHECK: The full set contains ""hepatic progenitor"", which accurately captures the primary cell type analyzed in the proteomics and transcriptomics experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -34,7 +34,7 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD013737","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
 SOURCE CHECK:      The paper describes the use of ""WT"" (wild-type) human embryonic stem cells as the control group against which mutants are compared.
-TRUTH CHECK:       The WT cells serve as the healthy/normal baseline for this experimental design.
+TRUTH CHECK:       The WT cells serve as the healthy/normal baseline for the experiment.
 COMPLETENESS CHECK: The full set contains ""normal"", which accurately represents the control state of the subjects in this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -45,8 +45,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD013737","BiologicalAgent","material_type","human embryonic stem cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human embryonic stem cells"" describes a specific cell type, but the field definition requires a ""Broad material class"" (e.g., ""cell line"", ""primary cells"").
 SOURCE CHECK:      The paper explicitly mentions ""WT human embryonic stem cells"" and the generation of ""edited pluripotent stem cell lines"".
-TRUTH CHECK:       The value is factually correct regarding the source, but it is a specific cell type rather than a broad material class.
-COMPLETENESS CHECK: The full set contains only this specific value, failing to map it to the required broad categories defined in the field definition.
+TRUTH CHECK:       The value is factually correct regarding the source, but it is a specific entity rather than a broad material class.
+COMPLETENESS CHECK: The full set contains only this value, which is a specific cell type rather than the required broad category.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -54,21 +54,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""cell line""]","cell line"
-"PXD013737","BiologicalAgent","cell_line","WT, DBD Mut, SUMO Mut","","low","True","","False","False","False","TYPE CHECK:        no
-SOURCE CHECK:      yes
-TRUTH CHECK:       no
-COMPLETENESS CHECK:The full set contains only the labels for the experimental groups, not the name of the cell line.
-TYPE_CORRECT:      no
+"PXD013737","BiologicalAgent","cell_line","WT, DBD Mut, SUMO Mut","WT, DBD Mut, SUMO Mut","high","False","","True","True","False","TYPE CHECK:        The candidate value lists specific edited clones/lines, which fits the category of cell line names.
+SOURCE CHECK:      The text explicitly mentions ""one WT, one homozygous deletion mutant (DBD Mut), and one point mutated clone (SUMO Mut)"" that were expanded and differentiated.
+TRUTH CHECK:       The values correctly identify the three cell lines used in the study.
+COMPLETENESS CHECK: The full set covers all the specific cell lines described in the results section.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           low
+VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD013737","TechnicalAgent","instrument","Q Exactive","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
-SOURCE CHECK:      The paper text mentions ""LC-MS/MS"" and ""MaxQuant"", but it does not explicitly name the mass spectrometer model used.
-TRUTH CHECK:       The value ""Q Exactive"" is not mentioned anywhere in the provided text.
-COMPLETENESS CHECK: The full set contains a value that is not supported by the text.
+SOURCE CHECK:      The text mentions ""Tryptic peptides were analyzed by LC-MS/MS"" and ""raw MS output data was processed using the MaxQuant platform,"" but it does not explicitly name the instrument model.
+TRUTH CHECK:       The instrument ""Q Exactive"" is not mentioned anywhere in the provided text.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -77,9 +77,9 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD013737","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (like TMT or SILAC); therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The value is factually correct as no labeling method was described for the LC-MS/MS analysis.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct as no labeling method was described.
+COMPLETENESS CHECK:The full set of extracted values is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -87,10 +87,11 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD013737","ExperimentalDesignAgent","replicates","3 cell lines (WT, DBD Mut, SUMO Mut)","","low","True","","False","False","False","TYPE CHECK:        The candidate value contains a count but also includes the names of the cell lines, which is not the correct format for a numeric count of replicates.
-SOURCE CHECK:      The paper mentions three different cell lines (WT, DBD Mut, and SUMO Mut), but these are experimental groups/conditions, not biological replicates of a single condition.
-TRUTH CHECK:       The value is factually incorrect; the ""3"" refers to the number of distinct genotypes/cell lines used in the study, not the number of biological replicates per group. The text does not explicitly state the number of biological replicates used for the proteomics experiments.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it confuses experimental groups with biological replicates.
+"PXD013737","ExperimentalDesignAgent","replicates","3 cell lines (WT, DBD Mut, SUMO Mut)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the experimental groups (cell lines) rather than a numeric count of biological replicates per group.
+SOURCE CHECK:      The paper mentions ""one WT, one homozygous deletion mutant (DBD Mut), and one point mutated clone (SUMO Mut)"", which are the three experimental conditions/groups.
+TRUTH CHECK:       The value ""3 cell lines"" describes the number of distinct genotypes/conditions used in the study, not the number of biological replicates (independent samples) per condition.
+COMPLETENESS CHECK: The full set includes ""3"", but the paper does not explicitly state the number of biological replicates per cell line; it only describes the three different lines used. Per the field definition, if no replication is mentioned, ""1"" is the correct value.
+
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -99,20 +100,20 @@ HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   1","1"
 "PXD013737","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper mentions three different cell lines (WT, DBD Mut, and SUMO Mut) used in the experiments, but it does not explicitly state the number of biological replicates per group.
-TRUTH CHECK:       The value ""3"" is being confused with the number of experimental groups (cell lines), not the number of biological replicates per group.
-COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the number of cell lines as the number of replicates.
+SOURCE CHECK:      The paper mentions three different cell lines (WT, DBD Mut, and SUMO Mut) used in the experiments, but it does not explicitly state that these were biological replicates of the same condition; rather, they are different experimental groups (conditions).
+TRUTH CHECK:       The value ""3"" is incorrectly derived from the number of experimental groups (WT, DBD Mut, SUMO Mut) rather than the number of biological replicates per group. The text does not mention how many times each cell line was replicated.
+COMPLETENESS CHECK:    The full set of extracted values incorrectly conflates the number of experimental groups with the number of biological replicates.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""1""]","1"
+CORRECTED_VALUE:   1","1"
 "PXD013737","ExperimentalDesignAgent","experimental_design","Comparison of WT, DBD Mut, and SUMO Mut cell lines at differentiation day 9","Comparison of WT, DBD Mut, and SUMO Mut cell lines at differentiation day 9","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup and comparison groups, which fits the category of study design.
-SOURCE CHECK:      The text explicitly states that WT, DBD Mut, and SUMO Mut clones were expanded and characterized, and specifically that metabolomic, transcriptomic, and proteomic profiles were generated for these three groups at differentiation day 9.
+SOURCE CHECK:      The text explicitly states that WT, DBD Mut, and SUMO Mut clones were expanded and characterized, and specifically that ""transcriptomic profiles were generated for WT, DBD Mut, and SUMO Mut cells at differentiation day 9"" and ""we examined alterations in the proteome at differentiation day 9 from WT, DBD Mut, and SUMO Mut lines.""
 TRUTH CHECK:       The value accurately reflects the experimental design described in the results section.
-COMPLETENESS CHECK: The full set of extracted values captures the primary comparison being made in the multiomics analysis.
+COMPLETENESS CHECK: The full set contains this single value, which comprehensively describes the primary comparison being made in the multiomics analysis.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -120,10 +121,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD013737","ExperimentalDesignAgent","factor_value","HNF4α status (WT, DBD Mut, SUMO Mut)","HNF4α status (WT, DBD Mut, SUMO Mut)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the experimental variable (the genetic status of HNF4α) being compared.
-SOURCE CHECK:      Yes, the paper explicitly compares ""WT"", ""DBD Mut"", and ""SUMO Mut"" clones.
-TRUTH CHECK:       Yes, these are the three conditions used throughout the study to evaluate the function of HNF4α protein domains.
-COMPLETENESS CHECK:The full set captures the primary experimental factor (the different HNF4α genotypes) used in the multiomics analysis.
+"PXD013737","ExperimentalDesignAgent","factor_value","HNF4α genotype (WT, DBD Mut, SUMO Mut)","HNF4α genotype (WT, DBD Mut, SUMO Mut)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (genotype) and its levels, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly describes the use of three different HNF4α-edited lines: WT, DBD Mut (homozygous deletion), and SUMO Mut (point mutations).
+TRUTH CHECK:       The value is factually correct as the study compares these three specific genotypes to evaluate the function of HNF4α protein domains.
+COMPLETENESS CHECK: The full set of extracted values captures the primary experimental variable used across the metabolomic, transcriptomic, and proteomic analyses.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,9 +133,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD013737","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
+SOURCE CHECK:      The paper does not mention any offline peptide/protein fractionation; therefore, the safe default of ""1"" is applied.
 TRUTH CHECK:       The value is correct as no fractionation is described in the methods or results.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which correctly represents the lack of fractionation.
+COMPLETENESS CHECK: The full set consists of a single value ""1"", which is exhaustive for this experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -142,14 +143,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD013737","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK: The paper describes three distinct cell lines (WT, DBD Mut, and SUMO Mut) that were expanded, differentiated, and analyzed across metabolomics, transcriptomics, and proteomics.
-TRUTH CHECK: The text explicitly states ""one WT, one homozygous deletion mutant (DBD Mut), and one point mutated clone (SUMO Mut) were expanded, differentiated, and characterized in detail.""
-COMPLETENESS CHECK: The full set contains only ""3"", which accurately reflects the three experimental groups/samples analyzed in the study.
-TYPE_CORRECT: yes
+"PXD013737","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The text states that ""one WT, one homozygous deletion mutant (DBD Mut), and one point mutated clone (SUMO Mut) were expanded, differentiated, and characterized in detail.""
+TRUTH CHECK:       The study processed three distinct cell lines (WT, DBD Mut, and SUMO Mut) for the multiomics analyses.
+COMPLETENESS CHECK:The full set contains the value ""3"", which accurately reflects the number of distinct sample groups/lines analyzed in the study.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"human lung cancers\", \"human CCAR1\", and \"human refseq protein database\".",
-        "TRUTH_CHECK": "The experiments primarily use human cell lines (A549, H358, MCF7, etc.) and human clinical samples.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which covers the primary source organism of the proteomics experiments."
+        "TRUTH_CHECK": "The experiments utilize human cell lines (A549, H358, MCF7, etc.) and human clinical samples, making \"Homo sapiens\" correct.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which covers the primary source of the proteomics data described in the LC-MS/MS analysis section."
       }
     },
     {
@@ -28,8 +28,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"lung\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human lung cancers\", \"lung cancer samples\", and \"lung tissue\".",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on lung cancer and uses lung tissue samples.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human lung cancers\", \"lung cancer samples\", and \"Smurf1−/− lung tissue\".",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on lung cancer and uses lung tissue.",
         "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the primary organ of origin described in the study."
       }
     },
@@ -44,9 +44,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"epithelial cell\" describes a cell type/lineage, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"normal lung epithelial tissues\" in the context of IHC analysis of human lung cancer samples.",
-        "TRUTH_CHECK": "The paper describes the use of \"normal lung epithelial tissues\" as controls for the lung cancer samples.",
-        "COMPLETENESS_CHECK": "The full set contains only \"epithelial cell\"; however, the primary experimental work was performed using multiple cancer cell lines (A549, H358, MCF7, SMMC-7721, etc.) and MEFs, which are not captured here."
+        "SOURCE_CHECK": "The paper mentions \"normal lung epithelial tissues\" in the context of clinical samples, but the experimental proteomics (IP-MS) was performed on A549 cells (a lung cancer cell line).",
+        "TRUTH_CHECK": "While the paper mentions epithelial tissues, the primary experimental material for the proteomics analysis was the A549 cell line. \"Epithelial cell\" is a general description of the tissue origin, but the specific cells used in the MS experiment were immortalized cell lines.",
+        "COMPLETENESS_CHECK": "The full set contains only \"epithelial cell\", which is a supertype/generalization and does not capture the specific cell lines (A549) used for the MS analysis."
       }
     },
     {
@@ -60,8 +60,8 @@
       "corrected_value": "lung cancer",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"lung adenocarcinoma\" is a disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"human lung cancers\" and \"lung cancer samples\" multiple times, but the specific histological subtype \"adenocarcinoma\" is not mentioned in the provided text.",
-        "TRUTH_CHECK": "While A549 and H358 are lung adenocarcinoma cell lines, the text only explicitly refers to \"lung cancer\" and \"human lung cancers.\"",
+        "SOURCE_CHECK": "The paper mentions \"human lung cancers\" and \"lung cancer samples\" multiple times, but the specific term \"adenocarcinoma\" does not appear in the provided text.",
+        "TRUTH_CHECK": "While A549 and H358 (the cell lines used) are known to be lung adenocarcinoma lines, the paper text itself only refers to \"lung cancer\" or \"human lung cancers.\"",
         "COMPLETENESS_CHECK": "The full set contains only this value, but it is more specific than the text provided."
       }
     },
@@ -76,25 +76,9 @@
       "corrected_value": "cell line",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"A549 cells\" is a specific cell line name, not a broad material class as required by the definition.",
-        "SOURCE_CHECK": "The text explicitly mentions A549 cells were used for the IP-MS analysis.",
-        "TRUTH_CHECK": "While A549 cells are used, the value provided is the specific entity (cell line name) rather than the category (material type).",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of A549 cells.",
+        "TRUTH_CHECK": "While A549 cells are used, the value provided is the specific name of the cell line rather than the material category.",
         "COMPLETENESS_CHECK": "The full set contains only the specific cell line name and fails to provide the broad material class."
-      }
-    },
-    {
-      "annotation_type": "anatomic_site_tumor",
-      "extracted_value": "lung",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"lung\" describes the anatomical location of the tumor, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human lung cancers\" and \"lung cancer samples\" multiple times.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on lung cancer.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the anatomical site described in the paper."
       }
     },
     {
@@ -110,7 +94,7 @@
         "TYPE_CHECK": "The candidate value is a name of an immortalized cell line.",
         "SOURCE_CHECK": "The value \"A549\" is explicitly mentioned multiple times in the text (e.g., \"examined their expression levels in A549 cells\").",
         "TRUTH_CHECK": "The value is factually correct as A549 is one of the cell lines used in the experiments.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also mentions H358, HepG2, HeLa, SMMC-7721, MCF7, and HEK293T."
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"A549\", but the paper also mentions \"H358\", \"HepG2\", \"HeLa\", \"SMMC-7721\", \"MCF7\", and \"HEK293T\" as cell lines used in various assays."
       }
     },
     {
@@ -124,8 +108,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"analyzed on a Q-Exactive HF MS (Thermo Fisher Scientific)\".",
-        "TRUTH_CHECK": "The value is factually correct as stated in the LC-MS/MS analysis section.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis\" section (\"analyzed on a Q-Exactive HF MS (Thermo Fisher Scientific)\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -140,14 +124,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
-        "SOURCE_CHECK": "The paper describes an IP-MS analysis using a Q-Exactive HF but does not mention any isobaric or metabolic labeling (such as TMT or SILAC).",
-        "TRUTH_CHECK": "Since no labeling method is mentioned, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
+        "SOURCE_CHECK": "The paper describes an IP-MS analysis using a Q-Exactive HF MS but mentions no isobaric (TMT, iTRAQ) or metabolic (SILAC) labeling; therefore, \"label-free\" is a safe default.",
+        "TRUTH_CHECK": "The experimental description is consistent with a label-free acquisition.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately covers the labeling status of the experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "A549 cells",
+      "extracted_value": "A549 cells expressing CCAR1L or CCAR1S",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -155,10 +139,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"A549 cells\" is a cell line, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "\"A549 cells\" is present in the text, but it refers to the sample source, not the number of replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
-        "COMPLETENESS_CHECK": "The full set contains a type mismatch (\"A549 cells\") and a default value (\"1\"), but the paper actually mentions \"three biological repeats\" for the mRNA-seq experiments."
+        "TYPE_CHECK": "The candidate value is a description of cell lines/samples, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The text mentions \"A549 cells\" and \"CCAR1L or CCAR1S\" in the context of the IP-MS experiment, but this is not a replicate count.",
+        "TRUTH_CHECK": "The value is factually a description of the experimental group, not the number of replicates.",
+        "COMPLETENESS_CHECK": "The full set contains a type mismatch and a default value; it does not correctly identify the biological replicates for the MS experiment."
       }
     },
     {
@@ -171,10 +155,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"1\" is a numeric count, which matches the required category for the replicates field.",
-        "SOURCE_CHECK": "The paper mentions \"three biological repeats\" for mRNA-seq experiments, but for the LC-MS/MS analysis (the proteomics part), it does not explicitly state the number of biological replicates.",
-        "TRUTH_CHECK": "Per the field definition, \"1\" is the correct value when no replication is mentioned for the specific experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"A549 cells\" (which is a cell line, not a replicate count) and \"1\". The inclusion of \"A549 cells\" is a type error, but the value \"1\" correctly follows the safe default rule for the replicates field."
+        "TYPE_CHECK": "The candidate value \"1\" is a numeric count, which matches the required category for the 'replicates' field.",
+        "SOURCE_CHECK": "The paper mentions \"three biological repeats\" for the mRNA-seq experiments, but for the LC-MS/MS analysis (the proteomics part), it does not explicitly state the number of biological replicates. Per the safe defaults rule, \"1\" is correct when the paper is silent.",
+        "TRUTH_CHECK": "The value is a valid application of the safe default for the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"1\" and a sample description (\"A549 cells...\"). The sample description is a type mismatch for this field, but the value \"1\" correctly represents the biological replicates for the MS experiment based on the provided rules."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the MS experiments.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The full set contains only the default value, which is appropriate given the absence of specific information in the text."
       }
     },
     {
@@ -187,26 +187,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the specific goal of an analysis rather than a study design type (e.g., \"treated vs control\").",
-        "SOURCE_CHECK": "The paper does perform a comparison of CCAR1L and CCAR1S interactomes using IP-MS.",
-        "TRUTH_CHECK": "While the action is correct, it is not a \"study design type\" as defined by the field.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of a specific experiment rather than the overall design."
+        "TYPE_CHECK": "The candidate value describes the specific objective of a sub-experiment rather than a study design type (e.g., \"treated vs control\").",
+        "SOURCE_CHECK": "The paper does perform a comparison of CCAR1L and CCAR1S interactomes via IP-MS, but this is the goal, not the design category.",
+        "TRUTH_CHECK": "While the action is performed, it does not fit the definition of \"experimental_design\" which requires the design type.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of the experiment's aim rather than its design."
       }
     },
     {
       "annotation_type": "factor_value",
       "extracted_value": "CCAR1 isoform (CCAR1L, CCAR1S)",
-      "verdict": "medium",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
-      "corrected_value": "CCAR1 isoform (CCAR1L, CCAR1S), glucose concentration, SRSF5 expression",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the experimental variable (isoform type) being compared, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly compares the effects and interactomes of the CCAR1L and CCAR1S isoforms throughout the results section.",
-        "TRUTH_CHECK": "The study focuses on the divergence of these two isoforms (CCAR1L and CCAR1S) in terms of tumor growth, glucose metabolism, and protein interactions.",
-        "COMPLETENESS_CHECK": "While the study also examines glucose levels and SRSF5 expression, the specific comparison of CCAR1 isoforms is a primary experimental factor. However, the full set of extracted values is missing other key factors like \"glucose concentration\" and \"SRSF5 expression/knockdown\"."
+        "SOURCE_CHECK": "The paper explicitly compares the effects and interactomes of the CCAR1L and CCAR1S isoforms.",
+        "TRUTH_CHECK": "The study focuses on the divergence of these two isoforms (CCAR1L and CCAR1S) in terms of their interactomes, effects on cell growth, and glucose metabolism.",
+        "COMPLETENESS_CHECK": "The full set of extracted values captures the primary variable for the IP-MS and RNA-seq experiments described in the results."
       }
     },
     {
@@ -221,8 +221,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
         "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is correct as no fractionation was performed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the experimental setup."
+        "TRUTH_CHECK": "The value is correct as no fractionation was described.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the experiment."
       }
     },
     {
@@ -236,9 +236,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper mentions \"three biological repeats\" for mRNA-seq experiments, but this refers to replicates per condition, not the total number of samples in the study.",
-        "TRUTH_CHECK": "The value \"3\" is incorrect as the total number of samples processed in the study is much higher (e.g., 60 pairs of human lung cancer samples, multiple cell lines, and various experimental groups).",
-        "COMPLETENESS_CHECK": "The full set of extracted values is insufficient and does not represent the total sample count of the study."
+        "SOURCE_CHECK": "The paper mentions \"three biological repeats\" for mRNA-seq experiments, but this refers to replicates per condition, not the total number of samples processed in the entire study.",
+        "TRUTH_CHECK": "The value \"3\" is incorrect as the total sample count is much higher; for example, the study analyzed 60 pairs of human lung cancer samples (120 samples total) and multiple cell line conditions.",
+        "COMPLETENESS_CHECK": "The full set of extracted values does not cover the total number of samples processed in the study."
       }
     }
   ]

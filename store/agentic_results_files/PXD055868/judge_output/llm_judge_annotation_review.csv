@@ -1,0 +1,166 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD055868","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""human BC cell lines"", ""patients with bladder cancer"", and ""human YTHDC1"" primers, making ""Homo sapiens"" explicitly present and correct.
+TRUTH CHECK:       The study uses human cell lines (UMUC3, T24T) and human clinical specimens.
+COMPLETENESS CHECK: The paper also uses ""BALB/c-nude mice"" (Mus musculus) for in vivo experiments, so the full set of extracted values is missing the mouse species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD055868","BiologicalAgent","organ","bladder","bladder","high","False","","True","True","False","TYPE CHECK:        The candidate value ""bladder"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper explicitly mentions ""bladder cancer"" and ""bladder cancer tissue"" multiple times.
+TRUTH CHECK:       The study uses bladder cancer cells and bladder cancer tissues from patients.
+COMPLETENESS CHECK: The full set of extracted values (""bladder"") correctly identifies the organ of origin for the samples used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""bladder cancer cells"" and specific cell lines (UMUC3, T24T), but the term ""epithelial cell"" does not appear in the text, nor is it explicitly stated that these are epithelial cells (though bladder cancer is typically epithelial, the text does not provide this specific label).
+TRUTH CHECK:       While bladder cancer cells are typically epithelial, the value is not explicitly mentioned or reasonably inferable as a specific label used in this study's experimental description.
+COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD055868","BiologicalAgent","disease","bladder cancer","bladder cancer","high","False","","True","True","False","TYPE CHECK:        The candidate value ""bladder cancer"" is a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""bladder cancer"" multiple times in the title, abstract, and results (e.g., ""XIAP promotes metastasis of bladder cancer"").
+TRUTH CHECK:       The value is factually correct as the study focuses on the role of XIAP in bladder cancer.
+COMPLETENESS CHECK: The full set of extracted values contains ""bladder cancer"", which covers the primary disease state described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","BiologicalAgent","material_type","cell lines","cell lines","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cell lines"" matches the category of broad material classes defined for this field.
+SOURCE CHECK:      The paper explicitly mentions the use of human bladder cancer cell lines UMUC3 and T24T.
+TRUTH CHECK:       The value is factually correct as these cell lines were used for the IP-MS and iTRAQ experiments.
+COMPLETENESS CHECK:    The full set of extracted values only includes ""cell lines"", but the paper also used ""tissue"" (clinical specimens from 17 patients and TCGA data) and ""whole organism"" (BALB/c-nude mice). While the MS experiments specifically used cell lines, the material_type field generally covers the source materials used in the study's experimental context. However, looking at the MS-specific part (""Immunoprecipitation-mass spectrometry (IP-MS) and iTRAQ were performed... After ectopic overexpression of XIAP in UMUC3 cells""), the MS was performed on cell lines. But the study as a whole used tissues and mice. Usually, for proteomics metadata, we focus on the material used for the MS. Even so, the paper mentions ""bladder cancer tissue"" in the context of the results.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cell line"", ""tissue""]","cell line, tissue"
+"PXD055868","BiologicalAgent","anatomic_site_tumor","bladder","bladder","high","False","","True","True","False","TYPE CHECK:        The candidate value ""bladder"" describes an anatomical location of a tumor, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""bladder cancer"" and ""bladder cancer tissue"" multiple times throughout the text.
+TRUTH CHECK:       The study focuses on bladder cancer, making ""bladder"" the correct anatomical site of the tumor.
+COMPLETENESS CHECK: The full set of extracted values (""bladder"") covers the anatomical site of the primary tumor described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","BiologicalAgent","cell_line","UMUC3","UMUC3","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""UMUC3"" is explicitly mentioned multiple times in the text (e.g., ""We constructed a model of XIAP knockout... in UMUC3 and T24T cell lines"").
+TRUTH CHECK:       The value is factually correct as it is one of the cell lines used in the experiments.
+COMPLETENESS CHECK:The full set of extracted values [""UMUC3""] is incomplete because the paper also explicitly mentions the ""T24T"" cell line.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""UMUC3"", ""T24T""]","UMUC3, T24T"
+"PXD055868","TechnicalAgent","instrument","Orbitrap Exploris 480","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text mentions ""Immunoprecipitation-mass spectrometry (IP-MS) and iTRAQ"", but it does not mention the ""Orbitrap Exploris 480"" or any other specific mass spectrometer model.
+TRUTH CHECK:       The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains a value that is not present in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD055868","TechnicalAgent","label","iTRAQ","iTRAQ","high","False","","True","True","False","TYPE CHECK:        The candidate value ""iTRAQ"" is a recognized isobaric labeling method, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""iTRAQ"" in the Results section (""Immunoprecipitation-mass spectrometry (IP-MS) and iTRAQ were performed to identify the direct targets of XIAP..."").
+TRUTH CHECK:       The value is factually correct as the authors used iTRAQ for their differential expression analysis.
+COMPLETENESS CHECK: The full set of extracted values contains ""iTRAQ"", which is the only labeling method mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","ExperimentalDesignAgent","replicates","UMUC3 cell lines (control and XIAP knockdown)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of cell lines/conditions, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions UMUC3 cell lines, but this is not a value for the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a representation of ""replicates"".
+COMPLETENESS CHECK: The full set contains both a cell line description and the number ""3""; however, the cell line description is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD055868","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      A search of the provided text (including the results and methods sections) reveals no mention of the number of biological replicates used for the experiments.
+TRUTH CHECK:       The value ""3"" is not supported by the text; there is no statement indicating that experiments were performed in triplicate.
+COMPLETENESS CHECK: The full set of extracted values is incorrect, as it includes a cell line description which does not belong in this field, and a numeric value not found in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD055868","ExperimentalDesignAgent","experimental_design","Comparison of XIAP overexpression and knockdown in UMUC3 cells using IP-MS and iTRAQ","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental procedure/comparison rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The details of the comparison (XIAP overexpression/knockdown in UMUC3 cells using IP-MS/iTRAQ) are present in the text.
+TRUTH CHECK:       While the events occurred, the value is a description of a specific assay, not the ""experimental design"" category requested by the field definition.
+COMPLETENESS CHECK: The full set contains only this value, which is a miscategorization of a specific experiment as a study design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD055868","ExperimentalDesignAgent","factor_value","XIAP expression level (overexpression, knockdown, control)","XIAP expression level (overexpression, knockdown, control)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (XIAP expression levels) being manipulated, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly describes constructing models of ""XIAP knockout and knockdown and XIAP overexpression"" in UMUC3 and T24T cell lines to investigate its effects.
+TRUTH CHECK:       The value is factually correct as the study compares these specific conditions (overexpression, knockdown/knockout, and wild-type/control) to observe the impact on YTHDC1 and metastasis.
+COMPLETENESS CHECK:    The full set captures the primary experimental variable manipulated across the cell line experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK:       The value is correct as no fractionation was described in the methods.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD055868","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The value ""3"" is not explicitly mentioned as the total number of samples processed in the study.
+TRUTH CHECK:       The paper describes multiple experiments involving various cell lines (UMUC3, T24T), mouse models (BALB/c-nude), and clinical specimens (17 pairs of patients), making ""3"" an incorrect total count.
+COMPLETENESS CHECK: The full set of extracted values does not cover the total number of samples processed across the different experimental arms of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

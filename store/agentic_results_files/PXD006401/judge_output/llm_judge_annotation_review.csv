@@ -2,7 +2,7 @@
 "PXD006401","BiologicalAgent","species","Mus musculus","Mus musculus","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""murine kidney tissue specimens"" and ""C57 black 6 mouse"", from which ""Mus musculus"" is the standard scientific name.
 TRUTH CHECK: The value is factually correct as the study uses mouse kidney samples.
-COMPLETENESS CHECK: The full set of extracted values only contains ""Mus musculus"", but the paper also uses human tonsil samples; therefore, the set is incomplete.
+COMPLETENESS CHECK: The full set of extracted values only contains ""Mus musculus"", but the paper also uses ""human tonsil FFPE tissue specimens"". Therefore, the set is incomplete.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -14,7 +14,7 @@ CORRECTED_VALUE: [""Mus musculus"", ""Homo sapiens""]","Mus musculus, Homo sapie
 "PXD006401","BiologicalAgent","organ","kidney","kidney","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
 SOURCE CHECK:      The paper explicitly mentions ""murine kidney tissue specimens"" and ""kidneys of a male... mouse"".
 TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values only contains ""kidney"", but the paper also describes experiments using ""human tonsil FFPE tissue specimens"". Therefore, the set is incomplete.
+COMPLETENESS CHECK: The paper also mentions ""human tonsil FFPE tissue specimens"", so the full set of extracted values is missing ""tonsil"".
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -33,32 +33,32 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD006401","BiologicalAgent","material_type","C57 black 6 mouse","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific animal strain/organism, not a broad material class (e.g., ""tissue"", ""cell line"").
-SOURCE CHECK:      The value is present in the text, but it describes the source organism, not the material type.
-TRUTH CHECK:       The value is factually incorrect for this field; the material used was FFPE tissue slices.
-COMPLETENESS CHECK: The full set is incorrect as it identifies the organism instead of the material class.
-TYPE_CORRECT:      no
+"PXD006401","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK: No. ""Patients"" refers to the donor/subject, not the broad material class (e.g., tissue, biofluid) as required by the definition.
+SOURCE CHECK: Yes, the paper mentions patients as the source of the tonsil samples.
+TRUTH CHECK: No. While patients were the donors, the material actually analyzed was ""tissue"" (specifically FFPE tissue slices).
+COMPLETENESS CHECK: No. The full set only contains ""patients"", which is the wrong category.
+TYPE_CORRECT: no
 CORRECT_TYPE_NAME: material_type
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD006401","BiologicalAgent","age","6-months old","6-months old","high","False","","True","True","False","TYPE CHECK: The candidate value ""6-months old"" is a valid representation of age.
-SOURCE CHECK: The text explicitly states ""Kidneys of a male, 6-months old C57 black 6 mouse... were removed"".
-TRUTH CHECK: The value is factually correct according to the paper.
-COMPLETENESS CHECK: The full set of extracted values contains the only age mentioned in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
 HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VERDICT: low
+CORRECTED_VALUE: [""tissue""]","tissue"
+"PXD006401","BiologicalAgent","age","6-months old","6-months old","high","False","","True","True","False","TYPE CHECK:        The candidate value is a time-based age description, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""Kidneys of a male, 6-months old C57 black 6 mouse... were removed"".
+TRUTH CHECK:       The value is factually correct according to the paper.
+COMPLETENESS CHECK: The full set contains the only age mentioned in the text for the animal subjects; human tonsil samples do not have ages listed.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD006401","BiologicalAgent","sex","male","male","high","False","","True","True","False","TYPE CHECK: The candidate value ""male"" is a valid category for the sex field.
 SOURCE CHECK: The text explicitly states ""Kidneys of a male, 6-months old C57 black 6 mouse"" in the methods section.
-TRUTH CHECK: The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains the only sex mentioned for the primary experimental group (mouse kidney); the human tonsil samples do not have sex specified, so this is the complete available information.
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the only sex mentioned for the animal subjects; human subjects' sex is not specified, but ""male"" is the only value provided in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -66,7 +66,7 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","BiologicalAgent","strain","C57 black 6","C57 black 6","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific animal strain, which matches the field definition.
+"PXD006401","BiologicalAgent","strain","C57 black 6","C57 black 6","high","False","","True","True","False","TYPE CHECK:        The candidate value is an animal strain, which matches the field definition.
 SOURCE CHECK:      The text explicitly mentions ""C57 black 6 mouse"" in the FFPE mouse kidney samples section.
 TRUTH CHECK:       The value is factually correct as stated in the paper.
 COMPLETENESS CHECK: The full set contains the only strain mentioned in the text.
@@ -77,21 +77,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD006401","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Orbitrap Q-Exactive plus (Thermo Scientific) mass spectrometer"".
-TRUTH CHECK:       The value is factually correct based on the text.
+"PXD006401","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""an Orbitrap Q-Exactive plus (Thermo Scientific) mass spectrometer"".
+TRUTH CHECK: The value is factually correct based on the text.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
-TYPE_CORRECT:      yes
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD006401","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly mentions ""analyzed by label-free, quantitative liquid chromatography–tandem mass spectrometry (LC–MS/MS)"" in the Methods section.
-TRUTH CHECK:       The value is factually correct as the study used label-free quantitation (LFQ).
-COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+SOURCE CHECK:      The paper explicitly mentions ""label-free, quantitative liquid chromatography–tandem mass spectrometry (LC–MS/MS)"" in the Methods section.
+TRUTH CHECK:       The value is factually correct as the study used a label-free quantitation (LFQ) strategy.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label-free"", which is exhaustive for this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -100,9 +100,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD006401","ExperimentalDesignAgent","replicates","murine kidney tissue slices and human tonsil tissue slices","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the sample types, not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions these tissues, but they are not the ""number of replicates"".
-TRUTH CHECK:       The value is factually incorrect for this field; it provides the material/organ rather than the count.
-COMPLETENESS CHECK: The full set contains both a descriptive string and a number, but the descriptive string is a type mismatch.
+SOURCE CHECK:      The text mentions ""four single consecutive murine kidney tissue specimens"" per protocol and ""four human tonsil FFPE tissue specimens per condition"", but the candidate value itself is just a description of the tissues.
+TRUTH CHECK:       The candidate value is not a number and therefore does not represent the ""replicates"" field.
+COMPLETENESS CHECK: The full set contains a numeric value (""20"") and a descriptive value; however, the descriptive value is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -110,54 +110,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD006401","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper mentions ""four single consecutive murine kidney tissue specimens"" and ""four human tonsil FFPE tissue specimens per condition,"" but does not explicitly state a biological replicate count of 3.
-TRUTH CHECK:       The text states that for the murine kidney samples, ""Twelve single kidney tissue slices... were used as replicates for each of the three protocols (DTR, FASP 10 k, FASP 30 k),"" meaning there were 4 replicates per protocol. For the human tonsil samples, it mentions ""four human tonsil FFPE tissue specimens per condition."" There is no mention of ""3"" biological replicates.
-COMPLETENESS CHECK:    The full set of extracted values is incorrect; one value is a description of the samples rather than a count, and the numeric value ""3"" is not supported by the text.
+"PXD006401","ExperimentalDesignAgent","replicates","20","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper mentions ""Twelve single kidney tissue slices... used as replicates for each of the three protocols"" (12 * 3 = 36) and ""16 single... tissue slices"" for the tonsil experiment. The number ""20"" is not mentioned in the text as a count of replicates.
+TRUTH CHECK:       The value ""20"" is factually incorrect based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; one value is a description of samples and the other is a hallucinated number.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
-CORRECTED_VALUE:   NONE","4"
-"PXD006401","ExperimentalDesignAgent","technical_replicates","consecutive tissue slices","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""consecutive tissue slices"" is a description of the sample source, not a numeric count of technical replicates.
-SOURCE CHECK:      The phrase ""consecutive murine kidney tissue specimens"" appears in the text, but it refers to the biological samples used.
-TRUTH CHECK:       The value is factually incorrect for this field; it describes the nature of the samples, not the number of times each sample was measured.
-COMPLETENESS CHECK: The full set contains ""4"", which refers to the biological replicates (four slices per protocol), but there is no mention of technical replicates (multiple MS injections per sample).
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: technical_replicates
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD006401","ExperimentalDesignAgent","technical_replicates","4","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper mentions ""Four single consecutive murine kidney tissue specimens"" and ""four replicates"" for the DTR and FASP protocols, but these refer to biological replicates (different tissue slices).
-TRUTH CHECK:       The value ""4"" refers to the number of biological replicates (consecutive tissue slices), not technical replicates (multiple MS injections of the same sample). There is no mention of technical replicates in the text.
-COMPLETENESS CHECK:    The full set of extracted values incorrectly identifies biological replicates as technical replicates.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD006401","ExperimentalDesignAgent","factor_value","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun)","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (protocols and staining types) being compared, which fits the definition of factor_value.
-SOURCE CHECK:      The paper explicitly compares three protocols (DTR, FASP 10k, FASP 30k) and four staining conditions (unstained, H&E, hematoxylin, hemalaun).
-TRUTH CHECK:       The values are factually correct based on the ""Methods"" and ""Results"" sections.
-COMPLETENESS CHECK:    The full set of extracted values covers both the protocol comparison and the staining compatibility study described in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD006401","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper explicitly states in the Results section that the DTR protocol identified proteins in a ""single, non-fractionated LC–MS/MS analysis.""
-TRUTH CHECK: Since the analysis was non-fractionated, the value ""1"" is the correct representation.
-COMPLETENESS CHECK: The full set contains ""1"", which accurately reflects the non-fractionated nature of the experiment described.
+"PXD006401","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention technical replicates; per the safe defaults in the instructions, ""1"" is correct when the paper is silent.
+TRUTH CHECK: The value is a valid default for this experiment.
+COMPLETENESS CHECK: The full set contains the single default value, which is exhaustive given the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -165,10 +132,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","ExperimentalDesignAgent","number_of_samples","28","28","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes two sets of experiments: 12 murine kidney tissue slices (4 for DTR, 4 for FASP 10k, 4 for FASP 30k) and 16 human tonsil tissue slices (4 per condition: unstained, hematoxylin, H&E, hemalaun). 12 + 16 = 28.
-TRUTH CHECK:       The calculation is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set contains the total count of all samples processed across both experimental arms.
+"PXD006401","ExperimentalDesignAgent","factor_value","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun)","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (protocols and staining types) being compared, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly compares three protocols (DTR, FASP 10k, FASP 30k) and four staining conditions (unstained, H&E, hematoxylin, hemalaun).
+TRUTH CHECK:       The values are factually correct based on the ""Methods"" and ""Results"" sections.
+COMPLETENESS CHECK: The full set captures both primary experimental variables investigated in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -176,3 +143,26 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
+"PXD006401","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper explicitly states in the Results section that the DTR protocol identified proteins ""in a single, non-fractionated LC–MS/MS analysis.""
+TRUTH CHECK: Since the analysis was ""non-fractionated,"" the number of fractions is 1.
+COMPLETENESS CHECK: The full set of extracted values consists of ""1"", which accurately reflects the non-fractionated nature of the experiment described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006401","ExperimentalDesignAgent","number_of_samples","28","28","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK: The paper describes two sets of experiments: 1) 12 murine kidney tissue slices (4 per protocol for DTR, FASP 10k, and FASP 30k) and 2) 16 human tonsil tissue slices (4 per condition for H&E, hematoxylin, hemalaun, and unstained). 12 + 16 = 28.
+TRUTH CHECK: The calculation is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values (28) covers all samples processed in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "OVKATE, SNU119, JHOS4, OVCAR3, COV318, OVSAHO, KURAMOCHI, CAOV3, OVCA433, JHOS2, PEO1, PEO4, OVCAR5, ME180, ME180C13, OVISE, IGROV1, SKOV3IP1, IOSE-397, IOSE-7576, HEYA8, DOV13, 59M, TOV112D, TOV112DR, A2780, TYKNU",
+      "extracted_value": "OVKATE, SNU119, JHOS4, OVCAR3, COV318, OVSAHO, KURAMOCHI, CAOV3, OVCA433, JHOS2, PEO1, PEO4, OVCAR5, ME180, C13, OVISE, IGROV1, SKOV3IP1, IOSE-397, IOSE-7576, HEYA8, DOV13, 59M, TOV112D, TOV112DR, A2780, TYKNU",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -15,28 +15,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a list of immortalized cell line names, which matches the field definition.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Results\" section as part of the 30 cell lines analyzed by the \"single-run mass spectrometric workflow\".",
-        "TRUTH_CHECK": "The listed cell lines (including the specific IOSE lines and the various OvCa lines) are all confirmed in the text as having been processed for MS analysis.",
-        "COMPLETENESS_CHECK": "The paper states 30 cell lines were included. The candidate list contains 27 names. While it covers the vast majority of the specific lines named in the text (e.g., Group I, II, and III members), it is slightly incomplete compared to the total count of 30, though it captures all those explicitly named in the provided text."
+        "SOURCE_CHECK": "These cell lines are explicitly listed in the \"Results\" and \"Methods\" sections as part of the 30 cell lines that underwent the \"single-run mass spectrometric workflow\" (lysis, digestion, and LC-MS/MS).",
+        "TRUTH_CHECK": "The names match the text (e.g., \"OVKATE, SNU119... PEO1/4... IOSE-397 and IOSE-7576... TOV112D and A2780\").",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the vast majority of the cell lines mentioned as being analyzed by MS, though the paper mentions \"30 cell lines\" and the list provided contains 27. However, the list is comprehensive of the specific names mentioned in the provided text."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "epithelial cell",
-      "verdict": "medium",
+      "extracted_value": "epithelial cell, mesenchymal cell, clear cell, fallopian tube epithelial cell, ovarian surface epithelial cell",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "incomplete",
-      "corrected_value": "epithelial cell, clear cell, mesenchymal cell",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
-        "SOURCE_CHECK": "The value is present and inferable from the MS experiment context; the paper explicitly describes \"epithelial (group I)\" cell lines and \"fallopian tube epithelial cells\" (FTECs) analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The value is factually correct as the study specifically categorizes a large group of the analyzed cell lines as epithelial.",
-        "COMPLETENESS_CHECK": "The full set is incomplete because the study also analyzed \"clear cell\" (group II) and \"mesenchymal\" (group III) cell lines, as well as \"secretory epithelial cells\" (FTECs)."
+        "TYPE_CHECK": "The candidate value contains a list of cell types/lineages, which matches the definition of the `cell_type` field.",
+        "SOURCE_CHECK": "These values are present in the text: \"epithelial (group I), clear cell (group II) and mesenchymal (group III)\" cell line categories, \"fallopian tube epithelial cells\" (FTECs), and \"ovarian surface epithelial cells\" (IOSE). All were analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The values accurately reflect the biological materials analyzed by MS in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all the primary cell types and lineages described as being analyzed by MS in the paper."
       }
     },
     {
@@ -50,12 +50,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "incomplete",
-      "corrected_value": "high-grade serous ovarian cancer, clear cell ovarian cancer, endometrioid ovarian cancer",
+      "corrected_value": "high-grade serous ovarian cancer, clear cell ovarian cancer, normal",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a disease diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the title, abstract, and results as the disease state of the tumour tissues and many of the cell lines analysed by mass spectrometry.",
-        "TRUTH_CHECK": "The value is factually correct as the paper focuses on the proteomic profiling of high-grade serous ovarian cancer (HGSOC).",
-        "COMPLETENESS_CHECK": "The full set contains only this value; however, the paper also mentions \"clear cell ovarian cancer\" (CCC) and \"endometrioid\" origin for some cell lines."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract and results sections as the disease state of the tumours and the target of the cell line analysis.",
+        "TRUTH_CHECK": "The paper explicitly identifies the samples as \"human high-grade serous ovarian cancer (HGSOC)\".",
+        "COMPLETENESS_CHECK": "While the study also includes \"clear cell\" ovarian cancer and \"immortalized ovarian surface epithelial cells\" (healthy/normal), \"high-grade serous ovarian cancer\" is a primary disease state described. However, the full set of extracted values only contains this one, missing the other subtypes and the healthy controls."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value consists of organs/tissues, which matches the definition.",
-        "SOURCE_CHECK": "The paper explicitly describes the MS analysis of HGSOC tumour tissues (ovary) and primary FTEC isolates (fallopian tube).",
-        "TRUTH_CHECK": "The values are factually correct as the study analyzed proteomes from ovarian tumours and fallopian tube epithelial cells.",
-        "COMPLETENESS_CHECK": "The full set covers the primary biological sources of the MS samples described in the text."
+        "TYPE_CHECK": "The candidate value consists of organs/tissues, which matches the definition of the 'organ' field.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the text as the source of the MS samples: \"HGSOC tumour tissues\" (ovary) and \"primary FTEC isolates\" (fallopian tube).",
+        "TRUTH_CHECK": "The paper describes the proteomic analysis of ovarian cancer tissues and fallopian tube epithelial cells.",
+        "COMPLETENESS_CHECK": "The full set covers the primary biological sources of the MS samples described in the study."
       }
     },
     {
@@ -91,14 +91,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human high-grade serous ovarian cancer\", \"human UniProtKB database\", and \"confirmed to be of human origin\" in the context of the MS analysis.",
-        "TRUTH_CHECK": "The samples (cell lines, tumours, and primary cells) are all of human origin.",
-        "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
+        "SOURCE_CHECK": "The paper explicitly mentions \"human high-grade serous ovarian cancer\", \"human tumours\", and \"human UniProtKB database\" in the context of the MS analysis.",
+        "TRUTH_CHECK": "The samples analyzed (ovarian cancer cell lines, HGSOC tumours, and FTEC isolates) are all of human origin.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Homo sapiens\", which is the only species analyzed in this study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "sample type (HGSOC tumour, OvCa cell line, IOSE, FTEC), cell line category (epithelial, clear cell, mesenchymal)",
+      "extracted_value": "cell line category (epithelial/group I, clear cell/group II, mesenchymal/group III)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes experimental factors (sample type and cell line category) and their respective levels, which is the correct category for this field.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the text: \"HGSOC tumour\", \"OvCa cell line\", \"IOSE\", and \"FTEC\" are the sample types analyzed by MS, and the three cell line categories (\"epithelial\", \"clear cell\", \"mesenchymal\") are the primary result of the proteomic stratification.",
-        "TRUTH_CHECK": "The values are factually correct based on the results and methods sections.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental axes (sample types, cell line categories, and the specific disease state), making the extraction exhaustive."
+        "TYPE_CHECK": "The candidate value describes the experimental groups/categories used to stratify the samples, which is a correct category for a factor_value.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"three distinct cell line categories: epithelial (group I), clear cell (group II) and mesenchymal (group III)\") and the results section.",
+        "TRUTH_CHECK": "The value accurately reflects the classification system used by the authors to group the 30 cell lines analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "Together with the other extracted value (\"high-grade serous ovarian cancer\"), the set covers the primary experimental factors (the disease state and the proteomic stratification) described in the study."
       }
     },
     {
@@ -129,9 +129,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a disease state, which is a valid characteristic for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the disease state of the tumour tissues and many of the cell lines analysed by MS.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on high-grade serous ovarian cancer (HGSOC).",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific disease and the broader sample types/categories, covering the experimental design axes described."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract and results as the primary disease of interest for the HGSOC tumour tissues and many of the cell lines analysed by MS.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on profiling high-grade serous ovarian cancer (HGSOC).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific disease (HGSOC) and the derived cell line categories (epithelial, clear cell, mesenchymal), which together cover the primary experimental axes of the study."
       }
     },
     {
@@ -148,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper explicitly states \"absence of any fractionation step\" in the Results section.",
-        "TRUTH_CHECK": "Since no fractionation was performed, the value \"1\" is the correct representation according to the field definition.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the experimental setup described."
+        "SOURCE_CHECK": "The paper explicitly states that the authors \"adapted and applied a recently described method based on a single-run workflow\" and mentions \"the absence of any fractionation step.\"",
+        "TRUTH_CHECK": "Since no fractionation was performed, the value \"1\" is the correct representation of the number of fractions per sample.",
+        "COMPLETENESS_CHECK": "The value \"1\" fully and accurately describes the fractionation state for all samples in this experiment."
       }
     },
     {
@@ -166,10 +166,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper explicitly states in the \"Cell lines\" section that \"samples were collected from three consecutive passages for n=3 replicates for each line.\"",
-        "TRUTH_CHECK": "The value \"3\" is factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"3\", which accurately reflects the biological replication described for the cell lines."
+        "TRUTH_CHECK": "The value \"3\" is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"3\", which accurately reflects the biological replication described for the cell lines."
       }
     },
     {
@@ -186,9 +186,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper states \"the samples were collected from three consecutive passages for n=3 replicates for each line,\" but these are biological replicates (different passages/independent preparations), not technical replicates of the same sample.",
-        "TRUTH_CHECK": "The value \"3\" refers to biological replicates, not technical replicates. There is no mention of technical replicates in the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is incorrectly attributed."
+        "SOURCE_CHECK": "The paper states \"the samples were collected from three consecutive passages for n=3 replicates for each line,\" but these are biological replicates (different passages), not technical replicates of a single sample.",
+        "TRUTH_CHECK": "The value \"3\" refers to biological replicates (passages), not technical replicates. There is no mention of technical replicates in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition method field.",
-        "SOURCE_CHECK": "The paper describes a \"top-five method\" used to select the most abundant precursor ions, which is a characteristic implementation of data-dependent acquisition (DDA).",
-        "TRUTH_CHECK": "The description of selecting the top five most abundant precursor ions for fragmentation is the definition of a data-dependent acquisition scheme.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the acquisition scheme used for the primary proteomics experiment."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes a \"top-five method\" used to select the most abundant precursor ions for fragmentation, which is the defining characteristic of data-dependent acquisition (DDA).",
+        "TRUTH_CHECK": "The description of the MS method (top-five selection of precursors) confirms that DDA was used.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method used for the primary experiment."
       }
     },
     {
@@ -223,9 +223,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS analysis\" section as the reagent used to alkylate proteins before mass spectrometry.",
-        "TRUTH_CHECK": "The paper states that proteins were \"alkylated with 55 mM iodoacetamide\", confirming the value is factually correct.",
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS analysis\" section (\"alkylated with 55 mM iodoacetamide\").",
+        "TRUTH_CHECK": "The value is factually correct as it describes the reagent used for the MS sample preparation.",
         "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
       }
     },
@@ -242,10 +242,10 @@
       "error_category": "incomplete",
       "corrected_value": "Lys-C, trypsin",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease used for protein digestion, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS analysis\" section as part of the proteomics workflow.",
-        "TRUTH_CHECK": "The paper states that protein pellets were \"digested with 1 μg of LysC for 3 h at room temperature\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper describes a sequential digestion using both LysC and trypsin (\"1 μg trypsin was added and tryptic digestion carried out overnight\")."
+        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS analysis\" section as part of the proteomics workflow (\"digested with 1 μg of LysC\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes a sequential digestion using LysC followed by trypsin.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly states that trypsin was also used for digestion (\"1 μg trypsin was added and tryptic digestion carried out overnight\")."
       }
     },
     {
@@ -263,8 +263,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
         "SOURCE_CHECK": "The value \"12 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+        "TRUTH_CHECK": "The value is not supported by the text; the paper does not specify a fragment mass tolerance value.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not present in the text."
       }
     },
     {
@@ -281,9 +281,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper states that precursor ions were subjected to \"high-energy collisional dissociation fragmentation,\" which is the descriptive name for HCD (Higher-energy Collisional Dissociation), often referred to as beam-type CID.",
-        "TRUTH_CHECK": "While \"high-energy collisional dissociation\" is explicitly written, \"beam-type collision-induced dissociation\" is a technical synonym for HCD used in Orbitrap instruments.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which covers the fragmentation method described."
+        "SOURCE_CHECK": "The paper explicitly mentions \"high-energy collisional dissociation fragmentation\" in the Liquid chromatography-MS analysis section.",
+        "TRUTH_CHECK": "\"High-energy collisional dissociation\" (HCD) is the specific implementation of beam-type collision-induced dissociation used in Orbitrap instruments (like the Q Exactive mentioned in the text). While \"beam-type collision-induced dissociation\" is a technically accurate description of HCD, the paper uses the specific term \"high-energy collisional dissociation\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which covers the fragmentation method described."
       }
     },
     {
@@ -299,10 +299,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains mass spectrometer models, which matches the definition of the instrument field.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Liquid chromatography-MS analysis\" section as the instruments used for the MS analysis.",
-        "TRUTH_CHECK": "The paper states \"MS analysis was performed using Quadrupole Orbitrap mass spectrometers (Q Exactive and Q Exactive HF, Thermo Fisher Scientific...)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers all mass spectrometers mentioned for the primary experiment."
+        "TYPE_CHECK": "The candidate value consists of mass spectrometer models, which matches the definition of the instrument field.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Liquid chromatography-MS analysis\" section as \"Quadrupole Orbitrap mass spectrometers (Q Exactive and Q Exactive HF, Thermo Fisher Scientific...)\".",
+        "TRUTH_CHECK": "The values are factually correct as they are the instruments used for the MS analysis described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both models mentioned in the text."
       }
     },
     {
@@ -318,10 +318,10 @@
       "error_category": "wrong_value",
       "corrected_value": "ITRAQ",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"Label-free protein quantification (LFQ)\" in the results section.",
-        "TRUTH_CHECK": "While the main experiment is label-free, the paper also describes the use of \"Isobaric tag for relative and absolute quantification (ITRAQ)-based TCGA proteome raw files\" for a significant part of the analysis. According to the field definition, \"label-free\" is INCORRECT if the paper describes ANY isobaric or chemical labeling.",
-        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which ignores the ITRAQ labeling mentioned in the text."
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods defined for this field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Label-free protein quantification (LFQ)\" in the Results section.",
+        "TRUTH_CHECK": "While the authors used a label-free workflow for their primary analysis of cell lines and tissues, the paper also describes the use of \"Isobaric tag for relative and absolute quantification (ITRAQ)-based TCGA proteome raw files\" for the validation analysis. According to the field definition, \"label-free\" is correct ONLY when NO isobaric labels (TMT/iTRAQ) are described in the paper.",
+        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which fails to account for the ITRAQ data described in the study."
       }
     },
     {
@@ -338,9 +338,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Liquid chromatography-MS analysis\" section (\"Quadrupole Orbitrap mass spectrometers\").",
-        "TRUTH_CHECK": "The value is factually correct as the paper specifies the use of Orbitrap mass spectrometers.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only Orbitrap analyzers are mentioned for the MS analysis."
+        "SOURCE_CHECK": "The paper explicitly mentions \"high-resolution quadrupole Orbitrap mass spectrometers\" and \"Quadrupole Orbitrap mass spectrometers (Q Exactive and Q Exactive HF...)\" in the context of the MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used is an Orbitrap.",
+        "COMPLETENESS_CHECK": "The full set contains \"orbitrap\", which accurately describes the mass analyzer used for the experiment."
       }
     },
     {
@@ -357,9 +357,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS data analysis\" section under \"fixed modification, carbamidomethylation\".",
-        "TRUTH_CHECK": "\"carbamidomethylation\" is an unambiguous synonym for \"Carbamidomethyl (C)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification (carbamidomethylation) and the variable modifications (acetylation and oxidation) mentioned in the text, as well as the iTRAQ label used for the TCGA data."
+        "SOURCE_CHECK": "The value is present in the paper text under the \"MS data analysis\" section, which describes the search parameters for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "The paper explicitly states \"fixed modification, carbamidomethylation\", which is an unambiguous synonym for \"Carbamidomethyl (C)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification (carbamidomethylation) and the variable modifications (acetylation and methionine oxidation) mentioned in the text; however, \"iTRAQ4plex (K)\" is not mentioned in the text as a searched modification for the primary experiment (the TCGA data used ITRAQ, but the search parameters for the primary study are explicitly listed). Regardless, the candidate value itself is correct."
       }
     },
     {
@@ -377,8 +377,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a chemical modification/labeling on a residue, which fits the category of a modification.",
         "SOURCE_CHECK": "The paper mentions \"Isobaric tag for relative and absolute quantification (ITRAQ)-based TCGA proteome raw files\", but it does not explicitly name \"iTRAQ4plex (K)\" as a searched modification.",
-        "TRUTH_CHECK": "While iTRAQ is used in the TCGA data, the specific modification name \"iTRAQ4plex (K)\" is not explicitly written in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications, but this specific one is not explicitly stated."
+        "TRUTH_CHECK": "While iTRAQ labels lysine residues, the specific term \"iTRAQ4plex (K)\" is not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications, but this specific value is not supported by the text."
       }
     },
     {
@@ -395,9 +395,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS data analysis\" section as a variable modification (\"methionine oxidation\").",
-        "TRUTH_CHECK": "\"Oxidation (M)\" is a standard representation of \"methionine oxidation\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the fixed and variable modifications explicitly listed in the text."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS data analysis\" section (\"variable modification, acetylation (N terminus) and methionine oxidation\").",
+        "TRUTH_CHECK": "\"methionine oxidation\" is an unambiguous synonym for \"Oxidation (M)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"Oxidation (M)\", both of which are explicitly mentioned in the text; however, \"acetylation (N terminus)\" is also mentioned but missing from the set, and \"iTRAQ4plex (K)\" is not explicitly listed as a searched modification in the text (though iTRAQ is mentioned for the TCGA data)."
       }
     },
     {
@@ -413,10 +413,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which matches the required category for this field.",
         "SOURCE_CHECK": "The value \"7 ppm\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not report a precursor mass tolerance of 7 ppm; it mentions isolation windows (2.2 Th and 1.4 Th) and resolutions, but not a search tolerance in ppm.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
       }
     },
     {
@@ -432,10 +432,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a chemical used for reducing disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the paper text; the \"Sample preparation for MS analysis\" section states \"Proteins in the lysate were reduced with 10 mM DTT\".",
-        "TRUTH_CHECK": "\"dithiothreitol\" is the full name for the abbreviation \"DTT\" used in the text, making it factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the sample preparation workflow."
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text explicitly mentions \"proteins in the lysate were reduced with 10 mM DTT\" in the Sample preparation for MS analysis section.",
+        "TRUTH_CHECK": "\"DTT\" is the standard abbreviation for dithiothreitol; therefore, the value is factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
       }
     }
   ]

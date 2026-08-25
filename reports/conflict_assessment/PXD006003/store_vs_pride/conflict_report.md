@@ -6,15 +6,15 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Gold files | Assessed files | Matched | Missing from assessed | Assessed only | Coverage |
 |---:|---:|---:|---:|---:|---:|
-| 764 | 30 | 30 | 734 | 0 | 3.9% |
+| 764 | 842 | 764 | 0 | 78 | 100.0% |
 
 ## Metadata agreement across matched files
 
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| Biological | 0.200 | 0.338 | 0.242 | 0.200 | 0.291 | 0.237 |
-| Technical | 0.204 | 0.439 | 0.278 | 0.204 | 0.450 | 0.281 |
-| ExperimentalDesign | 0.040 | 0.200 | 0.067 | 0.040 | 0.200 | 0.067 |
+| Biological | 0.200 | 0.302 | 0.233 | 0.200 | 0.269 | 0.229 |
+| Technical | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| ExperimentalDesign | 0.040 | 0.198 | 0.066 | 0.040 | 0.198 | 0.066 |
 
 ## Metadata type agreement across matched files
 
@@ -29,20 +29,22 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `characteristics[organism]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[sex]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[biological replicate]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
-| `comment[fraction identifier]` | ExperimentalDesign | 0.200 | 0.200 | 0.200 |
+| `comment[fraction identifier]` | ExperimentalDesign | 0.198 | 0.198 | 0.198 |
 | `comment[technical replicate]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `factor value[disease]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `factor value[experimental design]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
+| `comment[alkylation reagent]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[cleavage agent details]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[dissociation method]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[fragment mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
-| `comment[instrument]` | Technical | 1.000 | 1.000 | 1.000 |
-| `comment[label]` | Technical | 0.633 | 0.317 | 0.422 |
-| `comment[ms2 mass analyzer]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[instrument]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[label]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[modification parameters]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[precursor mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[proteomics data acquisition method]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[reduction reagent]` | Technical | 0.000 | 0.000 | 0.000 |
 | `technology type` | Technical | 0.000 | 0.000 | 0.000 |
 
-Metadata averages include only the 30 uniquely matched files. Missing files are reported as coverage failures rather than zero-score metadata rows.
+Metadata averages include only the 764 uniquely matched files. Missing files are reported as coverage failures rather than zero-score metadata rows.
 
 Detailed results: `sample_field_metrics.tsv`, `field_summary.tsv`, `sample_category_metrics.tsv`, `entity_matches.tsv`, and the `heatmaps/` directory.

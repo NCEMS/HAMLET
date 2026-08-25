@@ -11,15 +11,31 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human proteome\", \"human samples\", and \"human reference genome\" throughout the text.",
-        "TRUTH_CHECK": "The study is explicitly about the human proteome, making \"Homo sapiens\" factually correct.",
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human proteome\", \"human samples\", and \"human genome\" throughout the text.",
+        "TRUTH_CHECK": "\"Homo sapiens\" is the scientific name for humans and is factually correct for this study.",
         "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
       }
     },
     {
       "annotation_type": "organ",
-      "extracted_value": "kidney",
+      "extracted_value": "tissues",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"tissues\" is a general category, not a specific organ or tissue name.",
+        "SOURCE_CHECK": "The word \"tissues\" appears frequently in the text, but it is used as a collective noun for the samples.",
+        "TRUTH_CHECK": "The value is not a specific organ; the paper mentions 17 adult tissues and 7 fetal tissues, and specifically names organs like \"pancreas\", \"adult retina\", \"fetal ovary\", \"adult testis\", \"adrenal glands\", \"lung\", \"colon\", \"liver\", \"heart\", \"brain\", and \"kidney\".",
+        "COMPLETENESS_CHECK": "The full set contains only the generic term \"tissues\", failing to capture any of the specific organs mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "hematopoietic cells",
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
@@ -27,26 +43,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"kidney\" is an organ/tissue, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"kidney\" in the \"Comparison of human proteome map data with resources\" section when listing 10 tissues downloaded from the Broad Institute.",
-        "TRUTH_CHECK": "The paper describes the profiling of 30 human samples, including 17 adult tissues; while the specific list of 30 is not fully enumerated in the methods, kidney is explicitly listed as one of the tissues used for comparison and data analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"kidney\", but the paper mentions many other tissues (e.g., \"adult retina\", \"fetal ovary\", \"adult testis\", \"pancreas\", \"adrenal glands\", \"liver\", \"heart\", \"brain\", \"lung\", \"colon\", \"prostate\"). The current set is not exhaustive."
-      }
-    },
-    {
-      "annotation_type": "cell_type",
-      "extracted_value": "hematopoietic cells",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
         "TYPE_CHECK": "The candidate value \"hematopoietic cells\" describes a primary cell lineage, which matches the definition of cell_type.",
-        "SOURCE_CHECK": "The text explicitly mentions \"6 purified primary hematopoietic cells\" and \"Hematopoietic cells were isolated from leukopaks\".",
+        "SOURCE_CHECK": "The text explicitly mentions \"6 purified primary hematopoietic cells\" in the abstract and describes the isolation of \"Hematopoietic cells\" in the methods.",
         "TRUTH_CHECK": "The value is factually correct as the study used primary hematopoietic cells.",
-        "COMPLETENESS_CHECK": "The paper also specifies the exact subpopulations isolated (CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells), but \"hematopoietic cells\" is the overarching primary cell type used in the study."
+        "COMPLETENESS_CHECK": "The paper further specifies the hematopoietic cell populations as \"CD14+ Monocytes, pan CD56+ NK Cells, CD20+ B cells, CD8+ T cells, pan CD4+ T cells\" and \"Platelets\". The current set only contains the broad category."
       }
     },
     {
@@ -59,10 +59,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field as per the definition for healthy controls.",
-        "SOURCE_CHECK": "The paper explicitly states that \"All tissues were histologically confirmed to be normal prior to analysis\" and that hematopoietic cells were from \"healthy volunteers\".",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"normal\") covers the disease state of the subjects described in the paper."
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field when subjects are healthy controls.",
+        "SOURCE_CHECK": "The paper explicitly states that \"All tissues were histologically confirmed to be normal prior to analysis\" and that hematopoietic cells were from \"healthy volunteers.\"",
+        "TRUTH_CHECK": "The value is factually correct as the study focused on a map of the normal human proteome.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"normal\") covers the disease state of all samples described in the paper."
       }
     },
     {
@@ -78,23 +78,23 @@
         "TYPE_CHECK": "The candidate value \"adult donors\" refers to the source of the material (the subjects), not the broad material class (e.g., tissue, primary cells) as required by the definition.",
         "SOURCE_CHECK": "The text mentions \"adult donors\" as the source of the tissues, but this is not a material type.",
         "TRUTH_CHECK": "The value is factually present in the text but is the wrong category of information for this field.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies the donor rather than the material type."
+        "COMPLETENESS_CHECK": "The full set consists only of this incorrect value; the actual material types (tissue, primary cells) are missing."
       }
     },
     {
       "annotation_type": "age",
-      "extracted_value": "adult",
-      "verdict": "medium",
+      "extracted_value": "adult, fetal",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
-      "corrected_value": "adult, fetal",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"adult\" describes a developmental time point/age group.",
-        "SOURCE_CHECK": "The text explicitly mentions \"adult tissues\" and \"adult donors\".",
-        "TRUTH_CHECK": "The value is factually correct as the study used adult donors.",
-        "COMPLETENESS_CHECK": "The full set contains \"adult\", but the paper also explicitly mentions \"fetal tissues\", which is a distinct age/developmental time point."
+        "TYPE_CHECK": "The candidate value describes developmental stages/age groups, which fits the category for the age field.",
+        "SOURCE_CHECK": "The text explicitly mentions \"17 adult tissues\" and \"7 fetal tissues\".",
+        "TRUTH_CHECK": "The values are factually correct based on the paper's description of the samples.",
+        "COMPLETENESS_CHECK": "The full set captures the two age/developmental categories mentioned in the text."
       }
     },
     {
@@ -107,9 +107,9 @@
       "hallucination": false,
       "corrected_value": "LTQ-Orbitrap Velos, LTQ-Orbitrap Elite",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The text explicitly mentions \"LTQ-Orbitrap Velos\" in the LC-MS/MS section.",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
         "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper also mentions the \"LTQ-Orbitrap Elite\"."
       }
     },
@@ -123,26 +123,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label-free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The experimental description (spectral counting for quantitation) is consistent with a label-free approach.",
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC), making \"label-free\" a safe default.",
+        "TRUTH_CHECK": "The experimental design uses spectral counting for quantitation, which is a label-free approach.",
         "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "3 donors per adult tissue (pooled)",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
+      "extracted_value": "30 histologically normal human samples",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "1",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the number of donors (biological sources), which fits the category of biological replicates.",
-        "SOURCE_CHECK": "The text explicitly states \"Human tissues were harvested postmortem... from three adult donors for each tissue\".",
-        "TRUTH_CHECK": "The value is factually correct based on the text, including the detail that they were pooled.",
-        "COMPLETENESS_CHECK": "The full set includes \"30\", which refers to the total number of samples/tissues, not the number of replicates per sample. The value \"3\" correctly identifies the biological replication for the adult tissues."
+        "TYPE_CHECK": "The candidate value is a description of samples, not a numeric count of biological replicates for a single condition.",
+        "SOURCE_CHECK": "The text mentions \"30 histologically normal human samples\", but these are different tissues/cell types, not replicates of the same biological condition.",
+        "TRUTH_CHECK": "The value is factually incorrect as a \"replicate\" count; 30 is the total number of unique samples (tissues/cells), not the number of biological replicates per sample.",
+        "COMPLETENESS_CHECK": "The full set of extracted values incorrectly identifies the total sample size as the replicate count."
       }
     },
     {
@@ -155,10 +155,10 @@
       "hallucination": false,
       "corrected_value": "3",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
-        "SOURCE_CHECK": "The paper mentions \"30 histologically normal human samples\" and \"three adult donors for each tissue\", but \"30\" refers to the total number of distinct sample types/tissues, not the number of replicates per sample.",
-        "TRUTH_CHECK": "The value \"30\" is the total number of samples (tissues/cell types), not the number of biological replicates. The text states \"three adult donors for each tissue\", indicating 3 biological replicates for the adult tissues.",
-        "COMPLETENESS_CHECK": "The full set of extracted values confuses the total sample count (30) with the number of replicates per sample (3)."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper mentions \"30 histologically normal human samples\" in the abstract, but these are distinct samples (17 adult tissues, 7 fetal tissues, 6 hematopoietic cells), not biological replicates of a single condition.",
+        "TRUTH_CHECK": "The value \"30\" refers to the total number of unique samples/tissues analyzed, not the number of biological replicates per sample. The methods section states \"three adult donors for each tissue,\" which indicates 3 biological replicates for the adult tissues.",
+        "COMPLETENESS_CHECK": "The full set of extracted values incorrectly identifies the total sample size as the number of replicates."
       }
     },
     {
@@ -172,9 +172,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The paper does not mention technical replicates; per the safe defaults rule, \"1\" is correct when the paper is silent.",
-        "TRUTH_CHECK": "The value is a valid default for this experiment.",
-        "COMPLETENESS_CHECK": "The full set contains the single default value, which is exhaustive given the text."
+        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates; per the safe defaults rule, \"1\" is correct when the paper is silent.",
+        "TRUTH_CHECK": "The value is a valid application of the safe default for this experiment.",
+        "COMPLETENESS_CHECK": "The full set contains the safe default value, which is exhaustive given the lack of explicit mention in the text."
       }
     },
     {
@@ -187,15 +187,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the scope of the study rather than the study design type (e.g., \"cross-sectional\" or \"case-control\").",
-        "SOURCE_CHECK": "The information is present in the text, but it is a description of the samples, not the experimental design.",
-        "TRUTH_CHECK": "The value is a factual description of the samples used, but it does not answer \"what is the study design?\".",
-        "COMPLETENESS_CHECK": "The full set provides a description of the samples but fails to categorize the experimental design."
+        "TYPE_CHECK": "no",
+        "SOURCE_CHECK": "yes",
+        "TRUTH_CHECK": "yes",
+        "COMPLETENESS_CHECK": "The value describes the sample set and the goal, but not the study design type."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "sample type (adult tissues, fetal tissues, hematopoietic cells)",
+      "extracted_value": "tissue/cell type (17 adult tissues, 7 fetal tissues, 6 hematopoietic cells)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -203,10 +203,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (different types of human samples) being compared/mapped, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly mentions profiling \"30 histologically normal human samples including 17 adult tissues, 7 fetal tissues and 6 purified primary hematopoietic cells\".",
-        "TRUTH_CHECK": "The value accurately reflects the categories of samples used to create the proteome map.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variable (the different source materials) used in the study."
+        "TYPE_CHECK": "The candidate value describes the experimental variables (tissue and cell types) being compared/mapped.",
+        "SOURCE_CHECK": "The text explicitly mentions \"30 histologically normal human samples including 17 adult tissues, 7 fetal tissues and 6 purified primary hematopoietic cells\".",
+        "TRUTH_CHECK": "The value accurately reflects the experimental design of mapping the proteome across these different biological sources.",
+        "COMPLETENESS_CHECK": "The full set captures the primary factor (tissue/cell type) and the specific breakdown mentioned in the abstract."
       }
     },
     {
@@ -219,10 +219,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The text explicitly states, \"A total of 96 fractions were collected which were then concatenated to 24 fractions.\"",
+        "TYPE_CHECK": "The candidate value is a numeric count of fractions, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly states, \"A total of 96 fractions were collected which were then concatenated to 24 fractions\".",
         "TRUTH_CHECK": "The value 24 is factually correct as the final number of fractions used for LC-MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"24\", which accurately reflects the fractionation described in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"24\", which accurately reflects the fractionation described in the paper."
       }
     },
     {
@@ -238,7 +238,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
         "SOURCE_CHECK": "The abstract explicitly states \"profiling of 30 histologically normal human samples\".",
         "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"30\", which exhaustively covers the total count of samples mentioned in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the single correct total count mentioned in the paper."
       }
     }
   ]

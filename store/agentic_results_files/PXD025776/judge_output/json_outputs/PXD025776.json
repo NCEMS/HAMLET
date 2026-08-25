@@ -1,0 +1,213 @@
+{
+  "paper_id": "PXD025776",
+  "annotations": [
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "Homo sapiens, Mus musculus",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human\" and \"human heart tissue\" multiple times.",
+        "TRUTH_CHECK": "The use of human samples is factually correct as described in the \"Human tissue\" section of the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is missing \"Mus musculus\" (mouse), as the study extensively uses mouse models (C57BL/6J) and mouse CFs."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "COS-7 cell lysates",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "cell line, primary cells, tissue",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"COS-7 cell lysates\" describes a sample derived from a cell line, but the field definition requires a broad material class (e.g., \"cell line\").",
+        "SOURCE_CHECK": "The paper explicitly mentions using \"COS-7 cell lysates\" for MS analysis.",
+        "TRUTH_CHECK": "The value is factually present, but it includes the processing state (\"lysates\") rather than just the material class.",
+        "COMPLETENESS_CHECK": "The full set only contains this value, but the paper also uses primary mouse cardiac fibroblasts and human heart tissue for other experiments. However, for the MS-specific part of the study, COS-7 cells were the source."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "COS-7",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"COS-7\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS\" and \"Heterologous expression and degradation assays\" sections of the methods.",
+        "TRUTH_CHECK": "The paper states that HA-tagged βIV-spectrin was expressed in COS-7 cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"COS-7\", which is the only cell line mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions a \"ThermoScientific Fusion Lumos mass spectrometer system\".",
+        "TRUTH_CHECK": "The value is factually correct; \"Orbitrap\" is the mass analyzer type for the Fusion Lumos.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label-free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, \"label-free\" is a safe default.",
+        "TRUTH_CHECK": "The extraction is factually correct based on the absence of labeling methods in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "COS-7 cells",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"COS-7 cells\" is a cell line name, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The value \"COS-7 cells\" is present in the text, but it refers to the sample source, not the number of replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
+        "COMPLETENESS_CHECK": "The full set contains a cell line and a number, but neither accurately represents the biological replicates for the MS experiment (the text does not explicitly state the number of biological replicates for the MS analysis)."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"4\" is a numeric count, which is the correct category for the 'replicates' field.",
+        "SOURCE_CHECK": "I have searched the text for mentions of biological replicates, sample sizes (n=), or repetitions of the MS experiments, but no mention of \"4\" replicates is present.",
+        "TRUTH_CHECK": "The value \"4\" is not supported by the text; the paper does not specify the number of biological replicates for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect, as it includes a cell line (\"COS-7 cells\") which is a type mismatch for this field."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "second LC–MS/MS experiment",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a description of an experiment, not a numeric count of technical replicates.",
+        "SOURCE_CHECK": "The phrase \"a second LC–MS/MS experiment was performed\" is present in the text.",
+        "TRUTH_CHECK": "The phrase describes a repeat experiment for relative abundance measurement, but it is not a \"number of technical replicates\" as defined by the field.",
+        "COMPLETENESS_CHECK": "The full set contains \"2\" and \"second LC–MS/MS experiment\"; while \"2\" might be an inference from the \"second\" experiment, the candidate value itself is the wrong type."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper mentions \"a second LC–MS/MS experiment was performed\" to more accurately measure relative abundance, but it does not explicitly state that each sample was run in duplicate (technical replicates = 2).",
+        "TRUTH_CHECK": "The mention of a \"second experiment\" refers to a follow-up targeted analysis, not necessarily a technical replicate of the same sample in the same run. There is no explicit statement that \"2\" technical replicates were used per sample.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes a description of a second experiment and the number \"2\", but neither is explicitly defined as the number of technical replicates per sample."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "comparison of mouse and human βIV-spectrin phosphorylation with or without constitutively active CaMKII",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "treated vs control",
+      "issue_summary": {
+        "TYPE_CHECK": "No. The candidate value describes a specific experimental condition/comparison rather than a study design type (e.g., \"treated vs control\").",
+        "SOURCE_CHECK": "Yes. The text describes comparing mouse and human βIV-spectrin phosphorylation in the presence or absence of CaMKII.",
+        "TRUTH_CHECK": "Yes. This specific comparison was performed.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of a specific experiment, not a design category."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "species (mouse, human), CaMKII expression (with, without)",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental variables (species and CaMKII expression), which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly compares mouse and human $\\beta$IV-spectrin and tests the effect of coexpressing constitutively active CaMKII (with vs without).",
+        "TRUTH_CHECK": "The values are factually correct based on the MS experiments described in the results and methods.",
+        "COMPLETENESS_CHECK": "The full set is incomplete; the study also investigates the effect of $\\beta$IV-spectrin mutations (WT, S2254A, S2254E, qv3J, qv4J) and the effect of Angiotensin II (AngII) treatment."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
+        "SOURCE_CHECK": "The paper mentions that protein samples were \"fractionated on an SDS-PAGE\" and \"a small area around the band was cut from the gel,\" but it does not specify a number of fractions generated per sample for LC-MS. Per the field definition, \"1\" is the correct default when no specific fractionation count is mentioned.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for this field.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single default value, which is exhaustive given the text."
+      }
+    },
+    {
+      "annotation_type": "number_of_samples",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
+        "SOURCE_CHECK": "The paper does not explicitly state a total count of samples processed for the MS experiments or the overall study.",
+        "TRUTH_CHECK": "There is no evidence in the text to support the value \"4\". The MS section describes analysis of mouse and human βIV-spectrin with and without CaMKII (which could be 4 conditions), but this is not explicitly stated as the total sample count.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD030548","","strict","Biological","cell_line","Flp-In-TREx 293 cells, HEK293T, HEK293","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper mentions multiple cell lines: Flp-In-TREx 293 cells were used to express the hGPR35a-HA construct that was ""affinity-purified"" and analyzed by ""mass spectrometry""; HEK293T and HEK293 were used for BRET assays, internalization assays, and antibody validation (immunoblotting/immunocytochemistry).
+TRUTH CHECK: Only the Flp-In-TREx 293 cells provided the material for the mass spectrometry experiment. HEK293T and HEK293 were used for functional and validation assays, not for the MS analysis.
+COMPLETENESS CHECK: The set includes irrelevant cell lines used for non-MS assays, making the extraction factually incorrect regarding the MS sample source.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Flp-In-TREx 293 cells","Flp-In-TREx 293 cells"
+"PXD030548","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" is a valid category for the cell_type field.
+SOURCE CHECK: The MS sample was derived from ""Flp-In-TREx 293 cells"" (and ""HEK293"" is mentioned in the context of the receptor constructs), which are derived from the HEK293 lineage.
+TRUTH CHECK: HEK293 cells are well-established as being of epithelial lineage (human embryonic kidney cells).
+COMPLETENESS CHECK: The full set contains the correct lineage for the cell line used in the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Biological","organ","kidney","kidney","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The MS sample was derived from ""Flp-In-TREx 293 cells"" (and HEK293T cells), which are derived from the human embryonic kidney.
+TRUTH CHECK: The value is factually correct as HEK293 cells are human embryonic kidney cells.
+COMPLETENESS CHECK: The full set contains the single correct organ of origin for the cell lines used in the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Biological","species","Homo sapiens, Mus musculus, Rattus norvegicus","","low","False","","False","True","False","False","","wrong_value","TYPE CHECK: The candidate value is a list of species names, which matches the field definition.
+SOURCE CHECK: The paper describes the analysis of human (hGPR35a), mouse (mGPR35), and rat (rGPR35) orthologues; however, the ""Mass spectrometry"" section explicitly states that mass spectrometry was performed on ""tryptic peptides generated from affinity-purified hGPR35a-HA"", and later explicitly states, ""We did not perform equivalent initial mass spectrometry studies on mGPR35.""
+TRUTH CHECK: While the paper studies all three species, only the human orthologue (Homo sapiens) was actually analyzed by mass spectrometry. The mouse and rat orthologues were analyzed using [32P] labeling and BRET assays, not MS.
+COMPLETENESS CHECK: The set is incorrect because it includes species that were not part of the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD030548","","strict","ExperimentalDesign","factor_value","hGPR35a-HA, mGPR35-HA, rGPR35-HA, hGPR35a-PDM, mGPR35-PDM, zaprinast, pamoic acid, CID-2745687, vehicle","hGPR35a-HA, mGPR35-HA, rGPR35-HA, hGPR35a-PDM, mGPR35-PDM, zaprinast, pamoic acid, CID-2745687, vehicle","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a list of experimental conditions (constructs and treatments), which is the correct category for factor_value.
+SOURCE CHECK: These values are all present in the text and refer to the conditions used in the experiments, including the mass spectrometry analysis of hGPR35a-HA treated with zaprinast.
+TRUTH CHECK: The values are factually correct as they represent the specific receptor orthologues, mutants, and ligands used in the study.
+COMPLETENESS CHECK: The full set covers the primary variables (genotype/construct and treatment) described in the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes LC-MS/MS on tryptic peptides but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment; it mentions ""various experiments"" and ""at least three independent experiments"" for general results, but not specifically for the MS sample preparation.
+TRUTH CHECK: Since the paper is silent on the specific number of biological replicates for the MS analysis, the safe default of ""1"" is applied.
+COMPLETENESS CHECK: The full set contains only the safe default value, which is appropriate given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","ExperimentalDesign","technical_replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical_replicates.
+SOURCE CHECK: The paper does not mention the number of technical replicates performed for the mass spectrometry analysis.
+TRUTH CHECK: There is no evidence in the text to support the value ""2"" for technical replicates.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The paper does not explicitly mention ""data-dependent acquisition"", ""DDA"", or ""data-independent acquisition"", ""DIA"".
+TRUTH CHECK: While the use of an LTQ Orbitrap with Mascot/X!Tandem searching typically implies DDA, the specific term is not written in the text.
+COMPLETENESS CHECK: The full set is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The paper explicitly mentions ""tryptic peptides generated from affinity-purified hGPR35a-HA"" in the results and ""tryptic peptides"" in the mass spectrometry methods section.
+TRUTH CHECK: The use of trypsin for protein digestion is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","fragment_mass_tolerance","0.020 Da","0.020 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Database searching"" section of the methods.
+TRUTH CHECK: The text states ""Mascot and X! Tandem were searched with a fragment ion mass tolerance of 0.020 Da"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions the use of an ""LTQ Orbitrap mass spectrometer"" but does not explicitly name the fragmentation method used (e.g., CID, HCD, or beam-type CID).
+COMPLETENESS CHECK:The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","instrument","LTQ Orbitrap Velos","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper text mentions an ""LTQ Orbitrap mass spectrometer (Thermo Fisher Scientific)"", but it does not specify the ""Velos"" model.
+TRUTH CHECK: The value ""LTQ Orbitrap Velos"" is not explicitly stated in the text; only ""LTQ Orbitrap"" is mentioned.
+COMPLETENESS CHECK: The full set contains only this value, which adds a specific model name (""Velos"") not present in the source text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: LTQ Orbitrap","LTQ Orbitrap"
+"PXD030548","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes a mass spectrometry experiment on tryptic peptides from affinity-purified hGPR35a-HA, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl).
+TRUTH CHECK: Since no labeling method is described, the safe default ""label-free"" is factually correct.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for this experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section (""LTQ Orbitrap mass spectrometer"").
+TRUTH CHECK: The value is factually correct as the instrument used was an LTQ Orbitrap.
+COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Database searching"" section of the methods (""Carbamidomethyl of cysteine was specified as a fixed modification"").
+TRUTH CHECK: The value is factually correct as it is explicitly stated in the text.
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Oxidation, Phospho), although ""Deamidation (NQ)"" is not mentioned in the text. However, for this specific candidate value, it is correct.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for the modification field.
+SOURCE CHECK: The value is explicitly mentioned in the ""Database searching"" section of the methods (""oxidation of methionine"").
+TRUTH CHECK: The candidate value is factually correct as the paper specifies ""oxidation of methionine"" as a variable modification.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive; while ""Carbamidomethyl (C)"", ""Oxidation (M)"", and ""Phospho (STY)"" are in the text, ""Deamidation (NQ)"" is not mentioned, and other modifications like ""ammonia-loss of the n-terminus"" and ""pyro-Glu"" are missing.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification and its target residues, which matches the field definition.
+SOURCE CHECK: The value is derived from the ""Database searching"" section, which explicitly lists ""phosphorylation of serine, threonine, and tyrosine"" as variable modifications.
+TRUTH CHECK: The paper explicitly mentions phosphorylation of serine, threonine, and tyrosine; ""Phospho (STY)"" is a standard abbreviation for these three residues.
+COMPLETENESS CHECK: The full set of extracted values includes other modifications mentioned in the text (Carbamidomethyl, Oxidation), but it also includes ""Deamidation (NQ)"", which is not mentioned in the paper. However, evaluating the candidate ""Phospho (STY)"" individually, it is a correct extraction of one of the modifications described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","modification","Deamidation (NQ)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Deamidation (NQ)"" is not mentioned anywhere in the paper text.
+TRUTH CHECK: The value is not present in the text and therefore not factually supported for this experiment.
+COMPLETENESS CHECK: The full set of extracted values includes modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD030548","","strict","Technical","precursor_mass_tolerance","10.0 PPM","10.0 PPM","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which matches the required category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Database searching"" section of the methods.
+TRUTH CHECK: The paper states ""Mascot and X! Tandem were searched with a fragment ion mass tolerance of 0.020 Da and a parent ion tolerance of 10.0 PPM""; ""parent ion"" is a synonym for precursor ion.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

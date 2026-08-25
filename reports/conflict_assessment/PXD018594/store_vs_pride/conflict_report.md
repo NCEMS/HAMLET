@@ -38,6 +38,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[fragment mass tolerance]` | Technical | NA | NA | NA |
 | `comment[instrument]` | Technical | NA | NA | NA |
 | `comment[label]` | Technical | NA | NA | NA |
+| `comment[modification parameters]` | Technical | NA | NA | NA |
 | `comment[ms2 mass analyzer]` | Technical | NA | NA | NA |
 | `comment[precursor mass tolerance]` | Technical | NA | NA | NA |
 | `comment[proteomics data acquisition method]` | Technical | NA | NA | NA |

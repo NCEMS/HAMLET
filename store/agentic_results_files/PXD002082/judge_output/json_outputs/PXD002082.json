@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for an organism, which matches the species field definition.",
-        "SOURCE_CHECK": "The paper title explicitly mentions \"human colon and rectal cancer,\" and the methods mention \"Normal colon biopsies\" and \"TCGA\" (The Cancer Genome Atlas), which are human-derived.",
-        "TRUTH_CHECK": "The value \"Homo sapiens\" is the correct scientific name for humans.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens,\" which covers the primary source organism of the study."
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper title explicitly mentions \"human colon and rectal cancer,\" and the methods mention \"Patient-derived\" and \"Normal colon biopsies,\" confirming the source organism.",
+        "TRUTH_CHECK": "\"Homo sapiens\" is the correct scientific name for humans.",
+        "COMPLETENESS_CHECK": "The full set contains the primary species of interest for the proteogenomic characterization."
       }
     },
     {
@@ -27,26 +27,26 @@
       "hallucination": false,
       "corrected_value": "colon, rectum",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"colon\" is an organ/tissue, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human colon and rectal cancer\" in the title and \"Normal colon biopsies\" in the methods.",
-        "TRUTH_CHECK": "The value is factually correct as the study analyzes colon tumors and biopsies.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is missing \"rectum\" or \"rectal\", as the title and abstract explicitly state the study covers both \"colon and rectal cancer\"."
+        "TYPE_CHECK": "The candidate value \"colon\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human colon and rectal cancer\" and \"Normal colon biopsies\".",
+        "TRUTH_CHECK": "The value is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set [\"colon\"] is incomplete because the paper also explicitly mentions \"rectal\" tumors."
       }
     },
     {
       "annotation_type": "disease",
       "extracted_value": "colon and rectal cancer",
-      "verdict": "high",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "colon and rectal cancer, normal",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease state/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the title (\"Proteogenomic characterization of human colon and rectal cancer\").",
+        "TYPE_CHECK": "The candidate value \"colon and rectal cancer\" is a disease state/diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly stated in the title (\"Proteogenomic characterization of human colon and rectal cancer\").",
         "TRUTH_CHECK": "The value is factually correct as the study focuses on colon and rectal tumors.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary disease state described in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary disease focus of the study; however, the methods section also mentions \"Normal colon biopsies,\" which implies a \"normal\" or \"healthy\" control group."
       }
     },
     {
@@ -61,8 +61,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"colon\" is an anatomical location, which matches the field definition.",
         "SOURCE_CHECK": "The paper title and abstract explicitly mention \"human colon and rectal cancer\".",
-        "TRUTH_CHECK": "The value is factually correct as the study analyzes tumors from the colon.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is missing \"rectum\" or \"rectal\", as the paper specifies both colon and rectal cancer."
+        "TRUTH_CHECK": "The value is factually correct as the study analyzes colon tumors.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is missing \"rectum\" or \"rectal\", as the paper explicitly covers both colon and rectal cancer."
       }
     },
     {
@@ -78,7 +78,7 @@
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The candidate value \"LTQ Orbitrap Velos\" is not mentioned in the provided title, abstract, or methods text.",
         "TRUTH_CHECK": "The value cannot be verified as correct because it is absent from the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains a value not found in the text, making it an incorrect extraction."
+        "COMPLETENESS_CHECK": "The full set contains only this value, but since it is not in the text, it is not a valid extraction."
       }
     },
     {
@@ -92,14 +92,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
-        "SOURCE_CHECK": "The text mentions \"Quantitative proteomic comparisons were based on spectral count data,\" and no isobaric or metabolic labels (like TMT or SILAC) are mentioned.",
-        "TRUTH_CHECK": "Spectral counting is a label-free quantification method.",
-        "COMPLETENESS_CHECK": "The full set contains \"label-free\", which accurately describes the quantification method used in the study."
+        "SOURCE_CHECK": "The text does not mention any isobaric or metabolic labeling (like TMT or SILAC), and \"label-free\" is a safe default when no such labels are mentioned.",
+        "TRUTH_CHECK": "The use of \"spectral count data\" for quantitative comparisons is a characteristic of label-free proteomics.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that correctly describes the labeling state of the experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "colon and rectal tumors, normal colon biopsies",
+      "extracted_value": "patient tumor samples and normal colon biopsies",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -108,14 +108,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a description of sample types, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions these sample types, but the value is not a count.",
-        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and does not provide a numeric count."
+        "SOURCE_CHECK": "The text mentions \"tumor samples\" and \"normal colon biopsies,\" but the candidate value is not a count.",
+        "TRUTH_CHECK": "The value is factually incorrect as it does not answer \"how many\" replicates were used.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and fails to provide the required numeric count."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "integrated proteogenomic analyses of colon and rectal tumors",
+      "extracted_value": "proteogenomic characterization of human colon and rectal cancer",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -123,15 +123,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the analysis goal/approach rather than the study design type (e.g., case-control, cross-sectional).",
-        "SOURCE_CHECK": "The phrase is present in the abstract.",
-        "TRUTH_CHECK": "While the text mentions \"integrated proteogenomic analyses,\" this is a methodology/analysis type, not an experimental design.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+        "TYPE_CHECK": "The candidate value is a description of the study's goal/title, not a study design type (e.g., \"case-control\", \"cross-sectional\").",
+        "SOURCE_CHECK": "The value is present in the title of the paper.",
+        "TRUTH_CHECK": "While the text describes the study, the value provided is a summary of the research objective rather than the experimental design category.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch for the field."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "tissue type (colon and rectal tumors, normal colon biopsies)",
+      "extracted_value": "cancer type (colon, rectal)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -139,10 +139,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (tissue types) being compared, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly mentions analyzing \"colon and rectal tumors\" and \"Normal colon biopsies\".",
-        "TRUTH_CHECK": "The value accurately reflects the groups being compared in the study.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental factor (tissue type/source) described in the text."
+        "TYPE_CHECK": "The candidate value describes the experimental variable (cancer type) being compared, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The title and abstract explicitly state the study is a characterization of \"human colon and rectal cancer\".",
+        "TRUTH_CHECK": "The value is factually correct as the study compares proteomes of colon and rectal tumors.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental variable described in the text."
       }
     },
     {
@@ -156,8 +156,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
-        "SOURCE_CHECK": "The provided text does not mention the number of fractions; it only states that \"multidimensional liquid chromatography-tandem mass spectrometry\" was used.",
-        "TRUTH_CHECK": "The value \"15\" is not present in or inferable from the provided text.",
+        "SOURCE_CHECK": "The provided text mentions \"multidimensional liquid chromatography-tandem mass spectrometry,\" but it does not specify the number of fractions (e.g., \"15\").",
+        "TRUTH_CHECK": "The value \"15\" is not mentioned or reasonably inferable from the provided text.",
         "COMPLETENESS_CHECK": "The full set contains a value not supported by the text."
       }
     }

@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD032931",
+  "annotations": [
+    {
+      "annotation_type": "species",
+      "extracted_value": "Bacillus subtilis, Escherichia coli",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "Both organisms are mentioned; however, the mass spectrometry analysis was performed on recombinant PrkA proteins expressed in E. coli, and the database used for search was B. subtilis.",
+        "TRUTH_CHECK": "The proteins analyzed by MS were produced in E. coli (expression host) but are B. subtilis proteins (the target of the study). Both are relevant to the MS experiment context.",
+        "COMPLETENESS_CHECK": "The full set includes both the target species and the expression host, which is exhaustive for the MS context described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "protein variant (WT, T217E, S219E)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (protein variants) and the specific groups being compared, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The value is derived from the MS experiment context; the methods section explicitly states that PrkA (WT), PrkA-T217E, and PrkA-S219E were phosphorylated in vitro and analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as these three specific protein variants were the subjects of the MS analysis to determine phosphorylation sites.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the variants analyzed by MS in this study."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a direct injection of tryptic peptides onto a nano LC-MS/MS system without any mention of offline fractionation.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this experiment."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "3",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper mentions that \"Each experiment was reproduced at least in triplicate\" in the Sporulation test section, but the mass spectrometry analysis section does not explicitly state the number of biological replicates used for the proteomics experiment.",
+        "TRUTH_CHECK": "While \"triplicate\" is mentioned for sporulation assays, it is not explicitly linked to the mass spectrometry analysis of PrkA and its mutants.",
+        "COMPLETENESS_CHECK": "The value \"3\" is based on a general statement about other experiments, not the MS experiment specifically."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the technical replication status based on the provided text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; it only specifies the instrument (ESI-Q-Exactive Plus) and the software (Proteome Discoverer).",
+        "TRUTH_CHECK": "While the Q-Exactive Plus is commonly used for DDA, the text does not explicitly state the acquisition method used for this specific experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Lys-C",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "trypsin, Lys-C",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Protein phosphorylation and characterization by mass spectrometry\" section, describing the digestion of proteins for MS analysis.",
+        "TRUTH_CHECK": "The paper explicitly states that proteins were \"digested by trypsin/LysC protease\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"Lys-C\"] is incomplete because the paper explicitly mentions both \"trypsin\" and \"LysC\"."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "9 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"9 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention any specific mass tolerance values for either precursor or fragment ions.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not based on any information in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions the use of an ESI-Q-Exactive Plus mass spectrometer and Proteome Discoverer software, but it does not explicitly state the fragmentation method used (e.g., HCD or CID).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category for the instrument field.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein phosphorylation and characterization by mass spectrometry\" section as an \"ESI-Q-Exactive Plus mass spectrometer (Thermo Scientific)\".",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper, making it exhaustive."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric (TMT, iTRAQ), metabolic (SILAC), or chemical (dimethyl) labeling for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "Since no labeling is described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is reasonably inferable from the instrument model \"Q-Exactive Plus\" mentioned in the \"Protein phosphorylation and characterization by mass spectrometry\" section.",
+        "TRUTH_CHECK": "The Q-Exactive Plus is a well-known Orbitrap-based mass spectrometer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the proteomics analysis in this study."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category for a protein modification.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Protein phosphorylation and characterization by mass spectrometry\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Dynamic modifications were searched for oxidation on Met (+15.995)\", which matches \"Oxidation (M)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations (Acetyldeoxyhypusine, Formylation) and a contradiction (\"not applicable\"), but the candidate value itself is a correct extraction from the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Phospho (STY)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Phospho (STY)\" describes a protein modification and its target residues, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Protein phosphorylation and characterization by mass spectrometry\" section, where it states \"Dynamic modifications were searched for... phosphorylation on Ser/Thr/Tyr\".",
+        "TRUTH_CHECK": "The candidate value is a correct representation of the phosphorylation search on Serine, Threonine, and Tyrosine (STY) described in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations (Acetyldeoxyhypusine, Formylation, not applicable) and one correct value (Oxidation), but the candidate value itself is a correct extraction of one of the searched modifications."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acetyldeoxyhypusine (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"Acetyldeoxyhypusine (K)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper only mentions oxidation and phosphorylation as searched modifications.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"Formylation (K)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the only modifications explicitly searched for were oxidation and phosphorylation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The value \"not applicable\" is not a protein modification; it is a placeholder indicating the absence of a value.",
+        "SOURCE_CHECK": "The paper explicitly describes searching for \"oxidation on Met\" and \"phosphorylation on Ser/Thr/Tyr\" in the mass spectrometry section.",
+        "TRUTH_CHECK": "The value is factually incorrect because modifications were explicitly searched and reported in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations (Acetyldeoxyhypusine, Formylation) and one correct value (Oxidation), but \"not applicable\" is fundamentally wrong."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"6 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not report the precursor mass tolerance used for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as the value is not in the text."
+      }
+    }
+  ]
+}

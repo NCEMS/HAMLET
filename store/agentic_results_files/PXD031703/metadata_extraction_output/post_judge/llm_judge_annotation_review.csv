@@ -1,0 +1,231 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD031703","","strict","Biological","species","Escherichia coli","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a species name, which matches the field definition.
+SOURCE CHECK: While E. coli was used to express the recombinant proteins, the proteins themselves are explicitly stated to be ""human sequences"" (e.g., ""human NDP52, OPTN, and SQSTM1 proteins""), and the MS analysis was performed against the ""Uniprot human proteome"". The E. coli is the expression host, not the source of the proteins being analyzed by mass spectrometry.
+TRUTH CHECK: The proteins analyzed by MS were human, not E. coli.
+COMPLETENESS CHECK: The full set is incorrect as it identifies the expression host instead of the target species.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD031703","","strict","ExperimentalDesign","factor_value","substrate protein (NDP52, OPTN, SQSTM1)","substrate protein (NDP52, OPTN, SQSTM1)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the specific proteins being analyzed, which serves as the experimental factor (the identity of the substrate) in this study.
+SOURCE CHECK: The value comes from the MS experiment context, as the paper explicitly states that ""Label-free tandem mass spectrometry was used to map the sites of ubiquitination in NDP52, OPTN, and SQSTM1"".
+TRUTH CHECK: The value is factually correct; these three proteins were the specific substrates analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set contains the three proteins analyzed by MS, covering the experimental variable for the MS portion of the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes the LC-MS/MS workflow (digestion, desalting with C18 STAGE tips, and injection into the LC-MS/MS system) without mentioning any offline fractionation steps.
+TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","ExperimentalDesign","replicates","3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK: The paper mentions that ""Western blots were repeated at least three times"" and ""fluorescence anisotropy data were measured to high accuracy at least 3 times,"" but it does not explicitly state the number of biological replicates for the LC-MS/MS experiment.
+TRUTH CHECK: There is no explicit statement in the text specifying that the mass spectrometry samples were processed in biological triplicate; the ""three times"" mentions refer to Western blots and anisotropy assays.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD031703","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK: Applying the safe default ""1"" is correct when the paper is silent on technical replication.
+COMPLETENESS CHECK: The value ""1"" is complete as it represents the default for a single measurement per sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""LC-MS/MS analysis"" section which describes the mass spectrometry experiment.
+TRUTH CHECK: The paper explicitly states ""followed by data-dependent HCD MS/MS"", confirming the use of a data-dependent acquisition (DDA) scheme.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","alkylation_reagent","chloroacetamide","chloroacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""chloroacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis for lysine ubiquitination sites on autophagy receptors"" section of the methods, describing the sample preparation for the mass spectrometry experiment.
+TRUTH CHECK: The paper states that gel pieces were ""treated with 50 mM 2-chloroacetamide"", confirming the use of this reagent.
+COMPLETENESS CHECK: The full set of extracted values contains only this reagent, which is the only alkylation reagent mentioned for the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section (""rehydrated with 50 mM NH4HCO3 solution containing 20 ng/μl trypsin for digestion"").
+TRUTH CHECK: The value is factually correct as trypsin was used for the digestion of the proteins analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","fragment_mass_tolerance","0.03 Da","0.03 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.03 Da"" is explicitly stated in the ""LC-MS/MS analysis"" section of the methods as the ""fragment ion tolerance"".
+TRUTH CHECK: The value is factually correct as it is explicitly assigned to the fragment ion tolerance in the text.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the paper text; the text explicitly states ""data-dependent HCD MS/MS"".
+TRUTH CHECK: The value is factually incorrect for this experiment; the paper used HCD (Higher-energy Collisional Dissociation), not beam-type CID.
+COMPLETENESS CHECK: The full set is incorrect as it contains a hallucinated value and misses the actual method mentioned.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD031703","","strict","Technical","instrument","Q Exactive","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The candidate value ""Q Exactive"" is not mentioned in the paper text; the text explicitly states the instrument used was an ""LTQ Orbitrap Velos Pro"".
+TRUTH CHECK: The value is factually incorrect as it does not match the instrument described in the methods section.
+COMPLETENESS CHECK: The full set is incorrect.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: LTQ Orbitrap Velos Pro","LTQ Orbitrap Velos Pro"
+"PXD031703","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper explicitly states ""Label-free tandem mass spectrometry was used to map the sites of ubiquitination"" in the results section.
+TRUTH CHECK: The value is factually correct as no isobaric, metabolic, or chemical labeling (like TMT or SILAC) is mentioned in the text.
+COMPLETENESS CHECK: The full set contains the only labeling method used in the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""LC-MS/MS analysis"" section which describes the MS instrument used for the experiment.
+TRUTH CHECK: The paper explicitly states that an ""LTQ Orbitrap Velos Pro mass spectrometer"" was used.
+COMPLETENESS CHECK: The full set of extracted values contains ""orbitrap"", which is the only mass analyzer mentioned for the MS analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""static modification, Cys carbamidomethylation"" in the LC-MS/MS analysis section.
+TRUTH CHECK: ""Cys carbamidomethylation"" is an unambiguous synonym for ""Carbamidomethyl (C)"".
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text (e.g., Proline oxidation, Formylation), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""variable modifications, Met oxidation"" in the LC-MS/MS analysis section.
+TRUTH CHECK: ""Met oxidation"" is an unambiguous synonym for ""Oxidation (M)"".
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text (e.g., Proline oxidation, Formylation), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Ser/Thr/Tyr phosphorylation"" as a variable modification in the database search parameters.
+TRUTH CHECK: ""Phospho (STY)"" is a standard abbreviation/representation of ""Ser/Thr/Tyr phosphorylation"".
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text (e.g., Proline oxidation, Formylation), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","modification","Proline oxidation to 5-hydroxy-2-aminovaleric acid (P)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text.
+TRUTH CHECK: The candidate value is not mentioned in the text; the paper lists ""Met oxidation"" and ""Ser/Thr/Tyr phosphorylation"" but not proline oxidation.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","modification","Formylation (K)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Formylation (K)"" is not present in the paper text.
+TRUTH CHECK: The paper does not mention formylation as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","precursor_mass_tolerance","10 ppm","10 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""LC-MS/MS analysis for lysine ubiquitination sites on autophagy receptors"" section of the methods.
+TRUTH CHECK: The paper explicitly states ""precursor mass tolerance, 10 ppm"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","","strict","Technical","reduction_reagent","tris(2-carboxyethyl)phosphine","tris(2-carboxyethyl)phosphine","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical used for the reduction of disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is present in the paper text; the methods section explicitly mentions ""TCEP"" during the LC-MS/MS sample preparation (""treated with reducing agent TCEP in 100 mM NH4HCO3"").
+TRUTH CHECK: ""tris(2-carboxyethyl)phosphine"" is the full chemical name for the abbreviation ""TCEP"" used in the text.
+COMPLETENESS CHECK: The full set of extracted values contains the only reduction reagent mentioned for the MS sample preparation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD012143","BiologicalAgent","species","P. falciparum","P. falciparum","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
-SOURCE CHECK:      The text explicitly mentions ""Plasmodium falciparum"" and ""P. falciparum"" throughout the title, abstract, and methods.
+SOURCE CHECK:      The value ""P. falciparum"" is explicitly mentioned throughout the paper (e.g., in the title and abstract).
 TRUTH CHECK:       The value is factually correct as the study focuses on the malaria parasite Plasmodium falciparum.
-COMPLETENESS CHECK: The full set contains the primary organism of study; while human erythrocytes are used for culture, the proteomics analysis is specifically targeting the parasite proteins.
+COMPLETENESS CHECK: The full set of extracted values contains only ""P. falciparum"", which is the primary source organism for the proteomics experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,10 +10,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","BiologicalAgent","organ","blood","blood","high","False","","True","True","False","TYPE CHECK:        The candidate value ""blood"" describes the tissue/organ of origin, which fits the definition.
-SOURCE CHECK:      The paper explicitly mentions ""asexual blood stage development of Plasmodium falciparum"" and the use of ""human erythrocytes"" (blood cells).
-TRUTH CHECK:       The experiment is conducted using malaria parasites within human blood/erythrocytes.
-COMPLETENESS CHECK: The full set contains ""blood"", which accurately captures the source material described in the paper.
+"PXD012143","BiologicalAgent","organ","blood","blood","high","False","","True","True","False","TYPE CHECK: The candidate value ""blood"" describes the tissue/organ of origin, which matches the field definition.
+SOURCE CHECK: The paper repeatedly mentions ""asexual blood stage development of Plasmodium falciparum"" and ""human erythrocytes,"" from which the parasites were cultured.
+TRUTH CHECK: The experiment involves parasites within human blood/erythrocytes; ""blood"" is a correct representation of the organ/tissue source.
+COMPLETENESS CHECK: The full set contains ""blood,"" which accurately covers the source material described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012143","BiologicalAgent","cell_type","schizonts and merozoites","schizonts and merozoites","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to life cycle stages of a parasite, which fits the definition of cell type/lineage in this context.
+SOURCE CHECK:      The paper explicitly mentions profiling the phosphoproteomes from ""parasite cultures comprising mature schizonts and merozoites"".
+TRUTH CHECK:       The values are factually correct as these are the specific parasite stages used for the mass spectrometry experiments.
+COMPLETENESS CHECK: The full set of extracted values covers the specific parasite stages analyzed in the phosphoproteomics experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,10 +33,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","BiologicalAgent","cell_type","schizonts, merozoites","schizonts, merozoites","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to life stages of a parasite, which fits the category of cell type/lineage in this context.
-SOURCE CHECK:      The paper explicitly mentions ""mature schizonts and merozoites"" as the parasite life stages used for phosphoproteomic profiling.
-TRUTH CHECK:       The values are factually correct as these are the specific stages of Plasmodium falciparum analyzed.
-COMPLETENESS CHECK: The full set covers the specific parasite stages used for the proteomics experiment.
+"PXD012143","BiologicalAgent","disease","malaria","malaria","high","False","","True","True","False","TYPE CHECK:        The candidate value ""malaria"" describes a disease state, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""malaria parasite"" and ""malaria parasites"" throughout the text.
+TRUTH CHECK:       The study focuses on the mechanisms of *Plasmodium falciparum*, the causative agent of malaria.
+COMPLETENESS CHECK: The full set contains ""malaria"", which accurately captures the disease state under study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,32 +44,43 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","BiologicalAgent","material_type","human erythrocytes","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human erythrocytes"" describes a specific cell type, but the field definition requires a ""Broad material class"" (e.g., ""primary cells"", ""tissue"").
-SOURCE CHECK:      The paper explicitly mentions that P. falciparum erythrocytic stages were cultured in ""human erythrocytes"".
-TRUTH CHECK:       While the material used was indeed human erythrocytes, the value does not match the allowed categories defined for `material_type`.
-COMPLETENESS CHECK: The full set contains only this value, which is a specific cell type rather than a broad material class.
+"PXD012143","BiologicalAgent","material_type","parasite cultures","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""parasite cultures"" does not match the allowed broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""primary cells"", ""whole organism"").
+SOURCE CHECK:      The paper describes using ""parasite cultures"" of P. falciparum, but this is a description of the sample, not a category from the defined material_type list.
+TRUTH CHECK:       While the paper uses parasite cultures, the value is not a valid member of the specified ""Broad material class"" categories.
+COMPLETENESS CHECK:The full set contains only this invalid value.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""primary cells""]","primary cells"
-"PXD012143","BiologicalAgent","strain","3D7","3D7","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific parasite strain/clone name, which fits the category of ""strain"".
-SOURCE CHECK:      The text explicitly mentions ""P. falciparum 3D7 sequences"" and ""DiCre-expressing 3D7 P. falciparum clone"".
-TRUTH CHECK:       The value is factually correct as the paper uses the 3D7 strain of Plasmodium falciparum.
-COMPLETENESS CHECK: The full set contains ""3D7"", which is the primary strain mentioned for the genetic modifications and database search.
-TYPE_CORRECT:      yes
+CORRECTED_VALUE:   [""whole organism""]",""
+"PXD012143","BiologicalAgent","strain","3D7","3D7","high","False","","True","True","False","TYPE CHECK: The candidate value ""3D7"" is a specific strain/clone of the malaria parasite *Plasmodium falciparum*.
+SOURCE CHECK: The text explicitly mentions the ""DiCre-expressing 3D7 P. falciparum clone"" and ""wild-type 3D7 merozoites"".
+TRUTH CHECK: The value is factually correct as it identifies the specific parasite strain used in the experiments.
+COMPLETENESS CHECK: The full set contains ""3D7"", which is the only strain mentioned in the text.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD012143","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Orbitrap Fusion Lumos (Thermo Scientific)"" in the Phosphoproteomics section.
-TRUTH CHECK:       The value is factually correct as stated in the paper.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012143","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Orbitrap Fusion Lumos (Thermo Scientific)"" in the Phosphoproteomics section.
+TRUTH CHECK: The value is factually correct as stated in the paper.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012143","TechnicalAgent","label","Tandem Mass Tag 10plex","Tandem Mass Tag 10plex","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific isobaric labeling method, which matches the definition of the 'label' field.
+SOURCE CHECK:      The paper explicitly mentions the use of the ""0.8 mg Tandem Mass Tag 10plex isobaric reagent kit (Thermo Scientific)"" in the Phosphoproteomics section.
+TRUTH CHECK:       The value is factually correct as it describes the labeling method used for quantification in the mass spectrometry experiments.
+COMPLETENESS CHECK: The full set contains the only labeling method mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -65,10 +88,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","TechnicalAgent","label","Tandem Mass Tag 10plex","Tandem Mass Tag 10plex","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific isobaric labeling method, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""labelled using the 0.8 mg Tandem Mass Tag 10plex isobaric reagent kit (Thermo Scientific)"".
-TRUTH CHECK:       The value is factually correct as described in the phosphoproteomics section of the methods.
-COMPLETENESS CHECK: The full set contains the only labeling method used for the quantitative mass spectrometry experiments in this paper.
+"PXD012143","ExperimentalDesignAgent","replicates","3 samples per condition","3 samples per condition","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
+SOURCE CHECK:      The text states ""Sites described as ‘enriched’... are those that were quantified more highly in the three DMSO-treated samples compared with the three RAP-treated"", confirming 3 replicates per condition.
+TRUTH CHECK:       The value is factually correct based on the phosphoproteomics analysis description.
+COMPLETENESS CHECK: The full set includes ""3 samples per condition"" and ""12"". While ""3"" is the number of biological replicates per group, ""12"" likely refers to the total number of samples across the two experiments (ACβ and PKAc lines, each with DMSO and RAP groups: 2 lines * 2 conditions * 3 replicates = 12). Together, they cover the replication and sample count.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -76,21 +99,11 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","ExperimentalDesignAgent","replicates","3 samples per group","3 samples per group","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
-SOURCE CHECK:      The paper states in the Phosphoproteomics section: ""Sites described as ‘enriched’... are those that were quantified more highly in the three DMSO-treated samples compared with the three RAP-treated"".
-TRUTH CHECK:       The value ""3 samples per group"" is factually correct based on the text.
-COMPLETENESS CHECK:    The full set of extracted values includes ""3 samples per group"" and ""12"". While ""3"" is the number of replicates per condition, ""12"" likely refers to the total number of samples across the two experiments (ACβ and PKAc lines, each with DMSO and RAP groups). Together, they cover the experimental design.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD012143","ExperimentalDesignAgent","replicates","12","3 samples per group","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+"PXD012143","ExperimentalDesignAgent","replicates","12","3 samples per condition","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
 SOURCE CHECK:      The paper states in the Phosphoproteomics section: ""Sites described as ‘enriched’ in the text are those that were quantified more highly in the three DMSO-treated samples compared with the three RAP-treated"". This indicates 3 replicates per condition. The value ""12"" is not explicitly mentioned as a replicate count.
-TRUTH CHECK:       The value ""12"" is incorrect. The text specifies 3 samples per group for the comparisons. While there were two separate experiments (ACβ and PKAc), each with two groups (DMSO and RAP), and 3 replicates per group, the biological replicate count per condition is 3.
-COMPLETENESS CHECK:    The full set contains ""3 samples per group"" and ""12"". The ""12"" is likely a miscalculation of total samples across all conditions (2 experiments * 2 groups * 3 replicates = 12), but the field ""replicates"" refers to the number of biological replicates per sample/condition.
+TRUTH CHECK:       The paper describes two separate isobaric labelling experiments (one for ACβ-HA:loxP and one for PKAc-HA:loxP), each with 3 DMSO and 3 RAP samples. This totals 12 samples across the two experiments, but the number of biological replicates *per condition* is 3.
+COMPLETENESS CHECK:    The full set includes ""3 samples per condition"" and ""12"". While 12 is the total number of samples, the biological replicate count is 3.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -98,10 +111,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""3""]","3"
-"PXD012143","ExperimentalDesignAgent","technical_replicates","Two replicate injections","Two replicate injections | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to the number of times a sample was injected into the mass spectrometer, which is the correct category for technical replicates.
+"PXD012143","ExperimentalDesignAgent","technical_replicates","Two replicate injections","Two replicate injections | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of replicate injections, which corresponds to technical replicates in a mass spectrometry context.
 SOURCE CHECK:      The text explicitly states, ""Two replicate injections were made for each fraction"".
 TRUTH CHECK:       The value is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set of extracted values (""Two replicate injections"", ""2"") covers the information provided in the paper.
+COMPLETENESS CHECK:    The full set of extracted values (""Two replicate injections"", ""2"") accurately and exhaustively captures the information provided in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -112,7 +125,8 @@ CORRECTED_VALUE:   NONE",""
 "PXD012143","ExperimentalDesignAgent","technical_replicates","2","Two replicate injections | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
 SOURCE CHECK:      The paper states, ""Two replicate injections were made for each fraction,"" which refers to the MS analysis of the samples.
 TRUTH CHECK:       The value ""2"" accurately reflects the ""two replicate injections"" mentioned in the text.
-COMPLETENESS CHECK:    The full set of extracted values (""Two replicate injections"", ""2"") correctly and exhaustively captures the technical replication described in the phosphoproteomics experiment.
+COMPLETENESS CHECK:    The full set of extracted values (""Two replicate injections"", ""2"") covers the information provided in the paper.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -120,21 +134,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012143","ExperimentalDesignAgent","experimental_design","Comparison of DMSO-treated vs RAP-treated samples in ACβ-HA:loxP and PKAc-HA:loxP parasite lines","Comparison of DMSO-treated vs RAP-treated samples in ACβ-HA:loxP and PKAc-HA:loxP parasite lines","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup (treated vs control), which fits the definition of experimental design.
-SOURCE CHECK:      The paper explicitly describes comparing DMSO-treated (control) and RAP-treated (conditional knockout) samples for both the ACβ-HA:loxP and PKAc-HA:loxP lines.
-TRUTH CHECK:       The value is factually correct based on the results and methods sections.
-COMPLETENESS CHECK: The full set of extracted values accurately captures the primary design of the phosphoproteomic and phenotypic experiments.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
+"PXD012143","ExperimentalDesignAgent","experimental_design","Comparison of DMSO-treated controls with RAP-treated counterparts in ACβ-HA:loxP and PKAc-HA:loxP lines","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the experimental setup, but it is a specific description of the groups rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The description is accurately derived from the text, which mentions comparing DMSO-treated controls with RAP-treated counterparts.
+TRUTH CHECK:       The factual content is correct.
+COMPLETENESS CHECK:The full set contains only this value, which is a specific description rather than a design category.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           high
+VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD012143","ExperimentalDesignAgent","factor_value","parasite line (ACβ-HA:loxP, PKAc-HA:loxP), treatment (DMSO, RAP)","parasite line (ACβ-HA:loxP, PKAc-HA:loxP), treatment (DMSO, RAP)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (genetic lines and drug treatments) being compared.
-SOURCE CHECK:      The paper explicitly describes using two transgenic lines (ACβ-HA:loxP and PKAc-HA:loxP) and treating them with either DMSO (control) or RAP (to induce gene excision).
-TRUTH CHECK:       The values are factually correct based on the ""Results"" and ""Methods"" sections.
-COMPLETENESS CHECK:    The full set captures the primary experimental factors used to generate the phosphoproteomic and phenotypic data.
+"PXD012143","ExperimentalDesignAgent","factor_value","line (ACβ-HA:loxP, PKAc-HA:loxP), treatment (DMSO, RAP)","line (ACβ-HA:loxP, PKAc-HA:loxP), treatment (DMSO, RAP)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (cell lines and treatments) used in the study, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions the transgenic lines (ACβ-HA:loxP and PKAc-HA:loxP) and the treatments (DMSO as vehicle and RAP to induce gene excision).
+TRUTH CHECK:       The values are factually correct based on the results and methods sections.
+COMPLETENESS CHECK: The full set captures the primary experimental factors (genetic background and induction treatment) used to compare the phosphoproteomes.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,9 +157,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD012143","ExperimentalDesignAgent","number_of_samples","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes two isobaric labelling experiments (ACβ-HA:loxP and PKAc-HA:loxP), each comparing three DMSO-treated samples and three RAP-treated samples (3+3=6 per experiment), totaling 12 samples.
-TRUTH CHECK:       The text explicitly states ""three DMSO-treated samples compared with the three RAP-treated"" for each of the two lines, confirming 12 samples were processed for the phosphoproteomics.
-COMPLETENESS CHECK: The full set of extracted values (12) accurately covers the total count of samples used in the MS experiments described.
+SOURCE CHECK:      The text describes two isobaric labelling experiments (one for ACβ-HA:loxP and one for PKAc-HA:loxP), each comparing three DMSO-treated samples against three RAP-treated samples (3+3 = 6 per experiment; 6 * 2 = 12 total).
+TRUTH CHECK:       The calculation is correct based on the ""Phosphoproteomics"" section: ""three DMSO-treated samples compared with the three RAP-treated"" for each of the two lines.
+COMPLETENESS CHECK: The full set of extracted values (12) accurately covers the total number of samples processed for the quantitative mass spectrometry experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

@@ -1,0 +1,134 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD044860","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The text explicitly mentions ""human liver mitochondrial lysate"" and ""utilizing Homo sapiens as the target species"".
+TRUTH CHECK:       The value is factually correct as the study uses human samples.
+COMPLETENESS CHECK: The full set contains the only species mentioned in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is a valid organ/tissue name.
+SOURCE CHECK:      The paper explicitly mentions ""human liver mitochondrial lysate"" in the abstract and ""Mitochondria isolated from liver tissue"" in the methods.
+TRUTH CHECK:       The value is factually correct as the source material was derived from liver tissue.
+COMPLETENESS CHECK: The full set of extracted values contains ""liver"", which is the only organ mentioned as the source of the samples.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","BiologicalAgent","material_type","human liver mitochondrial lysate","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the specific sample, but the field definition requires a ""Broad material class"" (e.g., ""tissue"", ""biofluid"").
+SOURCE CHECK:      The text explicitly mentions ""human liver mitochondrial lysate"" multiple times.
+TRUTH CHECK:       The value is factually correct regarding what was used, but it is too specific for the required category.
+COMPLETENESS CHECK: The full set contains only this specific description and fails to map it to the broad material classes defined in the field definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   tissue","tissue"
+"PXD044860","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper text explicitly mentions the use of a ""Thermo Scientific Fusion Lumos mass spectrometry system"".
+TRUTH CHECK:       The value is factually correct; ""Orbitrap"" is the mass analyzer type inherent to the Fusion Lumos system.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the proteomic analysis described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC), making ""label-free"" a safe default.
+TRUTH CHECK:       The experimental description of the LC-MS/MS process is consistent with a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","replicates","one biological repeat per peak","one biological repeat per peak","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""one biological repeat for each peak"" in the Experimental Design and Statistical Rationale section.
+TRUTH CHECK:       The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set of extracted values contains both ""one biological repeat per peak"" and ""3"". The ""3"" likely refers to the three peaks/samples processed, whereas the ""one biological repeat"" refers to the replication per sample. Together, they accurately reflect the experimental design described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","replicates","3","one biological repeat per peak","low","False","","False","False","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper states ""one biological repeat for each peak"" and mentions there were ""three major protein peaks"" (peak 1, peak 2, and peak 3).
+TRUTH CHECK:       The value ""3"" is a misinterpretation; the study performed one biological replicate *per sample/peak*, not three replicates for the experiment as a whole. The total number of samples is 3, but the number of biological replicates per condition/sample is 1.
+COMPLETENESS CHECK: The full set of extracted values is contradictory and contains an incorrect interpretation of the replicate count.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD044860","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not explicitly mention technical replicates; per the safe defaults rule, ""1"" is correct when the paper is silent.
+TRUTH CHECK:       The value is a valid default representation of the experimental setup described.
+COMPLETENESS CHECK: The full set contains the single default value, which is exhaustive given the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","experimental_design","validation of cryo-EM identified enzymes across three size-exclusion chromatography peaks","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the purpose/goal of the experiment rather than a standard study design type (e.g., case-control, time course).
+SOURCE CHECK:      The description is reasonably inferable from the text, which states that LC-MS/MS was used to ""validate the presence of these enzymes"" identified by the BaR (cryo-EM) methodology across the three peaks.
+TRUTH CHECK:       The statement is factually accurate regarding the experiment's intent.
+COMPLETENESS CHECK: The full set contains only this value, which describes the specific nature of this study's design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","factor_value","SEC peak (peak 1, peak 2, peak 3)","SEC peak (peak 1, peak 2, peak 3)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (the different size-exclusion chromatography fractions) used to group the samples.
+SOURCE CHECK:      The paper explicitly describes the separation of the mitochondrial lysate into ""three major protein peaks"" (peak 1, peak 2, and peak 3) using a Superdex 200 column (SEC).
+TRUTH CHECK:       It is factually correct that the study compared and analyzed these three distinct peaks to identify different enzyme structures.
+COMPLETENESS CHECK: The full set of extracted values captures the primary experimental factor used to differentiate the samples in this study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","fractions","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper explicitly states that ""Enrichment of the human liver mitochondrial lysate using size-exclusion chromatography resulted in three major protein peaks"" and ""We isolated three peaks based on the column separation.""
+TRUTH CHECK:       The value ""3"" accurately reflects the number of fractions (peaks) generated from the lysate for subsequent analysis.
+COMPLETENESS CHECK: The full set of extracted values contains only ""3"", which exhaustively covers the fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD044860","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper states that ""three enriched heterogeneous fractions"" (peak 1, peak 2, and peak 3) were prepared from human liver mitochondrial lysate and each was subjected to LC-MS/MS analysis.
+TRUTH CHECK:       The text confirms that three distinct samples (the three peaks from the size-exclusion chromatography) were processed for the proteomics analysis.
+COMPLETENESS CHECK: The full set of extracted values (""3"") accurately reflects the total count of samples processed in the proteomics part of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

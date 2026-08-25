@@ -1,7 +1,7 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD002049","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""human breast tumor xenograft"", ""human protein sequence database"", and ""human cancer"".
-TRUTH CHECK: The study focuses on colon and rectal carcinoma from human patients (TCGA and CHTN cohorts).
+TRUTH CHECK: The study focuses on colon and rectal carcinoma from human patients (TCGA) and normal human colon epithelium.
 COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which correctly identifies the primary source organism for the main study.
 
 TYPE_CORRECT: yes
@@ -11,10 +11,33 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD002049","BiologicalAgent","organ","colon","colon","medium","False","","True","False","False","TYPE CHECK: The candidate value ""colon"" is a valid organ/tissue type.
-SOURCE CHECK: The paper explicitly mentions ""colon and rectal carcinoma"" and ""normal colon epithelium"".
-TRUTH CHECK: The value is factually correct as the study focuses on colon and rectal tissues.
-COMPLETENESS CHECK: The full set [""colon""] is incomplete because the paper explicitly states the study includes ""rectal carcinoma"" as well.
+"PXD002049","BiologicalAgent","organ","colon","colon","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper explicitly mentions ""colon and rectal carcinoma"" and ""normal colon epithelium"".
+TRUTH CHECK:       The value is factually correct as the study focuses on colon and rectal tissues.
+COMPLETENESS CHECK: The full set only contains ""colon"", but the paper explicitly mentions ""rectal"" carcinoma as well.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""colon"", ""rectum""]","colon, rectum"
+"PXD002049","BiologicalAgent","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","TYPE CHECK: The candidate value ""epithelial cell"" describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK: The paper mentions ""normal epithelial samples"" and ""normal colon epithelium,"" from which ""epithelial cell"" is a reasonable extraction.
+TRUTH CHECK: The text explicitly refers to the normal samples as ""normal epithelial samples"" and ""normal colon epithelium.""
+COMPLETENESS CHECK: The full set contains ""epithelial cell,"" which covers the primary cell type described for the normal control group.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002049","BiologicalAgent","disease","carcinoma","carcinoma","medium","False","","True","False","False","TYPE CHECK: The candidate value ""carcinoma"" describes a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""colon and rectal carcinoma"" and ""carcinoma samples"" throughout the text.
+TRUTH CHECK: While ""carcinoma"" is correct, the paper specifically identifies the disease as ""colon and rectal carcinoma"" (or colorectal carcinoma).
+COMPLETENESS CHECK: The full set of extracted values (""carcinoma"") is too broad; it omits the specific anatomical site (colon and rectal) which is central to the study's definition of the disease state.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -22,34 +45,11 @@ VALUE_CORRECT: yes
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
-CORRECTED_VALUE: [""colon"", ""rectum""]","colon, rectum"
-"PXD002049","BiologicalAgent","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","TYPE CHECK:        The candidate value ""epithelial cell"" describes a primary cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""60 normal epithelial samples"" in the methods section under ""Summary"" and ""Normal colon epithelium"".
-TRUTH CHECK:       The text explicitly refers to ""normal epithelial samples"" and ""normal colon epithelium"", making ""epithelial cell"" a correct description of the cell type.
-COMPLETENESS CHECK: The full set contains ""epithelial cell"", which covers the primary cell type described for the normal control group.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD002049","BiologicalAgent","disease","carcinoma","carcinoma","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""carcinoma"" describes a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""colon and rectal carcinoma"" and ""carcinoma samples"" throughout the text.
-TRUTH CHECK:       The value is factually correct, although it is a general term for the specific cancers (colon and rectal) studied.
-COMPLETENESS CHECK:    The full set contains only ""carcinoma"", but the paper specifically identifies ""colon and rectal carcinoma"". While ""carcinoma"" is correct, it is a supertype of the specific diseases mentioned.
-
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""colon carcinoma"", ""rectal carcinoma""]","colon and rectal carcinoma"
-"PXD002049","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is a description of the donor, not a broad material class (e.g., tissue, cell line, biofluid).
-SOURCE CHECK:      The paper mentions patients, but the material actually used for the proteomics analysis was ""tumor blocks"" and ""biopsies"" (tissue).
-TRUTH CHECK:       The value is incorrect because ""patients"" is the source of the material, not the material type itself.
-COMPLETENESS CHECK:The full set is incorrect and does not cover the actual material used.
+CORRECTED_VALUE: [""colon and rectal carcinoma""]","colon and rectal carcinoma"
+"PXD002049","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is a description of the donor/subject, not a broad material class (e.g., tissue, biofluid) as required by the definition.
+SOURCE CHECK:      The paper mentions patients, but the material extracted from them was tissue (tumor blocks and biopsies).
+TRUTH CHECK:       The material actually used for the proteomics analysis was tissue, not ""patients"".
+COMPLETENESS CHECK:    The full set contains only ""patients"", which is the wrong category and fails to capture the actual material type.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -58,9 +58,9 @@ HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue""]","tissue"
 "PXD002049","BiologicalAgent","anatomic_site_tumor","colon","colon","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon"" is an anatomical location, which matches the definition for this field.
-SOURCE CHECK:      The paper title and abstract explicitly mention ""colon and rectal carcinoma,"" and the methods describe ""colon and rectal carcinomas"" and ""normal colon epithelium.""
-TRUTH CHECK:       The value is factually correct as the study focuses on tumors of the colon and rectum.
-COMPLETENESS CHECK:    The full set of extracted values only contains ""colon,"" but the paper explicitly mentions ""rectal carcinoma"" as well. Therefore, the set is incomplete.
+SOURCE CHECK:      The paper explicitly mentions ""colon and rectal carcinoma"" and ""colon epithelium"" throughout the text.
+TRUTH CHECK:       The value is factually correct as the study focuses on colon and rectal carcinomas.
+COMPLETENESS CHECK: The full set of extracted values only contains ""colon"", but the paper explicitly mentions ""rectal carcinoma"" as well.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -68,21 +68,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""colon"", ""rectum""]","colon, rectum"
-"PXD002049","BiologicalAgent","strain","WHIM16","WHIM16","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a specific identifier for a xenograft model, which fits the category of a strain/model.
-SOURCE CHECK:      The value ""WHIM16"" is explicitly mentioned in the text as a ""luminal human breast tumor xenograft"".
-TRUTH CHECK:       The value is factually correct as it identifies one of the xenograft strains used for quality control.
-COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also explicitly mentions ""WHIM2"" as the basal breast cancer subtype xenograft.
+"PXD002049","BiologicalAgent","strain","WHIM2","WHIM2","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a specific identifier for a xenograft model, which fits the category of a strain/model.
+SOURCE CHECK:      The value ""WHIM2"" is explicitly mentioned in the text as a ""basal breast cancer subtype"" xenograft.
+TRUTH CHECK:       The text identifies WHIM2 as a breast tumor xenograft used as a benchmark quality control sample.
+COMPLETENESS CHECK:    The full set of extracted values is missing ""WHIM16"", which is the other xenograft strain mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""WHIM16"", ""WHIM2""]","WHIM16, WHIM2"
-"PXD002049","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+CORRECTED_VALUE:   [""WHIM2"", ""WHIM16""]","WHIM2, WHIM16"
+"PXD002049","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK: The text explicitly mentions the ""Thermo LTQ Orbitrap Velos ion trap mass spectrometer"".
-TRUTH CHECK: The value is factually correct as stated in the paper.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned for the primary experiments.
+TRUTH CHECK: The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only instrument mentioned for the primary analysis.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -91,9 +91,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD002049","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper describes protein quantification based on ""spectral count data,"" and no isobaric or metabolic labels (like TMT or SILAC) are mentioned; therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The use of spectral counting confirms that the experiment was performed without the use of labels.
-COMPLETENESS CHECK: The full set of extracted values consists of this single correct value.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); it describes a spectral counting approach, which is a label-free quantification method.
+TRUTH CHECK:       The value is factually correct as the experiment used label-free quantification.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -101,21 +101,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002049","ExperimentalDesignAgent","replicates","90 carcinoma patients and 30 normal subjects","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the number of subjects/patients, which is the basis for biological replicates in a clinical study, but it is provided as a descriptive string rather than a numeric count.
-SOURCE CHECK:      The text mentions ""90 colon and rectal carcinomas"" (from 90 patients) and ""30 subjects with completely normal findings"".
+"PXD002049","ExperimentalDesignAgent","replicates","90 patients (TCGA) and 30 subjects (normal)","90 patients (TCGA) and 30 subjects (normal)","low","True","","False","True","False","TYPE CHECK:        The candidate value provides a count of patients/subjects, which is the correct category for biological replicates in a clinical study.
+SOURCE CHECK:      The text explicitly mentions ""90 patients"" for the TCGA tumor samples and ""30 subjects"" for the normal colon epithelium.
 TRUTH CHECK:       The values are factually correct based on the text.
-COMPLETENESS CHECK:    The full set of extracted values (""90 carcinoma patients and 30 normal subjects"" and ""120"") covers the total number of biological entities analyzed.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: replicates
+COMPLETENESS CHECK: The full set of extracted values includes both the breakdown by group and the total sum (120), which exhaustively covers the biological subjects described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           low
+VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002049","ExperimentalDesignAgent","replicates","120","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
-SOURCE CHECK:      The paper mentions 95 carcinoma specimens from 90 patients and 60 normal epithelial specimens from 30 subjects. The value ""120"" appears to be a summation of the number of subjects (90 + 30), not a count of biological replicates for a single condition.
-TRUTH CHECK:       The value is factually incorrect. In proteomics metadata, 'replicates' refers to the number of biological replicates per sample/condition. This study is a large cohort study with 120 distinct subjects (90 cancer, 30 normal), not 120 replicates of a single biological condition.
-COMPLETENESS CHECK:    The full set of extracted values is incorrect as it confuses the total number of subjects/samples with the number of biological replicates.
+"PXD002049","ExperimentalDesignAgent","replicates","120","90 patients (TCGA) and 30 subjects (normal)","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The value ""120"" is not explicitly mentioned as a replicate count; it appears to be a summation of the 90 patients and 30 subjects mentioned in the text.
+TRUTH CHECK:       The paper describes a study of 90 patients (TCGA) and 30 subjects (normal), totaling 120 distinct biological sources. However, these are independent samples/subjects in a cross-sectional study, not biological replicates of the same condition/group. In proteomics metadata, when each sample is a unique biological entity, the number of replicates per sample is 1.
+COMPLETENESS CHECK:    The full set of extracted values confuses the total number of samples with the number of biological replicates.
 
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -123,11 +123,11 @@ VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
+CORRECTED_VALUE:   1","1"
 "PXD002049","ExperimentalDesignAgent","technical_replicates","duplicate pieces","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""duplicate pieces"" is a description of sample collection, not a numeric count of technical replicates.
 SOURCE CHECK:      The text mentions ""5 patients’s tumors were provided as duplicate pieces,"" but this refers to biological sampling/specimens, not technical replicates of the MS analysis.
-TRUTH CHECK:       The candidate value is factually incorrect for this field; ""duplicate pieces"" refers to biological duplicates (multiple pieces of the same tumor), not technical replicates (repeated measurements of the same processed sample).
-COMPLETENESS CHECK: The full set contains ""duplicate pieces"" and ""2"", neither of which are supported as technical replicates in the text. The paper does not mention technical replicates for the MS analysis.
+TRUTH CHECK:       The value is factually incorrect for this field; ""duplicate pieces"" refers to biological duplicates (multiple pieces of the same tumor), not technical replicates (repeated analysis of the same processed sample).
+COMPLETENESS CHECK: The full set contains ""duplicate pieces"" and ""2"", neither of which are supported as technical replicates in the text.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
@@ -135,32 +135,22 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD002049","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK: No, the candidate value ""2"" is a numeric count, but the context in the paper does not describe technical replicates of the MS analysis.
-SOURCE CHECK: The paper mentions ""5 patients’s tumors were provided as duplicate pieces,"" which refers to biological sample duplicates (biological replicates), not technical replicates of the measurement process.
-TRUTH CHECK: No, there is no mention of performing technical replicates (multiple MS injections of the same peptide fraction) for the samples.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it confuses biological duplicates with technical replicates.
-TYPE_CORRECT: yes
+"PXD002049","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper mentions ""5 patients’s tumors were provided as duplicate pieces,"" but it does not state that any sample was analyzed in technical replicates (e.g., running the same digested peptide sample multiple times).
+TRUTH CHECK:       The mention of ""duplicate pieces"" refers to biological duplicates (multiple pieces of the same tumor), not technical replicates of the MS analysis. There is no evidence in the text that technical replicates were performed.
+COMPLETENESS CHECK:    The full set of extracted values is incorrect as it confuses biological duplicates with technical replicates.
+
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD002049","ExperimentalDesignAgent","experimental_design","comparison between colorectal carcinoma and normal colon epithelium","comparison between colorectal carcinoma and normal colon epithelium","high","False","","True","True","False","TYPE CHECK: The candidate value describes the study design as a comparison between two groups, which fits the definition of experimental design.
-SOURCE CHECK: The paper explicitly mentions the analysis of 95 carcinoma samples and 60 normal epithelial samples to understand proteomic differences.
-TRUTH CHECK: The value accurately reflects the experimental setup described in the text.
-COMPLETENESS CHECK: The full set of extracted values captures the primary design of the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD002049","ExperimentalDesignAgent","factor_value","condition (carcinoma, normal epithelium)","condition (carcinoma, normal epithelium)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (carcinoma vs. normal epithelium) being compared, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly compares ""95 carcinoma"" and ""60 normal epithelial samples"" (colon and rectal carcinoma vs. normal colon epithelium).
-TRUTH CHECK:       The value is factually correct as the study focuses on the proteomic differences between these two conditions.
-COMPLETENESS CHECK: The full set captures the primary experimental comparison described in the paper.
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD002049","ExperimentalDesignAgent","experimental_design","comparison between colon/rectal carcinoma and normal colon epithelium","comparison between colon/rectal carcinoma and normal colon epithelium","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design as a comparison between two groups, which fits the definition of experimental design.
+SOURCE CHECK:      The paper explicitly describes the analysis of 95 carcinoma samples and 60 normal epithelial samples to understand proteomic differences.
+TRUTH CHECK:       The value accurately reflects the experimental setup described in the abstract and methods.
+COMPLETENESS CHECK:    The full set of extracted values captures the primary design of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -168,21 +158,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002049","ExperimentalDesignAgent","fractions","15","15","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The text explicitly states, ""Each tumor sample yielded 15 concatenated peptide fractions"" and ""Each sample comprised the 15 bRPLC fractions.""
-TRUTH CHECK: The value ""15"" is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set of extracted values contains only ""15"", which is the only number of fractions mentioned for the samples in the paper.
-TYPE_CORRECT: yes
+"PXD002049","ExperimentalDesignAgent","factor_value","condition (carcinoma, normal epithelium)","condition (carcinoma, normal epithelium)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (carcinoma vs. normal epithelium) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly mentions the analysis of ""95 carcinoma and 60 normal epithelial samples"" and compares ""TCGA colorectal tissue samples"" with ""Normal colon epithelium biopsies.""
+TRUTH CHECK:       The value is factually correct as the study focuses on the proteomic differences between these two conditions.
+COMPLETENESS CHECK:    The full set of extracted values captures the primary experimental comparison described in the paper.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD002049","ExperimentalDesignAgent","number_of_samples","155","155","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD002049","ExperimentalDesignAgent","fractions","15","15","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The text explicitly states, ""Each tumor sample yielded 15 concatenated peptide fractions.""
+TRUTH CHECK:       The value is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values contains ""15"", which is the only number of fractions mentioned for the samples.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD002049","ExperimentalDesignAgent","number_of_samples","155","155","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
 SOURCE CHECK:      The paper mentions 95 carcinoma samples and 60 normal epithelial samples (95 + 60 = 155).
-TRUTH CHECK:       The sum of the primary experimental groups (95 carcinoma and 60 normal) is 155.
-COMPLETENESS CHECK: The full set contains the total count of the primary samples described in the study.
+TRUTH CHECK:       The calculation is factually correct based on the ""Methods"" section (""Analysis of the 95 carcinoma and 60 normal epithelial samples..."").
+COMPLETENESS CHECK: The full set of extracted values (155) covers the total count of the primary experimental samples described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

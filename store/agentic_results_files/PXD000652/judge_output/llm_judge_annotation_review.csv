@@ -1,7 +1,7 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD000652","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human cerebrospinal fluid (CSF)"" and ""human Swiss-Prot database,"" making ""Homo sapiens"" a correct and reasonable extraction.
-TRUTH CHECK: The study is performed on human volunteers, so ""Homo sapiens"" is factually correct.
+SOURCE CHECK: The paper explicitly mentions ""human cerebrospinal fluid (CSF)"" and ""human Swiss-Prot database"".
+TRUTH CHECK: The study uses samples from human volunteers, making ""Homo sapiens"" factually correct.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -10,10 +10,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD000652","BiologicalAgent","organ","cerebrospinal fluid, plasma","cerebrospinal fluid, plasma","high","False","","True","True","False","TYPE CHECK:        The candidate value describes body fluids, which are acceptable as organ/tissue of origin per the field definition.
-SOURCE CHECK:      The paper explicitly mentions the characterization of the ""cerebrospinal fluid (CSF) proteome"" and ""parallel plasma samples.""
-TRUTH CHECK:       The values are factually correct based on the text.
-COMPLETENESS CHECK:    The full set of extracted values covers both the primary focus (CSF) and the comparative sample (plasma) described in the study.
+"PXD000652","BiologicalAgent","organ","cerebrospinal fluid, plasma","cerebrospinal fluid, plasma","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to body fluids, which are acceptable as organ/tissue of origin per the field definition.
+SOURCE CHECK:      Both ""cerebrospinal fluid"" (CSF) and ""plasma"" are explicitly mentioned throughout the text as the sources of the proteins analyzed.
+TRUTH CHECK:       The values are factually correct based on the paper's description of the samples used.
+COMPLETENESS CHECK: The full set of extracted values covers all the source materials (CSF and plasma) described in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,21 +21,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000652","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
-SOURCE CHECK:      The paper explicitly states that the CSF pool was from ""21 neurologically healthy volunteers"" and refers to ""The Normal Cerebrospinal Fluid Proteome"".
-TRUTH CHECK:       The value is factually correct as the subjects were neurologically healthy.
-COMPLETENESS CHECK: The full set of extracted values (""normal"") covers the state of the subjects described in the paper.
-TYPE_CORRECT:      yes
+"PXD000652","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field, as the definition explicitly allows ""normal"" or ""healthy"" for healthy controls.
+SOURCE CHECK: The paper states that the CSF pool was from ""21 neurologically healthy volunteers"" and refers to the results as ""The Normal Cerebrospinal Fluid Proteome.""
+TRUTH CHECK: The value is factually correct as the subjects were neurologically healthy.
+COMPLETENESS CHECK: The full set of extracted values (""normal"") accurately and exhaustively covers the disease state of the subjects described in the paper.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD000652","BiologicalAgent","material_type","neurologically healthy volunteers","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""neurologically healthy volunteers"" describes the study subjects (donors), not the broad material class (e.g., biofluid, tissue).
-SOURCE CHECK:      The phrase is present in the text, but it refers to the source of the samples, not the material type itself.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000652","BiologicalAgent","material_type","neurologically healthy volunteers","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""neurologically healthy volunteers"" describes the study subjects/population, not the broad material class (e.g., biofluid, tissue).
+SOURCE CHECK:      The phrase is present in the text, but it refers to the donors, not the material type.
 TRUTH CHECK:       The value is factually incorrect for this field; the material used was cerebrospinal fluid (CSF) and plasma.
-COMPLETENESS CHECK: The full set contains only this incorrect value and fails to capture the actual material types used.
+COMPLETENESS CHECK: The full set is incorrect as it captures the subject description instead of the material type.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -43,22 +44,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""biofluid"", ""plasma""]","biofluid, plasma"
-"PXD000652","TechnicalAgent","instrument","Orbitrap Velos Pro","Orbitrap Velos Pro","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions an ""LTQ Orbitrap Velos Pro mass spectrometer (Thermo Fischer Scientific, Bremen, Germany)"".
-TRUTH CHECK:       The value is factually correct based on the provided text.
+"PXD000652","TechnicalAgent","instrument","Orbitrap Velos Pro","Orbitrap Velos Pro","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions the ""LTQ Orbitrap Velos Pro mass spectrometer (Thermo Fischer Scientific, Bremen, Germany)"".
+TRUTH CHECK: The value is factually correct as per the text.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
-TYPE_CORRECT:      yes
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD000652","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK: No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
-TRUTH CHECK: The experimental description focuses on protein mapping and identification without any mention of labels, making ""label-free"" factually correct.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
-
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD000652","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The experimental description focuses on protein mapping and identification without any mention of labeling reagents.
+COMPLETENESS CHECK: The full set contains only ""label-free"", which accurately describes the labeling state for all experiments in this paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -68,20 +68,19 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD000652","ExperimentalDesignAgent","replicates","pooled CSF from 21 neurologically healthy volunteers","1","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample source, not a numeric count of biological replicates.
 SOURCE CHECK:      The text mentions a ""CSF pool from 21 neurologically healthy volunteers,"" but this describes the composition of a single pooled sample, not the number of replicates.
-TRUTH CHECK:       The value is factually incorrect as a count of replicates; the study used a single pool (n=1) for the experiments.
-COMPLETENESS CHECK:   The full set contains both a descriptive phrase and ""1"". While ""1"" is the correct value for a pooled sample, the descriptive phrase is a type mismatch.
+TRUTH CHECK:       The value is factually present in the text but is not a ""number of biological replicates.""
+COMPLETENESS CHECK:   The full set includes ""1"", which is the correct safe default when a pool is used as a single sample and no further biological replication is mentioned.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD000652","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper describes using a ""CSF pool from 21 neurologically healthy volunteers"" and a ""plasma pool from 20 of the same individuals."" Since the analysis was performed on these single pools rather than individual biological replicates, the number of biological replicates for the MS analysis is 1.
-TRUTH CHECK:       Correct. The experiment used pooled samples, meaning there was only one biological replicate per condition/strategy.
-COMPLETENESS CHECK: The full set of extracted values includes ""1"" and a descriptive phrase about the pool. The value ""1"" correctly captures the number of biological replicates.
-
+CORRECTED_VALUE:   [""1""]","1"
+"PXD000652","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper describes using a ""CSF pool from 21 neurologically healthy volunteers"" and a ""plasma pool from 20 of the same individuals,"" indicating that the analysis was performed on a single pooled sample rather than individual biological replicates.
+TRUTH CHECK:       Since the samples were pooled, there is only one biological replicate (the pool itself) per experimental strategy.
+COMPLETENESS CHECK:    The full set of extracted values includes ""1"" and a description of the pool; ""1"" correctly represents the number of biological replicates for the analyzed samples.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -89,21 +88,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000652","ExperimentalDesignAgent","factor_value","condition (neurologically healthy)","condition (neurologically healthy)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental condition/variable, which fits the definition of a factor_value.
-SOURCE CHECK:      The paper explicitly states that samples were collected from ""neurologically healthy"" individuals.
-TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the primary condition studied; however, the study also compares CSF vs. plasma, which is a key experimental factor.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""condition (neurologically healthy)"", ""body fluid (CSF vs plasma)""]","condition (neurologically healthy), body fluid (CSF vs plasma)"
-"PXD000652","ExperimentalDesignAgent","fractions","179","179","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK:      The paper describes multiple fractionation strategies: SDS-PAGE (46 slices for depleted + 37 for bound = 83), Mixed Mode Global (66 for depleted + 10 for bound = 76), and Mixed Mode Glyco (20 fractions). Summing these (83 + 76 + 20) equals 179.
-TRUTH CHECK:       The value 179 is the sum of all fractions generated across the different experimental strategies described in the methods.
-COMPLETENESS CHECK: The full set contains only this value, which correctly aggregates the total number of fractions mentioned across the three distinct mapping strategies.
+"PXD000652","ExperimentalDesignAgent","factor_value","fractionation strategy (SDS-PAGE, mixed mode RP-AX, hydrazide-based glycopeptide capture)","fractionation strategy (SDS-PAGE, mixed mode RP-AX, hydrazide-based glycopeptide capture)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (different mapping strategies) used to characterize the proteome.
+SOURCE CHECK:      The paper explicitly states that the proteome was mapped using ""three different strategies"" (SDS-PAGE, mixed mode reversed phase-anion exchange, and hydrazide-based glycopeptide capture).
+TRUTH CHECK:       The value accurately reflects the experimental design where different fractionation/enrichment strategies were compared to maximize protein identification.
+COMPLETENESS CHECK: The full set captures the primary experimental variable (the strategy used) and lists the specific methods employed.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -111,14 +99,25 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD000652","ExperimentalDesignAgent","number_of_samples","1","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes the use of a ""CSF pool from 21 neurologically healthy volunteers"" and a ""plasma pool from 20 of the same individuals.""
-TRUTH CHECK:       The study processed two pools (one CSF pool and one plasma pool) as the primary starting materials for the various mapping strategies. A value of ""1"" is incorrect.
-COMPLETENESS CHECK: The full set contains only ""1"", which does not accurately reflect the two distinct pools (CSF and plasma) processed.
+"PXD000652","ExperimentalDesignAgent","fractions","multiple (46 for SDS-PAGE depleted, 66 for MM depleted, 10 for MM bound, 20 for glycopeptide capture)","multiple (46 for SDS-PAGE depleted, 66 for MM depleted, 10 for MM bound, 20 for glycopeptide capture)","high","False","","True","True","False","TYPE CHECK:        The candidate value provides numeric counts of fractions for different experimental arms, which matches the field definition.
+SOURCE CHECK:      The values are explicitly stated in the text: 46 slices for the depleted SDS-PAGE lane, 66 fractions for the MM depleted CSF sample, 10 fractions for the MM bound sample, and 20 fractions for the glycopeptide capture experiment.
+TRUTH CHECK:       The values are factually correct based on the ""Sample Preparation"" sections of the methods.
+COMPLETENESS CHECK:    The full set of extracted values covers all fractionation strategies described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   [""2""]","2"
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD000652","ExperimentalDesignAgent","number_of_samples","1","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK: The paper describes the use of a ""CSF pool from 21 neurologically healthy volunteers"" and a ""plasma pool from 20 of the same individuals.""
+TRUTH CHECK: The study processed two distinct pools (one CSF pool and one plasma pool) as the primary analytical units for the MS experiments. A value of ""1"" is incorrect as it ignores the plasma sample and the distinct nature of the pools.
+COMPLETENESS CHECK: The full set contains only ""1"", which does not accurately reflect the two pools processed.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 2","2"

@@ -1,8 +1,8 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD009266","","strict","Biological","cell_line","A549, H358, HepG2, HeLa, SMMC-7721, MCF7, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of cell line names, which matches the category for the cell_line field.
-SOURCE CHECK: While all these cell lines are mentioned in the paper, only A549 was used for the actual LC-MS/MS analysis (""Distinct isoforms of CCAR1 were immunoprecipitated... from A549 cells... analyzed on a Q-Exactive HF MS""). The others (H358, HepG2, HeLa, SMMC-7721, MCF7, HEK293T) were used for functional assays, expression checks, or transfection/validation experiments.
-TRUTH CHECK: The value is factually incorrect because it includes multiple cell lines that were not the source of the mass spectrometry samples.
-COMPLETENESS CHECK: The full set is incorrect as it over-includes unrelated cell lines.
+"PXD009266","","strict","Biological","cell_line","A549, H358, HepG2, HeLa, SMMC-7721, MCF7, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a list of cell line names, which matches the required category for this field.
+SOURCE CHECK: While all these cell lines are mentioned in the paper, only A549 was used for the actual LC-MS/MS analysis (IP-MS of CCAR1L and CCAR1S). The others (H358, HepG2, HeLa, SMMC-7721, MCF7, HEK293T) were used for functional assays, expression screening, or protein degradation studies, not for the mass spectrometry experiment.
+TRUTH CHECK: The value is factually incorrect because it includes multiple cell lines that were not the source of the MS sample.
+COMPLETENESS CHECK:The full set is incorrect as it conflates all mentioned cell lines with the MS sample source.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -11,10 +11,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: A549","A549"
 "PXD009266","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" is a valid cell type/lineage.
-SOURCE CHECK: The MS experiment used A549 cells (""A549 cells stably expressing Flag-CCAR1L and Flag-CCAR1S... were subjected to IP-MS analysis""), and A549 is a well-known human lung epithelial cell line.
-TRUTH CHECK: A549 cells are derived from alveolar epithelial cells of the lung, making ""epithelial cell"" a factually correct lineage.
-COMPLETENESS CHECK: The full set contains the correct lineage for the cell line used in the MS experiment.
-
+SOURCE CHECK: The MS sample was derived from A549 cells (""A549 cells stably expressing Flag-CCAR1L and Flag-CCAR1S... were subjected to IP-MS analysis""), and A549 is a well-known human lung epithelial cell line.
+TRUTH CHECK: A549 cells are established as an adenocarcinoma cell line of epithelial origin.
+COMPLETENESS CHECK: The full set contains only this value, which correctly describes the lineage of the A549 cells used for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,9 +22,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Biological","disease","lung cancer","lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""lung cancer"" is a disease state, which matches the field definition.
-SOURCE CHECK: The value is present in the paper; the MS experiment used A549 cells, which are explicitly described as ""lung cancer cells"" in the results section.
-TRUTH CHECK: The value is factually correct as the study focuses on the role of SRSF5 in lung cancer and uses lung cancer-derived cell lines for the IP-MS analysis.
-COMPLETENESS CHECK: The full set contains ""lung cancer"", which accurately describes the disease context of the biological material analyzed by MS.
+SOURCE CHECK: The value is present in the paper text; the MS experiment used A549 cells, which are described as ""lung cancer cells"" (e.g., ""Depletion of SRSF5 in A549 and H358 lung cancer cells..."").
+TRUTH CHECK: The value is factually correct as the proteomics analysis was performed on A549 lung cancer cells.
+COMPLETENESS CHECK: The full set contains ""lung cancer"", which accurately describes the disease state of the biological material analyzed by MS.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -34,9 +33,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Biological","organ","lung","lung","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""lung"" is a valid organ/tissue type.
-SOURCE CHECK: The MS sample was derived from A549 cells (""A549 cells stably expressing Flag-CCAR1L and Flag-CCAR1S... were subjected to IP-MS analysis""), and A549 is a well-known lung cancer cell line.
-TRUTH CHECK: A549 cells are derived from human lung carcinoma, making ""lung"" the correct organ of origin.
-COMPLETENESS CHECK: The full set contains ""lung"", which correctly describes the origin of the biological material used for the MS experiment.
+SOURCE CHECK: The MS samples were derived from A549 cells (""A549 cells stably expressing Flag-CCAR1L and Flag-CCAR1S... were subjected to IP-MS analysis""), and A549 is a well-known lung cancer cell line.
+TRUTH CHECK: The value is factually correct as A549 cells originate from lung tissue.
+COMPLETENESS CHECK: The full set contains ""lung"", which correctly describes the origin of the MS samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,11 +54,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","ExperimentalDesign","factor_value","CCAR1 isoform (CCAR1L, CCAR1S), glucose concentration, SRSF5 expression","CCAR1 isoform (CCAR1L, CCAR1S), glucose concentration, SRSF5 expression | lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes experimental variables (isoforms, glucose levels, protein expression), which fits the definition of factor_value.
-SOURCE CHECK: These factors are central to the MS experiment context; the IP-MS was specifically performed on A549 cells expressing different CCAR1 isoforms (CCAR1L vs CCAR1S), and the broader study focuses on the effects of glucose concentration and SRSF5 expression on these processes.
-TRUTH CHECK: The paper explicitly compares CCAR1L and CCAR1S in the IP-MS analysis and investigates the role of glucose and SRSF5 throughout the study.
-COMPLETENESS CHECK: The full set of extracted values includes the biological context (lung cancer) and the specific experimental variables, covering the primary axes of the study.
-
+"PXD009266","","strict","ExperimentalDesign","factor_value","CCAR1 isoform (CCAR1L, CCAR1S)","CCAR1 isoform (CCAR1L, CCAR1S) | lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (isoform type) being compared, which fits the definition of a factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context, where A549 cells expressing either Flag-CCAR1L or Flag-CCAR1S were subjected to IP-MS analysis.
+TRUTH CHECK: The paper explicitly compares the interactomes of the two CCAR1 isoforms (CCAR1L and CCAR1S) using mass spectrometry.
+COMPLETENESS CHECK: The full set of extracted values includes the primary experimental variable for the MS analysis (CCAR1 isoforms) and the disease context (lung cancer), covering the relevant design factors.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,10 +65,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","ExperimentalDesign","factor_value","lung cancer","CCAR1 isoform (CCAR1L, CCAR1S), glucose concentration, SRSF5 expression | lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""lung cancer"" is a valid category for a factor_value (representing a disease state).
-SOURCE CHECK: The value is present in the text; the MS experiment used A549 cells, which are described as ""lung cancer cells"".
+"PXD009266","","strict","ExperimentalDesign","factor_value","lung cancer","CCAR1 isoform (CCAR1L, CCAR1S) | lung cancer","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""lung cancer"" is a valid category for a factor_value as it describes a disease state/characteristic of the samples.
+SOURCE CHECK: The value is present in the text; the MS experiment used A549 cells, which are explicitly described as ""lung cancer cells"" in the results section.
 TRUTH CHECK: The value is factually correct as the study focuses on the role of SRSF5 and CCAR1 in lung cancer.
-COMPLETENESS CHECK: The full set of extracted values covers the primary biological variables (isoforms, glucose, SRSF5) and the disease context (lung cancer).
+COMPLETENESS CHECK: The full set of extracted values includes both the biological condition (lung cancer) and the specific experimental variable (CCAR1 isoforms), which together cover the primary axes of the IP-MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -79,10 +77,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The paper describes an LC-MS/MS workflow but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
+SOURCE CHECK: The paper describes an LC-MS/MS workflow but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) prior to LC-MS.
 TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" correctly represents the lack of fractionation for the samples described.
-
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -93,7 +90,7 @@ CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the replicates field.
 SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the LC-MS/MS analysis of CCAR1L and CCAR1S.
 TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
-COMPLETENESS CHECK: The full set contains only this value, which is the correct default for the described experiment.
+COMPLETENESS CHECK: The full set contains only this value, and since no other replicate count is mentioned for the MS experiment, it is complete.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -104,7 +101,29 @@ CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
 TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replication.
-COMPLETENESS CHECK: The value ""1"" is a complete representation of the available information (or lack thereof) in the text.
+COMPLETENESS CHECK: The full set contains only the default value, which is appropriate given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009266","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme name.
+SOURCE CHECK: The value is explicitly stated in the ""LC-MS/MS analysis"" section (""The MS analysis was performed in a data-dependent manner"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009266","","strict","Technical","fragment_mass_tolerance","50 mmu","50 mmu","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""50 mmu"" is explicitly stated in the LC-MS/MS analysis section of the methods, specifically referring to the tolerance of the product ions.
+TRUTH CHECK: The paper states, ""For the tolerance of the product ions, QE HF was set to 50 mmu,"" which confirms the value is correct for fragment mass tolerance.
+COMPLETENESS CHECK: The full set of extracted values contains this single correct value, which is exhaustive for this field.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -113,32 +132,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
-SOURCE CHECK: The value is explicitly stated in the ""LC-MS/MS analysis"" section (""The MS analysis was performed in a data-dependent manner"").
-TRUTH CHECK: The value is factually correct as described in the paper.
-COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
-SOURCE CHECK: The value ""9 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The paper explicitly states that the tolerance for product ions was ""50 mmu"" and the tolerance for precursor ions was ""20 p.p.m."".
-COMPLETENESS CHECK: The extracted value is incorrect and does not reflect the data in the paper.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 50 mmu","50 mmu"
 "PXD009266","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
 SOURCE CHECK: The paper explicitly states that ""All the tandem mass spectra were acquired using the higher-energy collision dissociation (HCD) method"".
-TRUTH CHECK: ""Higher-energy collision dissociation"" (HCD) is the same technique as ""beam-type collision-induced dissociation"" (B-CID), but the paper explicitly uses the term ""HCD"".
-COMPLETENESS CHECK: The full set contains only this value, which covers the fragmentation method described.
+TRUTH CHECK: ""Higher-energy collision dissociation (HCD)"" is the specific name for the beam-type collision-induced dissociation implemented in Orbitrap instruments; however, the paper explicitly uses the term ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, but it uses a synonym/description rather than the explicit term used in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -150,7 +147,7 @@ CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Technical","instrument","Q Exactive HF","Q Exactive HF","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section as the instrument used to analyze the IP samples.
 TRUTH CHECK: The paper states the samples ""were analyzed on a Q-Exactive HF MS (Thermo Fisher Scientific)"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the proteomics experiment in the text.
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned for the proteomics experiment; the set is exhaustive.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -159,11 +156,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
-SOURCE CHECK: The paper describes an IP-MS analysis of CCAR1L and CCAR1S using a Q-Exactive HF MS, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
-TRUTH CHECK: Since no labeling method is described, the ""label-free"" safe default is correct.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the lack of labeling described in the paper.
-
+"PXD009266","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: No isobaric, metabolic, or chemical labeling is mentioned in the LC-MS/MS analysis section or elsewhere in the paper, making ""label-free"" a safe default.
+TRUTH CHECK: The value is factually correct as the experiment describes a standard IP-MS workflow without labeling.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -173,9 +169,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
 SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section, describing the instrument used for the proteomics experiment.
-TRUTH CHECK: The text states that scans were ""acquired using an Orbitrap mass analyzer"".
-COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiment.
-
+TRUTH CHECK: The paper states that full scans and MS/MS were ""detected by the Orbitrap"", confirming the mass analyzer used.
+COMPLETENESS CHECK: The full set of extracted values contains the only mass analyzer mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -185,8 +180,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section of the methods.
-TRUTH CHECK: The paper states ""methionine oxidation were set as variable modifications,"" which is equivalent to ""Oxidation (M)"".
-COMPLETENESS CHECK: The full set of extracted values includes ""Deamidation (NQ)"" and ""Lysine oxidation..."", neither of which are mentioned in the text; only ""N-terminal protein acetylation"" and ""methionine oxidation"" are listed as variable modifications.
+TRUTH CHECK: The text states ""N-terminal protein acetylation and methionine oxidation were set as variable modifications,"" which confirms ""methionine oxidation"" (Oxidation (M)).
+COMPLETENESS CHECK: The full set of extracted values includes ""Deamidation (NQ)"" and ""Lysine oxidation..."", neither of which are mentioned in the text; however, the candidate value itself is correct.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -197,19 +192,19 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Technical","modification","Deamidation (NQ)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
 SOURCE CHECK: The value ""Deamidation (NQ)"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and is therefore not factually supported for this experiment.
+TRUTH CHECK: The value is not supported by the text; the paper only mentions ""N-terminal protein acetylation"" and ""methionine oxidation"" as variable modifications in the LC-MS/MS analysis section.
 COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: no
+VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009266","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
 SOURCE CHECK: The candidate value is not present in the paper text.
-TRUTH CHECK: The paper does not mention ""Lysine oxidation to aminoadipic semialdehyde"" as a searched modification.
+TRUTH CHECK: The paper does not mention ""Lysine oxidation to aminoadipic semialdehyde"" or any similar modification.
 COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
 
 TYPE_CORRECT: yes
@@ -219,14 +214,14 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009266","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""6 ppm"" is not present in the paper text; the text explicitly states ""The mass tolerance of the precursor ions was set to 20 p.p.m.""
-TRUTH CHECK: The value is factually incorrect based on the provided text.
-COMPLETENESS CHECK: The full set contains only this incorrect value.
+"PXD009266","","strict","Technical","precursor_mass_tolerance","20 p.p.m.","20 p.p.m.","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which matches the required category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""LC-MS/MS analysis"" section of the methods.
+TRUTH CHECK: The paper states, ""The mass tolerance of the precursor ions was set to 20 p.p.m."", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 20 p.p.m.","20 p.p.m."
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD008842","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+"PXD008842","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the definition of the species field.
 SOURCE CHECK:      The paper explicitly mentions ""human hepatocellular carcinoma cells"" and the use of the ""UniProt human protein sequence database"".
-TRUTH CHECK:       The use of human cells (HepG2, HEK293) confirms the species is Homo sapiens.
-COMPLETENESS CHECK: The full set contains the only species used for the primary proteomic analysis.
+TRUTH CHECK:       The use of human cell lines (HepG2, HeLa, HEK293) confirms the source organism is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the single correct species used for the proteomic profiling.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,10 +10,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008842","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK: The candidate value ""liver"" is a valid organ/tissue type.
-SOURCE CHECK: The paper mentions ""HepG2 liver cells"" in the results section.
-TRUTH CHECK: HepG2 is a human liver cancer cell line; therefore, ""liver"" is the correct organ of origin.
-COMPLETENESS CHECK: The full set contains ""liver"", which accurately describes the origin of the primary cell model used for the proteomics analysis.
+"PXD008842","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper specifies the use of ""HepG2 liver cells"" in the results section.
+TRUTH CHECK:       The cells used (HepG2) are a liver-derived cell line, making ""liver"" a factually correct description of the organ of origin.
+COMPLETENESS CHECK:   The full set contains ""liver"", which accurately describes the origin of the primary cells/cell lines used for the proteomic profiling.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD008842","BiologicalAgent","cell_type","hepatocellular carcinoma cells","hepatocellular carcinoma cells","high","False","","True","True","False","TYPE CHECK: The candidate value describes a cell lineage/type.
+SOURCE CHECK: The abstract explicitly mentions ""cultured human hepatocellular carcinoma cells"".
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the primary cell type used for the main discovery experiment (HepG2 cells are hepatocellular carcinoma cells).
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -21,20 +32,9 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008842","BiologicalAgent","cell_type","hepatocellular carcinoma cells","hepatocellular carcinoma cells","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a cell lineage/type.
-SOURCE CHECK:      The abstract explicitly mentions ""cultured human hepatocellular carcinoma cells"".
-TRUTH CHECK:       The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains the primary cell type used for the VISTA discovery experiments.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
 "PXD008842","BiologicalAgent","disease","hepatocellular carcinoma","hepatocellular carcinoma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""hepatocellular carcinoma"" is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The abstract explicitly mentions ""cultured human hepatocellular carcinoma cells"" and the results section specifies ""HepG2 liver cells"" (HepG2 is a well-known hepatocellular carcinoma cell line).
-TRUTH CHECK:       The value is factually correct based on the text.
+SOURCE CHECK:      The paper mentions ""cultured human hepatocellular carcinoma cells"" in the abstract.
+TRUTH CHECK:       The cells used (HepG2) are a hepatocellular carcinoma cell line, making this value factually correct.
 COMPLETENESS CHECK: The full set contains the only disease state mentioned for the primary experimental cells.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -45,19 +45,19 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008842","BiologicalAgent","material_type","HepG2 liver cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HepG2 liver cells"" is a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
 SOURCE CHECK:      The paper explicitly mentions the use of ""HepG2 liver cells"" for the proteomic analysis.
-TRUTH CHECK:       The value is factually correct as the source of the material.
-COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the source, but it uses a specific entity name instead of the broad category.
+TRUTH CHECK:       The value is factually correct regarding the cells used, but it is a specific entity rather than a broad material class.
+COMPLETENESS CHECK: The full set contains only this specific value, which is a subtype of the required broad category.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
-VALUE_COMPLETE:    yes
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   cell line","cell line"
-"PXD008842","BiologicalAgent","anatomic_site_tumor","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is an anatomical site, which fits the category for this field.
+"PXD008842","BiologicalAgent","anatomic_site_tumor","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is an anatomical location, which fits the category for this field.
 SOURCE CHECK:      The paper mentions ""human hepatocellular carcinoma cells"" and ""HepG2 liver cells""; hepatocellular carcinoma is a liver tumor.
-TRUTH CHECK:       The cells used (HepG2) are derived from a liver tumor (hepatocellular carcinoma).
-COMPLETENESS CHECK: The full set contains ""liver"", which accurately describes the anatomical site of the tumor from which the cell line was derived.
+TRUTH CHECK:       The cells used (HepG2) are derived from a liver tumor (hepatocellular carcinoma), making ""liver"" the correct anatomical site.
+COMPLETENESS CHECK: The full set of extracted values (""liver"") covers the anatomical origin of the tumor cells used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -67,32 +67,30 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008842","BiologicalAgent","cell_line","HepG2","HepG2","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HepG2"" is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK:      The paper explicitly mentions ""HepG2 liver cells"" and ""HepG2 cells (American Type Culture Collection)"" in the results and methods sections.
-TRUTH CHECK:       The value is factually correct as HepG2 was the primary cell line used for the ERAD-VISTA proteomic profiling.
-COMPLETENESS CHECK:    While other cell lines (HEK293, HeLa, CHO-K1, NIH3T3-L1) are mentioned in the text for validation or control experiments, the core proteomic experiment described in the ""Global analysis..."" section was performed specifically in HepG2 cells. However, for a complete picture of all cell lines used in the study, the others should be included.
-
+TRUTH CHECK:       The value is factually correct as HepG2 cells were the primary model used for the proteomic profiling of ERAD substrates.
+COMPLETENESS CHECK:The paper also mentions ""HEK293 cells"", ""CHO-K1"", ""HeLa"", and ""NIH3T3-L1"" cells in various contexts (stable line generation, validation, and comparison). The current set only contains ""HepG2"", missing these other cell lines used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""HepG2"", ""HEK293"", ""HeLa"", ""CHO-K1"", ""NIH3T3-L1""]","HepG2, HEK293, HeLa, CHO-K1, NIH3T3-L1"
-"PXD008842","TechnicalAgent","instrument","Q Exactive Plus","","low","False","","False","False","True","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The paper text mentions a ""Q Exactive Orbitrap mass spectrometer"", but it does not explicitly state ""Plus"".
-TRUTH CHECK: The text specifies ""Q Exactive Orbitrap"", not ""Q Exactive Plus"". While ""Plus"" is a common model in the Q Exactive series, it is not mentioned in this text.
+CORRECTED_VALUE:   [""HepG2"", ""HEK293"", ""CHO-K1"", ""HeLa"", ""NIH3T3-L1""]","HepG2, HEK293, HeLa, CHO-K1, NIH3T3-L1"
+"PXD008842","TechnicalAgent","instrument","Q Exactive Plus","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper mentions a ""Q Exactive Orbitrap mass spectrometer"", but does not explicitly state ""Plus"".
+TRUTH CHECK:       The text specifies ""Q Exactive Orbitrap"", not ""Q Exactive Plus"". While ""Plus"" is a common model in the Q Exactive series, it is not mentioned in the provided text.
 COMPLETENESS CHECK: The full set contains only this value, which is an inaccurate specific model.
-
-TYPE_CORRECT: yes
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: [""Q Exactive Orbitrap""]","Q Exactive Orbitrap"
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""Q Exactive Orbitrap""]","Q Exactive Orbitrap"
 "PXD008842","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
 SOURCE CHECK:      The paper explicitly states, ""Cells were labeled by stable isotope labeling with amino acids in cell culture (SILAC)"".
 TRUTH CHECK:       The value is factually correct as described in the methods section.
-COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method mentioned in the paper.
+COMPLETENESS CHECK: The full set contains ""SILAC"", which is the only labeling method mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -100,21 +98,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008842","ExperimentalDesignAgent","replicates","4 independent experiments","4 independent experiments | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to the number of independent experiments, which is the correct category for biological replicates.
-SOURCE CHECK:      The text explicitly states, ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
-TRUTH CHECK:       The value ""4"" is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values (""4 independent experiments"", ""4"") correctly and exhaustively captures the number of replicates described in the paper.
-TYPE_CORRECT:      yes
+"PXD008842","ExperimentalDesignAgent","replicates","4 independent experiments","4 independent experiments | 4","high","False","","True","True","False","TYPE CHECK: The candidate value describes the number of independent experiments, which corresponds to biological replicates.
+SOURCE CHECK: The paper explicitly states, ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
+TRUTH CHECK: The value is factually correct.
+COMPLETENESS CHECK: The full set of extracted values (""4 independent experiments"", ""4"") correctly and exhaustively captures the number of replicates mentioned in the text.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008842","ExperimentalDesignAgent","replicates","4","4 independent experiments | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of biological replicates.
-SOURCE CHECK:      The paper explicitly states that ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008842","ExperimentalDesignAgent","replicates","4","4 independent experiments | 4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
+SOURCE CHECK:      The paper states, ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
 TRUTH CHECK:       The value ""4"" correctly reflects the number of independent experiments (biological replicates) performed for the proteomic analysis.
-COMPLETENESS CHECK: The full set of extracted values (""4 independent experiments"", ""4"") accurately and exhaustively captures the replication information provided in the text.
+COMPLETENESS CHECK: The full set of extracted values (""4 independent experiments"", ""4"") is exhaustive and correctly captures the information in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -122,10 +121,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008842","ExperimentalDesignAgent","experimental_design","SILAC-based comparison of vehicle vs CB5083 treatment","SILAC-based comparison of vehicle vs CB5083 treatment","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparison of treated vs control using a specific labeling method), which fits the definition.
-SOURCE CHECK:      The text explicitly states that cells were labeled by SILAC and treated with vehicle (light) or CB5083 (heavy) for proteomic analysis.
-TRUTH CHECK:       The value accurately reflects the experimental setup described in the ""Global analysis of trapped, ubiquitinated proteins..."" section.
-COMPLETENESS CHECK: The full set contains this single value, which comprehensively describes the primary experimental design for the proteomics discovery phase.
+"PXD008842","ExperimentalDesignAgent","experimental_design","SILAC comparison between vehicle and CB5083 treatment","SILAC comparison between vehicle and CB5083 treatment","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup and comparison, which fits the category of study design.
+SOURCE CHECK:      The text explicitly states that cells were labeled by SILAC and treated with ""vehicle (light) or CB5083 (heavy)"".
+TRUTH CHECK:       The value accurately reflects the experimental design described in the paper.
+COMPLETENESS CHECK:   The full set contains this single value, which comprehensively describes the primary experimental design used for the proteomic profiling.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -133,8 +132,8 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008842","ExperimentalDesignAgent","factor_value","treatment (vehicle, CB5083)","treatment (vehicle, CB5083)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (treatment) and its specific levels (vehicle and CB5083), which fits the definition of factor_value.
-SOURCE CHECK:      The paper explicitly states that cells were ""treated with vehicle (light) or CB5083 (heavy)"" in the ""Global analysis of trapped, ubiquitinated proteins"" section.
+"PXD008842","ExperimentalDesignAgent","factor_value","treatment (vehicle, CB5083)","treatment (vehicle, CB5083)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (treatment) and its levels, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly mentions treating cells with ""vehicle (light) or CB5083 (heavy)"" in the results section.
 TRUTH CHECK:       The value is factually correct as the study compares the effects of the VCP inhibitor CB5083 against a vehicle control.
 COMPLETENESS CHECK:   The full set of extracted values captures the primary experimental variable used for the proteomic profiling.
 TYPE_CORRECT:      yes
@@ -144,10 +143,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008842","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK:      The paper describes a ""differential fractionation"" to separate membrane and cytosolic fractions, but it does not describe an offline peptide fractionation step (like high-pH RP or SCX) before LC-MS/MS.
-TRUTH CHECK:       Since no multi-fraction peptide fractionation scheme was used prior to MS analysis, the default value of ""1"" is correct.
-COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of peptide fractionation described in the methods.
+"PXD008842","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes the use of ""membrane fractions"" (differential centrifugation), but it does not describe an offline peptide/protein fractionation step (like high-pH RP or SCX) prior to LC-MS/MS.
+TRUTH CHECK:       Since no peptide-level fractionation is mentioned, the safe default of ""1"" is appropriate.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which correctly reflects the lack of fractionation described in the methods.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -156,9 +155,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008842","ExperimentalDesignAgent","number_of_samples","4","4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text states that ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
-TRUTH CHECK:       The ""four independent experiments"" refer to the proteomic runs performed to identify the substrates. In the context of this quantitative SILAC experiment (light vs heavy), each ""experiment"" typically constitutes a sample pair or a biological replicate set.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the number of independent proteomic experiments described.
+SOURCE CHECK:      The text states ""Proteomic analysis of diGly-modified peptides purified from membrane fractions identified a total of 5573 diGly-modified peptides across four independent experiments"".
+TRUTH CHECK:       The paper describes four independent experiments for the proteomic analysis.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the number of independent experimental runs/samples described for the MS analysis.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

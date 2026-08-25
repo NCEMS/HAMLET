@@ -1,20 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD003772","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""mice"" and specifies ""Mus musculus for the taxonomy"" in the MS/MS data analysis section.
-TRUTH CHECK:       The value is factually correct as the primary experimental subjects were mice.
-COMPLETENESS CHECK: The full set contains ""Mus musculus"", which covers the primary source organism for the proteomics experiments. (Note: While human samples were used for WB verification, the proteomics metadata typically focuses on the MS-analyzed samples).
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003772","BiologicalAgent","organ","plasma","plasma","high","False","","True","True","False","TYPE CHECK: The candidate value ""plasma"" is a valid organ/tissue type according to the field definition.
-SOURCE CHECK: The paper explicitly mentions ""plasma microparticle protein content"" and ""plasma MP"" throughout the text.
-TRUTH CHECK: The proteins were extracted from microparticles derived from plasma.
-COMPLETENESS CHECK: The full set of extracted values (""plasma"") accurately covers the source material described in the paper.
-
+"PXD003772","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK: The candidate value ""Mus musculus"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""mice"" throughout and specifies ""Mus musculus for the taxonomy"" in the protein identification section of the methods.
+TRUTH CHECK: The primary proteomics experiments were performed using mouse models (DBA/1 and C57BL/6).
+COMPLETENESS CHECK: While human samples were used for Western Blot verification, the core proteomics experiments (the focus of the metadata extraction) were performed on Mus musculus. The set is complete for the proteomics part of the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -22,44 +10,66 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003772","BiologicalAgent","cell_type","microparticles","","low","True","","False","False","False","TYPE CHECK: No, ""microparticles"" (extracellular vesicles) are not a primary cell type or lineage.
-SOURCE CHECK: Yes, the paper focuses on plasma microparticles (MP).
-TRUTH CHECK: No, microparticles are membrane-bound vesicles shed from cells, not the cells themselves.
-COMPLETENESS CHECK: The full set contains only this incorrect value.
-TYPE_CORRECT: no
+"PXD003772","BiologicalAgent","organ","plasma","plasma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""plasma"" is a valid organ/tissue type as per the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""plasma microparticles"" and ""plasma MP"" throughout the text.
+TRUTH CHECK:       The proteins were extracted from microparticles derived from plasma.
+COMPLETENESS CHECK: The full set of extracted values (""plasma"") correctly identifies the source material described in the paper.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD003772","BiologicalAgent","disease","non-infected, P. berghei ANKA-infected","non-infected, P. berghei ANKA-infected","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the disease/infection state of the subjects, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""non-infected and P. berghei ANKA-infected mice"" in the abstract and results.
-TRUTH CHECK:       The values are factually correct based on the experimental groups described.
-COMPLETENESS CHECK: The full set covers the primary experimental groups, but the paper also specifically identifies the infected state as ""experimental cerebral malaria (ECM)"" and mentions ""cerebral malaria (CM)"" and ""asymptomatic malaria (AM)"" in the context of human samples.
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003772","BiologicalAgent","cell_type","microparticles","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""microparticles"" refers to extracellular vesicles, not a primary cell type or lineage.
+SOURCE CHECK:      The paper describes the study of plasma microparticles (MP).
+TRUTH CHECK:       Microparticles are not cells; they are membrane-bound vesicles released by cells.
+COMPLETENESS CHECK: The full set contains only an incorrect entity type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD003772","BiologicalAgent","disease","experimental cerebral malaria","experimental cerebral malaria","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a disease state/pathological condition, which matches the field definition.
+SOURCE CHECK:      The term ""experimental cerebral malaria"" is explicitly mentioned multiple times in the title, abstract, and results sections.
+TRUTH CHECK:       The value is factually correct as the study focuses on the protein cargo of microparticles during experimental cerebral malaria (ECM).
+COMPLETENESS CHECK:    The full set contains only this value; however, the paper also describes ""non-infected"" (NI) mice as controls. According to the definition, ""normal"" or ""healthy"" should be included for healthy controls.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""non-infected"", ""P. berghei ANKA-infected"", ""experimental cerebral malaria"", ""cerebral malaria"", ""asymptomatic malaria""]",""
-"PXD003772","BiologicalAgent","material_type","mice","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""mice"" refers to a whole organism, which is a category listed in the material_type definition.
-SOURCE CHECK:      The paper explicitly mentions using mice (DBA/1 and C57BL/6) as the source of the samples.
-TRUTH CHECK:       While mice were the subjects, the material actually analyzed by mass spectrometry was ""plasma microparticles"" (MP) derived from ""platelet free plasma"" (PFP).
-COMPLETENESS CHECK:   The full set only contains ""mice"", but the actual material processed for proteomics was a biofluid/plasma derivative (microparticles).
+CORRECTED_VALUE:   [""experimental cerebral malaria"", ""normal""]","experimental cerebral malaria, non-infected"
+"PXD003772","BiologicalAgent","material_type","mice","","low","True","","False","False","False","TYPE CHECK: No, ""mice"" is an organism/whole organism, but the material actually analyzed in the proteomics experiments was plasma microparticles.
+SOURCE CHECK: The paper mentions mice, but the material processed for MS was ""plasma MP"" (microparticles).
+TRUTH CHECK: No, the material type should describe the broad class of the sample analyzed. While mice were the source, the specific material used for the proteomics was plasma-derived microparticles (biofluid/plasma).
+COMPLETENESS CHECK: The full set is incorrect as it identifies the subject rather than the material type.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE","plasma"
+"PXD003772","BiologicalAgent","strain","DBA/1","DBA/1","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mouse strain, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""DBA/1 and C57BL/6 CM-susceptible mice"" in the Methods section.
+TRUTH CHECK: The value is factually correct as it is one of the strains used in the study.
+COMPLETENESS CHECK: The full set of extracted values only contains ""DBA/1"", but the paper also explicitly mentions ""C57BL/6"" mice were used for verification experiments. Therefore, the set is incomplete.
 
-TYPE_CORRECT:      yes
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   [""plasma""]","plasma"
-"PXD003772","BiologicalAgent","strain","DBA/1, C57BL/6","DBA/1, C57BL/6","high","False","","True","True","False","TYPE CHECK: The candidate value contains names of mouse strains, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""DBA/1 and C57BL/6 CM-susceptible mice"" in the Methods section.
-TRUTH CHECK: The values are factually correct as they are the strains used in the study.
-COMPLETENESS CHECK: The full set of extracted values covers all mouse strains mentioned in the text.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""DBA/1"", ""C57BL/6""]","DBA/1, C57BL/6"
+"PXD003772","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The paper explicitly mentions ""Tandem mass spectrometry analyses were performed on a QExactive Orbitrap Plus (Thermo Electron)"".
+TRUTH CHECK: ""Q Exactive Plus"" is a correct representation of the ""QExactive Orbitrap Plus"" mentioned in the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the proteomics experiments in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,21 +77,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003772","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Tandem mass spectrometry analyses were performed on a QExactive Orbitrap Plus (Thermo Electron)"".
-TRUTH CHECK:       The value ""Q Exactive Plus"" is a correct representation of the ""QExactive Orbitrap Plus"" mentioned in the text.
-COMPLETENESS CHECK: The full set contains the only instrument used for the MS analyses described in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
 "PXD003772","TechnicalAgent","label","Tandem Mass TagTM (TMT)","Tandem Mass TagTM (TMT)","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific isobaric labeling method, which matches the field definition.
 SOURCE CHECK:      The text explicitly mentions ""Tandem Mass TagTM (TMT) isobaric labelling technology"" in the Results section.
 TRUTH CHECK:       The value is factually correct as described in the paper.
-COMPLETENESS CHECK: The full set contains the only labeling method used for the quantitative proteomics experiments.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the labeling method used for the quantitative experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -89,44 +88,44 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003772","ExperimentalDesignAgent","replicates","Individual mice (NI, d3 pi, and ECM groups)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample groups, not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions ""Individual mice"" and specific group sizes (n=4 per group for TMT6), but the candidate value itself is a description.
-TRUTH CHECK:       The candidate value does not provide the number of replicates; it describes the subjects.
-COMPLETENESS CHECK: The full set contains ""14"", which refers to the total number of mice used for proteomics, but the specific biological replicates per group for the main quantitative experiment were 4.
+"PXD003772","ExperimentalDesignAgent","replicates","mice","14","low","True","","False","False","False","TYPE CHECK:        No, the candidate value ""mice"" is an organism/subject type, not a numeric count of biological replicates.
+SOURCE CHECK:      The word ""mice"" is present in the text, but it does not represent the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains ""mice"" (incorrect type) and ""14"" (which refers to the total number of mice used for proteomics, but the experimental design specifically mentions n=4 per group for the TMT6 experiments).
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""4""]","4"
-"PXD003772","ExperimentalDesignAgent","replicates","14","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper states ""A total of n = 14 DBA/1 mice were used to perform proteomics experiments"".
-TRUTH CHECK:       The value 14 represents the total number of biological samples/mice used for the proteomics experiments, not the number of replicates per group. The text specifies n=4 for NI, n=4 for d3 pi, and n=4 for ECM in the TMT6 experiments, and 2 mice for the TMT0 experiment (1 NI, 1 ECM).
-COMPLETENESS CHECK:    The full set of extracted values is inconsistent; one is a description and the other is the total sample count, neither of which correctly identifies the number of biological replicates per condition.
+CORRECTED_VALUE:   NONE",""
+"PXD003772","ExperimentalDesignAgent","replicates","14","14","high","False","","True","True","False","TYPE CHECK:        The candidate value ""14"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper states in the methods section: ""A total of n = 14 DBA/1 mice were used to perform proteomics experiments"".
+TRUTH CHECK:       The value is factually correct as it represents the total number of biological subjects (mice) used for the proteomics part of the study.
+COMPLETENESS CHECK:    The full set of extracted values includes ""mice"" (which is a type mismatch) and ""14"". Together, they identify the number of biological replicates for the proteomics experiments.
 
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003772","ExperimentalDesignAgent","technical_replicates","parallel experiments","2","low","True","","False","False","False","TYPE CHECK:        The candidate value ""parallel experiments"" is a description of a procedure, not a numeric count of replicates.
+SOURCE CHECK:      The text mentions ""two parallel experiments were performed,"" but this refers to the overall experimental design (TMT6-1 and TMT6-2) rather than technical replicates per sample.
+TRUTH CHECK:       The value is not a correct representation of technical replicates; it describes the repetition of the entire experiment.
+COMPLETENESS CHECK:    The full set contains ""2"", which is an attempt to quantify the parallel experiments, but the text does not explicitly state that each sample was run in technical replicate.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""4""]","4"
-"PXD003772","ExperimentalDesignAgent","technical_replicates","two parallel TMT6 experiments","2","low","True","","False","False","False","TYPE CHECK: No. The candidate value is a description of the experimental setup (""two parallel TMT6 experiments""), not a numeric count of technical replicates per sample.
-SOURCE CHECK: Yes, the text mentions ""two parallel experiments were performed"" and ""two parallel TMT6 experiments"".
-TRUTH CHECK: No. Performing two parallel experiments (where each experiment contains a set of biological replicates) is not the same as performing technical replicates for each individual sample.
-COMPLETENESS CHECK: The full set contains ""2"", which is a numeric interpretation of the ""two parallel experiments"", but the paper does not explicitly state that these were technical replicates of the same samples; rather, they appear to be independent experimental runs.
-TYPE_CORRECT: no
-CORRECT_TYPE_NAME: technical_replicates
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: NONE",""
+CORRECTED_VALUE:   NONE",""
 "PXD003772","ExperimentalDesignAgent","technical_replicates","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The text states ""two parallel experiments were performed"" and ""two parallel TMT6 experiments (TMT6-1 and TMT6-2)"", indicating the samples were analyzed in duplicate.
-TRUTH CHECK:       The value ""2"" correctly reflects the two parallel experiments described.
-COMPLETENESS CHECK:    The full set of extracted values (""two parallel TMT6 experiments"", ""2"") accurately captures the technical replication described in the paper.
+SOURCE CHECK:      The paper states that ""two parallel experiments were performed"" (TMT6-1 and TMT6-2) to analyze the same groups of samples.
+TRUTH CHECK:       Performing two parallel experiments for the same sample sets constitutes 2 technical replicates.
+COMPLETENESS CHECK:   The full set of extracted values (""parallel experiments"", ""2"") correctly identifies that there were two technical replicates.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -134,10 +133,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003772","ExperimentalDesignAgent","factor_value","infection status/time point (NI, d3 pi, ECM)","infection status/time point (NI, d3 pi, ECM)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (infection status and time point) and their specific levels, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly compares non-infected (NI), day 3 post-infection (d3 pi), and experimental cerebral malaria (ECM) mice.
-TRUTH CHECK:       The value accurately reflects the experimental groups used in the quantitative proteomics and verification experiments.
-COMPLETENESS CHECK: The full set captures the primary experimental variables and their levels described in the study.
+"PXD003772","ExperimentalDesignAgent","factor_value","infection status (non-infected, d3 pi, ECM)","infection status (non-infected, d3 pi, ECM)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (infection status) and its levels, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly compares ""non-infected"", ""d3 pi"" (day 3 post-infection), and ""ECM"" (experimental cerebral malaria) mice.
+TRUTH CHECK:       The value is factually correct based on the experimental design described in the results and methods.
+COMPLETENESS CHECK: The full set captures the primary experimental variable and all its levels used in the proteomics experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -145,21 +144,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003772","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
-TRUTH CHECK:       The value is correct as no fractionation was performed.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
-TYPE_CORRECT:      yes
+"PXD003772","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK: Since no fractionation was performed, the value ""1"" is factually correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003772","ExperimentalDesignAgent","number_of_samples","14","14","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition of number_of_samples.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD003772","ExperimentalDesignAgent","number_of_samples","14","14","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The text states ""A total of n = 14 DBA/1 mice were used to perform proteomics experiments"".
-TRUTH CHECK:       The value 14 refers specifically to the mice used for the proteomics experiments, but the study also includes verification experiments with additional mice (n=16 DBA/1 and n=8 C57BL/6) and human clinical samples (n=21 total: 7 CM, 7 AM, 7 CC).
-COMPLETENESS CHECK:    The full set only contains ""14"", which ignores the verification cohorts and the human samples, thus failing to represent the total count of samples processed in the study.
+TRUTH CHECK:       The value 14 refers specifically to the mice used for the proteomics experiments, but the study also includes verification experiments (WB) using 16 DBA/1 mice, 8 C57BL/6 mice, and 21 human samples (7 CM, 7 AM, 7 CC).
+COMPLETENESS CHECK: The full set of extracted values (only ""14"") only covers the proteomics cohort and ignores the verification cohorts, making it an incomplete representation of the total samples processed in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

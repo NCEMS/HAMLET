@@ -13,13 +13,13 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for an organism, which matches the species field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"Mouse E14 and J1 ESCs\" and \"mouse mm10 genome assembly,\" making \"Mus musculus\" a correct and inferable value.",
-        "TRUTH_CHECK": "The study uses mouse embryonic stem cells (ESCs), so \"Mus musculus\" is factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the primary experiments described."
+        "TRUTH_CHECK": "The study uses mouse embryonic stem cells (ESCs), and \"Mus musculus\" is the scientific name for mouse.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct species used for the primary experiments."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "embryonic stem cells",
+      "extracted_value": "ESCs",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -27,10 +27,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"embryonic stem cells\" describes a cell lineage/type, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"embryonic stem cells (ESCs)\" multiple times in the abstract and results.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on the role of FACT in ESCs.",
-        "COMPLETENESS_CHECK": "The full set contains \"embryonic stem cells\", which covers the primary cell type used in the main experiments."
+        "TYPE_CHECK": "The candidate value \"ESCs\" (Embryonic Stem Cells) refers to a cell lineage/type.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"embryonic stem cells (ESCs)\" throughout the abstract and results.",
+        "TRUTH_CHECK": "The value is factually correct as the primary cell type used in the experiments.",
+        "COMPLETENESS_CHECK": "The full set contains \"ESCs\", which covers the primary cell lineage used for the main findings of the study."
       }
     },
     {
@@ -44,9 +44,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field when describing healthy controls.",
-        "SOURCE_CHECK": "The paper uses embryonic stem cells (ESCs) as the experimental model; while \"normal\" is not explicitly written, it is a safe default for the baseline/wild-type state of the cells.",
-        "TRUTH_CHECK": "The study compares wild-type (WT) ESCs to Ssrp1 knockout cells, making \"normal\" a factually correct description of the control group.",
-        "COMPLETENESS_CHECK": "The full set contains \"normal\", which accurately covers the baseline state of the subjects in this study."
+        "SOURCE_CHECK": "The paper uses embryonic stem cells (ESCs) and wild-type (WT) cells as controls; \"normal\" is a safe default for these healthy/non-diseased states.",
+        "TRUTH_CHECK": "The experiment involves genetic manipulations (knockouts/knockdowns) of healthy ESC lines, making \"normal\" a factually correct description of the baseline state.",
+        "COMPLETENESS_CHECK": "The full set contains \"normal\", which accurately covers the disease state of the subjects in this study."
       }
     },
     {
@@ -78,7 +78,7 @@
         "TYPE_CHECK": "The candidate value is a name of a cell line, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"E14 ESCs\" multiple times in the results and methods sections.",
         "TRUTH_CHECK": "The value \"E14\" correctly identifies one of the embryonic stem cell lines used in the study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is missing other cell lines mentioned in the text, specifically \"J1\" and \"HEK 293T\" (or \"293T\")."
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete as the paper also uses \"J1\" ESCs and \"HEK 293T\" cells."
       }
     },
     {
@@ -91,7 +91,7 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The text explicitly mentions \"Q Exactive HF-X mass spectrometer (Thermo Scientific)\" in the Protein co-immunoprecipitation (co-IP) and mass spectrometry section.",
         "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the text."
@@ -108,9 +108,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a description of experimental groups/samples, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions these groups in the co-IP and mass spectrometry section, but they are the samples being compared, not the number of replicates.",
-        "TRUTH_CHECK": "The value is factually a description of the samples used, but it does not answer the question of how many biological replicates were performed.",
-        "COMPLETENESS_CHECK": "The full set contains a numeric value \"2\" and a sample description; however, the sample description is a type mismatch for this field."
+        "SOURCE_CHECK": "The text mentions these groups in the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section, but they are not a count of replicates.",
+        "TRUTH_CHECK": "The value is factually a description of the samples used, but it is not the \"number of biological replicates\".",
+        "COMPLETENESS_CHECK": "The full set contains both a sample description and a number (\"2\"), but the sample description is a type mismatch for this field."
       }
     },
     {
@@ -120,50 +120,50 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "1",
+      "hallucination": true,
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"2\" is a numeric count, which matches the definition for the replicates field.",
-        "SOURCE_CHECK": "The paper mentions \"Ssrp1 ChIP duplicate\" in the ChIP-seq and data analysis section, implying two replicates for that specific experiment.",
-        "TRUTH_CHECK": "While the paper mentions duplicates for ChIP-seq, it does not explicitly state a global number of biological replicates for the mass spectrometry experiment (the primary proteomics part of the study).",
-        "COMPLETENESS_CHECK": "The full set of extracted values is problematic; one value is a description of sample groups (\"E14 ESCs expressing...\"), which is a type mismatch for the 'replicates' field. The value \"2\" is based on a specific assay (ChIP-seq) rather than a general experimental design for the proteomics."
+        "SOURCE_CHECK": "The paper mentions \"Ssrp1 ChIP duplicate\" in the ChIP-seq and data analysis section, and the co-IP/MS section describes two groups (expressing 3HA-Ssrp1 and control), but it does not explicitly state the number of biological replicates for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "There is no explicit statement in the text confirming that \"2\" biological replicates were used for the proteomics/MS experiment. The mention of \"duplicates\" refers to ChIP-seq, not the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is problematic; one value is a description of sample groups rather than a replicate count, and the other is an unsupported number."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "Comparison of proteins co-immunoprecipitated with 3HA-Ssrp1 versus control pCAG-3HA",
+      "extracted_value": "co-immunoprecipitation (co-IP) comparison between 3HA-Ssrp1 expressing E14 ESCs and control E14 ESCs",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "treated vs control",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a specific experimental comparison rather than a study design type (e.g., \"treated vs control\").",
-        "SOURCE_CHECK": "The comparison is present in the text under the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section.",
-        "TRUTH_CHECK": "The factual description of the comparison is correct.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a specific procedure rather than a design category."
+        "TYPE_CHECK": "The candidate value describes a specific experimental procedure/comparison rather than a study design type (e.g., \"treated vs control\").",
+        "SOURCE_CHECK": "The comparison described is present in the text under the \"Protein co-immunoprecipitation (co-IP) and mass spectrometry\" section.",
+        "TRUTH_CHECK": "The factual details of the comparison are correct, but the value is not a \"study design type\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of a specific assay rather than the overall experimental design."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "expression (3HA-Ssrp1, pCAG-3HA)",
+      "extracted_value": "expression of 3HA-Ssrp1 (3HA-Ssrp1, pCAG-3HA control)",
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "expression of 3HA-Ssrp1 (3HA-Ssrp1, pCAG-3HA control), Ssrp1 knockout, Ssrp1 depletion, Supt16 depletion, Usp7 depletion, Usp7 inhibitor treatment",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes an experimental condition/variable (expression of a specific protein vs control), which fits the category of a factor value.",
-        "SOURCE_CHECK": "The text mentions \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\" in the co-IP and mass spectrometry section.",
-        "TRUTH_CHECK": "The value correctly identifies the variables compared in the proteomics experiment.",
-        "COMPLETENESS_CHECK": "The full set only contains this value, but the paper also studies \"Ssrp1 knockout\" (Ssrp1-/-) and \"Usp7 depletion/inhibition\" as major experimental factors."
+        "TYPE_CHECK": "The candidate value describes an experimental variable (expression of a specific protein vs control), which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The text mentions \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\" in the Protein co-immunoprecipitation and mass spectrometry section.",
+        "TRUTH_CHECK": "The value accurately reflects the experimental comparison used for the co-IP/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but the paper explores multiple factors (e.g., Ssrp1 knockout, Usp7 depletion, Ssrp1 mutants). The current set is incomplete as it only captures the factor for the MS experiment and ignores the primary genetic perturbations (Ssrp1 knockout/depletion) that drive the rest of the study."
       }
     },
     {
-      "annotation_type": "fractions",
-      "extracted_value": "1",
+      "annotation_type": "number_of_samples",
+      "extracted_value": "2",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -171,26 +171,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper mentions \"the resulting spectra from each fraction\" in the mass spectrometry section, but it does not specify the number of fractions generated. Per the safe defaults rule, \"1\" is correct when the paper is silent.",
-        "TRUTH_CHECK": "The value is a valid default based on the provided instructions.",
-        "COMPLETENESS_CHECK": "The full set contains the default value \"1\", which is sufficient given the text does not provide a specific number."
-      }
-    },
-    {
-      "annotation_type": "number_of_samples",
-      "extracted_value": "2",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper describes several experiments; for the mass spectrometry analysis, it mentions \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\", which implies 2 samples for that specific technical part.",
-        "TRUTH_CHECK": "While the MS part uses 2 samples, the overall study involves multiple cell lines (E14, J1, 293T), various knockout lines, and multiple conditions across RNA-seq and ChIP-seq. The \"total count of samples processed in the study\" should encompass the entire experimental design, not just the MS part.",
-        "COMPLETENESS_CHECK": "The value \"2\" only refers to the co-IP MS experiment and ignores the numerous samples used in RNA-seq, ChIP-seq, and other assays."
+        "SOURCE_CHECK": "The paper describes a co-immunoprecipitation mass spectrometry experiment comparing \"E14 ESCs expressing 3HA-Ssrp1 and control E14 ESCs expressing pCAG-3HA\".",
+        "TRUTH_CHECK": "The MS experiment specifically compares two groups (experimental vs control), making \"2\" a factually correct count for the samples processed in that specific proteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the sample count for the MS experiment described."
       }
     }
   ]

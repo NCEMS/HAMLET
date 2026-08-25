@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains disease states/diagnoses, which matches the field definition.",
-        "SOURCE_CHECK": "The values are present in the text; the MS experiment analyzed CSF from patients with \"leptomeningeal melanoma metastases\" (LMM) and \"non-LMM control\" (normal) patients.",
-        "TRUTH_CHECK": "The values are factually correct as the study compares LMM patients against a control group.",
-        "COMPLETENESS_CHECK": "The full set covers both the disease group and the control group described in the paper."
+        "TYPE_CHECK": "The candidate value contains disease states (\"leptomeningeal melanoma metastases\") and a safe default for healthy controls (\"normal\"), which fits the definition.",
+        "SOURCE_CHECK": "The values come from the MS experiment context; the paper describes analyzing CSF from patients with LMM and a \"non-LMM control group\".",
+        "TRUTH_CHECK": "The values are factually correct as the study compares CSF from patients with leptomeningeal melanoma metastases against those without.",
+        "COMPLETENESS_CHECK": "The full set captures both the disease group and the control group described in the proteomics analysis."
       }
     },
     {
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"csf\" (cerebrospinal fluid) describes the biological fluid/organ of origin, which fits the definition of the organ/tissue field.",
-        "SOURCE_CHECK": "The paper explicitly states that \"CSF samples were analyzed by mass spectrometry\" and \"Proteomic analysis of CSF from LMM patients,\" confirming it is the actual MS sample.",
+        "TYPE_CHECK": "The candidate value \"csf\" (cerebrospinal fluid) is a biofluid, which fits the definition of organ/tissue of origin.",
+        "SOURCE_CHECK": "The paper explicitly states that \"CSF samples were analyzed by mass spectrometry\" and describes the proteomics workflow applied to these samples.",
         "TRUTH_CHECK": "The value is factually correct as the proteomics experiment was performed on cerebrospinal fluid.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of \"csf\", which covers the only biological material analyzed by mass spectrometry in this study."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"csf\", which is the only material analyzed by mass spectrometry in this study."
       }
     },
     {
@@ -55,12 +55,12 @@
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly states that \"Forty-five human CSF specimens from 16 patients were procured,\" and these were the samples analyzed by mass spectrometry.",
         "TRUTH_CHECK": "\"Homo sapiens\" is the scientific name for humans, and the samples were derived from human patients.",
-        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the proteomics experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "disease status (LMM, non-LMM), clinical response (extraordinary responder, poor responder)",
+      "extracted_value": "LMM status (LMM, non-LMM), therapeutic response (responder, non-responder)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factors (disease status and clinical response) and their corresponding levels, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values \"LMM\", \"non-LMM\", \"extraordinary responder\", and \"poor responder\" are explicitly used in the text to describe the groups analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The values are factually correct; the study compares CSF from patients with LMM (further subdivided into extraordinary and poor responders) against non-LMM controls.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the primary disease contrast and the clinical response contrast described in the proteomics analysis."
+        "TYPE_CHECK": "The candidate value describes the experimental factors (disease status and therapeutic response) and their levels, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The values are explicitly present in the text; the study compares patients with LMM vs non-LMM and responders vs non-responders in the MS analysis.",
+        "TRUTH_CHECK": "The values are factually correct based on the results section, which discusses \"LMM non-responders and non-LMM datasets\" and the \"extraordinary responder.\"",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary axes of comparison (disease presence and treatment response) described in the proteomics experiment."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the disease states (LMM and normal/non-LMM) being compared, which is the correct category for a factor_value.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the text; the MS experiment compared CSF from patients with LMM to a \"non-LMM control group\".",
+        "TYPE_CHECK": "The candidate value describes the disease states (LMM vs normal) being compared, which is the correct category for a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly describes the comparison between patients with leptomeningeal melanoma metastases (LMM) and a \"non-LMM control group\" (normal).",
         "TRUTH_CHECK": "The values are factually correct; \"normal\" is a safe default for the non-LMM control group.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the disease status (LMM vs non-LMM) and the clinical response (responder vs poor responder) described in the proteomics analysis."
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the disease status (LMM vs non-LMM) and the therapeutic response (responder vs non-responder), which are the primary axes of the study."
       }
     },
     {
@@ -111,27 +111,27 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
         "SOURCE_CHECK": "The value is explicitly stated in the \"CSF Proteomics\" section of the methods: \"pooled TMT labeled samples were then separated via basic pH RPLC fractionation into final 24 concatenated fractions.\"",
-        "TRUTH_CHECK": "The value \"24\" is factually correct according to the text.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the paper."
+        "TRUTH_CHECK": "The value \"24\" is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only value mentioned in the paper for this field."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "45",
-      "verdict": "low",
+      "extracted_value": "16",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
+      "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper states \"A total of 45 serial CSF samples were collected from 16 patients\", but these are the total number of samples, not the number of biological replicates per group.",
-        "TRUTH_CHECK": "The value \"45\" refers to the total number of samples (number_of_samples), not the number of biological replicates. The text does not explicitly state a fixed number of biological replicates per condition; it describes a cohort of 16 patients with serial sampling.",
-        "COMPLETENESS_CHECK": "The value is incorrect, so completeness is not applicable."
+        "SOURCE_CHECK": "The paper mentions a cohort of 16 patients from whom CSF samples were collected and analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "In this study, the biological replicates are the individual patients (n=16).",
+        "COMPLETENESS_CHECK": "The full set contains the total number of biological subjects (patients) analyzed, which is exhaustive for this field."
       }
     },
     {
@@ -149,7 +149,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
         "SOURCE_CHECK": "The paper explicitly states that samples were analyzed \"in technical duplicates on a QExactive Plus mass spectrometer\".",
-        "TRUTH_CHECK": "\"Duplicates\" means 2 technical replicates per sample.",
+        "TRUTH_CHECK": "\"Duplicates\" means 2 technical replicates.",
         "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the text."
       }
     },
@@ -166,10 +166,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition_method field.",
-        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"data-independent acquisition\", \"DIA\".",
-        "TRUTH_CHECK": "While the use of a QExactive Plus for TMT-labeled peptides typically implies DDA, the specific acquisition scheme is not stated in the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; however, it describes a standard TMT-labeled workflow on a QExactive Plus using MaxQuant for sequence assignment, which typically implies DDA.",
+        "TRUTH_CHECK": "While highly probable for this instrument and workflow, the specific term \"data-dependent acquisition\" is not written in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but the value itself is not explicitly supported by the text."
       }
     },
     {
@@ -187,7 +187,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
         "SOURCE_CHECK": "The text explicitly states in the \"CSF Proteomics\" section that samples underwent \"trypsin digestion\".",
-        "TRUTH_CHECK": "The value is factually correct as per the methods described.",
+        "TRUTH_CHECK": "The value is factually correct as per the methods section.",
         "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
       }
     },
@@ -205,8 +205,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"10 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct for this experiment.",
+        "SOURCE_CHECK": "The value \"10 ppm\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
         "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
       }
     },
@@ -223,9 +223,9 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
-        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "While the paper uses a QExactive Plus (which typically uses HCD, a form of beam-type CID), the specific term \"beam-type collision-induced dissociation\" is not mentioned in the text.",
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not mentioned in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify the fragmentation method used on the QExactive Plus; while HCD (a form of beam-type CID) is standard for this instrument, the text does not explicitly state it.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
@@ -244,8 +244,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"CSF Proteomics\" section of the methods as the instrument used for LC-MS/MS analysis of the CSF samples.",
-        "TRUTH_CHECK": "The value \"Q Exactive Plus\" is factually correct according to the text.",
-        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper; the full set is exhaustive."
+        "TRUTH_CHECK": "The paper states the samples were analyzed on a \"QExactive Plus mass spectrometer\".",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the proteomics experiment; the set is exhaustive."
       }
     },
     {
@@ -259,12 +259,12 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "hallucinated",
-      "corrected_value": "TMT",
+      "corrected_value": "TMT-6plex",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
         "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
-        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual mass tags (e.g., TMT126, TMT127) in the provided text. These specific tags are likely in the mentioned \"Supplemental Table 1\", but are not in the provided paper text.",
-        "COMPLETENESS_CHECK": "The full set of values attempts to list individual tags, but the paper text only explicitly names the method as \"TMT\" or \"TMT-6plex\"."
+        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual channel tags (e.g., TMT126, TMT127) in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but the text only mentions \"TMT-6plex\"."
       }
     },
     {
@@ -282,8 +282,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific type of isobaric label, which fits the category for the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
-        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex reagents\", it does not explicitly list the individual channel tags (e.g., TMT127). These specific tags are likely in the referenced \"Supplemental Table 1\", but they are not written in the provided text.",
-        "COMPLETENESS_CHECK": "The full set of values attempts to list individual TMT channels, but the text only supports the general use of \"TMT\" or \"TMT-6plex\"."
+        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual channel tags (e.g., TMT127). The specific channel numbers are not mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values attempts to list individual TMT channels, but none of these specific channel identifiers appear in the text."
       }
     },
     {
@@ -299,10 +299,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric labeling reagent, which fits the category of the label field.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section of the methods.",
-        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex reagents\", it does not explicitly list the individual channel tags (e.g., TMT128). These specific tags are likely found in the mentioned \"Supplemental Table 1\", but they are not written in the provided paper text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values attempts to list individual TMT channels, but none of these specific channel numbers are explicitly mentioned in the text."
+        "TYPE_CHECK": "The candidate value is a specific type of isobaric label, which fits the definition of the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
+        "TRUTH_CHECK": "The paper specifies \"TMT-6plex reagents\", but it does NOT mention the specific TMT version or channel numbers (such as TMT126, TMT128, etc.) in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists specific TMT channels that are not mentioned in the text."
       }
     },
     {
@@ -320,8 +320,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
-        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual channel tags (e.g., TMT129). These specific tags are likely found in the mentioned \"Supplemental Table 1\", but they are not present in the provided text.",
-        "COMPLETENESS_CHECK": "The full set of values attempts to enumerate the 6-plex channels, but none of these specific tags are written in the provided text."
+        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual channel tags (e.g., TMT126, TMT129) in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of values attempts to enumerate specific TMT channels, but these specific tags are not mentioned in the text."
       }
     },
     {
@@ -337,10 +337,10 @@
       "error_category": "hallucinated",
       "corrected_value": "TMT",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
-        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex reagents\", it does not explicitly list the individual mass tags (e.g., TMT130). These specific tags are likely found in the mentioned \"Supplemental Table 1\", but they are not written in the provided text.",
-        "COMPLETENESS_CHECK": "The full set of values attempts to list the 6-plex tags, but none of these specific tags are explicitly mentioned in the provided text."
+        "TYPE_CHECK": "The candidate value refers to a specific TMT label, which fits the category of an isobaric labeling method.",
+        "SOURCE_CHECK": "The paper explicitly states that samples underwent \"TMT labeling\" and mentions \"TMT-6plex reagents (Thermo)\".",
+        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual mass tags (e.g., TMT130) used in the experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT tags, but these specific tags are not mentioned in the provided text."
       }
     },
     {
@@ -357,9 +357,9 @@
       "corrected_value": "TMT",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
-        "SOURCE_CHECK": "The paper mentions \"TMT labeling\" and \"TMT-6plex reagents\", but it does not explicitly list the individual channel tags (e.g., TMT131).",
-        "TRUTH_CHECK": "While TMT-6plex uses a set of tags, the specific tag \"TMT131\" is not mentioned in the provided text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific channel numbers appear in the text."
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMT labeling\" and \"TMT-6plex reagents\" in the CSF Proteomics section.",
+        "TRUTH_CHECK": "While the paper specifies \"TMT-6plex\", it does not explicitly list the individual channel tags (e.g., TMT131) in the provided text. These specific tags are likely in the mentioned \"Supplemental Table 1\", but are not in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values attempts to list individual TMT channels, but the text only supports the general use of \"TMT\" or \"TMT-6plex\"."
       }
     },
     {
@@ -375,9 +375,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The paper mentions the use of a \"QExactive Plus mass spectrometer\", and the QExactive series uses an Orbitrap mass analyzer.",
-        "TRUTH_CHECK": "The value is factually correct as the QExactive Plus is an Orbitrap-based instrument.",
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The paper specifies the use of a \"QExactive Plus mass spectrometer\", and the QExactive series is well-known to use an Orbitrap mass analyzer.",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model mentioned.",
         "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the proteomics experiment."
       }
     },
@@ -385,7 +385,7 @@
       "annotation_type": "modification",
       "extracted_value": "TMT6plex (K)",
       "verdict": "low",
-      "type_mismatch": true,
+      "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
       "hallucination": true,
@@ -394,10 +394,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value refers to a labeling reagent/method rather than a post-translational or chemical modification searched during database analysis.",
-        "SOURCE_CHECK": "The text mentions \"TMT-6plex reagents\" were used for labeling, but this is a labeling method, not a modification searched for in the proteomics data analysis.",
-        "TRUTH_CHECK": "TMT is a labeling method; while it attaches to Lysine (K), it is not listed as a \"modification\" searched in the context of the protein identification/search parameters.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+        "TYPE_CHECK": "The candidate value describes a labeling reagent/modification, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The paper mentions \"TMT-6plex reagents (Thermo)\" were used for labeling, but it does not explicitly name the modification as \"TMT6plex (K)\".",
+        "TRUTH_CHECK": "While TMT labels target lysine (K), the specific modification name \"TMT6plex (K)\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is unsupported by the text."
       }
     },
     {
@@ -414,9 +414,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance measurement, which is the correct category for this field.",
-        "SOURCE_CHECK": "I have searched the \"CSF Proteomics\" and \"Methods\" sections, and the value \"7 ppm\" does not appear in the text.",
-        "TRUTH_CHECK": "The value is not present in the provided text and cannot be inferred.",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+        "SOURCE_CHECK": "A search of the provided text (including the \"CSF Proteomics\" and \"Methods\" sections) reveals no mention of \"7 ppm\" or any other specific mass tolerance value.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
       }
     }
   ]

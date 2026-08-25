@@ -1,0 +1,442 @@
+{
+  "paper_id": "PXD050400",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "U87MG, LN229, PC9, U2OS, HEK293FT, DIvA",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "U87MG",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category.",
+        "SOURCE_CHECK": "While all these cell lines are mentioned in the paper, only U87MG was used for the mass spectrometry experiment. The \"Mass spectrometry\" section explicitly states: \"For mass spectrometry, 1.5 mg protein lysates of untreated, irradiated, doxorubicin treated U87MG were taken for immunoprecipitation...\". LN229, PC9, U2OS, HEK293FT, and DIvA were used for other assays (immunofluorescence, qPCR, comet assay, etc.) but not for the MS analysis.",
+        "TRUTH_CHECK": "The inclusion of LN229, PC9, U2OS, HEK293FT, and DIvA is factually incorrect for the MS sample source.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it includes non-MS samples."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "GBM cells, Lung Adenocarcinoma cells, Osteosarcoma cells, HEK293FT cells",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "glial cell",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains cell types/lineages, which fits the category for this field.",
+        "SOURCE_CHECK": "The candidate value includes multiple cell lines mentioned in the paper, but only U87MG (a GBM cell line) was actually used for the mass spectrometry experiment. Lung Adenocarcinoma (PC9), Osteosarcoma (U2OS), and HEK293FT cells were used for other assays (RIF, comet assay, co-IP validation) but not for the MS analysis.",
+        "TRUTH_CHECK": "The value is factually incorrect because it includes cell types that were not part of the MS sample.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it includes non-MS samples and uses the specific disease/lineage names rather than the general cell type lineage."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "gbm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"gbm\" (Glioblastoma Multiforme) is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text; the MS experiment used U87MG cells, which the paper identifies as \"GBM cells\" (e.g., \"in GBM (U87MG and LN229)\").",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on the role of GCN5 in GBM radio-resistance and uses GBM cell lines for the proteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set contains \"gbm\", which accurately describes the disease state of the biological material analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "brain",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"brain\" is a valid category for the organ/tissue field.",
+        "SOURCE_CHECK": "The MS experiment used U87MG cells (\"1.5 mg protein lysates of untreated, irradiated, doxorubicin treated U87MG were taken for immunoprecipitation...\"). U87MG is a well-known glioblastoma cell line derived from the brain.",
+        "TRUTH_CHECK": "The value is factually correct as U87MG is a brain-derived cell line.",
+        "COMPLETENESS_CHECK": "The full set contains \"brain\", which correctly describes the tissue of origin for the MS sample."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that the protein search for the mass spectrometry experiment was performed against the \"Homo sapiens database (downloaded from Uniprot)\".",
+        "TRUTH_CHECK": "The cell lines used for the MS experiment (U87MG) are human glioblastoma cells, making \"Homo sapiens\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (control, IR, doxorubicin)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental conditions (treatment groups) being compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is explicitly present in the \"Mass spectrometry\" section, which states that protein lysates of \"untreated, irradiated, doxorubicin treated U87MG\" were used for IP-MS.",
+        "TRUTH_CHECK": "The values \"control\" (untreated), \"IR\" (irradiated), and \"doxorubicin\" are all explicitly mentioned as the treatment conditions for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the treatment conditions and the disease context (\"gbm\"), which together cover the primary experimental variables for the MS samples."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "gbm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"gbm\" (Glioblastoma Multiforme) refers to the disease state/type of the samples, which is a valid characteristic for a factor_value.",
+        "SOURCE_CHECK": "The value is present in the text; the MS experiment used U87MG cells, which the paper explicitly identifies as GBM cells (\"...induced DSBs in GBM (U87MG and LN229)...\").",
+        "TRUTH_CHECK": "The value is factually correct as the samples analyzed by MS were derived from GBM cell lines.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the treatment conditions and the disease state, covering the primary experimental variables described for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes the LC-MS/MS workflow but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to analysis.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper explicitly states in the \"GCN5 interacts with DNA-PKcs and Ku80\" section: \"We performed immunoprecipitation with GCN5 and Isotype (IgG) control followed by mass spectrometry of control, IR and doxorubicin treated U87MG cells in 2 biological replicates.\"",
+        "TRUTH_CHECK": "The value \"2\" is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the biological replication described for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the mass spectrometry experiment; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for when the paper is silent on replication.",
+        "COMPLETENESS_CHECK": "The full set contains only the default value, which is complete given the absence of specific information in the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"Liquid chromatography mass spectrometry (LC–MS-MS)\" and \"Orbitrap detector\", but it does not explicitly state whether DDA or DIA was used.",
+        "TRUTH_CHECK": "There is no mention of \"data-dependent acquisition\" or \"DDA\" in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Mass spectrometry\" section of the methods, where it is mentioned as \"IAA\" (\"50 µl IAA (Final concentration: 20 mM)\").",
+        "TRUTH_CHECK": "\"IAA\" is a standard and unambiguous abbreviation for iodoacetamide.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this reagent, which is the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry\" section of the methods (\"The proteins were then incubated with 20 µl trypsin overnight\").",
+        "TRUTH_CHECK": "The value is factually correct as it is the protease used for digestion in the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "19 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"19 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text. The \"Mass spectrometry\" section mentions an \"Orbitrap detector\" and \"LC-MS-MS\", but does not specify the fragmentation method (e.g., HCD, CID, ETD).",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not present in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Orbitrap",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The paper mentions \"Liquid chromatography mass spectrometry (LC–MS-MS) Orbitrap detector\", but it does not specify the model as \"Fusion\".",
+        "TRUTH_CHECK": "The text only specifies \"Orbitrap detector\"; it does not mention \"Fusion\". \"Orbitrap\" is a type of mass analyzer, and while \"Orbitrap Fusion\" is a common instrument, it is not explicitly named in this text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is an over-specification (subtype drift) of the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods used in mass spectrometry.",
+        "SOURCE_CHECK": "The paper describes an IP-MS experiment using U87MG cells, but it does not mention any isobaric (TMT, iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling.",
+        "TRUTH_CHECK": "Since no labeling method is mentioned, the \"label-free\" safe default is applicable.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry\" section of the methods (\"Orbitrap detector\").",
+        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the text; while iodoacetamide (IAA) is mentioned as a reagent, the modification name \"Carbamidomethyl\" is never explicitly written.",
+        "TRUTH_CHECK": "The value is unsupported because the rules explicitly forbid inferring \"Carbamidomethyl (C)\" from the use of IAA.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains hallucinated or unsupported terms."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "ubiquitinylation residue (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The term \"ubiquitinylation residue (C)\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention ubiquitinylation as a modification searched during the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"not applicable\", neither of which are explicitly supported by the text (the text mentions reagents like IAA but not the modification name)."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The value \"not applicable\" is a placeholder indicating an absence of a modification, which is a valid way to represent a null finding, but the field expects specific modifications if they exist.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry experiment using DTT and IAA for sample preparation, but it never explicitly names any modifications (fixed or variable) used during the database search.",
+        "TRUTH_CHECK": "The candidate value \"not applicable\" is factually correct in the sense that no modifications are explicitly listed in the text. However, the other values in `all_extracted_values` (\"Carbamidomethyl (C)\" and \"ubiquitinylation residue (C)\") are hallucinated.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is contradictory and contains hallucinations. \"Carbamidomethyl (C)\" is inferred from the use of IAA, which is strictly forbidden by the rules. \"ubiquitinylation residue (C)\" is not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6.7 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"6.7 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value; the paper does not mention a precursor mass tolerance."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text explicitly mentions \"DTT\" in the Mass spectrometry section (\"80 µl DTT (Final concentration: 5 mM) was added\"). DTT is the standard abbreviation for dithiothreitol.",
+        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used in the sample preparation for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\", which is the only reduction reagent mentioned in the text."
+      }
+    }
+  ]
+}

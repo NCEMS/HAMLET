@@ -1,0 +1,133 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD023959","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper uses HeLa, 293T, and 293FT cells, and searches data against the ""Swiss-Prot Human database,"" confirming the use of human proteins/cells.
+TRUTH CHECK:       The use of human cell lines and the human protein database confirms the species is Homo sapiens.
+COMPLETENESS CHECK:    The paper also uses C57BL/6J mice, but the extracted set only contains ""Homo sapiens"". However, the prompt asks to verify the candidate value. Since the paper uses both human cells and mice, the full set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD023959","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is an organ, which matches the field definition.
+SOURCE CHECK:      A search of the paper text reveals no mention of ""kidney""; the study focuses on HeLa/293T cells and the liver.
+TRUTH CHECK:       The value is not factually correct as the experiment did not use kidney tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023959","BiologicalAgent","material_type","293T UBE3C knockout cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""293T UBE3C knockout cells"" is a specific cell line/sample description, not a broad material class as required by the definition.
+SOURCE CHECK:      The text mentions ""293T UBE3C knockout cells"" in the LC-MS/MS section.
+TRUTH CHECK:       While the cells are used, the value provided is the specific identity of the sample rather than the broad material category.
+COMPLETENESS CHECK: The full set contains only this specific sample name, failing to provide the broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD023959","BiologicalAgent","cell_line","293T","293T","medium","False","","True","False","False","TYPE CHECK: The candidate value ""293T"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned multiple times in the text (e.g., ""293T and 293FT cells were obtained from ATCC"").
+TRUTH CHECK: The value is factually correct as a cell line used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses ""HeLa"", ""293FT"", and ""AML12"" cell lines.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""293T"", ""293FT"", ""HeLa"", ""AML12""]","293T, 293FT, HeLa, AML12"
+"PXD023959","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions a ""Thermo Orbitrap Fusion Luoms mass spectrometer"" (note: ""Luoms"" is a typo in the paper for ""Lumos"").
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The paper also mentions a ""Waters Synapt G2 HDMS mass spectrometer"" and an ""LTQ Orbitrap Velos hybrid mass spectrometer"". The full set of extracted values is missing these two instruments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Orbitrap Fusion Lumos"", ""Waters Synapt G2 HDMS"", ""LTQ Orbitrap Velos""]","Orbitrap Fusion Lumos, Waters Synapt G2 HDMS, LTQ Orbitrap Velos"
+"PXD023959","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions ""label-free quantification"" in the LC-MS/MS section.
+TRUTH CHECK:       The use of label-free quantification is factually correct as described in the methods.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label-free"", which accurately covers the labeling method used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023959","ExperimentalDesignAgent","replicates","293T UBE3C knockout cells","2","low","True","","False","False","False","TYPE CHECK:        The candidate value is a cell line description, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""293T UBE3C knockout cells"" as the sample source, but this is not a replicate count.
+TRUTH CHECK:       The value is factually a cell line used in the study, but it is incorrect for the field 'replicates'.
+COMPLETENESS CHECK: The full set contains both a cell line and a number; the number ""2"" is derived from the ""Statistics and reproducibility"" section which mentions ""two... independent experiments"" for certain figures, but the cell line name is irrelevant.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023959","ExperimentalDesignAgent","replicates","2","2","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which matches the required category for the replicates field.
+SOURCE CHECK:      The paper states in the ""Statistics and reproducibility"" section that for certain figures (e.g., Fig. 2h, k, l, m; Fig. 3e, f; Fig. 6f, Fig. 7b, g), data are representative of ""two independent experiments.""
+TRUTH CHECK:       The value ""2"" is factually correct as it represents the number of independent experiments (biological replicates) for a subset of the data.
+COMPLETENESS CHECK:    The full set of extracted values contains ""2"" and ""293T UBE3C knockout cells"". The latter is a cell line, not a replicate count, and is a type mismatch. However, the paper mentions both ""three"" and ""two"" independent experiments across different figures. The set is incomplete because it misses the ""3"" replicates used for the majority of the figures.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""2"", ""3""]","2, 3"
+"PXD023959","ExperimentalDesignAgent","experimental_design","comparison of VPS34 ubiquitination sites with or without V5-UBE3C","comparison of VPS34 ubiquitination sites with or without V5-UBE3C","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison, which fits the category of study design (treated vs control).
+SOURCE CHECK:      The text describes an experiment where ubiquitinated Flag-VPS34 was isolated from 293T UBE3C knockout cells transfected with Flag-VPS34, His-ubiquitin, ""together with or without V5-UBE3C"".
+TRUTH CHECK:       The value accurately reflects the experimental setup described in the LC-MS/MS section for determining ubiquitination sites.
+COMPLETENESS CHECK:    The full set contains only this value; however, the paper describes multiple designs (e.g., HFD vs normal diet in mice, TRABID knockdown vs control in cells). This extraction only captures one specific technical sub-experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""treated vs control"", ""case-control""]",""
+"PXD023959","ExperimentalDesignAgent","factor_value","UBE3C expression (with V5-UBE3C, without V5-UBE3C)","UBE3C expression (with V5-UBE3C, without V5-UBE3C)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental variable (expression level of UBE3C), which fits the definition of a factor_value.
+SOURCE CHECK:      The paper describes experiments comparing cells with and without V5-UBE3C (e.g., ""ubiquitinated Flag-VPS34 was isolated... from 293T UBE3C knockout cells transfected with Flag-VPS34, His-ubiquitin, together with or without V5-UBE3C"").
+TRUTH CHECK:       The value accurately reflects the experimental design used to determine ubiquitination sites on VPS34.
+COMPLETENESS CHECK:    The full set of extracted values is incomplete; the paper studies many other factors including TRABID expression, starvation (DMEM vs EBSS), ER/proteotoxic stress (tunicamycin, puromycin, etc.), and high-fat diet (HFD) in mice.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""UBE3C expression"", ""TRABID expression"", ""nutrient starvation"", ""ER stress"", ""proteotoxic stress"", ""high-fat diet""]","UBE3C expression, TRABID expression, nutrient starvation, ER stress, proteotoxic stress, high-fat diet"
+"PXD023959","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes LC-MS/MS analysis but does not mention any offline peptide or protein fractionation steps.
+TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023959","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper mentions ""two independent experiments"" in the Statistics and reproducibility section for certain figures, but this refers to biological/technical replicates for specific assays, not the total number of samples processed in the study.
+TRUTH CHECK:       The value ""2"" is not the total count of samples processed in the study; the study involves multiple cell lines (HeLa, 293T, 293FT, AML12), various treatment conditions (starvation, ER stress, proteotoxic stress), and a mouse model with multiple groups (HFD, rAAV-TRABID, SAR405).
+COMPLETENESS CHECK: The full set of extracted values does not accurately represent the total sample count of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

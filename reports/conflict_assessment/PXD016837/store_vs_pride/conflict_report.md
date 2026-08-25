@@ -13,7 +13,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | Biological | 0.400 | 0.286 | 0.333 | 0.400 | 0.286 | 0.333 |
-| Technical | 0.250 | 0.333 | 0.286 | 0.250 | 0.333 | 0.286 |
+| Technical | 0.500 | 1.000 | 0.667 | 0.500 | 1.000 | 0.667 |
 | ExperimentalDesign | 0.225 | 0.562 | 0.321 | 0.225 | 0.562 | 0.321 |
 
 ## Metadata type agreement across matched files
@@ -33,14 +33,17 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[technical replicate]` | ExperimentalDesign | 1.000 | 1.000 | 1.000 |
 | `factor value[disease]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `factor value[experimental design]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
-| `comment[cleavage agent details]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[alkylation reagent]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[cleavage agent details]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[dissociation method]` | Technical | 0.000 | 0.000 | 0.000 |
-| `comment[fragment mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[fragment mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[instrument]` | Technical | 1.000 | 1.000 | 1.000 |
-| `comment[label]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[label]` | Technical | 1.000 | 1.000 | 1.000 |
+| `comment[modification parameters]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[ms2 mass analyzer]` | Technical | 1.000 | 1.000 | 1.000 |
-| `comment[precursor mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[precursor mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[proteomics data acquisition method]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[reduction reagent]` | Technical | 0.000 | 0.000 | 0.000 |
 | `technology type` | Technical | 0.000 | 0.000 | 0.000 |
 
 Metadata averages include only the 8 uniquely matched files. Missing files are reported as coverage failures rather than zero-score metadata rows.

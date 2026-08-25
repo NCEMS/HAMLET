@@ -11,58 +11,58 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Mus musculus\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"BALB/c mice\" and the \"RefSeq mouse (Mus musculus) reference proteome\" in the database search section.",
-        "TRUTH_CHECK": "The proteomics analysis was performed on exosomes derived from BALB/c mice, making \"Mus musculus\" factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains \"Mus musculus\", which covers the primary source organism for the proteomics experiment described."
+        "TYPE_CHECK": "The candidate value is a scientific name of a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"BALB/c mice\" and \"RefSeq mouse (Mus musculus) reference proteome\".",
+        "TRUTH_CHECK": "The proteomics analysis was performed on exosomes derived from BALB/c mice (Mus musculus).",
+        "COMPLETENESS_CHECK": "The full set contains \"Mus musculus\", which correctly identifies the host species for the proteomics experiment. (Note: While Plasmodium yoelii is also present, it is the parasite, and Mus musculus is the primary source organism for the host proteome)."
       }
     },
     {
       "annotation_type": "organ",
-      "extracted_value": "blood",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"blood\" is a valid category for the organ/tissue field.",
-        "SOURCE_CHECK": "The paper describes obtaining reticulocytes from \"mice blood collected in EDTA\" and \"intracardiac puncture,\" and later purifying exosomes from these cells.",
-        "TRUTH_CHECK": "The proteomics analysis was performed on rexPy (reticulocyte-derived exosomes), which were derived from reticulocytes purified from blood.",
-        "COMPLETENESS_CHECK": "The full set contains only \"blood\"; while the exosomes are specifically from reticulocytes, \"blood\" is the organ/tissue of origin for those cells."
-      }
-    },
-    {
-      "annotation_type": "cell_type",
-      "extracted_value": "reticulocyte",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"reticulocyte\" is a primary cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"reticulocyte-derived exosomes\" and \"Purified P. yoelii-infected reticulocytes\" in the methods and results.",
-        "TRUTH_CHECK": "The experiment involves the isolation and culture of reticulocytes to obtain exosomes for proteomics analysis.",
-        "COMPLETENESS_CHECK": "The full set contains \"reticulocyte\", which is the primary cell type used for the proteomics part of the study."
-      }
-    },
-    {
-      "annotation_type": "disease",
-      "extracted_value": "infected",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
+      "extracted_value": "reticulocytes",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
       "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"infected\" describes a disease state/condition, which fits the category for the disease field.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"infected BALB/c mice\" and \"P. yoelii 17X malaria strain\" infections.",
-        "TRUTH_CHECK": "While the mice are indeed infected, \"infected\" is a general state; the specific disease is malaria (specifically caused by P. yoelii in mice and P. vivax in humans).",
-        "COMPLETENESS_CHECK": "The full set contains only \"infected\", which is a generic descriptor and fails to capture the specific disease (malaria) described throughout the paper."
+        "TYPE_CHECK": "The candidate value \"reticulocytes\" refers to a cell type, not an organ or tissue.",
+        "SOURCE_CHECK": "The value is present in the text, as the exosomes were derived from reticulocytes.",
+        "TRUTH_CHECK": "While reticulocytes are the source of the exosomes, they are cells, not an organ. The organ of origin for these cells is the bone marrow or blood/spleen context, but the text specifically describes the material as \"reticulocyte-derived exosomes\".",
+        "COMPLETENESS_CHECK": "The full set contains only \"reticulocytes\", which is a cell type."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "reticulocytes",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"reticulocytes\" is a primary cell type, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Purified P. yoelii-infected reticulocytes\" and \"reticulocyte-derived exosomes\".",
+        "TRUTH_CHECK": "The value is factually correct as the proteomics analysis was performed on exosomes derived from reticulocytes.",
+        "COMPLETENESS_CHECK": "The full set contains \"reticulocytes\", which is the primary cell type used for the proteomics experiment described."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "P. yoelii 17X malaria infection",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a disease state (malaria infection), which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"BALB/c mice infected with the reticulocyte-prone non-lethal P. yoelii 17X malaria strain\".",
+        "TRUTH_CHECK": "The value is factually correct based on the experimental groups described.",
+        "COMPLETENESS_CHECK": "The full set contains the primary disease state studied in the proteomics analysis of rexPy."
       }
     },
     {
@@ -75,10 +75,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"BALB/c mice\" is a specific animal strain, not a broad material class as defined for this field.",
-        "SOURCE_CHECK": "The text mentions BALB/c mice were used, but the material actually analyzed by mass spectrometry were exosomes derived from reticulocytes.",
-        "TRUTH_CHECK": "The material analyzed in the proteomics experiment was \"rexPy\" (reticulocyte-derived exosomes), not the whole organism.",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect entity; it does not capture the actual material type (e.g., \"biofluid\" or \"primary cells\" depending on the interpretation of the exosome source)."
+        "TYPE_CHECK": "The candidate value \"BALB/c mice\" is a strain/species, not a broad material class as defined (e.g., \"tissue\", \"whole organism\").",
+        "SOURCE_CHECK": "The value is present in the text, but it refers to the animal model, not the material type used for the proteomics analysis.",
+        "TRUTH_CHECK": "The proteomics analysis was performed on \"isolated vesicles (rexPy)\" derived from reticulocytes, not on the whole mice.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and fails to capture the actual material used (exosomes/vesicles)."
       }
     },
     {
@@ -91,9 +91,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a time-based age range, which matches the definition for the age field.",
+        "TYPE_CHECK": "The candidate value is a time-based age range, which matches the definition.",
         "SOURCE_CHECK": "The text explicitly states \"Female BALB/c mice, 7 to 9 weeks of age, were used throughout the study.\"",
-        "TRUTH_CHECK": "The value is factually correct as per the methods section.",
+        "TRUTH_CHECK": "The value is factually correct according to the paper.",
         "COMPLETENESS_CHECK": "The full set contains the only age mentioned for the primary experimental subjects (mice). While human donors are mentioned as \"between 18 and 60 years old\", the extracted value correctly captures the age of the animal models used in the proteomics experiment."
       }
     },
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Female\" is a valid category for the sex field.",
-        "SOURCE_CHECK": "The paper explicitly states \"Female BALB/c mice, 7 to 9 weeks of age, were used throughout the study\" in the Materials and methods section.",
+        "TYPE_CHECK": "The candidate value \"Female\" is the correct category for the sex field.",
+        "SOURCE_CHECK": "The paper explicitly states in the \"Mice and parasites\" section: \"Female BALB/c mice, 7 to 9 weeks of age, were used throughout the study.\"",
         "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the only sex mentioned for the animal subjects in the study."
+        "COMPLETENESS_CHECK": "The full set contains the only sex mentioned for the animal subjects in the study."
       }
     },
     {
@@ -123,8 +123,8 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"BALB/c\" is a recognized animal strain, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"BALB/c mice\" multiple times in the abstract, results, and methods sections.",
+        "TYPE_CHECK": "The candidate value \"BALB/c\" is a mouse strain, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"BALB/c mice\" multiple times (e.g., in the abstract and methods).",
         "TRUTH_CHECK": "The value is factually correct as the study used BALB/c mice.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains \"BALB/c\", which is the only animal strain mentioned in the paper."
       }
@@ -139,9 +139,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the definition.",
-        "SOURCE_CHECK": "The text explicitly states, \"An LTQ OrbitrapVelos (Thermo Fisher) was used for performing liquid Chromatography... followed by mass spectrometry\".",
-        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The text explicitly states, \"An LTQ OrbitrapVelos (Thermo Fisher) was used for performing liquid Chromatography... followed by mass spectrometry.\"",
+        "TRUTH_CHECK": "The value is factually correct as per the methods section.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -155,15 +155,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label-free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the mass spectrometry section; therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The extraction is factually correct as the experiment used standard nanoLC-MS/MS without labels.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry workflow (LTQ OrbitrapVelos) but does not mention any isobaric or metabolic labeling (such as TMT or SILAC).",
+        "TRUTH_CHECK": "Since no labeling method is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "4 preparations (each pooled from 3 infected animals)",
+      "extracted_value": "4 preparations from pooled infected animals (n=3 each)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -171,10 +171,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the number of biological samples/preparations, which fits the category of replicates.",
-        "SOURCE_CHECK": "The text states, \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry,\" which supports the value.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental setup described in the \"Reticulocyte-derived exosomes from infections with P. yoelii 17x (rexPy) contain parasite proteins\" section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"4 preparations (each pooled from 3 infected animals)\" and \"4\") covers the information provided in the text."
+        "TYPE_CHECK": "The candidate value contains a count of preparations and animals, which relates to the number of biological replicates.",
+        "SOURCE_CHECK": "The text explicitly states, \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry.\"",
+        "TRUTH_CHECK": "The value accurately reflects the text, though it combines the number of preparations (4) and the number of animals per pool (3).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the detailed description and the number \"4\", which together cover the biological replication described for the MS experiment."
       }
     },
     {
@@ -187,15 +187,31 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for replicates.",
-        "SOURCE_CHECK": "The text states, \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry,\" indicating 4 biological preparations.",
-        "TRUTH_CHECK": "The value \"4\" correctly identifies the number of preparations analyzed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies that there were 4 preparations, and further specifies that each was pooled from 3 animals. Together, they provide a complete picture of the biological replication for the MS experiment."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The text states \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry\".",
+        "TRUTH_CHECK": "The study used 4 distinct preparations (biological replicates) for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies that 4 preparations were used."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when no replication is mentioned.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only the default \"1\", which is exhaustive given the absence of specific information in the text."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "characterization of the proteome of reticulocyte-derived exosomes from P. yoelii infected mice (rexPy)",
+      "extracted_value": "characterization of the core proteome of rexPy preparations",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -203,10 +219,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a study objective or a specific analysis rather than a study design type (e.g., \"treated vs control\", \"case-control\").",
-        "SOURCE_CHECK": "The text does describe the characterization of the rexPy proteome, but this is the goal of the experiment, not the design.",
-        "TRUTH_CHECK": "The value is a description of the experiment's purpose, not its design.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+        "TYPE_CHECK": "The candidate value describes a specific goal/analysis rather than a study design type (e.g., \"treated vs control\").",
+        "SOURCE_CHECK": "The text mentions the analysis of the core proteome of rexPy preparations, but this is the objective of the proteomics experiment, not the experimental design.",
+        "TRUTH_CHECK": "The value is a description of the result/analysis, not the design of the experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a miscategorization of the study's objective as its design."
       }
     },
     {
@@ -217,12 +233,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "exosome source (rexPy, rexC, exPv)",
+      "corrected_value": "exosome source (rexPy), exosome source (rexC), exosome source (exPv)",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes an experimental variable (the source of the exosomes), which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly compares different exosome sources: rexPy (from infected mice), rexC (from non-infected mice), and exPv (from P. vivax patients).",
-        "TRUTH_CHECK": "The value is factually correct as the study investigates the effect of these different exosome sources on immune protection and T cell subsets.",
-        "COMPLETENESS_CHECK": "The full set only contains \"exosome source (rexPy)\", but the paper clearly compares rexPy against rexC and exPv. The extraction is incomplete."
+        "SOURCE_CHECK": "The paper explicitly compares different exosome sources: rexPy (from P. yoelii infected mice), rexC (from non-infected mice), and exPv (from P. vivax patients).",
+        "TRUTH_CHECK": "The value is factually correct as the study investigates the effect of using rexPy versus other exosome types.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only lists \"exosome source (rexPy)\", but the paper compares rexPy against rexC and exPv. The extraction is partial."
       }
     },
     {
@@ -235,10 +251,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of \"1\" is applied.",
-        "TRUTH_CHECK": "Correct; no fractionation was performed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of a single \"1\", which accurately reflects the lack of fractionation described in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of \"1\" is applicable.",
+        "TRUTH_CHECK": "The value is factually correct as no fractionation was described.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the experiment."
       }
     },
     {
@@ -252,9 +268,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The text states \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry\".",
-        "TRUTH_CHECK": "The value \"4\" correctly identifies the number of proteomics samples (rexPy preparations) analyzed.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the number of samples processed for the proteomics experiment described."
+        "SOURCE_CHECK": "The text states, \"Four rexPy preparations from pooled infected animals (n = 3 each) were examined by mass spectrometry.\"",
+        "TRUTH_CHECK": "The mass spectrometry analysis was performed on 4 preparations of rexPy.",
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the 4 samples processed for the proteomics analysis."
       }
     }
   ]

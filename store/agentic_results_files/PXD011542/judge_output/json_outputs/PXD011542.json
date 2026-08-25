@@ -12,9 +12,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
-        "SOURCE_CHECK": "The species \"Arabidopsis thaliana\" is explicitly mentioned in the title and abstract.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on this plant species.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the primary experiments described."
+        "SOURCE_CHECK": "The species \"Arabidopsis thaliana\" is explicitly mentioned in the title and throughout the text.",
+        "TRUTH_CHECK": "The value is factually correct as the primary organism studied in the experiment.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the main experiments."
       }
     },
     {
@@ -25,12 +25,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "pistils, inflorescence",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"pistils\" is a tissue/organ of origin, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions that \"Protein extracts prepared from pistils... were subjected to mass spectrometry (Mass-Spec)\".",
-        "TRUTH_CHECK": "The value is factually correct as pistils were used for the mass spectrometry experiments.",
-        "COMPLETENESS_CHECK": "The paper also mentions \"inflorescence tissues\" and \"leaves\" being used for various assays, but for the specific Mass-Spec analysis described in the \"Protein-protein interactions\" section, pistils were used. However, the \"inflorescence tissues\" were also used for testing interactions among ILS proteins and for small RNA-seq. Since the field \"organ\" should capture the source material for the proteomics/MS experiments, and both pistils and inflorescences were used for MS-related protein analysis (though the primary identification of ILP1-interacting proteins used pistils), the set is slightly incomplete."
+        "TRUTH_CHECK": "The value is factually correct as pistils were used for the Mass-Spec analysis of ILP1-interacting proteins.",
+        "COMPLETENESS_CHECK": "The paper also mentions \"inflorescence tissues\" and \"leaves\" being used for various assays, but for the specific Mass-Spec analysis (which is the primary focus of proteomics metadata), pistils and inflorescence tissues were used. The current set only contains \"pistils\"."
       }
     },
     {
@@ -41,12 +41,12 @@
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "whole organism, tissue",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"transgenic plants\" is a description of the genetic status of the organism, not a broad material class as defined (e.g., \"tissue\", \"whole organism\").",
-        "SOURCE_CHECK": "The paper mentions \"transgenic plants\" multiple times, but this describes the subject, not the material type.",
-        "TRUTH_CHECK": "While the study uses transgenic plants, \"transgenic plants\" is not a valid value for the `material_type` field according to the provided definition list. The correct material type for the MS analysis described (proteins extracted from pistils and inflorescence tissues) would be \"tissue\".",
-        "COMPLETENESS_CHECK": "The full set contains only an incorrect category of value."
+        "TYPE_CHECK": "The candidate value \"transgenic plants\" is not one of the allowed broad material classes defined for this field (e.g., \"tissue\", \"whole organism\").",
+        "SOURCE_CHECK": "The paper mentions the use of transgenic plants (e.g., \"pILP1::ILP1-GFP transgenic plants\").",
+        "TRUTH_CHECK": "While transgenic plants were used, \"transgenic plants\" describes the genetic status of the organism, not the broad material class.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
       }
     },
     {
@@ -62,7 +62,7 @@
         "TYPE_CHECK": "The candidate value is a plant strain name, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly states, \"All the plant materials used in this study were in the Columbia (Col) background\".",
         "TRUTH_CHECK": "The value is factually correct based on the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains the only strain mentioned as the background for the plants used."
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary strain background mentioned for the study."
       }
     },
     {
@@ -77,8 +77,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The paper mentions \"Mass-spec analysis\" and \"Mass-Spec assay\" multiple times, but the specific instrument model \"Orbitrap Elite\" is not mentioned anywhere in the provided text.",
-        "TRUTH_CHECK": "The value is not present in the text and cannot be reasonably inferred.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TRUTH_CHECK": "The value is not supported by the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not present in the text."
       }
     },
     {
@@ -91,26 +91,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label-free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper describes a Mass-spec analysis of immunoprecipitated proteins but does not mention any isobaric or metabolic labeling (like TMT or SILAC); therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The value is factually correct as no labeling method was specified.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this experiment."
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper describes a Mass-spec analysis of immunoprecipitated proteins but does not mention any isobaric or metabolic labeling (like TMT or SILAC).",
+        "TRUTH_CHECK": "Per the field definition, \"label-free\" is the correct value when no labels are mentioned.",
+        "COMPLETENESS_CHECK": "The full set contains the only applicable value for this experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "ILP1-GFP and GFP control",
+      "extracted_value": "ILP1-GFP and GFP control lines",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "2",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"ILP1-GFP and GFP control\" is a description of experimental groups/samples, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions \"ILP1-GFP and GFP control proteins were immunoprecipitated,\" but these are the experimental conditions, not the number of replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect as a count of replicates.",
-        "COMPLETENESS_CHECK": "The full set contains \"2\", which is correct for the small RNA-seq assay (\"two biological replicates\"), but the candidate value itself is a type mismatch."
+        "TYPE_CHECK": "No, the candidate value describes experimental groups/lines, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "Yes, these lines are mentioned in the text, but not as a count of replicates.",
+        "TRUTH_CHECK": "No, the candidate value is not a valid representation of the number of replicates.",
+        "COMPLETENESS_CHECK": "The full set contains \"2\", which is the correct numeric value mentioned in the text (\"two biological replicates\" for the small RNA-seq assay)."
       }
     },
     {
@@ -123,26 +123,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"2\" is a numeric count, which matches the definition for the number of biological replicates.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
         "SOURCE_CHECK": "The paper explicitly states \"we conducted a small RNA-seq assay using ilp1-1 and Col-0 inflorescences (two biological replicates)\".",
         "TRUTH_CHECK": "The value \"2\" is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"2\" and \"ILP1-GFP and GFP control\". The latter is a sample description, not a replicate count. The value \"2\" correctly captures the biological replication mentioned for the small RNA-seq experiment."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"2\" and a non-numeric string \"ILP1-GFP and GFP control lines\" (which is a sample description, not a replicate count). The numeric value \"2\" correctly captures the biological replicates mentioned for the sequencing assay."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "Co-IP followed by Mass-spec analysis comparing ILP1-GFP and GFP control",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
+      "extracted_value": "Comparison of ILP1-GFP immunoprecipitate versus GFP control",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
       "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a specific experimental procedure/method rather than a study design type (e.g., case-control, treated vs control).",
-        "SOURCE_CHECK": "The procedure is mentioned in the text, but it is not a \"study design\" in the context of the field definition.",
-        "TRUTH_CHECK": "The value is factually present as a method, but it is the wrong category of information for this field.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+        "TYPE_CHECK": "The candidate value describes a specific experimental comparison rather than a broad study design type (e.g., \"case-control\", \"treated vs control\").",
+        "SOURCE_CHECK": "The comparison between ILP1-GFP and GFP control is explicitly mentioned in the \"Protein–protein interactions\" section.",
+        "TRUTH_CHECK": "The value is factually correct regarding the specific assay performed.",
+        "COMPLETENESS_CHECK": "The full set contains only this specific assay, but the paper also includes other designs such as mutant vs wild-type comparisons (ilp1-1, ntr1-1 vs Col-0) and rescue experiments."
       }
     },
     {
@@ -155,10 +155,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (the bait used for immunoprecipitation), which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The text explicitly mentions that \"ILP1-GFP and GFP control proteins were immunoprecipitated by GFP-trap beads\" for Mass-Spec analysis.",
-        "TRUTH_CHECK": "The value is factually correct as it identifies the different baits used to compare interacting proteins against a control.",
-        "COMPLETENESS_CHECK": "The full set contains only this value; however, the paper also studies other factors such as genotypes (WT, ilp1-1, ntr1-1) and their effects on miRNA biogenesis."
+        "TYPE_CHECK": "The candidate value describes the experimental variable (the bait used in the IP) used to compare interacting proteins.",
+        "SOURCE_CHECK": "The text describes immunoprecipitating \"ILP1-GFP and GFP control proteins\" to identify interacting proteins via Mass-Spec.",
+        "TRUTH_CHECK": "The value is factually correct as it identifies the specific proteins used as baits to differentiate between specific interactions and background.",
+        "COMPLETENESS_CHECK": "The full set captures the primary factor for the Mass-Spec interaction experiment, though the study also investigates genotypes (ilp1-1, ntr1-1, WT) as factors in other experiments. However, for the specific context of the IP/Mass-Spec, this is correct."
       }
     },
     {
@@ -172,9 +172,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes a \"Gel filtration\" experiment using a Superdex 200 column where \"Samples were collected at 1 min intervals,\" but it does not specify a total number of fractions generated per sample for the mass spectrometry analysis.",
-        "TRUTH_CHECK": "Per the field definition, \"1\" is the correct default value when no specific fractionation count is mentioned or when the standard LC-MS workflow is used without offline fractionation.",
-        "COMPLETENESS_CHECK": "The full set contains only the default value, which is appropriate given the text."
+        "SOURCE_CHECK": "The paper describes a \"Gel filtration\" step using a Superdex 200 column where \"Samples were collected at 1 min intervals,\" but it does not specify a total number of fractions generated per sample for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "Per the field definition, \"1\" is the correct value when no specific number of fractions is mentioned or when no offline fractionation (like high-pH RP) was used to split a single sample into multiple processed fractions for MS.",
+        "COMPLETENESS_CHECK": "The full set contains only \"1\", which is the appropriate default given the text."
       }
     },
     {
@@ -188,9 +188,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of samples.",
-        "SOURCE_CHECK": "The paper mentions \"two biological replicates\" for the small RNA-seq assay using ilp1-1 and Col-0 inflorescences.",
-        "TRUTH_CHECK": "The value \"2\" refers only to the replicates per group for one specific assay (small RNA-seq), not the total count of samples processed in the entire study. The study involves multiple genotypes (Col-0, ilp1-1, ntr1-1, dcl1-7, etc.) across various assays (RNA-seq, small RNA-seq, ChIP, etc.), making the total sample count significantly higher than 2.",
-        "COMPLETENESS_CHECK": "The full set contains only \"2\", which is an incorrect representation of the total samples in the study."
+        "SOURCE_CHECK": "The paper mentions \"two biological replicates\" for the small RNA-seq assay using ilp1-1 and Col-0 inflorescences, but this refers to replicates per group, not the total number of samples in the study.",
+        "TRUTH_CHECK": "The value \"2\" is incorrect as the total number of samples is higher. The study involves multiple genotypes (Col-0, ilp1-1, ntr1-1, dcl1-7, etc.) across various assays (small RNA-seq, mRNA-seq, qPCR, ChIP, etc.). Even for the small RNA-seq alone, there are at least 4 samples (2 genotypes $\\times$ 2 replicates).",
+        "COMPLETENESS_CHECK": "The full set consists of only this incorrect value and does not cover the total sample count of the study."
       }
     }
   ]

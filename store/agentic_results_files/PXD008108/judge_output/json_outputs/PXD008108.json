@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"murine embryonic fibroblasts (MEFs)\" and \"mouse proteome downloaded from Uniprot,\" confirming the species is mouse.",
-        "TRUTH_CHECK": "\"Mus musculus\" is the correct scientific name for the mouse.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the primary experiments described."
+        "TYPE_CHECK": "The candidate value \"Mus musculus\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"murine embryonic fibroblasts (MEFs)\" and \"mouse proteome downloaded from Uniprot,\" making \"Mus musculus\" (mouse) the correct source organism.",
+        "TRUTH_CHECK": "The value is factually correct based on the experimental models used in the study.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct species used for the primary experiments."
       }
     },
     {
@@ -27,15 +27,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the tissue/cell source of the experiment, which fits the definition of organ/tissue.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"murine embryonic fibroblasts (MEFs)\" and \"derivation of mouse embryonic fibroblasts\" in the methods.",
-        "TRUTH_CHECK": "The value is factually correct as the primary material used for the proteomics analysis was derived from embryonic fibroblasts.",
-        "COMPLETENESS_CHECK": "The full set contains \"embryonic fibroblasts\", which covers the primary tissue source for the main quantitative proteomics experiment described."
+        "TYPE_CHECK": "The candidate value \"embryonic fibroblasts\" describes a cell type rather than an organ or tissue.",
+        "SOURCE_CHECK": "The paper mentions \"murine embryonic fibroblasts (MEFs)\" throughout the text.",
+        "TRUTH_CHECK": "While the cells are derived from embryos, \"embryonic fibroblasts\" is a cell type/lineage, not an organ or tissue of origin.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch for the field \"organ\"."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "fibroblasts",
+      "extracted_value": "embryonic fibroblasts",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -43,74 +43,42 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"fibroblasts\" describes a primary cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"murine embryonic fibroblasts (MEFs)\" multiple times throughout the text.",
-        "TRUTH_CHECK": "The use of MEFs (mouse embryonic fibroblasts) is factually correct as the starting material for the reprogramming experiments.",
-        "COMPLETENESS_CHECK": "The full set contains \"fibroblasts\", which covers the primary cell type used for the main proteomic analysis (MEFs)."
-      }
-    },
-    {
-      "annotation_type": "disease",
-      "extracted_value": "normal",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field, used to describe healthy controls.",
-        "SOURCE_CHECK": "The paper describes the use of murine embryonic fibroblasts (MEFs) and other cell lines in a baseline state to compare against reprogramming or knockdown conditions; \"normal\" is a safe default for these control subjects.",
-        "TRUTH_CHECK": "The experimental design uses control cells (e.g., control siRNA treated MEFs) as the baseline, which corresponds to a \"normal\" or \"healthy\" state in this context.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of \"normal\", which accurately represents the control state of the subjects in this study."
+        "TYPE_CHECK": "The candidate value \"embryonic fibroblasts\" describes a primary cell lineage, which matches the definition of cell_type.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"murine embryonic fibroblasts (MEFs)\" and \"derivation of mouse embryonic fibroblasts\" in the methods.",
+        "TRUTH_CHECK": "The value is factually correct as the study uses MEFs for the majority of its reprogramming and transdifferentiation experiments.",
+        "COMPLETENESS_CHECK": "While the paper also uses iPSCs, iTSCs, and myeloid progenitors, these are derived from or are different states of the primary cell type (fibroblasts) or are separate cell lines/progenitors. However, the set of all_extracted_values only contains \"embryonic fibroblasts\". Given the primary focus of the study is the conversion of MEFs, this is a core cell type."
       }
     },
     {
       "annotation_type": "material_type",
-      "extracted_value": "embryos",
+      "extracted_value": "MEFs",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "primary cells, cell line",
+      "corrected_value": "primary cells",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"embryos\" is not one of the allowed broad material classes defined for this field (e.g., \"tissue\", \"cell line\", \"primary cells\").",
-        "SOURCE_CHECK": "The paper mentions embryos were dissected to generate MEFs, but the proteomics experiments were performed on cells (MEFs and HEK293T).",
-        "TRUTH_CHECK": "The material actually used for the mass spectrometry analysis was cells (MEFs and HEK293T), not whole embryos.",
-        "COMPLETENESS_CHECK": "The full set contains only \"embryos\", which is both the wrong type and the wrong material for the MS experiments."
-      }
-    },
-    {
-      "annotation_type": "age",
-      "extracted_value": "E13.5",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"E13.5\" is a developmental time point, which fits the definition of the age field.",
-        "SOURCE_CHECK": "The text explicitly states in the \"Derivation of mouse embryonic fibroblasts\" section: \"Following timed mating, embryos were dissected from pregnant females at E13.5.\"",
-        "TRUTH_CHECK": "The value is factually correct as per the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains the only developmental age mentioned for the source material (MEFs)."
+        "TYPE_CHECK": "The candidate value \"MEFs\" (Mouse Embryonic Fibroblasts) is a specific cell type, not a broad material class as required by the definition.",
+        "SOURCE_CHECK": "The value is present in the text, as the study uses murine embryonic fibroblasts.",
+        "TRUTH_CHECK": "While the cells used are MEFs, the field requires the broad category (e.g., \"primary cells\" or \"cell line\"). MEFs derived from embryos are primary cells.",
+        "COMPLETENESS_CHECK": "The full set contains only \"MEFs\", which is a specific entity rather than the required broad material class."
       }
     },
     {
       "annotation_type": "cell_line",
-      "extracted_value": "HEK293T",
-      "verdict": "high",
+      "extracted_value": "HEK293",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a name of an immortalized cell line, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"HEK293T\" is explicitly mentioned in the \"results\" section (\"...immunoprecipitation for Nudt21 followed by mass-spectrometry using HEK293T cells\") and the \"methods\" section.",
-        "TRUTH_CHECK": "The value is factually correct as the paper used HEK293T cells for the IP-MS experiment.",
-        "COMPLETENESS_CHECK": "The full set contains \"HEK293T\", which is the only immortalized cell line used for the proteomics experiments described."
+        "SOURCE_CHECK": "The paper mentions \"HEK293T cells\" in the \"Vectors and virus production and infection\" and \"Luciferase assays\" sections, and \"HEK293 cells\" in the \"IP mass spectrometry analysis\" section.",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly uses HEK293 and HEK293T cells.",
+        "COMPLETENESS_CHECK": "The full set contains \"HEK293\", but the paper specifically mentions \"HEK293T\" in multiple instances. While HEK293 is the parent line, \"HEK293T\" is the specific entity used for the majority of the mentioned tasks (transfection, luciferase assays)."
       }
     },
     {
@@ -125,7 +93,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly states, \"Mass spectrometry data were collected using an Orbitrap Fusion mass spectrometer (Thermo Fischer Scientific)\".",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TRUTH_CHECK": "The value is factually correct according to the paper.",
         "COMPLETENESS_CHECK": "The full set contains the only instrument mentioned for the proteomics experiments."
       }
     },
@@ -141,8 +109,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"TMT\" is a recognized isobaric labeling method, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"TMT reagents\" and the \"multinotch MS3-based TMT method\" in the \"Protein digestion and peptide labeling\" and \"Liquid chromatography and tandem mass spectrometry\" sections.",
-        "TRUTH_CHECK": "The use of TMT for quantitative proteomics is factually correct as described in the methods.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"TMT\", which is the only labeling method described for the proteomics experiments in this paper."
+        "TRUTH_CHECK": "The use of TMT for quantitative proteomics is factually correct as described in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"TMT\", which is the only labeling method mentioned in the paper."
       }
     },
     {
@@ -155,10 +123,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value refers to the number of biological replicates, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a numeric count of biological replicates, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly states \"n=3 replicates per sample\" in the section describing the large-scale quantitative proteomic analysis.",
         "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes \"3 replicates per sample\" and \"6\". The \"6\" is likely a hallucination or a misinterpretation of other numbers in the text, as the proteomic analysis specifically mentions 3 replicates. Together, the set is not clean, but the candidate value itself is the correct one for the proteomic experiment."
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"3 replicates per sample\" and \"6\". The \"6\" is not supported by the text for biological replicates of the proteomics experiment; the paper consistently refers to n=3 for the proteomic analysis. Including \"6\" introduces an incorrect value into the set."
       }
     },
     {
@@ -169,12 +137,12 @@
       "value_correct": false,
       "value_complete": false,
       "hallucination": true,
-      "corrected_value": "3",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of biological replicates.",
-        "SOURCE_CHECK": "The paper explicitly states \"n=3 replicates per sample\" in the \"Proteomics analysis reveals enrichment...\" section. There is no mention of \"6\" replicates in the text.",
-        "TRUTH_CHECK": "The value \"6\" is factually incorrect based on the provided text, which specifies 3 replicates.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is contradictory and contains an incorrect value (\"6\"); the correct value is 3."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the 'replicates' field.",
+        "SOURCE_CHECK": "The paper explicitly states \"n=3 replicates per sample\" in the \"Proteomics analysis reveals enrichment...\" section. There is no mention of \"6\" biological replicates for the proteomics experiment.",
+        "TRUTH_CHECK": "The value \"6\" is not supported by the text; the text specifies 3 replicates per sample.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect because it includes a hallucinated value (\"6\") and a descriptive string (\"3 replicates per sample\") instead of just the numeric value."
       }
     },
     {
@@ -187,10 +155,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a comparison between a treatment group and a control group, which fits the \"treated vs control\" category of experimental design.",
-        "SOURCE_CHECK": "The paper explicitly describes performing quantitative proteomic analysis of \"MEFs expressing OKSM for 3 days in the presence of either Nudt21 or control siRNAs.\"",
-        "TRUTH_CHECK": "The value accurately reflects the experimental setup for the proteomics experiment described in the text.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly captures the primary design of the quantitative proteomics experiment."
+        "TYPE_CHECK": "The candidate value describes a specific experimental comparison, which fits the category of \"treated vs control\" study design.",
+        "SOURCE_CHECK": "The text explicitly describes quantitative proteomic analysis of \"MEFs expressing OKSM for 3 days in the presence of either Nudt21 or control siRNAs.\"",
+        "TRUTH_CHECK": "The value accurately reflects the experimental setup used for the proteomics analysis described in the paper.",
+        "COMPLETENESS_CHECK": "The full set contains this single comparison, which is the primary design for the large-scale quantitative proteomics experiment."
       }
     },
     {
@@ -203,15 +171,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (siRNA treatment) and its levels (Nudt21 vs control), which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly describes the use of \"Nudt21 and control siRNAs\" to study the effect of Nudt21 suppression on reprogramming and protein levels.",
+        "TYPE_CHECK": "The candidate value describes an experimental variable (siRNA treatment) and its levels (Nudt21, control), which fits the definition of a factor value.",
+        "SOURCE_CHECK": "The paper explicitly describes the use of Nudt21 siRNAs and control siRNAs to study the effect of Nudt21 suppression on reprogramming and protein levels.",
         "TRUTH_CHECK": "The value is factually correct as the study compares Nudt21-depleted cells against control siRNA-treated cells.",
-        "COMPLETENESS_CHECK": "The full set contains this value; however, the study also investigates other factors such as \"doxycycline induction\" (time points of reprogramming) and \"miRNA inhibition\". While the siRNA treatment is a primary factor, the set is not exhaustive of all experimental variables."
+        "COMPLETENESS_CHECK": "The full set contains only this value; however, the study also investigates other factors such as the presence of OKSM (dox induction) and the use of different cell types (MEFs, ESCs, etc.). While the siRNA treatment is a primary factor, the set is not exhaustive of all experimental variables."
       }
     },
     {
       "annotation_type": "fractions",
-      "extracted_value": "24",
+      "extracted_value": "96",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -219,10 +187,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The text states, \"We fractionated into a total of 96 fractions, then consolidated samples into 24 fractions\".",
-        "TRUTH_CHECK": "The paper explicitly mentions that the samples were consolidated into 24 fractions for subsequent processing.",
-        "COMPLETENESS_CHECK": "The full set contains the final number of fractions used for LC-MS/MS analysis."
+        "TYPE_CHECK": "The candidate value is a numeric count of fractions, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states, \"We fractionated into a total of 96 fractions\" in the \"Offline basic pH reversed-phase (BPRP) fractionation\" section.",
+        "TRUTH_CHECK": "The value is factually correct as described in the methods.",
+        "COMPLETENESS_CHECK": "The full set contains the single value \"96\", which accurately reflects the total number of fractions generated per pooled sample before consolidation."
       }
     },
     {
@@ -236,9 +204,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper describes a quantitative proteomic analysis of MEFs expressing OKSM for 3 days in the presence of either Nudt21 or control siRNAs, with \"n=3 replicates per sample\" for each of the two conditions (Nudt21 siRNA vs control siRNA), totaling 6 samples.",
-        "TRUTH_CHECK": "The value is factually correct based on the \"n=3 replicates per sample\" for two groups (control and Nudt21 knockdown) mentioned in the proteomics section.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"6\", which accurately covers the samples used for the primary quantitative proteomics experiment described."
+        "SOURCE_CHECK": "The paper describes a quantitative proteomic analysis of MEFs expressing OKSM in the presence of either Nudt21 or control siRNAs, stating \"n=3 replicates per sample\" for each of the two conditions (Nudt21 siRNA vs control siRNA), which implies 6 samples total for that specific experiment.",
+        "TRUTH_CHECK": "The value \"6\" is correct for the large-scale quantitative proteomics experiment (2 conditions x 3 replicates).",
+        "COMPLETENESS_CHECK": "The full set contains only \"6\", which accurately reflects the sample count for the primary quantitative proteomics experiment described."
       }
     }
   ]

@@ -1,0 +1,145 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD032035","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions the use of human cell lines (HEK 293T, HepG2, HeLa) and explicitly states the use of the ""Uniprot human protein database"" for protein identification.
+TRUTH CHECK: The experimental system uses human-derived cells and human protein databases, making ""Homo sapiens"" correct.
+COMPLETENESS CHECK: The full set contains the only relevant species used for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD032035","BiologicalAgent","organ","kidney","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper mentions ""kidney epithelial cell line Vero E6"" in the results section.
+TRUTH CHECK:       The experiment used the Vero E6 cell line, which is derived from kidney epithelial cells; however, the material used was a cell line, not the organ itself.
+COMPLETENESS CHECK:   The full set contains only ""kidney"", but the actual material used was a cell line.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD032035","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell lineage/type, which fits the definition.
+SOURCE CHECK:      The paper mentions ""kidney epithelial cell line Vero E6"" in the results section.
+TRUTH CHECK:       The paper refers to Vero E6 as a ""kidney epithelial cell line""; however, the field `cell_type` is for primary cell types or lineages, whereas Vero E6 is an immortalized cell line.
+COMPLETENESS CHECK:    The full set contains only this value, but it is a misclassification of a cell line as a primary cell type.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD032035","BiologicalAgent","material_type","HEK 293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK 293T cells"" is a specific cell line name, not a broad material class as required by the definition.
+SOURCE CHECK:      The text mentions HEK 293T cells were used, but the field requires the broad category.
+TRUTH CHECK:       While HEK 293T cells are used, the value provided is the specific entity rather than the material type.
+COMPLETENESS CHECK: The full set contains only the specific cell line name and fails to provide the broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]",""
+"PXD032035","BiologicalAgent","cell_line","HEK 293T","HEK 293T","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""HEK 293T"" is explicitly mentioned multiple times in the text (e.g., in the ""Cell lines"" section and ""Results"").
+TRUTH CHECK: The value is factually correct as the paper describes using HEK 293T cells for various experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also explicitly mentions ""HepG2"", ""HeLa"", and ""Vero E6"" as cell lines used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""HEK 293T"", ""HepG2"", ""HeLa"", ""Vero E6""]","HEK 293T, HepG2, HeLa, Vero E6"
+"PXD032035","TechnicalAgent","instrument","Orbitrap Exploris 480","Orbitrap Exploris 480","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Orbitrap Exploris 480 mass spectrometer (Thermo Fisher Scientific)"" in the LC-MS/MS analysis section.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032035","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The extraction is factually correct as the experiment used standard LC-MS/MS without labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD032035","ExperimentalDesignAgent","replicates","HEK 293T cells (ORF8-overexpressing vs control)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample groups/cell lines, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions HEK 293T cells and the comparison between ORF8-overexpressing and control groups, but this is not a replicate count.
+TRUTH CHECK:       The value is factually present in the text but is not the correct type of information for the 'replicates' field.
+COMPLETENESS CHECK: The full set contains both a group description and a number, but the group description is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD032035","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper text does not mention the number of biological replicates for the mass spectrometry experiments or any other assay.
+TRUTH CHECK:       There is no evidence in the text to support the value ""2"".
+COMPLETENESS CHECK: The full set of extracted values is incorrect; one value is a sample description and the other is an unsupported number.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""1""]",""
+"PXD032035","ExperimentalDesignAgent","experimental_design","comparative interactome analysis (ORF8-overexpressing vs control)","comparative interactome analysis (ORF8-overexpressing vs control)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing an overexpressing group to a control), which fits the definition of experimental design.
+SOURCE CHECK:      The paper describes identifying the ORF8 interactome and defines significant interactions based on the ""abundance ratio of ORF8-overexpressing group to control group.""
+TRUTH CHECK:       The value accurately reflects the comparative nature of the mass spectrometry experiment described in the ""Protein identification"" section.
+COMPLETENESS CHECK: The full set contains this single value, which captures the primary design of the proteomics experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032035","ExperimentalDesignAgent","factor_value","expression (ORF8-overexpressing, control)","expression (ORF8-overexpressing, control)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (expression of ORF8 vs control), which fits the definition of a factor value.
+SOURCE CHECK:      The paper describes comparing ""ORF8-overexpressing group to control group"" in the Protein identification section and throughout the results.
+TRUTH CHECK:       The value is factually correct as the study focuses on the effects of ORF8 expression compared to controls.
+COMPLETENESS CHECK: The full set captures the primary experimental variable used for the proteomics analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032035","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values consists of only this value, which accurately reflects the lack of fractionation described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032035","ExperimentalDesignAgent","number_of_samples","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the mass spectrometry experiments.
+TRUTH CHECK:       There is no evidence in the text to support the number ""5"" as the total sample count. The study involves multiple cell lines (HEK 293T, HepG2, HeLa, Vero E6) and various conditions, but a total count of 5 is not mentioned.
+COMPLETENESS CHECK:The full set contains only this unsupported value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

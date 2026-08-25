@@ -13,7 +13,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | Biological | 0.667 | 0.610 | 0.631 | 0.667 | 0.583 | 0.622 |
-| Technical | 0.250 | 0.250 | 0.250 | 0.250 | 0.250 | 0.250 |
+| Technical | 0.571 | 0.667 | 0.615 | 0.571 | 0.667 | 0.615 |
 | ExperimentalDesign | 0.043 | 0.071 | 0.054 | 0.043 | 0.071 | 0.054 |
 
 ## Metadata type agreement across matched files
@@ -30,14 +30,17 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[technical replicate]` | ExperimentalDesign | 0.179 | 0.179 | 0.179 |
 | `factor value[disease]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `factor value[experimental design]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
-| `comment[cleavage agent details]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[alkylation reagent]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[cleavage agent details]` | Technical | 1.000 | 0.500 | 0.667 |
 | `comment[dissociation method]` | Technical | 1.000 | 1.000 | 1.000 |
-| `comment[fragment mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[fragment mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[instrument]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[label]` | Technical | 1.000 | 1.000 | 1.000 |
+| `comment[modification parameters]` | Technical | 1.000 | 0.750 | 0.857 |
 | `comment[ms2 mass analyzer]` | Technical | 0.000 | 0.000 | 0.000 |
-| `comment[precursor mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[precursor mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[proteomics data acquisition method]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[reduction reagent]` | Technical | 0.000 | 0.000 | 0.000 |
 | `technology type` | Technical | 0.000 | 0.000 | 0.000 |
 
 Metadata averages include only the 28 uniquely matched files. Missing files are reported as coverage failures rather than zero-score metadata rows.

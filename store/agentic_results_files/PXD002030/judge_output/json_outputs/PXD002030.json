@@ -11,26 +11,10 @@
       "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "",
-        "SOURCE_CHECK": "",
-        "TRUTH_CHECK": "",
-        "COMPLETENESS_CHECK": ""
-      }
-    },
-    {
-      "annotation_type": "organ",
-      "extracted_value": "flagellar membrane",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"flagellar membrane\" describes a specific cellular structure/subcellular location, not an organ or tissue.",
-        "SOURCE_CHECK": "The text mentions that nanotubes and EVs originate from the flagellar membrane.",
-        "TRUTH_CHECK": "While the flagellar membrane is the source of the EVs, it is a subcellular component, not an organ or tissue.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"cattle trypanosomiasis\" and \"cattle\" in the concluding remarks, but it does not explicitly name \"Bos taurus\".",
+        "TRUTH_CHECK": "While \"Bos taurus\" is the scientific name for cattle, the paper discusses the disease in cattle generally; it does not state that cattle tissues or cells were used as a source for the proteomics experiment. The proteomics was performed on EVs from *Trypanosoma brucei*.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Bos taurus\", which is not the primary source organism of the proteomic analysis."
       }
     },
     {
@@ -43,10 +27,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a specific life cycle stage/form of the parasite, which functions as the cell type/lineage in this context.",
-        "SOURCE_CHECK": "The text explicitly mentions \"bloodstream form (BF) T. b. brucei\" multiple times.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on the bloodstream form of the trypanosomes.",
-        "COMPLETENESS_CHECK": "The full set contains the primary cell type/form used for the EV production and proteomic analysis."
+        "TYPE_CHECK": "The candidate value \"bloodstream form\" describes a developmental stage or life cycle stage of the parasite, not a primary cell type or lineage.",
+        "SOURCE_CHECK": "The term \"bloodstream form (BF)\" is explicitly mentioned in the text.",
+        "TRUTH_CHECK": "While the text mentions \"bloodstream form T. b. brucei\", this is a life cycle stage of the organism, not a \"cell type\" in the sense of biological lineage (like neurons or fibroblasts).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a category error."
       }
     },
     {
@@ -59,10 +43,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"extracellular vesicles\" is a specific biological entity, but it does not match any of the broad material classes defined for this field (e.g., \"tissue\", \"cell line\", \"biofluid\").",
-        "SOURCE_CHECK": "The paper explicitly focuses on extracellular vesicles (EVs) as the material analyzed for proteomics.",
-        "TRUTH_CHECK": "While the material analyzed was indeed extracellular vesicles, the field definition requires a \"Broad material class\" from a specific list. EVs are typically derived from biofluids or cell cultures, but \"extracellular vesicles\" itself is not one of the allowed categories.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a specific entity rather than a broad material class."
+        "TYPE_CHECK": "The candidate value \"extracellular vesicles\" is a specific biological entity, but it does not match the broad material classes defined for this field (e.g., \"tissue\", \"cell line\", \"biofluid\").",
+        "SOURCE_CHECK": "The paper explicitly focuses on \"extracellular vesicles\" (EVs) as the subject of the proteomic analysis.",
+        "TRUTH_CHECK": "While the study is about EVs, the `material_type` field requires a broad category. EVs are typically considered a component of a \"biofluid\" or a specialized \"primary cell\" derivative, but \"extracellular vesicles\" itself is not one of the allowed categories in the definition.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+      }
+    },
+    {
+      "annotation_type": "strain",
+      "extracted_value": "T. b. brucei",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "BALB/c, C57BL/6",
+      "issue_summary": {
+        "TYPE_CHECK": "",
+        "SOURCE_CHECK": "",
+        "TRUTH_CHECK": "",
+        "COMPLETENESS_CHECK": ""
       }
     },
     {
@@ -76,9 +76,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
-        "SOURCE_CHECK": "The paper mentions \"Proteomic analysis of EVs revealed 156 proteins\" and refers to \"Table S1\", but the provided text does not explicitly name the instrument used for the mass spectrometry.",
-        "TRUTH_CHECK": "The instrument \"Q Exactive\" is not mentioned anywhere in the provided paper text.",
-        "COMPLETENESS_CHECK": "The full set contains a value that is not supported by the text."
+        "SOURCE_CHECK": "The paper mentions \"Proteomic analysis of EVs revealed 156 proteins\" and refers to a \"Table S1\", but the text provided does not mention the instrument \"Q Exactive\" or any other mass spectrometer model.",
+        "TRUTH_CHECK": "The value is not supported by the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only one value which is not present in the text."
       }
     },
     {
@@ -93,8 +93,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
         "SOURCE_CHECK": "The paper mentions \"Proteomic analysis of EVs revealed 156 proteins\" and \"SDS-PAGE protein profile,\" but does not mention any isobaric or metabolic labeling (like TMT or SILAC).",
-        "TRUTH_CHECK": "Since no labeling method is mentioned, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only \"label-free\", which accurately reflects the lack of labeling described in the text."
+        "TRUTH_CHECK": "Since no labeling method is described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods are mentioned."
       }
     },
     {
@@ -107,15 +107,47 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
-        "SOURCE_CHECK": "The paper text does not explicitly mention the number of biological replicates for the proteomic analysis of EVs.",
-        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when no replication is mentioned.",
-        "COMPLETENESS_CHECK": "The full set contains only the default value, which is appropriate given the absence of specific replicate counts in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of biological replicates for the proteomic analysis of EVs.",
+        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single default value, which is exhaustive given the lack of information in the text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "technical replicates",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"technical replicates\" is the name of the field itself, not a numeric count as required by the definition.",
+        "SOURCE_CHECK": "The phrase \"technical replicates\" does not appear in the text as a value; the text does not specify the number of technical replicates.",
+        "TRUTH_CHECK": "The value is not a factual count of replicates from the experiment.",
+        "COMPLETENESS_CHECK": "The full set contains a non-numeric string and the number \"4\", neither of which are supported by the provided text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"4\" is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "I have searched the provided text (title, abstract, results, and methods section) and found no mention of the number of technical replicates used for the proteomic analysis.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains a generic phrase \"technical replicates\" and a number \"4\", neither of which are present in the text."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "characterization of the EV proteome and comparison with flagellar surface and matrix proteomes",
+      "extracted_value": "proteomic characterization of T. b. brucei extracellular vesicles",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -123,15 +155,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "No, the candidate value describes the objective/goal of the analysis rather than the study design type (e.g., \"treated vs control\", \"case-control\").",
-        "SOURCE_CHECK": "Yes, the text mentions proteomic analysis of EVs and comparison with flagellar surface and matrix proteomes.",
-        "TRUTH_CHECK": "The description of the activity is factually correct, but it is not an \"experimental design\" as defined.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of the experiment's aim, not its design type."
+        "TYPE_CHECK": "",
+        "SOURCE_CHECK": "",
+        "TRUTH_CHECK": "",
+        "COMPLETENESS_CHECK": ""
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "sample type (EVs)",
+      "extracted_value": "sample type (purified EVs)",
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
@@ -139,10 +171,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a variable/factor (sample type), which fits the definition of factor_value.",
-        "SOURCE_CHECK": "The paper focuses on comparing the proteome of extracellular vesicles (EVs) against total cell lysates and other organelles, and the effects of EVs versus other treatments.",
-        "TRUTH_CHECK": "The study specifically investigates the properties and contents of EVs as a distinct experimental group/factor.",
-        "COMPLETENESS_CHECK": "The full set contains only this value; however, the paper also explores factors such as \"T. b. brucei\" vs \"T. b. rhodesiense\" and \"EV-treated\" vs \"untreated\" erythrocytes."
+        "TYPE_CHECK": "The candidate value describes a sample type/material, which is a common experimental factor/variable.",
+        "SOURCE_CHECK": "The paper explicitly focuses on \"purified EVs\" as the primary subject of the proteomic and functional analysis.",
+        "TRUTH_CHECK": "The study compares the proteome of purified EVs against total cell lysates and investigates the effects of these EVs on recipient cells.",
+        "COMPLETENESS_CHECK": "The full set contains only this value; however, the study also compares different parasite subspecies (T. b. brucei vs T. b. rhodesiense) and different conditions (e.g., EV-treated vs untreated erythrocytes), which are also experimental factors."
       }
     },
     {
@@ -155,15 +187,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation steps; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is factually correct as no fractionation was described.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the study."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the 'fractions' field.",
+        "SOURCE_CHECK": "The paper does not mention any peptide or protein fractionation steps; therefore, the safe default of \"1\" is applicable.",
+        "TRUTH_CHECK": "The value is factually correct as no fractionation is described in the methods or results.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation."
       }
     },
     {
       "annotation_type": "number_of_samples",
-      "extracted_value": "4",
+      "extracted_value": "1",
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
@@ -171,10 +203,10 @@
       "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper text does not explicitly state a total count of samples processed for the proteomic analysis or the overall study.",
-        "TRUTH_CHECK": "There is no evidence in the provided text to support the value \"4\".",
-        "COMPLETENESS_CHECK": "The full set contains only one value, but that value is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of samples.",
+        "SOURCE_CHECK": "The paper does not explicitly state a total number of samples processed for the proteomic analysis of EVs.",
+        "TRUTH_CHECK": "While the paper describes various experiments, there is no specific count of samples provided for the proteomic study; however, the \"1\" is not explicitly supported by the text.",
+        "COMPLETENESS_CHECK": "The full set contains only \"1\", but this is a default value rather than a value derived from the text."
       }
     }
   ]

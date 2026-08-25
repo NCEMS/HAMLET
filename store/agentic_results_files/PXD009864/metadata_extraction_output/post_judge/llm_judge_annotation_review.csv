@@ -1,8 +1,8 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
 "PXD009864","","strict","Biological","organ","hepatopancreas","hepatopancreas","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""hepatopancreas"" is a valid organ/tissue type.
-SOURCE CHECK: The value is explicitly mentioned in the text as the source of the material analyzed by mass spectrometry (""proteomic analysis of the hepatopancreas from mitten crabs"").
+SOURCE CHECK: The value is explicitly mentioned in the text as the source of the material used for proteomic analysis (""...proteomic analysis of the hepatopancreas from mitten crabs..."").
 TRUTH CHECK: The value is factually correct based on the paper.
-COMPLETENESS CHECK: The full set of extracted values contains the only organ mentioned for the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values contains the only organ mentioned for the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,10 +10,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is the correct category for the sex field.
+"PXD009864","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is a valid entry for the sex metadata field.
 SOURCE CHECK: The value is explicitly stated in the methods section (""48 active male crabs... were selected"").
-TRUTH CHECK: The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains the only sex mentioned for the samples used in the study.
+TRUTH CHECK: The value is factually correct as the crabs used in the experiment were male.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one sex was used.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,8 +23,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Biological","species","Eriocheir sinensis","Eriocheir sinensis","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of an organism, which matches the species field definition.
 SOURCE CHECK: The value is explicitly mentioned in the title and abstract as the subject of the proteomic analysis.
-TRUTH CHECK: The paper identifies the Chinese mitten crab as Eriocheir sinensis.
-COMPLETENESS CHECK: The full set contains the only species mentioned as the source of the MS samples.
+TRUTH CHECK: The value ""Eriocheir sinensis"" (Chinese mitten crab) is the correct source organism for the experiment.
+COMPLETENESS CHECK: The full set contains the only species used in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -32,10 +32,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","ExperimentalDesign","factor_value","diet (LA, LNA)","diet (LA, LNA)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (diet) and its specific levels (LA, LNA), which is the correct category for factor_value.
-SOURCE CHECK: The value is explicitly stated in the text; the crabs were fed either a linoleic acid (LA) or $\alpha$-linolenic acid (LNA) diet.
-TRUTH CHECK: The value is factually correct as the study compares the effects of these two specific dietary fatty acids.
-COMPLETENESS CHECK: The full set of extracted values captures the primary experimental variable described in the paper.
+"PXD009864","","strict","ExperimentalDesign","factor_value","diet (LA, LNA)","diet (LA, LNA)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (diet) and its specific levels (LA, LNA), which is the correct category for this field.
+SOURCE CHECK: The value is explicitly derived from the MS experiment context, as the study compares the hepatopancreas proteomes of crabs fed with LA or LNA diets.
+TRUTH CHECK: The value is factually correct; the paper describes two groups fed with either a linoleic acid (LA) or $\alpha$-linolenic acid (LNA) diet.
+COMPLETENESS CHECK: The full set of extracted values captures the primary experimental variable and its levels described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -43,10 +43,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper describes the LC-MS/MS workflow but does not mention any offline peptide or protein fractionation steps.
-TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The full set contains the single value ""1"", which is exhaustive for this experiment.
+"PXD009864","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation method (e.g., high-pH RP or SAX) before LC-MS/MS.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,31 +55,21 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","ExperimentalDesign","replicates","6","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: The paper states ""A total of six crabs... were selected for the use of the proteomic analysis with three crabs in each group"".
-TRUTH CHECK: The ""replicates"" field refers to the number of biological replicates per condition/group. The text explicitly states there were ""three crabs in each group"" used for the proteomic analysis. The value ""6"" is the total number of animals across both groups, not the number of replicates per group.
-COMPLETENESS CHECK: The full set contains only the incorrect total count.
+SOURCE CHECK: The paper states ""A total of six crabs... were selected for the use of the proteomic analysis with three crabs in each group"", and later ""the hepatopancreas from three crabs in each group were pooled into one sample, and then two pooled hepatopancreas samples were ground"".
+TRUTH CHECK: The ""6"" refers to the total number of crabs used across both groups, but biological replicates are typically counted per group. The text explicitly says ""three crabs in each group"" were pooled into ""two pooled hepatopancreas samples"" per group. This means there are 2 biological replicates per group.
+COMPLETENESS CHECK: The value ""6"" is the total number of animals, not the number of biological replicates per condition.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
-CORRECTED_VALUE: 3","3"
+CORRECTED_VALUE: 2","2"
 "PXD009864","","strict","ExperimentalDesign","technical_replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
-SOURCE CHECK: The paper states that ""the peptides in each group were divided into triplicate for the proteomic analysis to minimize equipment error,"" which refers to technical replicates of the MS analysis.
-TRUTH CHECK: ""Triplicate"" corresponds to the value 3.
-COMPLETENESS CHECK: The full set contains this single value, which accurately reflects the technical replication described in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
-SOURCE CHECK: The paper does not explicitly use the phrase ""data-dependent acquisition"" or ""DDA"", but it describes a ""Full MS spectra"" followed by ""MS2 scan"" with an ""isolation window"", which is the characteristic workflow of data-dependent acquisition (DDA).
-TRUTH CHECK: The described method (Full MS scan followed by targeted MS2 scans of precursors) is factually data-dependent acquisition.
-COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition scheme used for the discovery proteomics.
+SOURCE CHECK: The paper states in the ""Liquid Chromatography-Tandem Mass Spectrometry Analysis"" section that ""the peptides in each group were divided into triplicate for the proteomic analysis to minimize equipment error.""
+TRUTH CHECK: Dividing samples into triplicate for MS analysis to minimize equipment error is the definition of technical replication; therefore, ""3"" is factually correct.
+COMPLETENESS CHECK: The full set contains the single value ""3"", which exhaustively covers the technical replication described in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -88,9 +78,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The value is explicitly mentioned in the ""Protein Quantification and Proteolysis"" section of the methods (""digested using trypsin"").
-TRUTH CHECK: The value is factually correct as the paper states trypsin was used for digestion.
+"PXD009864","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The paper does not explicitly use the phrase ""data-dependent acquisition"", but it describes a ""Full MS spectra"" followed by ""MS2 scan"" with an ""isolation window"", which is the characteristic workflow of DDA.
+TRUTH CHECK: While the specific term ""data-dependent acquisition"" is not written, the described method (Full MS -> MS2) is DDA. However, the instructions for this field do not list it as a ""safe default"" or ""inferable"" in the same way as material_type or cell_type; it requires a scheme name.
+COMPLETENESS CHECK: The full set contains only this value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD009864","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Protein Quantification and Proteolysis"" section as the agent used to digest the protein samples.
+TRUTH CHECK: The paper states ""60 μg of the protein samples was digested using trypsin (Promega, United States)"".
 COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -101,8 +103,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
 SOURCE CHECK: The value ""9 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set contains only this hallucinated value.
+TRUTH CHECK: The value is not supported by the text; the paper does not specify the mass tolerance used for fragment ions.
+COMPLETENESS CHECK: The full set consists of a single value that is not present in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -112,8 +114,8 @@ VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
 SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided paper text.
-TRUTH CHECK: While the instrument used (Q Exactive HF) typically uses HCD (which is a form of beam-type CID), the specific term ""beam-type collision-induced dissociation"" is not mentioned in the text.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TRUTH CHECK: While the instrument used (Q Exactive HF) typically uses HCD (which is a form of beam-type CID), the specific term ""beam-type collision-induced dissociation"" is not explicitly mentioned in the text.
+COMPLETENESS CHECK: The full set contains only this value, but it is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -123,7 +125,7 @@ VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Technical","instrument","Q Exactive HF","Q Exactive HF","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Liquid Chromatography-Tandem Mass Spectrometry Analysis"" section as the instrument used for mass spectrometry analysis.
-TRUTH CHECK: The value ""Q Exactive HF"" is factually correct as stated in the text.
+TRUTH CHECK: The value ""Q Exactive HF"" is factually correct according to the text.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -134,8 +136,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
 SOURCE CHECK: The paper explicitly mentions ""label-free quantification proteomic analysis"" in the abstract and ""Label-free quantification was used for quantification of the proteins"" in the methods.
-TRUTH CHECK: The value is factually correct as the paper describes a label-free approach and mentions no isobaric or metabolic labeling.
-COMPLETENESS CHECK: The full set contains the only labeling method described in the paper.
+TRUTH CHECK: The value is factually correct as no isobaric, metabolic, or chemical labeling (like TMT or SILAC) is described in the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label free"", which is exhaustive for this study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -155,8 +157,8 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD009864","","strict","Technical","modification","Loss of Lysine (K)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The value ""Loss of Lysine (K)"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text.
+SOURCE CHECK: The value ""Loss of Lysine (K)"" is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not factually supported for this experiment.
 COMPLETENESS CHECK: The full set contains only this unsupported value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -165,10 +167,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD009864","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+"PXD009864","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
 SOURCE CHECK: The value ""6 ppm"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text; the paper does not specify the precursor mass tolerance used during the database search.
-COMPLETENESS CHECK: The full set is insufficient as the value is hallucinated.
+TRUTH CHECK: The paper does not report a precursor mass tolerance value.
+COMPLETENESS CHECK: The full set of extracted values is not based on any information in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

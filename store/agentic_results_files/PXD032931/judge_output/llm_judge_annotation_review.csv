@@ -1,0 +1,113 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD032931","BiologicalAgent","species","Escherichia coli","Escherichia coli","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The text mentions ""E. coli"" multiple times (e.g., in the ""Plasmids and strains constructions"" and ""Proteins purification"" sections).
+TRUTH CHECK:       While E. coli was used for protein expression and cloning, the primary source organism and subject of the study is Bacillus subtilis.
+COMPLETENESS CHECK: The full set only contains ""Escherichia coli"", missing the primary species ""Bacillus subtilis"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Bacillus subtilis"", ""Escherichia coli""]","Bacillus subtilis, Escherichia coli"
+"PXD032931","BiologicalAgent","material_type","recombinant PrkA","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""recombinant PrkA"" is a specific protein, not a broad material class as defined (e.g., ""tissue"", ""cell line"", ""primary cells"").
+SOURCE CHECK:      The paper describes using recombinant PrkA proteins purified from E. coli BL21(DE3).
+TRUTH CHECK:       While the protein is used, it does not fit the category of ""material_type"" which refers to the source material (the biological sample).
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD032931","BiologicalAgent","strain","168","168","high","False","","True","True","False","TYPE CHECK:        The candidate value is a strain identifier for a bacterium.
+SOURCE CHECK:      The paper explicitly mentions ""B. subtilis 168 strain"" in the methods section.
+TRUTH CHECK:       The value ""168"" correctly identifies the strain of Bacillus subtilis used.
+COMPLETENESS CHECK: The full set contains the only strain mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032931","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text explicitly mentions an ""ESI-Q-Exactive Plus mass spectrometer (Thermo Scientific)"".
+TRUTH CHECK:       The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032931","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a mass spectrometry analysis of PrkA phosphorylation without mentioning any isobaric or metabolic labeling reagents.
+TRUTH CHECK:       Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032931","ExperimentalDesignAgent","replicates","recombinant PrkA protein variants (WT, T217E, S219E)","3","low","True","","False","False","False","TYPE CHECK:        The candidate value describes protein variants, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions these protein variants, but they are experimental conditions/samples, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'.
+COMPLETENESS CHECK: The full set contains ""3"", which is correct (the paper states ""Each experiment was reproduced at least in triplicate""), but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD032931","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper states in the ""Sporulation test"" section: ""Each experiment was reproduced at least in triplicate.""
+TRUTH CHECK:       ""Triplicate"" is equivalent to 3 replicates.
+COMPLETENESS CHECK:   The full set of extracted values contains a non-numeric value (""recombinant PrkA protein variants..."") which is a type mismatch for this field, but the value ""3"" correctly captures the biological replication described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032931","ExperimentalDesignAgent","factor_value","protein variant (WT, T217E, S219E)","protein variant (WT, T217E, S219E)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (protein variants) being compared, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly tests WT-PrkA and various mutants including T217E and S219E to determine their effect on protease activity and sporulation.
+TRUTH CHECK:       The value is factually correct as these specific variants were central to the experimental design.
+COMPLETENESS CHECK: The full set captures the primary protein-level variable, although the study also compared WT vs deleted (knockout) strains and various other mutants (K108A, T217A, etc.).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""protein variant (WT, K108A, T217A, T217D, T217E, S219A, S219D, S219E, T217A-S219A, T217E-S219E)"", ""prkA deletion""]",""
+"PXD032931","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed prior to LC-MS.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD032931","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK: The paper does not explicitly state a total number of samples processed for the entire study; it mentions ""triplicate"" for several assays and ""four biological replicates"" for microscopy, but not a total sample count of 3.
+TRUTH CHECK: There is no evidence in the text to support the value ""3"" as the total number of samples processed in the study.
+COMPLETENESS CHECK: The value is not supported by the text, so the set is not exhaustive or correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

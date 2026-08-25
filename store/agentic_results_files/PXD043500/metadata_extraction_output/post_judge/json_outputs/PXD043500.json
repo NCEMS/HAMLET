@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD043500",
+  "annotations": [
+    {
+      "annotation_type": "organ",
+      "extracted_value": "cell culture",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cell culture\" is a description of a sample source/material, but it is not an organ or tissue of origin.",
+        "SOURCE_CHECK": "The MS experiment was performed on purified recombinant proteins (GST-STAT1 and His-LATS1/2) produced in bacteria (E. coli), as described in the \"In vitro kinase assays and mass spectrometry analysis\" section.",
+        "TRUTH_CHECK": "\"Cell culture\" is not the organ or tissue of origin; the proteins were expressed in E. coli (bacteria).",
+        "COMPLETENESS_CHECK": "The full set contains only \"cell culture\", which is incorrect for the 'organ' field."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "The paper describes mass spectrometry analysis of recombinant proteins (His-LATS1/2 and GST-STAT1) which are human proteins (implied by the study's focus on human endometrial cancer and the use of human cell lines like KLE and HEC-1 A). Additionally, the paper mentions using CPTAC proteomic data for EC specimens (human). While the paper uses BALB/c mice for in vivo experiments, the mass spectrometry specifically described in the \"In vitro kinase assays and mass spectrometry analysis\" section refers to the recombinant human proteins.",
+        "TRUTH_CHECK": "The study focuses on human endometrial cancer (Homo sapiens) and uses a mouse model (Mus musculus) for tumor implantation; however, the mass spectrometry described in the methods was performed on recombinant proteins derived from the human LATS/STAT1 system. The CPTAC data mentioned is also human. There is no mention of mass spectrometry being performed on mouse samples.",
+        "COMPLETENESS_CHECK": "The full set includes both human and mouse, but the mouse inclusion is incorrect for the MS context."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "kinase (LATS1, LATS2), IFN-γ treatment, TNF-α treatment, TDI-011536 treatment",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "LATS2",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value lists experimental conditions/treatments, which is the correct category for a factor_value.",
+        "SOURCE_CHECK": "These treatments (IFN-γ, TNF-α, TDI-011536) and the kinases (LATS1/2) are mentioned in the paper, but the candidate value is a concatenated list of multiple different experimental variables rather than a specific factor value for the MS experiment.",
+        "TRUTH_CHECK": "While these elements appear in the paper, the MS experiment specifically analyzed the phosphorylation of STAT1 by recombinant LATS1/2 proteins in an in vitro kinase assay; it did not analyze the effects of IFN-γ, TNF-α, or TDI-011536 via mass spectrometry.",
+        "COMPLETENESS_CHECK": "The value is a mixture of different experimental axes and includes conditions not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to mass spectrometry.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" fully represents the lack of fractionation described in the paper."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment (the in vitro kinase assay analysis).",
+        "TRUTH_CHECK": "There is no mention of \"2\" replicates in the text; the only mention of replication is in the Statistical analysis section (\"minimum of three experimental repeats\") and the cell proliferation assays (\"repeated over three times\").",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"mass-spectrometric sequencing\" and provides a PRIDE dataset identifier (PXD043500), but the text does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "The value is not mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "8 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"8 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not report the fragment mass tolerance used for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions that mass spectrometry was performed for in vitro kinase assays and that data was deposited in PRIDE (PXD043500), but it does not specify the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The candidate value \"Q Exactive\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods defined for this field.",
+        "SOURCE_CHECK": "The paper does not explicitly mention any labeling method (TMT, SILAC, iTRAQ, etc.) for the mass spectrometry analysis of the in vitro kinase assay products.",
+        "TRUTH_CHECK": "Since no isobaric, metabolic, or chemical labeling is described in the text, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the absence of labeling described in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions that proteomics data was deposited to PRIDE (PXD043500) and that mass spectrometry was used for in vitro kinase assays, but it does not explicitly name the mass spectrometer model or the mass analyzer used.",
+        "TRUTH_CHECK": "The value is not mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamidomethyl (C)\" is not mentioned in the paper text.",
+        "TRUTH_CHECK": "The paper does not explicitly name \"carbamidomethylation\" or \"Carbamidomethyl\" as a modification searched or applied.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, but none of them (including this one) are explicitly named in the text as search parameters."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category (a protein modification) for this field.",
+        "SOURCE_CHECK": "The term \"Oxidation\" or \"Oxidation (M)\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of methionine oxidation being searched or identified.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except potentially phosphorylation) are explicitly named as search parameters in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Phospho (STY)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Phospho (STY)\" describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper describes using mass spectrometry to analyze phospho-peptides (\"Mass spectrometry analysis of phospho-peptides revealed that LATS2 phosphorylate residues S532 and S727 in STAT1\"), confirming the modification was part of the MS experiment.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"phospho-peptides\" and the phosphorylation of specific serine (S) residues, making \"Phospho\" a factually correct modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications; however, only \"Phospho\" is supported by the text. The other values (Carbamidomethyl, Oxidation, ubiquitinylation) are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "ubiquitinylation residue (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The term \"ubiquitinylation residue (C)\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention ubiquitinylation or any search for ubiquitinylation residues in the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, but this specific candidate is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "6 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"6 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not mentioned in the text, it cannot be verified as factually correct for this experiment.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"In vitro kinase assays and mass spectrometry analysis\" section, where it is listed as part of the kinase buffer (2mM DTT) used for the proteins subsequently analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"2mM DTT\" in the buffer used for the kinase assay samples that were then subjected to mass-spectrometric sequencing; \"dithiothreitol\" is the full name for DTT.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"dithiothreitol\", which is the only reduction reagent mentioned in the context of the MS experiment."
+      }
+    }
+  ]
+}

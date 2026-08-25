@@ -1,0 +1,233 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD053260","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes a study on stress granule cores in yeast and HEK293T cells; it is not a disease study, making ""normal"" a safe default.
+TRUTH CHECK: The value is factually correct as the study does not involve a disease state.
+COMPLETENESS CHECK: The value ""normal"" is complete as it covers the disease state for all samples in this non-disease study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Biological","organ","cell culture","","low","True","","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value ""cell culture"" is a description of the sample environment/source, but the field ""organ"" specifically asks for the tissue or organ of origin.
+SOURCE CHECK: The MS samples were derived from *Saccharomyces cerevisiae* (yeast) and HEK293T cells, both grown in liquid culture.
+TRUTH CHECK: ""Cell culture"" is not an organ or tissue; it is the method of growth. For HEK293T, the organ of origin is the kidney (embryonic human kidney). For yeast, as a unicellular organism, the ""organ"" is not applicable or is the whole organism.
+COMPLETENESS CHECK: The full set contains only ""cell culture"", which does not identify the organ/tissue of origin.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: organ
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: kidney","kidney"
+"PXD053260","","strict","Biological","species","Saccharomyces cerevisiae, Homo sapiens","Saccharomyces cerevisiae, Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains names of organisms, which matches the species field definition.
+SOURCE CHECK: Both *Saccharomyces cerevisiae* (yeast) and *Homo sapiens* (human/HEK293T) were used as the biological sources for the materials analyzed by mass spectrometry.
+TRUTH CHECK: The paper explicitly describes the proteomic analysis of stress granule cores from both budding yeast (*S. cerevisiae*) and mammalian (HEK293T) cells.
+COMPLETENESS CHECK: The full set of extracted values covers both species analyzed in the proteomics experiments described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","ExperimentalDesign","factor_value","species (S. cerevisiae, HEK293T), yeast strain (YER165W, JD1370, YAG1021), medium (YPDA, SD), growth phase (early log, late log), purification method (SDGC-SEC, immunoprecipitation)","species (S. cerevisiae, HEK293T), yeast strain (YER165W, JD1370, YAG1021), medium (YPDA, SD), growth phase (early log, late log), purification method (SDGC-SEC, immunoprecipitation)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a list of experimental factors and their corresponding values, which fits the definition of factor_value.
+SOURCE CHECK: All mentioned factors (species, strains, media, growth phases, and purification methods) are explicitly described in the text as variables used in the proteomics experiments.
+TRUTH CHECK: The values are factually correct: S. cerevisiae and HEK293T are the species/cell lines; YER165W, JD1370, and YAG1021 are the yeast strains; YPDA and SD are the media; early and late log are the growth phases; and SDGC-SEC and immunoprecipitation are the purification methods.
+COMPLETENESS CHECK: The full set of extracted values (including the candidate and ""normal"") covers the primary experimental variables described in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","ExperimentalDesign","factor_value","normal","species (S. cerevisiae, HEK293T), yeast strain (YER165W, JD1370, YAG1021), medium (YPDA, SD), growth phase (early log, late log), purification method (SDGC-SEC, immunoprecipitation)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor value (representing a healthy/control state).
+SOURCE CHECK: The paper does not mention ""normal"" cells; it describes cells subjected to oxidative stress (sodium azide for yeast, sodium arsenite for HEK293T) to induce stress granules, and compares different strains, media, and purification methods.
+TRUTH CHECK: There is no ""normal"" or ""healthy"" control group described in the proteomics experiments; the study focuses on the composition of stress granule cores under stress conditions.
+COMPLETENESS CHECK: The full set of extracted values is inconsistent, containing both a list of actual experimental factors and a hallucinated ""normal"" value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","ExperimentalDesign","fractions","1","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK: The paper describes a complex purification process involving sucrose density gradient centrifugation (SDGC) and size-exclusion chromatography (SEC), both of which generate multiple fractions.
+TRUTH CHECK: The value ""1"" is incorrect because the text explicitly mentions ""SDGC fractions"" and ""SEC fractions"" (e.g., ""Aliquots of sucrose density gradient centrifugation (SDGC) fractions were mixed..."", ""Fractions enriched in stress granule cores... were centrifugally concentrated"").
+COMPLETENESS CHECK: The full set contains only ""1"", which fails to capture the fractionation described in the methods.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","ExperimentalDesign","replicates","8","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The value ""8"" does not appear in the text as a count of biological replicates for the proteomics experiment; the number ""8"" appears only in the context of ""8 L of HEK293T cells"" (starting volume).
+TRUTH CHECK: The value is factually incorrect; it refers to the volume of the cell culture, not the number of biological replicates.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD053260","","strict","ExperimentalDesign","technical_replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: I have searched the ""Proteomics"" and ""QUANTIFICATION AND STATISTICAL ANALYSIS"" sections, and there is no mention of technical replicates being performed for the mass spectrometry samples.
+TRUTH CHECK: The value ""2"" is not supported by the text; the paper does not specify the number of technical replicates.
+COMPLETENESS CHECK: The value is not present in the text, so the extraction is not based on the provided source.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The value is explicitly stated in the ""Proteomics"" section of the methods (""The instrument was operated in data-dependent acquisition mode (DDA)"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the MS experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","cleavage_agent","Lys-C","Lys-C","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""Lys-C"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is present in the ""Proteomics"" section of the methods, describing the digestion of yeast stress granule cores.
+TRUTH CHECK: The text explicitly mentions ""digestion with rLys-C was carried out prior to trypsin treatment"" and ""processed for trypsin/LysC digestion"".
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper explicitly states that trypsin was also used for digestion.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: trypsin, Lys-C","trypsin, Lys-C"
+"PXD053260","","strict","Technical","fragment_mass_tolerance","0.05 Da","0.05 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.05 Da"" is explicitly mentioned in the ""Proteomics"" section of the methods for both the Orbitrap Fusion Lumos and the Orbitrap Exploris 240 experiments.
+TRUTH CHECK: The text explicitly states ""fragment ion mass tolerance to 0.05 Da"" (for the Lumos) and ""fragment mass tolerance was set to 0.05 Da"" (for the Exploris 240).
+COMPLETENESS CHECK: The value ""0.05 Da"" is the only fragment mass tolerance reported in the text for the proteomics experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The term ""beam-type collision-induced dissociation"" does not appear in the provided text; however, the text explicitly mentions ""HCD-MS/MS scans"".
+TRUTH CHECK: HCD (Higher-energy Collisional Dissociation) is the specific implementation of beam-type collision-induced dissociation used in Orbitrap instruments, but the paper explicitly uses the term ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, but it uses a descriptive term instead of the specific method named in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD053260","","strict","Technical","instrument","Orbitrap Fusion Lumos, Orbitrap Exploris 240","Orbitrap Fusion Lumos, Orbitrap Exploris 240","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains mass spectrometer models, which is the correct category for this field.
+SOURCE CHECK: Both instruments are explicitly mentioned in the ""Proteomics"" section of the methods: ""Tryptic peptide analysis was performed using an Orbitrap Fusion Lumos Tribid mass spectrometer"" and ""The LC/MS/MS analysis... was performed... using a Thermo Scientific Orbitrap Exploris 240 Mass Spectrometer"".
+TRUTH CHECK: The values are factually correct as they appear in the text.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers used for the proteomics analysis described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods used in mass spectrometry.
+SOURCE CHECK: The paper explicitly states in the ""QUANTIFICATION AND STATISTICAL ANALYSIS"" section: ""For the quantitation, a label-free approach was used"".
+TRUTH CHECK: The value is factually correct; the paper describes a label-free approach and mentions no isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+COMPLETENESS CHECK: The full set of extracted values contains only ""label free"", which exhaustively covers the labeling method described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of ""Orbitrap Fusion Lumos Tribid"" and ""Orbitrap Exploris 240"" mass spectrometers.
+TRUTH CHECK: The value is factually correct as both instruments used for the proteomics analysis utilize Orbitrap mass analyzers.
+COMPLETENESS CHECK: The full set contains ""orbitrap"", which covers the mass analyzer technology used for all MS experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M) | Deamidation (NQ)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Proteomics"" section of the methods (""carbamidomethylation of cysteine as fixed modifications"").
+TRUTH CHECK: The value is factually correct as it is explicitly stated in the text.
+COMPLETENESS CHECK: The full set of extracted values includes the fixed modification and the variable modifications (Oxidation, Deamidation) mentioned in the text, though ""Gln->Gly substitution (Q)"" is not found in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M) | Deamidation (NQ)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""QUANTIFICATION AND STATISTICAL ANALYSIS"" section of the methods.
+TRUTH CHECK: The paper explicitly lists ""oxidation of methionine"" as a variable modification for the first yeast dataset and ""Oxidation / +15.995 Da (M)"" for the subsequent datasets.
+COMPLETENESS CHECK: The full set of extracted values includes Carbamidomethyl (C), Oxidation (M), and Deamidation (NQ), all of which are explicitly listed in the text. However, ""Gln->Gly substitution (Q)"" is not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","modification","Deamidation (NQ)","Carbamidomethyl (C) | Oxidation (M) | Deamidation (NQ)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with target residues, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""QUANTIFICATION AND STATISTICAL ANALYSIS"" section under ""Proteomics analysis"" (specifically for the datasets processed by Poochon Scientific).
+TRUTH CHECK: The paper explicitly lists ""Deamidation / +0.984 Da (N, Q)"" as a dynamic modification.
+COMPLETENESS CHECK: The full set of extracted values covers the modifications explicitly listed in the text (Carbamidomethylation, Oxidation, Phospho, Acetylation, and Deamidation). Note: ""Gln->Gly substitution (Q)"" is not mentioned in the text and is likely a hallucination, but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","modification","Gln->Gly substitution (Q)","Carbamidomethyl (C) | Oxidation (M) | Deamidation (NQ)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification/substitution, which fits the category for the modification field.
+SOURCE CHECK: The value ""Gln->Gly substitution (Q)"" is not present in the paper text.
+TRUTH CHECK: The paper does not mention a glutamine to glycine substitution; it mentions deamidation of glutamine and asparagine.
+COMPLETENESS CHECK: The full set of extracted values contains a hallucinated value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD053260","","strict","Technical","precursor_mass_tolerance","12 ppm, 15 ppm","12 ppm, 15 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of mass tolerance measurements, which is the correct category for this field.
+SOURCE CHECK: Both values are explicitly stated in the ""Proteomics"" section of the methods: ""12 ppm"" for the Orbitrap Fusion Lumos analysis and ""15 ppm"" for the Orbitrap Exploris 240 analysis.
+TRUTH CHECK: Both values are correctly attributed to the precursor mass tolerance in the text.
+COMPLETENESS CHECK: The full set of extracted values covers both distinct mass spectrometry setups described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

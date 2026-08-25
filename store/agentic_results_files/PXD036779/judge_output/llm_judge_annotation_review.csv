@@ -1,0 +1,135 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD036779","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human PKR"", ""human RPIA"", and the use of ""HEK293 cells"" (a human cell line) for the mass spectrometry experiments.
+TRUTH CHECK: The mass spectrometry analysis used human proteins (RPIA and PKR) expressed in HEK293 cells to identify phosphorylation sites.
+COMPLETENESS CHECK: While the paper also uses mice (Mus musculus) and E. coli for other assays, the proteomics/mass spectrometry specific part of the study (the focus of these metadata fields) utilized human proteins in human cells. However, since the study as a whole involves multiple species, including ""Homo sapiens"" is correct, but the full set of species used in the overall experimental design includes others. For the specific MS experiment described in the ""Mass spectrometry"" section, ""Homo sapiens"" is the correct and complete source.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE","Homo sapiens, Mus musculus, Escherichia coli"
+"PXD036779","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The word ""kidney"" does not appear in the paper text.
+TRUTH CHECK:       The paper describes experiments using macrophages (isolated from spleen and bone marrow) and HEK293 cells; no kidney tissue is mentioned.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036779","BiologicalAgent","material_type","HEK293 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK293 cells"" is a specific cell line, but the field `material_type` requires a broad material class (e.g., ""cell line"").
+SOURCE CHECK:      The use of HEK293 cells is explicitly mentioned in the ""Protein preparation"" and ""Mass spectrometry"" sections.
+TRUTH CHECK:       While HEK293 cells were used, the value provided is the name of the cell line, not the broad material class.
+COMPLETENESS CHECK: The full set contains only the specific cell line name, failing to provide the broad category required by the definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD036779","BiologicalAgent","cell_line","HEK293","HEK293","high","False","","True","True","False","TYPE CHECK:        Yes, HEK293 is a name of an immortalized cell line.
+SOURCE CHECK:      Yes, the paper mentions ""HEK293 cells"" in the ""Mass spectrometry"" and ""Split Venus assay"" sections.
+TRUTH CHECK:       Yes, the value is factually correct as per the text.
+COMPLETENESS CHECK:The full set contains ""HEK293"", but the paper also mentions ""HEK293FT cells"" (in the ""Assays in mammalian cells"" section). While HEK293FT is a derivative of HEK293, the set is slightly incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293"", ""HEK293FT""]",""
+"PXD036779","TechnicalAgent","instrument","Orbitrap Fusion","Orbitrap Fusion","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions an ""Orbitrap Fusion Tribrid mass spectrometer"" in the Mass spectrometry section.
+TRUTH CHECK:       The value ""Orbitrap Fusion"" is a correct shortened version of ""Orbitrap Fusion Tribrid"".
+COMPLETENESS CHECK: The full set contains the correct instrument used for the proteomics/phosphorylation analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036779","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes LCMS analysis of metabolites and mass spectrometry of RPIA peptides without mentioning any isobaric or metabolic labeling reagents.
+TRUTH CHECK:       Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036779","ExperimentalDesignAgent","replicates","WT PKR vs kinase-dead PKR","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of experimental groups, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""WT"" and ""kinase-dead PKR"" as groups, but this is not a replicate count.
+TRUTH CHECK:       The value is factually incorrect as a measure of replicates; it describes the experimental conditions.
+COMPLETENESS CHECK: The full set contains a numeric value (""2"") and a group description; however, the group description is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036779","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which matches the expected type for the replicates field.
+SOURCE CHECK:      The paper does not explicitly state that there were 2 biological replicates; it mentions ""four independent experiments"" for the metabolic analysis and that ""all experiments were performed independently a minimum of three times"" in the statistical analysis section.
+TRUTH CHECK:       The value ""2"" is not supported by the text; the text suggests at least 3 or 4 replicates depending on the specific experiment.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and contains a non-numeric value (""WT PKR vs kinase-dead PKR"") which is a sample group, not a replicate count.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036779","ExperimentalDesignAgent","experimental_design","Comparison of RPIA phosphorylation between WT PKR and kinase-dead PKR complexes","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The comparison is present in the text (comparing WT PKR and kinase-dead PKR complexes for RPIA phosphorylation).
+TRUTH CHECK:       The fact is correct, but it is an experimental observation/goal, not a ""study design type"".
+COMPLETENESS CHECK:   The full set contains only this value, which is a specific result/comparison rather than a design category.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control",""
+"PXD036779","ExperimentalDesignAgent","factor_value","PKR status (WT, kinase-dead)","PKR status (WT, kinase-dead)","medium","False","","True","False","False","TYPE CHECK: Yes, the candidate value describes an experimental variable (the status/genotype of the PKR protein) being compared.
+SOURCE CHECK: Yes, the paper extensively compares wild-type (WT) PKR and kinase-dead (K296R) PKR across multiple experiments (e.g., bacterial growth assays, mass spectrometry, and protein interaction assays).
+TRUTH CHECK: Yes, the comparison between WT and kinase-dead PKR is a central factor in the study's mechanism of action.
+COMPLETENESS CHECK: The full set of extracted values is incomplete. The study also compares WT vs. PKR-ablated (Eif2ak2−/−) macrophages and shCONT vs. shPKR (knockdown) cells, which are distinct experimental factors.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""PKR status (WT, kinase-dead)"", ""PKR expression (WT, Eif2ak2−/−)"", ""PKR knockdown (shCONT, shPKR)""]","PKR status (WT, kinase-dead), PKR expression (WT, Eif2ak2−/−), PKR knockdown (shCONT, shPKR)"
+"PXD036779","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036779","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes comparing two main sample groups: wild-type (WT) and PKR-ablated (Eif2ak2−/−) macrophages.
+TRUTH CHECK:       While there are two *groups* (WT and Eif2ak2−/−), the ""number of samples"" refers to the total count of individual samples processed. The ""Metabolic analysis"" section states: ""Samples were prepared from four independent experiments with WT and Eif2ak2−/− cells processed in parallel,"" implying at least 8 samples (4 WT + 4 Eif2ak2−/−).
+COMPLETENESS CHECK:    The value ""2"" refers to the number of experimental groups, not the total number of samples processed in the study.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

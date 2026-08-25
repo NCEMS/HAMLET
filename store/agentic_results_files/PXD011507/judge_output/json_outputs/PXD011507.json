@@ -9,49 +9,17 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "Acidithiobacillus caldus, Sulfobacillus thermosulfidooxidans, Leptospirillum ferriphilum",
+      "corrected_value": "Acidithiobacillus caldus, Leptospirillum ferriphilum, Sulfobacillus thermosulfidooxidans",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name of a bacterial species, which matches the definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Microbial species cultivation for transcriptomics and proteomics\" section.",
         "TRUTH_CHECK": "The value is factually correct as one of the three bacterial species used in the study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains one species, but the paper explicitly lists three: Acidithiobacillus caldus, Sulfobacillus thermosulfidooxidans, and Leptospirillum ferriphilum."
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly uses three species: Acidithiobacillus caldus, Sulfobacillus thermosulfidooxidans, and Leptospirillum ferriphilum."
       }
     },
     {
       "annotation_type": "cell_type",
       "extracted_value": "planktonic cells",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "planktonic cells, biofilm cells",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a state/type of cell (planktonic), which fits the category of cell type or lineage.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"this study investigated planktonic and biofilm cells\").",
-        "TRUTH_CHECK": "The value is factually correct as the study investigated planktonic cells of acidophilic bacteria.",
-        "COMPLETENESS_CHECK": "The full set is incomplete because the paper explicitly states it investigated both \"planktonic and biofilm cells\"."
-      }
-    },
-    {
-      "annotation_type": "material_type",
-      "extracted_value": "continuous culture",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "primary cells",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"continuous culture\" describes a cultivation method/setup, not a broad material class as defined (e.g., \"primary cells\", \"tissue\").",
-        "SOURCE_CHECK": "The term \"continuous culture\" is present in the text describing how the bacteria were maintained.",
-        "TRUTH_CHECK": "While the samples came from continuous cultures, the actual material used for proteomics was the \"cell pellets\" (cells) of the bacteria.",
-        "COMPLETENESS_CHECK": "The full set contains only \"continuous culture\", which is a description of the source environment rather than the material type."
-      }
-    },
-    {
-      "annotation_type": "strain",
-      "extracted_value": "DSM 14647",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -59,10 +27,42 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a strain/culture identifier, but the field definition specifically limits \"strain\" to \"Animal or plant strain\".",
-        "SOURCE_CHECK": "The value \"DSM 14647\" is present in the text associated with *Leptospirillum ferriphilum*.",
-        "TRUTH_CHECK": "The value is factually correct as a strain identifier for the bacteria used, but it does not fit the specific category of \"Animal or plant strain\".",
-        "COMPLETENESS_CHECK": "The full set only contains one value, but it is the wrong category of entity for this specific field definition."
+        "TYPE_CHECK": "The candidate value describes a state or lifestyle of the cells (planktonic vs biofilm) rather than a primary cell type or lineage.",
+        "SOURCE_CHECK": "The term \"planktonic and biofilm cells\" is explicitly mentioned in the abstract.",
+        "TRUTH_CHECK": "While the text mentions planktonic cells, \"planktonic\" is a growth state/morphology, not a \"cell type\" or \"lineage\" as defined by the field (e.g., neurons, fibroblasts).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is a category error."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "continuous cultures",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "primary cells",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"continuous cultures\" describes a cultivation method/setup, not a broad material class (e.g., \"primary cells\", \"tissue\") as defined.",
+        "SOURCE_CHECK": "The text mentions \"continuous cultures\" as the source of some samples.",
+        "TRUTH_CHECK": "While the samples came from continuous cultures, the material itself consists of bacterial cells.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+      }
+    },
+    {
+      "annotation_type": "strain",
+      "extracted_value": "DSM 14647",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "DSM 14647, DSM 9293, DSM 8584",
+      "issue_summary": {
+        "TYPE_CHECK": "No, the candidate value is a bacterial strain/culture collection ID, but the field definition specifically limits \"strain\" to animal or plant strains.",
+        "SOURCE_CHECK": "Yes, \"DSM 14647\" is present in the text associated with *Leptospirillum ferriphilum*.",
+        "TRUTH_CHECK": "Yes, it is the correct identifier for the organism used.",
+        "COMPLETENESS_CHECK": "The full set only contains one of the three bacterial strains mentioned (the others being DSM 9293 and DSM 8584), but this is secondary to the type mismatch."
       }
     },
     {
@@ -76,9 +76,9 @@
       "corrected_value": "LTQ Orbitrap Elite, Q-Exactive HF",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions an \"LTQ Orbitrap Elite mass spectrometer\".",
+        "SOURCE_CHECK": "The paper explicitly mentions an \"LTQ Orbitrap Elite mass spectrometer\".",
         "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set is incomplete because the paper also mentions a \"Q-Exactive HF mass spectrometer\" used for continuous culture samples."
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper also mentions a \"Q-Exactive HF mass spectrometer\"."
       }
     },
     {
@@ -91,10 +91,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label-free\" is the correct category for the label field.",
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions the use of the \"MaxQuant 1.5.3.175 label-free protein quantifications (LFQ) algorithm\".",
         "TRUTH_CHECK": "The value is factually correct as the study used label-free quantification.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only label-free quantification was used."
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
       }
     },
     {
@@ -108,8 +108,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"triplicates\" refers to the number of biological replicates, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states, \"Experiments using single, binary, and tertiary combinations of the microbial species along with a sterile control were carried out in triplicates.\"",
-        "TRUTH_CHECK": "The value is factually correct as the paper specifies the use of triplicates for the experiments.",
+        "SOURCE_CHECK": "The text explicitly states, \"Experiments using single, binary, and tertiary combinations of the microbial species along with a sterile control were carried out in triplicates.\"",
+        "TRUTH_CHECK": "The value is factually correct as the paper specifies triplicates for the experiments.",
         "COMPLETENESS_CHECK": "The full set of extracted values (\"triplicates\", \"3\") is exhaustive and correctly represents the biological replication described in the paper."
       }
     },
@@ -123,10 +123,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"3\" is a numeric count, which matches the definition for biological replicates.",
-        "SOURCE_CHECK": "The paper explicitly states that experiments \"were carried out in triplicates.\"",
-        "TRUTH_CHECK": "\"Triplicates\" is equivalent to 3 biological replicates.",
-        "COMPLETENESS_CHECK": "The full set [\"triplicates\", \"3\"] covers the information provided in the text; both refer to the same number of replicates."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
+        "SOURCE_CHECK": "The text explicitly states, \"Experiments using single, binary, and tertiary combinations of the microbial species along with a sterile control were carried out in triplicates.\"",
+        "TRUTH_CHECK": "\"Triplicates\" is equivalent to 3.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"triplicates\", \"3\") accurately and exhaustively captures the biological replication described in the paper."
       }
     },
     {
@@ -140,14 +140,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the study design (comparing two different growth conditions).",
-        "SOURCE_CHECK": "The paper explicitly compares \"continuous culture\" and \"batch experiments\" (bioleaching/mineral culture) in the proteomics and results sections.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental setup where proteins from continuous cultures and mineral cultures were analyzed and compared using a t-test.",
-        "COMPLETENESS_CHECK": "The full set captures the primary design of the proteomics experiment described."
+        "SOURCE_CHECK": "The text explicitly mentions analyzing \"continuous culture and batch experiments\" and comparing \"intensities with two-sample Welch’s t test\" between \"mineral or continuous\" conditions.",
+        "TRUTH_CHECK": "The value accurately reflects the experimental setup where proteins from continuous cultures were compared to those from bioleaching (mineral) experiments.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which captures the primary comparative design of the proteomics experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "culture condition (continuous, mineral); microbial composition (single, binary, tertiary combinations)",
+      "extracted_value": "condition (continuous culture, bioleaching/mineral)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -155,10 +155,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes experimental variables (culture conditions and microbial compositions), which fits the definition of factor_value.",
-        "SOURCE_CHECK": "The text explicitly mentions \"continuous culture and batch experiments\" (mineral culture) and \"single, binary, and tertiary combinations of the microbial species\".",
-        "TRUTH_CHECK": "The values are factually correct based on the experimental design described in the methods.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variables (the type of culture and the species combinations) used to generate the proteomics and transcriptomics data."
+        "TYPE_CHECK": "The candidate value describes the experimental variables/conditions being compared, which fits the definition of a factor value.",
+        "SOURCE_CHECK": "The paper explicitly compares \"continuous culture\" and \"mineral culture\" (bioleaching) samples in the proteomics and transcriptomics sections.",
+        "TRUTH_CHECK": "The value is factually correct as the study investigates the differences between planktonic (continuous culture) and biofilm (bioleaching/mineral) cells.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental factor (growth condition) described in the study."
       }
     },
     {
@@ -173,8 +173,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
         "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "Correct; no fractionation was performed.",
-        "COMPLETENESS_CHECK": "The full set consists of a single value \"1\", which accurately reflects the lack of fractionation described in the text."
+        "TRUTH_CHECK": "Since no fractionation is described, it is factually correct to state that one fraction (the whole sample) was analyzed.",
+        "COMPLETENESS_CHECK": "The full set contains the single value \"1\", which is exhaustive for a study where no fractionation occurred."
       }
     },
     {
@@ -188,9 +188,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper states in the \"Data Records\" section that proteomics data was deposited for \"three continuous culture samples and 61 bioleaching samples\", and 3 + 61 = 64.",
-        "TRUTH_CHECK": "The calculation is factually correct based on the proteomics data description.",
-        "COMPLETENESS_CHECK": "The full set (64) covers the total number of samples processed for the proteomics experiment described."
+        "SOURCE_CHECK": "The text states \"Proteomics data for three continuous culture samples and 61 bioleaching samples was deposited in the PRIDE database,\" and 3 + 61 = 64.",
+        "TRUTH_CHECK": "The calculation is correct based on the proteomics data records section.",
+        "COMPLETENESS_CHECK": "The full set contains the total number of proteomics samples mentioned in the data records."
       }
     }
   ]

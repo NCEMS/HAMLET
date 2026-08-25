@@ -12,8 +12,8 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| Biological | 0.375 | 0.500 | 0.429 | 0.375 | 0.500 | 0.429 |
-| Technical | 0.170 | 0.208 | 0.187 | 0.172 | 0.208 | 0.189 |
+| Biological | 0.625 | 0.833 | 0.714 | 0.625 | 0.833 | 0.714 |
+| Technical | 0.446 | 0.406 | 0.425 | 0.448 | 0.406 | 0.426 |
 | ExperimentalDesign | 0.200 | 1.000 | 0.333 | 0.200 | 1.000 | 0.333 |
 
 ## Metadata type agreement across matched files
@@ -22,7 +22,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 |---|---|---:|---:|---:|
 | `characteristics[age]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[disease]` | Biological | 0.500 | 0.500 | 0.500 |
-| `characteristics[organism part]` | Biological | 0.000 | 0.000 | 0.000 |
+| `characteristics[organism part]` | Biological | 1.000 | 1.000 | 1.000 |
 | `characteristics[organism]` | Biological | 1.000 | 1.000 | 1.000 |
 | `characteristics[sex]` | Biological | NA | NA | NA |
 | `characteristics[biological replicate]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
@@ -32,9 +32,10 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `factor value[experimental design]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
 | `comment[cleavage agent details]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[dissociation method]` | Technical | 0.250 | 0.250 | 0.250 |
-| `comment[fragment mass tolerance]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[fragment mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[instrument]` | Technical | 0.000 | 0.000 | 0.000 |
-| `comment[label]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[label]` | Technical | 1.000 | 1.000 | 1.000 |
+| `comment[modification parameters]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[ms2 mass analyzer]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[precursor mass tolerance]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[proteomics data acquisition method]` | Technical | 0.000 | 0.000 | 0.000 |

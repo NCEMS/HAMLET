@@ -27,10 +27,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"lung\" is a valid organ/tissue name.",
+        "TYPE_CHECK": "The candidate value \"lung\" is a valid organ/tissue type.",
         "SOURCE_CHECK": "The paper explicitly mentions \"lung squamous cell carcinomas\" and \"lung tissues\" multiple times.",
         "TRUTH_CHECK": "The value is factually correct as the study focuses on lung tumor proteomes.",
-        "COMPLETENESS_CHECK": "The full set contains \"lung\", which accurately describes the organ of origin for all samples in the study."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the organ of origin described in the paper."
       }
     },
     {
@@ -43,10 +43,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease state/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"lung squamous cell carcinomas\" in the abstract and \"lung SCC\" (squamous cell carcinoma) throughout the results.",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
-        "COMPLETENESS_CHECK": "The paper describes a comparison between lung squamous cell carcinomas and adjacent tissues; while \"adjacent tissues\" (representing the control/normal state) are mentioned, the primary disease being studied is lung squamous cell carcinoma. The set is sufficient to describe the disease state of the experimental group."
+        "TYPE_CHECK": "The candidate value is a disease diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"lung squamous cell carcinomas\" in the abstract.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on lung squamous cell carcinomas.",
+        "COMPLETENESS_CHECK": "The full set contains the primary disease studied; however, the paper also mentions \"adjacent tissues\" (controls), but \"lung squamous cell carcinoma\" is the central disease state."
       }
     },
     {
@@ -59,10 +59,10 @@
       "hallucination": false,
       "corrected_value": "tissue",
       "issue_summary": {
-        "TYPE_CHECK": "No, \"patients\" refers to the donor/subject, not the broad material class (e.g., tissue, biofluid).",
-        "SOURCE_CHECK": "The text mentions \"patients\" as the source of the samples, but the material itself is described as \"frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
-        "TRUTH_CHECK": "The candidate value is the subject, not the material type.",
-        "COMPLETENESS_CHECK": "The full set contains only \"patients\", which is a type mismatch and does not capture the actual material used."
+        "TYPE_CHECK": "The candidate value \"patients\" is a subject description, not a broad material class as defined (e.g., \"tissue\", \"cell line\").",
+        "SOURCE_CHECK": "The paper mentions \"patients\" in the context of sample origin, but the material actually processed was \"frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
+        "TRUTH_CHECK": "The material used for the proteomics experiment was tissue, not the patients themselves.",
+        "COMPLETENESS_CHECK": "The full set contains only \"patients\", which is the wrong category and fails to capture the actual material type."
       }
     },
     {
@@ -75,10 +75,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"lung\" describes the anatomical location of the tumor, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"lung\" describes the anatomical location of the tumor.",
         "SOURCE_CHECK": "The paper explicitly mentions \"lung squamous cell carcinomas\" and \"lung tissues\" multiple times.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on lung tumors.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the anatomical site described in the text."
+        "TRUTH_CHECK": "The value is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"lung\") covers the anatomical site described in the paper."
       }
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "annotation_type": "label",
-      "extracted_value": "label-free, TMT 6-plex",
+      "extracted_value": "TMT 6-plex, label-free",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains labeling methods, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification (LF)\" and \"isobaric labeling... (TMT 6-plex)\".",
-        "TRUTH_CHECK": "The values are factually correct as the study compared these two specific labeling strategies.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both labeling methods used in the study."
+        "TYPE_CHECK": "The candidate value contains labeling methods (TMT and label-free), which matches the field definition.",
+        "SOURCE_CHECK": "Both \"TMT 6-plex\" and \"label-free\" (LF) are explicitly mentioned in the abstract and methods.",
+        "TRUTH_CHECK": "The paper compares these two specific labeling strategies.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the isobaric labeling (TMT) and the non-labeled (label-free) approaches used in the study."
       }
     },
     {
@@ -119,14 +119,14 @@
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "4",
       "issue_summary": {
-        "TYPE_CHECK": "No. The candidate value is a description of the sample groups, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "Yes. The text mentions \"4 frozen lung squamous cell carcinomas and 4 adjacent tissues\".",
-        "TRUTH_CHECK": "No. The field \"replicates\" requires a numeric count of biological replicates.",
-        "COMPLETENESS_CHECK": "The full set contains \"8\", which is the correct numeric total of biological samples/replicates described."
+        "TYPE_CHECK": "The candidate value describes the sample groups rather than providing a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The text states \"4 frozen lung squamous cell carcinomas and 4 adjacent tissues,\" which is the source of the value.",
+        "TRUTH_CHECK": "The value is a description of the samples, not the number of replicates. The number of biological replicates for each condition is 4.",
+        "COMPLETENESS_CHECK": "The full set contains both a description and a number (\"8\"), but neither accurately represents the \"replicates\" field as defined (which should be the number of biological replicates per group or the total count of biological units)."
       }
     },
     {
@@ -141,7 +141,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for replicates.",
         "SOURCE_CHECK": "The paper states \"4 frozen lung squamous cell carcinomas and 4 adjacent tissues\", totaling 8 samples.",
-        "TRUTH_CHECK": "The study uses 4 pairs of tumor and adjacent tissues (plus 2 unpaired samples, totaling 8 samples). In this experimental design, these are the biological samples/replicates being compared.",
+        "TRUTH_CHECK": "The study uses 4 pairs of tumor and adjacent tissues (plus 2 unpaired samples, totaling 8 clinical samples). In this experimental design, these are the biological samples/replicates being compared.",
         "COMPLETENESS_CHECK": "The full set includes both the descriptive breakdown and the total count, which exhaustively covers the biological sample count described."
       }
     },
@@ -155,15 +155,31 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"technical replicates\" is a phrase describing the concept, not a numeric count as required by the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"technical replicates\" in the MaxQuant and Pinnacle data analysis sections, but it does not specify a numeric count for them.",
-        "TRUTH_CHECK": "The value is not a count; it is simply the name of the field/concept.",
-        "COMPLETENESS_CHECK": "The full set contains only the phrase \"technical replicates\" and provides no numeric value."
+        "TYPE_CHECK": "The candidate value \"technical replicates\" is a label/name of a concept, not a numeric count as required by the field definition.",
+        "SOURCE_CHECK": "The phrase \"technical replicates\" appears in the text, but it is not a value for the number of replicates.",
+        "TRUTH_CHECK": "The candidate value is not a numeric count and therefore is not a correct value for this field.",
+        "COMPLETENESS_CHECK": "The full set contains \"2\", which is a numeric value, but the inclusion of the phrase \"technical replicates\" is a type error."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"2\" is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper mentions \"Concordance of LF and single sample DDA technical replicates were measured using Pearson’s correlation\" and \"Concordance of technical replicates was measured using Pearson’s correlation of log2-transformed peptide peak areas,\" but it does not explicitly state the number of technical replicates was 2.",
+        "TRUTH_CHECK": "The text mentions technical replicates exist, but it never specifies the quantity as \"2\".",
+        "COMPLETENESS_CHECK": "The full set contains \"technical replicates\" (a label, not a value) and \"2\" (an unsupported number). Neither provides a factually grounded count from the text."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "Comparison of four LC-MS/MS platforms (DDA, DIA, LF, TMT) analyzing tumor vs adjacent lung tissues",
+      "extracted_value": "Comparison of four LC-MS/MS discovery platforms (DDA, DIA, LF, and TMT 6-plex) on lung tumor and adjacent tissues",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -171,10 +187,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the study design, although it includes technical platform details.",
-        "SOURCE_CHECK": "The value is clearly inferable from the title and abstract, which state the comparison of four platforms applied to tumor and adjacent tissues.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental setup described in the paper.",
-        "COMPLETENESS_CHECK": "The full set captures the core design (comparing platforms and comparing tumor vs adjacent tissue)."
+        "TYPE_CHECK": "The candidate value describes the overall study objective and comparison, which fits the general nature of an experimental design.",
+        "SOURCE_CHECK": "The value is directly supported by the title and abstract, which state the comparison of four LC-MS/MS platforms (DDA, DIA, LF, TMT) using lung tumor and adjacent tissues.",
+        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values accurately captures the primary design of the study."
       }
     },
     {
@@ -187,10 +203,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (tissue type and analysis method) being compared, which fits the definition of factor_value.",
-        "SOURCE_CHECK": "The paper explicitly compares \"4 frozen lung squamous cell carcinomas and 4 adjacent tissues\" across four different LC-MS/MS platforms (DDA, DIA, LF, and TMT 6-plex).",
-        "TRUTH_CHECK": "The value accurately reflects the two primary axes of the experimental design described in the abstract and results.",
-        "COMPLETENESS_CHECK": "The full set captures both the biological variable (tumor vs. adjacent) and the technical variable (the four MS methods), which are the core factors of the study."
+        "TYPE_CHECK": "The candidate value describes the experimental factors (tissue type and analysis method) being compared, which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The paper explicitly compares \"lung squamous cell carcinomas and 4 adjacent tissues\" and four different LC-MS/MS platforms (DDA, DIA, LF, and TMT 6-plex).",
+        "TRUTH_CHECK": "The values are factually correct based on the abstract and results sections.",
+        "COMPLETENESS_CHECK": "The full set captures both the biological variable (tumor vs adjacent) and the technical variable (the four MS methods) being studied."
       }
     },
     {
@@ -206,7 +222,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
         "SOURCE_CHECK": "The text explicitly states, \"Twelve concatenated fractions were analyzed with LC-MS/MS for the LF and TMT experiments.\"",
         "TRUTH_CHECK": "The value \"12\" is factually correct based on the methods section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"12\") accurately reflects the fractionation described for the primary experiments."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"12\") covers the fractionation described for the experiments that used it; for the single-sample experiments, the default would be 1, but the paper explicitly identifies 12 for the main comparative cohorts."
       }
     },
     {
@@ -220,9 +236,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The abstract states \"These strategies were applied to the same set of 4 frozen lung squamous cell carcinomas and 4 adjacent tissues,\" and the methods section mentions \"Six of the eight clinical samples are paired sets...\".",
-        "TRUTH_CHECK": "The total number of samples is 8 (4 tumor + 4 adjacent).",
-        "COMPLETENESS_CHECK": "The full set contains the single correct value for the total number of samples."
+        "SOURCE_CHECK": "The text explicitly states \"These strategies were applied to the same set of 4 frozen lung squamous cell carcinomas and 4 adjacent tissues,\" totaling 8 samples.",
+        "TRUTH_CHECK": "The sum of 4 tumor samples and 4 adjacent tissue samples is 8.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"8\") accurately covers the total number of samples described in the study."
       }
     }
   ]

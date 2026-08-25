@@ -6,7 +6,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Gold files | Assessed files | Matched | Missing from assessed | Assessed only | Coverage |
 |---:|---:|---:|---:|---:|---:|
-| 528 | 30 | 0 | 528 | 30 | 0.0% |
+| 528 | 528 | 0 | 528 | 528 | 0.0% |
 
 ## Metadata agreement across matched files
 
@@ -21,6 +21,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | Metadata type | Category | Mean precision | Mean recall | Mean F1 |
 |---|---|---:|---:|---:|
 | `characteristics[age]` | Biological | NA | NA | NA |
+| `characteristics[cell type]` | Biological | NA | NA | NA |
 | `characteristics[disease]` | Biological | NA | NA | NA |
 | `characteristics[organism part]` | Biological | NA | NA | NA |
 | `characteristics[organism]` | Biological | NA | NA | NA |
@@ -32,11 +33,10 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `factor value[experimental design]` | ExperimentalDesign | NA | NA | NA |
 | `comment[cleavage agent details]` | Technical | NA | NA | NA |
 | `comment[dissociation method]` | Technical | NA | NA | NA |
-| `comment[fragment mass tolerance]` | Technical | NA | NA | NA |
 | `comment[instrument]` | Technical | NA | NA | NA |
 | `comment[label]` | Technical | NA | NA | NA |
+| `comment[modification parameters]` | Technical | NA | NA | NA |
 | `comment[ms2 mass analyzer]` | Technical | NA | NA | NA |
-| `comment[precursor mass tolerance]` | Technical | NA | NA | NA |
 | `comment[proteomics data acquisition method]` | Technical | NA | NA | NA |
 | `technology type` | Technical | NA | NA | NA |
 

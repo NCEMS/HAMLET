@@ -13,8 +13,8 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | Biological | 0.167 | 0.134 | 0.148 | 0.167 | 0.133 | 0.148 |
-| Technical | 0.500 | 0.625 | 0.556 | 0.500 | 0.625 | 0.556 |
-| ExperimentalDesign | 0.400 | 0.667 | 0.500 | 0.400 | 0.667 | 0.500 |
+| Technical | 0.545 | 0.750 | 0.632 | 0.545 | 0.750 | 0.632 |
+| ExperimentalDesign | 0.600 | 1.000 | 0.750 | 0.600 | 1.000 | 0.750 |
 
 ## Metadata type agreement across matched files
 
@@ -29,7 +29,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `characteristics[organism part]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[organism]` | Biological | 0.000 | 0.000 | 0.000 |
 | `characteristics[sex]` | Biological | 0.000 | 0.000 | 0.000 |
-| `characteristics[biological replicate]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
+| `characteristics[biological replicate]` | ExperimentalDesign | 1.000 | 1.000 | 1.000 |
 | `comment[fraction identifier]` | ExperimentalDesign | 1.000 | 1.000 | 1.000 |
 | `comment[technical replicate]` | ExperimentalDesign | 1.000 | 1.000 | 1.000 |
 | `factor value[disease]` | ExperimentalDesign | 0.000 | 0.000 | 0.000 |
@@ -38,7 +38,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[cleavage agent details]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[dissociation method]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[instrument]` | Technical | 1.000 | 1.000 | 1.000 |
-| `comment[label]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[label]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[modification parameters]` | Technical | 1.000 | 0.750 | 0.857 |
 | `comment[ms2 mass analyzer]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[proteomics data acquisition method]` | Technical | 0.000 | 0.000 | 0.000 |

@@ -1,21 +1,8 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD015957","","strict","Biological","cell_line","108T, 12T, A375, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of cell lines, which matches the field definition.
-SOURCE CHECK: 108T, 12T, and A375 are explicitly used for HLA peptidomics (LC-MS/MS), but HEK293T is used only for lentivirus production (transfection).
-TRUTH CHECK: 108T, 12T, and A375 are correct MS sample sources; however, HEK293T is not an MS sample and should be excluded per the experimental context rule.
-COMPLETENESS CHECK:The full set includes an unrelated cell line (HEK293T) and correctly identifies the three MS-analyzed lines.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: yes
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 108T, 12T, A375","108T, 12T, A375"
-"PXD015957","","strict","Biological","cell_type","melanocyte","melanocyte","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanocyte"" is a cell type, which matches the required category for this field.
-SOURCE CHECK: The paper describes HLA peptidomics (MS analysis) performed on melanoma cell lines (108T, 12T, and A375). Melanoma is a cancer of melanocytes.
-TRUTH CHECK: While the paper explicitly names ""melanoma cell lines,"" the lineage of these cells is melanocytic. In proteomics metadata, identifying the cell type of a melanoma cell line as ""melanocyte"" (or ""melanoma cell"") is a correct application of domain knowledge regarding the lineage of the analyzed material.
-COMPLETENESS CHECK: The full set contains only this value, which accurately describes the lineage of all three cell lines (108T, 12T, A375) used in the MS experiment.
-
+"PXD015957","","strict","Biological","cell_line","108T, 12T, A375","108T, 12T, A375","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper explicitly states that HLA peptidomics (LC-MS/MS) was performed on these three cell lines (""we employed HLA peptidomics to profile HLA-I-bound antigens in the three cellular systems noted above... 108T cells, 12T cells and A375 cells"").
+TRUTH CHECK: The values are factually correct as they are the specific cell lines used for the proteomics experiment.
+COMPLETENESS CHECK: The full set contains all three cell lines used in the MS analysis, making it exhaustive.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,10 +10,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Biological","disease","melanoma","melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma"" is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned throughout the text; the MS experiment (HLA peptidomics) was performed on melanoma cell lines (108T, 12T, and A375).
-TRUTH CHECK: The paper explicitly states these are ""melanoma cell lines"" and the study focuses on ""melanoma patients.""
-COMPLETENESS CHECK: The full set contains ""melanoma,"" which covers the disease state of the samples analyzed by mass spectrometry.
+"PXD015957","","strict","Biological","cell_type","epithelial cell","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""epithelial cell"" is a valid category for the cell_type field.
+SOURCE CHECK: The MS samples were derived from melanoma cell lines (108T, 12T, and A375), and melanoma is a cancer of melanocytes, which are not epithelial cells (they are neural crest-derived).
+TRUTH CHECK: Melanoma cells are not epithelial cells; they are melanocytic/neural crest-derived.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD015957","","strict","Biological","disease","metastatic melanoma","metastatic melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""metastatic melanoma"" is a disease state, which matches the field definition.
+SOURCE CHECK: The value is explicitly stated in the ""Cells"" section of the methods: ""Cell lines 12T and 108T... were derived from pathology-confirmed metastatic melanoma tumor resections"". These cell lines were the source of the HLA peptidomics MS experiment.
+TRUTH CHECK: The value is factually correct as the cell lines used for the MS analysis were derived from metastatic melanoma.
+COMPLETENESS CHECK: The full set contains ""metastatic melanoma"", which accurately describes the disease state of the biological material analyzed by MS.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -36,9 +34,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD015957","","strict","Biological","organ","skin","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""skin"" is a valid organ/tissue type.
-SOURCE CHECK: The value ""skin"" appears in the text (""517 GTEx skin samples""), but these were transcriptomics data used for comparison, not the samples analyzed by mass spectrometry. The MS samples were derived from melanoma cell lines (108T, 12T, A375).
-TRUTH CHECK: The actual MS samples were melanoma cell lines; while melanoma originates from the skin, the specific material analyzed was cell culture, and the ""skin"" mentioned in the text refers to a separate GTEx transcriptomics dataset.
-COMPLETENESS CHECK: The full set is incorrect as it refers to the wrong experimental context.
+SOURCE CHECK: The value ""skin"" appears in the text (""GTEx skin samples""), but these were used for transcriptomics data comparison, not for the HLA peptidomics mass spectrometry experiment.
+TRUTH CHECK: The actual MS samples were derived from melanoma cell lines (108T, 12T, A375). While melanoma originates from the skin, the specific material analyzed by MS were these cell lines. However, the candidate value ""skin"" specifically refers to the GTEx control group used for RNA-seq, not the MS sample.
+COMPLETENESS CHECK: The full set only contains ""skin"", which is incorrect as it refers to the wrong experimental context.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -47,10 +45,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: skin","skin"
-"PXD015957","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper describes HLA peptidomics on human melanoma cell lines (108T, 12T, A375) and mentions searching against the ""UniProt human database"".
-TRUTH CHECK: The samples are human-derived melanoma cells, making ""Homo sapiens"" factually correct.
-COMPLETENESS CHECK: The full set contains the only species involved in the MS experiment.
+"PXD015957","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper describes HLA peptidomics on human melanoma cell lines (108T, 12T, A375) and mentions searching against the ""UniProt human database,"" confirming the MS samples are human.
+TRUTH CHECK: The value is factually correct as the cell lines and patients described are human.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens,"" which is the only species involved in the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -58,10 +56,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","ExperimentalDesign","factor_value","cell line (108T, 12T, A375), condition (OE, EV, IFNγ, NT)","cell line (108T, 12T, A375), condition (OE, EV, IFNγ, NT) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factors (cell lines and conditions) used in the study, which is the correct category for factor_value.
-SOURCE CHECK: The values are explicitly stated in the ""Identification of HLA class I antigens..."" and ""Cells"" sections as the materials and conditions analyzed by HLA peptidomics (MS).
-TRUTH CHECK: The cell lines (108T, 12T, A375) and conditions (OE = overexpression, EV = empty vector, IFNγ = treated, NT = non-treated) are accurately extracted from the text.
-COMPLETENESS CHECK: The full set of extracted values (including ""melanoma"") covers the primary biological and experimental variables of the MS experiment.
+"PXD015957","","strict","ExperimentalDesign","factor_value","metastatic melanoma","metastatic melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The value is present in the text; the cell lines (108T, 12T) used for the HLA peptidomics MS experiment were derived from ""pathology-confirmed metastatic melanoma tumor resections"".
+TRUTH CHECK: The value is factually correct as the biological source of the MS samples is metastatic melanoma.
+COMPLETENESS CHECK: The full set contains only this value; while the study also compares ""overexpression"" vs ""empty vector"" and ""IFNγ treated"" vs ""non-treated"", ""metastatic melanoma"" correctly describes the underlying disease factor for all samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -69,10 +67,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","ExperimentalDesign","factor_value","melanoma","cell line (108T, 12T, A375), condition (OE, EV, IFNγ, NT) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma"" is a disease state, which is a valid category for a factor_value.
-SOURCE CHECK: The value is present in the text; the MS experiment (HLA peptidomics) was performed on melanoma cell lines (108T, 12T, A375).
-TRUTH CHECK: The value is factually correct as the samples analyzed by mass spectrometry are derived from melanoma.
-COMPLETENESS CHECK: The full set of extracted values includes both the disease state (""melanoma"") and the specific experimental conditions/cell lines, which together exhaustively describe the factors under study.
+"PXD015957","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper describes the LC-MS/MS workflow (UltiMate 3000 RSLCnano coupled to Q-Exactive-Plus) but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation information is provided in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -80,21 +78,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper describes the LC-MS/MS workflow (UltiMate 3000 RSLCnano coupled to Q-Exactive-Plus) but does not mention any offline fractionation step before the LC-MS analysis.
-TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is exhaustive as no other fractionation is described.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","ExperimentalDesign","replicates","1","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK: The paper explicitly mentions multiple replicates for the MS experiment: ""For the HLA peptidomics analysis we used three experimental replicates per each cell line and each condition"".
-TRUTH CHECK: The value ""1"" is incorrect because the text explicitly states that three replicates were used.
-COMPLETENESS CHECK: The full set contains only ""1"", which fails to capture the actual number of replicates described in the paper.
+"PXD015957","","strict","ExperimentalDesign","replicates","1","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper explicitly describes the number of replicates for the MS experiment in the ""Purification of membrane HLA molecules"" section.
+TRUTH CHECK: The text states, ""For the HLA peptidomics analysis we used three experimental replicates per each cell line and each condition,"" making ""1"" factually incorrect.
+COMPLETENESS CHECK: The full set of extracted values contains only ""1"", which fails to capture the ""three"" replicates explicitly mentioned in the text.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -102,10 +90,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: 3","3"
-"PXD015957","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+"PXD015957","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention technical replicates for the mass spectrometry analysis; therefore, the safe default of ""1"" is applied.
 TRUTH CHECK: In the absence of explicit mention of technical replicates, ""1"" is the correct default value.
-COMPLETENESS CHECK: The full set contains only the default value, which is complete given the text.
+COMPLETENESS CHECK: The value ""1"" is complete as it represents the default state when no replication is described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -113,10 +101,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometry acquisition scheme, which matches the field definition.
-SOURCE CHECK: The value is explicitly stated in the ""Identification of the eluted HLA peptides"" section (""Data was acquired using a data-dependent “top 10” method"").
-TRUTH CHECK: The value is factually correct as described in the paper.
-COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the MS experiment.
+"PXD015957","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" describes an MS acquisition scheme, which matches the field definition.
+SOURCE CHECK: The value is explicitly stated in the ""Identification of the eluted HLA peptides"" section: ""Data was acquired using a data-dependent “top 10” method"".
+TRUTH CHECK: The value is factually correct as the paper describes using a data-dependent acquisition (DDA) approach.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -124,10 +112,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical reagent used for cysteine alkylation, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""Purification of membrane HLA molecules"" section of the methods, describing the lysis buffer used for the samples that underwent HLA peptidomics (MS analysis).
-TRUTH CHECK: The paper states that cell pellets were lysed with a buffer containing ""0.2 mM iodoacetamide"".
+"PXD015957","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Purification of membrane HLA molecules"" section, describing the lysis buffer used for the samples analyzed by mass spectrometry.
+TRUTH CHECK: The paper explicitly states that the lysis buffer contained ""0.2 mM iodoacetamide"".
 COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the text.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -135,7 +124,7 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+"PXD015957","","strict","Technical","fragment_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which is the correct category for this field.
 SOURCE CHECK: The value ""8 ppm"" does not appear anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
@@ -149,7 +138,7 @@ CORRECTED_VALUE: NONE",""
 "PXD015957","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
 SOURCE CHECK: The value is not present in the text; the paper explicitly states that peptides were fragmented by ""higher-energy collisional dissociation (HCD)"".
 TRUTH CHECK: The value is factually incorrect for this experiment; the paper specifies HCD, not beam-type CID.
-COMPLETENESS CHECK: The full set is incorrect as it does not reflect the method stated in the text.
+COMPLETENESS CHECK: The full set is incorrect as it does not reflect the method described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -157,10 +146,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: HCD","HCD"
-"PXD015957","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the definition of the instrument field.
+"PXD015957","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Identification of the eluted HLA peptides"" section as the instrument used for tandem mass spectrometry.
 TRUTH CHECK: The paper states the system was ""coupled by electrospray to tandem mass spectrometry on Q-Exactive-Plus (Thermo Fisher Scientific)"".
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the text for the proteomics experiment.
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the paper for the proteomics experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -168,10 +157,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper describes an HLA peptidomics workflow using LC-MS/MS (Q-Exactive-Plus) but does not mention any isobaric (TMT, iTRAQ), metabolic (SILAC), or chemical (dimethyl) labeling.
-TRUTH CHECK: Since no labeling method is described, the ""label-free"" safe default is applicable.
-COMPLETENESS CHECK: The full set contains only this value, which correctly describes the labeling state for the experiment.
+"PXD015957","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes an HLA peptidomics workflow using LC-MS/MS but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl).
+TRUTH CHECK: Since no labeling method is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no labeling was used.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD015957","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is inferable from the instrument model ""Q-Exactive-Plus"" mentioned in the ""Identification of the eluted HLA peptides"" section, which is part of the MS experiment context.
+TRUTH CHECK: The Q-Exactive-Plus is an Orbitrap-based mass spectrometer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the proteomics analysis described.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -180,21 +180,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
-SOURCE CHECK: The paper mentions the use of a ""Q-Exactive-Plus"" instrument, which is a well-known Orbitrap-based mass spectrometer.
-TRUTH CHECK: The Q-Exactive-Plus uses an Orbitrap mass analyzer, making this value factually correct.
-COMPLETENESS CHECK: The full set contains the only mass analyzer used in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","modification","Carbamidomethyl (C)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a peptide modification, which matches the field definition.
-SOURCE CHECK: The value is not explicitly mentioned in the text; while ""iodoacetamide"" is mentioned in the purification section, the modification name itself is absent.
-TRUTH CHECK: The modification ""Carbamidomethyl (C)"" is not explicitly written in the paper text.
-COMPLETENESS CHECK: The full set of extracted values is not correct because one value is hallucinated.
+"PXD015957","","strict","Technical","modification","Carbamidomethyl (C)","Oxidation (M)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not explicitly mentioned in the text; while iodoacetamide is mentioned as a reagent, the modification name itself is absent.
+TRUTH CHECK: The modification is not explicitly stated in the paper text, and per the rules, it cannot be inferred from the use of iodoacetamide.
+COMPLETENESS CHECK: The full set includes ""Oxidation (M)"", which is explicitly mentioned, but ""Carbamidomethyl (C)"" is unsupported.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -202,10 +191,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD015957","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""methionine oxidation (15.994915 Da)"" as a variable modification in the ""Identification of the eluted HLA peptides"" section.
-TRUTH CHECK: ""Oxidation (M)"" is a standard abbreviation/synonym for ""methionine oxidation"".
-COMPLETENESS CHECK: The full set includes ""Carbamidomethyl (C)"" and ""Oxidation (M)"". While ""Oxidation (M)"" is correct, ""Carbamidomethyl (C)"" is not explicitly mentioned in the text (only the reagent iodoacetamide is mentioned), making the full set contain an unsupported value, but the candidate value itself is correct.
+"PXD015957","","strict","Technical","modification","Oxidation (M)","Oxidation (M)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a peptide modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Identification of the eluted HLA peptides"" section of the methods.
+TRUTH CHECK: The paper states ""methionine oxidation (15.994915 Da)"" was set as a variable modification, which is equivalent to ""Oxidation (M)"".
+COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and ""Oxidation (M)"". While ""Oxidation (M)"" is correct, ""Carbamidomethyl (C)"" is not explicitly mentioned in the text (only the reagent iodoacetamide is mentioned), making the overall set contain an unsupported value, but the candidate value itself is correct.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -215,9 +204,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD015957","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""6 ppm"" does not appear anywhere in the provided paper text.
+SOURCE CHECK: The value ""6 ppm"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

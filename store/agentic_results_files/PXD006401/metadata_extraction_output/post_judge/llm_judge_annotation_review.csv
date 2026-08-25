@@ -1,8 +1,9 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD006401","","strict","Biological","age","6-months old","6-months old","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a time-based age description, which matches the definition for the age field.
-SOURCE CHECK: The value is explicitly stated in the ""FFPE mouse kidney samples"" section of the methods, describing the mouse from which the kidney tissue analyzed by MS was taken.
-TRUTH CHECK: The paper states ""Kidneys of a male, 6-months old C57 black 6 mouse... were removed"", and these tissues were the basis for the DTR and FASP proteomics experiments.
-COMPLETENESS CHECK: The value correctly identifies the age of the animal used for the MS samples; no other ages are reported for the samples.
+"PXD006401","","strict","Biological","age","6-months old","6-months old","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a time-based age description, which matches the required category for the age field.
+SOURCE CHECK: The value is explicitly stated in the ""FFPE mouse kidney samples"" section of the methods, describing the mouse from which the kidney tissue (the MS sample) was taken.
+TRUTH CHECK: The paper states the kidneys were from a ""male, 6-months old C57 black 6 mouse"".
+COMPLETENESS CHECK: The value correctly identifies the age of the animal used for the proteomics experiment.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -11,42 +12,44 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","Biological","disease","ctsl−/−","","low","True","strain","False","False","False","False","","type_mismatch","TYPE CHECK: The candidate value is a genotype/strain designation, not a disease state or diagnosis.
-SOURCE CHECK: The value ""Ctsl−/−"" (cathepsin L knockout) is present in the text describing the mouse used for the MS experiment.
-TRUTH CHECK: While the mouse is a knockout, ""ctsl−/−"" is a genotype, not a disease. The paper does not describe a disease state or diagnosis for these animals.
-COMPLETENESS CHECK: The full set contains only this genotype; it does not provide a disease state.
+SOURCE CHECK: The value is present in the text describing the mouse strain used for the MS experiment.
+TRUTH CHECK: While ""ctsl−/−"" (cathepsin L knockout) is a genetic modification, it is not described as a disease or diagnosis in the text.
+COMPLETENESS CHECK: The full set contains only this genotype; it does not capture the disease state (which is not specified, making ""healthy"" or ""no disease"" the appropriate safe defaults).
 TYPE_CORRECT: no
 CORRECT_TYPE_NAME: strain
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: low
-CORRECTED_VALUE: normal","normal"
-"PXD006401","","strict","Biological","organ","kidney, tonsil","kidney, tonsil","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of organ names, which matches the definition.
-SOURCE CHECK: Both kidney (murine) and tonsil (human) tissues were processed and analyzed by LC-MS/MS.
-TRUTH CHECK: The paper explicitly mentions ""murine kidney tissue specimens"" and ""human tonsil FFPE tissue specimens"" as the materials analyzed by mass spectrometry.
-COMPLETENESS CHECK: The full set of extracted values covers all organs used for the MS experiments described in the paper.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is a valid entry for the sex field.
-SOURCE CHECK: The value is explicitly stated in the methods section under ""FFPE mouse kidney samples"" (""Kidneys of a male, 6-months old C57 black 6 mouse..."").
-TRUTH CHECK: The value is factually correct as per the text.
-COMPLETENESS CHECK: The full set contains the only sex mentioned for the animal samples; the human tonsil samples do not have sex specified, so this is the complete set of available information.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","Biological","species","Mus musculus, Homo sapiens","Mus musculus, Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of organism names, which matches the definition for the species field.
-SOURCE CHECK: Both species are explicitly mentioned as the source of the materials analyzed by LC-MS/MS: murine kidney tissue and human tonsil tissue.
+CORRECTED_VALUE: healthy","healthy"
+"PXD006401","","strict","Biological","organ","kidney, tonsil","kidney, tonsil","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of organ names, which matches the field definition.
+SOURCE CHECK: Both kidney (murine) and tonsil (human) tissues were explicitly processed and analyzed by LC-MS/MS.
 TRUTH CHECK: The paper describes the analysis of ""murine kidney tissue specimens"" and ""human tonsil FFPE tissue specimens"".
-COMPLETENESS CHECK: The full set of extracted values covers both the mouse and human samples used in the proteomics experiments.
+COMPLETENESS CHECK: The full set of extracted values covers all organs used for the MS samples described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006401","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is a valid entry for the sex metadata field.
+SOURCE CHECK: The value is explicitly stated in the ""Methods"" section under ""FFPE mouse kidney samples"" (""Kidneys of a male, 6-months old C57 black 6 mouse..."").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the only sex mentioned for the animal samples; the human tonsil samples do not have sex specified.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006401","","strict","Biological","species","Mus musculus, Homo sapiens","Mus musculus, Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of organism names, which is the correct category for the species field.
+SOURCE CHECK: Both ""mouse"" (Mus musculus) and ""human"" (Homo sapiens) are explicitly mentioned as the sources of the FFPE tissue slices analyzed by LC-MS/MS.
+TRUTH CHECK: The paper describes the analysis of murine kidney tissue and human tonsil tissue.
+COMPLETENESS CHECK: The full set of extracted values covers both species used in the proteomics experiments described in the paper.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,9 +58,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","ExperimentalDesign","factor_value","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun)","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun) | ctsl−/−","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factors (sample preparation protocol and histological staining) and their respective levels, which is the correct category for factor_value.
-SOURCE CHECK: The values are explicitly mentioned in the text: the comparison between DTR, FASP 10k, and FASP 30k protocols for mouse kidney, and the comparison between unstained, H&E, hematoxylin, and hemalaun staining for human tonsils.
-TRUTH CHECK: The values are factually correct as they accurately reflect the experimental groups analyzed by mass spectrometry.
-COMPLETENESS CHECK: The full set of extracted values includes the protocols, the stainings, and the genotype (ctsl−/−), which together cover the primary experimental variables described in the paper.
+SOURCE CHECK: The values are explicitly mentioned in the text: the comparison of DTR vs FASP 10k vs FASP 30k for kidney samples, and the comparison of unstained vs H&E vs hematoxylin vs hemalaun for tonsil samples.
+TRUTH CHECK: The values are factually correct as they represent the primary variables being tested in the two main parts of the study.
+COMPLETENESS CHECK: The full set of extracted values includes the protocols, the stainings, and the genotype (ctsl−/−), which together exhaustively cover the experimental factors described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,8 +70,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","ExperimentalDesign","factor_value","ctsl−/−","protocol (DTR, FASP 10k, FASP 30k), staining (unstained, H&E, hematoxylin, hemalaun) | ctsl−/−","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a genotype, which is a valid characteristic for a factor_value.
 SOURCE CHECK: The value ""Ctsl−/−"" is explicitly mentioned in the methods section describing the mouse kidney samples used for the MS experiment.
-TRUTH CHECK: The value is factually correct as the paper states the kidneys were from a ""C57 black 6 mouse lacking cathepsin L (Ctsl−/−)"".
-COMPLETENESS CHECK: The full set of extracted values covers both the genotype of the mouse samples and the primary experimental variables (protocols and stainings) described in the study.
+TRUTH CHECK: The paper states the kidneys were from a ""C57 black 6 mouse lacking cathepsin L (Ctsl−/−)"".
+COMPLETENESS CHECK: The full set of extracted values covers both the genotype of the mouse samples and the primary experimental variables (protocols and stainings).
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -76,10 +79,33 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK: The paper explicitly states in the Results section that the DTR protocol identified proteins in a ""single, non-fractionated LC–MS/MS analysis.""
-TRUTH CHECK: Since the analysis was non-fractionated, the value ""1"" is factually correct.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper.
+"PXD006401","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper explicitly states in the Results section that the DTR protocol identified proteins in a ""single, non-fractionated LC–MS/MS analysis"".
+TRUTH CHECK: Since the analysis was non-fractionated, the number of fractions per sample is 1.
+COMPLETENESS CHECK: The value ""1"" fully describes the fractionation state for all samples in this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006401","","strict","ExperimentalDesign","replicates","20","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The value ""20"" is not explicitly stated as the number of replicates; however, the paper describes two separate experiments: one with 12 murine kidney slices (4 replicates for each of the 3 protocols: DTR, FASP 10k, FASP 30k) and one with 16 human tonsil slices (4 replicates for each of the 4 conditions: unstained, hematoxylin, H&E, hemalaun).
+TRUTH CHECK: The value ""20"" is factually incorrect. The replicates are reported per group/condition (4 replicates per group), not as a single total of 20. Even if summing the total number of samples (12 + 16 = 28), ""20"" does not match the arithmetic.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 4","4"
+"PXD006401","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not mention any technical replicates (multiple MS injections of the same digested sample); it describes biological replicates (separate tissue slices).
+TRUTH CHECK: Per the ""SAFE DEFAULTS"" rule, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The value ""1"" is complete as no other technical replication is described.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -88,31 +114,9 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","ExperimentalDesign","replicates","4","4","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK: The paper explicitly states that ""Four single consecutive murine kidney tissue specimens were prepared"" and later mentions ""within the four replicates"" for the DTR and FASP protocols.
-TRUTH CHECK: The value ""4"" is factually correct as the study used four replicates for each of the three sample preparation protocols.
-COMPLETENESS CHECK: The full set of extracted values (""4"") is exhaustive for the biological replicates described for the primary experiment.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","ExperimentalDesign","technical_replicates","4","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical_replicates.
-SOURCE CHECK: The paper mentions ""four replicates"" for the murine kidney samples and ""four replicates"" for the tonsil samples, but these refer to biological replicates (separate tissue slices).
-TRUTH CHECK: The value ""4"" refers to the number of biological replicates (separate tissue slices per protocol), not technical replicates (repeated measurements of the same sample). There is no mention of technical replicates in the text.
-COMPLETENESS CHECK: The full set contains only this incorrect value.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: 1","1"
-"PXD006401","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes an MS acquisition scheme, which matches the field definition.
+"PXD006401","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
 SOURCE CHECK: The value is explicitly stated in the ""LC–MS/MS analysis"" section (""The MS was operated in data dependent mode"").
-TRUTH CHECK: The value is factually correct as the paper describes the use of a data-dependent acquisition mode.
+TRUTH CHECK: The value is factually correct as the paper describes using a data-dependent mode.
 COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -122,9 +126,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
-SOURCE CHECK: The text explicitly mentions ""sequencing grade trypsin"" being added for trypsinization in both the DTR and FASP protocols used for MS analysis.
-TRUTH CHECK: The value is factually correct as trypsin was the protease used for digestion.
-COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+SOURCE CHECK: The paper explicitly mentions ""sequencing grade trypsin"" was used for both the DTR and FASP protocols.
+TRUTH CHECK: The value is factually correct as trypsin was the protease used for protein digestion.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -132,21 +136,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","Technical","fragment_mass_tolerance","13 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: The value ""13 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The paper explicitly states that the ""fragment mass tolerance was 20 ppm"".
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it does not reflect the value stated in the text.
+"PXD006401","","strict","Technical","fragment_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Data analysis"" section of the methods.
+TRUTH CHECK: The text states ""the fragment mass tolerance was 20 ppm"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 20 ppm","20 ppm"
-"PXD006401","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
-SOURCE CHECK: The candidate value is not mentioned in the paper text; the text specifies the instrument as an ""Orbitrap Q-Exactive plus"" but does not explicitly name the fragmentation method.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006401","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not mentioned in the paper text; the text specifies the instrument (Orbitrap Q-Exactive plus) but does not explicitly name the fragmentation method.
 TRUTH CHECK: While the Orbitrap Q-Exactive plus typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase ""beam-type collision-induced dissociation"" does not appear in the text.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+COMPLETENESS CHECK: The full set contains only this value, but since it is not in the text, it is not a valid extraction.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -155,10 +159,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the ""LC–MS/MS analysis"" section as the instrument used to analyze the samples.
-TRUTH CHECK: The paper states ""Orbitrap Q-Exactive plus (Thermo Scientific)"", making ""Q Exactive Plus"" a correct representation.
-COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the paper, so the extraction is complete.
-
+SOURCE CHECK: The value is explicitly mentioned in the ""LC–MS/MS analysis"" section as ""Orbitrap Q-Exactive plus (Thermo Scientific)"".
+TRUTH CHECK: The value ""Q Exactive Plus"" is a correct shorthand for the ""Orbitrap Q-Exactive plus"" mentioned in the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -166,10 +169,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper explicitly states in the Methods section that samples were ""analyzed by label-free, quantitative liquid chromatography–tandem mass spectrometry (LC–MS/MS)"".
+"PXD006401","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper explicitly states that samples were ""analyzed by label-free, quantitative liquid chromatography–tandem mass spectrometry (LC–MS/MS)"".
 TRUTH CHECK: The value is factually correct; no isobaric, metabolic, or chemical labeling (like TMT or SILAC) is mentioned in the text.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which completely covers the labeling method described in the paper.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one labeling approach was used.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -180,7 +183,7 @@ CORRECTED_VALUE: NONE",""
 "PXD006401","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
 SOURCE CHECK: The value is present in the paper text, as the samples were analyzed by an ""Orbitrap Q-Exactive plus"".
 TRUTH CHECK: The value is factually correct based on the instrument model mentioned.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one mass analyzer was used.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -188,14 +191,15 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006401","","strict","Technical","precursor_mass_tolerance","8 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""8 ppm"" is not present in the paper text.
-TRUTH CHECK: The paper explicitly states that the precursor mass tolerance for the initial search was ""20 ppm"" and for the main search ""4.5 ppm"".
-COMPLETENESS CHECK: The extracted value is incorrect and does not reflect the values stated in the text.
+"PXD006401","","strict","Technical","precursor_mass_tolerance","4.5 ppm","4.5 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which matches the definition for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Data analysis"" section of the methods.
+TRUTH CHECK: The text states ""The precursor mass tolerance for the initial search was 20 ppm and for the main search 4.5 ppm"", confirming 4.5 ppm as a precursor mass tolerance.
+COMPLETENESS CHECK: The full set contains the main search tolerance; while an initial search tolerance of 20 ppm is mentioned, the 4.5 ppm value is the primary parameter for the final results.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 4.5 ppm","4.5 ppm"
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

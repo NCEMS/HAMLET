@@ -2,7 +2,7 @@
 "PXD004997","BiologicalAgent","species","Tropilaelaps mercedesae","Tropilaelaps mercedesae","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
 SOURCE CHECK:      The value ""Tropilaelaps mercedesae"" is explicitly mentioned in the title and throughout the text.
 TRUTH CHECK:       The value is factually correct as the primary subject of the study.
-COMPLETENESS CHECK: The full set contains the only species being characterized in the proteomics experiment.
+COMPLETENESS CHECK: The full set contains the only species being analyzed for the proteomic data.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,21 +10,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004997","BiologicalAgent","material_type","single honey bee colony","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""single honey bee colony"" is a description of the source location/group, not a broad material class as defined (e.g., ""whole organism"", ""tissue"").
-SOURCE CHECK:      The text mentions mites were collected from a ""single honey bee colony"", but the material actually analyzed was the mites themselves.
-TRUTH CHECK:       The material used for the proteomics and genome sequencing was the mites (whole organisms), not the colony itself.
-COMPLETENESS CHECK:The full set contains only this incorrect value and fails to capture the actual material type.
+"PXD004997","BiologicalAgent","material_type","single honey bee colony","","low","True","","False","False","False","TYPE CHECK:        No, ""single honey bee colony"" is a source location or sample group, not a broad material class (e.g., tissue, whole organism).
+SOURCE CHECK:      The text mentions mites were collected from a ""single honey bee colony,"" but this describes the origin, not the material type.
+TRUTH CHECK:       The material actually used for proteomics was pools of male or female mites (whole organisms).
+COMPLETENESS CHECK: The full set is incorrect as it captures the colony rather than the biological material.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""whole organism""]","whole organism"
+CORRECTED_VALUE:   whole organism","whole organism"
 "PXD004997","BiologicalAgent","age","adult","adult","medium","False","","True","False","False","TYPE CHECK: The candidate value ""adult"" describes a developmental time point/age category.
-SOURCE CHECK: The paper explicitly mentions ""adult males and females"" and ""adult females #2"" in the methods and results sections.
+SOURCE CHECK: The paper explicitly mentions ""adult males and females"" and ""nymphs"" throughout the results and methods sections.
 TRUTH CHECK: The value is factually correct as the study used adult mites.
-COMPLETENESS CHECK: The full set of extracted values is not exhaustive because the paper also explicitly mentions ""nymphs"" as a sample group used for RNA-seq and proteomic comparisons.
+COMPLETENESS CHECK: The full set of extracted values is [""adult""], but the paper also explicitly mentions ""nymphs"" as a developmental stage used in the proteomic and transcriptomic analyses. Therefore, the set is incomplete.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -33,18 +33,17 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: [""adult"", ""nymph""]","adult, nymph"
-"PXD004997","BiologicalAgent","sex","male, female","male, female","high","False","","True","True","False","TYPE CHECK: The candidate value ""male, female"" describes the sex of the donors, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""adult males and females"" multiple times in the results and methods sections.
-TRUTH CHECK: The values are factually correct as the study used both male and female mites.
+"PXD004997","BiologicalAgent","sex","males and females","males and females","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the sex of the donors.
+SOURCE CHECK:      The paper explicitly mentions ""adult males and females"" in the results and methods sections.
+TRUTH CHECK:       The value is factually correct as both sexes were used in the proteomic analysis.
 COMPLETENESS CHECK: The full set of extracted values covers all sexes mentioned in the study.
-
-TYPE_CORRECT: yes
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD004997","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The text explicitly mentions ""coupled with a Q-Exactive mass spectrometer (Thermo Fisher Scientific)"".
 TRUTH CHECK: The value is factually correct based on the provided text.
@@ -56,10 +55,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD004997","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+"PXD004997","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
 SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The experimental description of the proteomic analysis confirms no labels were used.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive as this is the only applicable labeling method.
+TRUTH CHECK:       The extraction is factually correct as the experiment used a standard LC-MS/MS approach without labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -67,11 +66,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004997","ExperimentalDesignAgent","replicates","Pools of adult males and females","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample preparation (pooling), not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions ""Pools of male or female mites were lysed"", but this describes the sample composition, not the number of replicates.
-TRUTH CHECK:       The candidate value is not a count of replicates.
-COMPLETENESS CHECK: The full set contains ""2"", but the paper does not explicitly state a number of biological replicates for the proteomics experiment (it mentions ""pools"" and ""samples"" but not a specific count of independent biological replicates).
-
+"PXD004997","ExperimentalDesignAgent","replicates","Pools of male and female mites","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the sample preparation, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""Pools of male or female mites"" is present in the text, but it describes the sample type, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a count of replicates.
+COMPLETENESS CHECK: The full set contains ""2"", but the candidate value is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -79,10 +77,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004997","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK: The candidate value ""2"" is a numeric count, which is the correct category for the `replicates` field.
-SOURCE CHECK: The paper mentions ""Pools of male or female mites were lysed"" and ""Comparison between adult male and female transcriptomes and proteomes,"" but it does not explicitly state the number of biological replicates used for the proteomic analysis.
-TRUTH CHECK: There is no evidence in the text to support the value ""2"" as the number of biological replicates. The mention of ""male and female"" refers to the experimental groups (sex), not the number of replicates within those groups.
-COMPLETENESS CHECK: The full set of extracted values is incorrect; one is a description of the sample and the other is an unsupported number.
+"PXD004997","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK: The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The paper mentions ""Pools of male or female mites"" were used for proteomic analysis, but it does not explicitly state the number of biological replicates for these pools.
+TRUTH CHECK: There is no evidence in the text to support that there were exactly 2 biological replicates; the text mentions ""Pools"" (plural) but does not quantify them.
+COMPLETENESS CHECK: The full set of extracted values includes a descriptive phrase and a number, neither of which are supported by the text as a specific count of biological replicates.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -90,21 +88,10 @@ VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
-CORRECTED_VALUE: 1","1"
-"PXD004997","ExperimentalDesignAgent","technical_replicates","technical duplicates","","low","True","","False","False","True","TYPE CHECK:        The candidate value ""technical duplicates"" describes the nature of replication, but the field definition specifically requires a numeric count (e.g., ""2"").
-SOURCE CHECK:      The paper text does not mention ""technical duplicates"" or any specific number of technical replicates for the proteomics experiment.
-TRUTH CHECK:       The value is not supported by the text; there is no mention of technical replication in the ""Proteomic analysis"" section.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: technical_replicates
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      yes
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD004997","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for technical replicates.
-SOURCE CHECK:      The paper text does not mention ""technical replicates"" or ""technical duplicates"" in the proteomic analysis section; it describes the processing of pools of male or female mites but does not specify the number of technical replicates per sample.
-TRUTH CHECK:       The value is not supported by the text.
+CORRECTED_VALUE: 1",""
+"PXD004997","ExperimentalDesignAgent","technical_replicates","technical duplicate","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""technical duplicate"" describes the number of technical replicates, which fits the field definition.
+SOURCE CHECK:      The paper text does not explicitly mention ""technical duplicates"" or a specific number of technical replicates for the proteomic analysis.
+TRUTH CHECK:       The value is not supported by the provided text; there is no mention of technical replication for the MS experiments.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -113,10 +100,22 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004997","ExperimentalDesignAgent","experimental_design","Comparison between adult male and female proteomes","Comparison between adult male and female proteomes","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental comparison, which fits the category of study design.
+"PXD004997","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK: The candidate value ""2"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention ""technical replicates"" or ""technical duplicates"" in the proteomic analysis section; it describes the processing of pools of male and female mites but does not specify the number of technical injections or replicates per sample.
+TRUTH CHECK: There is no evidence in the text to support the value ""2"" for technical replicates.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD004997","ExperimentalDesignAgent","experimental_design","Comparison between adult male and female proteomes","Comparison between adult male and female proteomes","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the comparative nature of the study, which fits the category of experimental design.
 SOURCE CHECK:      The text explicitly mentions ""Comparison between adult male and female transcriptomes and proteomes"" in the results section.
-TRUTH CHECK:       The value accurately reflects the comparative nature of the proteomic analysis described in the paper.
-COMPLETENESS CHECK: The full set captures the primary comparative design of the proteomic experiment.
+TRUTH CHECK:       The value accurately reflects the experimental approach of comparing the proteomes of different sexes.
+COMPLETENESS CHECK:    The full set captures the primary comparative design of the proteomics experiment described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -126,30 +125,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD004997","ExperimentalDesignAgent","factor_value","sex (male, female)","sex (male, female)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variable (sex) and its levels (male, female), which fits the definition of a factor value.
 SOURCE CHECK: The paper explicitly compares adult males and females across transcriptome and proteome analyses.
-TRUTH CHECK: The study focuses on differences between male and female mites (e.g., ""Comparison between adult male and female transcriptomes and proteomes"").
-COMPLETENESS CHECK: The full set captures the primary experimental variable used for the comparative analysis in this study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD004997","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
-SOURCE CHECK:      The paper describes a standard LC-MS/MS workflow (""linear gradient of 3.8% to 50% buffer B over 90 minutes"") without any mention of offline fractionation.
-TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
-COMPLETENESS CHECK:   The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD004997","ExperimentalDesignAgent","number_of_samples","2","2","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK: The paper describes proteomic analysis of ""pools of male or female mites"" and mentions ""relative differences in protein expression between samples"" (male vs female).
-TRUTH CHECK: The proteomic experiment specifically compared two groups: adult males and adult females.
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the two primary proteomic sample groups (male and female) analyzed.
+TRUTH CHECK: The study focuses on the differences between male and female mites (e.g., ""Comparison between adult male and female transcriptomes and proteomes"").
+COMPLETENESS CHECK: The full set of extracted values covers the primary experimental factor (sex) used to compare the samples.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -158,3 +135,25 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
+"PXD004997","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide/protein fractionation method; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD004997","ExperimentalDesignAgent","number_of_samples","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes proteomic analysis of ""pools of male or female mites,"" and the results section mentions ""proteomic characterization of the adult males and females,"" indicating two distinct sample groups for the proteomics experiment.
+TRUTH CHECK:       The value is factually correct based on the proteomic experimental design (male vs female).
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the two sample groups analyzed by mass spectrometry.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

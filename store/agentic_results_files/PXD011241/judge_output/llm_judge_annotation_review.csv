@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD011241","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper mentions ""human fibroblasts"", ""human PDAC"", and ""Swissprot (Human) database"", making ""Homo sapiens"" a correct and inferable value.
-TRUTH CHECK: The experiment uses human cell lines (H1299, TIFs, PDCLs) and human-derived samples.
-COMPLETENESS CHECK: While the paper also uses mice (Mus musculus), the current set only contains ""Homo sapiens"". However, the prompt asks to verify the candidate value. Since the paper uses both humans and mice, the full set is incomplete.
+TRUTH CHECK: The value is factually correct as the study uses human cell lines (H1299, TIFs, PDCLs).
+COMPLETENESS CHECK: While the paper also uses mice (Mus musculus), the current set only contains ""Homo sapiens"". However, the prompt asks to verify the candidate value; the full set of extracted values is incomplete because it misses the mouse models used in the in vivo experiments.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -12,31 +12,31 @@ HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
 "PXD011241","BiologicalAgent","organ","lung","lung","high","False","","True","True","False","TYPE CHECK:        The candidate value ""lung"" is a valid organ/tissue.
-SOURCE CHECK:      The paper explicitly mentions analyzing the ""lung ECM of mice"" and ""lung parenchyma"".
-TRUTH CHECK:       The value is factually correct as the study examines the lung microenvironment.
-COMPLETENESS CHECK: The full set contains ""lung"", which covers the organ of origin for the in vivo lung ECM analysis described.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD011241","BiologicalAgent","cell_type","carcinoma cell","carcinoma cell","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""carcinoma cell"" describes a cell lineage/type, which fits the definition of cell_type.
-SOURCE CHECK:      The paper mentions ""H1229 non-small cell lung carcinoma cells"" and ""H1299 cells"" (which are lung carcinoma cells), making this value inferable.
-TRUTH CHECK:       The cells used (H1299, H1229) are indeed carcinoma cells.
-COMPLETENESS CHECK: The full set only contains ""carcinoma cell"", but the paper also explicitly uses ""fibroblasts"" (TIFs) as a key part of the experimental design.
+SOURCE CHECK:      The paper explicitly mentions analyzing the ""lung ECM"" and ""lung parenchyma"" in both nude mice and autochthonous PDAC models.
+TRUTH CHECK:       The value is factually correct as the lung is one of the organs studied for ECM organization.
+COMPLETENESS CHECK: The full set contains ""lung"", but the paper also describes experiments using ""pancreas"" (the site of the primary PDAC tumours) and ""liver"" (mentioned as a site of metastasis). However, the primary proteomics experiment (SILAC) was performed on exosomes from H1299 cells (lung carcinoma), making ""lung"" a primary organ of interest.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""carcinoma cell"", ""fibroblasts""]","carcinoma cell, fibroblasts"
-"PXD011241","BiologicalAgent","disease","non-small cell lung carcinoma","non-small cell lung carcinoma","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""H1229 non-small cell lung carcinoma cells"".
-TRUTH CHECK:       The value is factually correct as it describes the disease state of the H1299 cell line used in the study.
-COMPLETENESS CHECK: The full set contains this value; however, the paper also discusses ""pancreatic adenocarcinomas"" (PDAC) and ""breast cancer"" (MDA-MB-231 cells), which are not captured in the extracted values.
+CORRECTED_VALUE:   [""lung"", ""pancreas"", ""liver""]",""
+"PXD011241","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        No, ""epithelial cell"" is a cell type, but the paper does not explicitly use this term to describe the cells.
+SOURCE CHECK:      The value is not present in the text. While H1299 and PDCLs are cancer cells (which are often epithelial), the paper describes them as ""tumour cells"", ""non-small cell lung carcinoma cells"", or ""pancreatic ductal adenocarcinoma"" cells, but never uses the specific term ""epithelial cell"".
+TRUTH CHECK:       The value is not explicitly stated or a safe default.
+COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD011241","BiologicalAgent","disease","non-small cell lung carcinoma","non-small cell lung carcinoma","medium","False","","True","False","False","TYPE CHECK:        Yes, the candidate value is a disease/diagnosis.
+SOURCE CHECK:      Yes, the text explicitly mentions ""H1229 non-small cell lung carcinoma cells"".
+TRUTH CHECK:       Yes, the cells used in the study are derived from non-small cell lung carcinoma.
+COMPLETENESS CHECK:The full set contains this value; however, the paper also uses other cancer models including pancreatic ductal adenocarcinoma (PDAC) and breast cancer (MDA-MB-231), which are not captured.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -46,8 +46,9 @@ VERDICT:           medium
 CORRECTED_VALUE:   [""non-small cell lung carcinoma"", ""pancreatic ductal adenocarcinoma"", ""breast cancer""]","non-small cell lung carcinoma, pancreatic adenocarcinomas, breast cancer"
 "PXD011241","BiologicalAgent","material_type","exosomes","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""exosomes"" is not one of the broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""biofluid"").
 SOURCE CHECK:      The paper explicitly describes the isolation and analysis of exosomes.
-TRUTH CHECK:       While exosomes were the subject of the proteomics analysis, they are a sub-fraction of a biofluid or secreted product, not a broad material class as defined.
+TRUTH CHECK:       While exosomes were the subject of the proteomics analysis, they are a sub-component of a biofluid (conditioned medium) or derived from cell lines; they are not a ""broad material class"" as defined.
 COMPLETENESS CHECK: The full set contains only ""exosomes"", which is a type mismatch.
+
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -55,31 +56,32 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD011241","BiologicalAgent","anatomic_site_tumor","lung","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""lung"" is an anatomical location, which matches the definition of the field.
-SOURCE CHECK:      The paper mentions ""lung ECM of mice possessing mutp53-driven pancreatic adenocarcinomas"" and ""alteration to ECM organisation in other tissues... in the lung parenchyma,"" but these are distant effects/metastases, not the primary tumor site. The primary tumors are ""pancreatic adenocarcinomas"" (PDAC) and ""subcutaneously implanted"" H1299 cells.
-TRUTH CHECK:       The primary tumor site for the autochthonous models is the pancreas (PDAC), and for the xenografts, it is subcutaneous. The lung is the site of the microenvironment changes and potential metastasis, not the primary anatomic site of the tumor itself.
-COMPLETENESS CHECK:   The full set only contains ""lung"", which is incorrect as the primary tumor sites are the pancreas and subcutaneous tissue.
+"PXD011241","BiologicalAgent","anatomic_site_tumor","lung","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""lung"" is an anatomical location, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""lung ECM of mice possessing mutp53-driven pancreatic adenocarcinomas"" and ""lung parenchyma"" in the context of analyzing the effects of tumors, but the primary tumors described are pancreatic adenocarcinomas (PDAC) or subcutaneous xenografts.
+TRUTH CHECK:       The primary tumors are located in the pancreas (autochthonous models) or subcutaneously (xenografts). The ""lung"" is mentioned as a site of metastasis or a site where the microenvironment was altered by the primary tumor, not as the primary anatomic site of the tumor itself.
+COMPLETENESS CHECK:    The full set only contains ""lung"", which is factually incorrect as the primary tumor site.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""pancreas"", ""subcutaneous""]",""
-"PXD011241","BiologicalAgent","cell_line","H1299","H1299","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+CORRECTED_VALUE:   [""pancreas"", ""subcutaneous""]","pancreas, subcutaneous"
+"PXD011241","BiologicalAgent","cell_line","H1299","H1299","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""H1299"" is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK:      The value ""H1299"" is explicitly mentioned multiple times in the text (e.g., ""H1299 non-small cell lung carcinoma cells"").
-TRUTH CHECK:       The value is factually correct as it is the cell line used in the experiments.
-COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also uses A2780, MCF7, and patient-derived cell lines SQ1, SQ2, and SQ3.
+TRUTH CHECK:       The value is factually correct as H1299 is the primary cell line used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses ""A2780"", ""MCF7"", ""TIFs"" (telomerase-immortalised human fibroblasts), and patient-derived cell lines ""SQ1"", ""SQ2"", and ""SQ3"".
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""H1299"", ""A2780"", ""MCF7"", ""SQ1"", ""SQ2"", ""SQ3""]","H1299, A2780, MDA-MB-231, SQ1, SQ2, SQ3"
-"PXD011241","TechnicalAgent","instrument","Orbitrap Elite","Orbitrap Elite","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Protein samples were then applied directly to an Orbitrap Elite (LC-MS).""
-TRUTH CHECK:       The value is factually correct as stated in the SILAC proteomics section of the methods.
+CORRECTED_VALUE:   [""H1299"", ""A2780"", ""MCF7"", ""TIFs"", ""SQ1"", ""SQ2"", ""SQ3""]",""
+"PXD011241","TechnicalAgent","instrument","Orbitrap Elite","Orbitrap Elite","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the definition.
+SOURCE CHECK:      The text explicitly states ""Protein samples were then applied directly to an Orbitrap Elite (LC-MS).""
+TRUTH CHECK:       The value is factually correct as per the provided text.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -89,9 +91,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD011241","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""SILAC-based proteomics"" and the use of ""heavy SILAC (lysine8, arginine10—Cambridge Isotope Labs)"" and ""light SILAC medium"".
-TRUTH CHECK:       The value is factually correct as the experiment used SILAC to compare exosomes from different cell lines.
-COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method described in the proteomics section of the paper.
+SOURCE CHECK:      The paper explicitly mentions ""SILAC-based proteomics"" and the use of ""heavy SILAC (lysine8, arginine10)"" and ""light SILAC medium"" in the SILAC proteomics section.
+TRUTH CHECK:       The value is factually correct as the study used SILAC to compare exosomes from different cell lines.
+COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -100,9 +102,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD011241","ExperimentalDesignAgent","replicates","H1299-p53−/− and H1299-p53R273H cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of cell lines, not a numeric count of biological replicates.
-SOURCE CHECK:      The cell lines are mentioned in the text, but they are the samples/conditions, not the number of replicates.
+SOURCE CHECK:      The cell lines are mentioned in the text, but they are not the number of replicates.
 TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
-COMPLETENESS CHECK: The full set contains a numeric value ""2"", but the candidate value is a type mismatch.
+COMPLETENESS CHECK: The full set contains both a cell line description and a number, but the cell line description is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -111,9 +113,10 @@ HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD011241","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper does not explicitly state the number of biological replicates for the proteomics experiment; it mentions two cell lines (H1299-p53−/− and H1299-p53R273H) were used, but this refers to experimental groups, not replicates.
-TRUTH CHECK:       The value ""2"" is not supported by the text as a count of biological replicates.
-COMPLETENESS CHECK: The full set of extracted values includes a cell line description and a number, neither of which correctly identifies the number of biological replicates.
+SOURCE CHECK:      The paper does not explicitly state the number of biological replicates used for the proteomics experiment or other assays.
+TRUTH CHECK:       There is no evidence in the text to support the value ""2"" as the number of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values includes a cell line description and a number, neither of which accurately represents the biological replicates described in the text.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -121,8 +124,19 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD011241","ExperimentalDesignAgent","technical_replicates","technical replicates (MV1, MV2)","","low","False","","False","False","True","TYPE CHECK:        The candidate value contains a numeric count (implied by MV1, MV2) but is formatted as a descriptive string rather than a simple number.
-SOURCE CHECK:      The text does not mention ""MV1"", ""MV2"", or any specific number of technical replicates for the proteomics experiment.
+"PXD011241","ExperimentalDesignAgent","technical_replicates","technical duplicates","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""technical duplicates"" describes the number of technical replicates, but it is a descriptive phrase rather than a numeric count.
+SOURCE CHECK:      The phrase ""technical duplicates"" does not appear in the provided paper text.
+TRUTH CHECK:       The paper does not explicitly state the number of technical replicates for the proteomics or other experiments.
+COMPLETENESS CHECK: The full set of extracted values contains ""technical duplicates"" and ""2"", neither of which are supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD011241","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper text does not mention ""technical duplicates"" or the number ""2"" in the context of technical replicates for the proteomics or any other experiment.
 TRUTH CHECK:       The value is not supported by the provided text.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT:      yes
@@ -132,44 +146,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD011241","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper text does not mention the number of technical replicates for the proteomics experiment or any other assay.
-TRUTH CHECK:       There is no evidence in the text to support the value ""2"".
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      yes
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD011241","ExperimentalDesignAgent","experimental_design","Comparison of exosome proteins between H1299-p53R273H and H1299-p53−/− cells using SILAC","","low","True","","False","False","False","TYPE CHECK:        no
-SOURCE CHECK:      yes
-TRUTH CHECK:       yes
-COMPLETENESS CHECK:no
+"PXD011241","ExperimentalDesignAgent","experimental_design","comparison of exosomes from H1299-p53R273H and H1299-p53−/− cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The comparison is mentioned in the text under the SILAC proteomics section.
+TRUTH CHECK:       While the comparison exists, the value is a description of the sample groups, not the ""experimental design"" category.
+COMPLETENESS CHECK: The full set contains only this value, which is a specific instance rather than a design type.
 TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: NONE
+CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   treated vs control","treated vs control"
-"PXD011241","ExperimentalDesignAgent","factor_value","p53 status (p53R273H, p53−/−)","p53 status (p53R273H, p53−/−)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variable (p53 status) and its specific levels, which fits the definition of a factor_value.
-SOURCE CHECK: The paper explicitly compares cells with different p53 statuses, specifically p53 null (p53−/−) and mutant p53 (e.g., p53R273H), throughout the results and methods.
-TRUTH CHECK: The value is factually correct as the study focuses on how different p53 mutations (or lack thereof) influence exosome content and invasive niches.
-COMPLETENESS CHECK: The full set captures the primary experimental variable; while other mutants like p53R175H are mentioned, the core factor is the p53 status.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD011241","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
-TRUTH CHECK:       Correct; no fractionation was described.
-COMPLETENESS CHECK: The full set contains the single value ""1"", which is exhaustive for a study where no fractionation occurred.
+CORRECTED_VALUE:   NONE",""
+"PXD011241","ExperimentalDesignAgent","factor_value","p53 status (p53R273H, p53−/−)","p53 status (p53R273H, p53−/−)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes an experimental variable (p53 status) and its specific levels.
+SOURCE CHECK:      Yes, the paper extensively compares cells with different p53 statuses, specifically p53 null (p53−/−) and mutant p53 (e.g., p53R273H).
+TRUTH CHECK:       Yes, the comparison between p53R273H and p53−/− is a central experimental factor in the SILAC proteomics and other assays.
+COMPLETENESS CHECK:The full set captures the primary variable for the proteomics experiment, although the paper also explores other mutants (p53R175H) and other cell types (TIFs, PDCLs), the core factor for the proteomics comparison is indeed the p53 status.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -177,14 +168,26 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD011241","ExperimentalDesignAgent","number_of_samples","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
-SOURCE CHECK:      The SILAC proteomics experiment compared exosomes from two groups: H1299-p53−/− and H1299-p53R273H.
-TRUTH CHECK:       The proteomics section describes a comparison between these two specific conditions (""H1299-p53−/− cells were cultured in heavy SILAC... and H1299-p53R273H in light SILAC medium"").
-COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the two distinct sample groups analyzed in the mass spectrometry experiment.
+"PXD011241","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" applies.
+TRUTH CHECK:       Correct; no fractionation is described in the SILAC proteomics section.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no fractionation occurred.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD011241","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes a SILAC proteomics experiment comparing exosomes from two groups: H1299-p53−/− and H1299-p53R273H.
+TRUTH CHECK:       While the proteomics part of the study compares two conditions, the overall study involves numerous other samples, including various cell lines (H1299, A2780, TIFs, PDCLs), multiple mouse models (KP172C, KP270C, KPflC, KC), and xenograft mice.
+COMPLETENESS CHECK:    The value ""2"" only refers to the SILAC proteomics groups and does not represent the total count of samples processed in the entire study.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
 CORRECTED_VALUE:   NONE",""

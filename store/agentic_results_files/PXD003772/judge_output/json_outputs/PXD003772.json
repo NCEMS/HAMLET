@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"mice\" and specifies \"Mus musculus for the taxonomy\" in the MS/MS data analysis section.",
-        "TRUTH_CHECK": "The value is factually correct as the primary experimental subjects were mice.",
-        "COMPLETENESS_CHECK": "The full set contains \"Mus musculus\", which covers the primary source organism for the proteomics experiments. (Note: While human samples were used for WB verification, the proteomics metadata typically focuses on the MS-analyzed samples)."
+        "TYPE_CHECK": "The candidate value \"Mus musculus\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"mice\" throughout and specifies \"Mus musculus for the taxonomy\" in the protein identification section of the methods.",
+        "TRUTH_CHECK": "The primary proteomics experiments were performed using mouse models (DBA/1 and C57BL/6).",
+        "COMPLETENESS_CHECK": "While human samples were used for Western Blot verification, the core proteomics experiments (the focus of the metadata extraction) were performed on Mus musculus. The set is complete for the proteomics part of the study."
       }
     },
     {
@@ -27,10 +27,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"plasma\" is a valid organ/tissue type according to the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"plasma microparticle protein content\" and \"plasma MP\" throughout the text.",
+        "TYPE_CHECK": "The candidate value \"plasma\" is a valid organ/tissue type as per the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"plasma microparticles\" and \"plasma MP\" throughout the text.",
         "TRUTH_CHECK": "The proteins were extracted from microparticles derived from plasma.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"plasma\") accurately covers the source material described in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"plasma\") correctly identifies the source material described in the paper."
       }
     },
     {
@@ -43,58 +43,58 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "No, \"microparticles\" (extracellular vesicles) are not a primary cell type or lineage.",
-        "SOURCE_CHECK": "Yes, the paper focuses on plasma microparticles (MP).",
-        "TRUTH_CHECK": "No, microparticles are membrane-bound vesicles shed from cells, not the cells themselves.",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
+        "TYPE_CHECK": "The candidate value \"microparticles\" refers to extracellular vesicles, not a primary cell type or lineage.",
+        "SOURCE_CHECK": "The paper describes the study of plasma microparticles (MP).",
+        "TRUTH_CHECK": "Microparticles are not cells; they are membrane-bound vesicles released by cells.",
+        "COMPLETENESS_CHECK": "The full set contains only an incorrect entity type."
       }
     },
     {
       "annotation_type": "disease",
-      "extracted_value": "non-infected, P. berghei ANKA-infected",
+      "extracted_value": "experimental cerebral malaria",
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "experimental cerebral malaria, non-infected",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the disease/infection state of the subjects, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"non-infected and P. berghei ANKA-infected mice\" in the abstract and results.",
-        "TRUTH_CHECK": "The values are factually correct based on the experimental groups described.",
-        "COMPLETENESS_CHECK": "The full set covers the primary experimental groups, but the paper also specifically identifies the infected state as \"experimental cerebral malaria (ECM)\" and mentions \"cerebral malaria (CM)\" and \"asymptomatic malaria (AM)\" in the context of human samples."
+        "TYPE_CHECK": "The candidate value describes a disease state/pathological condition, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"experimental cerebral malaria\" is explicitly mentioned multiple times in the title, abstract, and results sections.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on the protein cargo of microparticles during experimental cerebral malaria (ECM).",
+        "COMPLETENESS_CHECK": "The full set contains only this value; however, the paper also describes \"non-infected\" (NI) mice as controls. According to the definition, \"normal\" or \"healthy\" should be included for healthy controls."
       }
     },
     {
       "annotation_type": "material_type",
       "extracted_value": "mice",
       "verdict": "low",
-      "type_mismatch": false,
+      "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
       "corrected_value": "plasma",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"mice\" refers to a whole organism, which is a category listed in the material_type definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions using mice (DBA/1 and C57BL/6) as the source of the samples.",
-        "TRUTH_CHECK": "While mice were the subjects, the material actually analyzed by mass spectrometry was \"plasma microparticles\" (MP) derived from \"platelet free plasma\" (PFP).",
-        "COMPLETENESS_CHECK": "The full set only contains \"mice\", but the actual material processed for proteomics was a biofluid/plasma derivative (microparticles)."
+        "TYPE_CHECK": "No, \"mice\" is an organism/whole organism, but the material actually analyzed in the proteomics experiments was plasma microparticles.",
+        "SOURCE_CHECK": "The paper mentions mice, but the material processed for MS was \"plasma MP\" (microparticles).",
+        "TRUTH_CHECK": "No, the material type should describe the broad class of the sample analyzed. While mice were the source, the specific material used for the proteomics was plasma-derived microparticles (biofluid/plasma).",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies the subject rather than the material type."
       }
     },
     {
       "annotation_type": "strain",
-      "extracted_value": "DBA/1, C57BL/6",
-      "verdict": "high",
+      "extracted_value": "DBA/1",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "DBA/1, C57BL/6",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains names of mouse strains, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"DBA/1 and C57BL/6 CM-susceptible mice\" in the Methods section.",
-        "TRUTH_CHECK": "The values are factually correct as they are the strains used in the study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers all mouse strains mentioned in the text."
+        "TYPE_CHECK": "The candidate value is a mouse strain, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"DBA/1 and C57BL/6 CM-susceptible mice\" in the Methods section.",
+        "TRUTH_CHECK": "The value is factually correct as it is one of the strains used in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"DBA/1\", but the paper also explicitly mentions \"C57BL/6\" mice were used for verification experiments. Therefore, the set is incomplete."
       }
     },
     {
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"Tandem mass spectrometry analyses were performed on a QExactive Orbitrap Plus (Thermo Electron)\".",
-        "TRUTH_CHECK": "The value \"Q Exactive Plus\" is a correct representation of the \"QExactive Orbitrap Plus\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only instrument used for the MS analyses described in the paper."
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Tandem mass spectrometry analyses were performed on a QExactive Orbitrap Plus (Thermo Electron)\".",
+        "TRUTH_CHECK": "\"Q Exactive Plus\" is a correct representation of the \"QExactive Orbitrap Plus\" mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer used for the proteomics experiments in the study."
       }
     },
     {
@@ -126,44 +126,12 @@
         "TYPE_CHECK": "The candidate value is a specific isobaric labeling method, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly mentions \"Tandem Mass TagTM (TMT) isobaric labelling technology\" in the Results section.",
         "TRUTH_CHECK": "The value is factually correct as described in the paper.",
-        "COMPLETENESS_CHECK": "The full set contains the only labeling method used for the quantitative proteomics experiments."
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the labeling method used for the quantitative experiments."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "Individual mice (NI, d3 pi, and ECM groups)",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "4",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a description of the sample groups, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions \"Individual mice\" and specific group sizes (n=4 per group for TMT6), but the candidate value itself is a description.",
-        "TRUTH_CHECK": "The candidate value does not provide the number of replicates; it describes the subjects.",
-        "COMPLETENESS_CHECK": "The full set contains \"14\", which refers to the total number of mice used for proteomics, but the specific biological replicates per group for the main quantitative experiment were 4."
-      }
-    },
-    {
-      "annotation_type": "replicates",
-      "extracted_value": "14",
-      "verdict": "low",
-      "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "4",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for replicates.",
-        "SOURCE_CHECK": "The paper states \"A total of n = 14 DBA/1 mice were used to perform proteomics experiments\".",
-        "TRUTH_CHECK": "The value 14 represents the total number of biological samples/mice used for the proteomics experiments, not the number of replicates per group. The text specifies n=4 for NI, n=4 for d3 pi, and n=4 for ECM in the TMT6 experiments, and 2 mice for the TMT0 experiment (1 NI, 1 ECM).",
-        "COMPLETENESS_CHECK": "The full set of extracted values is inconsistent; one is a description and the other is the total sample count, neither of which correctly identifies the number of biological replicates per condition."
-      }
-    },
-    {
-      "annotation_type": "technical_replicates",
-      "extracted_value": "two parallel TMT6 experiments",
+      "extracted_value": "mice",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -171,10 +139,42 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "No. The candidate value is a description of the experimental setup (\"two parallel TMT6 experiments\"), not a numeric count of technical replicates per sample.",
-        "SOURCE_CHECK": "Yes, the text mentions \"two parallel experiments were performed\" and \"two parallel TMT6 experiments\".",
-        "TRUTH_CHECK": "No. Performing two parallel experiments (where each experiment contains a set of biological replicates) is not the same as performing technical replicates for each individual sample.",
-        "COMPLETENESS_CHECK": "The full set contains \"2\", which is a numeric interpretation of the \"two parallel experiments\", but the paper does not explicitly state that these were technical replicates of the same samples; rather, they appear to be independent experimental runs."
+        "TYPE_CHECK": "No, the candidate value \"mice\" is an organism/subject type, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The word \"mice\" is present in the text, but it does not represent the number of replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
+        "COMPLETENESS_CHECK": "The full set contains \"mice\" (incorrect type) and \"14\" (which refers to the total number of mice used for proteomics, but the experimental design specifically mentions n=4 per group for the TMT6 experiments)."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "14",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"14\" is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper states in the methods section: \"A total of n = 14 DBA/1 mice were used to perform proteomics experiments\".",
+        "TRUTH_CHECK": "The value is factually correct as it represents the total number of biological subjects (mice) used for the proteomics part of the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"mice\" (which is a type mismatch) and \"14\". Together, they identify the number of biological replicates for the proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "parallel experiments",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"parallel experiments\" is a description of a procedure, not a numeric count of replicates.",
+        "SOURCE_CHECK": "The text mentions \"two parallel experiments were performed,\" but this refers to the overall experimental design (TMT6-1 and TMT6-2) rather than technical replicates per sample.",
+        "TRUTH_CHECK": "The value is not a correct representation of technical replicates; it describes the repetition of the entire experiment.",
+        "COMPLETENESS_CHECK": "The full set contains \"2\", which is an attempt to quantify the parallel experiments, but the text does not explicitly state that each sample was run in technical replicate."
       }
     },
     {
@@ -188,14 +188,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The text states \"two parallel experiments were performed\" and \"two parallel TMT6 experiments (TMT6-1 and TMT6-2)\", indicating the samples were analyzed in duplicate.",
-        "TRUTH_CHECK": "The value \"2\" correctly reflects the two parallel experiments described.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"two parallel TMT6 experiments\", \"2\") accurately captures the technical replication described in the paper."
+        "SOURCE_CHECK": "The paper states that \"two parallel experiments were performed\" (TMT6-1 and TMT6-2) to analyze the same groups of samples.",
+        "TRUTH_CHECK": "Performing two parallel experiments for the same sample sets constitutes 2 technical replicates.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"parallel experiments\", \"2\") correctly identifies that there were two technical replicates."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "infection status/time point (NI, d3 pi, ECM)",
+      "extracted_value": "infection status (non-infected, d3 pi, ECM)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -203,10 +203,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (infection status and time point) and their specific levels, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly compares non-infected (NI), day 3 post-infection (d3 pi), and experimental cerebral malaria (ECM) mice.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental groups used in the quantitative proteomics and verification experiments.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variables and their levels described in the study."
+        "TYPE_CHECK": "The candidate value describes the experimental variable (infection status) and its levels, which fits the definition of a factor value.",
+        "SOURCE_CHECK": "The paper explicitly compares \"non-infected\", \"d3 pi\" (day 3 post-infection), and \"ECM\" (experimental cerebral malaria) mice.",
+        "TRUTH_CHECK": "The value is factually correct based on the experimental design described in the results and methods.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental variable and all its levels used in the proteomics experiments."
       }
     },
     {
@@ -219,10 +219,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
         "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is correct as no fractionation was performed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
+        "TRUTH_CHECK": "Since no fractionation was performed, the value \"1\" is factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper."
       }
     },
     {
@@ -235,10 +235,10 @@
       "hallucination": false,
       "corrected_value": "14, 16, 8, 21",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition of number_of_samples.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
         "SOURCE_CHECK": "The text states \"A total of n = 14 DBA/1 mice were used to perform proteomics experiments\".",
-        "TRUTH_CHECK": "The value 14 refers specifically to the mice used for the proteomics experiments, but the study also includes verification experiments with additional mice (n=16 DBA/1 and n=8 C57BL/6) and human clinical samples (n=21 total: 7 CM, 7 AM, 7 CC).",
-        "COMPLETENESS_CHECK": "The full set only contains \"14\", which ignores the verification cohorts and the human samples, thus failing to represent the total count of samples processed in the study."
+        "TRUTH_CHECK": "The value 14 refers specifically to the mice used for the proteomics experiments, but the study also includes verification experiments (WB) using 16 DBA/1 mice, 8 C57BL/6 mice, and 21 human samples (7 CM, 7 AM, 7 CC).",
+        "COMPLETENESS_CHECK": "The full set of extracted values (only \"14\") only covers the proteomics cohort and ignores the verification cohorts, making it an incomplete representation of the total samples processed in the study."
       }
     }
   ]

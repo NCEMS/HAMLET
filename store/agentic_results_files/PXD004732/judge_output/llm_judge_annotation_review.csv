@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD004732","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human proteome"" and ""human gene products"" multiple times.
-TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans, which is the source organism for the synthetic peptides.
-COMPLETENESS CHECK: The full set contains the only relevant species for the primary experiment.
+SOURCE CHECK:      The paper explicitly mentions ""human proteome"" and ""human genes"" multiple times.
+TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans, and the study focuses on the human proteome.
+COMPLETENESS CHECK: The full set contains the only relevant species for the synthetic proteome being built.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,9 +10,9 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004732","BiologicalAgent","material_type","synthetic tryptic peptides","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""synthetic tryptic peptides"" describes the chemical nature of the sample, but it does not fit the provided categories for material_type (e.g., tissue, cell line, biofluid).
-SOURCE CHECK:      The paper explicitly states the analysis of "">330,000 synthetic tryptic peptides"".
-TRUTH CHECK:       While factually true that synthetic peptides were used, this does not align with the ""Broad material class"" definitions required for this field.
+"PXD004732","BiologicalAgent","material_type","synthetic tryptic peptides","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""synthetic tryptic peptides"" describes the chemical nature of the sample, but it does not match the categories listed in the field definition (e.g., ""tissue"", ""cell line"", ""biofluid"").
+SOURCE CHECK:      The value is present in the text (""generation and multimodal LC-MS/MS analysis of >330,000 synthetic tryptic peptides"").
+TRUTH CHECK:       The value is factually correct regarding what was analyzed, but it is not a valid ""material_type"" per the provided definition.
 COMPLETENESS CHECK:The full set contains only this value, which is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: NONE
@@ -22,9 +22,9 @@ HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD004732","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Orbitrap Fusion Lumos mass spectrometer (Thermo Fisher Scientific)"".
-TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK:   The full set contains the primary instrument used for the study; while a 5600 TripleTOF is mentioned for comparison, the main experimental data was generated on the Lumos.
+SOURCE CHECK:      The text explicitly mentions ""an Orbitrap Fusion Lumos mass spectrometer (Thermo Fisher Scientific)"".
+TRUTH CHECK:       The value is factually correct as per the provided text.
+COMPLETENESS CHECK: The full set contains the primary instrument used for the study's measurements. While a 5600 TripleTOF is mentioned for comparison, the Orbitrap Fusion Lumos is the central instrument of the experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -33,9 +33,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD004732","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper describes the analysis of synthetic peptide pools without mentioning any isobaric or metabolic labeling (e.g., TMT, SILAC); therefore, ""label-free"" is a safe default.
+SOURCE CHECK:      The paper describes the analysis of synthetic peptide pools without any mention of isobaric or metabolic labeling; therefore, ""label-free"" is a safe default.
 TRUTH CHECK:       The value is factually correct as no labeling method was employed.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -43,10 +43,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper describes the analysis of synthetic peptide pools; there is no mention of biological replicates (which is expected for synthetic peptides). Per the safe defaults, ""1"" is correct when no replication is mentioned.
-TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains only ""1"", which is exhaustive for this experiment.
+"PXD004732","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper describes the analysis of synthetic peptide pools; there is no mention of biological replicates (which are typically associated with biological samples).
+TRUTH CHECK:       Since no biological replication is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains the single value ""1"", which is exhaustive for this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -54,10 +54,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","technical_replicates","repeated LC-MS measurements (survey, HCD, IT, ETD) and multiple runs per pool","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a descriptive phrase rather than a numeric count of replicates.
-SOURCE CHECK:      The text mentions a ""survey method"" followed by ""three subsequent LC-MS measurements"" (HCD, IT, ETD), but these are different acquisition methods/schemes, not technical replicates of the same measurement.
-TRUTH CHECK:       The candidate value incorrectly identifies different experimental methods (survey, HCD, IT, ETD) as technical replicates. Technical replicates are repeated measurements of the same sample using the same method.
-COMPLETENESS CHECK:    The full set includes a numeric value ""4"", but the candidate value is factually incorrect.
+"PXD004732","ExperimentalDesignAgent","technical_replicates","multiple technical measurements per pool","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a descriptive phrase rather than a numeric count as required by the field definition.
+SOURCE CHECK:      The paper mentions ""three subsequent LC-MS measurements"" focusing on different acquisition types (HCD, IT, ETD) after a survey run, but these are different methods, not technical replicates of the same measurement.
+TRUTH CHECK:       The candidate value is vague and does not represent a count of technical replicates; the ""three subsequent measurements"" are different acquisition schemes, not technical replicates.
+COMPLETENESS CHECK: The full set contains a descriptive phrase and a number ""3"", neither of which accurately represents technical replicates as defined (identical measurements of the same sample).
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
@@ -65,11 +65,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","technical_replicates","4","","high","False","","True","True","False","TYPE CHECK:        The candidate value ""4"" is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper describes a ""survey method"" followed by ""three subsequent LC-MS measurements"" (HCD, IT, and ETD), totaling 4 measurements per peptide pool.
-TRUTH CHECK:       While the paper performed 4 different acquisition methods per pool, these are distinct experimental conditions (different fragmentation schemes) rather than technical replicates (identical conditions to assess precision).
-COMPLETENESS CHECK:    The full set of extracted values attempts to capture the 4 runs, but misidentifies them as technical replicates.
-
+"PXD004732","ExperimentalDesignAgent","technical_replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper mentions that after the survey method, ""three subsequent LC-MS measurements"" were performed focusing on different acquisition types (HCD, IT, and ETD).
+TRUTH CHECK:       While three measurements were taken, they were not technical replicates (identical conditions); they were different acquisition methods (HCD, IT, ETD). Technical replicates must be identical measurements of the same sample.
+COMPLETENESS CHECK:    The full set includes ""multiple technical measurements per pool"" and ""3"", but neither accurately reflects a count of identical technical replicates as defined.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -77,10 +76,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","experimental_design","multimodal LC-MS/MS analysis of synthetic human proteome peptide pools","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a technical procedure/analysis rather than a study design type (e.g., case-control, time course).
-SOURCE CHECK:      The phrase is present in the abstract, but it describes the method of analysis, not the experimental design.
-TRUTH CHECK:       The value is factually present in the text, but it is not an ""experimental design"" in the context of the field definition.
-COMPLETENESS CHECK:The full set contains only this value, which is a type mismatch.
+"PXD004732","ExperimentalDesignAgent","experimental_design","multimodal LC-MS/MS analysis of synthetic human proteome","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       no
+COMPLETENESS CHECK:no
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
@@ -88,10 +87,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","factor_value","peptide set (proteotypic, missing proteome, SRMAtlas), fragmentation method (HCD, IT, ETD)","peptide set (proteotypic, missing proteome, SRMAtlas), fragmentation method (HCD, IT, ETD)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes experimental variables (peptide sets and fragmentation methods) being compared or analyzed.
-SOURCE CHECK:      The paper explicitly describes three peptide sets (""proteotypic"", ""missing proteome"", ""SRMAtlas"") and three acquisition/fragmentation methods (""HCD"", ""IT"", ""ETD"").
-TRUTH CHECK:       The values are factually correct based on the ""Synthetic peptide sets"" and ""Mass spectrometry"" sections.
-COMPLETENESS CHECK:    The full set captures the primary variables manipulated in the experimental design of this synthetic proteome project.
+"PXD004732","ExperimentalDesignAgent","factor_value","acquisition type (HCD, IT, ETD), peptide set (proteotypic, missing proteome, SRMAtlas)","acquisition type (HCD, IT, ETD), peptide set (proteotypic, missing proteome, SRMAtlas)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes experimental variables (acquisition methods and peptide source sets) used to organize the study.
+SOURCE CHECK:      The paper explicitly describes three peptide sets (""proteotypic"", ""missing proteome"", ""SRMAtlas"") and three acquisition methods (""HCD"", ""IT"", ""ETD"").
+TRUTH CHECK:       These are the primary variables used to categorize the synthetic peptide analysis in the study.
+COMPLETENESS CHECK: The full set captures the main experimental factors described in the methods.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -99,9 +98,9 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper describes the analysis of peptide pools via LC-MS/MS but does not mention any offline fractionation step (e.g., high-pH RP or SAX) prior to the LC-MS analysis.
-TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
+"PXD004732","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK:      The paper describes the use of ""peptide pools"" and ""measurement pools,"" but does not mention any offline peptide/protein fractionation (e.g., high-pH RP or SAX) performed on the samples prior to LC-MS.
+TRUTH CHECK:       Since no fractionation method is described, the safe default of ""1"" is correct.
 COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -110,10 +109,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004732","ExperimentalDesignAgent","number_of_samples","96","96","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text states ""The resulting 96 measurement pools were desalted on C18 material"" and ""the peptide pools in the 96 well plates were dissolved"", indicating 96 distinct sample pools were processed for MS analysis.
-TRUTH CHECK:       The value 96 correctly represents the total number of peptide pools (samples) analyzed in the study.
-COMPLETENESS CHECK: The full set contains the single value ""96"", which exhaustively covers the number of samples described.
+"PXD004732","ExperimentalDesignAgent","number_of_samples","96","96","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition of number_of_samples.
+SOURCE CHECK:      The text states ""The resulting 96 measurement pools were desalted on C18 material"" and ""the peptide pools in the 96 well plates were dissolved"".
+TRUTH CHECK:       The study processed 96 measurement pools (samples) for LC-MS analysis.
+COMPLETENESS CHECK: The full set contains the single value ""96"", which accurately reflects the total number of measurement pools processed.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

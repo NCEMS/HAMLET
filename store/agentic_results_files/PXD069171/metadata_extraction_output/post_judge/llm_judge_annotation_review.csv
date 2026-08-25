@@ -1,0 +1,253 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD069171","","strict","Biological","cell_line","HEK293T, HEK293, HEK293E","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper mentions HEK293, HEK293T, and HEK293E in the ""Cell culture"" section, but the ""SIKALIP screen"" (the actual proteomics/MS experiment) explicitly states that ""two 15 cm plates of nontransfected HEK293T cells were lysed"" to create the lysates used for the MS analysis.
+TRUTH CHECK: While HEK293T is the correct source for the MS sample, HEK293 and HEK293E are mentioned only in the general cell culture section and were used for the production of recombinant proteins (which were then used as enzymes in the assay), not as the source of the protein lysates analyzed by mass spectrometry.
+COMPLETENESS CHECK: The set includes unnecessary cell lines that were not the source of the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: HEK293T","HEK293T"
+"PXD069171","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The MS experiment used HEK293T cell lysates; there is no mention of a disease state or a specific pathology being studied.
+TRUTH CHECK: Since the study is not a disease study and uses standard laboratory cell lines, the safe default ""normal"" is correct.
+COMPLETENESS CHECK: The full set contains only ""normal"", which is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Biological","organ","kidney","kidney","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The value ""kidney"" does not appear in the paper text, nor is it inferable from the materials used.
+TRUTH CHECK: The MS sample was derived from HEK293T cells (Human Embryonic Kidney 293T). While ""kidney"" is the origin of the HEK lineage, the paper explicitly uses HEK293T cells. However, the field definition allows inferring the organ from a named cell line's well-known tissue of origin.
+COMPLETENESS CHECK: The full set contains only ""kidney"", which correctly identifies the organ of origin for the HEK293T cells used in the SIKALIP screen.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a valid species name.
+SOURCE CHECK: The MS experiment (SIKALIP screen) used lysates from HEK293T cells, which are human cells.
+TRUTH CHECK: The paper explicitly mentions using ""human protein lysates"" for the kinase-assay-linked phosphoproteomic screen.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which correctly identifies the source organism of the analyzed lysates.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","ExperimentalDesign","factor_value","presence of exogenous mouse MAST2 (with, absent)","presence of exogenous mouse MAST2 (with, absent)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (presence or absence of a specific protein) used to define the sample groups, which is the correct category for factor_value.
+SOURCE CHECK: The value is derived from the SIKALIP screen and phosphoproteomics data analysis sections, where the experiment compared samples ""with exogenous mouse MAST2"" over ""samples with absent mouse MAST2"".
+TRUTH CHECK: The value accurately reflects the experimental contrast described in the ""Phosphoproteomics data analysis"" section (""ratios were calculated pairwise ratio-based... samples with exogenous mouse MAST2 over samples with absent mouse MAST2"").
+COMPLETENESS CHECK: The full set of extracted values includes the primary experimental contrast and a safe default (""normal""), covering the design of the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","ExperimentalDesign","factor_value","normal","presence of exogenous mouse MAST2 (with, absent)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, specifically as a safe default for disease state.
+SOURCE CHECK: The MS experiment (SIKALIP screen) used ""nontransfected HEK293T cells"" as the control group; there is no mention of a disease state or a ""normal"" vs ""diseased"" comparison in the proteomics context.
+TRUTH CHECK: While ""normal"" is a safe default for healthy subjects, it is not applicable here because the experimental contrast is based on the presence or absence of a recombinant protein (exogenous mouse MAST2), not a biological disease state.
+COMPLETENESS CHECK: The full set of extracted values includes the actual experimental contrast (""presence of exogenous mouse MAST2""), but ""normal"" is an irrelevant addition.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper describes a phosphoproteomics workflow (SIKALIP screen) but does not mention any offline peptide or protein fractionation steps prior to LC-MS/MS.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" fully represents the lack of fractionation described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","ExperimentalDesign","replicates","2","2","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The value is present in the ""Phosphoproteomics data analysis"" section, which describes the MS experiment.
+TRUTH CHECK: The text explicitly states, ""Data were pooled from two independent experimental preparations with or without exogenous Mast2,"" confirming two biological replicates.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
+TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when no replication is mentioned.
+COMPLETENESS CHECK: The value ""1"" is the standard default when the text is silent, and the full set is complete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The value is explicitly stated in the ""LC-MS/MS analysis"" section (""A top ten data-dependent acquisition MS method was used"").
+TRUTH CHECK: The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical reagent used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Phosphoproteomics sample preparation"" section (""Samples were alkylated with 50 mM iodoacetamide"").
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the MS sample preparation workflow.
+COMPLETENESS CHECK: The full set of extracted values contains only ""iodoacetamide"", which is the only alkylation reagent mentioned for the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","cleavage_agent","Lys-C","Lys-C","medium","False","","True","False","False","False","","incomplete","TYPE CHECK: The candidate value ""Lys-C"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Phosphoproteomics sample preparation"" section, describing the digestion of the MS samples.
+TRUTH CHECK: The paper explicitly states that samples were ""digested to peptides using trypsin/Lys-C"".
+COMPLETENESS CHECK: The full set of extracted values only contains ""Lys-C"", but the paper explicitly mentions ""trypsin/Lys-C"". Therefore, the extraction is incomplete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: trypsin/Lys-C","trypsin/Lys-C"
+"PXD069171","","strict","Technical","fragment_mass_tolerance","20 ppm","20 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance expressed in ppm, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Phosphoproteomics data analysis"" section of the methods.
+TRUTH CHECK: The paper states ""10 ppm precursor mass tolerance, 20 ppm fragment mass tolerance"", confirming that 20 ppm refers specifically to the fragment ions.
+COMPLETENESS CHECK: The full set contains the only fragment mass tolerance value mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention ""beam-type collision-induced dissociation"" or any specific fragmentation method (e.g., HCD, CID).
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category for the instrument field.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section as part of the ""Easy-nLC 1200-Orbitrap Q Exactive Plus mass spectrometer"".
+TRUTH CHECK: The value ""Q Exactive Plus"" is factually correct and matches the instrument used for the proteomics analysis described in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text, making it exhaustive.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","mass_analyzer","orbitrap","","","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the paper text, as the LC-MS/MS analysis was performed using an ""Orbitrap Q Exactive Plus mass spectrometer"".
+TRUTH CHECK: The value is factually correct based on the instrument model mentioned.
+COMPLETENESS CHECK",""
+"PXD069171","","strict","Technical","modification","Carbamidomethyl (C)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not explicitly mentioned in the text; the paper mentions ""alkylated cysteine residues"" and the use of ""iodoacetamide"", but not the specific name of the modification.
+TRUTH CHECK: While iodoacetamide results in carbamidomethylation, the field rules strictly forbid inferring the modification name from the reagent. The text only says ""fixed modification (+57.021465 Da for alkylated cysteine residues)"".
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and incorrect terms (e.g., ""pyrophosphorylation"", ""O-dimethylphosphothione"") and does not accurately reflect the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","modification","Phospho (STY)","Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Phospho (STY)"" describes a post-translational modification and its target residues, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Phosphoproteomics data analysis"" section, which describes the MS search parameters.
+TRUTH CHECK: The paper explicitly mentions ""variable (common) modification of phosphorylated amino acids (+79.966331 Da for S, T, Y)"". ""Phospho (STY)"" is a standard abbreviation for this.
+COMPLETENESS CHECK: The full set of extracted values includes several incorrect or hallucinated entries (e.g., ""O-dimethylphosphothione""), but the candidate value itself is a correct representation of one of the searched modifications.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","modification","pyrophosphorylation of Ser/Thr (S)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The value is not present in the paper text; the paper describes ""18O-ATP labeled kinase assay linked phospho-proteomics"" and ""18O3-replaced phosphorylated amino acids"", not pyrophosphorylation.
+TRUTH CHECK: The value is factually incorrect; the study used stable isotope labeling (18O) of phosphate groups, not pyrophosphorylation.
+COMPLETENESS CHECK: The full set of extracted values contains multiple hallucinations and incorrect entries.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE","18O-ATP labeled kinase assay linked phospho-proteomics"
+"PXD069171","","strict","Technical","modification","O-dimethylphosphothione (C)","Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The value ""O-dimethylphosphothione (C)"" is not present in the paper text.
+TRUTH CHECK: The value is not mentioned in the text and is not a valid modification for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains several hallucinations and incorrect entries.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","modification","not applicable","Phospho (STY)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is not a valid modification name or target residue.
+SOURCE CHECK: The paper explicitly lists several modifications used in the database search (phosphorylation, 18O-replaced phosphorylation, and alkylated cysteine).
+TRUTH CHECK: The value is factually incorrect as modifications were explicitly searched and reported.
+COMPLETENESS CHECK:The full set of extracted values contains several hallucinations and incorrect terms, and ""not applicable"" is an invalid entry.
+
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","precursor_mass_tolerance","10 ppm","10 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Phosphoproteomics data analysis"" section of the methods.
+TRUTH CHECK: The paper states ""10 ppm precursor mass tolerance"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD069171","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is present in the ""SIKALIP screen"" and ""Phosphoproteomics sample preparation"" sections, where samples were quenched with ""5 mM DTT"" (dithiothreitol) as part of the workflow leading to MS analysis.
+TRUTH CHECK: The value is factually correct; DTT is the standard abbreviation for dithiothreitol.
+COMPLETENESS CHECK: The full set contains ""dithiothreitol"", which is the only reduction reagent mentioned for the MS sample preparation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,0 +1,158 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD056039","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human EZH2"", ""human monocytes"", and ""myeloma patients"", making ""Homo sapiens"" a correct and present extraction.
+TRUTH CHECK: The study uses human cell lines (RPMI8226, MM.1S, MCF7, HEK293T) and primary cells from human patients.
+COMPLETENESS CHECK: While the study also uses NSG mice, the set of extracted values for ""species"" in this specific request is being evaluated; however, the paper describes both human and mouse components. Since the pipeline only extracted ""Homo sapiens"", it is missing ""Mus musculus"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD056039","BiologicalAgent","organ","bone marrow","bone marrow","high","False","","True","True","False","TYPE CHECK:        The candidate value ""bone marrow"" is a tissue/organ of origin, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""bone marrow aspirates"" and ""bone marrow samples"" multiple times.
+TRUTH CHECK:       The experiment involves extracting primary myeloma cells and analyzing tissues from the bone marrow of patients and mice.
+COMPLETENESS CHECK:   The full set contains ""bone marrow"", which accurately captures the primary tissue source described for the proteomics/MS part of the study (pull-down from RPMI8226 cells, which are myeloma cells derived from bone marrow).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD056039","BiologicalAgent","cell_type","plasma cell","plasma cell","high","False","","True","True","False","TYPE CHECK:        The candidate value ""plasma cell"" is a valid cell type/lineage.
+SOURCE CHECK:      The paper mentions ""normal plasma cells"" in the results section when comparing EMP1 expression.
+TRUTH CHECK:       The value is factually correct as the study compares myeloma cells (which are malignant plasma cells) to normal plasma cells.
+COMPLETENESS CHECK: The full set contains ""plasma cell"", which accurately captures the primary non-malignant cell type mentioned for comparison.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD056039","BiologicalAgent","disease","multiple myeloma","multiple myeloma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""multiple myeloma"" is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""multiple myeloma"" in the abstract (""Osteolytic bone disease is a complication that affects 80% of patients with multiple myeloma"").
+TRUTH CHECK:       The study focuses on the role of EZH2 in myeloma-induced bone destruction, confirming the disease state.
+COMPLETENESS CHECK: The full set contains ""multiple myeloma"", which accurately captures the primary disease studied in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD056039","BiologicalAgent","material_type","RPMI8226 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""RPMI8226 cells"" is a specific cell line name, not a broad material class as required by the definition.
+SOURCE CHECK:      The text mentions RPMI8226 cells, but the field requires the category of the material.
+TRUTH CHECK:       While RPMI8226 is used, the value provided is the specific entity rather than the material type.
+COMPLETENESS CHECK:   The full set contains only the specific cell line name and fails to provide the broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]",""
+"PXD056039","BiologicalAgent","cell_line","RPMI8226","RPMI8226","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""RPMI8226"" is explicitly mentioned multiple times in the text (e.g., ""knocked down its expression in RPMI8226 myeloma cells"").
+TRUTH CHECK: The value is factually correct as it is one of the cell lines used in the study.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also mentions ""MM.1S"", ""ARP-1"", ""CAG"", ""MCF7"", and ""HEK293T"" as cell lines.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""RPMI8226"", ""MM.1S"", ""ARP-1"", ""CAG"", ""MCF7"", ""HEK293T""]","RPMI8226, MM.1S, ARP-1, CAG, MCF7, HEK293T"
+"PXD056039","TechnicalAgent","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions ""nano-LC/MS/MS (Thermo Fisher Scientific)"" and ""1100 HPLC system (Agilent Technologies)"", but it does not mention ""Orbitrap Fusion Lumos"" anywhere in the text.
+TRUTH CHECK:       The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD056039","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a mass spectrometry experiment (gel bands excised, digested with trypsin, and analyzed via nano-LC/MS/MS) without mentioning any isobaric or metabolic labeling reagents.
+TRUTH CHECK:       Per the field definition, ""label-free"" is the correct value when no labels are mentioned.
+COMPLETENESS CHECK:   The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD056039","ExperimentalDesignAgent","replicates","RPMI8226 cells (HA-EZH2 vs empty vector)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of cell lines/conditions, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""RPMI8226 cells"" and ""empty vector"" as controls, but this is a description of the experimental groups, not the number of replicates.
+TRUTH CHECK:       The value is factually a description of the samples used, but it does not answer the question of how many replicates were performed.
+COMPLETENESS CHECK: The full set contains a numeric value (""2"") and a sample description; however, the ""replicates"" field must be a numeric count. The paper states ""All results were reproduced in at least three independent experiments,"" suggesting the correct value should be 3.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD056039","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper does not explicitly state that 2 biological replicates were used for the mass spectrometry experiment; however, it mentions ""All results were reproduced in at least three independent experiments"" in the Statistics & Reproducibility section.
+TRUTH CHECK:       The value ""2"" is not supported by the text; the text indicates a minimum of three independent experiments for results.
+COMPLETENESS CHECK:    The full set of extracted values is incorrect, as it includes a sample description (""RPMI8226 cells..."") which does not belong in the replicates field.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD056039","ExperimentalDesignAgent","experimental_design","interactome analysis of HA-EZH2 vs empty vector control","","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison/procedure rather than a broad study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The paper describes pulling down HA-EZH2 and using an empty vector as a control for mass spectrometry, which is the basis for the candidate value.
+TRUTH CHECK:        While the comparison is factually present, the value is phrased as a specific assay description rather than a ""study design type"" as required by the field definition.
+COMPLETENESS CHECK:    The full set contains only this value, which is too specific and fails to categorize the overall design of the experiment.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control",""
+"PXD056039","ExperimentalDesignAgent","factor_value","transfection (HA-EZH2, empty vector)","transfection (HA-EZH2, empty vector)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental manipulation (transfection with specific plasmids), which is a valid experimental factor.
+SOURCE CHECK:      The paper describes transfecting RPMI8226 cells with HA-EZH2 and using an empty vector as a control for the mass spectrometry and pull-down assays.
+TRUTH CHECK:       The value is factually correct based on the ""Mass spectrometry"" and ""Immunoprecipitation and pull-down assays"" sections.
+COMPLETENESS CHECK:    The full set of extracted values is not exhaustive; the study also investigates factors such as EZH2 knockdown (shEZH2), EZH2 overexpression, EZH2 inhibitors (GSK343, DZNep), and AP2α knockdown.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""transfection (HA-EZH2, empty vector)"", ""EZH2 knockdown (shEZH2)"", ""EZH2 overexpression"", ""EZH2 inhibitors (GSK343, DZNep)"", ""AP2α knockdown (shAP2α)""]","transfection (HA-EZH2, empty vector), EZH2 knockdown (shEZH2), EZH2 overexpression, EZH2 inhibition (GSK343, DZNep), AP2α knockdown (shAP2α)"
+"PXD056039","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation method; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK: The value is correct as no fractionation was described in the mass spectrometry methods.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no fractionation occurred.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD056039","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions ""30 patients"" in the context of EZH2 expression correlation and ""30 myeloma patient bone marrow samples"" in the methods. It also describes multiple mouse groups (shEZH2, shCtrl, Vec, EZH2) and various cell line experiments.
+TRUTH CHECK:       The value ""2"" is incorrect. While the paper mentions two specific patients (P1 and P2) for representative imaging and PDX models, the study processed at least 30 patient samples and numerous mouse/cell samples.
+COMPLETENESS CHECK:    The full set (containing only ""2"") is not exhaustive and is factually incorrect based on the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

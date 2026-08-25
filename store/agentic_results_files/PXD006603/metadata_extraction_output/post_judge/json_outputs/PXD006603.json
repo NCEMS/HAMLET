@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "U2OS, Flp-In™ T-Rex™ 293, A673, HEK293",
+      "extracted_value": "U2OS, Flp-In™ T-Rex™ 293, A673",
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
@@ -15,9 +15,28 @@
       "corrected_value": "U2OS Flp-In™ T-Rex™",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "The paper describes SILAC-MS/MS performed on U2OS Flp-In™ T-Rex™ cells (WT and $\\Delta$EMC5/6). While Flp-In™ T-Rex™ 293, A673, and HEK293 are mentioned in the paper, they are used for protein expression, western blotting, or immunofluorescence, not for the mass spectrometry experiment.",
-        "TRUTH_CHECK": "Only U2OS Flp-In™ T-Rex™ was used for the proteomics/MS analysis; the other listed lines were used for other assays.",
-        "COMPLETENESS_CHECK": "The full set includes cell lines that were not analyzed by MS, making the extraction inaccurate."
+        "SOURCE_CHECK": "The paper describes a SILAC-MS/MS experiment using \"WT and ΔEMC cells\". The \"Materials and Methods\" section specifies that these cell lines were generated using \"U2OS Flp-In™ T-Rex™\" cells. While \"Flp-In™ T-Rex™ 293\" and \"A673\" are mentioned in the \"Cell culture\" section, the SILAC-MS/MS specific section and the results regarding the proteomic analysis of ΔEMC5 and ΔEMC6 lines refer to the U2OS-derived lines. A673 and HEK293 (Flp-In T-Rex 293) were used for western blotting and immunofluorescence validation of SQS expression, not for the MS experiment.",
+        "TRUTH_CHECK": "Only U2OS Flp-In™ T-Rex™ was used for the actual proteomics (SILAC-MS/MS) experiment. The other two cell lines were used for validation assays.",
+        "COMPLETENESS_CHECK": "The full set includes cell lines that were not used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
+        "SOURCE_CHECK": "The MS experiment used U2OS cells (mentioned in \"SILAC-MS/MS\" and \"Cell culture\" sections), which are a well-known osteosarcoma cell line of epithelial origin.",
+        "TRUTH_CHECK": "U2OS cells are derived from human bone (osteosarcoma), and while they are mesenchymal/epithelial-like, \"epithelial cell\" is a reasonably accepted general lineage for this cell line in a proteomics context.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which covers the lineage of the primary cell line used for the MS analysis."
       }
     },
     {
@@ -33,10 +52,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"osteosarcoma\" is a disease/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is inferable from the cell lines used in the MS experiment; the paper uses U2OS and A673 cells, both of which are well-known osteosarcoma cell lines.",
-        "TRUTH_CHECK": "U2OS and A673 are established human osteosarcoma cell lines.",
-        "COMPLETENESS_CHECK": "The full set contains \"osteosarcoma\", which accurately describes the disease origin of the biological material analyzed by MS."
+        "TYPE_CHECK": "The candidate value \"osteosarcoma\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is inferable from the cell lines used for the MS experiment; the paper uses U2OS and A673 cells, both of which are well-established osteosarcoma cell lines.",
+        "TRUTH_CHECK": "U2OS and A673 are indeed derived from osteosarcoma.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the disease origin of the biological materials analysed by mass spectrometry."
       }
     },
     {
@@ -52,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"bone\" is a valid category for the organ/tissue field.",
-        "SOURCE_CHECK": "The paper uses U2OS cells (a well-known osteosarcoma cell line) and A673 cells (Ewing sarcoma cell line) for the SILAC-MS/MS experiment.",
-        "TRUTH_CHECK": "U2OS and A673 are bone-derived cancer cell lines; therefore, \"bone\" is the correct organ of origin.",
-        "COMPLETENESS_CHECK": "The full set contains \"bone\", which accurately describes the origin of the cell lines used in the proteomics analysis."
+        "TYPE_CHECK": "The candidate value \"bone\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The paper uses U2OS cells (osteosarcoma), A673 cells (Ewing sarcoma), and HEK293 cells for the MS experiment; these are all derived from bone or embryonic kidney.",
+        "TRUTH_CHECK": "U2OS and A673 are bone-derived sarcoma cell lines, making \"bone\" a correct inference for the tissue of origin for the primary MS samples.",
+        "COMPLETENESS_CHECK": "The full set contains \"bone\", but the study also used HEK293 cells (kidney origin). However, the primary focus and the majority of the MS analysis (SILAC) were performed on U2OS cells."
       }
     },
     {
@@ -74,12 +93,12 @@
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The paper describes the use of human cell lines (U2OS, HEK293, A673) and explicitly mentions searching against the \"human database downloaded from Uniprot\" for the MS data.",
         "TRUTH_CHECK": "The biological material analyzed by mass spectrometry consists of human cell lines.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which is the only species used in the proteomics experiment."
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which is the only species involved in the proteomics experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "genotype (WT, ΔEMC5, ΔEMC6)",
+      "extracted_value": "genotype (WT, $\\Delta$EMC5, $\\Delta$EMC6)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -90,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factor (genotype) and its specific levels, which is the correct category for this field.",
-        "SOURCE_CHECK": "The values \"WT\", \"ΔEMC5\", and \"ΔEMC6\" are explicitly mentioned in the text as the cell lines used for the SILAC-MS/MS proteomics experiment.",
-        "TRUTH_CHECK": "The values are factually correct; the study compares wild-type (WT) cells with knockouts of EMC5 and EMC6.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental variable (genotype) and the disease context (osteosarcoma, as U2OS is an osteosarcoma cell line), which is exhaustive for the design."
+        "TYPE_CHECK": "The candidate value describes the experimental factor (genotype) and its specific levels, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"WT\", \"ΔEMC5\", and \"ΔEMC6\" are explicitly mentioned in the results and methods as the genotypes of the U2OS cells analyzed by SILAC-MS/MS.",
+        "TRUTH_CHECK": "The values are factually correct; the study compares wild-type (WT) cells with knockout cells for EMC5 and EMC6.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the genotype and the disease/cell type context (\"osteosarcoma\" for U2OS), covering the primary experimental variables."
       }
     },
     {
@@ -109,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"osteosarcoma\" is a disease/cell lineage type, which is a valid category for a factor_value.",
-        "SOURCE_CHECK": "The value is not explicitly mentioned in the text; however, the paper uses U2OS cells, which are a well-known osteosarcoma cell line.",
-        "TRUTH_CHECK": "While U2OS is an osteosarcoma line, the paper does not explicitly name the disease \"osteosarcoma\" in the text. However, the field definition for `disease` (which `factor_value` mirrors) allows for inference from a named cell line's well-known disease origin.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the genotype contrast and the disease origin of the cells, covering the experimental design."
+        "TYPE_CHECK": "The candidate value \"osteosarcoma\" is a disease/cell type characteristic, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is reasonably inferable from the use of U2OS cells, which are a well-known osteosarcoma cell line, although the word \"osteosarcoma\" does not appear literally in the text.",
+        "TRUTH_CHECK": "U2OS cells are derived from human osteosarcoma; therefore, the value is factually correct for the biological material used in the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the genotype contrast and the disease/cell lineage, covering the primary experimental variables."
       }
     },
     {
@@ -131,7 +150,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
         "SOURCE_CHECK": "The paper describes a proteomics workflow (SILAC-MS/MS) but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.",
         "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text."
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the absence of fractionation."
       }
     },
     {
@@ -145,11 +164,11 @@
       "technical_origin": false,
       "inference": null,
       "error_category": "hallucinated",
-      "corrected_value": "1",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper does not explicitly state a number of biological replicates for the SILAC-MS/MS experiment; it mentions \"two independent ΔEMC5 and ΔEMC6 cell lines\" for selection criteria, but not a total of 5 replicates.",
-        "TRUTH_CHECK": "There is no evidence in the text to support the value \"5\" as the number of biological replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly state a number of biological replicates for the SILAC-MS/MS experiment; it mentions \"two independent ΔEMC5 and ΔEMC6 cell lines\" and \"four cell lines\" in total for the proteomic analysis, but not 5.",
+        "TRUTH_CHECK": "There is no mention of 5 biological replicates in the text.",
         "COMPLETENESS_CHECK": "The value is incorrect, and therefore the set is not exhaustive or accurate."
       }
     },
@@ -167,9 +186,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the MS analysis; therefore, the safe default of \"1\" is applied.",
-        "TRUTH_CHECK": "In the absence of explicit mention of technical replication, \"1\" is the correct default value.",
-        "COMPLETENESS_CHECK": "The full set contains the single default value, which is complete given the text."
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the MS analysis.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent on replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
       }
     },
     {
@@ -185,9 +204,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition method field.",
-        "SOURCE_CHECK": "The value is reasonably inferable from the text; the \"top 15 precursor ion selection\" and \"dynamic exclusion\" described in the \"Peptide analysis by UHPLC-coupled mass spectrometry\" section are characteristic features of a data-dependent acquisition (DDA) scheme.",
-        "TRUTH_CHECK": "The description of the MS method (top 15 precursors, dynamic exclusion) confirms the use of a data-dependent acquisition strategy.",
+        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The paper describes \"top 15 precursor ion selection\" and \"dynamic exclusion\", which are characteristic features of data-dependent acquisition (DDA).",
+        "TRUTH_CHECK": "While the literal phrase \"data-dependent acquisition\" is not used, the described settings (top 15 precursor selection, dynamic exclusion) explicitly define a DDA workflow.",
         "COMPLETENESS_CHECK": "The full set contains the only acquisition method used in the study."
       }
     },
@@ -204,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS/MS\" section (\"treated with UC buffer with 50 mM iodoacetamide\") as part of the proteomics workflow.",
         "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"iodoacetamide\", which is the only alkylation reagent mentioned for the MS samples."
+        "COMPLETENESS_CHECK": "The full set contains \"iodoacetamide\", which is the only alkylation reagent mentioned for the MS samples."
       }
     },
     {
@@ -223,29 +242,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS/MS\" section (\"Peptides were obtained after overnight incubation with trypsin at 37°C\").",
-        "TRUTH_CHECK": "The value is factually correct as trypsin was used for the protein digestion in the MS experiment.",
-        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the text for the proteomics experiment."
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation for MS/MS\" section (\"Peptides were obtained after overnight incubation with trypsin at 37°C\") and the \"Sample preparation of cytoplasmic fractions\" section (\"proteins were digested using a 1:50 ratio (trypsin:protein)\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned for the MS experiments."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "16 ppm",
-      "verdict": "low",
+      "extracted_value": "0.05 Da",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "0.05 Da",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"16 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper explicitly states that \"the peptide ion tolerance was adjusted to 0.05 Da\" in the Data processing section.",
-        "COMPLETENESS_CHECK": "The full set contains only the incorrect value and misses the actual value stated in the text."
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"0.05 Da\" is explicitly mentioned in the \"Data processing\" section of the methods, specifically referring to the \"peptide ion tolerance\" used during the MaxQuant search.",
+        "TRUTH_CHECK": "In mass spectrometry search settings, \"peptide ion tolerance\" (or fragment ion tolerance) refers to the MS2/fragment ions, making this value factually correct for the fragment_mass_tolerance field.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the text."
       }
     },
     {
@@ -254,17 +273,17 @@
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
+      "error_category": "wrong_value",
       "corrected_value": "HCD",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper text explicitly mentions \"fragmentation was performed in higher-energy C-trap dissociation (HCD) mode\", but does not mention \"beam-type collision-induced dissociation\".",
-        "TRUTH_CHECK": "While HCD is a form of beam-type CID, the specific term \"beam-type collision-induced dissociation\" is not present in the text; the text explicitly uses \"HCD\".",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not the term used in the paper."
+        "SOURCE_CHECK": "The paper explicitly states that \"fragmentation was performed in higher-energy C-trap dissociation (HCD) mode\".",
+        "TRUTH_CHECK": "\"Higher-energy C-trap dissociation\" (HCD) is a specific implementation of beam-type collision-induced dissociation (BCT-CID), but the paper uses the term \"HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it uses a technical synonym/description rather than the specific term used in the text."
       }
     },
     {
@@ -281,9 +300,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Peptide analysis by UHPLC-coupled mass spectrometry\" section as the instrument used for the MS/MS analysis.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Peptide analysis by UHPLC-coupled mass spectrometry\" section as the instrument used for the proteomics analysis.",
         "TRUTH_CHECK": "The paper states \"tandem mass spectrometry (Q Exactive, Thermo Fisher Scientific)\", confirming the instrument model.",
-        "COMPLETENESS_CHECK": "Only one mass spectrometer is mentioned in the text, and it has been extracted."
+        "COMPLETENESS_CHECK": "Only one mass spectrometer is mentioned for the proteomics experiment, so the extraction is complete."
       }
     },
     {
@@ -300,8 +319,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is inferable from the instrument model \"Q Exactive\" mentioned in the \"Peptide analysis by UHPLC-coupled mass spectrometry\" section.",
-        "TRUTH_CHECK": "The Q Exactive is an Orbitrap-based mass spectrometer.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q Exactive\" mass spectrometer, which is a well-known Orbitrap-based instrument.",
+        "TRUTH_CHECK": "The Q Exactive instrument uses an Orbitrap mass analyzer.",
         "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
       }
     },
@@ -318,10 +337,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section of the methods (\"Carbamidomethyl cysteine was defined as a fixed modification\").",
-        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated as a fixed modification in the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification and the variable modifications (N-terminal acetylation, methionine oxidation, and deamidation) mentioned in the text, making the set exhaustive."
+        "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section of the methods under the search settings for MaxQuant.",
+        "TRUTH_CHECK": "The paper explicitly states \"Carbamidomethyl cysteine was defined as a fixed modification.\"",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification and the variable modifications (N-terminal acetylation, methionine oxidation, and deamidation) mentioned in the text. However, \"N-ethylmaleimide on cysteines (C)\" is not listed as a searched modification in the data processing section, though NEM was used as a reagent."
       }
     },
     {
@@ -337,10 +356,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section of the methods (\"Variable modifications included... methionine oxidation\").",
-        "TRUTH_CHECK": "\"methionine oxidation\" is an unambiguous synonym for \"Oxidation (M)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed and variable modifications listed in the text, although \"N-ethylmaleimide on cysteines (C)\" is not explicitly listed as a searched modification in the data processing section."
+        "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category for a protein modification.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section under the \"SILAC-MS/MS\" workflow (\"Variable modifications included... methionine oxidation\").",
+        "TRUTH_CHECK": "The value is factually correct as \"methionine oxidation\" is an unambiguous synonym for \"Oxidation (M)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification (Carbamidomethyl cysteine) and the variable modifications (N-terminal acetylation, methionine oxidation, and deamidation (NQ)) mentioned in the text. However, \"N-ethylmaleimide on cysteines (C)\" is not listed as a searched modification in the data processing section, and \"N-terminal acetylation\" is missing from the set."
       }
     },
     {
@@ -357,9 +376,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with target residues, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section of the methods under the search settings for MaxQuant.",
-        "TRUTH_CHECK": "The paper explicitly states \"Variable modifications included... deamidation (NQ)\".",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the fixed modification (Carbamidomethyl) and all listed variable modifications (Oxidation, Deamidation, N-terminal acetylation), although \"N-ethylmaleimide on cysteines (C)\" is not mentioned as a searched modification in the text."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data processing\" section of the methods (\"Variable modifications included... deamidation (NQ)\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes all modifications mentioned in the \"Data processing\" section, although one value in the set (\"N-ethylmaleimide on cysteines (C)\") is not explicitly listed as a searched modification in the text."
       }
     },
     {
@@ -375,10 +394,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a protein modification on a specific residue, which matches the field definition.",
-        "SOURCE_CHECK": "The text mentions \"N-ethylmaleamide (NEM)\" in the chemicals list and \"2 mM NEM\" in the lysis buffer, but it does not state that NEM was used as a searched modification in the MS data processing.",
-        "TRUTH_CHECK": "The candidate value is not listed as a searched modification in the \"Data processing\" section; only Carbamidomethyl cysteine, N-terminal acetylation, methionine oxidation, and deamidation (NQ) are explicitly listed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the correct modifications, but this specific candidate value is not supported by the text."
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The text mentions \"N-ethylmaleamide (NEM)\" in the chemicals list and \"2 mM NEM\" in the lysis buffer, but it does not state that this was used as a searched modification for the MS analysis.",
+        "TRUTH_CHECK": "The candidate value is not listed as a searched modification in the \"Data processing\" section; only Carbamidomethyl, N-terminal acetylation, methionine oxidation, and deamidation are listed.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes modifications not supported by the text."
       }
     },
     {
@@ -395,9 +414,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"6 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not specify a precursor mass tolerance; it only mentions a \"peptide ion tolerance\" (fragment tolerance) of 0.05 Da.",
-        "COMPLETENESS_CHECK": "The value is not present in the text, so it cannot be complete."
+        "SOURCE_CHECK": "The value \"6 ppm\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention a precursor mass tolerance of 6 ppm; it only mentions a \"peptide ion tolerance\" of 0.05 Da in the Data processing section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as the value is not supported by the text."
       }
     },
     {
@@ -414,9 +433,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the paper text; the \"SILAC-MS/MS\" section states \"Disulfide bonds were reduced by incubation with PBS/0.5% (w/v) SDS and 100 mM DTT\", and DTT is the standard abbreviation for dithiothreitol.",
-        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used for reduction in the proteomics workflow.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"dithiothreitol\", which is the only reduction reagent mentioned for the MS samples."
+        "SOURCE_CHECK": "The value is present in the paper text; the \"SILAC-MS/MS\" section explicitly states \"Disulfide bonds were reduced by incubation with PBS/0.5% (w/v) SDS and 100 mM DTT\", and DTT is the standard abbreviation for dithiothreitol.",
+        "TRUTH_CHECK": "The value is factually correct as DTT (dithiothreitol) was used for the reduction step of the MS sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\", which is the only reduction reagent mentioned for the MS experiment."
       }
     }
   ]

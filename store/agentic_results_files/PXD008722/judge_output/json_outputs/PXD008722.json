@@ -12,8 +12,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human heart biopsies\" and \"human samples\" multiple times.",
-        "TRUTH_CHECK": "\"Homo sapiens\" is the scientific name for humans, making it factually correct.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human heart biopsies\" and \"patients\" multiple times.",
+        "TRUTH_CHECK": "\"Homo sapiens\" is the scientific name for humans, and the study used human samples.",
         "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
       }
     },
@@ -30,23 +30,23 @@
         "TYPE_CHECK": "The candidate value \"heart\" is an organ, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"human heart biopsies\" and \"cardiac biopsies\" throughout the text.",
         "TRUTH_CHECK": "The value is factually correct as the samples were collected from the heart.",
-        "COMPLETENESS_CHECK": "The full set contains \"heart\", which accurately describes the organ of origin for all samples in the study."
+        "COMPLETENESS_CHECK": "The full set contains \"heart\", which accurately describes the organ of origin for all samples (RA, LA, LV)."
       }
     },
     {
       "annotation_type": "disease",
       "extracted_value": "mitral valve regurgitation",
-      "verdict": "medium",
+      "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
-      "corrected_value": "mitral valve regurgitation, mitral valve prolapse",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"mitral valve regurgitation\" is a medical diagnosis/disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"seven male patients with mitral valve regurgitation\" in the abstract and results sections.",
+        "TYPE_CHECK": "The candidate value is a medical diagnosis, which matches the definition of the disease field.",
+        "SOURCE_CHECK": "The paper explicitly states that the patients had \"mitral valve regurgitation\" in both the abstract and the results section.",
         "TRUTH_CHECK": "The value is factually correct as it describes the condition of the patients from whom the heart biopsies were collected.",
-        "COMPLETENESS_CHECK": "The full set contains \"mitral valve regurgitation\"; however, the paper also explicitly mentions \"mitral valve prolapse (MVP)\" as the underlying condition/disease."
+        "COMPLETENESS_CHECK": "The full set contains \"mitral valve regurgitation\"; however, the paper also mentions \"mitral valve prolapse\" (MVP) as the underlying cause/condition. While regurgitation is the state, MVP is the specific diagnosis mentioned throughout the text."
       }
     },
     {
@@ -59,15 +59,15 @@
       "hallucination": false,
       "corrected_value": "tissue",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"patients\" refers to the human subjects, not the broad material class (e.g., tissue, biofluid) as required by the definition.",
-        "SOURCE_CHECK": "The paper mentions patients, but the material actually analyzed was \"heart biopsies\" (tissue).",
-        "TRUTH_CHECK": "The material used for proteomics was tissue biopsies, not the patients themselves.",
-        "COMPLETENESS_CHECK": "The full set contains only \"patients\", which is the wrong category of entity."
+        "TYPE_CHECK": "No, \"patients\" refers to the subjects/donors, not the broad material class (e.g., tissue, biofluid) as required by the definition.",
+        "SOURCE_CHECK": "The paper mentions patients, but the material actually analyzed was \"heart biopsies\" or \"tissue\".",
+        "TRUTH_CHECK": "The candidate value is incorrect because it identifies the source organism/subject rather than the material type.",
+        "COMPLETENESS_CHECK": "The full set contains only the incorrect value \"patients\" and fails to capture the actual material used."
       }
     },
     {
       "annotation_type": "age",
-      "extracted_value": "average 50 years",
+      "extracted_value": "middle aged (average 50 years)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -75,9 +75,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric age with units, which matches the definition.",
-        "SOURCE_CHECK": "The text explicitly states \"middle aged (average 50 years)\" in the Patient Population section.",
-        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "TYPE_CHECK": "The candidate value provides the age/age group of the donors, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly states \"All seven patients were male, middle aged (average 50 years)\".",
+        "TRUTH_CHECK": "The value is factually correct according to the paper.",
         "COMPLETENESS_CHECK": "The full set contains the only age information provided for the primary cohort."
       }
     },
@@ -92,9 +92,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric value representing Body-Mass Index, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"23.6\" is explicitly stated in the \"Patient Population\" section (\"average BMI 23.6\").",
-        "TRUTH_CHECK": "The value is factually correct as per the text.",
-        "COMPLETENESS_CHECK": "The full set contains the average BMI reported for the patient group, which is the only BMI information provided in the text."
+        "SOURCE_CHECK": "The value \"23.6\" is explicitly mentioned in the \"Patient Population\" section (\"average BMI 23.6\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the average BMI reported for the patient population."
       }
     },
     {
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"male\" is a valid category for the sex field.",
-        "SOURCE_CHECK": "The text explicitly states \"seven male patients\" and \"All seven patients were male\".",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"male\") covers all donors mentioned in the primary study group."
+        "TYPE_CHECK": "The candidate value \"male\" is a valid donor sex.",
+        "SOURCE_CHECK": "The paper explicitly states \"seven male patients\" in the abstract and \"All seven patients were male\" in the results section.",
+        "TRUTH_CHECK": "The value is factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"male\") covers all subjects described in the primary study cohort."
       }
     },
     {
@@ -123,9 +123,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The text explicitly mentions \"Q-Exactive HF Orbitrap instrument\" and \"Q-Exactive HF quadrupole Orbitrap tandem mass spectrometer\".",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TRUTH_CHECK": "The value \"Q Exactive HF\" is a correct representation of the instrument used.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer model mentioned in the paper."
       }
     },
@@ -155,26 +155,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"7 patients\" contains the correct category of information (a numeric count of biological replicates), although it includes the entity name.",
-        "SOURCE_CHECK": "The paper explicitly states, \"Our study is based on seven biological replicates of biopsy samples\" and \"seven male patients\".",
-        "TRUTH_CHECK": "The value is factually correct as the primary cohort consisted of 7 patients.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"7 patients\", \"7\") correctly identifies the number of biological replicates for the main study. While there is a replication cohort of 3, the primary experimental design is based on 7."
+        "TYPE_CHECK": "The candidate value \"7 patients\" contains a numeric count of biological subjects, which fits the category of biological replicates.",
+        "SOURCE_CHECK": "The paper explicitly states \"seven male patients\" and \"Our study is based on seven biological replicates of biopsy samples\".",
+        "TRUTH_CHECK": "The value is factually correct; there were 7 biological replicates (patients) in the primary cohort.",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"7 patients\", \"21\"] is confusing; \"7\" refers to the biological replicates (patients), while \"21\" refers to the total number of samples (7 patients x 3 chambers). According to the field definition, \"replicates\" refers to biological replicates. Including \"21\" is incorrect as it represents the total sample count, not the number of biological replicates."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "7",
-      "verdict": "high",
+      "extracted_value": "21",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
+      "value_correct": false,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "7",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count representing biological replicates, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states \"Our study is based on seven biological replicates of biopsy samples\" and \"seven male patients\".",
-        "TRUTH_CHECK": "The value \"7\" is factually correct for the primary study cohort.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"7 patients\", \"7\") correctly identifies the number of biological replicates for the main experiment. While there is a replication cohort of 3, the primary experimental design is based on 7."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
+        "SOURCE_CHECK": "The paper states \"Our study is based on seven biological replicates of biopsy samples from three cardiac chambers (LA, RA, LV)\" and mentions \"21 samples\".",
+        "TRUTH_CHECK": "The value \"21\" refers to the total number of samples (7 patients x 3 chambers), not the number of biological replicates. The biological replicates are the 7 patients.",
+        "COMPLETENESS_CHECK": "The set contains both the correct number of replicates (7) and the total sample count (21), but the candidate value itself is factually incorrect for this specific field."
       }
     },
     {
@@ -189,13 +189,13 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
         "SOURCE_CHECK": "The paper explicitly states in the \"Experimental Design and Statistical Rationale\" section: \"No technical replicates were performed.\"",
-        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned or when it is explicitly stated that no technical replicates were performed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"1\", which accurately reflects the study's design."
+        "TRUTH_CHECK": "According to the rules, \"1\" is the correct value when no replication is mentioned or when the paper states none were performed.",
+        "COMPLETENESS_CHECK": "The full set contains the single value \"1\", which accurately reflects the study's design."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "inter-chamber comparison (LA vs RA vs LV)",
+      "extracted_value": "comparison of proteomes across three cardiac chambers (LA, RA, LV)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -203,10 +203,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the study design (comparing different heart chambers), which fits the definition of experimental_design.",
-        "SOURCE_CHECK": "The paper explicitly states the goal was to \"define inter-chamber differences\" and compares the proteomes of the left atria (LA), right atria (RA), and left ventricle (LV).",
-        "TRUTH_CHECK": "The value is factually correct as the primary design of the study is a comparative analysis across these three specific cardiac chambers.",
-        "COMPLETENESS_CHECK": "The full set contains this value, which accurately captures the core experimental design described in the text."
+        "TYPE_CHECK": "The candidate value describes the study design (comparing different anatomical sites/chambers), which fits the category of experimental design.",
+        "SOURCE_CHECK": "The paper explicitly states the study is based on biopsy samples from three cardiac chambers (LA, RA, LV) to define inter-chamber differences.",
+        "TRUTH_CHECK": "The value accurately reflects the primary objective and design of the experiment.",
+        "COMPLETENESS_CHECK": "The full set captures the core design of the study (inter-chamber comparison)."
       }
     },
     {
@@ -219,9 +219,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (cardiac chamber) being compared, which fits the definition of a factor_value.",
-        "SOURCE_CHECK": "The paper explicitly states it is comparing proteomes from the right atria (RA), left atria (LA), and left ventricle (LV).",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on inter-chamber differences.",
+        "TYPE_CHECK": "The candidate value describes the experimental variable (cardiac chamber) being compared.",
+        "SOURCE_CHECK": "The paper explicitly states the study is based on biopsy samples from three cardiac chambers (LA, RA, LV).",
+        "TRUTH_CHECK": "The primary objective of the study is to define inter-chamber differences in the proteome.",
         "COMPLETENESS_CHECK": "The full set captures the primary experimental factor (chamber type) used for the comparative analysis."
       }
     },
@@ -235,10 +235,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count representing the number of fractions, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states, \"The generated peptides were pre-fractionated into 12 fractions\" and \"21 samples fractionated into 12 fractions before MS analysis.\"",
-        "TRUTH_CHECK": "The value \"12\" is factually correct according to the methods section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains the single correct number of fractions described in the paper."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "SOURCE_CHECK": "The text explicitly states \"The generated peptides were pre-fractionated into 12 fractions\" and \"21 samples fractionated into 12 fractions\".",
+        "TRUTH_CHECK": "The value \"12\" is factually correct based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"12\", which is the only fractionation number mentioned in the paper."
       }
     },
     {
@@ -252,9 +252,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The text states \"Our study is based on seven biological replicates of biopsy samples from three cardiac chambers (LA, RA, LV)\" and explicitly mentions \"Based on 21 samples fractionated into 12 fractions\".",
-        "TRUTH_CHECK": "The value 21 is factually correct (7 patients * 3 chambers = 21 samples).",
-        "COMPLETENESS_CHECK": "The full set contains the total count of samples for the primary study cohort."
+        "SOURCE_CHECK": "The paper states \"Our study is based on seven biological replicates of biopsy samples from three cardiac chambers (LA, RA, LV)\" and explicitly mentions \"Based on 21 samples\".",
+        "TRUTH_CHECK": "The value 21 (7 patients * 3 chambers) is factually correct for the primary study cohort.",
+        "COMPLETENESS_CHECK": "While there is a replication cohort of 3 individuals (3 * 3 = 9 samples), the primary experimental design is centered on the 21 samples. In proteomics metadata, the primary cohort size is typically the key value, and \"21\" is the explicit number of samples provided in the \"Experimental Design\" section."
       }
     }
   ]

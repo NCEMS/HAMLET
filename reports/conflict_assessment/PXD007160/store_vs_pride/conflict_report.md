@@ -6,7 +6,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 
 | Gold files | Assessed files | Matched | Missing from assessed | Assessed only | Coverage |
 |---:|---:|---:|---:|---:|---:|
-| 11 | 30 | 0 | 11 | 30 | 0.0% |
+| 11 | 211 | 0 | 11 | 211 | 0.0% |
 
 ## Metadata agreement across matched files
 
@@ -30,14 +30,17 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[technical replicate]` | ExperimentalDesign | NA | NA | NA |
 | `factor value[disease]` | ExperimentalDesign | NA | NA | NA |
 | `factor value[experimental design]` | ExperimentalDesign | NA | NA | NA |
+| `comment[alkylation reagent]` | Technical | NA | NA | NA |
 | `comment[cleavage agent details]` | Technical | NA | NA | NA |
 | `comment[dissociation method]` | Technical | NA | NA | NA |
 | `comment[fragment mass tolerance]` | Technical | NA | NA | NA |
 | `comment[instrument]` | Technical | NA | NA | NA |
 | `comment[label]` | Technical | NA | NA | NA |
+| `comment[modification parameters]` | Technical | NA | NA | NA |
 | `comment[ms2 mass analyzer]` | Technical | NA | NA | NA |
 | `comment[precursor mass tolerance]` | Technical | NA | NA | NA |
 | `comment[proteomics data acquisition method]` | Technical | NA | NA | NA |
+| `comment[reduction reagent]` | Technical | NA | NA | NA |
 | `technology type` | Technical | NA | NA | NA |
 
 Metadata averages include only the 0 uniquely matched files. Missing files are reported as coverage failures rather than zero-score metadata rows.

@@ -1,8 +1,19 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD003544","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper mentions ""breast cancer cells"", ""breast cancer patient-derived CAF"", and the use of the ""Human RefSeq database"", all of which confirm the species is human.
-TRUTH CHECK: The value ""Homo sapiens"" is the correct scientific name for humans.
-COMPLETENESS CHECK: The full set contains the only species involved in the study.
+"PXD003544","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""breast cancer cells"", ""breast cancer patient-derived CAF"", and searching against the ""Human RefSeq database"", from which ""Homo sapiens"" is reasonably inferable.
+TRUTH CHECK:       The study uses human-derived cell lines (MDA-MB-231) and patient-derived fibroblasts.
+COMPLETENESS CHECK: The full set contains the only species involved in the experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003544","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK: The candidate value ""breast"" refers to an organ/tissue of origin, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF"".
+TRUTH CHECK: The cells used in the study are derived from breast cancer, making ""breast"" the correct organ of origin.
+COMPLETENESS CHECK: The full set contains ""breast"", which accurately describes the organ of origin for all samples in this study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,10 +21,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003544","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" refers to an organ/tissue of origin, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF"".
-TRUTH CHECK:       The source material is derived from breast tissue.
-COMPLETENESS CHECK:   The full set of extracted values (""breast"") covers the organ of origin described in the paper.
+"PXD003544","BiologicalAgent","cell_type","epithelial cells","epithelial cells","medium","False","","True","False","False","TYPE CHECK: The candidate value ""epithelial cells"" describes a cell lineage/type, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""cancer epithelial cells"" and ""tumor epithelial cells"" multiple times.
+TRUTH CHECK: The value is factually correct as the study uses MDA-MB-231, which are described as tumor epithelial cells.
+COMPLETENESS CHECK: The full set of extracted values only contains ""epithelial cells"", but the paper also focuses heavily on ""cancer-associated fibroblasts"" (CAFs). The extraction is missing the fibroblast component.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""epithelial cells"", ""fibroblasts""]","epithelial cells, fibroblasts"
+"PXD003544","BiologicalAgent","disease","breast cancer","breast cancer","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast cancer"" is a disease state, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF"" in the abstract.
+TRUTH CHECK:       The study focuses on the interaction between breast cancer cells (MDA-MB-231) and cancer-associated fibroblasts (CAFs) from breast cancer patients.
+COMPLETENESS CHECK: The full set contains ""breast cancer"", which accurately captures the disease state described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,32 +43,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","BiologicalAgent","cell_type","epithelial cell","epithelial cell","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell lineage/type, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""cancer epithelial cells"" and ""tumor epithelial counterpart"" in the abstract and results.
-TRUTH CHECK:       The value is factually correct as the study uses MDA-MB-231 cells, which are described as epithelial tumor cells.
-COMPLETENESS CHECK: The full set of extracted values only contains ""epithelial cell"", but the paper also explicitly focuses on ""cancer-associated fibroblasts"" (CAFs). The extraction is missing the fibroblast cell type.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""epithelial cell"", ""fibroblast""]","epithelial cell, fibroblast"
-"PXD003544","BiologicalAgent","disease","breast cancer","breast cancer","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast cancer"" is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF"" in the abstract and methods.
-TRUTH CHECK:       The value is factually correct as the study uses breast cancer cell lines and patient-derived fibroblasts.
-COMPLETENESS CHECK: The full set of extracted values (""breast cancer"") covers the disease state described in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003544","BiologicalAgent","material_type","patient-derived","","low","True","","False","False","False","TYPE CHECK:        no
-SOURCE CHECK:      yes
-TRUTH CHECK:       no
-COMPLETENESS CHECK:The full set contains only one value which is not a valid material type.
+"PXD003544","BiologicalAgent","material_type","patient-derived","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patient-derived"" is a description of the source, not a broad material class as defined (e.g., ""cell line"", ""primary cells"").
+SOURCE CHECK:      The text mentions ""breast cancer patient-derived CAF"", but ""patient-derived"" is an adjective describing the cells, not the material type itself.
+TRUTH CHECK:       The material used consists of a cell line (MDA-MB-231) and primary cells (patient-derived CAFs).
+COMPLETENESS CHECK: The full set contains only ""patient-derived"", which is neither a valid material type nor an exhaustive list of the materials used.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -54,10 +54,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""cell line"", ""primary cells""]","cell line, primary cells"
-"PXD003544","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" describes an anatomical location associated with the tumor type.
-SOURCE CHECK:      The paper explicitly mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF"".
-TRUTH CHECK:       The tumor cells (MDA-MB-231) and the CAFs are derived from breast cancer.
-COMPLETENESS CHECK: The full set contains ""breast"", which accurately captures the anatomical site of the tumor described in the paper.
+"PXD003544","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" refers to an anatomical location of a tumor, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""invasive breast cancer cells"" and ""breast cancer patient-derived CAF cells"" multiple times.
+TRUTH CHECK:       The tumor origin is explicitly stated as breast cancer.
+COMPLETENESS CHECK: The full set of extracted values (""breast"") accurately captures the anatomical site described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -65,32 +65,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","BiologicalAgent","cell_line","MDA-MB-231","MDA-MB-231","high","False","","True","True","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK:      The value ""MDA-MB-231"" is explicitly mentioned multiple times in the text (e.g., ""breast cancer cell line, MDA-MB-231"").
-TRUTH CHECK:       The value is factually correct as the paper identifies MDA-MB-231 as a breast cancer cell line used in the study.
-COMPLETENESS CHECK:    The full set contains ""MDA-MB-231""; however, the paper also uses ""82T"" (and other CAF strains), which are described as ""primary cultured CAF cell strains."" Since primary cells are not immortalized cell lines, they do not belong in this field. MDA-MB-231 is the only cell line mentioned.
+"PXD003544","BiologicalAgent","cell_line","MDA-MB-231","MDA-MB-231","high","False","","True","True","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line.
+SOURCE CHECK:      The value is explicitly mentioned in the text (e.g., ""breast cancer cell line, MDA-MB-231"").
+TRUTH CHECK:       The value is factually correct as per the paper.
+COMPLETENESS CHECK: The full set contains MDA-MB-231, but the paper also uses ""82T"" (described as a ""CAF cell strain"" and ""primary cultured CAF cell strain""). While 82T is derived from primary cells, it is used as a stable line in the experiment. However, MDA-MB-231 is the primary immortalized cell line.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003544","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""LTQ Orbitrap Velos"" in the ""Phosphotyrosine profiling..."" and ""Liquid chromatography tandem mass spectrometry"" sections.
-TRUTH CHECK:       The value is factually correct as stated in the paper.
-COMPLETENESS CHECK:   The full set contains the only mass spectrometer mentioned in the text.
-TYPE_CORRECT:      yes
+VERDICT:           medium
+CORRECTED_VALUE:   [""MDA-MB-231"", ""82T""]",""
+"PXD003544","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The text explicitly mentions ""LTQ Orbitrap Velos"" in the ""Phosphotyrosine profiling..."" and ""Liquid chromatography tandem mass spectrometry"" sections.
+TRUTH CHECK: The value is factually correct as per the provided text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD003544","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""stable isotope labeling with amino acids in cell culture (SILAC) strategy"" in the abstract and methods.
+SOURCE CHECK:      The paper explicitly mentions ""stable isotope labeling with amino acids in cell culture (SILAC)"" in the abstract and methods.
 TRUTH CHECK:       The use of SILAC for quantitative phosphoproteomic analysis is factually correct as described in the text.
-COMPLETENESS CHECK:    The full set of extracted values contains ""SILAC"", which is the only labeling method used in this study.
+COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method used in this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -98,11 +98,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","ExperimentalDesignAgent","replicates","two biological replicates","two biological replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
+"PXD003544","ExperimentalDesignAgent","replicates","two biological replicates","two biological replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value ""two biological replicates"" describes the number of biological replicates, which matches the field definition.
 SOURCE CHECK:      The paper explicitly states, ""we identified 424 phosphopeptides corresponding to 291 proteins from two biological replicates.""
 TRUTH CHECK:       The value is factually correct based on the text.
-COMPLETENESS CHECK:    The full set of extracted values (""two biological replicates"", ""2"") covers the information provided in the paper.
-
+COMPLETENESS CHECK: The full set of extracted values (""two biological replicates"", ""2"") is exhaustive and covers the information provided in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -110,10 +109,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","ExperimentalDesignAgent","replicates","2","two biological replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for biological replicates.
-SOURCE CHECK:      The paper explicitly states ""we identified 424 phosphopeptides corresponding to 291 proteins from two biological replicates"" and ""two independent biological replicate experiments"".
+"PXD003544","ExperimentalDesignAgent","replicates","2","two biological replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of biological replicates, which matches the field definition.
+SOURCE CHECK:      The paper explicitly states, ""we identified 424 phosphopeptides corresponding to 291 proteins from two biological replicates.""
 TRUTH CHECK:       The value ""2"" is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values (""two biological replicates"", ""2"") covers the information provided in the paper.
+COMPLETENESS CHECK: The full set of extracted values (""two biological replicates"", ""2"") is exhaustive and covers the information provided in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,10 +120,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","ExperimentalDesignAgent","experimental_design","co-cultured versus individually cultured cells for MDA-MB-231 and 82T cells","co-cultured versus individually cultured cells for MDA-MB-231 and 82T cells","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental comparison (treated vs control), which fits the definition of study design.
-SOURCE CHECK:      The paper explicitly describes comparing ""co-cultured"" cells against ""individually cultured"" cells for both the MDA-MB-231 and 82T cell types.
+"PXD003544","ExperimentalDesignAgent","experimental_design","comparison of co-cultured vs individually cultured MDA-MB-231 and 82T cells using SILAC","comparison of co-cultured vs individually cultured MDA-MB-231 and 82T cells using SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing two conditions), which fits the definition of experimental_design.
+SOURCE CHECK:      The paper explicitly describes comparing co-cultured cells (MDA-MB-231-M and 82T-L) against individually cultured controls (MDA-MB-231-H and 82T-H) using a SILAC strategy.
 TRUTH CHECK:       The value accurately reflects the experimental setup described in the ""SILAC labeling-based co-culture system"" and ""Results"" sections.
-COMPLETENESS CHECK:The full set of extracted values captures the primary experimental design of the study.
+COMPLETENESS CHECK:The full set contains this single value, which comprehensively captures the primary experimental design of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -134,8 +133,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD003544","ExperimentalDesignAgent","factor_value","culture condition (co-cultured, individually cultured)","culture condition (co-cultured, individually cultured)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (culture condition) and its levels, which fits the definition of a factor value.
 SOURCE CHECK:      The paper explicitly compares ""co-cultured"" cells versus ""individually cultured"" cells throughout the results and methods.
-TRUTH CHECK:       The value is factually correct as the primary experimental variable studied is the effect of co-culture versus individual culture.
-COMPLETENESS CHECK:    The full set captures the primary experimental factor described in the study.
+TRUTH CHECK:       The value is factually correct as the study's primary goal was to investigate the effects of co-culture on tyrosine phosphorylation.
+COMPLETENESS CHECK: The full set captures the primary experimental variable being manipulated in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,10 +142,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+"PXD003544","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
 SOURCE CHECK:      The paper describes a 90-min linear reversed phase HPLC gradient but does not mention any offline fractionation steps prior to LC-MS/MS.
 TRUTH CHECK:       Since no offline fractionation is mentioned, the default value of ""1"" is correct.
-COMPLETENESS CHECK:   The full set contains the correct default value for a non-fractionated experiment.
+COMPLETENESS CHECK: The full set of extracted values consists of a single ""1"", which accurately reflects the lack of fractionation described in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -154,14 +153,15 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003544","ExperimentalDesignAgent","number_of_samples","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+"PXD003544","ExperimentalDesignAgent","number_of_samples","2","","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
 SOURCE CHECK:      The paper mentions ""two biological replicates"" in the ""Phosphotyrosine profiling..."" section.
-TRUTH CHECK:       The study used two biological replicates for the phosphoproteomic analysis.
-COMPLETENESS CHECK:   The full set contains only ""2"", which accurately reflects the number of biological replicates mentioned as the basis for the MS analysis.
+TRUTH CHECK:       The study performed the experiment in two biological replicates, but ""number of samples"" typically refers to the total count of distinct experimental conditions/groups processed. Here, there are two main groups (MDA-MB-231 and 82T), each with co-cultured and individually cultured conditions, processed in duplicate.
+COMPLETENESS CHECK:    The value ""2"" refers to the number of biological replicates, not the total number of samples processed in the study.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           high
+VERDICT:           low
 CORRECTED_VALUE:   NONE",""

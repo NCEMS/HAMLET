@@ -3,21 +3,21 @@
   "annotations": [
     {
       "annotation_type": "cell_type",
-      "extracted_value": "yeast cell",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
+      "extracted_value": "cell",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "correct_explicit",
-      "corrected_value": null,
+      "error_category": "type_mismatch",
+      "corrected_value": "yeast",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"yeast cell\" describes the cell type/lineage of the biological source.",
-        "SOURCE_CHECK": "The value comes from the MS experiment context, as the paper explicitly states the samples were \"yeast cell lysate samples\".",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"yeast cell\") covers the biological source described in the paper."
+        "TYPE_CHECK": "The candidate value \"cell\" is a very broad term and does not specify a cell type or lineage as required by the definition.",
+        "SOURCE_CHECK": "The paper mentions \"yeast cell lysate samples\", confirming the MS sample is derived from yeast cells.",
+        "TRUTH_CHECK": "While the sample is a cell, \"cell\" is a general material category rather than a \"cell type or lineage\" (e.g., \"yeast\" or \"Saccharomyces cerevisiae\").",
+        "COMPLETENESS_CHECK": "The full set contains only \"cell\", which is too generic to be a useful or accurate cell_type."
       }
     },
     {
@@ -33,10 +33,10 @@
       "error_category": "type_mismatch",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"cell culture\" is a description of a sample source, but it is not an organ or tissue.",
+        "TYPE_CHECK": "The candidate value \"cell culture\" is a general description of a sample source, but it is not an organ or tissue.",
         "SOURCE_CHECK": "The paper describes the use of \"yeast cell lysate,\" which is derived from cultured yeast cells.",
-        "TRUTH_CHECK": "\"Cell culture\" is a general term for the method of growing cells, not the organ or tissue of origin. For yeast (a unicellular organism), there is no \"organ,\" but the material is a whole-cell lysate.",
-        "COMPLETENESS_CHECK": "The full set contains only \"cell culture,\" which is a category mismatch for the \"organ\" field."
+        "TRUTH_CHECK": "While the sample is a cell culture, \"cell culture\" is a material type or a general state, not an \"organ\" or \"tissue\" as defined by the field.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch for the organ field."
       }
     },
     {
@@ -55,7 +55,7 @@
         "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"yeast cell lysate\" and the use of the \"yeast database from UniprotKB (S_cerevisiae_ 20121108.fasta)\" for the MS analysis.",
         "TRUTH_CHECK": "\"Saccharomyces cerevisiae\" is the scientific name for yeast, and the text explicitly references \"S_cerevisiae\".",
-        "COMPLETENESS_CHECK": "The full set contains the primary background organism used for the MS samples. (Note: While UPS1 contains human proteins, the biological source material/matrix is yeast lysate)."
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the primary background organism used for the MS samples."
       }
     },
     {
@@ -71,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (spike level) and its specific values, which is the correct category for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Sample preparation\" section of the methods, describing the 9 different spiked levels of UPS1 used for the MS samples.",
-        "TRUTH_CHECK": "The values (0.05, 0.125, 0.250, 0.5, 2.5, 5, 12.5, 25, 50 fmol of UPS1/µg of yeast lysate) match the text exactly.",
-        "COMPLETENESS_CHECK": "The full set of extracted values captures the primary experimental variable used to generate the dataset."
+        "TYPE_CHECK": "The candidate value describes the experimental variable (spike level) and its specific values, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"Sample preparation\" section of the methods (\"9 different spiked levels of UPS1 (respectively 0.05–0.125–0.250–0.5–2.5–5–12.5–25–50 fmol of UPS1/µg of yeast lysate)\").",
+        "TRUTH_CHECK": "The value is factually correct according to the text.",
+        "COMPLETENESS_CHECK": "The full set contains the complete list of spike levels used in the experimental design."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes a nanoLC-MS/MS workflow where samples were loaded directly onto a precolumn and then an analytical column without any mention of offline fractionation.",
-        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set contains only the value \"1\", which accurately reflects the lack of fractionation described in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes a nanoLC-MS/MS analysis where samples were loaded onto a precolumn and then an analytical column; no offline fractionation step is mentioned.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this experiment."
       }
     },
     {
@@ -110,9 +110,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
-        "SOURCE_CHECK": "The paper explicitly states in the \"Data and experimental design\" section that \"The 9 different samples were analyzed in triplicate\".",
+        "SOURCE_CHECK": "The paper explicitly states in the \"Data and experimental design\" section that \"The 9 different samples were analyzed in triplicate,\" and later mentions \"triplicate MS/MS analyzes.\"",
         "TRUTH_CHECK": "The value \"3\" is factually correct as the samples were analyzed in triplicate.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct value \"3\", which is exhaustive for this experiment."
+        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned in the text."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical_replicates.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
         "SOURCE_CHECK": "The paper states that \"The 9 different samples were analyzed in triplicate on a LTQ-Velos Orbitrap,\" which refers to the MS analysis of the samples.",
         "TRUTH_CHECK": "\"Analyzed in triplicate\" means 3 replicates were performed for each sample.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"3\", which covers the replication described for the MS analysis."
+        "COMPLETENESS_CHECK": "The full set contains the single value \"3\", which accurately reflects the replication described in the text."
       }
     },
     {
@@ -147,8 +147,8 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"NanoLC-MS/MS analysis\" section (\"The LTQ-Orbitrap Velos was operated in data-dependent acquisition mode\").",
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"NanoLC-MS/MS analysis\" section: \"The LTQ-Orbitrap Velos was operated in data-dependent acquisition mode\".",
         "TRUTH_CHECK": "The value is factually correct based on the text.",
         "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned in the paper."
       }
@@ -166,10 +166,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for alkylation, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation\" section as the reagent used to alkylate the samples analyzed by MS.",
-        "TRUTH_CHECK": "The paper states that samples \"were reduced with DTT and alkylated with iodoacetamide.\"",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"iodoacetamide\", which is the only alkylation reagent mentioned in the text."
+        "TRUTH_CHECK": "The value is factually correct according to the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only alkylation reagent mentioned in the text."
       }
     },
     {
@@ -186,28 +186,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
-        "SOURCE_CHECK": "The paper explicitly states in the Sample preparation section that \"proteins were digested in solution by addition of 2% of trypsin overnight.\"",
-        "TRUTH_CHECK": "The value is factually correct as described in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned in the paper."
+        "SOURCE_CHECK": "The text explicitly states that \"proteins were digested in solution by addition of 2% of trypsin overnight.\"",
+        "TRUTH_CHECK": "The value is factually correct as per the methods section.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
       }
     },
     {
       "annotation_type": "fragment_mass_tolerance",
-      "extracted_value": "-0.223497 ppm",
-      "verdict": "low",
+      "extracted_value": "0.8 Da, 0.5 Da",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "0.8 Da, 0.5 Da",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
-        "SOURCE_CHECK": "The value \"-0.223497 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text; the paper explicitly mentions fragment mass tolerances of \"0.8 Da\" (Workflows 1 and 3) and \"0.5 Da\" (Workflow 2).",
-        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value and fails to capture the actual values mentioned in the text."
+        "TYPE_CHECK": "The candidate value consists of mass tolerance measurements, which is the correct category for this field.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"MS data processing\" section for different workflows (Workflow 1/3: \"0.8 Da\"; Workflow 2: \"0.5 Da\").",
+        "TRUTH_CHECK": "Both values are correctly identified as fragment mass error tolerances in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all fragment mass tolerances mentioned across the different workflows described in the paper."
       }
     },
     {
@@ -245,7 +245,7 @@
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Data and experimental design\" and \"NanoLC-MS/MS analysis\" sections as the instrument used for the MS analysis.",
         "TRUTH_CHECK": "The paper states the samples were analyzed on an \"LTQ-Velos Orbitrap\" and an \"LTQ-Orbitrap Velos mass spectrometer\".",
-        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the analysis of the samples."
+        "COMPLETENESS_CHECK": "The full set contains the only instrument mentioned for the MS analysis."
       }
     },
     {
@@ -262,9 +262,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantitative software\", \"label-free quantitative analysis\", and \"label-free module\" in the context of the MS analysis.",
-        "TRUTH_CHECK": "The paper describes a label-free approach and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling.",
-        "COMPLETENESS_CHECK": "The full set contains the only labeling method used in the study."
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantitative software\", \"label-free quantitative analysis\", and \"label-free module\" in the context of the MS experiment.",
+        "TRUTH_CHECK": "The paper describes a label-free approach and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC/dimethyl) labeling.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one labeling approach was used."
       }
     },
     {
@@ -280,10 +280,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for a mass analyzer.",
-        "SOURCE_CHECK": "The value is present in the text, specifically mentioning the \"LTQ-Velos Orbitrap\" and \"LTQ-Orbitrap Velos mass spectrometer\" used for the MS analysis.",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used contains an Orbitrap mass analyzer.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one mass analyzer type is described for the instrument used."
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the text, as the samples were analyzed on an \"LTQ-Velos Orbitrap\" and \"LTQ-Orbitrap Velos\".",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model described.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one mass analyzer type is mentioned for the MS analysis."
       }
     },
     {
@@ -300,9 +300,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS data processing\" section under Bioinformatic workflow 1 (\"carbamidomethyl (C) was set as fixed modification\") and workflow 2 (\"carbamidomethylation of cysteine was defined as a fixed modification\").",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"MS data processing\" section (e.g., \"carbamidomethyl (C) was set as fixed modification\" in Workflow 1).",
         "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") covers the modifications explicitly mentioned in the text (including acetylation, though not listed in the candidate set, the current set is valid)."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") covers the modifications explicitly listed in the search parameters of the described workflows."
       }
     },
     {
@@ -319,28 +319,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification with its target residue, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text under \"Bioinformatic workflow 1\" (\"oxidation (M)\") and \"Workflow 2\" (\"Oxidation of methionine\").",
-        "TRUTH_CHECK": "The value is factually correct as it is explicitly listed as a variable modification used in the database searches.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") covers the modifications explicitly named in the text (including \"acetyl (Protein N-ter)\" which is missing, but the candidate itself is correct)."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Bioinformatic workflow 1\" and \"Workflow 2\" sections of the methods.",
+        "TRUTH_CHECK": "The paper explicitly lists \"oxidation (M)\" as a variable modification allowed during the search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Carbamidomethyl (C)\", \"Oxidation (M)\") covers the modifications explicitly named in the text (including \"acetyl (Protein N-ter)\" which is missing, but the candidate value itself is correct)."
       }
     },
     {
       "annotation_type": "precursor_mass_tolerance",
-      "extracted_value": "8 ppm",
-      "verdict": "low",
+      "extracted_value": "5 ppm, 20 ppm, 6 ppm",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "5 ppm, 20 ppm, 6 ppm",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance value, which matches the required category for this field.",
-        "SOURCE_CHECK": "The value \"8 ppm\" does not appear in the provided text.",
-        "TRUTH_CHECK": "The paper reports multiple precursor mass tolerances for different workflows: 5 ppm (Workflows 1, 3), 20 ppm and 6 ppm (Workflow 2). There is no mention of 8 ppm.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it contains a hallucinated value and misses the actual values stated in the text."
+        "TYPE_CHECK": "The candidate value consists of mass tolerance values, which is the correct category for this field.",
+        "SOURCE_CHECK": "The values are present in the text across different bioinformatic workflows (Workflow 1: 5 ppm; Workflow 2: 20 ppm and 6 ppm).",
+        "TRUTH_CHECK": "The values are factually correct as they are explicitly listed as precursor mass error tolerances for the different workflows described.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the precursor tolerances mentioned for the various workflows (5 ppm for Workflow 1/3, 20 ppm and 6 ppm for Workflow 2)."
       }
     },
     {
@@ -357,9 +357,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a chemical used for reducing disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the paper text (\"reduced with DTT\") and refers to the sample preparation for the MS experiment.",
+        "SOURCE_CHECK": "The value is present in the paper text (\"reduced with DTT\") in the context of the MS sample preparation.",
         "TRUTH_CHECK": "\"dithiothreitol\" is the full name for the abbreviation \"DTT\" used in the text; they are equivalent.",
-        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the paper."
       }
     }
   ]

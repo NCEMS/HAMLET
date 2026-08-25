@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"C2C12\" is a named immortalized cell line, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states that \"C2C12 cell lysate\" was used as the constant background for the gold standard spike-in sample set and was lysed and analyzed by LC-MS/MS.",
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly states that \"C2C12 cell lysate\" was used as the constant background for the gold standard spike-in sample set analyzed by LC-MS/MS.",
         "TRUTH_CHECK": "The value is factually correct as C2C12 is the cell line used to create the protein matrix for the proteomics experiment.",
-        "COMPLETENESS_CHECK": "The full set contains \"C2C12\", which is the only cell line mentioned as the source of the MS samples."
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the MS samples described in the paper."
       }
     },
     {
@@ -33,10 +33,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"myoblast\" is a cell type, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"myoblast\" describes a cell type/lineage, which matches the field definition.",
         "SOURCE_CHECK": "The paper states that \"C2C12 cell lysate\" was used as the constant background for the gold standard spike-in sample set analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "C2C12 is a well-known mouse myoblast cell line; therefore, \"myoblast\" is the correct cell type lineage for this sample.",
-        "COMPLETENESS_CHECK": "The full set contains only \"myoblast\", which accurately describes the lineage of the C2C12 cells used in the MS experiment."
+        "TRUTH_CHECK": "C2C12 is a well-established mouse myoblast cell line; therefore, \"myoblast\" is the correct cell type for this sample.",
+        "COMPLETENESS_CHECK": "The full set contains \"myoblast\", which accurately describes the lineage of the C2C12 cells used in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes a gold standard spike-in sample set using C2C12 cell lysate as a background matrix; there is no mention of any disease or pathology being studied.",
+        "TRUTH_CHECK": "Since the study is a technical performance evaluation using a standard cell line and spike-ins rather than a disease study, the safe default \"normal\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a non-disease study."
       }
     },
     {
@@ -52,10 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"muscle\" is the correct category (organ/tissue) for this field.",
+        "TYPE_CHECK": "The candidate value \"muscle\" is a valid organ/tissue type.",
         "SOURCE_CHECK": "The MS sample uses C2C12 cell lysate as the background matrix; C2C12 is a well-known mouse myoblast (muscle) cell line.",
-        "TRUTH_CHECK": "C2C12 cells are derived from mouse skeletal muscle, making \"muscle\" a factually correct organ of origin.",
-        "COMPLETENESS_CHECK": "The full set contains \"muscle\", which correctly describes the origin of the C2C12 background used in the MS samples."
+        "TRUTH_CHECK": "C2C12 cells are derived from mouse skeletal muscle, making \"muscle\" a correct inference for the organ of origin.",
+        "COMPLETENESS_CHECK": "The full set contains \"muscle\", which accurately describes the origin of the primary matrix used in the MS experiment."
       }
     },
     {
@@ -72,14 +91,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states the use of \"C2C12 cell lysate\" as the constant background matrix and refers to \"mouse cell lysate\" and \"mouse proteins,\" confirming the source organism for the MS experiment.",
-        "TRUTH_CHECK": "C2C12 is a well-known mouse myoblast cell line; the text explicitly mentions \"mouse cell lysate\" and \"non-mouse proteins,\" confirming the species is Mus musculus.",
-        "COMPLETENESS_CHECK": "The full set contains the primary background species used in the spike-in sample set."
+        "SOURCE_CHECK": "The paper explicitly mentions \"C2C12 cell lysate\" as the constant background matrix for the samples analyzed by mass spectrometry, and refers to \"mouse cell lysate\" and \"non-mouse proteins.\"",
+        "TRUTH_CHECK": "C2C12 is a well-known mouse myoblast cell line; the text explicitly refers to the background as \"mouse cell lysate.\"",
+        "COMPLETENESS_CHECK": "The full set contains \"Mus musculus,\" which correctly identifies the primary background species used in the MS experiment."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "spike-in concentration (1.25 to 125 nm)",
+      "extracted_value": "spike-in concentration (5 levels), analysis method (DDA, DirectDIA, DIA)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -90,10 +109,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (spike-in concentration) and its range, which is a correct category for a factor_value.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Results\" section: \"We used five physiologically plausible spike-in amounts of 1.25 to 125 nm per spike-in protein\".",
-        "TRUTH_CHECK": "The value is factually correct according to the text.",
-        "COMPLETENESS_CHECK": "The full set contains this value, which accurately captures the primary experimental variable (the varying concentrations of the 13 spike-in proteins) used to test quantification accuracy."
+        "TYPE_CHECK": "The candidate value describes the experimental variables (spike-in levels and analysis methods) being compared, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly describes a \"gold standard spike-in sample set (GS) consisting of five samples\" with \"varying concentrations\" and compares \"DDA, DirectDIA, and spectral library-based DIA\".",
+        "TRUTH_CHECK": "The value is factually correct; the study uses 5 different spike-in concentrations and compares the three mentioned analysis methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the experimental factors and a \"normal\" default, covering the design described in the paper."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "gold standard spike-in sample set",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (representing a healthy/baseline state).",
+        "SOURCE_CHECK": "The paper describes a \"gold standard spike-in sample set\" using C2C12 cell lysate as a \"constant background\" or \"matrix,\" but it does not describe a \"normal\" vs \"disease\" or \"normal\" vs \"treated\" comparison.",
+        "TRUTH_CHECK": "While \"normal\" is a safe default for disease fields when subjects are healthy, this experiment is a technical benchmark using a synthetic spike-in mixture in a cell lysate matrix; there is no \"normal\" group being compared to a \"disease\" group. The \"constant background\" is just the matrix, not a \"normal\" factor value in the context of an experimental design.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes a correct description of the actual factors (spike-in concentration and analysis method), but \"normal\" is an incorrect addition."
       }
     },
     {
@@ -109,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes that the \"gold standard spike-in sample set (GS)\" used for the main DIA and DDA analysis was \"used for in-solution (IS) digest followed by mass spectrometric acquisition only,\" meaning no fractionation was applied to these samples.",
-        "TRUTH_CHECK": "Since the primary samples analyzed for quantification were not fractionated, \"1\" is the correct value according to the field definition.",
-        "COMPLETENESS_CHECK": "The value \"1\" correctly describes the fractionation state for the primary experimental samples."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes that the gold standard (GS) samples used for the main DIA/DDA analysis were \"in-solution (IS) digest followed by mass spectrometric acquisition only,\" meaning no fractionation was applied to these specific samples.",
+        "TRUTH_CHECK": "While the paper describes fractionation for the purpose of *spectral library generation* (e.g., 10 slices for SDS-PAGE, 8 fractions for high pH RP), the actual samples being quantified in the experimental design (the 5 GS samples measured in triplicate) did not undergo fractionation.",
+        "COMPLETENESS_CHECK": "The value \"1\" correctly represents the lack of fractionation for the primary samples analyzed in the study."
       }
     },
     {
@@ -131,26 +169,26 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
         "SOURCE_CHECK": "The paper explicitly states in the \"Mass Spectrometric Acquisition\" and \"Experimental Design and Statistical Rationale\" sections that \"each sample was measured in triplicate in DDA and DIA mode\" and \"the described five spike-in states were measured in triplicates\".",
         "TRUTH_CHECK": "The value \"3\" is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct value \"3\", which is exhaustive for the biological replicates described for the MS samples."
+        "COMPLETENESS_CHECK": "The full set contains the single correct value \"3\", which is exhaustive for the biological replicates per sample."
       }
     },
     {
       "annotation_type": "technical_replicates",
       "extracted_value": "3",
-      "verdict": "low",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
-      "corrected_value": "1",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper states \"each sample was measured in triplicate in DDA and DIA mode\", but in proteomics, \"measured in triplicate\" typically refers to biological replicates unless specified as technical injections of the same digest.",
-        "TRUTH_CHECK": "The text says \"the described five spike-in states were measured in triplicates... resulting in 15 LC-MS/MS runs per method.\" This indicates 3 biological replicates per sample (5 samples * 3 = 15), not technical replicates of a single sample. There is no mention of multiple technical injections per biological replicate.",
-        "COMPLETENESS_CHECK": "The value is based on a misinterpretation of biological replicates as technical replicates."
+        "SOURCE_CHECK": "The paper states \"each sample was measured in triplicate in DDA and DIA mode\", which refers to the MS measurements of the samples.",
+        "TRUTH_CHECK": "In proteomics, \"measured in triplicate\" typically refers to technical replicates (multiple injections of the same processed sample) unless specified as biological replicates. However, the \"Experimental Design and Statistical Rationale\" section clarifies that \"the described five spike-in states were measured in triplicates to reflect a common replicate number\", and the \"Results\" section discusses \"reproducibility between replicates\" using CVs. In the context of a spike-in gold standard where the \"sample\" is a specific concentration mix, these triplicates are the technical measurements of those specific mixes.",
+        "COMPLETENESS_CHECK": "The value \"3\" covers the replication described for the MS analysis."
       }
     },
     {
@@ -166,15 +204,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"In-solution Tryptic Digestion\" and \"Protein Fractionation\" sections of the methods.",
-        "TRUTH_CHECK": "The paper states that digestion was carried out using trypsin.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Trypsin\", which is the only cleavage agent mentioned for the MS samples."
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"In-solution Tryptic Digestion\" and \"Protein Fractionation\" sections as the enzyme used for digestion.",
+        "TRUTH_CHECK": "The paper states \"digestion was carried out using trypsin\" and refers to \"tryptic digestion\".",
+        "COMPLETENESS_CHECK": "Trypsin is the only cleavage agent mentioned in the text for the MS samples."
       }
     },
     {
       "annotation_type": "instrument",
-      "extracted_value": "Q Exactive HF",
+      "extracted_value": "Q-Exactive HF",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -187,7 +225,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometric Acquisition\" section as the instrument used for all samples.",
-        "TRUTH_CHECK": "The paper states that peptides were \"transferred into a Q Exactive HF mass spectrometer (Thermo Fisher Scientific)\".",
+        "TRUTH_CHECK": "The paper states \"transferred into a Q Exactive HF mass spectrometer (Thermo Fisher Scientific)\".",
         "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned for the analysis of the samples; the set is exhaustive."
       }
     },
@@ -206,27 +244,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification approaches\" in the Results section.",
-        "TRUTH_CHECK": "The paper describes a gold standard spike-in sample set and compares DDA and DIA without any mention of isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling.",
-        "COMPLETENESS_CHECK": "The full set contains the only labeling method used in the study."
-      }
-    },
-    {
-      "annotation_type": "mass_analyzer",
-      "extracted_value": "orbitrap",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "correct_explicit",
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for the mass_analyzer field.",
-        "SOURCE_CHECK": "The paper states that a \"Q Exactive HF mass spectrometer\" was used; the Q Exactive series is well-known to use an Orbitrap mass analyzer.",
-        "TRUTH_CHECK": "The value is factually correct based on the instrument model mentioned.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
+        "TRUTH_CHECK": "The paper describes a spike-in experiment using C2C12 lysate and purified proteins without any mention of TMT, iTRAQ, SILAC, or other chemical/metabolic labeling.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods are mentioned."
       }
     }
   ]

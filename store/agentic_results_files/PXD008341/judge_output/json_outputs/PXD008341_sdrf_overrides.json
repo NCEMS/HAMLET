@@ -11,6 +11,8 @@
     "material_type",
     "instrument",
     "label",
+    "precursor_mass_tolerance",
+    "fragment_mass_tolerance",
     "replicates",
     "technical_replicates",
     "fractions",
@@ -60,40 +62,40 @@
     "disease": {
       "builder_field": "disease",
       "pipeline_values": [
-        "normal"
+        "castrated"
       ],
-      "selected_value": "normal",
-      "selection_source": "judge_high_confidence",
-      "apply_override": false,
+      "selected_value": "castrated, sham-operated control, T-treated",
+      "selection_source": "judge_corrected_value",
+      "apply_override": true,
       "judge_rows": [
         {
-          "extracted_value": "normal",
-          "verdict": "high",
+          "extracted_value": "castrated",
+          "verdict": "medium",
           "value_correct": true,
-          "value_complete": true,
+          "value_complete": false,
           "hallucination": false,
           "type_mismatch": false,
-          "corrected_value": null
+          "corrected_value": "castrated, sham-operated control, T-treated"
         }
       ]
     },
     "sex": {
       "builder_field": "sex",
       "pipeline_values": [
-        "male, female"
+        "male"
       ],
       "selected_value": "male, female",
-      "selection_source": "judge_high_confidence",
-      "apply_override": false,
+      "selection_source": "judge_corrected_value",
+      "apply_override": true,
       "judge_rows": [
         {
-          "extracted_value": "male, female",
-          "verdict": "high",
+          "extracted_value": "male",
+          "verdict": "medium",
           "value_correct": true,
-          "value_complete": true,
+          "value_complete": false,
           "hallucination": false,
           "type_mismatch": false,
-          "corrected_value": null
+          "corrected_value": "male, female"
         }
       ]
     },
@@ -180,19 +182,29 @@
     "replicates": {
       "builder_field": "biological_replicate",
       "pipeline_values": [
-        "urine samples"
+        "7",
+        "7 rats per group"
       ],
       "selected_value": null,
       "selection_source": null,
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "urine samples",
-          "verdict": "low",
-          "value_correct": false,
-          "value_complete": false,
+          "extracted_value": "7 rats per group",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
           "hallucination": false,
-          "type_mismatch": true,
+          "type_mismatch": false,
+          "corrected_value": null
+        },
+        {
+          "extracted_value": "7",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
+          "hallucination": false,
+          "type_mismatch": false,
           "corrected_value": null
         }
       ]
@@ -202,9 +214,9 @@
       "pipeline_values": [
         "3"
       ],
-      "selected_value": "1",
-      "selection_source": "judge_corrected_value",
-      "apply_override": true,
+      "selected_value": null,
+      "selection_source": null,
+      "apply_override": false,
       "judge_rows": [
         {
           "extracted_value": "3",
@@ -213,24 +225,24 @@
           "value_complete": false,
           "hallucination": false,
           "type_mismatch": false,
-          "corrected_value": "1"
+          "corrected_value": null
         }
       ]
     },
     "factor_value": {
       "builder_field": "factor_value",
       "pipeline_values": [
-        "sex (male)"
+        "sex (male, female), hormonal status (sham-operated control, castrated, T treatment)"
       ],
-      "selected_value": null,
-      "selection_source": null,
+      "selected_value": "sex (male, female), hormonal status (sham-operated control, castrated, T treatment)",
+      "selection_source": "judge_high_confidence",
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "sex (male)",
-          "verdict": "medium",
+          "extracted_value": "sex (male, female), hormonal status (sham-operated control, castrated, T treatment)",
+          "verdict": "high",
           "value_correct": true,
-          "value_complete": false,
+          "value_complete": true,
           "hallucination": false,
           "type_mismatch": false,
           "corrected_value": null

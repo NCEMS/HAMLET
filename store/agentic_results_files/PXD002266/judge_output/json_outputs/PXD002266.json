@@ -14,7 +14,7 @@
         "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
         "SOURCE_CHECK": "The text explicitly mentions \"Plasmodium falciparum\" and \"P. falciparum\" multiple times.",
         "TRUTH_CHECK": "The value is factually correct as the study focuses on the malaria parasite Plasmodium falciparum.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used for the proteomics experiments in the paper."
+        "COMPLETENESS_CHECK": "The full set contains the only species studied in the experiment."
       }
     },
     {
@@ -29,8 +29,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"blood\" describes the tissue/organ of origin, which matches the field definition.",
         "SOURCE_CHECK": "The paper describes the use of \"human RBC\" (red blood cells) and \"blood stage\" parasites, making \"blood\" a reasonable extraction.",
-        "TRUTH_CHECK": "The experiment uses Plasmodium falciparum during its erythrocytic (blood) stage in human red blood cells.",
-        "COMPLETENESS_CHECK": "The full set contains \"blood\", which accurately captures the tissue source described in the paper."
+        "TRUTH_CHECK": "The experiment uses Plasmodium falciparum in its erythrocytic (blood) stage, specifically using human red blood cells.",
+        "COMPLETENESS_CHECK": "The full set contains \"blood\", which accurately captures the source material described in the paper."
       }
     },
     {
@@ -43,10 +43,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"schizonts\" refers to a specific stage/type of the malaria parasite cell.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"wild-type late schizont stage parasites\" and \"schizonts\" throughout the results and methods.",
-        "TRUTH_CHECK": "It is factually correct that the experiments were performed on schizonts.",
-        "COMPLETENESS_CHECK": "The full set contains \"schizonts\", which covers the primary cell type/stage used for the phosphoproteomics analysis."
+        "TYPE_CHECK": "The candidate value \"schizonts\" refers to a specific life-cycle stage of the malaria parasite, which functions as the cell type/lineage in this context.",
+        "SOURCE_CHECK": "The text explicitly mentions \"wild-type late schizont stage parasites\" and \"wild-type schizonts\" multiple times.",
+        "TRUTH_CHECK": "The value is factually correct as the experiments were performed on parasites at the schizont stage.",
+        "COMPLETENESS_CHECK": "The full set contains \"schizonts\", which accurately captures the primary cell type/stage used for the phosphoproteomics analysis described."
       }
     },
     {
@@ -59,15 +59,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"malaria\" describes a disease state, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"malaria\" describes a disease state/diagnosis, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly mentions \"human malaria parasite\" and \"malaria parasite\" throughout the text.",
         "TRUTH_CHECK": "The study focuses on the phosphoproteomics of *Plasmodium falciparum*, the causative agent of malaria.",
-        "COMPLETENESS_CHECK": "The full set contains \"malaria\", which accurately captures the disease context of the study."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"malaria\") accurately captures the disease context of the study."
       }
     },
     {
       "annotation_type": "material_type",
-      "extracted_value": "O+ human RBC",
+      "extracted_value": "human RBC",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -75,15 +75,31 @@
       "hallucination": false,
       "corrected_value": "primary cells",
       "issue_summary": {
-        "TYPE_CHECK": "No, \"O+ human RBC\" is a specific cell/tissue type, not a broad material class as defined.",
-        "SOURCE_CHECK": "Yes, the text mentions parasites were grown using \"O+ human RBC\".",
-        "TRUTH_CHECK": "Yes, the parasites were grown in human red blood cells.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a specific entity rather than a broad material class."
+        "TYPE_CHECK": "The candidate value \"human RBC\" is a specific cell/tissue type, but the field definition requires a \"Broad material class\" (e.g., \"tissue\", \"primary cells\", \"biofluid\").",
+        "SOURCE_CHECK": "The paper mentions \"O+ human RBC\" were used to culture the parasites.",
+        "TRUTH_CHECK": "While human RBCs were used, the actual material analyzed by mass spectrometry was the *Plasmodium falciparum* parasite (extracted from the RBCs via saponin treatment and lysis).",
+        "COMPLETENESS_CHECK": "The full set contains only \"human RBC\", which is both a type mismatch and factually incorrect as the sample source for the proteomics was the parasite."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "3D7",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"3D7\" refers to a parasite strain, not an immortalized cell line.",
+        "SOURCE_CHECK": "The value \"3D7\" is present in the text (e.g., \"P. falciparum blood stage 3D7\").",
+        "TRUTH_CHECK": "While \"3D7\" is a correct identifier for the parasite strain used, it is not a \"cell line\" as defined by the field (immortalized cell lines).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
       }
     },
     {
       "annotation_type": "strain",
-      "extracted_value": "3D7, PfPKGT618Q",
+      "extracted_value": "3D7",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -91,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value refers to specific parasite strains, which fits the category of \"strain\".",
-        "SOURCE_CHECK": "The text explicitly mentions \"P. falciparum blood stage 3D7 (wild type)-, PKGT618Q- and CDPK1-HA-parasites\".",
-        "TRUTH_CHECK": "The values \"3D7\" and \"PfPKGT618Q\" are correctly identified as the strains used in the experiments.",
-        "COMPLETENESS_CHECK": "The full set includes the primary wild-type and mutant strains; while CDPK1-HA is also mentioned, it is a transgenic line derived from 3D7. The extracted values cover the core strains described."
+        "TYPE_CHECK": "The candidate value is a specific strain identifier for the parasite.",
+        "SOURCE_CHECK": "The text explicitly mentions \"P. falciparum blood stage 3D7 (wild type)-\" in the Methods section.",
+        "TRUTH_CHECK": "The value \"3D7\" is the correct and widely recognized strain of Plasmodium falciparum used in this study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"3D7\", which is the only strain mentioned in the text."
       }
     },
     {
@@ -109,7 +125,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly mentions \"an LTQ-Orbitrap-Velos mass spectrometer (Thermo Scientific)\".",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the methods section.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -124,9 +140,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"6-plex TMT\" describes an isobaric labeling method, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states: \"labelled with 6-plex TMT reagents (Thermo scientific) following the manufacturer's instructions.\"",
+        "SOURCE_CHECK": "The text explicitly states, \"labelled with 6-plex TMT reagents (Thermo scientific) following the manufacturer's instructions.\"",
         "TRUTH_CHECK": "The value is factually correct as described in the methods section.",
-        "COMPLETENESS_CHECK": "The full set contains the only labeling method mentioned in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only labeling method mentioned in the paper."
       }
     },
     {
@@ -140,9 +156,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the number of biological replicates, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly states, \"Here we conducted three independent experiments testing the effects of Compound 2 on wild-type and PfPKGT618Q mutant parasites.\"",
+        "SOURCE_CHECK": "The text explicitly states, \"Here we conducted three independent experiments testing the effects of Compound 2 on wild-type and PfPKGT618Q mutant parasites.\"",
         "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"3 independent experiments\", \"3\") covers the information provided in the paper."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"3 independent experiments\", \"3\") correctly and exhaustively captures the number of biological replicates mentioned in the paper."
       }
     },
     {
@@ -157,24 +173,24 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
         "SOURCE_CHECK": "The text explicitly states, \"Here we conducted three independent experiments testing the effects of Compound 2 on wild-type and PfPKGT618Q mutant parasites.\"",
-        "TRUTH_CHECK": "The value \"3\" is factually correct based on the \"three independent experiments\" mentioned in the results section.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"3 independent experiments\", \"3\") correctly and exhaustively captures the number of biological replicates described in the paper."
+        "TRUTH_CHECK": "The value \"3\" correctly represents the number of independent experiments (biological replicates) performed.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"3 independent experiments\", \"3\") accurately and exhaustively captures the replication information provided in the paper."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "Comparison of global phosphoproteome changes in wild-type vs PfPKGT618Q mutant parasites following Compound 2 treatment",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
+      "extracted_value": "comparison of Compound 2 treatment between wild-type and PfPKGT618Q mutant parasites",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
       "value_complete": true,
       "hallucination": false,
-      "corrected_value": "treated vs control",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental setup, but it is phrased as a specific experimental goal/description rather than a study design type (e.g., \"treated vs control\").",
-        "SOURCE_CHECK": "The description is accurately derived from the \"Results\" section, which details the comparison between wild-type and mutant parasites treated with Compound 2.",
-        "TRUTH_CHECK": "The factual content is correct; the study compares the phosphoproteome of wild-type and mutant strains under treatment.",
-        "COMPLETENESS_CHECK": "The full set captures the primary design of the phosphoproteomics experiment."
+        "TYPE_CHECK": "The candidate value describes the experimental setup/comparison, which fits the category of study design.",
+        "SOURCE_CHECK": "The text explicitly states that targets were identified by \"comparing the changes in the global phosphoproteome of wild-type late schizont stage parasites following Compound 2 treatment... with those changes observed following Compound 2 treatment of the PfPKGT618Q mutant parasite strain.\"",
+        "TRUTH_CHECK": "The value accurately reflects the core experimental design used to identify PfPKG targets.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which captures the primary design of the phosphoproteomics experiment described."
       }
     },
     {
@@ -187,26 +203,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (genotype and treatment) being manipulated, which matches the definition of factor_value.",
-        "SOURCE_CHECK": "The paper explicitly describes comparing \"wild-type\" and \"PfPKGT618Q mutant\" parasites and the effect of \"Compound 2\" treatment.",
+        "TYPE_CHECK": "The candidate value describes the experimental variables (genotype and treatment) used in the study, which matches the definition of factor_value.",
+        "SOURCE_CHECK": "The paper explicitly mentions comparing \"wild-type\" and \"PfPKGT618Q mutant\" parasites and the effect of \"Compound 2\" treatment.",
         "TRUTH_CHECK": "The values are factually correct based on the results and methods sections.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental factors used to identify PfPKG-dependent phosphorylation sites."
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental variables used to identify PfPKG targets."
       }
     },
     {
       "annotation_type": "fractions",
-      "extracted_value": "16",
-      "verdict": "high",
+      "extracted_value": "8",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the 'fractions' field.",
-        "SOURCE_CHECK": "The text states that peptides were eluted from a Resource Q anion-exchange column and \"collecting 1 ml fractions,\" and specifically mentions \"gradient eluate fractions (fractions 10–16).\"",
-        "TRUTH_CHECK": "The paper explicitly mentions fractions up to 16 during the anion-exchange chromatography step.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"16\") accurately reflects the highest fraction number mentioned in the fractionation process described."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The text mentions \"gradient eluate fractions (fractions 10–16)\" and \"fractions 2–4\" and \"fractions 5–7\", but it does not explicitly state a total number of fractions per sample as \"8\".",
+        "TRUTH_CHECK": "The paper describes collecting fractions from an anion-exchange column (Resource Q), specifically mentioning fractions 2-4, 5-7, and 10-16. This implies a total number of fractions, but the specific number \"8\" is not stated as the total count of fractions generated per sample.",
+        "COMPLETENESS_CHECK": "The value \"8\" does not appear in the text as a total count of fractions; it seems to be an incorrect inference from the range of fraction numbers mentioned."
       }
     },
     {
@@ -221,8 +237,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of samples.",
         "SOURCE_CHECK": "The paper states \"we conducted three independent experiments testing the effects of Compound 2 on wild-type and PfPKGT618Q mutant parasites,\" which implies 3 (wild-type) + 3 (mutant) = 6 samples.",
-        "TRUTH_CHECK": "The calculation of 6 samples based on three biological replicates for two different parasite strains is factually correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (6) covers the total count of samples processed for the main phosphoproteomic experiment."
+        "TRUTH_CHECK": "The calculation is factually correct based on the described experimental design (three biological replicates for two different parasite strains).",
+        "COMPLETENESS_CHECK": "The full set of extracted values (6) covers the total number of samples processed for the global phosphoproteomics experiments described."
       }
     }
   ]

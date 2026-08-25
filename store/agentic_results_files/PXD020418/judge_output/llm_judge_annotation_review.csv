@@ -1,0 +1,145 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD020418","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""humanized gene"" and ""taxonomy human"" in the MS data search settings, and uses HEK293T cells (a human cell line).
+TRUTH CHECK: The proteins and cells used in the experiment are human.
+COMPLETENESS CHECK: The full set contains the only relevant species mentioned for the experimental samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020418","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is an organ, which matches the field definition.
+SOURCE CHECK:      The paper text does not mention ""kidney""; it describes experiments using HEK293T cells.
+TRUTH CHECK:       The value is factually incorrect as the source material is a cell line (HEK293T), not kidney tissue.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD020418","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions the use of ""HEK293T cells"" multiple times, but it does not explicitly use the term ""epithelial cell"". While HEK293T cells are derived from human embryonic kidney cells (which are epithelial in nature), the text does not state this.
+TRUTH CHECK:       The paper specifies ""HEK293T cells"", which is a specific cell line. ""Epithelial cell"" is a broad category that is not mentioned in the text.
+COMPLETENESS CHECK: The full set contains only ""epithelial cell"", which is not mentioned in the text and fails to capture the specific cell line used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD020418","BiologicalAgent","material_type","HEK293T cells","","low","True","","False","True","False","TYPE CHECK: The candidate value ""HEK293T cells"" refers to a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK: The paper explicitly mentions the use of HEK293T cells throughout the methods and results.
+TRUTH CHECK: While HEK293T is the correct entity, the value provided is the specific name of the cell line rather than the broad material class.
+COMPLETENESS CHECK: The full set contains only the specific cell line name, failing to provide the broad category ""cell line"" as required by the definition.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: [""cell line""]","cell line"
+"PXD020418","BiologicalAgent","cell_line","HEK293T","HEK293T","high","False","","True","True","False","TYPE CHECK:        The candidate value is the name of an immortalized cell line.
+SOURCE CHECK:      The text explicitly mentions ""HEK293T cells"" multiple times in the Results and Methods sections.
+TRUTH CHECK:       The value is factually correct as the cell line used for the experiments.
+COMPLETENESS CHECK: The full set contains the only cell line mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020418","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions an ""Orbitrap Q-Exactive Plus mass spectrometer (Thermo Fisher Scientific)"".
+TRUTH CHECK:       The value is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the nano-LC-MS/MS analysis (the MALDI-TOF is a separate instrument, but the Q-Exactive Plus is the primary proteomics instrument).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020418","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The experimental procedure described (nano-HPLC/nano-ESI-Orbitrap-MS/MS) does not utilize any labeling reagents.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020418","ExperimentalDesignAgent","replicates","HEK293T cells expressing Bpa78-βarr1","1","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of a sample/cell line, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions HEK293T cells and Bpa78-βarr1, but this is not a value for the number of replicates.
+TRUTH CHECK:       The value is factually a sample description, but it is incorrect as a value for the 'replicates' field.
+COMPLETENESS CHECK:The full set contains both a sample description and ""1""; while ""1"" is the correct default for this paper, the inclusion of the sample description is a type error.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD020418","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper does not explicitly mention the number of biological replicates for the MS experiments; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK:       The value is correct based on the safe default rule for silent replication.
+COMPLETENESS CHECK:   The full set of extracted values contains a non-numeric entity (""HEK293T cells...""), but the inclusion of ""1"" satisfies the requirement for the replicates field when no other count is provided.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020418","ExperimentalDesignAgent","experimental_design","Identification of crosslinked product in SEC fraction using different enzymatic digestions","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific laboratory procedure/analysis step rather than a study design type (e.g., ""treated vs control"", ""case-control"").
+SOURCE CHECK:      The text does mention using SEC fractions and enzymatic digestions to identify the crosslinked product, but this is a method, not the experimental design.
+TRUTH CHECK:       The value is a description of a technical step, not a valid ""experimental design"" as defined by the field.
+COMPLETENESS CHECK:The full set contains only this incorrect value; the actual experimental design (e.g., comparing different receptors, agonist stimulation vs. non-stimulation) is not captured.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD020418","ExperimentalDesignAgent","factor_value","digestion method (trypsin, trypsin+GluC)","digestion method (trypsin, trypsin+GluC)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a technical variation in sample preparation (digestion method), which is a variable/factor in the experimental process.
+SOURCE CHECK:      The text explicitly states that samples were ""proteolyzed either by trypsin or a combination of trypsin and endoproteinase GluC"".
+TRUTH CHECK:       The value is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set captures the digestion variation, but the study's primary experimental factors are the different GPCR receptors (V2R, PTH1R, CRF1R) and the presence/absence of agonist stimulation.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""digestion method (trypsin, trypsin+GluC)"", ""GPCR receptor (V2R, PTH1R, CRF1R)"", ""agonist stimulation""]",""
+"PXD020418","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK:      The paper describes the use of size exclusion chromatography (SEC) to separate proteins into peaks/fractions (VR2, VR3), but it does not specify a total number of fractions collected per sample for the subsequent MS analysis.
+TRUTH CHECK:       Per the field definition, ""1"" is the correct default value when no specific number of fractions is mentioned or when no offline fractionation scheme (like high-pH RP) is applied to the samples before LC-MS.
+COMPLETENESS CHECK: The full set contains only the default value, which is appropriate given the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020418","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the MS analysis; it mentions a ""subset of arrestin-receptor combinations"" and specific SEC fractions (VR2, VR3), but not a total sample count of 2.
+TRUTH CHECK:       The value ""2"" is not supported by the text as the total number of samples. The study involved 144 combinations for the crosslinking experiments, and the MS analysis was performed on SEC fractions from a specific IP experiment.
+COMPLETENESS CHECK:The full set of extracted values does not accurately reflect the study's sample size.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

@@ -1,0 +1,146 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD027841","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human genome"", ""human cancers"", and ""human cell lines"" throughout the text.
+TRUTH CHECK: The study focuses on the discovery of a protein in humans, making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which exhaustively covers the source organism described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027841","BiologicalAgent","organ","cervix, breast, lung, colon","","low","False","","False","False","False","TYPE CHECK:        The candidate value lists organs/tissues, which matches the definition.
+SOURCE CHECK:      The paper mentions HeLa (cervix), MCF-7 (breast), A549 (lung), and HCT-116 (colon) cell lines, and also mentions endometrial and breast primary tumors.
+TRUTH CHECK:       The candidate value lists the organs from which the cancer cell lines are derived, but the paper primarily uses these as ""cell lines"" (material_type) rather than ""organ"" samples. However, the paper also explicitly mentions ""endometria and breasts"" for the clinical data.
+COMPLETENESS CHECK:    The full set is incomplete as it misses ""endometria"" (uterus) and focuses on the origin of cell lines rather than the actual tissues analyzed in the clinical data.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""endometria"", ""breast""]","endometria, breast"
+"PXD027841","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions cancer cell lines (HeLa, MCF-7, A549, and HCT-116), but it does not explicitly use the term ""epithelial cell"" to describe them.
+TRUTH CHECK:       While these specific cell lines are derived from epithelial tissues (cervix, breast, lung, colon), the paper does not state ""epithelial cell"" as the cell type.
+COMPLETENESS CHECK: The full set contains only this value, which is not explicitly mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD027841","BiologicalAgent","disease","cancer","cancer","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cancer"" describes a disease state, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human cancers"", ""human cancer cell lines"", and ""carcinogenesis"" throughout the text.
+TRUTH CHECK:       The study focuses on proteogenomic data mining in cancer cell lines and the analysis of primary tumors in endometrial and breast cancers.
+COMPLETENESS CHECK: The full set contains ""cancer"", but the paper specifically identifies ""endometrial cancer"" and ""breast cancer"" in the clinical data reanalysis section.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cancer"", ""endometrial cancer"", ""breast cancer""]","cancer, endometrial cancer, breast cancer"
+"PXD027841","BiologicalAgent","material_type","cancer cell lines","cancer cell lines","medium","False","","True","False","False","TYPE CHECK: The candidate value ""cancer cell lines"" describes a material class, which fits the definition of material_type.
+SOURCE CHECK: The paper explicitly mentions performing proteogenomic data mining in ""human cancer cell lines"" (HeLa, MCF-7, A549, and HCT-116).
+TRUTH CHECK: The value is factually correct as the study used these cell lines for the primary discovery and validation.
+COMPLETENESS CHECK: While the paper also mentions ""human primary tumor and adjacent normal tissues"" for the TMT reanalysis, the current set only includes cell lines. However, the candidate value itself is a correct extraction of one of the materials used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""cancer cell lines"", ""tissue""]","cancer cell lines, tissue"
+"PXD027841","BiologicalAgent","cell_line","HeLa, MCF-7, A549, HCT-116","HeLa, MCF-7, A549, HCT-116","high","False","","True","True","False","TYPE CHECK:        The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK:      The cell lines HeLa, MCF-7, A549, and HCT-116 are explicitly mentioned multiple times in the results and methods sections.
+TRUTH CHECK:       The values are factually correct as they are the specific cell lines used in the proteogenomic data mining.
+COMPLETENESS CHECK: The full set contains all four cell lines mentioned in the paper; however, the candidate value is provided as a single comma-separated string rather than individual entries.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027841","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the definition.
+SOURCE CHECK: The text explicitly mentions ""The Q Exactive hybrid Quadrupole-Orbitrap mass spectrometer (Thermo Fisher Scientific) was used"".
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer model mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD027841","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes multiple MS experiments; the validation of oSCRIB and the HeLa protein extraction were performed using standard LC-MS/MS (DDA and PRM) without mention of isobaric or metabolic labels.
+TRUTH CHECK:       The primary experimental validations described in the ""Sample preparation for LC–MS/MS analysis"" and ""LC–MS/MS analysis"" sections are label-free. While the paper mentions reanalyzing ""TMT isobaric labeling-based quantitative proteomic data"" from CPTAC, this was secondary analysis of publicly available data, not the primary experimental method used by the authors for their own sample processing.
+COMPLETENESS CHECK:    The set contains ""label-free"", which correctly describes the authors' own MS experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027841","ExperimentalDesignAgent","replicates","2 replicates per cell line (HeLa, MCF-7, A549, HCT-116)","2 replicates per cell line (HeLa, MCF-7, A549, HCT-116) | 8","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""two biological replicates for each cell line"" for the proteomic data from HeLa, MCF-7, A549, and HCT-116.
+TRUTH CHECK:       The value is factually correct based on the ""Proteomic data mining for new SEPs in humans"" section.
+COMPLETENESS CHECK:    The full set includes both the per-cell-line count (2) and the total count (8), which comprehensively covers the biological replication described for the proteomic data mining.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027841","ExperimentalDesignAgent","replicates","8","2 replicates per cell line (HeLa, MCF-7, A549, HCT-116) | 8","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""two biological replicates for each cell line"" for four cell lines (HeLa, MCF-7, A549, and HCT-116), which mathematically equals 8.
+TRUTH CHECK:       The value is factually correct as the total number of biological replicates for the proteomic data mining part of the study.
+COMPLETENESS CHECK: The full set of extracted values includes both the per-cell-line count and the total count, which exhaustively covers the biological replication described for the main proteomic experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027841","ExperimentalDesignAgent","experimental_design","comparative proteomic analysis of four human cancer cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the study's approach, but it is more of a summary of the method than a standard ""experimental design"" type (like case-control or treated vs control).
+SOURCE CHECK:      The text mentions proteogenomic data mining in four human cancer cell lines (HeLa, MCF-7, A549, and HCT-116).
+TRUTH CHECK:       While the study does analyze these four cell lines, ""comparative proteomic analysis"" is a description of the procedure rather than the design type. The study is primarily a discovery/mining effort (proteogenomics) and a comparison between tumor and normal tissues (case-control).
+COMPLETENESS CHECK:    The full set only contains this value, which fails to capture the case-control design used for the clinical data (tumor vs adjacent normal tissues).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""case-control""]","case-control"
+"PXD027841","ExperimentalDesignAgent","factor_value","cell line (HeLa, MCF-7, A549, HCT-116)","cell line (HeLa, MCF-7, A549, HCT-116)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (cell lines) used in the study, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly mentions using four human cancer cell lines: HeLa, MCF-7, A549, and HCT-116.
+TRUTH CHECK:       The value is factually correct based on the results and methods sections.
+COMPLETENESS CHECK: The full set identifies the cell lines used for the proteogenomic mining, but the study also includes a comparison between ""primary tumor and adjacent normal tissues"" (endometria and breasts) for the TMT quantitative analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cell line (HeLa, MCF-7, A549, HCT-116)"", ""tissue (primary tumor vs adjacent normal tissues)""]","cell line (HeLa, MCF-7, A549, HCT-116), tissue (primary tumor vs adjacent normal tissues)"
+"PXD027841","ExperimentalDesignAgent","number_of_samples","8","8","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition of the number_of_samples field.
+SOURCE CHECK: The paper mentions ""cancer cell lines (HeLa, MCF-7, A549, and HCT-116; two biological replicates for each cell line)"" for the proteomic data mining, which equals 8 samples.
+TRUTH CHECK: The value 8 correctly represents the number of biological replicates across the four cell lines used in the primary proteomic data mining phase.
+COMPLETENESS CHECK: The full set only contains ""8"", but the study also involves reanalysis of clinical TMT data (endometria and breasts) and in vitro translation samples; however, the primary experimental proteomic cohort described is 8. Given the complexity of the multi-part study (public data vs. new experiments), 8 is the most specific count provided for the main proteomic analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

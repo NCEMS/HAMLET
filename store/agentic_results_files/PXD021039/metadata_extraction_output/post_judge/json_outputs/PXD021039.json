@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD021039",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T, Vero",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HEK293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "HEK293T cells were used for the FLAG-tag based immunoprecipitation and subsequent LC-MS/MS analysis; however, Vero cells were only used for viral growth and vaccine production assays, not for mass spectrometry.",
+        "TRUTH_CHECK": "HEK293T is the correct source for the MS experiment, but Vero is not.",
+        "COMPLETENESS_CHECK": "The full set includes a cell line (Vero) that was not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The MS experiment used lysates of HEK293T cells; HEK293T is a well-known human embryonic kidney cell line, which is of epithelial lineage.",
+        "TRUTH_CHECK": "HEK293T cells are derived from human embryonic kidney cells, which are epithelial in nature.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the lineage of the cell line used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "kidney",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The value \"kidney\" appears in the text describing Vero cells (\"African green monkey kidney\"), but these cells were used for viral growth and vaccine production assays, not for the mass spectrometry experiment. The MS experiment specifically used lysates of HEK293T cells.",
+        "TRUTH_CHECK": "The candidate value is factually incorrect for the MS sample; the MS sample was derived from HEK293T cells (human embryonic kidney).",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies the organ of a validation cell line rather than the MS sample source."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment used lysates of HEK293T cells (human embryonic kidney cells) and the data were processed against the \"Uniprot human protein database\".",
+        "TRUTH_CHECK": "The use of HEK293T cells and the human protein database confirms the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "M protein tag position (M-NF, M-CF, control), ATP6V1A expression level (knockdown, overexpression, control), cell type (HEK293T, Vero)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "M protein tag position (M-NF, M-CF, control)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (tag position, expression level, cell type), which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The values are present in the text; however, the MS experiment specifically used HEK293T cells transfected with M-NF, M-CF, or control plasmids. The \"ATP6V1A expression level\" and \"Vero cells\" refer to subsequent validation assays (siRNA, overexpression, and vaccine production tests) and not the material analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "While these factors are studied in the overall paper, the factor_value for the proteomics experiment should only describe the variables associated with the MS samples. The MS experiment only compared M-NF, M-CF, and control in HEK293T cells.",
+        "COMPLETENESS_CHECK": "The full set includes factors from unrelated validation assays, making it factually incorrect for the MS sample description."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation step prior to LC-MS/MS.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation information is provided in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no replication is mentioned.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default for this paper."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the appropriate default."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; however, it describes using the Mascot algorithm to process MS/MS signals from an Orbitrap Q Exactive HF-X, which is the standard workflow for DDA in this context.",
+        "TRUTH_CHECK": "While highly likely, the specific term \"data-dependent acquisition\" or \"DDA\" is not written in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but the value itself is not explicitly supported by the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Co-IP, pull-down assay, and mass spectrometry\" section: \"Samples were mixed with trypsin and digested at 37 °C overnight.\"",
+        "TRUTH_CHECK": "The value is factually correct as per the text.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "13 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"13 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions the use of an \"Orbitrap Q Exactive HF-X\" mass spectrometer, which typically uses HCD (Higher-energy Collisional Dissociation), but the text does not explicitly name the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the provided source."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Co-IP, pull-down assay, and mass spectrometry\" section, describing the instrument used for the LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The paper explicitly mentions an \"Orbitrap Q Exactive HF-X mass spectrometer\"; \"Q Exactive\" is a correct shorthand/equivalent for this model.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes an LC-MS/MS analysis of coimmunoprecipitated proteins without mentioning any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "No labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, making \"label-free\" the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of labeling described in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the methods section describing the instrument used for LC-MS/MS.",
+        "TRUTH_CHECK": "The paper explicitly mentions the use of an \"Orbitrap Q Exactive HF-X mass spectrometer\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Co-IP, pull-down assay, and mass spectrometry\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"fixed modifications: carbamidomethyl: (C)\", which is an unambiguous synonym for \"Carbamidomethyl (C)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"Oxidation (M)\", both of which are explicitly listed in the text; however, \"Deamidation (NQ)\" is not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Co-IP, pull-down assay, and mass spectrometry\" section of the methods (\"dynamical modifications: oxidation (M)\").",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly listed as a dynamical modification used in the Mascot search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Carbamidomethyl (C)\" and \"Oxidation (M)\", which are both explicitly mentioned in the text; however, \"Deamidation (NQ)\" is not mentioned in the text. While the candidate value itself is correct, the full set contains a hallucination."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQ)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Deamidation (NQ)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention deamidation as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "7 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"7 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the methods section describes the MS parameters (Mascot algorithm, modifications, missed cleavages) but does not specify the precursor mass tolerance.",
+        "COMPLETENESS_CHECK": "The value is hallucinated, so the set is not correct."
+      }
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD002395","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human cell lines"" and ""human genome"" multiple times.
-TRUTH CHECK: The cell lines used (e.g., HeLa, HEK293, HepG2) are all derived from humans.
-COMPLETENESS CHECK: The full set contains the only species involved in the study.
+"PXD002395","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""11 human cell lines"" and the use of the ""IPI-human database,"" making ""Homo sapiens"" a correct and inferable value.
+TRUTH CHECK: The value is factually correct as the study focuses on human cell lines.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens,"" which exhaustively covers the species described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -12,8 +12,8 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD002395","BiologicalAgent","organ","lung","lung","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""lung"" is a tissue/organ, which matches the field definition.
 SOURCE CHECK:      The paper mentions ""A549 from lung carcinoma"" in the Results section.
-TRUTH CHECK:       The value is factually correct as one of the cell lines (A549) originates from the lung.
-COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper lists multiple origins including lung, glioblastoma (brain), cervical, hepatoma (liver), T-cell leukemia (blood/bone marrow), myeloid leukemia (blood/bone marrow), prostate, mammary (breast), colon, and osteosarcoma (bone).
+TRUTH CHECK:       The value is factually correct as A549 is a lung-derived cell line.
+COMPLETENESS CHECK: The full set of extracted values only contains ""lung"", but the paper describes 11 cell lines from various origins including glioblastoma (brain), cervical carcinoma (cervix), hepatoma (liver), leukemia (blood/bone marrow), prostate carcinoma (prostate), mammary carcinoma (breast), colon carcinoma (colon), and osteosarcoma (bone).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -22,9 +22,9 @@ HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""lung"", ""brain"", ""cervix"", ""liver"", ""blood"", ""prostate"", ""breast"", ""colon"", ""bone""]","lung, brain, cervix, liver, blood, prostate, breast, colon, bone"
 "PXD002395","BiologicalAgent","cell_type","cancer cells","cancer cells","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cancer cells"" describes a cell lineage/type, which fits the definition of cell_type.
-SOURCE CHECK:      The paper explicitly states, ""These included mainly cancer cells from various origins,"" in the Results section.
-TRUTH CHECK:       The value is factually correct as the study primarily uses cancer-derived cell lines.
-COMPLETENESS CHECK: The full set contains ""cancer cells"", but the paper also explicitly mentions a ""noncancerous cell line HEK293"". Therefore, the set is incomplete.
+SOURCE CHECK:      The text explicitly states, ""These included mainly cancer cells from various origins.""
+TRUTH CHECK:       The value is factually correct as the majority of the cell lines used are cancer-derived.
+COMPLETENESS CHECK: The full set contains only ""cancer cells"", but the paper also mentions a ""noncancerous cell line HEK293"". Therefore, the set is not exhaustive of all cell types used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,34 +32,32 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""cancer cells"", ""noncancerous cells""]","cancer cells, noncancerous cells"
-"PXD002395","BiologicalAgent","disease","lung carcinoma","lung carcinoma","medium","False","","True","False","False","TYPE CHECK: The candidate value ""lung carcinoma"" is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK: The text explicitly states ""A549 from lung carcinoma"" in the Results section.
-TRUTH CHECK: The value is factually correct as it describes the origin of the A549 cell line used in the study.
-COMPLETENESS CHECK: The full set of extracted values contains only ""lung carcinoma"", but the paper describes 10 different disease states (lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute T-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma) and one noncancerous state (HEK293). The current set is highly incomplete.
-
-TYPE_CORRECT: yes
+"PXD002395","BiologicalAgent","disease","lung carcinoma","lung carcinoma","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""lung carcinoma"" is a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""A549 from lung carcinoma"" in the Results section.
+TRUTH CHECK:       The value is factually correct as it describes the origin of the A549 cell line used in the study.
+COMPLETENESS CHECK:The full set of extracted values contains only ""lung carcinoma"", but the paper describes 10 other disease states (glioblastoma, cervical carcinoma, hepatoma, acute T-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma) and one noncancerous state (HEK293).
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: medium
-CORRECTED_VALUE: [""lung carcinoma"", ""glioblastoma"", ""cervical carcinoma"", ""hepatoma"", ""acute T-cell leukemia"", ""chronic myeloid leukemia"", ""prostate carcinoma"", ""mammary carcinoma"", ""colon carcinoma"", ""osteosarcoma"", ""noncancerous""]","lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute T-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, noncancerous"
-"PXD002395","BiologicalAgent","material_type","cell lines","cell lines","high","False","","True","True","False","TYPE CHECK: The candidate value ""cell lines"" matches the defined category for material_type.
-SOURCE CHECK: The paper explicitly states ""Comparative Proteomic Analysis of Eleven Common Cell Lines"" and ""We analyzed 11 human cell lines"".
-TRUTH CHECK: The material used in the experiment was indeed cell lines.
-COMPLETENESS CHECK: The full set contains ""cell lines"", which exhaustively describes the material type used for the primary analysis.
-TYPE_CORRECT: yes
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""lung carcinoma"", ""glioblastoma"", ""cervical carcinoma"", ""hepatoma"", ""acute T-cell leukemia"", ""chronic myeloid leukemia"", ""prostate carcinoma"", ""mammary carcinoma"", ""colon carcinoma"", ""osteosarcoma"", ""noncancerous""]","lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute T-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, noncancerous"
+"PXD002395","BiologicalAgent","material_type","cell lines","cell lines","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cell lines"" matches the defined categories for material_type.
+SOURCE CHECK:      The paper explicitly states ""Comparative Proteomic Analysis of Eleven Common Cell Lines"" and describes the use of various cell lines (e.g., HeLa, HEK293).
+TRUTH CHECK:       The value is factually correct as the experiment was performed on cell lines.
+COMPLETENESS CHECK: The full set contains ""cell lines"", which exhaustively covers the material used in this study.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD002395","BiologicalAgent","cell_line","A549","A549","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK: The value ""A549"" is explicitly mentioned in the ""RESULTS"" and ""EXPERIMENTAL PROCEDURES"" sections.
-TRUTH CHECK: The value is factually correct as A549 is one of the cell lines analyzed in the study.
+SOURCE CHECK: The value ""A549"" is explicitly mentioned in the Results and Methods sections.
+TRUTH CHECK: The value is factually correct as one of the cell lines analyzed in the study.
 COMPLETENESS CHECK: The full set of extracted values contains only ""A549"", but the paper describes eleven cell lines (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, and HEK293).
-
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -69,7 +67,7 @@ VERDICT: medium
 CORRECTED_VALUE: [""A549"", ""GAMG"", ""HeLa"", ""HepG2"", ""Jurkat"", ""K562"", ""LnCap"", ""MCF7"", ""RKO"", ""U2OS"", ""HEK293""]","A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293"
 "PXD002395","BiologicalAgent","sex","male","male","high","False","","True","True","False","TYPE CHECK:        The candidate value ""male"" is the correct category for the sex field.
 SOURCE CHECK:      The paper explicitly mentions ""cell lines of male origin (LnCap, Jurkat, HepG2, and A549)"".
-TRUTH CHECK:       The value is factually correct as the paper identifies specific cell lines as being of male origin.
+TRUTH CHECK:       The value is factually correct as the paper identifies several cell lines as being of male origin.
 COMPLETENESS CHECK: The paper mentions male origin for some cell lines, but does not specify the sex for all 11 cell lines; however, ""male"" is a correct extraction of the information provided.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -79,34 +77,20 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD002395","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions the ""LTQ-Orbitrap Velos mass spectrometer"".
+SOURCE CHECK: The text explicitly mentions ""LTQ-Orbitrap Velos mass spectrometer"".
 TRUTH CHECK: The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The paper mentions the LTQ-Orbitrap Velos and a ""novel LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer""; however, the latter is described as a prototype/novel family member rather than a specific model name. The extracted set captures the primary identified instrument.
-
+COMPLETENESS CHECK: The paper mentions the LTQ-Orbitrap Velos and a ""novel LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer"". The current set only captures the Velos, missing the high-field instrument.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE","LTQ Orbitrap Velos, LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer"
-"PXD002395","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK: The paper explicitly states ""relative abundance of proteins was determined by label-free quantification"" and ""we used label-free quantification"" to compare cell lines.
-TRUTH CHECK: The primary experimental comparison of the 11 cell lines was performed using label-free quantification.
-COMPLETENESS CHECK: While the paper mentions using SILAC to create a ""super-SILAC"" standard in a separate part of the study, the main proteomic analysis of the 11 cell lines was label-free, and ""label-free"" is the primary labeling method for the core experiment.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD002395","ExperimentalDesignAgent","replicates","3 separate cell pellets per cell line","3 separate cell pellets per cell line","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
-SOURCE CHECK:      The text explicitly states ""Three separate cell pellets from subconfluent cultures were flash frozen"" and ""We performed triplicate analysis of each cell line"".
-TRUTH CHECK:       The value is factually correct; the study used 3 biological replicates per cell line.
-COMPLETENESS CHECK: The full set includes ""3 separate cell pellets per cell line"" and ""33"" (which is the total number of samples: 11 cell lines * 3 replicates). The core biological replicate count is 3.
-
+VERDICT: medium
+CORRECTED_VALUE: [""LTQ-Orbitrap Velos"", ""LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer""]","LTQ-Orbitrap Velos, LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer"
+"PXD002395","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The text explicitly states ""relative abundance of proteins was determined by label-free quantification"" and ""we used label-free quantification.""
+TRUTH CHECK:       The value is factually correct as the primary quantitative analysis for the 11 cell lines was label-free.
+COMPLETENESS CHECK:    While the paper mentions a ""super-SILAC"" standard used for a separate validation/application, the main experimental proteomic analysis of the 11 cell lines was label-free. The set is complete for the primary experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -114,22 +98,54 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002395","ExperimentalDesignAgent","replicates","33","3 separate cell pellets per cell line","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper states ""We performed triplicate analysis of each cell line"" and later mentions ""33 proteome measurements"" (11 cell lines x 3 replicates).
-TRUTH CHECK:       The value ""33"" represents the total number of measurements across all groups, whereas ""replicates"" refers to the number of biological replicates *per sample/condition*. The paper explicitly states ""triplicate analysis of each cell line"".
-COMPLETENESS CHECK:   The full set includes both the per-condition count and the total count; however, the total count is not the correct value for the ""replicates"" field.
-
+"PXD002395","ExperimentalDesignAgent","replicates","11 human cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""11 human cell lines"" is a description of the sample group, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""11 human cell lines"" and ""triplicate analysis of each cell line,"" but the candidate value refers to the number of samples, not replicates.
+TRUTH CHECK:       The value is factually incorrect for this field; the number of biological replicates is 3, while 11 is the number of distinct cell lines (samples).
+COMPLETENESS CHECK: The full set contains ""11 human cell lines"" and ""11"", both of which are incorrect for the 'replicates' field.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE","3"
+"PXD002395","ExperimentalDesignAgent","replicates","11","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the category for the replicates field.
+SOURCE CHECK:      The paper mentions ""11 human cell lines"" and ""triplicate analysis of each cell line,"" but the number 11 refers to the number of distinct samples (cell lines), not the number of biological replicates per sample.
+TRUTH CHECK:       The value is factually incorrect; the paper explicitly states ""We performed triplicate analysis of each cell line,"" meaning there are 3 biological replicates per cell line.
+COMPLETENESS CHECK:The full set of extracted values is incorrect as it confuses the number of samples (11) with the number of replicates (3).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""3""]","3"
-"PXD002395","ExperimentalDesignAgent","experimental_design","Comparative proteomic analysis of 11 human cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the study's objective/scope rather than the study design type (e.g., ""cross-sectional"" or ""case-control"").
-SOURCE CHECK:      The phrase is derived from the title and abstract.
-TRUTH CHECK:       While the study is comparative, the value provided is a description of the experiment's goal, not a standard experimental design category.
-COMPLETENESS CHECK: The full set contains only this descriptive phrase, which does not specify the design type.
+CORRECTED_VALUE:   3","3"
+"PXD002395","ExperimentalDesignAgent","technical_replicates","triplicate analysis","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""triplicate analysis"" describes the number of replicates, but it is a phrase rather than a numeric count as specified in the definition.
+SOURCE CHECK:      The text states ""We performed triplicate analysis of each cell line,"" which supports the concept of three replicates.
+TRUTH CHECK:       The paper describes ""triplicate analysis of each cell line,"" but these are biological replicates (three separate cell pellets were frozen), not technical replicates of a single sample.
+COMPLETENESS CHECK:    The full set contains ""triplicate analysis"" and ""3"", but both refer to biological replicates, not technical replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE","triplicate analysis of each cell line"
+"PXD002395","ExperimentalDesignAgent","technical_replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper states ""We performed triplicate analysis of each cell line,"" but this refers to biological replicates (separate cell pellets). There is no mention of technical replicates (repeated measurements of the same sample).
+TRUTH CHECK:       The value ""3"" refers to biological replicates, not technical replicates.
+COMPLETENESS CHECK: The full set of extracted values incorrectly identifies biological replicates as technical replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD002395","ExperimentalDesignAgent","experimental_design","comparative proteomic analysis of 11 human cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the study's objective and scope rather than a standard study design type (e.g., ""cross-sectional"" or ""case-control"").
+SOURCE CHECK:      The value is derived from the title and abstract of the paper.
+TRUTH CHECK:       While the paper does perform a comparative analysis, ""comparative proteomic analysis of 11 human cell lines"" is a description of the experiment, not the ""design type"" as defined by the field.
+COMPLETENESS CHECK: The full set contains only this descriptive phrase, which does not categorize the design into a recognized type.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
@@ -137,21 +153,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD002395","ExperimentalDesignAgent","factor_value","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)","high","False","","True","True","False","TYPE CHECK: The candidate value identifies the experimental variable (cell line) and the specific levels of that variable, which fits the definition of factor_value.
-SOURCE CHECK: The paper explicitly lists these eleven cell lines as the subjects of the comparative proteomic analysis.
-TRUTH CHECK: The value is factually correct based on the ""Results"" section of the paper.
-COMPLETENESS CHECK: The full set contains the primary experimental factor and all specific cell lines used in the study, making it exhaustive.
-TYPE_CORRECT: yes
+"PXD002395","ExperimentalDesignAgent","factor_value","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variable (cell line) and the specific levels of that variable, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly states the analysis of 11 human cell lines and lists them (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, and HEK293).
+TRUTH CHECK:       The value is factually correct based on the ""Results"" section of the paper.
+COMPLETENESS CHECK:   The full set contains the primary experimental factor and all specific cell lines used in the comparative analysis.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD002395","ExperimentalDesignAgent","fractions","6","6","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The text explicitly states, ""we separated the peptides into six fractions using strong anion exchange"".
-TRUTH CHECK:       The value ""6"" is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set of extracted values contains only ""6"", which is the only fractionation number mentioned in the paper.
+SOURCE CHECK:      The text explicitly states, ""we separated the peptides into six fractions using strong anion exchange.""
+TRUTH CHECK:       The value ""6"" is factually correct according to the results section.
+COMPLETENESS CHECK: The full set of extracted values contains only ""6"", which exhaustively covers the fractionation described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -162,11 +178,11 @@ CORRECTED_VALUE:   NONE",""
 "PXD002395","ExperimentalDesignAgent","number_of_samples","198","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The paper explicitly states, ""The project produced at total of 198 raw files (11 cell lines × 6 fractions × 3 replicates)"".
 TRUTH CHECK:       The value 198 refers to the number of raw files (data files), not the number of biological samples. The study processed 11 distinct cell lines (biological samples).
-COMPLETENESS CHECK:The full set contains only the number of files, failing to capture the actual number of biological samples.
+COMPLETENESS CHECK: The full set contains only the number of files, failing to identify the actual number of biological samples.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
+CORRECTED_VALUE:   11","11"

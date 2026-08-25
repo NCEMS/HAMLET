@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD002082","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for an organism, which matches the species field definition.
-SOURCE CHECK:      The paper title explicitly mentions ""human colon and rectal cancer,"" and the methods mention ""Normal colon biopsies"" and ""TCGA"" (The Cancer Genome Atlas), which are human-derived.
-TRUTH CHECK:       The value ""Homo sapiens"" is the correct scientific name for humans.
-COMPLETENESS CHECK: The full set contains ""Homo sapiens,"" which covers the primary source organism of the study.
+"PXD002082","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper title explicitly mentions ""human colon and rectal cancer,"" and the methods mention ""Patient-derived"" and ""Normal colon biopsies,"" confirming the source organism.
+TRUTH CHECK:       ""Homo sapiens"" is the correct scientific name for humans.
+COMPLETENESS CHECK: The full set contains the primary species of interest for the proteogenomic characterization.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,10 +10,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002082","BiologicalAgent","organ","colon","colon","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon"" is an organ/tissue, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human colon and rectal cancer"" in the title and ""Normal colon biopsies"" in the methods.
-TRUTH CHECK:       The value is factually correct as the study analyzes colon tumors and biopsies.
-COMPLETENESS CHECK: The full set of extracted values is missing ""rectum"" or ""rectal"", as the title and abstract explicitly state the study covers both ""colon and rectal cancer"".
+"PXD002082","BiologicalAgent","organ","colon","colon","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper explicitly mentions ""human colon and rectal cancer"" and ""Normal colon biopsies"".
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set [""colon""] is incomplete because the paper also explicitly mentions ""rectal"" tumors.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,21 +21,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""colon"", ""rectum""]","colon, rectum"
-"PXD002082","BiologicalAgent","disease","colon and rectal cancer","colon and rectal cancer","high","False","","True","True","False","TYPE CHECK:        The candidate value is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The value is explicitly mentioned in the title (""Proteogenomic characterization of human colon and rectal cancer"").
+"PXD002082","BiologicalAgent","disease","colon and rectal cancer","colon and rectal cancer","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon and rectal cancer"" is a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK:      The value is explicitly stated in the title (""Proteogenomic characterization of human colon and rectal cancer"").
 TRUTH CHECK:       The value is factually correct as the study focuses on colon and rectal tumors.
-COMPLETENESS CHECK: The full set of extracted values covers the primary disease state described in the paper.
+COMPLETENESS CHECK: The full set of extracted values covers the primary disease focus of the study; however, the methods section also mentions ""Normal colon biopsies,"" which implies a ""normal"" or ""healthy"" control group.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
+VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VERDICT:           medium
+CORRECTED_VALUE:   [""colon and rectal cancer"", ""normal""]","colon and rectal cancer, normal"
 "PXD002082","BiologicalAgent","anatomic_site_tumor","colon","colon","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""colon"" is an anatomical location, which matches the field definition.
 SOURCE CHECK:      The paper title and abstract explicitly mention ""human colon and rectal cancer"".
-TRUTH CHECK:       The value is factually correct as the study analyzes tumors from the colon.
-COMPLETENESS CHECK: The full set of extracted values is missing ""rectum"" or ""rectal"", as the paper specifies both colon and rectal cancer.
+TRUTH CHECK:       The value is factually correct as the study analyzes colon tumors.
+COMPLETENESS CHECK: The full set of extracted values is missing ""rectum"" or ""rectal"", as the paper explicitly covers both colon and rectal cancer.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -46,7 +46,7 @@ CORRECTED_VALUE:   [""colon"", ""rectum""]","colon, rectum"
 "PXD002082","TechnicalAgent","instrument","LTQ Orbitrap Velos","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The candidate value ""LTQ Orbitrap Velos"" is not mentioned in the provided title, abstract, or methods text.
 TRUTH CHECK:       The value cannot be verified as correct because it is absent from the provided text.
-COMPLETENESS CHECK: The full set contains a value not found in the text, making it an incorrect extraction.
+COMPLETENESS CHECK: The full set contains only this value, but since it is not in the text, it is not a valid extraction.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -55,9 +55,9 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD002082","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The text mentions ""Quantitative proteomic comparisons were based on spectral count data,"" and no isobaric or metabolic labels (like TMT or SILAC) are mentioned.
-TRUTH CHECK:       Spectral counting is a label-free quantification method.
-COMPLETENESS CHECK: The full set contains ""label-free"", which accurately describes the quantification method used in the study.
+SOURCE CHECK:      The text does not mention any isobaric or metabolic labeling (like TMT or SILAC), and ""label-free"" is a safe default when no such labels are mentioned.
+TRUTH CHECK:       The use of ""spectral count data"" for quantitative comparisons is a characteristic of label-free proteomics.
+COMPLETENESS CHECK: The full set consists of a single value that correctly describes the labeling state of the experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -65,10 +65,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002082","ExperimentalDesignAgent","replicates","colon and rectal tumors, normal colon biopsies","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of sample types, not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions these sample types, but the value is not a count.
-TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
-COMPLETENESS CHECK: The full set contains only this incorrect value and does not provide a numeric count.
+"PXD002082","ExperimentalDesignAgent","replicates","patient tumor samples and normal colon biopsies","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of sample types, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""tumor samples"" and ""normal colon biopsies,"" but the candidate value is not a count.
+TRUTH CHECK:       The value is factually incorrect as it does not answer ""how many"" replicates were used.
+COMPLETENESS CHECK: The full set contains only this incorrect value and fails to provide the required numeric count.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -76,10 +76,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD002082","ExperimentalDesignAgent","experimental_design","integrated proteogenomic analyses of colon and rectal tumors","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the analysis goal/approach rather than the study design type (e.g., case-control, cross-sectional).
-SOURCE CHECK:      The phrase is present in the abstract.
-TRUTH CHECK:       While the text mentions ""integrated proteogenomic analyses,"" this is a methodology/analysis type, not an experimental design.
-COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+"PXD002082","ExperimentalDesignAgent","experimental_design","proteogenomic characterization of human colon and rectal cancer","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of the study's goal/title, not a study design type (e.g., ""case-control"", ""cross-sectional"").
+SOURCE CHECK:      The value is present in the title of the paper.
+TRUTH CHECK:       While the text describes the study, the value provided is a summary of the research objective rather than the experimental design category.
+COMPLETENESS CHECK:The full set contains only this value, which is a type mismatch for the field.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
@@ -87,10 +87,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD002082","ExperimentalDesignAgent","factor_value","tissue type (colon and rectal tumors, normal colon biopsies)","tissue type (colon and rectal tumors, normal colon biopsies)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue types) being compared, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly mentions analyzing ""colon and rectal tumors"" and ""Normal colon biopsies"".
-TRUTH CHECK:       The value accurately reflects the groups being compared in the study.
-COMPLETENESS CHECK: The full set captures the primary experimental factor (tissue type/source) described in the text.
+"PXD002082","ExperimentalDesignAgent","factor_value","cancer type (colon, rectal)","cancer type (colon, rectal)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (cancer type) being compared, which fits the definition of a factor_value.
+SOURCE CHECK:      The title and abstract explicitly state the study is a characterization of ""human colon and rectal cancer"".
+TRUTH CHECK:       The value is factually correct as the study compares proteomes of colon and rectal tumors.
+COMPLETENESS CHECK: The full set captures the primary experimental variable described in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -99,8 +99,8 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD002082","ExperimentalDesignAgent","fractions","15","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK:      The provided text does not mention the number of fractions; it only states that ""multidimensional liquid chromatography-tandem mass spectrometry"" was used.
-TRUTH CHECK:       The value ""15"" is not present in or inferable from the provided text.
+SOURCE CHECK:      The provided text mentions ""multidimensional liquid chromatography-tandem mass spectrometry,"" but it does not specify the number of fractions (e.g., ""15"").
+TRUTH CHECK:       The value ""15"" is not mentioned or reasonably inferable from the provided text.
 COMPLETENESS CHECK: The full set contains a value not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE

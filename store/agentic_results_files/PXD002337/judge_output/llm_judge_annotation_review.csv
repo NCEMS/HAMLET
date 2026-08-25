@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD002337","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK: The candidate value ""Mus musculus"" is a scientific name for a species, which matches the field definition.
+"PXD002337","BiologicalAgent","species","Mus musculus","Mus musculus","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""hybrid mice"" and ""mouse fibroblast cells"" throughout the text.
-TRUTH CHECK: ""Mus musculus"" is the correct scientific name for the mouse.
-COMPLETENESS CHECK: The full set contains the only species used in the study.
+TRUTH CHECK: ""Mus musculus"" is the scientific name for the mouse, which is the source organism of the experiment.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -11,9 +11,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD002337","BiologicalAgent","cell_type","fibroblast","fibroblast","high","False","","True","True","False","TYPE CHECK: The candidate value ""fibroblast"" is a cell type, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""fibroblast cell lines"" and ""Adult mouse fibroblast cells"" in the results and methods sections.
-TRUTH CHECK: The value is factually correct as the study used fibroblasts from F1 hybrid mice.
-COMPLETENESS CHECK: The full set of extracted values contains ""fibroblast"", which covers the only cell type mentioned in the study.
+SOURCE CHECK: The paper explicitly mentions ""fibroblast cell lines"" and ""mouse fibroblast cells"" multiple times in the Results and Methods sections.
+TRUTH CHECK: The value is factually correct as the study used fibroblasts derived from F1 hybrid mice.
+COMPLETENESS CHECK: The full set of extracted values (""fibroblast"") covers the only cell type mentioned in the study.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -22,55 +22,32 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD002337","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field when subjects are healthy.
-SOURCE CHECK: The paper describes the use of F1 hybrid mice and derived fibroblast cell lines without any mention of disease or pathology.
-TRUTH CHECK: Since the study focuses on baseline translational regulation in hybrid mice and does not specify a disease state, ""normal"" is a safe and correct default.
-COMPLETENESS CHECK: The full set contains ""normal"", which accurately reflects the healthy/baseline state of the subjects described.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD002337","BiologicalAgent","material_type","F1 hybrid mouse","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""F1 hybrid mouse"" refers to a whole organism, but the material actually used for the proteomics experiment was a cell line derived from that mouse.
-SOURCE CHECK:      The paper mentions ""F1 hybrid mouse"" in the title and abstract, but the results and methods specify that ""we derived fibroblast cell lines from an F1 hybrid mouse"" and used ""F1 fibroblasts"" for the experiments.
-TRUTH CHECK:       The material analyzed in the mass spectrometry experiment was the fibroblast cell line, not the whole mouse organism.
-COMPLETENESS CHECK:   The full set contains only the organism/source, failing to identify the actual material type (cell line) used in the assay.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   [""cell line""]","cell line"
-"PXD002337","BiologicalAgent","age","Adult","Adult","high","False","","True","True","False","TYPE CHECK: The candidate value ""Adult"" describes the developmental stage/age of the donor.
-SOURCE CHECK: The text explicitly states, ""Adult mouse fibroblast cells were isolated..."" in the Materials and Methods section.
-TRUTH CHECK: The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the only age-related descriptor provided in the text.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD002337","BiologicalAgent","cell_line","fibroblast cell lines","","low","True","cell_type","False","False","False","TYPE CHECK:        The candidate value describes a type of cell rather than a specific named immortalized cell line.
-SOURCE CHECK:      The text mentions ""we derived fibroblast cell lines from an F1 hybrid mouse,"" but does not provide a specific name for the line.
-TRUTH CHECK:       The value ""fibroblast cell lines"" is a description of the material, not the name of a specific immortalized cell line.
-COMPLETENESS CHECK:The full set contains only a general description, not a specific cell line name.
+"PXD002337","BiologicalAgent","material_type","F1 hybrid mouse","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""F1 hybrid mouse"" refers to a whole organism, but the field definition requires a broad material class (e.g., ""cell line"", ""primary cells"").
+SOURCE CHECK:      The paper mentions F1 hybrid mice, but the actual material used for the experiments was ""fibroblast cell lines"" derived from them.
+TRUTH CHECK:       The experiments were performed on fibroblast cell lines, not the whole organism.
+COMPLETENESS CHECK:   The full set contains only the organism/subject, failing to identify the actual material type used (cell line).
 TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: cell_type
+CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
+CORRECTED_VALUE:   cell line","cell line"
+"PXD002337","BiologicalAgent","age","Adult","Adult","high","False","","True","True","False","TYPE CHECK: The candidate value ""Adult"" describes the developmental stage/age of the donor.
+SOURCE CHECK: The text explicitly states, ""Adult mouse fibroblast cells were isolated and cultured..."" in the Materials and Methods section.
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains the only age-related descriptor provided in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD002337","BiologicalAgent","strain","C57BL/6J, SPRET/EiJ","C57BL/6J, SPRET/EiJ","high","False","","True","True","False","TYPE CHECK: The candidate value contains names of mouse strains, which matches the field definition.
-SOURCE CHECK: Both ""C57BL/6J"" and ""SPRET/EiJ"" are explicitly mentioned multiple times in the text (e.g., in the Results section: ""F1 hybrid mouse between C57BL/6J and SPRET/EiJ strains"").
-TRUTH CHECK: The values are factually correct as the study uses an F1 hybrid of these two specific strains.
-COMPLETENESS CHECK: The full set of extracted values covers all strains mentioned in the paper.
+SOURCE CHECK: Both ""C57BL/6J"" and ""SPRET/EiJ"" are explicitly mentioned in the text as the parental strains used to derive the F1 hybrid mouse.
+TRUTH CHECK: The values are factually correct as per the paper.
+COMPLETENESS CHECK: The full set of extracted values covers all strains mentioned in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -89,10 +66,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002337","TechnicalAgent","label","stable isotope labelling by amino acids in cell culture (SILAC)","stable isotope labelling by amino acids in cell culture (SILAC)","high","False","","True","True","False","TYPE CHECK:        The candidate value is a metabolic labeling method, which matches the definition of the 'label' field.
+"PXD002337","TechnicalAgent","label","stable isotope labelling by amino acids in cell culture (SILAC)","stable isotope labelling by amino acids in cell culture (SILAC)","high","False","","True","True","False","TYPE CHECK:        The candidate value is a metabolic labeling method, which matches the field definition.
 SOURCE CHECK:      The text explicitly mentions ""stable isotope labelling by amino acids in cell culture (SILAC)"" in the ""Azidohomoalanine (AHA) pulse-labelled samples"" section.
-TRUTH CHECK:       The value is factually correct as the study used SILAC to distinguish between SPRET/EiJ, C57BL/6J, and F1 hybrid proteins.
-COMPLETENESS CHECK: The full set contains the only labeling method used for the proteomics part of the experiment.
+TRUTH CHECK:       The value is factually correct as the study used SILAC to distinguish between SPRET/EiJ, C57BL/6J, and F1 fibroblast proteins.
+COMPLETENESS CHECK:    The full set contains the only labeling method mentioned for the proteomics part of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -100,43 +77,65 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002337","ExperimentalDesignAgent","replicates","3 cell lines (SPRET/EiJ, C57BL/6J, and F1 fibroblasts)","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value describes the number of distinct cell lines/strains used, not the number of biological replicates per condition.
-SOURCE CHECK:      The text mentions ""two biological replicates"" for the sequencing data and three different cell lines (SPRET/EiJ, C57BL/6J, and F1), but these are different concepts.
-TRUTH CHECK:       The candidate value is factually incorrect as a measure of biological replicates; it is describing the experimental groups/strains.
-COMPLETENESS CHECK: The full set contains ""3"", which is also incorrect based on the text stating ""two biological replicates"".
+"PXD002337","ExperimentalDesignAgent","replicates","Parental SPRET/EiJ, C57BL/6J and F1 fibroblasts","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes sample groups/cell lines, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions these cell lines, but they are the experimental groups, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates', which requires a number.
+COMPLETENESS CHECK: The full set contains ""3"", but the candidate value is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD002337","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""From two biological replicates"" in the results section regarding the sequencing of total mRNA and poly-mRNA. It does not mention three biological replicates.
+TRUTH CHECK:       The value ""3"" is factually incorrect; the text explicitly states ""two biological replicates"".
+COMPLETENESS CHECK: The full set of extracted values is incorrect and contains a value (""Parental SPRET/EiJ, C57BL/6J and F1 fibroblasts"") that is a type mismatch (it describes samples/strains, not a replicate count).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
 CORRECTED_VALUE:   NONE","2"
-"PXD002337","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for biological replicates.
-SOURCE CHECK:      The paper mentions ""From two biological replicates"" in the results section regarding the sequencing of total mRNA and poly-mRNA.
-TRUTH CHECK:       The value ""3"" is incorrect; the text explicitly states there were ""two biological replicates"". The value ""3"" in the all_extracted_values likely comes from a confusion with the three different cell lines used (SPRET/EiJ, C57BL/6J, and F1), which are experimental groups, not replicates.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it misidentifies the number of replicates.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   [""2""]","2"
-"PXD002337","ExperimentalDesignAgent","experimental_design","3-plex SILAC comparison of F1 hybrid vs parental SPRET/EiJ and C57BL/6J strains using AHA pulse-labelling","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental setup/methodology rather than a study design type (e.g., ""case-control"", ""treated vs control"").
-SOURCE CHECK:      The details (3-plex SILAC, F1 hybrid, parental strains, AHA pulse-labelling) are present in the text.
-TRUTH CHECK:       The description of the setup is factually accurate based on the text.
-COMPLETENESS CHECK:The value is a detailed description of the sample groups and labeling, but it does not categorize the ""experimental design"" as requested by the field definition.
+"PXD002337","ExperimentalDesignAgent","technical_replicates","repeated measurements of the same AHA-labeled sample","","low","True","","False","False","True","TYPE CHECK:        no
+SOURCE CHECK:      no
+TRUTH CHECK:       no
+COMPLETENESS CHECK:The full set contains a descriptive phrase and a number, neither of which are supported by the text as technical replicates.
 TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD002337","ExperimentalDesignAgent","technical_replicates","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not mention ""3"" technical replicates; it mentions ""two biological replicates"" for the sequencing data and does not specify a number of technical replicates for the MS proteomics.
+TRUTH CHECK:       The value ""3"" is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values does not contain a valid numeric count of technical replicates found in the text.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD002337","ExperimentalDesignAgent","experimental_design","Triple-SILAC (L, M, H) with AHA pulse-labeling to quantify allele-specific protein abundance in F1 hybrid fibroblasts","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a technical methodology (labeling and sample preparation) rather than a study design type (e.g., case-control, time course).
+SOURCE CHECK:      The details about Triple-SILAC and AHA pulse-labeling are present in the text.
+TRUTH CHECK:       The technical description is accurate, but it does not answer ""what is the experimental design"" in terms of the study's comparative structure.
+COMPLETENESS CHECK:    The full set contains only this technical description, failing to identify the actual experimental design (which is a comparison of alleles in an F1 hybrid).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD002337","ExperimentalDesignAgent","factor_value","strain (SPRET/EiJ, C57BL/6J, F1 hybrid)","strain (SPRET/EiJ, C57BL/6J, F1 hybrid)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variables (strains) being compared, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly mentions the use of C57BL/6J and SPRET/EiJ strains and their F1 hybrid to study allele-specific translational regulation.
-TRUTH CHECK:       The value is factually correct as these are the primary biological groups compared in the study.
-COMPLETENESS CHECK: The full set captures the primary experimental factor (genetic strain/allele origin) used to drive the comparisons in the study.
+"PXD002337","ExperimentalDesignAgent","factor_value","genotype/SILAC label (SPRET/EiJ-light, C57BL/6J-medium, F1-heavy)","genotype/SILAC label (SPRET/EiJ-light, C57BL/6J-medium, F1-heavy)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (genotype and associated SILAC labels) used to distinguish the samples.
+SOURCE CHECK:      The text explicitly mentions the use of SPRET/EiJ, C57BL/6J, and F1 hybrid fibroblasts, and details the SILAC labeling: ""SPRET/EiJ-derived proteins light, C57BL/6J proteins medium and F1 heavy.""
+TRUTH CHECK:       The value accurately reflects the experimental design where genotype is the primary factor, and SILAC labels are used as the technical means to distinguish them in the MS analysis.
+COMPLETENESS CHECK:    The full set captures the primary experimental factor (genotype/strain) and the specific labels used for the proteomics part of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -144,10 +143,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002337","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper describes a mass spectrometry workflow but does not mention any offline peptide fractionation (e.g., high-pH RP or SCX fractionation of the peptide mixture) before LC-MS/MS.
+"PXD002337","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper describes a proteomics workflow using a Q-Exactive mass spectrometer, but it does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.
 TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The full set contains only the value ""1"", which is exhaustive for a non-fractionated experiment.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -155,10 +154,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002337","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper mentions ""Parental SPRET/EiJ, C57BL/6J and the F1 fibroblasts"" were used for the MS-based proteomics, and ""two biological replicates"" were used for the sequencing.
-TRUTH CHECK:       The value ""3"" refers to the three distinct cell lines/groups (SPRET/EiJ, C57BL/6J, and F1 hybrid) used in the proteomics experiment.
-COMPLETENESS CHECK: The full set contains only ""3"", which correctly identifies the number of distinct biological sample groups processed for the proteomics part of the study.
+"PXD002337","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The paper describes the use of three distinct cell types for the proteomics (MS) part of the study: ""Parental SPRET/EiJ, C57BL/6J and the F1 fibroblasts"".
+TRUTH CHECK:       The text explicitly mentions these three groups were cultured and processed for the AHA pulse-labelling and subsequent mass spectrometry analysis.
+COMPLETENESS CHECK:    The full set contains only this value, which accurately reflects the three biological groups (samples) used in the protein quantification experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

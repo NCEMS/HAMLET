@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD036005",
+  "annotations": [
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "yeast cells, HeLa cells, HEK293T cells, primary human vein endothelial cells",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "yeast cells",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains a list of cell types/lines, which fits the general category of the field.",
+        "SOURCE_CHECK": "Only the yeast cells were actually analyzed by mass spectrometry (IP-MS of Glc7-FLAG); HeLa, HEK293T, and HUVECs were used for ChIP, RT-qPCR, and other assays, but not for MS.",
+        "TRUTH_CHECK": "The value is factually incorrect because it includes cells that were not part of the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it includes non-MS samples."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Saccharomyces cerevisiae, Homo sapiens",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Saccharomyces cerevisiae",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which matches the definition for the species field.",
+        "SOURCE_CHECK": "The paper describes mass spectrometry (IP-MS) performed on yeast cells (Saccharomyces cerevisiae) to identify Glc7 interaction partners. While the paper also performs experiments in HeLa and HUVEC cells (Homo sapiens), these mammalian experiments involve ChIP-qPCR, Co-IP, and immunoblotting, but the \"Sample preparation and MS analysis\" section explicitly describes only the yeast workflow.",
+        "TRUTH_CHECK": "The yeast species is correct; however, the mammalian cells (Homo sapiens) were not analyzed by mass spectrometry in this study.",
+        "COMPLETENESS_CHECK": "The full set includes a species not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "bait protein (Glc7-FLAG)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the specific protein used as the bait for the immunoprecipitation, which is a valid experimental factor/variable.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the text states \"we immunoprecipitated the endogenous FLAG-tagged Glc7 (Glc7-FLAG) from yeast cells, and mass spectrometry (IP-MS) analysis detected...\".",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly uses Glc7-FLAG as the bait for the IP-MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the primary variable (the bait) for the IP-MS analysis."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The paper describes the MS workflow (Sample preparation and MS analysis) but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) before loading onto the LC-MS/MS system.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it accurately reflects the absence of fractionation described in the text."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "3",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper mentions \"Three biological replicates were performed for WT and glc7-12 mutant\" in the RNA-seq section, but the MS analysis section (\"Sample preparation and MS analysis\") does not explicitly state the number of replicates for the IP-MS experiment.",
+        "TRUTH_CHECK": "While the paper mentions 3 replicates for RNA-seq, it does not specify the number of biological replicates for the mass spectrometry experiment. According to the field definition, \"1\" is correct when no replication is mentioned for the MS sample.",
+        "COMPLETENESS_CHECK": "The value \"3\" is extracted from the RNA-seq context, not the MS context."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the MS analysis.",
+        "TRUTH_CHECK": "Per the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The full set contains only the safe default value, which is complete given the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper text does not mention \"data-dependent acquisition\", \"DDA\", \"DIA\", or any other specific acquisition scheme in the \"Sample preparation and MS analysis\" section or elsewhere.",
+        "TRUTH_CHECK": "The value is not supported by the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and MS analysis\" section: \"alkylated by adding 50 mM iodoacetamide\".",
+        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Sample preparation and MS analysis\" section (\"digested with sequencing-grade trypsin\").",
+        "TRUTH_CHECK": "The value is factually correct as it is the protease used for the MS sample digestion.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "8 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"8 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct for this experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this hallucinated value."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"beam-type collision-induced dissociation\" or any other specific fragmentation method.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive HF-X",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Q Exactive HF",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions a \"Q Exactive HF mass spectrometer\" in the \"Sample preparation and MS analysis\" section.",
+        "TRUTH_CHECK": "The paper explicitly states \"Q Exactive HF\", not \"Q Exactive HF-X\". These are different instrument models.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes an IP-MS experiment using a Q Exactive HF mass spectrometer, but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling method is described."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q Exactive HF mass spectrometer\", and the Q Exactive series uses an Orbitrap mass analyzer.",
+        "TRUTH_CHECK": "The value is factually correct as the Q Exactive HF is an Orbitrap-based instrument.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this instrument."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions the use of \"iodoacetamide\" for alkylation in the \"Sample preparation and MS analysis\" section, but it does not explicitly name the resulting modification.",
+        "TRUTH_CHECK": "The modification \"Carbamidomethyl (C)\" is not explicitly written in the text; it is only implied by the use of iodoacetamide.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQ)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Deamidation (NQ)\" is the correct category (a protein modification).",
+        "SOURCE_CHECK": "The term \"deamidation\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "S-homocysteinylation (C)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"S-homocysteinylation (C)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "8 ppm",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"8 ppm\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not present in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text explicitly mentions \"25 mM DTT\" in the \"Sample preparation and MS analysis\" section; DTT is the standard abbreviation for dithiothreitol.",
+        "TRUTH_CHECK": "The value is factually correct as DTT was used for disulfide reduction of the MS sample.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned for the MS experiment."
+      }
+    }
+  ]
+}

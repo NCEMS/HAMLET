@@ -1,0 +1,273 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD060878","","strict","Biological","cell_line","THP-1, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which is the correct category for this field.
+SOURCE CHECK: THP-1 cells were the source of the material analyzed by LC-MS/MS; however, HEK293T cells were used only for lentiviral packaging of plasmids, not for the proteomics experiment.
+TRUTH CHECK: The inclusion of HEK293T is factually incorrect as it was not the biological source of the MS sample.
+COMPLETENESS CHECK: The set is incorrect because it includes a cell line used for a different purpose (viral packaging).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: THP-1","THP-1"
+"PXD060878","","strict","Biological","cell_type","monocyte, fibroblasts","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains cell types, which matches the definition.
+SOURCE CHECK: The MS experiment was performed on THP-1 cells (monocytes), but the fibroblasts (MEFs) were used only for actin staining and wound healing assays, not for mass spectrometry.
+TRUTH CHECK: While ""monocyte"" is correct for the MS sample, ""fibroblasts"" is incorrect as they were not analyzed by MS.
+COMPLETENESS CHECK: The set is incorrect because it includes a cell type from an unrelated assay.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: monocyte","monocyte"
+"PXD060878","","strict","Biological","disease","acute myeloid leukemia","acute myeloid leukemia","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK: The value is inferable from the use of THP-1 cells, which the paper explicitly describes as ""human acute leukemia-derived monocyte"" cells and are the material analyzed by LC-MS/MS.
+TRUTH CHECK: THP-1 is a well-known cell line derived from acute monocytic leukemia (a subtype of acute myeloid leukemia).
+COMPLETENESS CHECK: The full set contains the correct disease origin for the cell line used in the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Biological","organ","blood","blood","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: Yes, ""blood"" is a valid organ/tissue type.
+SOURCE CHECK: The MS sample was derived from THP-1 cells, which are described in the text as ""human acute leukemia-derived monocyte"" cells.
+TRUTH CHECK: THP-1 cells are a monocytic cell line; monocytes are leukocytes found in the blood. Therefore, ""blood"" is a correct inference for the organ/tissue of origin.
+COMPLETENESS CHECK: The full set contains only ""blood"", which accurately describes the origin of the THP-1 cells used for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a valid species name.
+SOURCE CHECK: The MS experiment was performed on THP-1 cells, which are described as ""human acute leukemia-derived monocyte"" cells, and the search was performed against the ""human SwissProt protein database"".
+TRUTH CHECK: The value is factually correct as the biological material analysed by mass spectrometry was of human origin.
+COMPLETENESS CHECK: The full set contains the only species used for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","ExperimentalDesign","factor_value","condition (resting, LPS-stressed)","condition (resting, LPS-stressed) | acute myeloid leukemia","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental conditions (resting vs. LPS-stressed) being compared, which is a correct category for factor_value.
+SOURCE CHECK: The paper explicitly states that the HMGB1 interactome was defined in ""resting and LPS-stressed monocytic THP-1 cells"" and that these were the samples analyzed by LC-MS/MS.
+TRUTH CHECK: The values ""resting"" and ""LPS-stressed"" are factually correct as the two primary conditions compared in the proteomics experiment.
+COMPLETENESS CHECK: The full set of extracted values includes the experimental condition and the disease context (acute myeloid leukemia, from the THP-1 cell line origin), which together cover the primary factors of the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","ExperimentalDesign","factor_value","acute myeloid leukemia","condition (resting, LPS-stressed) | acute myeloid leukemia","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a disease/condition, which is a correct category for a factor_value.
+SOURCE CHECK: The value is not explicitly mentioned in the text; the paper describes THP-1 cells as ""human acute leukemia-derived monocyte"" cells.
+TRUTH CHECK: While THP-1 is a leukemia-derived cell line, the experimental factor being studied in the MS experiment is the stimulation state (resting vs. LPS-stressed), not the leukemia itself. However, the cell line's origin is a characteristic of the sample.
+COMPLETENESS CHECK: The full set includes the actual experimental variable (resting vs LPS-stressed) and the cell line origin.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes a sample preparation workflow (on-beads digestion) and LC-MS/MS analysis, but it does not mention any offline peptide or protein fractionation step.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which is exhaustive for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper explicitly states in the ""SILAC labeling of THP-1 cells"" section: ""The conditions were set up in three separate T-175 flasks (n = 3),"" referring to the samples used for the LC-MS/MS analysis.
+TRUTH CHECK: The value ""3"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains only this value, which accurately reflects the biological replication described for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly state the number of technical replicates for the LC-MS/MS analysis; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK: In the absence of explicit mention of technical replicates for the MS experiment, ""1"" is the correct default.
+COMPLETENESS CHECK: The full set contains only the default value, which is complete given the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper does not explicitly use the phrase ""data-dependent acquisition"", but it describes the acquisition of ""survey MS spectra"" followed by ""MS/MS data... for ions with charge z > 1"", which is the defining characteristic of a data-dependent acquisition (DDA) workflow.
+TRUTH CHECK: The described workflow (survey scan followed by targeted MS/MS of selected precursors) is factually a data-dependent acquisition.
+COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition scheme used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""On-beads digestion"" section of the methods (""cysteines were reduced by iodoacetamide (IAA, 20 mM, Sigma Aldrich)"").
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.
+COMPLETENESS CHECK: The full set of extracted values contains the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The paper explicitly mentions the use of ""sequencing grade modified trypsin"" and ""trypsin"" in the ""On-beads digestion"" section of the methods.
+TRUTH CHECK: The value is factually correct as trypsin was the protease used for digestion.
+COMPLETENESS CHECK: The full set contains ""Trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","fragment_mass_tolerance","0.05 Da","0.05 Da","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value ""0.05 Da"" is explicitly stated in the ""Processing of LC-MS/MS raw data"" section of the methods.
+TRUTH CHECK: The text states ""precursor mass tolerance 10 ppm, and 0.05 Da for the HCD fragment ions,"" confirming that 0.05 Da refers to the fragment ions.
+COMPLETENESS CHECK: The full set of extracted values contains the only fragment mass tolerance mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions ""higher-energy collisional dissociation (HCD)"" in the LC-MS/MS analysis section.
+TRUTH CHECK: ""Beam-type collision-induced dissociation"" is a technical synonym for HCD, but the paper explicitly uses the term ""higher-energy collisional dissociation (HCD)"".
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the fragmentation method used.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","instrument","Orbitrap Fusion","Orbitrap Fusion","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section of the methods (""coupled to an Orbitrap Fusion mass spectrometer"").
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the paper text, which states the use of an ""Orbitrap Fusion mass spectrometer"".
+TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap Fusion.
+COMPLETENESS CHECK: The full set of extracted values contains the only mass analyzer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","modification","Carbamidomethyl (C)","Oxidation (M) | Deamidation (NQ)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the text; only the reagent iodoacetamide (IAA) is mentioned.
+TRUTH CHECK: The modification name is not explicitly written in the paper text.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications, but this specific one is unsupported.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","modification","Oxidation (M)","Oxidation (M) | Deamidation (NQ)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Processing of LC-MS/MS raw data"" section: ""Dynamic modifications of oxidation on methionine... were set.""
+TRUTH CHECK: The paper explicitly states ""oxidation on methionine"", which is equivalent to ""Oxidation (M)"".
+COMPLETENESS CHECK: The full set of extracted values includes ""Carbamidomethyl (C)"" and ""Carbamyl (K)"", which are not explicitly named in the text (only the reagents IAA and DTT are mentioned, and the rules forbid inferring the modification name from reagents). However, ""Oxidation (M)"" and ""Deamidation (NQ)"" are explicitly stated. The presence of incorrect values in the full set does not make the candidate value itself incorrect.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","modification","Deamidation (NQ)","Oxidation (M) | Deamidation (NQ)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with target residues, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""deamidation of asparagine and glutamine"" in the ""Processing of LC-MS/MS raw data"" section.
+TRUTH CHECK: The candidate value ""Deamidation (NQ)"" is a correct representation of the deamidation of asparagine (N) and glutamine (Q) mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications; however, ""Carbamidomethyl (C)"" and ""Carbamyl (K)"" are not explicitly named in the text (only the reagent iodoacetamide is mentioned), and ""not applicable"" is not a modification. The set is not exhaustive of the correct values while containing incorrect ones.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","modification","Carbamyl (K)","Oxidation (M) | Deamidation (NQ)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamyl (K)"" is not present in the paper text.
+TRUTH CHECK: The paper does not mention ""Carbamyl (K)"" as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications, but ""Carbamyl (K)"" is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","modification","not applicable","Oxidation (M) | Deamidation (NQ)","low","True","","False","False","True","False","","hallucinated","TYPE CHECK: The value ""not applicable"" is a placeholder indicating the absence of a modification, but the field expects specific modifications searched.
+SOURCE CHECK: The paper explicitly lists several modifications in the ""Processing of LC-MS/MS raw data"" section.
+TRUTH CHECK: The value ""not applicable"" is factually incorrect because the paper explicitly describes modifications that were searched.
+COMPLETENESS CHECK: The full set of extracted values contains several correct modifications and one incorrect placeholder.
+
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","precursor_mass_tolerance","10 ppm","10 ppm","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: The value is explicitly stated in the ""Processing of LC-MS/MS raw data"" section of the methods.
+TRUTH CHECK: The paper explicitly states ""precursor mass tolerance 10 ppm"", which matches the candidate value.
+COMPLETENESS CHECK: The full set contains the only precursor mass tolerance value mentioned in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD060878","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is present in the paper text; ""DTT"" is mentioned in the ""BioID-based proximity labeling"" and ""On-beads digestion"" sections, and ""dithiothreitol"" is the full name for DTT.
+TRUTH CHECK: The value is factually correct as the paper explicitly uses DTT for protein reduction.
+COMPLETENESS CHECK: The full set contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD008934","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human heart failure"", ""human hearts"", and ""human myocardial tissue"" throughout the text.
-TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans, and the study exclusively uses human samples.
-COMPLETENESS CHECK: The full set contains the only species involved in the experiment.
+SOURCE CHECK:      The paper explicitly mentions ""human heart failure"", ""human hearts"", and ""human left ventricular tissues"" throughout the text.
+TRUTH CHECK:       The source organism is indeed human (Homo sapiens).
+COMPLETENESS CHECK: The full set contains the only species used for the proteomics experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,10 +10,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","BiologicalAgent","organ","left ventricle","left ventricle","high","False","","True","True","False","TYPE CHECK:        The candidate value ""left ventricle"" refers to a specific anatomical organ/tissue region, which matches the field definition.
+"PXD008934","BiologicalAgent","organ","left ventricle","left ventricle","high","False","","True","True","False","TYPE CHECK:        The candidate value ""left ventricle"" is a specific anatomical organ/tissue region, which matches the field definition.
 SOURCE CHECK:      The paper explicitly mentions ""left ventricle tissue"" and ""left ventricular (LV) myocardium"" multiple times.
-TRUTH CHECK:       The value is factually correct as the study specifically analyzed the left ventricle of human hearts.
-COMPLETENESS CHECK: The full set contains ""left ventricle"", which exhaustively covers the organ of origin described in the paper.
+TRUTH CHECK:       The value is factually correct as the proteomics analysis was performed on left ventricle tissue.
+COMPLETENESS CHECK: The full set of extracted values (""left ventricle"") exhaustively covers the organ of origin described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -22,9 +22,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008934","BiologicalAgent","cell_type","cardiomyocytes","cardiomyocytes","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cardiomyocytes"" is a primary cell type, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""cardiomyocytes"" multiple times (e.g., in the abstract and results sections).
-TRUTH CHECK:       The value is factually correct as the study focuses on the cytoskeleton and function of cardiomyocytes.
-COMPLETENESS CHECK: The full set of extracted values contains ""cardiomyocytes"", which is the only primary cell type described as the subject of the study.
+SOURCE CHECK:      The paper explicitly mentions ""cardiomyocytes"" and ""human myocytes"" throughout the text (e.g., in the abstract and results).
+TRUTH CHECK:       The study focuses on the mechanical and proteomic properties of cardiomyocytes from human hearts.
+COMPLETENESS CHECK: The full set of extracted values contains ""cardiomyocytes"", which exhaustively covers the primary cell type studied in this paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -32,11 +32,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","BiologicalAgent","disease","heart failure","heart failure","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""heart failure"" describes a disease state, which matches the field definition.
+"PXD008934","BiologicalAgent","disease","heart failure","heart failure","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""heart failure"" is a disease state/diagnosis, which matches the field definition.
 SOURCE CHECK:      The paper explicitly mentions ""human heart failure"" in the title and abstract, and discusses various etiologies of heart failure throughout the text.
 TRUTH CHECK:       The value is factually correct as the study focuses on the proteomic and functional changes in failing human hearts.
-COMPLETENESS CHECK: The paper describes several specific types of heart failure (ICM, DCM, HCMpEF, HCMrEF) and a control group (non-failing/normal). While ""heart failure"" is the overarching condition, the full set of extracted values should ideally include the control state (""normal"" or ""non-failing"") to be exhaustive.
-
+COMPLETENESS CHECK: The full set contains only ""heart failure"". While the paper specifies subtypes (ICM, DCM, HCM), ""heart failure"" is the overarching disease state. However, the paper also includes ""non-failing"" (NF) and ""normal"" hearts as controls. According to the definition, ""normal"" or ""healthy"" should be included when subjects are healthy controls.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -44,21 +43,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""heart failure"", ""normal""]","heart failure, normal"
-"PXD008934","BiologicalAgent","material_type","human hearts","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human hearts"" is a specific organ/organism, not one of the broad material classes defined for this field (e.g., ""tissue"", ""primary cells"").
-SOURCE CHECK:      The paper mentions using human hearts, but the field requires the broad material class.
-TRUTH CHECK:       The material used for the proteomics analysis was ""left ventricle tissue"" (tissue) and ""isolated LV myocytes"" (primary cells).
-COMPLETENESS CHECK:    The full set contains only ""human hearts"", which is a type mismatch and does not cover the actual material types used (tissue and primary cells).
+"PXD008934","BiologicalAgent","material_type","cadaveric donors","","low","True","","False","False","False","TYPE CHECK:        No, ""cadaveric donors"" refers to the source of the samples (the donors), not the broad material class (e.g., tissue, cells).
+SOURCE CHECK:      The term ""cadaveric donors"" is present in the text, but it describes the origin of the hearts, not the material type.
+TRUTH CHECK:       The material actually used for the mass spectrometry was ""left ventricle tissue"" (tissue).
+COMPLETENESS CHECK:The full set contains only a value that is a type mismatch; it does not capture the actual material used.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""tissue"", ""primary cells""]","tissue, primary cells"
-"PXD008934","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+CORRECTED_VALUE:   [""tissue""]","tissue"
+"PXD008934","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the definition.
 SOURCE CHECK:      The text explicitly states ""Desalted peptides were analyzed on a Q-Exactive (Thermo Scientific)"".
 TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK:        The full set contains the only mass spectrometer mentioned in the paper.
+COMPLETENESS CHECK: The full set contains the only instrument mentioned for the proteomics experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -69,7 +68,7 @@ CORRECTED_VALUE:   NONE",""
 "PXD008934","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
 SOURCE CHECK:      The paper explicitly mentions ""LFQ (Label-free quantification)"" in the ""Proteomics MS data analysis"" section.
 TRUTH CHECK:       The use of LFQ confirms that no isobaric or metabolic labels were used for the proteomics analysis.
-COMPLETENESS CHECK: The full set contains the only applicable labeling method used in the study.
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -77,9 +76,9 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","ExperimentalDesignAgent","replicates","human hearts","34","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human hearts"" is a description of the sample source, not a numeric count of biological replicates.
+"PXD008934","ExperimentalDesignAgent","replicates","human hearts","34","low","True","","False","False","False","TYPE CHECK:        No, the candidate value ""human hearts"" is a sample source/entity, not a numeric count of biological replicates.
 SOURCE CHECK:      The phrase ""human hearts"" is present in the text, but it does not represent the number of replicates.
-TRUTH CHECK:       The value is factually incorrect for this field; the field requires a number.
+TRUTH CHECK:       The value is factually incorrect as a count of replicates.
 COMPLETENESS CHECK: The full set contains ""34"", which is the correct number of hearts used for mass spectrometry, but ""human hearts"" is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
@@ -88,10 +87,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD008934","ExperimentalDesignAgent","replicates","34","34","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper states ""34 hearts in total were used in mass spectrometry"", which are biologically independent samples.
-TRUTH CHECK:       The value 34 is factually correct for the number of biological replicates used in the proteomics experiment.
-COMPLETENESS CHECK:    The full set includes ""human hearts"" (which is a type, not a count) and ""34"". Together, they identify the number of biological replicates for the MS experiment.
+"PXD008934","ExperimentalDesignAgent","replicates","34","34","high","False","","True","True","False","TYPE CHECK:        The candidate value ""34"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper states ""34 hearts in total were used in mass spectrometry"", which serves as the biological replicates for the proteomics experiment.
+TRUTH CHECK:       The value is factually correct as it represents the total number of biological samples (hearts) processed for the MS analysis.
+COMPLETENESS CHECK:    The full set of extracted values includes ""human hearts"" (which is a type, not a count) and ""34"". Together, they identify the number of biological replicates for the MS experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -99,10 +98,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","ExperimentalDesignAgent","experimental_design","Comparison of proteomic profiles among non-failing (normal, cHyp) and failing (ICM, DCM, HCMpEF, HCMrEF) human hearts","Comparison of proteomic profiles among non-failing (normal, cHyp) and failing (ICM, DCM, HCMpEF, HCMrEF) human hearts","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental groups and the nature of the comparison, which aligns with the ""experimental_design"" field.
-SOURCE CHECK:      The value is directly supported by the ""RESULTS"" section, which details the subdivision of 105 hearts into non-failing (normal, cHyp) and failing (ICM, DCM, HCMpEF, HCMrEF) groups for proteomic analysis.
-TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set of extracted values accurately captures the primary design of the proteomics experiment described in the paper.
+"PXD008934","ExperimentalDesignAgent","experimental_design","comparison of non-failing (normal, cHyp) vs failing human hearts (ICM, DCM, HCMpEF, HCMrEF)","comparison of non-failing (normal, cHyp) vs failing human hearts (ICM, DCM, HCMpEF, HCMrEF)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design by specifying the groups being compared, which fits the definition of experimental design.
+SOURCE CHECK:      The text explicitly states the study utilized ""non-failing (NF) and failing human hearts,"" further subdividing them into normal, cHyp, ICM, DCM, HCMpEF, and HCMrEF.
+TRUTH CHECK:       The value accurately reflects the primary experimental comparison described in the results and methods sections.
+COMPLETENESS CHECK: The full set of extracted values captures the core design of the proteomic and functional comparisons in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -110,10 +109,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","ExperimentalDesignAgent","factor_value","heart condition (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM)","heart condition (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (heart conditions) under study, which fits the definition of a factor_value.
+"PXD008934","ExperimentalDesignAgent","factor_value","heart condition (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM)","heart condition (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (heart conditions) being compared, which fits the definition of a factor_value.
 SOURCE CHECK:      The paper explicitly lists these conditions (normal, cHyp, HCMpEF, HCMrEF, DCM, ICM) in the Results and Methods sections.
-TRUTH CHECK:       The value is factually correct as these are the specific patient groups compared in the proteomic and functional analyses.
-COMPLETENESS CHECK: The full set captures the primary experimental factor (disease state/heart condition) used to categorize the samples.
+TRUTH CHECK:       The value is factually correct as these are the primary groups used to categorize the human heart samples.
+COMPLETENESS CHECK:    The full set captures the primary experimental factor (disease state/heart condition) used for the proteomic and functional comparisons.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -122,9 +121,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008934","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" applies.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
 TRUTH CHECK:       The value is correct as no fractionation was performed.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -132,14 +131,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008934","ExperimentalDesignAgent","number_of_samples","34","34","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text explicitly states, ""34 hearts in total were used in mass spectrometry"".
-TRUTH CHECK:       The value is factually correct for the proteomics portion of the study.
-COMPLETENESS CHECK: The full set contains only this value, which accurately represents the total number of samples processed for the mass spectrometry experiment.
-TYPE_CORRECT:      yes
+"PXD008934","ExperimentalDesignAgent","number_of_samples","34","34","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK: The text explicitly states, ""34 hearts in total were used in mass spectrometry"".
+TRUTH CHECK: The value is factually correct based on the ""Mass Spectrometry of human left ventricular tissues"" section.
+COMPLETENESS CHECK: The full set contains only this value, which correctly identifies the total number of samples processed for the proteomics experiment.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

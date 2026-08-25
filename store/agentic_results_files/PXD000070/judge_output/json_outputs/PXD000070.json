@@ -14,39 +14,23 @@
         "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
         "SOURCE_CHECK": "The text explicitly mentions \"P. falciparum\" multiple times (e.g., \"We analysed the Plasmodium falciparum schizont phosphoproteome\").",
         "TRUTH_CHECK": "The value is factually correct as the primary source organism for the experiments described.",
-        "COMPLETENESS_CHECK": "The full set contains the primary species used in the study; while human proteins are mentioned as contaminants or in a benchmark dataset, the experimental subject is P. falciparum."
-      }
-    },
-    {
-      "annotation_type": "organ",
-      "extracted_value": "schizont",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"schizont\" refers to a developmental stage of the Plasmodium falciparum parasite, not an organ or tissue.",
-        "SOURCE_CHECK": "The term \"schizont\" is present in the text (e.g., \"P. falciparum schizont phosphoproteome\").",
-        "TRUTH_CHECK": "While present, \"schizont\" is a life-cycle stage of a unicellular parasite, which does not fit the definition of an \"organ\" or \"tissue\".",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a category error."
+        "COMPLETENESS_CHECK": "The full set contains the primary species studied in the paper."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "erythrocytes",
-      "verdict": "low",
+      "extracted_value": "schizont",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"erythrocytes\" is a cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"human erythrocytes\" as the host cells for the P. falciparum parasites.",
-        "TRUTH_CHECK": "The experiment is focused on the *Plasmodium falciparum* phosphoproteome; the erythrocytes are the host cells from which the parasites were collected via saponin lysis (which \"removes the vast majority of erythrocyte material\"). The actual biological material analyzed is the parasite, not the erythrocyte.",
-        "COMPLETENESS_CHECK": "The full set contains only \"erythrocytes\", which is incorrect as the target of the study is the parasite."
+        "TYPE_CHECK": "The candidate value \"schizont\" refers to a specific developmental stage/cell type of the Plasmodium falciparum parasite.",
+        "SOURCE_CHECK": "The text explicitly mentions \"Plasmodium falciparum schizont phosphoproteome\" and \"schizont digests\".",
+        "TRUTH_CHECK": "The value is factually correct as the study specifically analyzed the schizont stage of the parasite.",
+        "COMPLETENESS_CHECK": "The full set contains \"schizont\", which is the only specific cell type/stage mentioned for the primary experiment."
       }
     },
     {
@@ -61,24 +45,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific organism strain, not a broad material class (e.g., \"tissue\", \"cell line\", \"whole organism\").",
         "SOURCE_CHECK": "The value \"P. falciparum strain 3D7\" is present in the text.",
-        "TRUTH_CHECK": "While the strain is correct, it is not a \"material_type\" as defined.",
-        "COMPLETENESS_CHECK": "The full set contains only a strain name and fails to provide the broad material class."
-      }
-    },
-    {
-      "annotation_type": "cell_line",
-      "extracted_value": "human cell line",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"human cell line\" describes a category of material rather than a specific named immortalized cell line.",
-        "SOURCE_CHECK": "The text mentions \"phosphopeptides enriched from a human cell line,\" but does not provide the specific name of the cell line.",
-        "TRUTH_CHECK": "While the text mentions a human cell line was used for benchmarking, \"human cell line\" is a general description, not a specific cell line name.",
-        "COMPLETENESS_CHECK": "The full set contains only a generic description; the specific name of the cell line is missing from the text."
+        "TRUTH_CHECK": "While the strain is correct, it is not a \"material_type\" according to the field definition.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the wrong category of information."
       }
     },
     {
@@ -93,8 +61,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a specific strain identifier for the organism.",
         "SOURCE_CHECK": "The text explicitly states \"P. falciparum strain 3D7 was cultured\".",
-        "TRUTH_CHECK": "The value \"3D7\" is the correct strain of Plasmodium falciparum used in the study.",
-        "COMPLETENESS_CHECK": "The full set contains the only strain mentioned in the paper."
+        "TRUTH_CHECK": "The value is factually correct as per the paper.",
+        "COMPLETENESS_CHECK": "The full set contains the only strain mentioned in the text."
       }
     },
     {
@@ -107,9 +75,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
         "SOURCE_CHECK": "The text explicitly mentions \"LTQ Orbitrap Velos hybrid mass spectrometer (Thermo Scientific)\".",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the LC-MS/MS analysis section.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -124,14 +92,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
-        "SOURCE_CHECK": "No isobaric or metabolic labeling methods (such as TMT, SILAC, or iTRAQ) are mentioned in the text; therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The experimental description is consistent with a label-free approach.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
+        "SOURCE_CHECK": "No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the text, making \"label-free\" a safe default.",
+        "TRUTH_CHECK": "The experiment describes standard LC-MS/MS analysis of phosphopeptides without any mention of labels.",
+        "COMPLETENESS_CHECK": "The full set contains the only applicable value for this experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "P. falciparum schizont",
+      "extracted_value": "P. falciparum strain 3D7",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -139,10 +107,10 @@
       "hallucination": false,
       "corrected_value": "3",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"P. falciparum schizont\" is a biological sample/stage description, not a numeric count of replicates.",
-        "SOURCE_CHECK": "The term \"P. falciparum schizont\" is present in the text, but it refers to the organism/stage, not the number of replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect for the field 'replicates'.",
-        "COMPLETENESS_CHECK": "The full set contains a type mismatch and a default value; it does not correctly capture the biological replicates mentioned in the text (e.g., \"Triplicate experiments\")."
+        "TYPE_CHECK": "The candidate value is a biological strain name, not a numeric count of replicates.",
+        "SOURCE_CHECK": "The value \"P. falciparum strain 3D7\" is present in the text, but it describes the organism/strain, not the number of replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
+        "COMPLETENESS_CHECK": "The full set contains a strain name and the number \"1\", but the strain name is a type mismatch."
       }
     },
     {
@@ -155,26 +123,26 @@
       "hallucination": false,
       "corrected_value": "3",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"1\" is a numeric count, which is the correct category for the 'replicates' field.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"Triplicate experiments were performed using both the DT and DDNL strategies\" and \"triplicate experiments using CID fragmentation and triplicate DT experiments\".",
-        "TRUTH_CHECK": "The candidate value \"1\" is factually incorrect; the paper states that experiments were performed in triplicate.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and contains a value (\"P. falciparum schizont\") that does not belong in this field."
+        "TYPE_CHECK": "The candidate value \"1\" is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"Triplicate experiments were performed\" for both the DT and DDNL strategies, as well as for proteome profiling.",
+        "TRUTH_CHECK": "The value \"1\" is factually incorrect because the paper states that experiments were performed in triplicate.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and contains a value (\"P. falciparum strain 3D7\") that does not belong in this field."
       }
     },
     {
       "annotation_type": "technical_replicates",
       "extracted_value": "triplicate experiments",
-      "verdict": "low",
+      "verdict": "high",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": true,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"triplicate experiments\" describes the number of replicates, but the field definition expects a numeric count (e.g., \"3\").",
+        "TYPE_CHECK": "The candidate value \"triplicate experiments\" describes the number of replicates, but the field expects a numeric count.",
         "SOURCE_CHECK": "The text explicitly mentions \"Triplicate experiments were performed\" multiple times.",
-        "TRUTH_CHECK": "The value is factually correct as the study used triplicates.",
-        "COMPLETENESS_CHECK": "The full set of extracted values [\"triplicate experiments\", \"3\"] covers the information in the paper."
+        "TRUTH_CHECK": "The term \"triplicate\" means 3 replicates.",
+        "COMPLETENESS_CHECK": "The full set contains both the descriptive phrase and the numeric value \"3\", which accurately covers the information in the paper."
       }
     },
     {
@@ -183,19 +151,19 @@
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
-      "value_complete": false,
+      "value_complete": true,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for technical replicates.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
         "SOURCE_CHECK": "The paper mentions \"Triplicate experiments were performed using both the DT and DDNL strategies\" and \"triplicate experiments using CID fragmentation and triplicate DT experiments\".",
-        "TRUTH_CHECK": "The text specifies \"triplicate experiments\", which corresponds to the value 3. However, the text describes these as \"triplicate experiments\" in the context of the overall experimental setup; it does not explicitly distinguish between biological and technical replicates. In proteomics, \"triplicate experiments\" usually refers to biological replicates unless specified as technical.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"triplicate experiments\", \"3\") covers the mention of triplicates in the text."
+        "TRUTH_CHECK": "The text describes experiments performed in triplicate; however, these are described as \"triplicate experiments\" for the overall strategy/analysis, which typically refers to biological replicates in this context unless specified as technical replicates of a single sample.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"triplicate experiments\", \"3\") captures the mention of triplicates in the text."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "Comparison of DDNL and DT acquisition strategies for phosphoproteomics",
+      "extracted_value": "comparison of DDNL and DT acquisition strategies",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -203,10 +171,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental objective/comparison, which fits the general nature of a study design.",
-        "SOURCE_CHECK": "The paper explicitly compares the \"data-dependent neutral loss-triggered-ETD (DDNL) strategy\" and a \"conventional decision-tree (DT) method\" for phosphoproteome analysis.",
-        "TRUTH_CHECK": "The value accurately reflects the primary experimental design of the study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values captures the core design of the benchmark/comparison study."
+        "TYPE_CHECK": "The candidate value describes the experimental approach/comparison, which fits the category of study design.",
+        "SOURCE_CHECK": "The paper explicitly states, \"We compared this DDNL strategy to the decision tree method,\" and discusses the performance of both acquisition strategies.",
+        "TRUTH_CHECK": "The value accurately reflects the primary objective of the experimental design described in the results section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values captures the core comparison being performed in the study."
       }
     },
     {
@@ -220,9 +188,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes the experimental variables (acquisition strategies) being compared, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly compares two acquisition strategies: \"data-dependent neutral loss-triggered-ETD (DDNL)\" and a \"decision-tree method\" (DT).",
-        "TRUTH_CHECK": "The value is factually correct as the study benchmarks these two specific MS acquisition methods.",
-        "COMPLETENESS_CHECK": "The full set captures the primary experimental variable being investigated in the study."
+        "SOURCE_CHECK": "The paper explicitly compares two acquisition strategies: \"data-dependent neutral loss-triggered-ETD (DDNL)\" and a \"conventional decision-tree method\" (DT).",
+        "TRUTH_CHECK": "The value is factually correct as the study's primary goal was to benchmark these two specific acquisition methods for phosphoproteomics.",
+        "COMPLETENESS_CHECK": "The full set captures the primary experimental variable under study in the main experiments."
       }
     },
     {
@@ -235,10 +203,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper states that \"an extensive phosphopeptide fractionation was not employed,\" and the methods describe a single LC-MS/MS analysis per aliquot without offline fractionation.",
-        "TRUTH_CHECK": "Since no offline fractionation was performed, the value \"1\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set of extracted values correctly reflects that no fractionation occurred."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; it explicitly states \"an extensive phosphopeptide fractionation was not employed.\"",
+        "TRUTH_CHECK": "Since no fractionation was performed, the safe default value of \"1\" is factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper."
       }
     },
     {
@@ -251,10 +219,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of samples.",
         "SOURCE_CHECK": "The text states that phosphopeptides from two IMAC purifications were pooled and split into \"6 aliquots for LC–MS/MS analysis\".",
-        "TRUTH_CHECK": "The 6 aliquots represent the total number of samples processed for the main phosphoproteomics analysis.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the sample count described for the LC-MS/MS analysis."
+        "TRUTH_CHECK": "The 6 aliquots represent the samples processed for the main phosphoproteomics analysis.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the sample split described for the primary experiment."
       }
     }
   ]

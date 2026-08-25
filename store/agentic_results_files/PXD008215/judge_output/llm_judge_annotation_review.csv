@@ -1,30 +1,30 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD008215","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions the analysis of the ""3D structure of human MCAK"".
-TRUTH CHECK: ""Homo sapiens"" is the scientific name for ""human"", making the value factually correct.
-COMPLETENESS CHECK: The full set contains the only species mentioned for the protein analysis.
-TYPE_CORRECT: yes
+"PXD008215","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The paper explicitly mentions the analysis of ""human MCAK"" in the Results section.
+TRUTH CHECK:       ""Homo sapiens"" is the scientific name for human, making the value factually correct.
+COMPLETENESS CHECK: The full set contains the only species mentioned for the protein analyzed in the mass spectrometry experiments.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD008215","BiologicalAgent","material_type","Sf9 insect cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Sf9 insect cells"" is a specific cell line, but the field definition requires a broad material class (e.g., ""cell line"").
-SOURCE CHECK:      The text states that MCAK constructs were ""expressed in Sf9 insect cells,"" confirming the source.
-TRUTH CHECK:       The value is factually correct regarding the source, but it is a specific entity rather than a broad category.
-COMPLETENESS CHECK:The full set contains only this specific cell line; it does not provide the broad material class required by the definition.
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD008215","BiologicalAgent","material_type","Sf9 insect cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Sf9 insect cells"" is a specific cell line, not a broad material class as required by the definition.
+SOURCE CHECK:      The paper mentions that MCAK constructs were ""expressed in Sf9 insect cells"".
+TRUTH CHECK:       While Sf9 cells were used for protein expression, the material actually analyzed by mass spectrometry was the purified protein (MCAK).
+COMPLETENESS CHECK: The full set contains only the expression system, not the material type of the sample analyzed.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   cell line","cell line"
+CORRECTED_VALUE:   NONE",""
 "PXD008215","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""Peptides were analyzed on LTQ Orbitrap Velos (Thermo Fisher Scientific)"".
-TRUTH CHECK:       The value is factually correct as stated in the paper.
-COMPLETENESS CHECK: The full set of extracted values is missing the ""Orbitrap Fusion Lumos"" also used for quantitative mass spectrometry in the paper.
+SOURCE CHECK:      The value ""LTQ Orbitrap Velos"" is explicitly mentioned in the ""Mass spectrometry"" section of the methods.
+TRUTH CHECK:       The value is factually correct as it is the instrument used for the initial peptide analysis.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also mentions the use of an ""Orbitrap Fusion Lumos"" for the quantitative mass spectrometry workflow.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -33,9 +33,10 @@ HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""LTQ Orbitrap Velos"", ""Orbitrap Fusion Lumos""]","LTQ Orbitrap Velos, Orbitrap Fusion Lumos"
 "PXD008215","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper describes quantitative mass spectrometry using peak area calculations and intensity ratios (e.g., ""peak intensity ratios of MCAK:MCAKS6E of 1.77–0.30"") without mentioning any isobaric or metabolic labels.
-TRUTH CHECK:       The use of MS1-based quantification (via Skyline) and peak area normalization confirms a label-free approach.
-COMPLETENESS CHECK: The full set contains ""label-free"", which accurately describes the labeling scheme for the experiments in the paper.
+SOURCE CHECK:      The paper describes quantitative mass spectrometry using peak area calculations and intensity ratios without mentioning any isobaric or metabolic labels, making ""label-free"" a safe default.
+TRUTH CHECK:       The experimental methods (MS1-based quantification via Skyline and MaxQuant) are consistent with a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -43,43 +44,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008215","ExperimentalDesignAgent","replicates","MCAK and MCAKS6E","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""MCAK and MCAKS6E"" refers to protein samples/conditions, not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions ""MCAK and MCAKS6E"" as the samples being compared, but this is not a replicate count.
-TRUTH CHECK:       The value is factually incorrect as a count of replicates.
-COMPLETENESS CHECK: The full set contains ""2"", but the paper actually states ""three reaction replica"" for the quantitative MS analysis.
+"PXD008215","ExperimentalDesignAgent","replicates","protein variants (MCAK, MCAKS6E)","3","low","True","","False","False","False","TYPE CHECK:        The candidate value ""protein variants (MCAK, MCAKS6E)"" is a description of experimental groups/samples, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions these protein variants, but they are the subjects of the experiment, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates', which requires a number.
+COMPLETENESS CHECK: The full set contains ""3"", which is the correct numeric value mentioned in the text (""three reaction replica"").
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""3""]","3"
-"PXD008215","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper mentions ""three reaction replica"" in the quantitative mass spectrometry section. It does not mention ""2"" as a number of biological replicates.
-TRUTH CHECK:       The value ""2"" is factually incorrect; the text explicitly states ""three reaction replica"".
-COMPLETENESS CHECK:The full set of extracted values is incorrect and does not accurately reflect the paper's description of replicates.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      yes
-VERDICT:           low
-CORRECTED_VALUE:   [""3""]","3"
-"PXD008215","ExperimentalDesignAgent","technical_replicates","injection replica","2","low","True","","False","True","False","TYPE CHECK:        No, the candidate value ""injection replica"" is a description of the type of replicate, not a numeric count.
-SOURCE CHECK:      The phrase ""injection replica"" is present in the text.
-TRUTH CHECK:       The text states ""three reaction replica, each reaction has two injection replica"", meaning there are 2 technical replicates per biological/reaction sample.
-COMPLETENESS CHECK: The full set contains both the label ""injection replica"" and the correct numeric value ""2"", which together cover the information. However, the candidate value itself is a type mismatch.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: technical_replicates
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD008215","ExperimentalDesignAgent","technical_replicates","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The text states ""three reaction replica, each reaction has two injection replica"", where ""injection replica"" refers to technical replicates of the MS analysis.
-TRUTH CHECK:       The paper explicitly mentions ""two injection replica"" per reaction.
-COMPLETENESS CHECK: The full set of extracted values includes ""2"" and ""injection replica""; together they correctly identify the number and nature of the technical replicates.
+"PXD008215","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK:      The text states ""across six analyses (three reaction replica, each reaction has two injection replica)"", confirming three reaction (biological) replicates.
+TRUTH CHECK:       The value ""3"" correctly reflects the number of reaction replicates described in the quantitative mass spectrometry section.
+COMPLETENESS CHECK: The full set contains ""3"" and ""protein variants (MCAK, MCAKS6E)"". The latter is a type mismatch (it describes samples/conditions, not replicate counts), but the value ""3"" alone is exhaustive for the number of biological replicates.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -87,10 +66,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008215","ExperimentalDesignAgent","experimental_design","quantitative comparison of MCAK and MCAKS6E","quantitative comparison of MCAK and MCAKS6E","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental approach/comparison, which fits the category of study design.
-SOURCE CHECK:      The paper explicitly mentions using ""quantitative mass spectrometry"" to ""compare MCAK and MCAKS6E quantitatively"" to see if phosphorylation induces conformational changes.
-TRUTH CHECK:       The value accurately reflects the design of the quantitative MS experiment described in the results.
-COMPLETENESS CHECK:    The full set contains this single value, which covers the primary comparative design of the proteomics experiments in the paper.
+"PXD008215","ExperimentalDesignAgent","technical_replicates","two injection replica","two injection replica | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of technical replicates (injection replicas), which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""three reaction replica, each reaction has two injection replica"".
+TRUTH CHECK:       The value ""two injection replica"" is factually correct as it describes the technical replicates per sample.
+COMPLETENESS CHECK: The full set of extracted values (""two injection replica"", ""2"") covers the information provided in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -98,21 +77,44 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008215","ExperimentalDesignAgent","factor_value","protein variant (MCAK, MCAKS6E)","protein variant (MCAK, MCAKS6E)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (different protein versions) being compared, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly compares wild-type MCAK and the phosphomimetic mutant MCAKS6E (and also MCAKS2E) to study the effects of phosphorylation.
-TRUTH CHECK:       The value is factually correct as the study investigates how these different protein variants respond to Aurora B phosphorylation and affect microtubule depolymerization.
-COMPLETENESS CHECK:    The full set only includes ""protein variant (MCAK, MCAKS6E)"", but the paper also mentions ""MCAKS2E"" as a variant used in the depolymerization and residency assays.
+"PXD008215","ExperimentalDesignAgent","technical_replicates","2","two injection replica | 2","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the technical_replicates field.
+SOURCE CHECK: The paper explicitly mentions ""two injection replica"" in the Mass spectrometry section.
+TRUTH CHECK: The value ""2"" correctly represents the ""two injection replica"" described in the text.
+COMPLETENESS CHECK: The full set of extracted values (""two injection replica"", ""2"") exhaustively covers the technical replication information provided in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008215","ExperimentalDesignAgent","experimental_design","quantitative comparison of MCAK vs MCAKS6E phosphomimetic mutant","quantitative comparison of MCAK vs MCAKS6E phosphomimetic mutant","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup (comparing a wild-type protein to a mutant), which fits the category of a study design.
+SOURCE CHECK:      The paper explicitly describes comparing ""MCAK and MCAKS6E"" using ""quantitative mass spectrometry"" to see if phosphorylation induces conformational changes.
+TRUTH CHECK:       The value accurately reflects the experimental design used for the quantitative MS portion of the study.
+COMPLETENESS CHECK: The full set contains this single value, which covers the primary comparative design of the proteomics experiment described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""protein variant (MCAK, MCAKS2E, MCAKS6E)""]",""
-"PXD008215","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
-SOURCE CHECK:      The paper mentions that crosslinked peptides were ""fractionated using SCX-StageTips"", but it does not specify the number of fractions generated. Per the safe defaults rule, ""1"" is used when the paper is silent on the specific count.
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD008215","ExperimentalDesignAgent","factor_value","protein variant (MCAK, MCAKS6E)","protein variant (MCAK, MCAKS6E)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (different protein versions) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly compares wild-type MCAK and the phosphomimetic mutant MCAKS6E (and also MCAKS2E) to study the effect of phosphorylation on conformation and activity.
+TRUTH CHECK:       The value is factually correct as the study focuses on the differences between these protein variants.
+COMPLETENESS CHECK:    The full set includes the primary variants compared in the quantitative MS and activity assays, although MCAKS2E is also mentioned in the text; however, the core comparison for the structural/quantitative MS part is MCAK vs MCAKS6E.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE","protein variant (MCAK, MCAKS2E, MCAKS6E)"
+"PXD008215","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper mentions that crosslinked peptides were ""fractionated using SCX-StageTips"", but it does not specify the number of fractions generated. Per the safe defaults rule, ""1"" is correct when the paper is silent on the specific count.
 TRUTH CHECK:       The value is a reasonable default given the lack of a specific number in the text.
-COMPLETENESS CHECK: The full set contains only the default value, which is the standard procedure when the exact number of fractions is not reported.
+COMPLETENESS CHECK: The full set contains only the default value, which is the only available information.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -120,14 +122,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008215","ExperimentalDesignAgent","number_of_samples","6","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text mentions ""six analyses (three reaction replica, each reaction has two injection replica)"" for the quantitative comparison of MCAK and MCAKS6E.
-TRUTH CHECK:       The ""six analyses"" refers to the number of MS runs/injections for a specific quantitative experiment, not the total number of biological samples processed in the study. The study involves at least two distinct protein samples (MCAK and MCAKS6E) and potentially others (MCAK-GFP, etc.).
-COMPLETENESS CHECK: The full set consists only of this value, which is a misinterpretation of ""analyses"" as ""samples"".
+"PXD008215","ExperimentalDesignAgent","number_of_samples","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper mentions ""six analyses (three reaction replica, each reaction has two injection replica)"" for the quantitative comparison of MCAK and MCAKS6E. This equals 6 analyses per condition. Since there are two conditions (MCAK and MCAKS6E), 6 * 2 = 12.
+TRUTH CHECK:       The calculation (3 biological replicates * 2 technical replicates * 2 conditions) equals 12 total samples/analyses processed for the quantitative MS part of the study.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the total number of MS analyses described for the quantitative experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           low
+VERDICT:           high
 CORRECTED_VALUE:   NONE",""

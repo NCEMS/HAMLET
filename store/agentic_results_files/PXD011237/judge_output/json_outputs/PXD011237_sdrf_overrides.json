@@ -11,6 +11,8 @@
     "material_type",
     "instrument",
     "label",
+    "precursor_mass_tolerance",
+    "fragment_mass_tolerance",
     "replicates",
     "technical_replicates",
     "fractions",
@@ -37,63 +39,23 @@
         }
       ]
     },
-    "organ": {
-      "builder_field": "organism_part",
-      "pipeline_values": [
-        "blood"
-      ],
-      "selected_value": "plasma",
-      "selection_source": "judge_corrected_value",
-      "apply_override": true,
-      "judge_rows": [
-        {
-          "extracted_value": "blood",
-          "verdict": "medium",
-          "value_correct": true,
-          "value_complete": false,
-          "hallucination": false,
-          "type_mismatch": false,
-          "corrected_value": "plasma"
-        }
-      ]
-    },
-    "disease": {
-      "builder_field": "disease",
-      "pipeline_values": [
-        "normal"
-      ],
-      "selected_value": "normal, hereditary angioedema type III",
-      "selection_source": "judge_corrected_value",
-      "apply_override": true,
-      "judge_rows": [
-        {
-          "extracted_value": "normal",
-          "verdict": "medium",
-          "value_correct": true,
-          "value_complete": false,
-          "hallucination": false,
-          "type_mismatch": false,
-          "corrected_value": "normal, hereditary angioedema type III"
-        }
-      ]
-    },
     "material_type": {
       "builder_field": "sample_source",
       "pipeline_values": [
-        "healthy donors"
+        "purified human fXII"
       ],
-      "selected_value": "plasma",
-      "selection_source": "judge_corrected_value",
-      "apply_override": true,
+      "selected_value": null,
+      "selection_source": null,
+      "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "healthy donors",
+          "extracted_value": "purified human fXII",
           "verdict": "low",
           "value_correct": false,
           "value_complete": false,
           "hallucination": false,
           "type_mismatch": true,
-          "corrected_value": "plasma"
+          "corrected_value": null
         }
       ]
     },
@@ -140,28 +102,38 @@
     "replicates": {
       "builder_field": "biological_replicate",
       "pipeline_values": [
-        "2",
-        "purified human fXII fragments"
+        "1"
       ],
-      "selected_value": null,
-      "selection_source": null,
+      "selected_value": "1",
+      "selection_source": "judge_high_confidence",
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "purified human fXII fragments",
-          "verdict": "low",
-          "value_correct": false,
-          "value_complete": false,
+          "extracted_value": "1",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
           "hallucination": false,
-          "type_mismatch": true,
+          "type_mismatch": false,
           "corrected_value": null
-        },
+        }
+      ]
+    },
+    "technical_replicates": {
+      "builder_field": "technical_replicate",
+      "pipeline_values": [
+        "1"
+      ],
+      "selected_value": "1",
+      "selection_source": "judge_high_confidence",
+      "apply_override": false,
+      "judge_rows": [
         {
-          "extracted_value": "2",
-          "verdict": "low",
-          "value_correct": false,
-          "value_complete": false,
-          "hallucination": true,
+          "extracted_value": "1",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
+          "hallucination": false,
           "type_mismatch": false,
           "corrected_value": null
         }

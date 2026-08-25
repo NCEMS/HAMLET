@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific named cell line, which matches the required category.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"ESC culture\" section of the methods, and the \"Proteome profiling with LC-MS/MS\" section confirms that \"cells\" (referring to these ESCs) were lysed and analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The paper states that E14Tg2a ESCs were used for the various culture conditions (SL, 2iL, EPI) that were subsequently analyzed by LC-MS/MS.",
-        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the proteomics experiments described in the paper."
+        "TYPE_CHECK": "The candidate value is a specific name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"ESC culture\" section of the methods, and these cells were used to generate the proteome profiles analyzed by LC-MS/MS.",
+        "TRUTH_CHECK": "The paper states \"For SL culture, E14Tg2a ESCs... were maintained\" and \"For 2iL culture, E14Tg2a ESCs were cultured\", and these are the cells used for the \"Proteome profiling with LC-MS/MS\".",
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the proteomics experiment described in the paper."
       }
     },
     {
@@ -34,9 +34,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"embryonic stem cells\" describes a cell type/lineage, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned throughout the text (e.g., \"transition of naïve-to-primed mouse embryonic stem cells (ESCs)\") and refers to the biological material that was lysed and analysed by mass spectrometry.",
-        "TRUTH_CHECK": "The paper explicitly states that the proteomics experiments were performed on E14Tg2a embryonic stem cells (ESCs).",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"embryonic stem cells\") covers the cell type of the samples analysed in the study."
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text (e.g., \"transition of naïve-to-primed mouse embryonic stem cells (ESCs)\") and refers to the biological material analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on the proteome of mouse embryonic stem cells (E14Tg2a).",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the cell type used for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes a study on mouse embryonic stem cells (ESCs) in different pluripotency states (naïve and primed) without any mention of a disease model or pathology.",
+        "TRUTH_CHECK": "Since the study is not a disease study and uses standard ESC lines, \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a non-disease study."
       }
     },
     {
@@ -52,10 +71,10 @@
       "error_category": "type_mismatch",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"embryonic stem cell\" describes a cell type/source rather than a specific organ or tissue.",
-        "SOURCE_CHECK": "The value is present in the text; the MS samples were derived from E14Tg2a embryonic stem cells (ESCs).",
-        "TRUTH_CHECK": "While \"embryonic stem cell\" is the source, the field \"organ\" specifically asks for the tissue or organ of origin. ESCs are derived from the inner cell mass of the blastocyst (embryo).",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is a cell type rather than an organ/tissue."
+        "TYPE_CHECK": "The candidate value \"embryonic stem cell\" describes a cell type/source, but the field \"organ\" specifically asks for the tissue or organ of origin.",
+        "SOURCE_CHECK": "The MS samples were derived from E14Tg2a mouse embryonic stem cells (ESCs), as stated in the \"ESC culture\" and \"Proteome profiling with LC-MS/MS\" sections.",
+        "TRUTH_CHECK": "While the material is an embryonic stem cell, \"embryonic stem cell\" is a cell type, not an organ or tissue. However, ESCs are derived from the inner cell mass of the blastocyst (embryo).",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch for \"organ\"."
       }
     },
     {
@@ -72,14 +91,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"mouse embryonic stem cells (ESCs)\" and \"mouse genome (mm9)\" in the context of the proteomics and sequencing experiments.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"mouse embryonic stem cells (ESCs)\" and \"mouse RefSeq protein sequence database\" in the context of the proteomics experiment.",
         "TRUTH_CHECK": "The use of mouse ESCs (E14Tg2a) confirms the species is Mus musculus.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct species described in the paper."
+        "COMPLETENESS_CHECK": "The full set contains the only species used in the study."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "ESC state (2iL, SL, EPI) and transition time points (Day 1, Day 3, Day 7)",
+      "extracted_value": "cell state (2iL, SL, EPI) and transition time points (Day 1, Day 3, Day 7)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -90,10 +109,29 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factors (cell states and time points) under study, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the text: \"2iL, SL, and EPI\" are the states, and \"Day 1, Day 3, and Day 7\" are the transition time points used for the proteomics and ribosome profiling experiments.",
-        "TRUTH_CHECK": "The value accurately reflects the experimental design described in the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental axes (steady states and the time-course transition) described in the study."
+        "TYPE_CHECK": "The candidate value describes the experimental variables (cell states and time points) under study, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"2iL\", \"SL\", \"EPI\", and \"Day 1, Day 3, Day 7\" are explicitly mentioned in the text as the conditions and time points for the proteomics and ribosome profiling experiments.",
+        "TRUTH_CHECK": "The values are factually correct; the study compares these three ESC states and the transitions between them at the specified days.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental factors (cell states and time points) and includes a safe default (\"normal\") for the disease state."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (representing a healthy/baseline state).",
+        "SOURCE_CHECK": "The value \"normal\" is not mentioned in the text, nor is there a \"normal\" control group described; the study compares different pluripotent states (2iL, SL, EPI).",
+        "TRUTH_CHECK": "While \"normal\" is a safe default for disease fields, this study is not a disease study; it is a study of cell state transitions in embryonic stem cells. There is no \"normal\" vs \"disease\" contrast here.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes a correct description of the experimental factors, but \"normal\" is an irrelevant addition."
       }
     },
     {
@@ -110,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
-        "SOURCE_CHECK": "The paper describes \"Proteome profiling with LC-MS/MS\" where peptides were desalted and purified on StageTips and then loaded on the instrument; no offline peptide fractionation (e.g., high-pH RP) is mentioned for the proteomics workflow.",
-        "TRUTH_CHECK": "Since no fractionation is described for the MS samples, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" fully represents the state of fractionation for the samples in this study."
+        "SOURCE_CHECK": "The paper describes a proteomics workflow (\"Proteome profiling with LC-MS/MS\") but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.",
+        "TRUTH_CHECK": "Since no fractionation is described for the proteomics samples, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text."
       }
     },
     {
@@ -128,10 +166,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the replicates field.",
-        "SOURCE_CHECK": "The paper explicitly states in the \"Proteome profiling with LC-MS/MS\" section that \"biological triplicates were grouped\" for calculating differential protein expression.",
-        "TRUTH_CHECK": "The value \"3\" is factually correct as it corresponds to the \"biological triplicates\" mentioned in the proteomics workflow.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the biological replication described for the MS experiment."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for biological replicates.",
+        "SOURCE_CHECK": "The text explicitly states in the \"Proteome profiling with LC-MS/MS\" section: \"biological triplicates were grouped\".",
+        "TRUTH_CHECK": "The value \"3\" is factually correct as \"triplicates\" means three replicates.",
+        "COMPLETENESS_CHECK": "The full set contains the single correct value mentioned for the proteomics experiment."
       }
     },
     {
@@ -147,9 +185,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the technical_replicates field.",
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention technical replicates for the mass spectrometry experiment; therefore, the safe default of \"1\" is applied.",
-        "TRUTH_CHECK": "In the absence of explicit mention of technical replicates, \"1\" is the correct default value.",
+        "TRUTH_CHECK": "In the absence of an explicit mention of technical replicates, \"1\" is the correct default value.",
         "COMPLETENESS_CHECK": "The full set contains only the default value, which is complete given the text."
       }
     },
@@ -166,10 +204,10 @@
       "error_category": "incomplete",
       "corrected_value": "trypsin, Lys-C",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the category for the cleavage_agent field.",
-        "SOURCE_CHECK": "The value is present in the \"Proteome profiling with LC-MS/MS\" section, where it states \"Protein lysates were then digested with trypsin/LysC combination\".",
-        "TRUTH_CHECK": "The paper explicitly mentions the use of a trypsin/LysC combination for protein digestion.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Lys-C\", but the paper explicitly mentions \"trypsin/LysC combination\", meaning \"trypsin\" is missing from the extraction."
+        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is present in the \"Proteome profiling with LC-MS/MS\" section, describing the digestion of the MS samples.",
+        "TRUTH_CHECK": "The paper explicitly states that \"Protein lysates were then digested with trypsin/LysC combination\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Lys-C\", but the paper explicitly mentions a \"trypsin/LysC combination\". Therefore, the extraction is incomplete."
       }
     },
     {
@@ -185,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a mass spectrometer make and model, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteome profiling with LC-MS/MS\" section as the instrument used for the proteomics analysis.",
-        "TRUTH_CHECK": "The paper states \"loaded on Orbitrap LC-MS (Thermo)\", confirming the instrument used.",
-        "COMPLETENESS_CHECK": "The full set contains the only instrument mentioned in the text for the MS experiment."
+        "TYPE_CHECK": "The candidate value describes a mass spectrometer make and model.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Proteome profiling with LC-MS/MS\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"loaded on Orbitrap LC-MS (Thermo)\", which identifies the instrument as a Thermo Orbitrap.",
+        "COMPLETENESS_CHECK": "The full set contains the only instrument mentioned for the proteomics experiment."
       }
     },
     {
@@ -204,10 +242,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper explicitly states \"Label-free quantification identified 4743 protein groups\" in the results section under \"Pervasive translational buffering in ground state ESCs\".",
-        "TRUTH_CHECK": "The value is factually correct; the paper uses label-free quantification and mentions no isobaric, metabolic, or chemical labeling (like TMT or SILAC).",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling method used for the MS experiment."
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods used in mass spectrometry.",
+        "SOURCE_CHECK": "The paper explicitly states in the \"Pervasive translational buffering in ground state ESCs\" section: \"Label-free quantification identified 4743 protein groups...\".",
+        "TRUTH_CHECK": "The value is factually correct as the paper specifies label-free quantification and mentions no isobaric or metabolic labeling (TMT, SILAC, etc.).",
+        "COMPLETENESS_CHECK": "The full set contains the only labeling method mentioned in the text."
       }
     },
     {
@@ -224,9 +262,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Proteome profiling with LC-MS/MS\" section (\"loaded on Orbitrap LC-MS (Thermo)\").",
-        "TRUTH_CHECK": "The value is factually correct as the paper explicitly mentions an Orbitrap instrument.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+        "SOURCE_CHECK": "The value is present in the paper text within the \"Proteome profiling with LC-MS/MS\" section, describing the instrument used for the MS analysis.",
+        "TRUTH_CHECK": "The paper explicitly states that peptides \"were loaded on Orbitrap LC-MS (Thermo)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only mass analyzer mentioned in the text."
       }
     },
     {
@@ -243,9 +281,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value is present in the paper text; the \"Proteome profiling with LC-MS/MS\" section states cells were lyzed in a buffer containing \"0.1 M DTT\" (dithiothreitol).",
-        "TRUTH_CHECK": "DTT is the standard abbreviation for dithiothreitol, and it was used in the lysis buffer for the proteomics samples.",
-        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned for the MS sample preparation."
+        "SOURCE_CHECK": "The value is present in the paper text; the \"Proteome profiling with LC-MS/MS\" section states cells were lyzed in a buffer containing \"0.1 M DTT\".",
+        "TRUTH_CHECK": "DTT is the standard abbreviation for dithiothreitol, making the value factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only reduction reagent mentioned in the proteomics workflow."
       }
     }
   ]

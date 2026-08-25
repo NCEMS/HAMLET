@@ -1,20 +1,20 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD013923","","strict","Biological","cell_line","A375, HEK293","A375, HEK293","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
-SOURCE CHECK: Both A375 and HEK293 are mentioned in the text; A375 was the primary subject of the global phosphoproteomics, and HEK293 was used for the affinity purification mass spectrometry experiment to validate interactions.
-TRUTH CHECK: Both cell lines were actually lysed and analyzed by mass spectrometry (A375 for the main study, HEK293 for the AP-MS validation).
-COMPLETENESS CHECK: The full set covers the cell lines used for MS analysis in the paper.
+"PXD013923","","strict","Biological","cell_line","A375, HEK293, HEK293T","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate values are names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: A375 is the primary cell line used for the global phosphoproteomics experiment; HEK293 was used for the affinity purification MS experiment; however, HEK293T is mentioned only in the context of a peptide array analysis using radiolabeling ([γ-33P]ATP), not mass spectrometry.
+TRUTH CHECK: A375 and HEK293 are correct MS sample sources, but HEK293T is not an MS sample source.
+COMPLETENESS CHECK: The set includes a non-MS cell line, making the extraction inaccurate.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","Biological","cell_type","melanoma cells","melanoma cells","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma cells"" describes a cell type/lineage, which fits the definition of the cell_type field.
-SOURCE CHECK: The value is explicitly mentioned in the abstract (""quantitative (phospho)-proteomics of human melanoma cells"") and the results section refers to A375 cells, which are a well-known melanoma cell line used for the MS analysis.
-TRUTH CHECK: The value is factually correct as the proteomics experiments were performed on A375 human melanoma cells.
-COMPLETENESS CHECK: The full set contains ""melanoma cells"", which accurately describes the cell type of the biological material analyzed by mass spectrometry.
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: A375, HEK293","A375, HEK293"
+"PXD013923","","strict","Biological","cell_type","melanoma cells","melanoma cells","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma cells"" describes a cell type/lineage, which fits the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the abstract (""quantitative (phospho)-proteomics of human melanoma cells"") and the results section refers to the A375 cell line, which is a well-known melanoma cell line used for the MS analysis.
+TRUTH CHECK: The value is factually correct as the proteomics experiments were performed on A375 melanoma cells.
+COMPLETENESS CHECK: The full set contains ""melanoma cells"", which accurately describes the cell type of the biological material analyzed by mass spectrometry in this study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -23,9 +23,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Biological","disease","melanoma","melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma"" is a disease state, which matches the field definition.
-SOURCE CHECK: The value is present in the abstract (""inhibiting tumor growth in melanoma patients"") and the results describe the use of A375 cells, which are a well-known human melanoma cell line.
-TRUTH CHECK: The study specifically investigates signaling responses in human melanoma cells (A375).
-COMPLETENESS CHECK: The full set of extracted values (""melanoma"") covers the disease state of the biological material analyzed by MS.
+SOURCE CHECK: The value is present in the text; the abstract explicitly mentions ""human melanoma cells"" and the results section specifies ""A375 cells"" (a well-known melanoma cell line) as the material analyzed by mass spectrometry.
+TRUTH CHECK: The value is factually correct as the study focuses on the RAF-MEK-ERK module in melanoma cells.
+COMPLETENESS CHECK: The full set of extracted values (""melanoma"") covers the disease state of the biological material used in the MS experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -55,10 +55,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","ExperimentalDesign","factor_value","treatment (dabrafenib, trametinib, SCH772984, DMSO)","treatment (dabrafenib, trametinib, SCH772984, DMSO) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental treatment groups, which is a correct category for a factor_value.
-SOURCE CHECK: The values (dabrafenib, trametinib, SCH772984, and DMSO) are explicitly mentioned as the treatment conditions for the A375 cells analyzed by mass spectrometry.
-TRUTH CHECK: The value is factually correct; the paper describes treating cells with these three inhibitors or a DMSO vehicle control.
-COMPLETENESS CHECK: The full set of extracted values covers both the treatment factor and the disease/cell type context (melanoma).
+"PXD013923","","strict","ExperimentalDesign","factor_value","inhibitor treatment (dabrafenib, trametinib, SCH772984, DMSO)","inhibitor treatment (dabrafenib, trametinib, SCH772984, DMSO) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (treatment conditions), which is the correct category for a factor_value.
+SOURCE CHECK: The value is explicitly present in the text, describing the treatment of A375 melanoma cells with dabrafenib, trametinib, SCH772984, or a DMSO vehicle control for the MS experiments.
+TRUTH CHECK: The value is factually correct as these are the four conditions compared in the quantitative phosphoproteomics study.
+COMPLETENESS CHECK: The full set of extracted values (""inhibitor treatment..."", ""melanoma"") covers both the experimental variable and the disease context of the samples.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -66,10 +66,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","ExperimentalDesign","factor_value","melanoma","treatment (dabrafenib, trametinib, SCH772984, DMSO) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma"" describes the disease state/characteristic of the samples, which is a valid category for factor_value.
-SOURCE CHECK: The paper states that quantitative proteomics was performed on ""human melanoma cells"" (A375 cell line), which were the actual MS samples.
-TRUTH CHECK: The value is factually correct as the study uses A375 melanoma cells.
-COMPLETENESS CHECK: The full set of extracted values covers both the disease state (melanoma) and the treatment conditions, which together describe the experimental design.
+"PXD013923","","strict","ExperimentalDesign","factor_value","melanoma","inhibitor treatment (dabrafenib, trametinib, SCH772984, DMSO) | melanoma","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""melanoma"" describes a disease state, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The paper describes the use of A375 cells, which are identified in the abstract as ""human melanoma cells"" and analyzed by mass spectrometry.
+TRUTH CHECK: The value is factually correct as the study focuses on the signaling responses in melanoma cells.
+COMPLETENESS CHECK: The full set of extracted values includes both the disease state (""melanoma"") and the treatment conditions, covering the primary experimental variables.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -80,7 +80,7 @@ CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","ExperimentalDesign","fractions","32","32","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
 SOURCE CHECK: The value is explicitly stated in the ""TiO2 enrichment of phosphorylated peptides"" section: ""Samples eluted from the Sep-Pak were then fractionated using strong cation exchange chromatography generating 32 fractions.""
 TRUTH CHECK: The value is factually correct based on the text.
-COMPLETENESS CHECK: The full set of extracted values contains this single correct value, which is exhaustive.
+COMPLETENESS CHECK: The full set contains the only mentioned number of fractions generated per sample.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -90,7 +90,7 @@ VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","ExperimentalDesign","replicates","3","3","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which matches the definition for biological replicates.
 SOURCE CHECK: The paper explicitly states in the ""Global phosphoproteomic analysis..."" section that ""Samples were analysed by LC-MS/MS on a Q-Exactive Orbitrap mass spectrometer in biological triplicate"".
-TRUTH CHECK: ""Biological triplicate"" is equivalent to 3 biological replicates.
+TRUTH CHECK: ""Biological triplicate"" means 3 biological replicates, so the value ""3"" is factually correct.
 COMPLETENESS CHECK: The full set contains the single correct value mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -102,7 +102,7 @@ CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention technical replicates; therefore, the safe default of ""1"" is applied.
 TRUTH CHECK: The value is correct as a safe default when the paper is silent on technical replication.
-COMPLETENESS CHECK: The full set contains the single safe default value, which is complete for this field.
+COMPLETENESS CHECK: The full set contains only the safe default, which is complete given the lack of information in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -110,11 +110,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
+"PXD013923","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
 SOURCE CHECK: The value is present in the paper text, which states the Q Exactive was run in ""DDA-MS2 top10 method"".
-TRUTH CHECK: ""data-dependent acquisition"" is the full name for the abbreviation ""DDA"" used in the text.
-COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the MS experiments.
-
+TRUTH CHECK: ""DDA"" is the standard abbreviation for ""data-dependent acquisition"", making the value factually correct.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -122,10 +121,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","Technical","alkylation_reagent","chloroacetamide","chloroacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""chloroacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+"PXD013923","","strict","Technical","alkylation_reagent","chloroacetamide","chloroacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a chemical reagent used for alkylation, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Sample preparation"" section of the methods (""Chloroacetamide was then added at 1 in 100 dilution"").
-TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.
-COMPLETENESS CHECK: The full set of extracted values contains only ""chloroacetamide"", which is the only alkylation reagent mentioned in the text.
+TRUTH CHECK: The value is factually correct as the reagent used for alkylation in the described proteomics workflow.
+COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -145,10 +144,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: Lys-C, trypsin","Lys-C, trypsin"
-"PXD013923","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: The value ""10 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The paper does not report the fragment mass tolerance used during the MaxQuant search.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+"PXD013923","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance measurement, which is the correct category for this field.
+SOURCE CHECK: The value ""10 ppm"" is not present anywhere in the provided paper text.
+TRUTH CHECK: Since the value is not mentioned in the text, it cannot be verified as correct.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -157,9 +156,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
-SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not mentioned in the provided paper text.
-TRUTH CHECK: While the instrument used (Q Exactive) typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase ""beam-type collision-induced dissociation"" does not appear in the text.
-COMPLETENESS CHECK: The full set contains only this value, but since it is not in the text, it is not a valid extraction.
+SOURCE CHECK: The value is not mentioned in the provided text.
+TRUTH CHECK: The text mentions a ""Q Exactive"" instrument and ""DDA-MS2"", but it does not explicitly name the fragmentation method (e.g., HCD or beam-type CID).
+COMPLETENESS CHECK: The full set is insufficient as the value is not present in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -168,9 +167,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Technical","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The value is explicitly mentioned in the text (""analysed on a ThermoFisher Scientific Q Exactive mass spectrometer"").
-TRUTH CHECK: The value is factually correct as per the paper.
-COMPLETENESS CHECK: The full set contains the only instrument mentioned for the MS analysis.
+SOURCE CHECK: The value is explicitly mentioned in the text (""analysed on a ThermoFisher Scientific Q Exactive mass spectrometer"") in the context of the MS analysis.
+TRUTH CHECK: The value is factually correct as per the paper text.
+COMPLETENESS CHECK: The full set contains the only instrument mentioned for the MS experiments.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -178,10 +177,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper explicitly mentions the use of a ""Q-Exactive Orbitrap mass spectrometer"" for the analysis of the A375 cells and the HEK293 cells.
-TRUTH CHECK: The value is factually correct as the Q-Exactive instrument utilizes an Orbitrap mass analyzer.
-COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned in the text.
+"PXD013923","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the text, which mentions a ""Q-Exactive Orbitrap mass spectrometer"" used for the MS analysis.
+TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one mass analyzer type is mentioned.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -192,7 +191,7 @@ CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry searches"" section of the methods.
 TRUTH CHECK: The paper states ""cysteine carbamidomethylation was set as a fixed modification,"" which is an unambiguous synonym for ""Carbamidomethyl (C)"".
-COMPLETENESS CHECK: The full set of extracted values (""Carbamidomethyl (C)"", ""Oxidation (M)"", ""Phospho (STY)"") covers all modifications explicitly listed in the ""Mass spectrometry searches"" section (carbamidomethylation, methionine oxidation, and serine/threonine/tyrosine phosphorylation).
+COMPLETENESS CHECK: The full set of extracted values (""Carbamidomethyl (C)"", ""Oxidation (M)"", ""Phospho (STY)"") covers all modifications explicitly listed in the text (carbamidomethylation, methionine oxidation, and serine/threonine/tyrosine phosphorylation).
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -203,7 +202,7 @@ CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Technical","modification","Oxidation (M)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification with its target residue, which matches the field definition.
 SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry searches"" section of the paper.
 TRUTH CHECK: The paper states ""Methionine oxidation... were set as variable modifications"", which is equivalent to ""Oxidation (M)"".
-COMPLETENESS CHECK: The full set of extracted values covers the fixed and variable modifications explicitly listed in the text (carbamidomethylation, methionine oxidation, N-terminal acetylation, and phosphorylation).
+COMPLETENESS CHECK: The full set of extracted values covers the fixed and variable modifications explicitly listed in the text (carbamidomethylation, methionine oxidation, N-terminal acetylation, and phosphorylation). Note: ""Phospho (STY)"" is a synonym for the mentioned ""serine/threonine/tyrosine phosphorylation"".
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -212,10 +211,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD013923","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification and its target residues, which matches the field definition.
+"PXD013923","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Oxidation (M) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification with target residues, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""serine/threonine/tyrosine phosphorylation"" as a variable modification in the ""Mass spectrometry searches"" section.
 TRUTH CHECK: ""Phospho (STY)"" is a standard abbreviation/representation of ""serine/threonine/tyrosine phosphorylation"".
-COMPLETENESS CHECK: The full set of extracted values (Carbamidomethyl, Oxidation, Phospho) covers all modifications explicitly listed in the ""Mass spectrometry searches"" section.
+COMPLETENESS CHECK: The full set of extracted values (""Carbamidomethyl (C)"", ""Oxidation (M)"", ""Phospho (STY)"") covers all modifications explicitly listed in the ""Mass spectrometry searches"" section (carbamidomethylation, methionine oxidation, and phosphorylation).
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -224,9 +223,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD013923","","strict","Technical","precursor_mass_tolerance","9.6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
-SOURCE CHECK: The value ""9.6 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The value is not mentioned in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set of extracted values is insufficient as the value is not in the text.
+SOURCE CHECK: The value ""9.6 ppm"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set contains only one value, which is not present in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

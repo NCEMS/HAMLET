@@ -12,9 +12,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"human myeloid lineages\", \"human database\", and the use of human AML cell lines (HL60, U937) and primary patient samples.",
-        "TRUTH_CHECK": "The experiments were performed using human cells and the proteomics search was conducted against the Swiss-Prot human database.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which exhaustively covers the source organism described in the paper."
+        "SOURCE_CHECK": "The paper mentions \"human myeloid lineages\", \"human database\", and \"AML patient Bone Marrow Mononuclear Cells\", making \"Homo sapiens\" a correct and inferable value.",
+        "TRUTH_CHECK": "The experiment uses human cell lines (HL60, U937) and primary human patient samples.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which covers all biological sources used in the proteomics experiments described."
       }
     },
     {
@@ -29,24 +29,24 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"blood\" is a valid organ/tissue type.",
         "SOURCE_CHECK": "The paper mentions \"AML patient bone marrow mononuclear cells (BMNCs)\" and \"hematopoietic lineages,\" but does not explicitly use the word \"blood\" as the organ of origin for the samples.",
-        "TRUTH_CHECK": "While AML is a blood cancer and BMNCs are derived from bone marrow, \"blood\" is a slight supertype/approximation; the text specifically identifies \"bone marrow\" for the primary patient samples.",
-        "COMPLETENESS_CHECK": "The full set contains only \"blood,\" which is an approximation of the specific \"bone marrow\" mentioned in the text."
+        "TRUTH_CHECK": "While AML is a blood cancer and BMNCs are derived from bone marrow, the specific organ/tissue mentioned is \"bone marrow.\" \"Blood\" is a reasonable inference for hematopoietic cells, but \"bone marrow\" is the explicit source.",
+        "COMPLETENESS_CHECK": "The full set contains only \"blood,\" which misses the explicitly mentioned \"bone marrow.\""
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "AML cells",
-      "verdict": "high",
+      "extracted_value": "myeloid cell",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"AML cells\" refers to a cell lineage/type, which fits the definition of cell_type.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"AML cells\" and \"primary patient cells\" (AML bone marrow mononuclear cells) throughout the text.",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on Acute Myeloid Leukemia (AML) cells.",
-        "COMPLETENESS_CHECK": "The full set contains \"AML cells\", which accurately captures the primary cell lineage studied."
+        "TYPE_CHECK": "The candidate value \"myeloid cell\" describes a cell lineage, which fits the definition of cell_type.",
+        "SOURCE_CHECK": "The paper mentions \"human myeloid lineages\" in the Gene expression profiling data analysis section.",
+        "TRUTH_CHECK": "The study focuses on Acute Myeloid Leukemia (AML) and analyzes myeloid lineages; however, the primary experimental materials used for the proteomics/MS experiments were HL60 and U937 cell lines, and primary patient bone marrow mononuclear cells (BMNCs).",
+        "COMPLETENESS_CHECK": "The full set only contains \"myeloid cell\", but the paper specifically identifies the primary cells as \"bone marrow mononuclear cells\" (BMNCs). \"Myeloid cell\" is a broad lineage description used in the context of database queries, whereas the actual experimental samples are more specific."
       }
     },
     {
@@ -59,26 +59,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the title and throughout the text (e.g., \"treatment of acute myeloid leukemia (AML)\").",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on AML.",
-        "COMPLETENESS_CHECK": "The full set contains the primary disease studied; while \"normal\" is mentioned for comparison in the BloodSpot database, the core experimental focus is AML."
+        "TYPE_CHECK": "The candidate value \"acute myeloid leukemia\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The text explicitly mentions \"acute myeloid leukemia (AML)\" multiple times in the title, abstract, and results.",
+        "TRUTH_CHECK": "The study focuses on the effects of tivantinib in AML cell lines and primary patient cells.",
+        "COMPLETENESS_CHECK": "The full set contains \"acute myeloid leukemia\", which covers the primary disease state described in the paper."
       }
     },
     {
       "annotation_type": "material_type",
-      "extracted_value": "HL60 and U937 cells",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
+      "extracted_value": "cell lines",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
       "value_complete": false,
       "hallucination": false,
       "corrected_value": "cell line, primary cells",
       "issue_summary": {
-        "TYPE_CHECK": "No. The candidate value provides specific cell line names rather than a broad material class as required by the definition.",
-        "SOURCE_CHECK": "Yes. HL60 and U937 are mentioned as the cells used in the proteomics experiments.",
-        "TRUTH_CHECK": "Yes. These are indeed the cells used.",
-        "COMPLETENESS_CHECK": "No. The full set contains specific names instead of the category \"cell line\", and it misses the \"primary cells\" (BMNCs) also used in the study."
+        "TYPE_CHECK": "The candidate value \"cell lines\" matches the defined category for material_type.",
+        "SOURCE_CHECK": "The paper explicitly mentions using HL60 and U937 AML cell lines for the proteomics experiments.",
+        "TRUTH_CHECK": "The value is factually correct as cell lines were used in the drug affinity chromatography and subsequent MS analysis.",
+        "COMPLETENESS_CHECK": "The paper also describes experiments using \"primary AML patient Bone Marrow Mononuclear Cells (BMNCs)\", which are primary cells. The full set of extracted values only contains \"cell lines\", missing the primary cells used in the study."
       }
     },
     {
@@ -91,10 +91,10 @@
       "hallucination": false,
       "corrected_value": "HL60, U937",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"HL60\" is a name of an immortalized cell line, which matches the field definition.",
         "SOURCE_CHECK": "The value \"HL60\" is explicitly mentioned multiple times in the text (e.g., \"we treated HL60 and U937 AML cell lines\").",
-        "TRUTH_CHECK": "The value is factually correct as HL60 is one of the cell lines used in the study.",
-        "COMPLETENESS_CHECK": "The full set of extracted values [\"HL60\"] is incomplete because the paper also explicitly mentions the \"U937\" cell line."
+        "TRUTH_CHECK": "The value is factually correct as HL60 is one of the AML cell lines used in the experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"HL60\"] is incomplete because the paper also explicitly uses the \"U937\" cell line for the same proteomics and viability experiments."
       }
     },
     {
@@ -107,9 +107,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"electrospray bench top orbitrap mass spectrometer (Q-Exactive plus, Thermo Fisher)\".",
-        "TRUTH_CHECK": "The value is factually correct as stated in the methods section.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The text explicitly mentions a \"Q-Exactive plus, Thermo Fisher\" mass spectrometer.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the \"Proteomics and bioinformatic analysis\" section.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -124,9 +124,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
-        "SOURCE_CHECK": "The paper does not mention any isobaric or metabolic labeling (like TMT or SILAC); it uses total spectral counts for abundance, which is a label-free approach.",
-        "TRUTH_CHECK": "The value is factually correct as no labeling was used.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this experiment."
+        "SOURCE_CHECK": "The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, \"label-free\" is a safe default.",
+        "TRUTH_CHECK": "The proteomics analysis used total spectral counts for abundance, which is a label-free quantification method.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods were used."
       }
     },
     {
@@ -140,25 +140,41 @@
       "corrected_value": "1",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"biological replicates\" is a description of the field, not a numeric count as required by the definition.",
-        "SOURCE_CHECK": "The paper mentions \"good reproducibility between biological replicates\" and \"good correlations between biological replicates,\" but it does not specify the exact number of replicates.",
-        "TRUTH_CHECK": "The value is not a numeric count; it is the name of the concept.",
-        "COMPLETENESS_CHECK": "The full set does not provide a numeric value. According to the field definition, \"1\" is the correct value when no specific number of replicates is mentioned."
+        "SOURCE_CHECK": "The paper mentions \"good reproducibility between biological replicates\" in the results section, but does not provide a specific number.",
+        "TRUTH_CHECK": "The value is not a count; it is the name of the concept.",
+        "COMPLETENESS_CHECK": "The full set does not provide a numeric value. According to the field definition, \"1\" should be used when no specific number of replicates is mentioned."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "comparison of c-(−)-tivantinib, c-(+)-tivantinib, and ampicillin (blocked beads) pulldowns",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "treated vs control",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a specific experimental comparison rather than a study design type (e.g., \"treated vs control\").",
+        "SOURCE_CHECK": "The comparison of these specific pulldowns is mentioned in the \"Proteomics and bioinformatic analysis\" section.",
+        "TRUTH_CHECK": "While the comparison occurred, the value is a description of the sample groups rather than the \"experimental design\" category requested by the field definition.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of the groups rather than a design type."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "bait/condition (c-(−)-tivantinib, c-(+)-tivantinib, ampicillin, BIO competition)",
-      "verdict": "high",
+      "extracted_value": "ligand (c-(−)-tivantinib, c-(+)-tivantinib, ampicillin)",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "ligand (c-(−)-tivantinib, c-(+)-tivantinib, ampicillin), drug treatment (tivantinib, ABT-199, LiCl), cell line (HL60, U937)",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental conditions/variables (baits and competition) used in the drug affinity chromatography experiment, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The values \"c-(−)-tivantinib\", \"c-(+)-tivantinib\", \"ampicillin\", and \"BIO\" are explicitly mentioned in the \"Proteomics and bioinformatic analysis\" section as the immobilized compounds and competition agents.",
-        "TRUTH_CHECK": "The values are factually correct as they represent the different experimental arms of the proteomics study.",
-        "COMPLETENESS_CHECK": "The full set captures the primary variables of the proteomics experiment, although the broader study also includes other factors like cell lines (HL60, U937) and drug combinations (ABT-199). However, for the proteomics-specific part of the study, this is exhaustive."
+        "TYPE_CHECK": "The candidate value describes the experimental variables (different ligands) used in the drug affinity chromatography experiment, which fits the definition of a factor value.",
+        "SOURCE_CHECK": "The ligands \"c-(−)-tivantinib\", \"c-(+)-tivantinib\", and \"ampicillin\" are explicitly mentioned in the \"Proteomics and bioinformatic analysis\" section as being immobilized on resin.",
+        "TRUTH_CHECK": "The value is factually correct as these were the different baits/ligands used to compare protein interactions.",
+        "COMPLETENESS_CHECK": "The full set contains only this value; however, the paper also studies other factors such as drug combinations (tivantinib vs ABT-199) and cell lines (HL60 vs U937). While the extracted value is correct for the proteomics part, the overall experimental design includes more factors."
       }
     },
     {
@@ -171,10 +187,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes a liquid chromatography-mass spectrometry (LC-MS) setup but does not mention any offline fractionation steps (e.g., high-pH RP or SAX) prior to the analytical run.",
-        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which correctly represents the lack of fractionation."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct as no fractionation was described in the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this experiment."
       }
     },
     {
@@ -184,13 +200,13 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The paper mentions \"4 of 7 patients\" in the context of synergy analysis for primary samples, but it does not provide a total count of all samples processed across the entire study (which includes multiple cell lines and multiple patient samples).",
-        "TRUTH_CHECK": "The value \"4\" refers specifically to the number of patients showing synergy in one specific experiment, not the total number of samples processed in the study.",
-        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and does not represent the total sample count."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number_of_samples field.",
+        "SOURCE_CHECK": "The value \"4\" is not explicitly mentioned in the text as the total number of samples; while four baits/controls are listed (c-(−)-tivantinib, c-(+)-tivantinib, ampicillin, and blocked beads), the study used two different cell lines (HL60 and U937) and mentioned biological replicates.",
+        "TRUTH_CHECK": "The value is likely incorrect because the total number of samples processed for the proteomics analysis would be at least the number of baits multiplied by the number of cell lines (4 x 2 = 8), further increased by the mentioned biological replicates.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which does not accurately reflect the experimental design described."
       }
     }
   ]

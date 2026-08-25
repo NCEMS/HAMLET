@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD012755","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human ASD vs. control brain"" and the use of the ""human UniProt database.""
-TRUTH CHECK:       The source organism is indeed human (Homo sapiens).
-COMPLETENESS CHECK: The full set contains the only species involved in the study.
+SOURCE CHECK:      The paper explicitly mentions ""human ASD vs. control brain"" and the use of the ""human UniProt database"".
+TRUTH CHECK:       The study uses human brain samples, making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK: The full set contains the only species used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -10,40 +10,39 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012755","BiologicalAgent","organ","brain","brain","medium","False","","True","False","False","TYPE CHECK:        Yes, ""brain"" is an organ/tissue.
-SOURCE CHECK:      Yes, the paper explicitly mentions ""human ASD vs. control brain"" and ""brain samples"".
-TRUTH CHECK:       Yes, the source material is brain tissue.
-COMPLETENESS CHECK:The full set contains ""brain"", but the paper specifies two distinct regions: ""Brodmann area 19 (BA19) [occipital cortex]"" and ""posterior inferior cerebellum (CB)"". While ""brain"" is correct, it is a supertype of the specific regions described.
+"PXD012755","BiologicalAgent","organ","brain","brain","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""brain"" is a valid organ/tissue category.
+SOURCE CHECK:      The paper explicitly mentions ""human ASD vs. control brain"" and ""brain samples"" throughout the text.
+TRUTH CHECK:       The value is factually correct as the study focuses on brain tissue.
+COMPLETENESS CHECK:The paper specifies two specific regions: ""Brodmann area 19 (BA19)"" (occipital cortex) and ""posterior inferior cerebellum (CB)"". While ""brain"" is correct, the full set of extracted values is not exhaustive of the specific regions described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""Brodmann area 19"", ""posterior inferior cerebellum""]","Brodmann area 19, posterior inferior cerebellum"
-"PXD012755","BiologicalAgent","disease","ASD","ASD","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""ASD"" is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""Autism Spectrum Disorder (ASD)"" throughout the title, abstract, and methods.
-TRUTH CHECK:       The value is factually correct as the study compares ASD cases against controls.
-COMPLETENESS CHECK: The full set of extracted values only contains ""ASD"", but the paper also describes ""matched controls"". According to the field definition, ""normal"" or ""healthy"" should be included for healthy controls.
-
+CORRECTED_VALUE:   [""Brodmann area 19"", ""posterior inferior cerebellum""]",""
+"PXD012755","BiologicalAgent","disease","Autism Spectrum Disorder","Autism Spectrum Disorder","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The value is explicitly mentioned in the title and abstract (""Autism Spectrum Disorder (ASD)"").
+TRUTH CHECK:       The value is factually correct as the study focuses on ASD cases versus controls.
+COMPLETENESS CHECK:    The full set contains ""Autism Spectrum Disorder""; however, the paper also describes a ""control"" group. According to the field definition, ""normal"" or ""healthy"" should be included for healthy controls.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""ASD"", ""control""]","ASD, control"
-"PXD012755","BiologicalAgent","material_type","subjects","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""subjects"" is not one of the allowed broad material classes (e.g., ""tissue"", ""cell line"", ""biofluid"") defined for this field.
-SOURCE CHECK:      The paper mentions ""subjects"" in the context of the donors, but the actual material analyzed was brain tissue.
-TRUTH CHECK:       The material used for the proteomic analysis was brain tissue (specifically BA19 and CB regions), not ""subjects"" (which refers to the organisms).
-COMPLETENESS CHECK: The full set contains only ""subjects"", which is an incorrect category and does not describe the material type.
+CORRECTED_VALUE:   [""Autism Spectrum Disorder"", ""control""]","Autism Spectrum Disorder, control"
+"PXD012755","BiologicalAgent","material_type","idiopathic ASD cases and matched controls","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       no
+COMPLETENESS CHECK:no
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""tissue""]","tissue"
+CORRECTED_VALUE:   tissue","tissue"
 "PXD012755","TechnicalAgent","instrument","Orbitrap Elite","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The text mentions ""HPLC-tandem mass spectrometry"" and ""Reverse phase LC-MS/MS"", but it does not mention the ""Orbitrap Elite"" or any specific mass spectrometer make and model.
 TRUTH CHECK:       The value is not supported by the provided text.
@@ -55,21 +54,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD012755","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK: The paper explicitly mentions ""label-free HPLC-tandem mass spectrometry"" in the abstract and ""global label-free expression proteomic analysis"" in the methods.
-TRUTH CHECK: The value is factually correct as the study used a label-free approach for its global proteomic analysis.
-COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive for the global analysis described.
-TYPE_CORRECT: yes
+"PXD012755","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions ""label-free HPLC-tandem mass spectrometry"" in the abstract and ""global, label-free proteomic analysis"" in the results and methods.
+TRUTH CHECK:       The value is factually correct as the study used a label-free approach for its global proteomic analysis.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label-free"", which exhaustively describes the labeling method used for the primary experiment.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD012755","ExperimentalDesignAgent","replicates","human subjects (ASD and control)","31","low","True","","False","False","False","TYPE CHECK:        No, the candidate value is a description of the subjects, not a numeric count of biological replicates.
-SOURCE CHECK:      The text mentions the subjects are human ASD and control cases, but this is not the ""replicates"" count.
-TRUTH CHECK:       The value is factually a description of the study group, but it is the wrong category of information for this field.
-COMPLETENESS CHECK:The full set contains both a description and a number (""31""), but the description is a type mismatch.
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012755","ExperimentalDesignAgent","replicates","human subjects (ASD and control)","31","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human subjects (ASD and control)"" is a description of the study population, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ASD and control subjects, but the candidate value does not represent the number of replicates.
+TRUTH CHECK:       The value is factually a description of the subjects, but it is incorrect for the field 'replicates', which requires a numeric count.
+COMPLETENESS CHECK: The full set contains both a description and a number (""31""), but the description is a type mismatch.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -77,10 +76,11 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD012755","ExperimentalDesignAgent","replicates","31","31","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper states tissues were procured from a total of 9 ASD and 9 control subjects (18 total), and later specifies available tissue for CB (9 ASD, 9 control = 18) and BA19 (7 ASD, 6 control = 13). The sum of these specific available samples is 18 + 13 = 31.
-TRUTH CHECK:       The value 31 represents the total number of biological samples/replicates processed across the two brain regions, which is factually supported by the methods section.
-COMPLETENESS CHECK:    The set of all_extracted_values includes a descriptive string (""human subjects..."") and the numeric count ""31""; together they describe the biological replication of the study.
+"PXD012755","ExperimentalDesignAgent","replicates","31","31","high","False","","True","True","False","TYPE CHECK:        The candidate value ""31"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper mentions 9 ASD and 9 control subjects for CB (18 total) and 7 ASD and 6 control subjects for BA19 (13 total). 18 + 13 = 31.
+TRUTH CHECK:       The value 31 represents the total number of biological samples/subjects processed across both brain regions, which serves as the biological replication for the study.
+COMPLETENESS CHECK: The full set of extracted values includes ""human subjects (ASD and control)"", which is a type mismatch for a numeric field, but the numeric value ""31"" correctly captures the total count of biological replicates.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -88,10 +88,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012755","ExperimentalDesignAgent","technical_replicates","rerun","1","low","True","","False","False","True","TYPE CHECK:        The candidate value ""rerun"" is not a numeric count, which is the required category for the technical_replicates field.
-SOURCE CHECK:      The word ""rerun"" does not appear in the provided text in the context of technical replication.
-TRUTH CHECK:       The paper does not mention performing technical replicates for the samples.
-COMPLETENESS CHECK: The full set contains ""rerun"" (incorrect) and ""1"" (a safe default when the paper is silent).
+"PXD012755","ExperimentalDesignAgent","technical_replicates","rerun","","low","True","","False","False","True","TYPE CHECK:        The candidate value ""rerun"" is a descriptive term, not a numeric count as required by the field definition.
+SOURCE CHECK:      The word ""rerun"" does not appear in the provided paper text in the context of technical replicates.
+TRUTH CHECK:       The paper does not specify the number of technical replicates performed per sample.
+COMPLETENESS CHECK:The full set contains a non-numeric, hallucinated value and does not provide the actual count.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: technical_replicates
 VALUE_CORRECT:     no
@@ -99,21 +99,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD012755","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper does not mention technical replicates; per the safe defaults, ""1"" is correct when the paper is silent.
-TRUTH CHECK:       The value is a valid default for an experiment where no technical replication is explicitly described.
-COMPLETENESS CHECK: The full set of extracted values [""rerun"", ""1""] is inconsistent; ""rerun"" is not a numeric count and does not belong in this field, while ""1"" is the correct default.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""1""]",""
-"PXD012755","ExperimentalDesignAgent","experimental_design","Comparison of ASD vs control across two brain regions (BA19 and CB)","Comparison of ASD vs control across two brain regions (BA19 and CB)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the study design (comparing cases vs controls across regions).
-SOURCE CHECK:      Yes, the text explicitly states the study characterized proteomes of human ASD vs. control brain in two regions (BA19 and CB).
-TRUTH CHECK:       Yes, the value accurately reflects the experimental setup described in the abstract and methods.
-COMPLETENESS CHECK:The full set contains a single value that comprehensively describes the primary design of the study.
+"PXD012755","ExperimentalDesignAgent","experimental_design","case-control comparison across two brain regions (BA19 and CB)","case-control comparison across two brain regions (BA19 and CB)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (case-control comparison), which matches the field definition.
+SOURCE CHECK:      The paper explicitly compares ""idiopathic ASD cases and matched controls"" across two brain regions (BA19 and CB).
+TRUTH CHECK:       The value is factually correct based on the abstract and methods sections.
+COMPLETENESS CHECK: The full set of extracted values accurately captures the experimental design described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,10 +110,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012755","ExperimentalDesignAgent","factor_value","condition (ASD, Control), brain region (BA19, CB)","condition (ASD, Control), brain region (BA19, CB)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variables (condition and brain region) and their levels, which matches the definition of a factor value.
-SOURCE CHECK:      The paper explicitly mentions comparing ""ASD vs. control brain"" and analyzing ""two brain regions, Brodmann area 19 (BA19) and posterior inferior cerebellum (CB)"".
+"PXD012755","ExperimentalDesignAgent","factor_value","condition (ASD, Control), brain region (BA19, CB)","condition (ASD, Control), brain region (BA19, CB)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variables (condition and brain region) and their levels, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions comparing ""ASD vs. control brain"" and characterizing ""two brain regions, Brodmann area 19 (BA19) and posterior inferior cerebellum (CB)"".
 TRUTH CHECK:       The values are factually correct based on the study design described in the abstract and methods.
-COMPLETENESS CHECK: The full set captures both the primary disease state factor and the anatomical region factor used in the study.
+COMPLETENESS CHECK: The full set captures both primary experimental factors (disease state and anatomical region) used in the analysis.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -133,9 +122,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD012755","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
-TRUTH CHECK:       The value is correct as no fractionation was described.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the study.
+SOURCE CHECK:      The paper does not mention any offline fractionation method (e.g., high-pH RP or SAX) before LC-MS/MS; therefore, ""1"" is a safe default.
+TRUTH CHECK:       The value is factually correct as no fractionation is described.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -143,14 +132,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012755","ExperimentalDesignAgent","number_of_samples","32","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text states that for the CB region, there were 9 ASD and 9 control subjects (18 total), and for the BA19 region, there were 7 ASD and 6 control subjects (13 total). 18 + 13 = 31.
-TRUTH CHECK:       The calculation from the text (18 CB samples + 13 BA19 samples) equals 31, not 32.
-COMPLETENESS CHECK: The full set contains only the incorrect value.
+"PXD012755","ExperimentalDesignAgent","number_of_samples","31","31","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The text states that for CB (cerebellum), tissue was available from 9 ASD and 9 control subjects (18 samples), and for BA19, tissue was available from 7 ASD and 6 control subjects (13 samples). 18 + 13 = 31.
+TRUTH CHECK:       The calculation is factually correct based on the ""Subjects and samples"" section of the methods.
+COMPLETENESS CHECK: The full set contains the total count of samples processed across both brain regions.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   31","31"
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

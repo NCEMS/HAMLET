@@ -1,7 +1,7 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD012131","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper explicitly mentions ""Human Brain"" in the title and ""human proteome"" in the methods.
-TRUTH CHECK: The study is performed on human brain tissue, making ""Homo sapiens"" factually correct.
+TRUTH CHECK: The study is performed on human brain tissue, making ""Homo sapiens"" correct.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -10,8 +10,8 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD012131","BiologicalAgent","organ","brain","brain","high","False","","True","True","False","TYPE CHECK:        The candidate value ""brain"" is an organ, which matches the field definition.
-SOURCE CHECK:      The paper title (""Proteomic Atlas of the Human Brain"") and text explicitly state the study is on the human brain.
+"PXD012131","BiologicalAgent","organ","brain","brain","high","False","","True","True","False","TYPE CHECK:        The candidate value ""brain"" is a valid organ/tissue name.
+SOURCE CHECK:      The paper title (""Proteomic Atlas of the Human Brain"") and abstract explicitly state the study is on the human brain.
 TRUTH CHECK:       The value is factually correct as the source material is brain tissue.
 COMPLETENESS CHECK: The full set contains ""brain"", which accurately describes the organ of origin for all samples in the study.
 TYPE_CORRECT:      yes
@@ -22,9 +22,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD012131","BiologicalAgent","cell_type","neuron","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""neuron"" is a cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""neuronal tissue"" and ""cell body density of neuronal tissue,"" but it does not explicitly state that the experiment was performed on isolated neurons; rather, it was performed on whole brain tissue sections.
-TRUTH CHECK:       The experiment used whole brain tissue sections (organs/tissues), not a purified cell type. While neurons are a primary component of the brain, ""neuron"" as a cell_type extraction implies the sample was specifically that cell type.
-COMPLETENESS CHECK: The full set contains only ""neuron,"" which is an incorrect characterization of the material used.
+SOURCE CHECK:      The paper mentions ""neuronal tissue"" in the Results section, but it does not explicitly state that the experiment was performed on isolated neurons; rather, it describes the analysis of whole brain tissue sections.
+TRUTH CHECK:       The study is a proteomic atlas of brain sections (tissues), not a study of a specific cell type. While neurons are the primary cells in the brain, the material used was ""tissue sections,"" not purified ""neurons.""
+COMPLETENESS CHECK: The full set contains only ""neuron,"" which is an incorrect characterization of the sample material.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -32,21 +32,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD012131","BiologicalAgent","disease","Alzheimer’s Disease","Alzheimer’s Disease","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease name, which matches the field definition.
+"PXD012131","BiologicalAgent","disease","Alzheimer’s Disease","Alzheimer’s Disease","high","False","","True","True","False","TYPE CHECK:        The candidate value is a disease name, which matches the field definition.
 SOURCE CHECK:      The value is explicitly mentioned in the title and abstract (""Alzheimer’s Disease (AD)"").
 TRUTH CHECK:       The value is factually correct as the study focuses on the proteomic atlas of the human brain in Alzheimer's Disease.
-COMPLETENESS CHECK: The full set contains ""Alzheimer’s Disease"", but the paper also mentions ""healthy age-matched controls"" and ""healthy, aged brains"". According to the definition, ""healthy"" or ""normal"" should be included for control subjects.
+COMPLETENESS CHECK: The paper describes both AD-afflicted individuals and healthy age-matched controls; however, ""Alzheimer's Disease"" is the primary disease state under study. While ""healthy"" or ""normal"" could be added to represent the control group, the current set accurately captures the disease of interest.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""Alzheimer’s Disease"", ""healthy""]","Alzheimer’s Disease, healthy"
-"PXD012131","BiologicalAgent","material_type","aged individuals","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""aged individuals"" describes the subjects/donors, not the broad material class (e.g., tissue, biofluid).
-SOURCE CHECK:      The text mentions ""aged individuals,"" but this refers to the source of the material, not the material type itself.
-TRUTH CHECK:       The material used was brain tissue (""nine anatomically distinct sections"", ""Tissue sections were lysed""), not ""individuals"".
-COMPLETENESS CHECK: The full set contains only a value that is a type mismatch.
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012131","BiologicalAgent","material_type","individuals","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""individuals"" refers to the subjects, not the broad material class (e.g., tissue, biofluid) as required by the definition.
+SOURCE CHECK:      The paper mentions ""three aged individuals,"" but the material actually processed was ""tissue sections"" and ""brain samples.""
+TRUTH CHECK:       The material used for the proteomics experiment was brain tissue, not the ""individuals"" themselves.
+COMPLETENESS CHECK: The full set contains only ""individuals,"" which is the wrong category of information.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -54,17 +54,17 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue""]","tissue"
-"PXD012131","BiologicalAgent","age","aged","aged","high","False","","True","True","False","TYPE CHECK: The candidate value ""aged"" is a description of a life stage/age group, which fits the category of age/developmental stage.
-SOURCE CHECK: The paper explicitly mentions ""three aged individuals"" and an ""aged cohort"" multiple times.
-TRUTH CHECK: The value is factually correct as the study specifically focuses on aged human populations.
-COMPLETENESS CHECK: While ""aged"" is correct, the paper mentions a comparison to a previous study's ""adult"" group (23–40 years old), but the primary subjects of this study are only described as ""aged"" without specific numeric ages provided. The full set contains the only available descriptor for the study's subjects.
-TYPE_CORRECT: yes
+"PXD012131","BiologicalAgent","age","aged","aged","high","False","","True","True","False","TYPE CHECK:        The candidate value ""aged"" is a descriptive term for a developmental stage or age group, but not a specific age or age range.
+SOURCE CHECK:      The term ""aged"" is used throughout the text (e.g., ""three aged individuals"", ""aged cohort"").
+TRUTH CHECK:       The paper describes the subjects as ""aged"", but does not provide a specific numeric age or range for the primary cohort.
+COMPLETENESS CHECK:The full set contains only ""aged"", which is the only age-related descriptor provided for the main study subjects.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD012131","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
 SOURCE CHECK: The text explicitly mentions ""Fusion Lumos Mass Spectrometer"" and ""Thermo Orbitrap Fusion Lumos"".
 TRUTH CHECK: The value is factually correct based on the provided text.
@@ -76,10 +76,43 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD012131","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
-SOURCE CHECK: The paper does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC); it mentions ""fast LFQ"" (Label-Free Quantification) in the Data Searching & Analysis section.
-TRUTH CHECK: The use of ""fast LFQ"" confirms that the experiment was label-free.
-COMPLETENESS CHECK: The full set of extracted values consists of ""label-free"", which completely describes the labeling approach used in this study.
+"PXD012131","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (like TMT or SILAC); it mentions ""fast LFQ"" (Label-Free Quantification) in the Data Searching & Analysis section.
+TRUTH CHECK:       The use of ""fast LFQ"" confirms the experiment was label-free.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012131","ExperimentalDesignAgent","replicates","3 aged individuals","3 aged individuals | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3 aged individuals"" contains the correct category (numeric count) but includes descriptive text.
+SOURCE CHECK:      The text states ""nine anatomically distinct sections from three aged individuals"".
+TRUTH CHECK:       The number of biological replicates (individuals) is indeed 3.
+COMPLETENESS CHECK:The full set contains both the descriptive phrase and the numeric value ""3"", which accurately covers the biological replication described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012131","ExperimentalDesignAgent","replicates","3","3 aged individuals | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The abstract states the resource comprises sections from ""three aged individuals,"" and the results mention ""three sample from that region"" (referring to the AMY section).
+TRUTH CHECK:       The study used three biological donors (aged individuals) as the source for the brain sections.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the number of biological replicates as 3.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012131","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention technical replicates; per the safe defaults rule, ""1"" is correct when the paper is silent.
+TRUTH CHECK: There is no information in the text to contradict the assumption of a single technical measurement per sample.
+COMPLETENESS CHECK: The full set contains the default value ""1"", which is exhaustive given the lack of explicit mention in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -88,21 +121,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD012131","ExperimentalDesignAgent","replicates","3 aged individuals","3","high","False","","True","True","False","TYPE CHECK:        The candidate value contains a numeric count of biological subjects, but includes descriptive text (""aged individuals"") which is not the requested format (numeric count).
-SOURCE CHECK:      The text explicitly states ""nine anatomically distinct sections from three aged individuals"".
-TRUTH CHECK:       The number of biological replicates (individuals) is indeed 3.
-COMPLETENESS CHECK: The full set of extracted values includes ""3"", which is the correct numeric representation.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD012131","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The abstract states the resource comprises sections from ""three aged individuals"".
-TRUTH CHECK:       The study used three biological sources (individuals) for the primary atlas.
-COMPLETENESS CHECK: The full set includes ""3"" and ""3 aged individuals"", which accurately and exhaustively captures the number of biological replicates described.
+"PXD012131","ExperimentalDesignAgent","experimental_design","multiregional proteomic atlas across a spectrum of Alzheimer's disease progression","multiregional proteomic atlas across a spectrum of Alzheimer's disease progression","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design/objective, which fits the category of experimental design.
+SOURCE CHECK:      The value is reasonably inferable from the title (""Proteomic Atlas of the Human Brain in Alzheimer’s Disease"") and the abstract (""we provide a proteomic resource comprising nine anatomically distinct sections... across a spectrum of disease progression"").
+TRUTH CHECK:       The value accurately reflects the nature of the study as described in the text.
+COMPLETENESS CHECK: The full set contains this single value, which comprehensively describes the overarching design of the atlas study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -110,10 +132,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012131","ExperimentalDesignAgent","experimental_design","multiregional proteomic atlas across a spectrum of Alzheimer's disease progression","multiregional proteomic atlas across a spectrum of Alzheimer's disease progression","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study's scope and objective, which aligns with the ""experimental_design"" field's purpose of defining the study type.
-SOURCE CHECK:      The value is reasonably inferable from the title (""Proteomic Atlas of the Human Brain in Alzheimer’s Disease"") and the abstract (""provide a proteomic resource comprising nine anatomically distinct sections... across a spectrum of disease progression"").
-TRUTH CHECK:       The value accurately reflects the nature of the experiment as described in the text.
-COMPLETENESS CHECK: The full set contains a single value that comprehensively describes the design of the atlas and the disease spectrum study.
+"PXD012131","ExperimentalDesignAgent","factor_value","anatomical region (AMY, CNC, CBM, ECX, IPL, MFG, STG, THA, VCX), disease progression (neurofibrillary tangle quantity)","anatomical region (AMY, CNC, CBM, ECX, IPL, MFG, STG, THA, VCX), disease progression (neurofibrillary tangle quantity)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (anatomical region and disease progression) being studied, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions nine anatomically distinct sections (AMY, CNC, CBM, ECX, IPL, MFG, STG, THA, VCX) and categorization by the quantity of neurofibrillary tangles (Braak staging) to assess disease progression.
+TRUTH CHECK:       The values are factually correct based on the provided text.
+COMPLETENESS CHECK:    The full set captures the primary variables of the atlas (region and disease state/progression) and the expanded study (region and disease).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -121,10 +143,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD012131","ExperimentalDesignAgent","fractions","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The text explicitly states, ""In the interest of time fraction number was again reduced to 12 by pooling..."".
-TRUTH CHECK:       The value is factually correct as the final number of fractions injected per sample was 12.
-COMPLETENESS CHECK: The full set contains the single correct value mentioned in the methods.
+"PXD012131","ExperimentalDesignAgent","fractions","12","12","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The text explicitly states in the Fractionation section: ""In the interest of time fraction number was again reduced to 12 by pooling..."".
+TRUTH CHECK:       The value ""12"" accurately reflects the final number of fractions generated per sample for the main experiment.
+COMPLETENESS CHECK:   The full set contains the value ""12"", which covers the fractionation described for the primary samples.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -134,8 +156,8 @@ VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD012131","ExperimentalDesignAgent","number_of_samples","26","26","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The text explicitly states, ""5,098 proteins identified in all 26 samples"".
-TRUTH CHECK:       The value 26 is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains the single value 26, which accurately reflects the total count of samples mentioned for the main atlas study.
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the single value ""26"", which accurately reflects the total count of samples mentioned for the primary atlas study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

@@ -1,0 +1,388 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD042575","","strict","Biological","species","Homo sapiens, Rattus norvegicus, Sus scrofa, Canis familiaris","Homo sapiens, Rattus norvegicus, Sus scrofa, Canis familiaris","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a list of species names, which matches the required category for this field.
+SOURCE CHECK: The paper describes MS analysis of kinase reactions using human and rat Cx43 sequences (""searched against the human SwissProt database and a custom database containing the rat connexin43 C-terminus""), and the use of porcine PAECs and canine MDCK cells in the broader study.
+TRUTH CHECK: The text explicitly mentions human and rat sequences for the MS search. It also uses porcine (Sus scrofa) and canine (Canis familiaris) cell lines. However, the MS analysis specifically targeted the kinase reactions of purified proteins (human/rat Cx43CT).
+COMPLETENESS CHECK: The set covers all species mentioned in the context of the experimental materials.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","ExperimentalDesign","factor_value","kinase treatment (ERK, JNK, p38)","kinase treatment (ERK, JNK, p38)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (kinase treatment) and the specific conditions (ERK, JNK, p38), which fits the definition of a factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context, where purified proteins (ERK, JNK, p38) were used to phosphorylate GST-Cx43CT substrates for LC-MS/MS analysis.
+TRUTH CHECK: The paper explicitly describes kinase assays using these three specific MAPKs (ERK, JNK, and p38) as the primary experimental variables.
+COMPLETENESS CHECK: The full set captures the primary experimental axis of the phosphoproteomics study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK: The paper describes a phosphoproteomic workflow using Fe-NTA spin columns for enrichment followed by LC-MS/MS, but it does not mention any offline peptide or protein fractionation steps.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" correctly reflects the lack of fractionation described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","ExperimentalDesign","replicates","3","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper mentions ""Three independent rounds of PAEC seeding, treatments and LY dye transfer assays were carried out"" and ""Quantifications were carried out on experiments that had at least three independent replicates,"" but these refer to the functional dye transfer assays and western blots, not specifically to the LC-MS/MS phosphoproteomic experiment.
+TRUTH CHECK: For the mass spectrometry part of the study, the text describes the processing of ""kinase assay samples"" and the use of ""TMTpro isobaric mass tags"" to quantify phosphorylation across ""multiple conditions,"" but it does not explicitly state the number of biological replicates used for the MS analysis.
+COMPLETENESS CHECK: The value ""3"" is extracted from general experimental repetitions in the paper, but there is no explicit statement that the MS samples were processed in triplicate.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD042575","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
+TRUTH CHECK: According to the field definitions, ""1"" is the correct safe default when the paper is silent regarding replication.
+COMPLETENESS CHECK: The full set contains the safe default value, which is complete given the absence of other information in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper describes the MS process, stating ""The top 15 most intense precursor ions were selected and isolated,"" which is the defining characteristic of a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The description of selecting the ""top 15 most intense precursor ions"" for fragmentation is factually equivalent to data-dependent acquisition.
+COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition method used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical reagent used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Kinase assay sample preparation for mass spectrometry"" section: ""alkylated with 55 mM iodoacetamide"".
+TRUTH CHECK: The value is factually correct as per the paper text.
+COMPLETENESS CHECK: The full set of extracted values contains the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","fragment_mass_tolerance","9 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: I have searched the entire paper text, including the ""Phosphoproteomic analyses of kinase reactions"" and ""Phosphoproteomic data analysis"" sections, and the value ""9 ppm"" does not appear anywhere.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not present in the paper text; the text explicitly states that ions were ""HCD fragmented"".
+TRUTH CHECK: The value is factually incorrect for this experiment; the paper specifies HCD (Higher-energy Collisional Dissociation), not beam-type CID.
+COMPLETENESS CHECK: The full set is incorrect as it contains a hallucinated value and misses the actual method mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD042575","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Phosphoproteomic analyses of kinase reactions"" section as the instrument used for LC-MS/MS.
+TRUTH CHECK: The paper states that eluates were subjected to LC-MS/MS on the ""Q-Exactive Plus"".
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the paper; the extraction is complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","label","TMT126","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper states ""TMTpro isobaric mass tags"" were used, it does not explicitly list the individual channel tags (e.g., TMT126, TMT127N, etc.) in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but these specific channel names are not mentioned in the text; only the general ""TMTpro"" labeling is described.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT127N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not list the individual channel names (e.g., TMT127N) in the provided text. These specific channel names are likely inferred from the PRIDE dataset or external metadata, but they are not explicitly written in the paper text.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but the paper only mentions the general ""TMTpro"" labeling method.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT127C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for relative quantitation in the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not list the individual channel names (e.g., TMT127C) in the provided text. These specific tags are typical of TMT kits but are not explicitly written in the paper.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but the paper only mentions ""TMTpro"" as the labeling method.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT128N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not list the individual tag names (e.g., TMT128N) used for each sample. These specific tag names are not present in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists a wide range of specific TMT tags, none of which are mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT128C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not list the individual channel tags (e.g., TMT128C) used in the experiment. These specific channel names are not present in the provided text.
+COMPLETENESS CHECK: The full set of extracted values consists of a list of individual TMT channels, none of which are mentioned in the text. The correct general label is ""TMTpro"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT129N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not list the individual channel names (e.g., TMT129N) in the provided text. These specific channel identifiers are likely from the raw data or a supplementary table not included in the text provided.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but the paper text only mentions ""TMTpro"" as the labeling method.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT129C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper states ""TMTpro isobaric mass tags"" were used, it does not explicitly list the individual channel names (e.g., TMT129C) in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists a wide array of specific TMT channels, but none of these specific channel identifiers are mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT130N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not explicitly list the individual channel tags (e.g., TMT130N) in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT channels, but the paper only mentions ""TMTpro"" generally.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT130C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not explicitly list the individual channel tags (e.g., TMT130C) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists a wide array of specific TMT channels, none of which are explicitly mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT131N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not explicitly list the individual channel tags (e.g., TMT131N) used in the experiment. These specific channel names are not present in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists almost every possible TMT channel, but none of these specific channel identifiers are mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT131C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions, but it does not list the specific individual tags (e.g., TMT131C) used.
+TRUTH CHECK: While the paper confirms TMTpro labeling was used, the specific tag ""TMT131C"" is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values lists a wide range of specific TMT tags, none of which are explicitly mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT132N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for relative quantitation in the phosphoproteomics analysis of kinase reactions.
+TRUTH CHECK: While the paper explicitly states ""TMTpro isobaric mass tags"" were used, it does not list the specific individual tags (e.g., TMT132N) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists a wide array of specific TMT tags, none of which are explicitly mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT132C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions, but it does not list the specific individual tags (e.g., TMT132C) used.
+TRUTH CHECK: While the paper confirms TMTpro was used, the specific tag ""TMT132C"" is not explicitly mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values lists a wide range of specific TMT tags, none of which are explicitly mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT133N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper explicitly states ""TMTpro isobaric mass tags"" were used, it does not list the specific individual tags (e.g., TMT133N) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists a wide range of specific TMT tags, none of which are explicitly mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT133C","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions the use of ""TMTpro isobaric mass tags"" for the phosphoproteomic analysis of kinase reactions.
+TRUTH CHECK: While the paper specifies ""TMTpro"", it does not explicitly list the individual channel names (like TMT133C) in the provided text.
+COMPLETENESS CHECK: The full set of extracted values lists a wide range of specific TMT channels, none of which are explicitly named in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","label","TMT134N","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric mass tag, which fits the category of a labeling method.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for relative quantitation in the phosphoproteomics analysis of kinase reactions.
+TRUTH CHECK: While the paper explicitly states ""TMTpro isobaric mass tags"" were used, it does not list the specific individual tags (e.g., TMT134N) used in the experiment.
+COMPLETENESS CHECK: The full set of extracted values lists a series of specific TMT tags, but none of these specific tag identifiers are written in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMTpro","TMTpro"
+"PXD042575","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is reasonably inferable from the instrument model ""Q-Exactive Plus"" mentioned in the ""Phosphoproteomic analyses of kinase reactions"" section.
+TRUTH CHECK: The Q-Exactive Plus is a well-known Orbitrap-based mass spectrometer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used for the MS experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","modification","Carbamidomethyl (C)","Carbamidomethyl (C) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value is present in the ""Phosphoproteomic data analysis"" section of the methods.
+TRUTH CHECK: The paper explicitly states ""Cysteine carbamidomethylation... were set as static modifications.""
+COMPLETENESS CHECK: The full set of extracted values covers the static and dynamic modifications mentioned in the text (carbamidomethylation, TMT, and phosphorylation).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","modification","TMT6plex (K)","Carbamidomethyl (C) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a mass spectrometry label/modification on lysine, which fits the category of a modification.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" for relative quantitation in the MS experiment.
+TRUTH CHECK: The paper explicitly mentions ""TMTpro isobaric mass tags"", but it does NOT specify ""TMT6plex"". The specific plexity (6-plex) is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values includes various modifications, but ""TMT6plex"" is a specific subtype not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","modification","Phospho (STY)","Carbamidomethyl (C) | Phospho (STY)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes a post-translational modification and its target residues, which matches the field definition.
+SOURCE CHECK: The value is derived from the MS experiment context; the paper explicitly describes ""phosphoproteomic analyses"" and searching for ""phosphorylation of tyrosine, serine, and threonine"".
+TRUTH CHECK: The paper explicitly states that ""phosphorylation of tyrosine, serine, and threonine were searched as dynamic modifications"". ""Phospho (STY)"" is a standard abbreviation for this.
+COMPLETENESS CHECK: The full set of extracted values covers the modifications mentioned in the ""Phosphoproteomic data analysis"" section (carbamidomethylation, TMT, and phosphorylation of S, T, and Y).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","modification","TMTpro 16plex Tandem Mass Tag (H)","Carbamidomethyl (C) | Phospho (STY)","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a mass tag modification, which fits the category of a protein/peptide modification.
+SOURCE CHECK: The paper mentions the use of ""TMTpro isobaric mass tags"" in the ""Kinase assay sample preparation for mass spectrometry"" section.
+TRUTH CHECK: While the paper explicitly mentions ""TMTpro isobaric mass tags"", it does NOT specify the plexity (e.g., ""16plex"") nor the specific target residue/labeling chemistry (e.g., ""(H)"") in the text.
+COMPLETENESS CHECK: The full set of extracted values contains specific plexities and residues not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","precursor_mass_tolerance","7 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: I have searched the entire paper text, including the ""Phosphoproteomic analyses of kinase reactions"" and ""Phosphoproteomic data analysis"" sections, and the value ""7 ppm"" does not appear anywhere.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as factually correct for this experiment.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD042575","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Kinase assay sample preparation for mass spectrometry"" section: ""Denatured reactions were then reduced with 10 mM dithiothreitol (DTT)"".
+TRUTH CHECK: The value is factually correct as it was the reagent used for reduction in the MS sample preparation.
+COMPLETENESS CHECK: The full set of extracted values contains only ""dithiothreitol"", which is the only reduction reagent mentioned for the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

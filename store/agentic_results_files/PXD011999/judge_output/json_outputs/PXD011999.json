@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human mammary carcinoma cell lines\" and that raw data were searched against the \"SwissProt database containing Homo sapiens protein sequences\".",
-        "TRUTH_CHECK": "The use of human cell lines (BT474, SKBR3, etc.) confirms the species is Homo sapiens.",
-        "COMPLETENESS_CHECK": "The full set contains the only species used in the experiment."
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human mammary carcinoma cell lines\" and that raw data files were searched against the \"SwissProt database containing Homo sapiens protein sequences\".",
+        "TRUTH_CHECK": "The value is factually correct as the study uses human breast cancer cell lines.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the experiment."
       }
     },
     {
@@ -28,9 +28,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast\" refers to an organ/tissue, which matches the field definition.",
-        "SOURCE_CHECK": "The paper describes the use of \"breast cancer cell lines\" (e.g., BT474, SKBR3) and \"human mammary carcinoma cell lines,\" from which \"breast\" is reasonably inferable as the organ of origin.",
-        "TRUTH_CHECK": "The cells used are mammary carcinoma cells, making \"breast\" factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains \"breast\", which accurately describes the organ of origin for all samples used in the study."
+        "SOURCE_CHECK": "The paper describes the use of \"HER2-positive breast cancer\" and \"human mammary carcinoma cell lines,\" making \"breast\" a reasonable extraction for the organ of origin.",
+        "TRUTH_CHECK": "The study uses breast cancer cell lines (BT474, SKBR3, etc.), so the organ of origin is the breast.",
+        "COMPLETENESS_CHECK": "The full set contains \"breast\", which accurately covers the organ of origin described in the paper."
       }
     },
     {
@@ -43,10 +43,10 @@
       "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"epithelial cell\" describes a cell lineage/type, which fits the definition of cell_type.",
-        "SOURCE_CHECK": "The paper mentions \"breast cancer cell model\" and \"human mammary carcinoma cell lines\" (BT474, etc.), but the specific term \"epithelial cell\" does not appear in the text. While breast carcinoma cells are epithelial in origin, this is an external biological inference rather than a value present in or reasonably inferable from the provided text.",
-        "TRUTH_CHECK": "While biologically true that mammary carcinoma cells are epithelial, the metadata should be extracted from the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not explicitly stated in the paper."
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" describes a cell lineage/type, which fits the definition.",
+        "SOURCE_CHECK": "The paper mentions \"breast cancer cell model\" and \"human mammary carcinoma cell lines\" (BT474, etc.), but it does not explicitly use the term \"epithelial cell\". While breast carcinomas are epithelial in origin, the text does not state this.",
+        "TRUTH_CHECK": "The value is biologically true for the cell lines used, but it is not explicitly mentioned or a \"safe default\" provided in the instructions.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is an inference not explicitly supported by the text."
       }
     },
     {
@@ -59,9 +59,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"breast carcinoma\" is a disease state/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"human mammary carcinoma cell lines\" and \"HER2-positive breast cancer\" multiple times.",
-        "TRUTH_CHECK": "\"Breast carcinoma\" is a scientifically accurate synonym for \"breast cancer\" as described in the text.",
+        "TYPE_CHECK": "The candidate value \"breast carcinoma\" describes a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"human mammary carcinoma cell lines\" and \"HER2-positive breast cancer\" throughout the text.",
+        "TRUTH_CHECK": "\"Breast carcinoma\" is a factually correct synonym for \"breast cancer\" and \"mammary carcinoma\" as used in the text.",
         "COMPLETENESS_CHECK": "The full set contains \"breast carcinoma\", which accurately captures the disease state of the cell lines used in the study."
       }
     },
@@ -75,10 +75,10 @@
       "hallucination": false,
       "corrected_value": "cell line",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"BT474 cell line\" contains the specific cell line name, but the field definition requires a \"Broad material class\" (e.g., \"cell line\").",
+        "TYPE_CHECK": "The candidate value includes a specific cell line name, but the field definition requires a broad material class (e.g., \"cell line\").",
         "SOURCE_CHECK": "The paper explicitly mentions the use of the \"BT474 cell line\".",
-        "TRUTH_CHECK": "It is factually correct that BT474 is a cell line used in the experiment.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the source material."
+        "TRUTH_CHECK": "The material used is indeed a cell line.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the material source, although it is too specific."
       }
     },
     {
@@ -93,24 +93,24 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast\" describes the anatomical location of the tumor.",
         "SOURCE_CHECK": "The paper mentions \"HER2-positive breast cancer\" and \"human mammary carcinoma cell lines\".",
-        "TRUTH_CHECK": "The study uses breast cancer cell lines (BT474, SKBR3, etc.), making \"breast\" the correct anatomical site.",
-        "COMPLETENESS_CHECK": "The full set contains the only relevant anatomical site mentioned."
+        "TRUTH_CHECK": "The tumor type is breast cancer, making \"breast\" the correct anatomical site.",
+        "COMPLETENESS_CHECK": "The full set contains \"breast\", which is the only anatomical site mentioned for the tumor."
       }
     },
     {
       "annotation_type": "cell_line",
       "extracted_value": "BT474",
-      "verdict": "high",
+      "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
-      "corrected_value": null,
+      "corrected_value": "BT474, SKBR3, HCC1419, MDA-MB453, UACC893, MDA-MB361",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a cell line name, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"the BT474 cell line\" in the Results and Methods sections.",
-        "TRUTH_CHECK": "The value is factually correct as per the paper.",
-        "COMPLETENESS_CHECK": "While other cell lines (SKBR3, HCC1419, etc.) are mentioned in the FAK1 inhibition experiments, the primary phosphoproteomics TMT LC-MS/MS experiment was performed specifically on BT474 cells. However, the \"all_extracted_values\" set only contains BT474, and since the main MS experiment focused on this line, it is a correct extraction."
+        "TYPE_CHECK": "The candidate value is a name of an immortalized cell line.",
+        "SOURCE_CHECK": "The value \"BT474\" is explicitly mentioned multiple times in the text (e.g., \"the BT474 cell line in 2-dimensional culture\").",
+        "TRUTH_CHECK": "The value is factually correct as the primary cell line used for the LC-MS/MS and peptide chip array experiments.",
+        "COMPLETENESS_CHECK": "The paper also mentions other cell lines (SKBR3, HCC1419, MDA-MB453, UACC893, MDA-MB361) used for Western blot and proliferation assays, but the proteomics/MS experiments were specifically performed on BT474. However, for a general \"cell_line\" field in a proteomics context, all cell lines used in the study are typically expected."
       }
     },
     {
@@ -121,12 +121,12 @@
       "value_correct": false,
       "value_complete": false,
       "hallucination": true,
-      "corrected_value": "Thermo Q Exactive",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The paper text mentions a \"Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer\", but does not explicitly use the word \"Plus\".",
-        "TRUTH_CHECK": "The text specifies \"Q Exactive\", not \"Q Exactive Plus\". While they are similar, \"Plus\" is a specific model variant not mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is slightly inaccurate based on the text."
+        "SOURCE_CHECK": "The text states \"injected directly into a Thermo Q Exactive Hybrid Quadrupole-Orbitrap mass spectrometer,\" but it does not explicitly use the word \"Plus\".",
+        "TRUTH_CHECK": "The paper specifies a \"Thermo Q Exactive\", but \"Q Exactive Plus\" is a specific model variant not explicitly mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it adds a specific model suffix (\"Plus\") not found in the source text."
       }
     },
     {
@@ -140,9 +140,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"TMT10plex\" refers to a specific isobaric labeling method, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"TMT10plex Mass Tag Labeling Kits (Thermo)\" in the \"TMT peptide labeling and p-Tyr peptide IP\" section.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"labeled with TMT10plex Mass Tag Labeling Kits (Thermo)\" in the \"TMT peptide labeling and p-Tyr peptide IP\" section.",
         "TRUTH_CHECK": "The value is factually correct as it describes the labeling method used for the LC-MS/MS experiment.",
-        "COMPLETENESS_CHECK": "The full set contains \"TMT10plex\", which accurately captures the labeling method described in the paper."
+        "COMPLETENESS_CHECK": "The full set contains the only labeling method mentioned in the paper."
       }
     },
     {
@@ -158,7 +158,7 @@
         "TYPE_CHECK": "The candidate value \"biological duplicates\" describes the number of replicates, but the field definition expects a numeric count (e.g., \"3\").",
         "SOURCE_CHECK": "The text explicitly states \"BT474 cells were treated in biological duplicates\" in the Sample preparation for LC-MS/MS section.",
         "TRUTH_CHECK": "The value is factually correct as it reflects the \"duplicates\" mentioned in the text.",
-        "COMPLETENESS_CHECK": "The full set [\"biological duplicates\", \"2\"] is exhaustive and covers the information provided in the paper."
+        "COMPLETENESS_CHECK": "The full set [\"biological duplicates\", \"2\"] is exhaustive and covers the biological replication for the MS experiment."
       }
     },
     {
@@ -171,15 +171,31 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of biological replicates.",
+        "TYPE_CHECK": "The candidate value is a numeric count representing biological replicates, which matches the field definition.",
         "SOURCE_CHECK": "The paper explicitly states in the \"Sample preparation for LC-MS/MS\" section that \"BT474 cells were treated in biological duplicates\".",
         "TRUTH_CHECK": "\"Biological duplicates\" is equivalent to 2 biological replicates.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"biological duplicates\", \"2\") accurately and exhaustively captures the biological replication described for the LC-MS/MS experiment."
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"biological duplicates\", \"2\") accurately and exhaustively covers the biological replication described for the LC-MS/MS experiment."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "Comparison of trastuzumab, DARPin 6L1G, ARRY-380, and combination (A+T) treatments at 6 and 48 hours",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "treated vs control, time course",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental setup and variables, but it is phrased as a description of the experiment rather than a \"study design type\" (e.g., \"treated vs control\" or \"time course\").",
+        "SOURCE_CHECK": "The details (treatments and time points) are explicitly present in the text.",
+        "TRUTH_CHECK": "The factual content is correct, but it does not map to a standard experimental design category.",
+        "COMPLETENESS_CHECK": "The full set provides a description of the experiment, but fails to categorize the design type as requested by the field definition."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T combination), time (6h, 48h)",
+      "extracted_value": "treatment (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, A+T), time (6h, 48h)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -187,9 +203,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factors (treatment and time) and their specific levels, which fits the definition of factor_value.",
-        "SOURCE_CHECK": "The treatments (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, and the combination A+T) and the time points (6h and 48h) are explicitly mentioned in the \"Sample preparation for LC-MS/MS\" and \"Peptide chip array\" sections.",
-        "TRUTH_CHECK": "The values are factually correct based on the text.",
+        "TYPE_CHECK": "The candidate value describes the experimental factors (treatment and time) and their levels, which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The treatments (DMSO, trastuzumab, DARPin 6L1G, ARRY-380, and the combination A+T) and time points (6 and 48 hours) are explicitly mentioned in the \"Sample preparation for LC-MS/MS\" and \"Peptide chip array\" sections.",
+        "TRUTH_CHECK": "The values are factually correct based on the experimental setup described in the paper.",
         "COMPLETENESS_CHECK": "The full set captures the primary experimental variables (drug treatment and time) used across the quantitative studies."
       }
     },
@@ -206,7 +222,7 @@
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
         "SOURCE_CHECK": "The paper describes a direct LC-MS/MS analysis after IMAC elution without any mention of offline peptide fractionation.",
         "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The full set contains the value \"1\", which accurately reflects the lack of fractionation described in the text."
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the experimental setup."
       }
     },
     {
@@ -220,9 +236,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
-        "SOURCE_CHECK": "The TMT labeling scheme explicitly lists 10 distinct conditions/samples: DMSO_6h, TZB_6h, 6L1G_6h, ARRY_6h, A+T_6h, DMSO_48h, TZB_48h, 6L1G_48h, ARRY_48h, and A+T_48h.",
-        "TRUTH_CHECK": "The value is factually correct based on the TMT10plex labeling scheme described in the methods.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"10\", which exhaustively covers the samples processed for the LC-MS/MS experiment."
+        "SOURCE_CHECK": "The paper describes a TMT10plex labeling scheme with 10 specific conditions: DMSO_6h, TZB_6h, 6L1G_6h, ARRY_6h, A+T_6h, DMSO_48h, TZB_48h, 6L1G_48h, ARRY_48h, and A+T_48h.",
+        "TRUTH_CHECK": "The TMT10plex scheme explicitly lists 10 distinct sample conditions used for the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains the value \"10\", which accurately reflects the number of samples in the TMT multiplex."
       }
     }
   ]

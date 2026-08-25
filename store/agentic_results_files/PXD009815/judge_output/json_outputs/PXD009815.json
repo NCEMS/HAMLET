@@ -11,10 +11,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"yeast lysate\" multiple times; \"Saccharomyces cerevisiae\" is the standard scientific name for common brewer's/baker's yeast used in proteomics.",
-        "TRUTH_CHECK": "The text explicitly states the use of \"yeast lysate\" as the base for the spiked-in samples.",
-        "COMPLETENESS_CHECK": "The full set contains the primary source organism described in the experiment."
+        "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
+        "SOURCE_CHECK": "The paper mentions \"yeast lysate\" multiple times; \"Saccharomyces cerevisiae\" is the scientific name for common laboratory yeast.",
+        "TRUTH_CHECK": "The use of yeast lysate as the base for the spiked-in sample is explicitly stated in the results and methods sections.",
+        "COMPLETENESS_CHECK": "The full set contains the primary source organism used in the validation dataset."
       }
     },
     {
@@ -23,14 +23,14 @@
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"yeast lysate\" describes the source material, but it is a specific sample description rather than one of the broad material classes defined (e.g., \"tissue\", \"cell line\", \"primary cells\").",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text (\"generated from a yeast lysate\").",
+        "TYPE_CHECK": "The candidate value \"yeast lysate\" describes the sample source, but it is a specific material rather than one of the broad material classes defined for this field (e.g., \"tissue\", \"cell line\", \"whole organism\").",
+        "SOURCE_CHECK": "The value \"yeast lysate\" is explicitly mentioned in the text (\"generated from a yeast lysate\").",
         "TRUTH_CHECK": "The value is factually correct regarding what was used in the experiment.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the material used, although it does not map to the predefined broad categories."
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is a specific sample description rather than a broad material class."
       }
     },
     {
@@ -43,9 +43,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"a Q-Exactive Plus mass spectrometer\" in section 2.2.",
-        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Materials and methods\" section (\"...coupled to a Q-Exactive Plus mass spectrometer\").",
+        "TRUTH_CHECK": "The value is factually correct as per the text.",
         "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
       }
     },
@@ -61,13 +61,13 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification\" multiple times (e.g., in the abstract and results section).",
-        "TRUTH_CHECK": "The experiment used a spiked-in sample and compared intensity feature extraction without the use of isobaric or metabolic labels.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of only \"label-free\", which completely describes the labeling approach used in this study."
+        "TRUTH_CHECK": "The experiment used a label-free DDA workflow to compare Proline and MaxQuant.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"label-free\", which exhaustively describes the labeling method used in this study."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "yeast lysate spiked with UPS1 proteins",
+      "extracted_value": "10 different levels of the equimolar UPS1 mix spiked into yeast lysate",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -75,10 +75,10 @@
       "hallucination": false,
       "corrected_value": "4",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a description of the sample material, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions \"yeast lysate in which 10 different levels of the equimolar UPS1 mix... were spiked\", but this describes the experimental conditions, not the number of replicates.",
-        "TRUTH_CHECK": "The candidate value is not a count of replicates.",
-        "COMPLETENESS_CHECK": "The full set contains \"10\" (which refers to the number of spike levels, not replicates) and the sample description; it does not correctly identify the biological replicates. The paper states samples were \"analyzed in quadruplicate\", implying 4 replicates per condition."
+        "TYPE_CHECK": "The candidate value is a description of experimental conditions (spiked levels), not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The text mentions \"10 different levels of the equimolar UPS1 mix\", but this refers to the concentration gradient, not the number of replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect for the field 'replicates'; the paper explicitly states samples were \"analyzed in quadruplicate\", meaning there are 4 replicates per level.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it confuses the number of concentration levels (10) with the number of biological replicates (4)."
       }
     },
     {
@@ -91,10 +91,10 @@
       "hallucination": false,
       "corrected_value": "4",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"10\" is a numeric count, which is the correct category for the replicates field.",
-        "SOURCE_CHECK": "The paper mentions \"10 different levels of the equimolar UPS1 mix\" and \"10 different concentrations\", but these refer to experimental conditions (spiked levels), not biological replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect. The paper explicitly states in section 2.2 that samples were \"analyzed in quadruplicate\", and the \"10\" refers to the number of different spike concentrations used to test the software's accuracy.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect; one value is a description of the sample and the other is a misidentified experimental factor."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the 'replicates' field.",
+        "SOURCE_CHECK": "The value \"10\" appears in the text, but it refers to the \"10 different levels of the equimolar UPS1 mix\" (concentrations), not the number of biological replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect; the paper explicitly states in section 2.2 that samples were \"analyzed in quadruplicate,\" meaning there were 4 replicates.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it confuses the number of concentration levels with the number of replicates."
       }
     },
     {
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"quadruplicate\" describes the number of replicates, which fits the category for this field.",
+        "TYPE_CHECK": "The candidate value \"quadruplicate\" describes the number of times a sample was analyzed, which fits the category of technical replicates.",
         "SOURCE_CHECK": "The text explicitly states that \"Trypsin digested samples were then analyzed in quadruplicate\".",
-        "TRUTH_CHECK": "\"Quadruplicate\" is factually correct and equivalent to 4.",
-        "COMPLETENESS_CHECK": "The full set of extracted values [\"quadruplicate\", \"4\"] is exhaustive and covers the information provided in the paper."
+        "TRUTH_CHECK": "The value is factually correct as per the methods section.",
+        "COMPLETENESS_CHECK": "The full set [\"quadruplicate\", \"4\"] is exhaustive and covers the information provided in the text."
       }
     },
     {
@@ -123,31 +123,31 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for technical replicates.",
-        "SOURCE_CHECK": "The text states that \"Trypsin digested samples were then analyzed in quadruplicate by nanoLC–MS/MS\", which implies 4 technical replicates per sample.",
-        "TRUTH_CHECK": "The value \"4\" is a correct numeric representation of \"quadruplicate\".",
-        "COMPLETENESS_CHECK": "The full set [\"quadruplicate\", \"4\"] covers the information provided in the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper states that \"Trypsin digested samples were then analyzed in quadruplicate by nanoLC–MS/MS\", which directly supports the value 4.",
+        "TRUTH_CHECK": "The value is factually correct as \"quadruplicate\" means 4 replicates.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"quadruplicate\", \"4\") is exhaustive and covers the information provided in the text."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "concentration gradient of spiked UPS1 proteins in yeast lysate",
-      "verdict": "high",
+      "extracted_value": "spiking of 10 different levels of UPS1 mix into yeast lysate to assess quantification accuracy",
+      "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "yes",
-        "SOURCE_CHECK": "yes",
-        "TRUTH_CHECK": "yes",
-        "COMPLETENESS_CHECK": "yes"
+        "TYPE_CHECK": "The candidate value describes the experimental procedure/setup rather than a study design type (e.g., \"case-control\", \"treated vs control\").",
+        "SOURCE_CHECK": "The description of spiking UPS1 into yeast lysate is present in the text.",
+        "TRUTH_CHECK": "While the description of the experiment is factually correct, it is not a \"study design type\" as defined by the field.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a description of the method rather than a design category."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "UPS1 spike concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)",
+      "extracted_value": "UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -155,10 +155,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variable (spike concentration) and its levels, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The values are explicitly stated in the \"Experimental datasets\" section: \"spiking, respectively, 0.01–0.05–0.1–0.250–0.5–1–5–10–25–50 fmol of the UPS1 equimolar mix\".",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains the single candidate value, which exhaustively describes the primary experimental variable used to benchmark the software."
+        "TYPE_CHECK": "The candidate value describes the experimental variable (concentration of a protein spike) being studied.",
+        "SOURCE_CHECK": "The paper explicitly states the dataset was prepared by spiking \"0.01–0.05–0.1–0.250–0.5–1–5–10–25–50 fmol of the UPS1 equimolar mix\".",
+        "TRUTH_CHECK": "The value is factually correct based on the \"Experimental datasets\" section of the methods.",
+        "COMPLETENESS_CHECK": "The full set contains the single primary experimental factor used to evaluate the software's quantification accuracy."
       }
     },
     {
@@ -172,8 +172,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation being performed on the samples; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is correct as no fractionation is described in the methods.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation being performed on the samples; therefore, the safe default of \"1\" applies.",
+        "TRUTH_CHECK": "The value is factually correct as no fractionation is described in the methods.",
         "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper."
       }
     },
@@ -189,7 +189,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for number_of_samples.",
         "SOURCE_CHECK": "The text states that samples were analyzed in quadruplicate across 10 different spike levels (0.01 to 50 fmol), producing \"40 raw MS files\".",
-        "TRUTH_CHECK": "The paper describes 40 MS runs/files generated from 10 conditions in quadruplicate, which equates to 40 samples processed.",
+        "TRUTH_CHECK": "The paper describes 40 MS runs/files generated from the experimental design (10 levels * 4 replicates). In the context of this software benchmark, these 40 runs constitute the samples processed.",
         "COMPLETENESS_CHECK": "The full set contains the single value \"40\", which exhaustively covers the sample count described for the evaluation dataset."
       }
     }

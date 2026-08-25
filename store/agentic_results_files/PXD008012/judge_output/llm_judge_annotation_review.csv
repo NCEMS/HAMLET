@@ -1,8 +1,9 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD008012","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human protein database"" and ""Homo sapiens Uniprot database"" in the methods section.
-TRUTH CHECK: The study focuses on triple-negative breast cancer in patients and human cell lines, making Homo sapiens the correct species.
-COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which covers the primary source of the proteomics data described.
+SOURCE CHECK: The paper explicitly mentions ""human protein database (UniProtKB...)"" and ""human triple negative breast cancer cell lines,"" making ""Homo sapiens"" a correct and present value.
+TRUTH CHECK: The study focuses on human triple-negative breast cancer patients and cell lines.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens,"" which correctly identifies the primary source organism for the proteomics experiments.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,20 +11,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD008012","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" is a valid organ/tissue type.
-SOURCE CHECK:      The paper explicitly discusses ""triple-negative breast cancer (TNBC)"" and ""tumor samples from patients,"" making ""breast"" the clear organ of origin.
-TRUTH CHECK:       The value is factually correct based on the study's focus on breast cancer.
-COMPLETENESS CHECK: The full set of extracted values (""breast"") covers the organ of origin described in the paper.
-TYPE_CORRECT:      yes
+"PXD008012","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK: The candidate value ""breast"" refers to an organ/tissue, which matches the field definition.
+SOURCE CHECK: The paper repeatedly mentions ""breast cancer"" and ""TNBC"" (triple-negative breast cancer), making ""breast"" the clear organ of origin.
+TRUTH CHECK: The samples are tumor samples from patients with triple-negative breast cancer.
+COMPLETENESS CHECK: The full set contains ""breast"", which accurately describes the organ of origin for all clinical samples in this study.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008012","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""triple-negative breast cancer"" and ""tumor samples,"" but the specific term ""epithelial cell"" does not appear in the text. While breast cancer is an epithelial malignancy, the field definition requires the value to be present or reasonably inferable.
-TRUTH CHECK:       The paper describes breast cancer cells and cell lines, but it never explicitly identifies the cells as ""epithelial cells.""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008012","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper describes ""triple-negative breast cancer"" (TNBC) and uses various TNBC cell lines and patient tumors; however, the specific term ""epithelial cell"" does not appear in the provided text. While breast cancer is typically epithelial in origin, the text does not explicitly state this cell type.
+TRUTH CHECK:       The value is not explicitly supported by the text provided.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -32,21 +34,21 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD008012","BiologicalAgent","disease","triple-negative breast cancer","triple-negative breast cancer","high","False","","True","True","False","TYPE CHECK:        The candidate value ""triple-negative breast cancer"" is a disease state/diagnosis, which matches the field definition.
-SOURCE CHECK:      The term ""triple-negative breast cancer"" (and its abbreviation TNBC) is explicitly mentioned throughout the title, abstract, and results sections.
-TRUTH CHECK:       The value is factually correct as the study specifically focuses on patients and cell lines with triple-negative breast cancer.
-COMPLETENESS CHECK: The full set of extracted values contains only this value, which exhaustively covers the disease state described in the paper.
-TYPE_CORRECT:      yes
+"PXD008012","BiologicalAgent","disease","triple-negative breast cancer","triple-negative breast cancer","high","False","","True","True","False","TYPE CHECK: The candidate value is a specific disease/diagnosis, which matches the field definition.
+SOURCE CHECK: The term ""triple-negative breast cancer"" (and its abbreviation TNBC) is explicitly mentioned throughout the title, abstract, and results.
+TRUTH CHECK: The study specifically focuses on patients and cell lines with triple-negative breast cancer.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the single disease state under investigation.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008012","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        No, ""patients"" is a subject/donor description, not a broad material class as defined (e.g., ""tissue"", ""cell line"").
-SOURCE CHECK:      The paper mentions patients, but the material actually used for MS was ""tumor samples"" (tissue) and ""cell lines"".
-TRUTH CHECK:       The candidate value is incorrect because it describes the source organism/subject rather than the material type.
-COMPLETENESS CHECK:The full set is incomplete and incorrect; it fails to capture the actual materials used (tissue and cell lines).
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008012","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is not one of the allowed broad material classes (e.g., ""tissue"", ""cell line"", ""biofluid"") defined for this field.
+SOURCE CHECK:      The paper mentions patients, but the material actually analyzed by mass spectrometry was tumor tissue/samples.
+TRUTH CHECK:       The value is incorrect; ""patients"" refers to the subject, not the material type.
+COMPLETENESS CHECK: The full set contains only an incorrect value and fails to capture the actual materials used (tumor tissue and cell lines).
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -54,10 +56,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""tissue"", ""cell line""]","tissue, cell line"
-"PXD008012","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" describes an anatomical location of a tumor, which matches the field definition.
-SOURCE CHECK:      The paper title and abstract explicitly state the study is on ""triple-negative breast cancer (TNBC)"".
-TRUTH CHECK:       The value is factually correct as the tumors are derived from breast cancer patients.
-COMPLETENESS CHECK: The full set of extracted values (""breast"") accurately and exhaustively covers the anatomical site described in the paper.
+"PXD008012","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value is an anatomical location.
+SOURCE CHECK:      Yes, the paper title and abstract explicitly state ""triple-negative breast cancer"".
+TRUTH CHECK:       Yes, the tumors are located in the breast.
+COMPLETENESS CHECK:The full set contains ""breast"", which accurately describes the anatomical site of the tumors in this study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -66,9 +68,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008012","BiologicalAgent","cell_line","MDA-MB-231","MDA-MB-231","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK:      The value ""MDA-MB-231"" is explicitly mentioned multiple times in the ""Cell lines"" and ""Results"" sections.
+SOURCE CHECK:      The value ""MDA-MB-231"" is explicitly mentioned multiple times in the ""Cell lines"" and ""Colony assays"" sections.
 TRUTH CHECK:       The value is factually correct as a cell line used in the study.
-COMPLETENESS CHECK: The full set of extracted values contains only ""MDA-MB-231"", but the paper mentions several other cell lines (MDA-MB-157, Hs578T, MDA-MB-468, HCC1937, HCC1143, HCC38, BT549, BT483, MDA-MB-415).
+COMPLETENESS CHECK: The full set of extracted values contains only ""MDA-MB-231"", but the paper explicitly lists a panel of ten human TNBC cell lines (MDA-MB-231, MDA-MB-157, Hs578T, MDA-MB-468, HCC1937, HCC1143, HCC38, BT549, BT483, and MDA-MB-415).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -76,44 +78,67 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""MDA-MB-231"", ""MDA-MB-157"", ""Hs578T"", ""MDA-MB-468"", ""HCC1937"", ""HCC1143"", ""HCC38"", ""BT549"", ""BT483"", ""MDA-MB-415""]","MDA-MB-231, MDA-MB-157, Hs578T, MDA-MB-468, HCC1937, HCC1143, HCC38, BT549, BT483, MDA-MB-415"
-"PXD008012","TechnicalAgent","instrument","LTQ-Orbitrap Elite","LTQ-Orbitrap Elite","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The value ""LTQ-Orbitrap Elite"" is explicitly mentioned in the ""Proteomics sample preparation and runs"" section.
-TRUTH CHECK:       The paper states that peptides were analyzed using an ""LTQ-Orbitrap Elite (Thermo Fisher Scientific)"".
-COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the primary proteomics analysis described in the methods.
+"PXD008012","TechnicalAgent","instrument","LTQ-Orbitrap Elite","LTQ-Orbitrap Elite","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Proteomics sample preparation and runs"" section: ""...and an LTQ-Orbitrap Elite (Thermo Fisher Scientific).""
+TRUTH CHECK: The value is factually correct as the instrument used for the proteomics analysis.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned for the primary proteomics experiments (note: the ""Q Exactive Plus"" mentioned in the ""Kinase assays"" section refers to a different part of the study/methodology, but the LTQ-Orbitrap Elite is the primary instrument for the main proteomics runs described in the ""Proteomics sample preparation and runs"" section).
 
-TYPE_CORRECT:      yes
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008012","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly mentions ""label-free single-shot strategy"" and ""Label-free quantification was done with match between runs"".
-TRUTH CHECK:       The value is factually correct as the study used label-free quantification.
-COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive for this experiment.
-TYPE_CORRECT:      yes
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008012","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: The paper explicitly states, ""we aimed to probe the phosphoproteome using a label-free single-shot strategy"" and ""Label-free quantification was done with match between runs"".
+TRUTH CHECK: The value is factually correct as the study used label-free quantification.
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive for the study.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008012","ExperimentalDesignAgent","replicates","34 tumor samples from patients","34","low","True","number_of_samples","False","False","False","TYPE CHECK:        The candidate value is a description of samples rather than a numeric count of biological replicates per condition.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD008012","ExperimentalDesignAgent","replicates","34 tumor samples from patients","34","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of samples, but the field requires a numeric count of biological replicates.
 SOURCE CHECK:      The text mentions a training set of 34 tumor samples from patients.
-TRUTH CHECK:       The value ""34"" refers to the total number of unique patient samples (number_of_samples), not the number of biological replicates per sample or condition.
-COMPLETENESS CHECK: The full set of extracted values incorrectly identifies the total sample size as the number of replicates.
+TRUTH CHECK:       While 34 samples were used, ""replicates"" in proteomics typically refers to the number of times a specific condition/group was replicated. Here, 34 is the total number of samples (number_of_samples), not the number of replicates per group.
+COMPLETENESS CHECK: The full set contains ""34 tumor samples from patients"" and ""34"", both of which refer to the total sample size rather than biological replicates.
+
 TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: number_of_samples
+CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   1","1"
+CORRECTED_VALUE:   NONE",""
 "PXD008012","ExperimentalDesignAgent","replicates","34","34","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the category for the replicates field.
-SOURCE CHECK:      The paper states ""The training set consisted of 34 tumor samples from patients,"" which is the source of this value.
-TRUTH CHECK:       The value ""34"" refers to the number of unique patient samples (biological replicates) in the training set, not technical replicates.
-COMPLETENESS CHECK:    The full set of extracted values correctly identifies the number of biological replicates for the primary training cohort.
+SOURCE CHECK:      The paper states ""The training set consisted of 34 tumor samples from patients"", which is the source of the value.
+TRUTH CHECK:       The value 34 refers to the number of unique patient samples (biological replicates) in the training set.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the number of biological replicates for the primary training set described in the proteomics experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD008012","ExperimentalDesignAgent","technical_replicates","single-shot","1","low","True","","False","False","False","TYPE CHECK:        The candidate value ""single-shot"" is a description of the acquisition strategy, not a numeric count of technical replicates.
+SOURCE CHECK:      The text mentions a ""label-free single-shot strategy,"" which implies that each sample was analyzed once.
+TRUTH CHECK:       While ""single-shot"" implies one measurement, the field definition specifically requires the number of technical replicates (e.g., ""1"").
+COMPLETENESS CHECK:   The set contains both ""single-shot"" and ""1""; ""1"" is the correct representation of the technical replicate count for a single-shot analysis.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE","1"
+"PXD008012","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper describes a ""label-free single-shot strategy"" for the proteomics analysis of clinical specimens.
+TRUTH CHECK:       A ""single-shot"" strategy implies that each sample was analyzed once, meaning there were no technical replicates (technical replicates = 1).
+COMPLETENESS CHECK:    The full set of extracted values (""single-shot"", ""1"") correctly captures the information provided in the text.
 
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -122,10 +147,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008012","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
-SOURCE CHECK:      The paper does not explicitly mention the number of technical replicates for the MS experiments; therefore, the safe default of ""1"" is applied.
-TRUTH CHECK:       The value is correct based on the safe default rule for silent replication.
-COMPLETENESS CHECK: The full set contains the single default value, which is exhaustive when the paper is silent.
+"PXD008012","ExperimentalDesignAgent","experimental_design","relapsed versus non-relapsed TNBC cases comparison","relapsed versus non-relapsed TNBC cases comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing two groups based on clinical outcome), which fits the definition of experimental_design.
+SOURCE CHECK:      The paper explicitly states the training set was used to capture differences between ""non-relapsed and relapsed phenotypes"" and that phosphopeptides were identified that ""distinguished relapsed from non-relapsed cases.""
+TRUTH CHECK:       The value is factually correct as the primary experimental design for the phosphoproteomics discovery phase was a comparison between these two patient groups.
+COMPLETENESS CHECK: The full set captures the primary design of the discovery phase; while there are subsequent validation sets and preclinical models, the core experimental design of the proteomics study is the comparison of these two phenotypes.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -133,21 +158,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD008012","ExperimentalDesignAgent","experimental_design","comparison between relapsed and non-relapsed TNBC cases","comparison between relapsed and non-relapsed TNBC cases","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing two groups based on clinical outcome), which fits the definition of experimental_design.
-SOURCE CHECK:      The paper explicitly states the training set consisted of patients who ""relapsed in the first 3 years"" versus those ""free of relapse after 12 or more years"" to identify phosphopeptides and kinases that explain adverse outcomes.
-TRUTH CHECK:       The value is factually correct as the primary objective of the proteomics experiment was to distinguish the phosphoprofiles of relapsed versus non-relapsed TNBC cases.
-COMPLETENESS CHECK: The full set contains this single value, which accurately captures the core design of the clinical proteomics study described.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD008012","ExperimentalDesignAgent","factor_value","phenotype (relapsed, non-relapsed)","phenotype (relapsed, non-relapsed)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (phenotype) and its levels, which fits the definition of a factor_value.
-SOURCE CHECK:      The paper explicitly compares ""relapsed"" versus ""non-relapsed"" cases in the training set to identify phosphoprofiles.
-TRUTH CHECK:       The value is factually correct as the study focuses on the differences between these two phenotypes.
-COMPLETENESS CHECK:    The full set captures the primary experimental factor used for the discovery phase of the study.
+"PXD008012","ExperimentalDesignAgent","factor_value","phenotype (relapsed, non-relapsed)","phenotype (relapsed, non-relapsed)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (phenotype) and its levels (relapsed, non-relapsed), which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares ""relapsed"" versus ""non-relapsed"" cases in the training set to identify phosphoprofiles and kinases.
+TRUTH CHECK:       The value is factually correct as the study's primary objective was to distinguish between these two phenotypes.
+COMPLETENESS CHECK: The full set contains this primary factor; while other factors like ""drug treatment"" are mentioned in preclinical models, the core experimental design of the proteomics study is based on the relapse phenotype.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -156,9 +170,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008012","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper describes a ""label-free single-shot strategy"" for the proteomics analysis of tumor samples and cell lines, and does not mention any offline peptide fractionation.
-TRUTH CHECK:       Since no fractionation was performed, the value ""1"" is the correct safe default.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
+SOURCE CHECK:      The paper describes a ""label-free single-shot strategy"" for the proteomics analysis, and no offline fractionation steps (such as high-pH RP or SAX) are mentioned.
+TRUTH CHECK:       Since the study used a single-shot approach without offline fractionation, the value ""1"" is the correct representation.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental design.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -167,9 +181,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD008012","ExperimentalDesignAgent","number_of_samples","34","34","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper explicitly states in the Results section that ""The training set consisted of 34 tumor samples from patients"".
-TRUTH CHECK:       The value 34 is factually correct for the training set processed by mass spectrometry.
-COMPLETENESS CHECK: The full set of extracted values only includes the training set (34), but the paper also describes two validation sets (Val-1 with 113 TNBCs and Val-2 with 61 TNBC patients) and several cell lines/PDXs. While the MS-based phosphoproteomics was primarily performed on the training set, the ""total count of samples processed in the study"" should ideally encompass all patient samples analyzed.
+SOURCE CHECK:      The text explicitly states, ""The training set consisted of 34 tumor samples from patients with extreme phenotypes of TNBC.""
+TRUTH CHECK:       The value 34 is correct for the training set, but the study also includes validation sets (Val-1 with 113 TNBCs and Val-2 with 61 TNBC patients) and various cell lines.
+COMPLETENESS CHECK: The full set of extracted values only includes the training set (34), ignoring the validation sets and cell lines, thus failing to capture the total count of samples processed in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

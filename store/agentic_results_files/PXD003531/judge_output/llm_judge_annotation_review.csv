@@ -1,7 +1,7 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD003531","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper mentions ""patient-derived epithelial cells"" and ""women (age 45–75 years)"", from which ""Homo sapiens"" is reasonably inferable.
-TRUTH CHECK: The study uses human patient samples and human cell lines (e.g., OVCAR3, HeLa), making ""Homo sapiens"" factually correct.
+"PXD003531","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""patient-derived epithelial cells"" and ""women (age 45–75 years)"", which explicitly indicates the source is human.
+TRUTH CHECK: ""Homo sapiens"" is the correct scientific name for humans.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -10,22 +10,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003531","BiologicalAgent","organ","ovary","ovary","medium","False","","True","False","False","TYPE CHECK: The candidate value ""ovary"" is a valid organ/tissue type.
-SOURCE CHECK: The paper explicitly mentions ""ovarian cancer"", ""ovarian cortical tissues"", and ""ovarian cancer cell lines"", making ""ovary"" a reasonable extraction.
-TRUTH CHECK: The study focuses on epithelial ovarian cancer (EOC), ovarian surface epithelium (OSE), and fallopian tube epithelium (FTE); the primary organ of origin is the ovary.
-COMPLETENESS CHECK: The full set contains only ""ovary"", but the paper also specifically mentions ""fallopian tube"" (FTE - fallopian tube epithelium). Therefore, the set is incomplete.
-
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: medium
-CORRECTED_VALUE: [""ovary"", ""fallopian tube""]",""
-"PXD003531","BiologicalAgent","cell_type","epithelial cells","epithelial cells","high","False","","True","True","False","TYPE CHECK:        The candidate value ""epithelial cells"" describes a primary cell type/lineage, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""patient-derived epithelial cells"" and ""primary epithelial cells"" multiple times in the abstract and methods.
-TRUTH CHECK:       The value is factually correct as the study focuses on epithelial cells from FTE, OSE, and EOC.
-COMPLETENESS CHECK: The full set contains ""epithelial cells"", which accurately captures the primary cell type described across the different tissue origins in the study.
+"PXD003531","BiologicalAgent","organ","ovary","ovary","high","False","","True","True","False","TYPE CHECK:        The candidate value ""ovary"" is a valid organ/tissue name.
+SOURCE CHECK:      The paper describes analyzing ""ovarian cancer"", ""ovarian cortical tissues"", and ""ovarian cancer cell lines"", making ""ovary"" a reasonable and inferable organ of origin.
+TRUTH CHECK:       The study focuses on epithelial ovarian cancer (EOC), fallopian tube epithelium (FTE), and ovarian surface epithelium (OSE), all of which are associated with the ovary or its immediate anatomical environment.
+COMPLETENESS CHECK: The full set contains ""ovary"", which captures the primary organ of interest, although the paper specifically mentions ""ovarian cortical tissues"" and ""fimbriae"" (fallopian tube). However, ""ovary"" is the overarching organ.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -33,10 +21,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD003531","BiologicalAgent","disease","epithelial ovarian cancer","epithelial ovarian cancer","medium","False","","True","False","False","TYPE CHECK: The candidate value is a disease diagnosis, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""epithelial ovarian cancer (EOC)"" multiple times in the abstract and results.
-TRUTH CHECK: The value is factually correct as the study focuses on EOC.
-COMPLETENESS CHECK: The full set contains ""epithelial ovarian cancer"", but the paper also describes ""healthy"" tissues (FTE and OSE) used as controls. According to the field definition, ""normal"" or ""healthy"" should be extracted for healthy controls.
+"PXD003531","BiologicalAgent","cell_type","epithelial cells","epithelial cells","high","False","","True","True","False","TYPE CHECK:        The candidate value ""epithelial cells"" describes a primary cell type/lineage.
+SOURCE CHECK:      The text explicitly mentions ""patient-derived epithelial cells"" and ""primary epithelial cells"".
+TRUTH CHECK:       The value is factually correct as the study focuses on epithelial cells from FTE, OSE, and EOC.
+COMPLETENESS CHECK: The full set contains ""epithelial cells"", which accurately captures the primary cell type described across the different tissue origins.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003531","BiologicalAgent","disease","epithelial ovarian cancer","epithelial ovarian cancer","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""epithelial ovarian cancer (EOC)"" multiple times in the abstract and results.
+TRUTH CHECK:       The value is factually correct as the primary disease studied in the paper.
+COMPLETENESS CHECK: The paper also describes ""healthy"" tissues (FTE and OSE) as controls; however, the candidate value correctly identifies the disease state. Since the full set only contains the disease, it is missing the ""healthy"" control state mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""epithelial ovarian cancer"", ""healthy""]","epithelial ovarian cancer, healthy"
+"PXD003531","BiologicalAgent","material_type","patient-derived primary cells","patient-derived primary cells","medium","False","","True","False","False","TYPE CHECK: Yes, the value describes the broad material class used in the experiment.
+SOURCE CHECK: Yes, the text explicitly mentions ""patient-derived primary cells"" and ""ex-vivo-cultured primary cells"".
+TRUTH CHECK: Yes, the study focuses on analyzing primary cells derived from patients.
+COMPLETENESS CHECK: The full set is incomplete because the study also performed a large-scale quantitative phosphoproteomics experiment using the ""EOC cell line OVCAR3"".
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -44,22 +54,11 @@ VALUE_CORRECT: yes
 VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
-CORRECTED_VALUE: [""epithelial ovarian cancer"", ""healthy""]","epithelial ovarian cancer, healthy"
-"PXD003531","BiologicalAgent","material_type","patient-derived primary cells","","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the source material, but it includes a descriptor (""patient-derived"") rather than sticking to the broad material class defined in the field definitions.
-SOURCE CHECK:      The paper explicitly mentions ""patient-derived epithelial cells"" and ""ex-vivo-cultured primary cells"".
-TRUTH CHECK:       The value is factually correct as the experiment used primary cells derived from patients.
-COMPLETENESS CHECK:The full set contains only this value, but the paper also describes the use of ""cell lines"" (e.g., OVCAR3) for the second large-scale phosphoproteomics experiment.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: material_type
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""primary cells"", ""cell line""]","primary cells, cell line"
-"PXD003531","BiologicalAgent","age","45–75 years","45–75 years","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric range with units, which matches the definition of the age field.
+CORRECTED_VALUE: [""primary cells"", ""cell line""]","primary cells, cell line"
+"PXD003531","BiologicalAgent","age","45–75 years","45–75 years","high","False","","True","True","False","TYPE CHECK: The candidate value is a range of years, which matches the definition of the age field.
 SOURCE CHECK: The value is explicitly stated in the ""Tissue Samples"" section of the methods (""women (age 45–75 years)"").
-TRUTH CHECK: The value accurately reflects the age range of the donors described in the paper.
-COMPLETENESS CHECK: The full set of extracted values contains the only age range mentioned in the text.
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set of extracted values contains the only age range mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,11 +66,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003531","BiologicalAgent","anatomic_site_tumor","ovary","ovary","high","False","","True","True","False","TYPE CHECK: The candidate value ""ovary"" describes an anatomical location, which matches the field definition.
-SOURCE CHECK: The paper describes ""epithelial ovarian cancer (EOC)"" and ""ovarian cancer cell lines,"" making ""ovary"" a reasonable inference for the tumor site.
-TRUTH CHECK: The study focuses on ovarian cancer, so the anatomical site of the tumor is the ovary.
-COMPLETENESS CHECK: The full set contains ""ovary,"" which accurately captures the tumor site described in the paper.
-
+"PXD003531","BiologicalAgent","anatomic_site_tumor","ovary","ovary","high","False","","True","True","False","TYPE CHECK: The candidate value ""ovary"" is an anatomical location, which matches the category for this field.
+SOURCE CHECK: The paper describes ""epithelial ovarian cancer (EOC)"" and ""ovarian cancer cell lines,"" making ""ovary"" a reasonable inference for the anatomical site of the tumor.
+TRUTH CHECK: The value is factually correct based on the study's focus on ovarian cancer.
+COMPLETENESS CHECK: The full set of extracted values (""ovary"") covers the anatomical site described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -79,10 +77,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003531","BiologicalAgent","cell_line","OVCAR3","OVCAR3","medium","False","","True","False","False","TYPE CHECK:        The candidate value is the name of an immortalized cell line, which matches the field definition.
+"PXD003531","BiologicalAgent","cell_line","OVCAR3","OVCAR3","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK:      The value ""OVCAR3"" is explicitly mentioned multiple times in the text (e.g., ""large-scale quantitative phosphoproteomics experiment in the EOC cell line OVCAR3"").
-TRUTH CHECK:       The value is factually correct as the paper identifies OVCAR3 as an EOC cell line used for experiments.
-COMPLETENESS CHECK:    The full set of extracted values is incomplete; the paper also mentions SKOV3, HEYA8, COV362, COV318, HeLa, A549, and MCF7.
+TRUTH CHECK:       The value is factually correct as the paper identifies OVCAR3 as an EOC cell line used in the study.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also mentions other EOC cell lines (SKOV3, HEYA8, COV362, COV318) and control cell lines (HeLa, A549, MCF7).
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -91,9 +89,9 @@ HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""OVCAR3"", ""SKOV3"", ""HEYA8"", ""COV362"", ""COV318"", ""HeLa"", ""A549"", ""MCF7""]","OVCAR3, SKOV3, HEYA8, COV362, COV318, HeLa, A549, MCF7"
 "PXD003531","BiologicalAgent","sex","female","female","high","False","","True","True","False","TYPE CHECK: The candidate value ""female"" is the correct category for the sex field.
-SOURCE CHECK: The paper states that tissue samples were obtained from ""women"" undergoing surgery.
-TRUTH CHECK: The value is factually correct as ""women"" implies female sex.
-COMPLETENESS CHECK: The full set contains the only relevant value mentioned in the text.
+SOURCE CHECK: The paper states that tissue samples were obtained from ""women (age 45–75 years)"".
+TRUTH CHECK: The value is factually correct as the donors were women.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only female donors are mentioned.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -102,9 +100,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD003531","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions a ""Q-Exactive mass spectrometer (Thermo Fisher Scientific)"".
+SOURCE CHECK: The text explicitly states ""connected to a Q-Exactive mass spectrometer (Thermo Fisher Scientific)"".
 TRUTH CHECK: The value is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set contains the only instrument mentioned in the text.
+COMPLETENESS CHECK: The full set contains the only instrument mentioned in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -112,76 +110,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003531","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper explicitly mentions ""label-free quantitation"" in the results section when describing the OVCAR3 cell line experiment.
-TRUTH CHECK:       The value is factually correct as the study used label-free methods for quantification.
-COMPLETENESS CHECK: The full set of extracted values (""label-free"") is exhaustive for this study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003531","ExperimentalDesignAgent","replicates","13 independent patient samples","13 independent patient samples | 13","high","False","","True","True","False","TYPE CHECK:        The candidate value contains a numeric count of samples, but it is phrased as a description of the sample set rather than a simple count of replicates.
-SOURCE CHECK:      The text explicitly states ""LC-MS/MS measurements from 13 independent patient samples"".
-TRUTH CHECK:       The value is factually correct regarding the number of patient samples used in the primary cell analysis.
-COMPLETENESS CHECK: The full set of extracted values (""13 independent patient samples"", ""13"") correctly captures the number of biological replicates/samples described for the main experiment.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003531","ExperimentalDesignAgent","replicates","13","13 independent patient samples | 13","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper explicitly states that measurements were taken from ""13 independent patient samples"".
-TRUTH CHECK:       The value is factually correct as it refers to the number of independent biological samples (patients) used in the primary cell analysis.
-COMPLETENESS CHECK:    The full set of extracted values correctly identifies the 13 independent patient samples.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD003531","ExperimentalDesignAgent","technical_replicates","technical replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""technical replicates"" is a phrase describing the field, not a numeric count as required by the definition.
-SOURCE CHECK:      The paper mentions ""coverage of protein and phosphorylated peptides among technical replicates (samples 1, 2, and 4) was high"", but it does not provide a specific number of technical replicates per sample.
-TRUTH CHECK:       The value is not a factual count; it is simply the name of the concept.
-COMPLETENESS CHECK:The full set contains only the phrase ""technical replicates"", which fails to provide the actual number of replicates.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: technical_replicates
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD003531","ExperimentalDesignAgent","experimental_design","comparison of high-grade serous EOC with non-neoplastic FTE and OSE","comparison of high-grade serous EOC with non-neoplastic FTE and OSE","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the study design (comparing different disease/tissue states).
-SOURCE CHECK:      The text explicitly states, ""we compared the molecular profile of high-grade serous EOC with those of non-neoplastic FTE and OSE.""
-TRUTH CHECK:       The value accurately reflects the experimental comparison described in the results section.
-COMPLETENESS CHECK: The full set captures the primary design of the patient-derived cell study, although the paper also includes a ""treated vs control"" design for the OVCAR3 cell line (THZ1 vs untreated).
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""comparison of high-grade serous EOC with non-neoplastic FTE and OSE"", ""treated vs control""]","comparison of high-grade serous EOC with non-neoplastic FTE and OSE, treated vs control"
-"PXD003531","ExperimentalDesignAgent","factor_value","tissue origin (OSE, EOC, FTE)","tissue origin (OSE, EOC, FTE)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue types) being compared, which fits the definition of a factor_value.
-SOURCE CHECK:      The paper explicitly compares ""high-grade serous EOC with those of non-neoplastic FTE and OSE"" and groups samples into these three categories.
-TRUTH CHECK:       The value is factually correct as the study focuses on discriminating between these three tissue origins.
-COMPLETENESS CHECK: The full set captures the primary experimental factor for the patient-derived cell analysis; however, the paper also includes a separate experiment using drug treatment (THZ1 vs control) in OVCAR3 cells, which is not captured in the extracted values.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""tissue origin (OSE, EOC, FTE)"", ""drug treatment (THZ1)""]",""
-"PXD003531","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of fractions.
-SOURCE CHECK: The paper describes ""single-shot mass-spectrometry-based phosphoproteomics"" and ""single-run liquid chromatography-tandem mass spectrometry (LC-MS/MS) measurements,"" indicating no offline fractionation was performed.
-TRUTH CHECK: Since the analysis was ""single-shot"" and ""single-run,"" the value ""1"" is the correct representation of the number of fractions per sample.
-COMPLETENESS CHECK: The full set contains only ""1"", which accurately reflects the experimental setup described.
+"PXD003531","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: The paper explicitly mentions ""label-free quantitation"" in the results section when describing the OVCAR3 cell line experiment.
+TRUTH CHECK: The use of label-free quantitation is factually correct for the experiments described.
+COMPLETENESS CHECK: The full set of extracted values (""label-free"") is exhaustive as no other labeling methods (like TMT or SILAC) are mentioned.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -190,10 +122,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD003531","ExperimentalDesignAgent","number_of_samples","13","13","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The text explicitly states ""LC-MS/MS measurements from 13 independent patient samples (four OSE, four EOC, and five FTE)"".
-TRUTH CHECK:       The value 13 is factually correct based on the provided text for the primary cell analysis.
-COMPLETENESS CHECK: The full set contains ""13"", which accurately reflects the number of patient samples processed for the main phosphoproteomics analysis. While the paper also mentions a separate experiment with OVCAR3 cells, the primary sample count is 13.
+"PXD003531","ExperimentalDesignAgent","replicates","13 independent patient samples","13 independent patient samples | 13","high","False","","True","True","False","TYPE CHECK:        The candidate value contains a numeric count of samples, which is the correct category for biological replicates.
+SOURCE CHECK:      The text explicitly states ""measurements from 13 independent patient samples"".
+TRUTH CHECK:       The value is factually correct as the study used 13 independent patient samples as biological replicates for the primary cell analysis.
+COMPLETENESS CHECK:The full set of extracted values (""13 independent patient samples"", ""13"") is exhaustive and covers the biological replication described for the main experiment.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -201,3 +133,70 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
+"PXD003531","ExperimentalDesignAgent","replicates","13","13 independent patient samples | 13","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK: The text explicitly states that measurements were taken from ""13 independent patient samples"".
+TRUTH CHECK: In the context of patient-derived primary cells, each independent patient sample serves as a biological replicate.
+COMPLETENESS CHECK: The full set of extracted values (""13 independent patient samples"", ""13"") accurately and exhaustively captures the number of biological replicates described for the primary cell experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD003531","ExperimentalDesignAgent","technical_replicates","technical replicates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""technical replicates"" is a phrase describing the concept, not a numeric count as required by the field definition.
+SOURCE CHECK:      The paper mentions ""coverage of protein and phosphorylated peptides among technical replicates (samples 1, 2, and 4) was high"", but it does not provide a specific number of technical replicates per sample.
+TRUTH CHECK:       The value is not a factual count; it is simply the name of the field.
+COMPLETENESS CHECK:The full set contains only the phrase ""technical replicates"" and no numeric value, failing to provide the actual count.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD003531","ExperimentalDesignAgent","experimental_design","comparison of high-grade serous EOC with non-neoplastic FTE and OSE","comparison of high-grade serous EOC with non-neoplastic FTE and OSE","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental groups being compared, which fits the definition of a study design.
+SOURCE CHECK:      The text explicitly states, ""we compared the molecular profile of high-grade serous EOC with those of non-neoplastic FTE and OSE.""
+TRUTH CHECK:       The value accurately reflects the primary experimental comparison described in the results section.
+COMPLETENESS CHECK: The full set captures the main comparative design of the primary cell study, although the paper also includes a ""treated vs control"" design for the OVCAR3 cell line (THZ1 vs untreated).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""comparison of high-grade serous EOC with non-neoplastic FTE and OSE"", ""treated vs control""]","comparison of high-grade serous EOC with non-neoplastic FTE and OSE, treated vs control"
+"PXD003531","ExperimentalDesignAgent","factor_value","tissue origin (OSE, EOC, FTE)","tissue origin (OSE, EOC, FTE)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (tissue types) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly compares ""high-grade serous EOC with those of non-neoplastic FTE and OSE"" and groups samples into these three categories.
+TRUTH CHECK:       The value is factually correct as the study investigates the differences between Ovarian Surface Epithelium (OSE), Fallopian Tube Epithelium (FTE), and Epithelial Ovarian Cancer (EOC).
+COMPLETENESS CHECK: The full set captures the primary biological factor of the main study; however, the paper also includes a separate experiment using ""drug treatment"" (THZ1 and U0126) in OVCAR3 cells.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""tissue origin (OSE, EOC, FTE)"", ""drug treatment (THZ1, U0126)""]","tissue origin (OSE, EOC, FTE), drug treatment (THZ1, U0126)"
+"PXD003531","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK:      The paper describes ""single-shot mass-spectrometry-based phosphoproteomics"" and ""single-run liquid chromatography-tandem mass spectrometry (LC-MS/MS) measurements,"" indicating no offline fractionation was performed.
+TRUTH CHECK:       Since the analysis was performed in a single run/shot per sample, the number of fractions is 1.
+COMPLETENESS CHECK: The full set of extracted values correctly reflects the experimental setup described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD003531","ExperimentalDesignAgent","number_of_samples","13","13","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK: The text explicitly states ""LC-MS/MS measurements from 13 independent patient samples (four OSE, four EOC, and five FTE)"".
+TRUTH CHECK: The value 13 is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values (13) covers the primary patient-derived sample cohort described in the results.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

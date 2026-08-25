@@ -1,0 +1,169 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD018357","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human Caco-2 cells"" and ""Homo sapiens SwissProt database"".
+TRUTH CHECK:       The source material (Caco-2 and UKF-RC-2 cells) is human.
+COMPLETENESS CHECK: The full set contains the only relevant source organism for the proteomics analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","BiologicalAgent","organ","colon","colon","high","False","","True","True","False","TYPE CHECK:        The candidate value ""colon"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper states that Caco-2 cells are ""derived from colon carcinoma"".
+TRUTH CHECK:       The source material is a cell line (Caco-2) derived from the colon; therefore, ""colon"" is the correct organ of origin.
+COMPLETENESS CHECK: The full set contains ""colon"", which accurately describes the organ of origin for the primary cell line used in the proteomics experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" describes a cell lineage/type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""Caco-2 cells"" and ""UKF-RC-2 human kidney cells"". Caco-2 is a well-known human colorectal adenocarcinoma cell line (epithelial), and UKF-RC-2 is derived from renal carcinoma (epithelial). However, the text does not explicitly use the words ""epithelial cell"".
+TRUTH CHECK:       While Caco-2 and renal carcinoma cells are epithelial in nature, the field `cell_type` is intended for primary cell types or lineages. In this study, the materials used are specifically ""cell lines"" (Caco-2 and UKF-RC-2), which should be captured in the `cell_line` field.
+COMPLETENESS CHECK:    The full set contains only this value, but it is a supertype/inference not explicitly stated in the text.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD018357","BiologicalAgent","disease","colorectal carcinoma","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""Caco-2 cells, derived from colon carcinoma"", but it does not use the term ""colorectal carcinoma"".
+TRUTH CHECK:       While Caco-2 is a colon carcinoma cell line, the study's primary focus is on ""SARS-CoV-2 infection"" and the ""disease"" state being modeled is the viral infection, not the origin of the cell line. However, the cell line itself is derived from a carcinoma.
+COMPLETENESS CHECK:    The full set only contains the cell line origin, missing the actual experimental disease state (SARS-CoV-2 infection).
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""SARS-CoV-2 infection""]","SARS-CoV-2 infection"
+"PXD018357","BiologicalAgent","material_type","Caco-2 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Caco-2 cells"" is a specific cell line name, not a broad material class as required by the definition.
+SOURCE CHECK:      The value is present in the text, as Caco-2 cells were used for the proteomics analysis.
+TRUTH CHECK:       While Caco-2 cells were used, the field requires the broad category (e.g., ""cell line"").
+COMPLETENESS CHECK: The full set contains only the specific cell name rather than the material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD018357","BiologicalAgent","anatomic_site_tumor","colon","colon","high","False","","True","True","False","TYPE CHECK:        Yes, ""colon"" is an anatomical site.
+SOURCE CHECK:      Yes, the paper states that Caco-2 cells are ""derived from colon carcinoma"".
+TRUTH CHECK:       Yes, the tumor from which the Caco-2 cell line was derived is located in the colon.
+COMPLETENESS CHECK:The full set contains ""colon"", which accurately describes the anatomical site of the tumor for the Caco-2 cells used in the proteomics experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","BiologicalAgent","cell_line","Caco-2","Caco-2","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""Caco-2"" is explicitly mentioned multiple times in the text (e.g., ""Caco-2 cells were mock-infected..."").
+TRUTH CHECK: The value is factually correct as the paper uses Caco-2 cells for the phosphoproteomics and viral replication experiments.
+COMPLETENESS CHECK: The full set of extracted values is missing ""UKF-RC-2"", which is also explicitly described as a cell line established from a tumor sample and used for antiviral experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Caco-2"", ""UKF-RC-2""]","Caco-2, UKF-RC-2"
+"PXD018357","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly states, ""All mass spectrometry data was acquired in centroid mode on an Orbitrap Fusion Lumos mass spectrometer"".
+TRUTH CHECK: The value is factually correct according to the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD018357","TechnicalAgent","label","TMT 10-plex","TMT 10-plex","high","False","","True","True","False","TYPE CHECK: The candidate value ""TMT 10-plex"" describes an isobaric labeling method, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""tandem mass tag (TMT) 10-plex samples"" in the Results section.
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the only labeling method mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD018357","ExperimentalDesignAgent","replicates","5 biological replicates per group","5 biological replicates per group","high","False","","True","True","False","TYPE CHECK:        The candidate value provides a numeric count of biological replicates, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""Caco-2 cells were mock-infected or infected with SARS-CoV-2 patient isolates (in 5 biological replicates at an MOI of 1)"".
+TRUTH CHECK:       The value ""5 biological replicates per group"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set includes ""5 biological replicates per group"" and ""10"". The ""10"" likely refers to the TMT 10-plex used, which is a technical multiplexing detail, not the number of biological replicates. The ""5 biological replicates"" per group (mock vs infected) is the correct biological replicate count. Together, the set is exhaustive of the biological replication mentioned.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","ExperimentalDesignAgent","replicates","10","5 biological replicates per group","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper states ""Caco-2 cells were mock-infected or infected with SARS-CoV-2 patient isolates (in 5 biological replicates at an MOI of 1)"". There is no mention of ""10"" biological replicates.
+TRUTH CHECK:       The value ""10"" is factually incorrect; the paper explicitly specifies 5 biological replicates per group. The number 10 likely comes from the ""TMT 10-plex"" mentioned in the text, which refers to the labeling capacity/multiplexing, not the number of biological replicates.
+COMPLETENESS CHECK:   The full set contains an incorrect value (""10"") and a correct value (""5 biological replicates per group""), but the ""10"" is a hallucination/misinterpretation.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""5""]","5"
+"PXD018357","ExperimentalDesignAgent","experimental_design","mock-infected vs SARS-CoV-2 infected comparison","mock-infected vs SARS-CoV-2 infected comparison","high","False","","True","True","False","TYPE CHECK: The candidate value describes the study design (comparison between two groups), which matches the field definition.
+SOURCE CHECK: The text explicitly states ""Caco-2 cells were mock-infected or infected with SARS-CoV-2 patient isolates,"" indicating a comparison between these two states.
+TRUTH CHECK: The value accurately reflects the experimental setup described in the results section.
+COMPLETENESS CHECK: The full set contains this single value, which exhaustively describes the primary experimental design for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD018357","ExperimentalDesignAgent","factor_value","infection status (mock-infected, infected with SARS-CoV-2)","infection status (mock-infected, infected with SARS-CoV-2)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (infection status) and its levels, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly states that ""Caco-2 cells were mock-infected or infected with SARS-CoV-2 patient isolates"".
+TRUTH CHECK:       The value is factually correct based on the experimental design described in the results section.
+COMPLETENESS CHECK: The full set contains the primary experimental factor used for the phosphoproteomics and proteomics analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","ExperimentalDesignAgent","fractions","24 (whole cell proteome), 4 (phosphoproteome)","24 (whole cell proteome), 4 (phosphoproteome)","high","False","","True","True","False","TYPE CHECK:        The candidate value provides numeric counts of fractions for different experimental arms, which matches the field definition.
+SOURCE CHECK:      The text states that for the whole cell proteome, 96 fractions were ""cross-concatenated into 24 fractions,"" and for the phosphoproteome, ""eight fractions were concatenated into four fractions.""
+TRUTH CHECK:       The values accurately reflect the final number of fractions analyzed by LC-MS for each respective proteomics experiment.
+COMPLETENESS CHECK:    The full set captures both the whole-cell and phosphoproteome fractionation schemes described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018357","ExperimentalDesignAgent","number_of_samples","10","10","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper mentions ""TMT 10-plex samples"" for both whole-cell proteomics and phosphoproteome analyses.
+TRUTH CHECK:       A TMT 10-plex indicates that 10 samples were multiplexed and processed together in a single experiment.
+COMPLETENESS CHECK: The full set contains ""10"", which accurately reflects the multiplexing scale described for the proteomics experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

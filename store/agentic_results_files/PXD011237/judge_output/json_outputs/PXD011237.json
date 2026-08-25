@@ -11,58 +11,26 @@
       "hallucination": false,
       "corrected_value": "Homo sapiens, Mus musculus",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human plasma\" and \"human fXII\" multiple times throughout the text.",
-        "TRUTH_CHECK": "The use of human plasma and proteins confirms that Homo sapiens is a source organism for the experiments.",
-        "COMPLETENESS_CHECK": "The paper also uses murine plasma and mice (Mus musculus), but the current set only contains \"Homo sapiens\"."
-      }
-    },
-    {
-      "annotation_type": "organ",
-      "extracted_value": "blood",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "plasma",
-      "issue_summary": {
-        "TYPE_CHECK": "yes",
-        "SOURCE_CHECK": "no",
-        "TRUTH_CHECK": "no",
-        "COMPLETENESS_CHECK": "The full set is incorrect as the paper specifies \"plasma\" rather than \"blood\"."
-      }
-    },
-    {
-      "annotation_type": "disease",
-      "extracted_value": "normal",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "normal, hereditary angioedema type III",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field as per the definition for healthy controls.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"Normal (healthy) plasma samples\" and \"normal (healthy) human pooled plasma samples\".",
-        "TRUTH_CHECK": "The value is factually correct as the study used healthy human plasma as a control.",
-        "COMPLETENESS_CHECK": "The full set contains \"normal\", which covers the healthy control group; however, the paper also uses plasma from patients with \"hereditary angioedema type III (HAEIII)\"."
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human plasma\" and \"human fXII\" throughout the text.",
+        "TRUTH_CHECK": "The use of human-derived materials (plasma, fXII) confirms Homo sapiens as a source organism.",
+        "COMPLETENESS_CHECK": "The paper also uses murine plasma and mice (Mus musculus), but the current set only contains Homo sapiens."
       }
     },
     {
       "annotation_type": "material_type",
-      "extracted_value": "healthy donors",
+      "extracted_value": "purified human fXII",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "plasma",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "No, \"healthy donors\" describes the source of the material (the subjects), not the broad material class (e.g., plasma, tissue).",
-        "SOURCE_CHECK": "The paper mentions \"normal (healthy) human pooled plasma samples\" and \"plasma from healthy individuals,\" but the candidate value describes the donors rather than the material.",
-        "TRUTH_CHECK": "The value is factually related to the study but does not match the field definition for material_type.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it fails to identify the actual material used (plasma)."
+        "TYPE_CHECK": "No, \"purified human fXII\" is a specific protein, not a broad material class like \"plasma\" or \"tissue\".",
+        "SOURCE_CHECK": "The text mentions \"purified human fXII\" was used in assays, but this is a protein/reagent, not the source material type.",
+        "TRUTH_CHECK": "The value is a specific entity mentioned in the paper, but it does not fit the definition of `material_type`.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies a protein instead of the material class (e.g., \"plasma\" or \"biofluid\")."
       }
     },
     {
@@ -77,8 +45,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The text explicitly mentions \"a ThermoFisher Q Exactive\" in the GeLC-MS/MS analysis section.",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer used for the proteomics (GeLC-MS/MS) analysis; the other instrument mentioned (Waters Qtof) was used for intact mass determination, but \"Q Exactive\" is a correct extraction for the proteomics part of the study."
+        "TRUTH_CHECK": "The value is factually correct based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer used for the peptide identification (GeLC-MS/MS) described in the methods. (Note: A Waters Qtof is also mentioned for intact mass determination, but the candidate value is a correct extraction of one of the instruments)."
       }
     },
     {
@@ -93,45 +61,45 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
         "SOURCE_CHECK": "No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The extraction is factually correct as the experiment used standard LC-MS/MS without labeling.",
+        "TRUTH_CHECK": "The extraction is factually correct as the experiment used standard LC-MS/MS without labels.",
         "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "purified human fXII fragments",
-      "verdict": "low",
-      "type_mismatch": true,
-      "value_correct": false,
-      "value_complete": false,
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"purified human fXII fragments\" is a description of a sample material, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The phrase \"purified human fXII fragments\" appears in the text, but it does not refer to the number of replicates.",
-        "TRUTH_CHECK": "The value is factually incorrect for the field \"replicates\".",
-        "COMPLETENESS_CHECK": "The full set contains a numeric value \"2\" and a material description; however, the material description is a type mismatch."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates for the MS experiments; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for silent replication.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single default value, which is exhaustive given the text."
       }
     },
     {
-      "annotation_type": "replicates",
-      "extracted_value": "2",
-      "verdict": "low",
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "No, the candidate value \"2\" is a numeric count, but the set of all_extracted_values contains \"purified human fXII fragments\", which is a material/sample description, not a replicate count.",
-        "SOURCE_CHECK": "The paper does not explicitly state a number of biological replicates for the MS experiments; it mentions \"two different mice\" for the fXII expression experiment and \"two different patients\" for the HAEIII plasma, but these are specific to those sub-experiments, not a general replicate count for the proteomics analysis.",
-        "TRUTH_CHECK": "There is no evidence in the text to support \"2\" as the number of biological replicates for the overall study or the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it mixes a sample description with a number that is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
+        "SOURCE_CHECK": "The paper does not mention technical replicates for the MS analysis; therefore, the safe default of \"1\" is applied.",
+        "TRUTH_CHECK": "The value is correct based on the safe default rule for silent replication.",
+        "COMPLETENESS_CHECK": "The full set contains the safe default value, which is exhaustive when the paper is silent."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "characterization of fXII cleavage fragments 1 and 2",
+      "extracted_value": "Identification of fXII cleavage sites via LC-MS/MS",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -139,9 +107,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a specific experimental goal or analysis rather than a study design type (e.g., \"treated vs control\", \"case-control\").",
-        "SOURCE_CHECK": "The text does describe the characterization of fXII fragments 1 and 2, but this is a result/analysis, not the overall experimental design.",
-        "TRUTH_CHECK": "The value is a description of a task performed, but it does not fit the definition of \"experimental_design\".",
+        "TYPE_CHECK": "The candidate value describes a specific analytical procedure/goal rather than a study design type (e.g., \"treated vs control\", \"case-control\").",
+        "SOURCE_CHECK": "The text mentions identifying cleavage sites via LC-MS/MS, but this is a method, not the experimental design.",
+        "TRUTH_CHECK": "The value is a correct description of a task performed in the paper, but it is not an \"experimental design\" in the context of the field definition.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
       }
     },
@@ -155,10 +123,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes specific protein fragments, which are the subjects of analysis rather than the experimental factor or variable being manipulated.",
-        "SOURCE_CHECK": "The fragments are mentioned in the text (fragment 1 and 2), but they are the result of the protease action, not the experimental factor.",
-        "TRUTH_CHECK": "The experimental factors in this study are the presence/absence of CpaA (WT vs $\\Delta cpaA$), the glycosylation state of fXII (glycosylated vs deglycosylated), and the fXII genotype (wild-type vs Thr309Lys mutation). The fragments are the observed outcomes.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies the outcome/material instead of the experimental variable."
+        "TYPE_CHECK": "No, the candidate value describes specific protein fragments generated by a protease, not an experimental factor or variable (like a treatment, genotype, or condition).",
+        "SOURCE_CHECK": "The fragments are mentioned in the text, but they are the *result* of the experiment, not the *factor* being manipulated.",
+        "TRUTH_CHECK": "The value is factually present as a result, but it is not a \"factor_value\" in the context of experimental design.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it identifies a result as a factor."
       }
     },
     {
@@ -171,10 +139,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is correct as no fractionation was performed.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of \"1\" applies.",
+        "TRUTH_CHECK": "The value is factually correct as no fractionation was performed.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which correctly represents the lack of fractionation."
       }
     },
     {
@@ -188,9 +156,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of samples.",
-        "SOURCE_CHECK": "The paper does not explicitly state a total count of samples processed in the study. While it mentions \"two different patients\" for the HAEIII plasma samples and \"two different mice\" for the fXII expression experiment, these are subsets of the overall experimental work.",
-        "TRUTH_CHECK": "The value \"2\" is not a correct representation of the total number of samples processed in the entire study; it likely refers to a specific sub-experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values does not cover the total number of samples processed in the study."
+        "SOURCE_CHECK": "The paper does not explicitly state a total count of samples processed in the study.",
+        "TRUTH_CHECK": "The value \"2\" is not supported by the text; while there are mentions of \"two different mice\" or \"two different patients,\" these are subsets of various experiments, not the total sample count for the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values does not cover the complete picture because the total number of samples is not provided in the text."
       }
     }
   ]

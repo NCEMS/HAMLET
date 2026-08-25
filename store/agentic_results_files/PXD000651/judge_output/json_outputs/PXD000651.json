@@ -12,8 +12,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human cerebrospinal fluid (CSF)\" and \"human Swiss-Prot database\".",
-        "TRUTH_CHECK": "The study uses samples from human volunteers, making \"Homo sapiens\" factually correct.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"human cerebrospinal fluid (CSF)\" and \"human Swiss-Prot database,\" making \"Homo sapiens\" a correct and reasonable extraction.",
+        "TRUTH_CHECK": "The study uses samples from human volunteers, so \"Homo sapiens\" is factually correct.",
         "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
       }
     },
@@ -27,10 +27,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value lists body fluids, which are acceptable as \"organ\" (tissue) of origin per the field definition.",
-        "SOURCE_CHECK": "Both \"cerebrospinal fluid\" (CSF) and \"plasma\" are explicitly mentioned as the sources of the proteins analyzed.",
-        "TRUTH_CHECK": "The paper describes the mapping of the proteome for both human CSF and plasma.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers all biological sources used in the study."
+        "TYPE_CHECK": "The candidate value refers to body fluids, which are acceptable as \"organ\" (tissue) of origin per the field definition.",
+        "SOURCE_CHECK": "Both \"cerebrospinal fluid\" (CSF) and \"plasma\" are explicitly mentioned throughout the text as the sources of the proteins analyzed.",
+        "TRUTH_CHECK": "The values are factually correct; the study maps the proteomes of both human CSF and plasma.",
+        "COMPLETENESS_CHECK": "The full set contains both fluids analyzed in the study, making it exhaustive."
       }
     },
     {
@@ -43,10 +43,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field, as the definition explicitly allows \"normal\" or \"healthy\" for healthy controls.",
-        "SOURCE_CHECK": "The paper states that the CSF pool was from \"21 neurologically healthy volunteers\" and refers to the results as \"The Normal Cerebrospinal Fluid Proteome\".",
-        "TRUTH_CHECK": "The subjects are described as neurologically healthy, making \"normal\" a factually correct representation of the disease state.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"normal\") accurately and exhaustively covers the disease state of the subjects described in the paper."
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field when subjects are healthy controls.",
+        "SOURCE_CHECK": "The paper explicitly describes the subjects as \"neurologically healthy volunteers\" and \"neurologically healthy patients.\"",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on mapping the \"Normal Cerebrospinal Fluid Proteome.\"",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"normal\") exhaustively covers the disease state of the subjects described in the paper."
       }
     },
     {
@@ -59,10 +59,10 @@
       "hallucination": false,
       "corrected_value": "biofluid, plasma",
       "issue_summary": {
-        "TYPE_CHECK": "No, the candidate value describes the subject population (volunteers), not the broad material class (e.g., biofluid, plasma).",
-        "SOURCE_CHECK": "The phrase \"neurologically healthy volunteers\" is present in the text, but it refers to the donors, not the material type.",
-        "TRUTH_CHECK": "The value is factually incorrect as a material type; the materials used were cerebrospinal fluid (CSF) and plasma.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it fails to identify the actual material types described in the paper."
+        "TYPE_CHECK": "The candidate value \"neurologically healthy volunteers\" describes the study subjects/donors, not the broad material class (e.g., biofluid, tissue).",
+        "SOURCE_CHECK": "The phrase is present in the text, but it refers to the source of the samples, not the material type itself.",
+        "TRUTH_CHECK": "The value is factually incorrect for this field; the material used was cerebrospinal fluid (CSF) and plasma.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies the subjects instead of the material."
       }
     },
     {
@@ -91,15 +91,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label-free\" is the correct category for the label field.",
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
         "SOURCE_CHECK": "No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, \"label-free\" is a safe default.",
-        "TRUTH_CHECK": "The experimental description focuses on fractionation and enrichment without any mention of labels, making \"label-free\" factually correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no labeling was used."
+        "TRUTH_CHECK": "The experiment used standard LC-MS/MS without labeling, making \"label-free\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately describes the labeling state of the experiment."
       }
     },
     {
       "annotation_type": "replicates",
-      "extracted_value": "pooled CSF from 21 neurologically healthy volunteers and pooled plasma from 20 individuals",
+      "extracted_value": "pooled CSF from 21 volunteers and pooled plasma from 20 volunteers",
       "verdict": "low",
       "type_mismatch": true,
       "value_correct": false,
@@ -107,10 +107,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a description of the sample composition, not a numeric count of biological replicates.",
-        "SOURCE_CHECK": "The text mentions a pool of 21 CSF samples and 20 plasma samples, but the candidate value is a description, not a count.",
-        "TRUTH_CHECK": "The value is factually present in the text but does not answer the question of how many biological replicates (independent experimental units) were processed.",
-        "COMPLETENESS_CHECK": "The full set contains a description and the number \"2\" (likely referring to the two pools), but neither accurately represents the biological replicates as defined (the study used pooled samples, effectively creating N=1 for each fluid type per strategy)."
+        "TYPE_CHECK": "No. The candidate value is a description of the sample composition, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The text mentions a pool of 21 CSF volunteers and 20 plasma volunteers, but this describes the sample source, not the number of replicates.",
+        "TRUTH_CHECK": "The value is a description of the sample, not the number of replicates.",
+        "COMPLETENESS_CHECK": "The full set contains a numeric value \"2\" (likely referring to the two body fluids), but the candidate value itself is not a replicate count."
       }
     },
     {
@@ -120,34 +120,18 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": false,
+      "hallucination": true,
       "corrected_value": "1",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"2\" is a numeric count, which is the correct category for the replicates field.",
-        "SOURCE_CHECK": "The paper describes the use of a \"CSF pool from 21 neurologically healthy volunteers\" and a \"plasma pool from 20 of the same individuals.\" It does not mention performing the experiment in duplicate or triplicate across different biological pools.",
-        "TRUTH_CHECK": "The value \"2\" is incorrect. The study used pooled samples (one pool for CSF and one pool for plasma), meaning there was only one biological replicate (the pool itself) per body fluid type. The number \"2\" likely comes from a misinterpretation of the two different body fluids (CSF and plasma) as biological replicates.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect; one is a description of the pool and the other is an incorrect count."
-      }
-    },
-    {
-      "annotation_type": "technical_replicates",
-      "extracted_value": "1",
-      "verdict": "high",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
-      "corrected_value": null,
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for technical replicates.",
-        "SOURCE_CHECK": "The paper does not mention any technical replicates for the LC-MS/MS analysis; therefore, the safe default of \"1\" is applied.",
-        "TRUTH_CHECK": "The value is correct based on the absence of information regarding technical replication.",
-        "COMPLETENESS_CHECK": "The full set contains the single value \"1\", which is exhaustive for this study."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the 'replicates' field.",
+        "SOURCE_CHECK": "The paper mentions a \"CSF pool from 21 neurologically healthy volunteers\" and a \"plasma pool from 20 of the same individuals,\" but it does not state that these pools were processed in duplicate or that multiple independent pools were used.",
+        "TRUTH_CHECK": "The value \"2\" is not supported by the text; the study used pooled samples, and there is no mention of biological replicates (multiple independent pools/subjects processed separately).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect; one value describes the pool composition and the other is an unsupported number."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "fluid type (CSF, plasma), analytical strategy (SDS-PAGE, MM RP-AX, glycopeptide capture)",
+      "extracted_value": "fluid type (CSF, plasma), fractionation strategy (SDS-PAGE, MM RP-AX, glycopeptide capture)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -155,26 +139,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental variables (fluid type and analytical strategy) being compared/used, which fits the definition of a factor value.",
-        "SOURCE_CHECK": "The paper explicitly compares CSF vs plasma and uses three different analytical strategies (SDS-PAGE, MM RP-AX, and glycopeptide capture).",
+        "TYPE_CHECK": "The candidate value describes the experimental variables (fluid type and fractionation strategy) being compared or used, which fits the definition of a factor value.",
+        "SOURCE_CHECK": "The paper explicitly compares CSF and plasma and uses three different fractionation strategies (SDS-PAGE, MM RP-AX, and glycopeptide capture).",
         "TRUTH_CHECK": "The values are factually correct based on the \"Three Proteome Mapping Strategies\" and \"Plasma Mixed Mode Mapping\" sections.",
-        "COMPLETENESS_CHECK": "The full set captures the primary variables manipulated/compared in the study design."
+        "COMPLETENESS_CHECK": "The full set captures the primary variables of the study (the body fluids and the analytical methods used to map them)."
       }
     },
     {
       "annotation_type": "fractions",
-      "extracted_value": "179",
-      "verdict": "high",
+      "extracted_value": "142",
+      "verdict": "low",
       "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": true,
-      "hallucination": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
-        "SOURCE_CHECK": "The paper describes multiple fractionation strategies: SDS-PAGE (46 slices for depleted + 37 for bound = 83), Mixed Mode Global (66 for depleted + 10 for bound = 76), and Mixed Mode Glyco (20 fractions). Summing these (83 + 76 + 20) equals 179.",
-        "TRUTH_CHECK": "The value 179 is the sum of all fractions generated across the three different experimental strategies described in the paper.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately aggregates the fractionation counts from all three experimental arms described."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes multiple fractionation strategies: SDS-PAGE (46 slices for depleted + 37 slices for bound = 83), Mixed Mode Global (66 fractions for depleted + 10 for bound = 76), and Mixed Mode Glyco (20 fractions).",
+        "TRUTH_CHECK": "The value \"142\" does not appear in the text. If the pipeline summed the fractions from the different experiments (83 + 76 + 20 = 179), it still does not equal 142. The paper describes different strategies applied to a pool, not a single sample split into 142 fractions.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value and does not accurately reflect the fractionation described in the paper."
       }
     },
     {
@@ -188,9 +172,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of samples.",
-        "SOURCE_CHECK": "The paper mentions a \"CSF pool from 21 neurologically healthy volunteers\" and a \"plasma pool from 20 of the same individuals.\"",
-        "TRUTH_CHECK": "The study processed two main pooled samples (one CSF pool and one plasma pool) for the MS analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the two pooled samples used as the starting material for the various experimental strategies."
+        "SOURCE_CHECK": "The paper describes the use of a \"CSF pool from 21 neurologically healthy volunteers\" and a \"plasma pool from 20 of the same individuals.\"",
+        "TRUTH_CHECK": "The study processed two pooled samples (one CSF pool and one plasma pool) for the MS analysis, making \"2\" a factually correct representation of the samples analyzed.",
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the two pooled samples processed in the study."
       }
     }
   ]

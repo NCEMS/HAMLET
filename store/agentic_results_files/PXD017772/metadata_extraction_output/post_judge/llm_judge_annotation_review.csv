@@ -1,0 +1,219 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
+"PXD017772","","strict","Biological","age","8 dpp, 12 dpp, 14 dpp, 18 dpp, 20 dpp, 28 dpp, 17-18 dpp, adult","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value consists of age/developmental time points, which is the correct category for the age field.
+SOURCE CHECK: The values are present in the text, but most refer to RT-PCR or immunofluorescence experiments; only ""17-18 dpp"" (and potentially ""adult"") are associated with the mass spectrometry experiment.
+TRUTH CHECK: The mass spectrometry section explicitly states: ""DICER was immunoprecipitated from 17–18 dpp mouse testes... and samples were submitted to LC–ESI-MS/MS analysis"". The other time points (8, 12, 14, 20, 28 dpp) refer to the RT-PCR time course.
+COMPLETENESS CHECK: The full set includes values from unrelated assays, making it over-inclusive and factually incorrect for the specific MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 17-18 dpp","17-18 dpp"
+"PXD017772","","strict","Biological","cell_type","male germ cells, spermatogonia, spermatocytes, pachytene spermatocytes, round spermatids","male germ cells, spermatogonia, spermatocytes, pachytene spermatocytes, round spermatids","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value consists of primary cell types and lineages, which matches the definition of the `cell_type` field.
+SOURCE CHECK: The values are present in the text; the mass spectrometry analysis was performed on DICER immunoprecipitated from 17–18 dpp mouse testes, which the paper explicitly states contain these specific germ cell types (specifically pachytene spermatocytes at that time point).
+TRUTH CHECK: The values are factually correct as the study focuses on the role of DICER in these specific male germ cell populations during spermatogenesis.
+COMPLETENESS CHECK: The full set of extracted values covers the various stages of germ cells discussed and analyzed in the context of the proteomics/MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Biological","organ","testes","testes","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""testes"" is a valid organ/tissue name.
+SOURCE CHECK: The value comes from the MS experiment context; the ""Mass spectrometry"" section explicitly states that ""DICER was immunoprecipitated from 17–18 dpp mouse testes"" and then analyzed by LC-ESI-MS/MS.
+TRUTH CHECK: The value is factually correct as the proteomics analysis was performed on material derived from mouse testes.
+COMPLETENESS CHECK: The full set contains ""testes"", which is the only organ used for the MS sample in this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""male"" is the correct category for the sex field.
+SOURCE CHECK: The value is explicitly mentioned in the text (e.g., ""Male germ cells"", ""Dicer1 cKO male mice"") and refers to the biological source of the MS sample (testes).
+TRUTH CHECK: The value is factually correct as the study focuses on spermatogenesis and uses male mouse testes.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""mouse spermatogenesis"" and ""mouse testes"" in the context of the mass spectrometry analysis.
+TRUTH CHECK: The study uses mice, and ""Mus musculus"" is the correct scientific name for the mouse.
+COMPLETENESS CHECK: The full set contains the only species used in the experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","ExperimentalDesign","factor_value","IP target (DICER, IgG)","IP target (DICER, IgG)","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the target of an immunoprecipitation (IP), which is a valid experimental factor/variable for the study.
+SOURCE CHECK: The value is derived from the mass spectrometry experiment context, where DICER was immunoprecipitated from mouse testes to identify interacting proteins.
+TRUTH CHECK: The paper explicitly states that DICER was immunoprecipitated (""DICER was immunoprecipitated from 17–18 dpp mouse testes""). While ""IgG"" is not explicitly mentioned in the provided text as the control for the MS experiment, it is the universal standard control for IP-MS; however, the rules require explicit mention for specific values.
+COMPLETENESS CHECK: The full set contains only this value, which covers the primary experimental variable (the IP target) for the proteomics analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes the mass spectrometry workflow (""digested with trypsin... submitted to LC–ESI-MS/MS analysis"") but does not mention any offline peptide or protein fractionation steps.
+TRUTH CHECK: Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The value ""1"" correctly reflects the absence of fractionation for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","ExperimentalDesign","replicates","2","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper mentions ""two CTRL and two Dicer1 cKO mice"" in the DNA in situ hybridization section and ""n = 3"" in the flow cytometry section, but for the mass spectrometry experiment, it states ""DICER was immunoprecipitated from 17–18 dpp mouse testes"" without specifying the number of biological replicates.
+TRUTH CHECK: There is no explicit mention of 2 biological replicates for the mass spectrometry experiment; the value ""2"" appears in the context of DNA in situ hybridization, not the MS workflow.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the MS experimental context.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 1","1"
+"PXD017772","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK: In the absence of explicit mention of technical replication for the MS analysis, ""1"" is the correct default value.
+COMPLETENESS CHECK: The full set contains only the default value, which is complete given the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a valid acquisition scheme name.
+SOURCE CHECK: The value is present in the ""Mass spectrometry"" section of the methods, which describes the actual MS experiment.
+TRUTH CHECK: The paper explicitly states ""An information dependent acquisition method consisted of an Orbitrap MS survey scan... followed by HCD fragmentation"", and ""information dependent acquisition"" is a synonym for ""data-dependent acquisition"" (DDA).
+COMPLETENESS CHECK: The full set contains the only acquisition method described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section: ""Beads were washed with Tris buffer (pH 8.0) and digested with trypsin..."".
+TRUTH CHECK: The value is factually correct as the paper states trypsin was used for digestion of the immunoprecipitated DICER.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Trypsin"", which is the only cleavage agent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","fragment_mass_tolerance","15 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""15 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set consists of a single value that is not present in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not present in the paper text; the text explicitly states ""HCD fragmentation"".
+TRUTH CHECK: While HCD (Higher-energy Collisional Dissociation) is a form of beam-type CID, the specific phrase ""beam-type collision-induced dissociation"" does not appear in the text.
+COMPLETENESS CHECK: The full set is incomplete/incorrect because it uses a synonym/description not found in the text instead of the explicitly stated method.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD017772","","strict","Technical","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section of the methods, describing the instrument used for the LC-ESI-MS/MS analysis of DICER-interacting proteins.
+TRUTH CHECK: The paper states the samples were analyzed on a ""Q Exactive mass spectrometer (Thermo Fisher Scientific)"".
+COMPLETENESS CHECK: Only one mass spectrometer is mentioned in the paper, and it has been extracted.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods defined for this field.
+SOURCE CHECK: The paper describes an LC-ESI-MS/MS analysis of DICER-immunoprecipitated proteins, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling method is mentioned, the ""label-free"" safe default is applicable.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the lack of labeling described in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","mass_analyzer","orbitrap","orbitrap","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the ""Mass spectrometry"" section, which describes the analysis of DICER-interacting proteins.
+TRUTH CHECK: The paper explicitly mentions an ""Orbitrap MS survey scan"" and the use of a ""Q Exactive mass spectrometer"" (which is an Orbitrap-based instrument).
+COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Oxidation (M)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; there is no mention of searching for methionine oxidation.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the paper text.
+TRUTH CHECK: The paper does not explicitly name any modifications searched during the mass spectrometry analysis.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD017772","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
+SOURCE CHECK: The value ""6 ppm"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the ""Mass spectrometry"" section describes the instrument and acquisition method but does not specify the mass tolerance used for the database search.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

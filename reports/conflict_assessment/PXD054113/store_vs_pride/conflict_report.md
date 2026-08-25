@@ -13,7 +13,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | Category | Macro precision | Macro recall | Macro F1 | Micro precision | Micro recall | Micro F1 |
 |---|---:|---:|---:|---:|---:|---:|
 | Biological | 0.200 | 0.167 | 0.182 | 0.200 | 0.167 | 0.182 |
-| Technical | 0.167 | 0.500 | 0.250 | 0.167 | 0.500 | 0.250 |
+| Technical | 0.250 | 0.750 | 0.375 | 0.250 | 0.750 | 0.375 |
 | ExperimentalDesign | 0.400 | 0.667 | 0.500 | 0.400 | 0.667 | 0.500 |
 
 ## Metadata type agreement across matched files
@@ -36,7 +36,7 @@ PRIDE is the gold standard. Rows are aligned by normalized exact `comment[data f
 | `comment[alkylation reagent]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[cleavage agent details]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[dissociation method]` | Technical | 0.000 | 0.000 | 0.000 |
-| `comment[instrument]` | Technical | 0.000 | 0.000 | 0.000 |
+| `comment[instrument]` | Technical | 1.000 | 1.000 | 1.000 |
 | `comment[label]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[modification parameters]` | Technical | 0.000 | 0.000 | 0.000 |
 | `comment[ms2 mass analyzer]` | Technical | 0.000 | 0.000 | 0.000 |

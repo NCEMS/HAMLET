@@ -1,19 +1,19 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD004613","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""HeLa cell lines"" and ""HT1080 cell line"" (human cell lines) and explicitly states the search was conducted against the ""Homo sapiens complete/reference proteome set of UniProt database"".
-TRUTH CHECK:       The use of human cell lines and the human proteome database confirms the species is Homo sapiens.
-COMPLETENESS CHECK: The full set contains the only species used in the experiments described.
-TYPE_CORRECT:      yes
+"PXD004613","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Homo sapiens complete/reference proteome set of UniProt database"" in the Mass spectrometry section and uses human cell lines (HeLa, HT1080).
+TRUTH CHECK: The use of human cell lines and the human proteome for database searching confirms the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species used in the experiments.
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
 "PXD004613","BiologicalAgent","organ","cervix","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""cervix"" is a valid organ/tissue type.
-SOURCE CHECK:      The paper mentions the use of HeLa cells, which are derived from a cervical cancer cell line, but the word ""cervix"" does not appear in the text.
-TRUTH CHECK:       While HeLa cells originate from the cervix, the experimental material used in this study consists of immortalized cell lines (HeLa, HT1080, DT40), not primary tissue or organs.
-COMPLETENESS CHECK: The full set contains only ""cervix"", which is an inference from the cell line origin rather than a description of the sample material.
+SOURCE CHECK:      The paper mentions the use of ""HeLa cell lines"" and ""HT1080 cell line"", but the word ""cervix"" does not appear in the text.
+TRUTH CHECK:       While HeLa cells are derived from a cervical cancer biopsy, the field definition requires the value to be present in or reasonably inferable from the paper text. The paper describes the experiments as being performed on ""HeLa cell lines"" (cell_line) and ""HT1080 cell line"", not on cervical tissue/organ.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -22,9 +22,9 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD004613","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
-SOURCE CHECK:      The paper mentions the use of HeLa and HT1080 cell lines, but it does not explicitly state that these are ""epithelial cells"" nor is this a safe default for these specific lines (HeLa is cervical cancer, HT1080 is fibrosarcoma).
-TRUTH CHECK:       The value is not supported by the provided text.
-COMPLETENESS CHECK: The full set contains only this unsupported value.
+SOURCE CHECK:      The paper mentions ""HeLa cell lines"" and ""HT1080 cell line"", but it does not explicitly state that these are ""epithelial cells"". While HeLa is known to be an epithelial-derived cell line, the text does not provide this specific description.
+TRUTH CHECK:       The value is not explicitly supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -32,10 +32,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD004613","BiologicalAgent","disease","cervical adenocarcinoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK:      The term ""cervical adenocarcinoma"" does not appear in the provided paper text.
-TRUTH CHECK:       The paper uses HeLa cells (which are derived from cervical adenocarcinoma), but the study focuses on basic cell biology (Repo-Man/PP1 and heterochromatin) rather than a disease state or diagnosis of a subject.
-COMPLETENESS CHECK: The full set contains only this value, but the value itself is not supported by the text.
+"PXD004613","BiologicalAgent","disease","cervical adenocarcinoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""cervical adenocarcinoma"" is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The term ""cervical adenocarcinoma"" does not appear in the provided paper text. The paper mentions HeLa cells, which are derived from cervical adenocarcinoma, but the text itself does not explicitly state the disease state of the subjects or the cell line origin.
+TRUTH CHECK:       While HeLa cells are known to be derived from cervical adenocarcinoma, this specific information is not present in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, but it is not supported by the source text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -46,16 +46,16 @@ CORRECTED_VALUE:   NONE",""
 "PXD004613","BiologicalAgent","material_type","HeLa cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HeLa cells"" is a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
 SOURCE CHECK:      The paper explicitly mentions the use of ""HeLa cell lines"" and ""HeLa cells"" throughout the text.
 TRUTH CHECK:       The value is factually correct as HeLa cells were used, but it is a specific entity rather than the broad category requested.
-COMPLETENESS CHECK: The full set contains only ""HeLa cells"", which is a specific instance of the broad category ""cell line"".
+COMPLETENESS CHECK: The full set contains only ""HeLa cells"", but the paper also mentions ""HT1080"" and ""DT40"" cell lines.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE","cell line"
+CORRECTED_VALUE:   [""cell line""]","cell line"
 "PXD004613","BiologicalAgent","cell_line","HeLa","HeLa","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""HeLa cell lines"" and ""HeLa cells"" multiple times throughout the results and methods sections.
+SOURCE CHECK:      The value ""HeLa"" is explicitly mentioned multiple times in the text (e.g., ""we used HeLa cell lines"", ""Repo-Man knockdown in HeLa cells"").
 TRUTH CHECK:       The value is factually correct as HeLa cells were used in the experiments.
 COMPLETENESS CHECK: The full set of extracted values is missing ""HT1080"" and ""DT40"", both of which are explicitly mentioned as cell lines used in the study.
 TYPE_CORRECT:      yes
@@ -66,9 +66,9 @@ HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""HeLa"", ""HT1080"", ""DT40""]","HeLa, HT1080, DT40"
 "PXD004613","TechnicalAgent","instrument","Q Exactive","Q Exactive","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""a Q Exactive mass spectrometer (Thermo Scientific)"" in the Mass spectrometry section.
+SOURCE CHECK:      The text explicitly mentions ""a Q Exactive mass spectrometer (Thermo Scientific)"".
 TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK:    The paper mentions two instruments: ""LTQ-Orbitrap mass spectrometer"" and ""Q Exactive mass spectrometer"". The full set of extracted values only contains one of these.
+COMPLETENESS CHECK: The paper mentions two instruments: ""LTQ-Orbitrap mass spectrometer"" and ""Q Exactive mass spectrometer"". The full set of extracted values only contains one of these, making it incomplete.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -77,9 +77,9 @@ HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""LTQ-Orbitrap"", ""Q Exactive""]","Q Exactive, LTQ-Orbitrap"
 "PXD004613","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK:      The paper describes mass spectrometry analysis of gel bands but does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC); therefore, ""label-free"" is a safe default.
-TRUTH CHECK:       The value is factually correct as no labeling method was employed.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct based on the absence of labeling methods in the text.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -88,9 +88,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD004613","ExperimentalDesignAgent","replicates","2 independent repeats","2 independent repeats | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates, which matches the field definition.
-SOURCE CHECK:      The text explicitly states ""The mass spectrometry data analyses of two independent repeats show..."" in the results section.
-TRUTH CHECK:       The value is factually correct based on the paper text.
-COMPLETENESS CHECK:The full set of extracted values (""2 independent repeats"", ""2"") correctly and exhaustively captures the number of replicates mentioned for the mass spectrometry analysis.
+SOURCE CHECK:      The text explicitly states ""The mass spectrometry data analyses of two independent repeats show...""
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values (""2 independent repeats"", ""2"") correctly and exhaustively captures the number of replicates mentioned for the MS analysis.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -98,10 +98,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004613","ExperimentalDesignAgent","replicates","2","2 independent repeats | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for biological replicates.
-SOURCE CHECK:      The paper states in the ""Repo-Man is enriched at subtelomeric regions"" section: ""The mass spectrometry data analyses of two independent repeats show that...""
-TRUTH CHECK:       The value ""2"" correctly reflects the ""two independent repeats"" mentioned for the mass spectrometry analysis.
-COMPLETENESS CHECK:    The full set of extracted values (""2 independent repeats"", ""2"") accurately and exhaustively covers the replication information provided for the MS experiments.
+"PXD004613","ExperimentalDesignAgent","replicates","2","2 independent repeats | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of biological replicates.
+SOURCE CHECK:      The paper text states, ""The mass spectrometry data analyses of two independent repeats show that Repo-Man binds preferentially to chromatin...""
+TRUTH CHECK:       The value ""2"" correctly reflects the ""two independent repeats"" mentioned in the text.
+COMPLETENESS CHECK:    The full set of extracted values (""2 independent repeats"", ""2"") accurately and exhaustively captures the replication information provided for the mass spectrometry experiments.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -109,44 +109,43 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD004613","ExperimentalDesignAgent","experimental_design","comparison between GST-tagged C terminus Repo-Man and GST alone baits","comparison between GST-tagged C terminus Repo-Man and GST alone baits","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison, which fits the category of study design (treated vs control).
-SOURCE CHECK:      The text describes a ""TAG-Proteogenomic approach"" where ""GST-tagged C terminus Repo-Man or GST alone were used as baits to isolate HeLa nucleosomes.""
-TRUTH CHECK:       The value accurately reflects the experimental setup used for the proteogenomic and sequencing analyses.
-COMPLETENESS CHECK:    The full set contains this comparison, but the paper also includes other designs such as ""Repo-Man RNAi vs control"" and ""Repo-Man TA3 mutant vs control.""
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
+"PXD004613","ExperimentalDesignAgent","experimental_design","Comparison between GST:Repo-ManCTerm and GST alone baits for nucleosome isolation","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison/procedure rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The comparison between GST:Repo-ManCTerm and GST alone is mentioned in the ""Preparation of Repo-Man bound nucleosomes"" section.
+TRUTH CHECK:       While the comparison occurred, the value is a description of a specific assay step, not the ""experimental design"" of the study.
+COMPLETENESS CHECK: The full set contains only this value, which is a specific technical comparison rather than a high-level study design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""comparison between GST-tagged C terminus Repo-Man and GST alone baits"", ""Repo-Man RNAi vs control"", ""Repo-Man TA3 mutant vs control""]","comparison between GST-tagged C terminus Repo-Man and GST alone baits, Repo-Man RNAi vs control, Repo-Man depletion vs rescue"
-"PXD004613","ExperimentalDesignAgent","factor_value","bait (GST-tagged C terminus Repo-Man, GST alone)","bait (GST-tagged C terminus Repo-Man, GST alone)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variable (the bait used for pull-down) used to compare Repo-Man associated chromatin versus a control.
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD004613","ExperimentalDesignAgent","factor_value","bait (GST:Repo-ManCTerm, GST alone)","bait (GST:Repo-ManCTerm, GST alone)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (the bait used for pull-down) used to compare results.
 SOURCE CHECK:      The text explicitly mentions using ""GST-tagged C terminus Repo-Man or GST alone"" as baits to isolate nucleosomes.
-TRUTH CHECK:       The value is factually correct based on the ""Preparation of Repo-Man bound nucleosomes"" section.
-COMPLETENESS CHECK: The full set captures the primary experimental factor for the proteogenomic part of the study, though other factors like ""Repo-Man RNAi"" are also present in the paper.
+TRUTH CHECK:       The value correctly identifies the two conditions compared in the TAG-Proteogenomic approach.
+COMPLETENESS CHECK:    The full set captures the primary variable for the MS-based nucleosome isolation experiment, although other factors (like Repo-Man RNAi) are present in other parts of the study. However, as a representation of the bait variable, it is accurate.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
+VALUE_COMPLETE:    yes
 HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""bait (GST-tagged C terminus Repo-Man, GST alone)"", ""Repo-Man RNAi"", ""Nup153 RNAi""]","bait (GST-tagged C terminus Repo-Man, GST alone), Repo-Man RNAi, Nup153 RNAi"
-"PXD004613","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK: The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
-TRUTH CHECK: The value is correct as no fractionation was described.
-COMPLETENESS CHECK: The full set contains the single value ""1"", which is exhaustive for this experiment.
-
-TYPE_CORRECT: yes
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD004613","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct based on the absence of fractionation descriptions in the methods.
+COMPLETENESS CHECK: The full set of extracted values consists of only this value, which accurately reflects the experimental setup described.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD004613","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the mass spectrometry experiments; it mentions ""two independent repeats"" for the TAG-Proteogenomic approach and ""two similar histone gel bands"" for the S28 phosphorylation analysis.
-TRUTH CHECK:       There is no evidence in the text to support the specific number ""4"" as the total count of samples processed in the study.
-COMPLETENESS CHECK:The full set of extracted values does not cover the picture described in the paper because the value is not supported by the text.
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD004613","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total count of samples processed in the study.
+TRUTH CHECK:       There is no evidence in the text to support the value ""4"" as the total number of samples. The study involves multiple cell lines (HeLa, DT40, HT1080), various RNAi treatments, and multiple mass spectrometry repeats, but no total sample count of 4 is mentioned.
+COMPLETENESS CHECK:The full set of extracted values is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no

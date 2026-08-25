@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "MCF-7, HEK293 Flp-In T-REx, HeLa",
+      "extracted_value": "MCF-7, HEK293 Flp-In T-REx, HeLa, K562",
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
@@ -15,9 +15,9 @@
       "corrected_value": "MCF-7, HEK293 Flp-In T-REx",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "MCF-7 and HEK293 Flp-In T-REx were used for MS experiments (mRNA interactome capture and BioID), but HeLa was used only for in vitro splicing assays and as a reference for intron retention.",
-        "TRUTH_CHECK": "MCF-7 and HEK293 Flp-In T-REx are correct MS sources; however, HeLa is not an MS sample source in this study.",
-        "COMPLETENESS_CHECK": "The full set includes a cell line (HeLa) that was not analyzed by mass spectrometry."
+        "SOURCE_CHECK": "MCF-7 and HEK293 Flp-In T-REx were used for the MS experiments (mRNA interactome capture and BioID); however, HeLa and K562 are mentioned only in the context of comparing intron retention patterns and in vitro splicing assays, not as sources for MS analysis.",
+        "TRUTH_CHECK": "While MCF-7 and HEK293 Flp-In T-REx are correct MS sources, HeLa and K562 are not.",
+        "COMPLETENESS_CHECK": "The set is incorrect because it includes cell lines not used for the proteomics experiments."
       }
     },
     {
@@ -33,10 +33,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
-        "SOURCE_CHECK": "The MS samples were derived from MCF-7 cells (breast adenocarcinoma), which are a well-established epithelial cell line.",
-        "TRUTH_CHECK": "MCF-7 cells are epithelial in lineage, making \"epithelial cell\" a factually correct description.",
-        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the lineage of the biological material used for the proteomics experiments."
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
+        "SOURCE_CHECK": "The MS samples were derived from MCF-7 cells (human breast adenocarcinoma), which are an epithelial cell line.",
+        "TRUTH_CHECK": "MCF-7 is a well-established epithelial cell line.",
+        "COMPLETENESS_CHECK": "The full set contains the correct lineage for the primary cell line used in the MS experiments."
       }
     },
     {
@@ -52,9 +52,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"breast carcinoma\" is a disease state, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"human breast carcinoma cells\") and the results (\"human breast adenocarcinoma MCF-7 cells\") in the context of the cells analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The value is factually correct as the study uses MCF-7 cells, which are derived from breast carcinoma.",
+        "TYPE_CHECK": "The candidate value \"breast carcinoma\" describes a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the abstract (\"human breast carcinoma cells\") and the results section (\"human breast adenocarcinoma MCF-7 cells\") in the context of the cells analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the study uses MCF-7 cells, which are a well-known breast carcinoma/adenocarcinoma cell line.",
         "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the disease origin of the biological material used in the MS experiments."
       }
     },
@@ -73,8 +73,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast\" is a valid organ/tissue type.",
         "SOURCE_CHECK": "The MS samples were derived from MCF-7 cells, which are explicitly described in the text as \"human breast adenocarcinoma MCF-7 cells\".",
-        "TRUTH_CHECK": "MCF-7 is a well-established breast cancer cell line; therefore, \"breast\" is the correct organ of origin.",
-        "COMPLETENESS_CHECK": "The full set contains the only relevant organ for the MS samples used in this study."
+        "TRUTH_CHECK": "The value is factually correct as MCF-7 is a well-known breast cancer cell line.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant organ of origin for the MS samples described."
       }
     },
     {
@@ -91,14 +91,14 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper describes the use of human breast adenocarcinoma MCF-7 cells and HEK293 cells for the proteomics experiments.",
-        "TRUTH_CHECK": "The use of human cell lines confirms the species is Homo sapiens.",
-        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiments."
+        "SOURCE_CHECK": "The paper explicitly mentions \"human breast carcinoma cells\" and \"human breast adenocarcinoma MCF-7 cells\" as the source for the proteomics experiments.",
+        "TRUTH_CHECK": "The use of MCF-7 and HEK293 cells confirms the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiments."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "treatment (IR-treated, untreated), DDX54 expression (mock-transfected, siDDX54-transfected)",
+      "extracted_value": "condition (IR-treated, untreated)",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes experimental factors (treatment and expression levels) and their corresponding groups, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values are explicitly stated in the text: \"IR-treated and untreated cells\" and \"mock-transfected cells\" vs \"siDDX54-transfected cells\" in the context of the proteomics (pSILAC and mRNA-bound proteome) experiments.",
-        "TRUTH_CHECK": "The values accurately reflect the experimental conditions described in the paper.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (including the disease state \"breast carcinoma\") covers the primary experimental variables used in the MS experiments."
+        "TYPE_CHECK": "The candidate value describes the experimental conditions (treated vs untreated) being compared, which is a valid representation of a factor value.",
+        "SOURCE_CHECK": "The paper explicitly describes comparing MCF-7 cells that were \"exposed to ionizing radiation (IR)\" versus \"untreated cells\" for the mRNA-bound proteome and pSILAC experiments.",
+        "TRUTH_CHECK": "The value accurately reflects the experimental groups described in the text.",
+        "COMPLETENESS_CHECK": "Together with \"breast carcinoma\" (the disease state of the cell line), these values cover the primary experimental variables (disease/cell type and treatment condition) described in the study."
       }
     },
     {
@@ -129,9 +129,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"breast carcinoma\" describes a disease state, which is a valid characteristic for a factor_value.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"human breast carcinoma cells\" in the abstract and \"human breast adenocarcinoma MCF-7 cells\" in the results, which were the biological material analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The value is factually correct as the study uses MCF-7 cells, which are a breast carcinoma/adenocarcinoma cell line.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the experimental conditions (IR treatment and DDX54 expression) and the biological context (breast carcinoma), making the set exhaustive."
+        "SOURCE_CHECK": "The value is present in the text; the study uses MCF-7 cells, which are described in the abstract as \"human breast carcinoma cells\".",
+        "TRUTH_CHECK": "The value is factually correct as it describes the nature of the cell line used for the MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental condition (IR-treated vs untreated) and the disease/cell type (breast carcinoma), covering the primary axes of the study."
       }
     },
     {
@@ -148,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation steps (such as high-pH RP or SAX) prior to LC-MS/MS.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.",
         "TRUTH_CHECK": "In the absence of any mentioned fractionation, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation is described."
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation information is provided."
       }
     },
     {
@@ -168,8 +168,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
         "SOURCE_CHECK": "The paper explicitly mentions \"biological replicates\" in the context of the mRNA-bound proteome analysis (\"high correlation of summed peptide intensities between biological replicates\" and \"overlap between the proteins identified in both biological replicates was high\").",
-        "TRUTH_CHECK": "The text refers to \"both biological replicates,\" which confirms there were 2.",
-        "COMPLETENESS_CHECK": "The value \"2\" accurately reflects the number of biological replicates described for the primary proteomics experiment."
+        "TRUTH_CHECK": "The text refers to \"both biological replicates,\" which confirms that 2 biological replicates were used for that specific MS experiment.",
+        "COMPLETENESS_CHECK": "The value \"2\" accurately reflects the biological replication described for the primary proteomics experiment."
       }
     },
     {
@@ -187,8 +187,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
         "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the MS experiments.",
-        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is correct when the paper is silent regarding replication.",
-        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a silent paper and is complete."
+        "TRUTH_CHECK": "According to the safe defaults in the field definitions, \"1\" is the correct value when the paper is silent regarding replication.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it represents the default for a study where no technical replication is specified."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a chemical reagent used for alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The candidate value \"iodoacetamide\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct for this experiment.",
-        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The word \"iodoacetamide\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
       }
     },
     {
@@ -224,9 +224,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the category for the cleavage_agent field.",
-        "SOURCE_CHECK": "The paper text does not mention \"Lys-C\" or any specific protease used for digestion; it only states that proteins were \"digested to peptides\".",
+        "SOURCE_CHECK": "The paper text does not mention \"Lys-C\" or any other specific protease used for protein digestion; it only states that proteins were \"digested to peptides\".",
         "TRUTH_CHECK": "There is no evidence in the provided text to support the use of Lys-C.",
-        "COMPLETENESS_CHECK": "The full set contains only one value, but that value is not supported by the text."
+        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
       }
     },
     {
@@ -243,8 +243,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The modification \"Carbamidomethyl (C)\" is not mentioned anywhere in the provided text.",
-        "TRUTH_CHECK": "The value is not supported by the text; while the paper mentions \"digested to peptides\", it does not explicitly name the modification used.",
+        "SOURCE_CHECK": "The modification \"Carbamidomethyl (C)\" is not explicitly mentioned in the provided paper text.",
+        "TRUTH_CHECK": "While the paper describes protein digestion and LC-MS/MS, it does not explicitly name the modifications searched during database analysis.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, none of which are explicitly mentioned in the text."
       }
     },
@@ -262,7 +262,7 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Oxidation (M)\" is the correct category for a protein modification.",
-        "SOURCE_CHECK": "The term \"Oxidation\" or \"Oxidation (M)\" does not appear anywhere in the provided paper text.",
+        "SOURCE_CHECK": "The term \"Oxidation (M)\" or any synonym for methionine oxidation is not mentioned in the provided paper text.",
         "TRUTH_CHECK": "The value is not supported by the text.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text."
       }
@@ -271,7 +271,7 @@
       "annotation_type": "modification",
       "extracted_value": "not applicable",
       "verdict": "low",
-      "type_mismatch": true,
+      "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
       "hallucination": true,
@@ -280,10 +280,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The value \"not applicable\" is not a valid modification name or target residue.",
-        "SOURCE_CHECK": "The paper does not mention \"not applicable\" as a modification; it is a placeholder indicating an absence of information.",
-        "TRUTH_CHECK": "The value is not a factually correct modification for this experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, none of which are explicitly mentioned in the provided text."
+        "TYPE_CHECK": "The value \"not applicable\" is a placeholder indicating the absence of a modification, which is a valid type of response for this field.",
+        "SOURCE_CHECK": "The paper text does not explicitly list the modifications searched for during the mass spectrometry database search.",
+        "TRUTH_CHECK": "While the paper describes proteomics experiments, it does not explicitly name any modifications (fixed or variable) used in the search parameters.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several specific modifications (Carbamidomethyl, Oxidation, etc.) that are not mentioned anywhere in the provided text."
       }
     },
     {
@@ -299,10 +299,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category for the modification field.",
+        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category of the modification field.",
         "SOURCE_CHECK": "The value \"Gln->Trp substitution (Q)\" is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not mention this specific substitution or any search for this modification.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text."
+        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not factually supported for this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the provided text."
       }
     },
     {
@@ -318,10 +318,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a chemical modification of a residue, which fits the category of a protein modification.",
-        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not factually supported for this experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the provided text."
+        "TYPE_CHECK": "The candidate value describes a chemical modification of a protein residue, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text."
       }
     },
     {
@@ -337,10 +337,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used for reducing disulfide bonds, which matches the field definition.",
         "SOURCE_CHECK": "The text mentions \"1 mM DTT\" in the lysis buffer for PAR-CLIP experiments, and DTT is the standard abbreviation for dithiothreitol.",
         "TRUTH_CHECK": "DTT (dithiothreitol) is explicitly mentioned in the methods section.",
-        "COMPLETENESS_CHECK": "The full set contains \"dithiothreitol\", which covers the reduction reagent mentioned in the text."
+        "COMPLETENESS_CHECK": "The full set contains only this value, and no other reduction reagents are mentioned in the text."
       }
     }
   ]

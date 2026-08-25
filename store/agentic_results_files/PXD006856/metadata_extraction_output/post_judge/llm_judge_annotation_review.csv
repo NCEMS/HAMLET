@@ -1,20 +1,20 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","inference","error_category","issue_summary","corrected_value"
-"PXD006856","","strict","Biological","cell_line","HAP1, HeLa","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which is the correct category for this field.
-SOURCE CHECK: HAP1 cells were used for the N-terminal proteomics experiment (""quantitatively assessing the Nt-acetylation status... from control and NAA80 KO1 cell lysates""), but HeLa cells were only used for an in vitro activity assay using immunoprecipitated NAA80 (""observed both in NAA80 immunoprecipitated from HeLa cells... and in recombinantly expressed and purified NAA80"").
-TRUTH CHECK: HAP1 is correct as the source of the MS sample; HeLa is incorrect as it was used for a biochemical assay, not the proteomics experiment.
-COMPLETENESS CHECK: The set is incorrect because it includes a cell line not used for MS.
+"PXD006856","","strict","Biological","cell_line","HAP1, HeLa","","low","False","","False","False","False","False","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which is the correct category for this field.
+SOURCE CHECK: HAP1 cells were used for the N-terminal proteomics experiment (""quantitatively assessing the Nt-acetylation status of 402 unique N termini from control and NAA80 KO1 cell lysates""), but HeLa cells were only used for an in vitro Nt-acetylation assay using immunoprecipitated NAA80, not for the MS analysis.
+TRUTH CHECK: HAP1 is correct as the source of the MS sample; HeLa is incorrect as it was not the material analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set includes an incorrect cell line (HeLa) and correctly identifies HAP1.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
-HALLUCINATED: yes
+HALLUCINATED: no
 VERDICT: low
 CORRECTED_VALUE: HAP1","HAP1"
-"PXD006856","","strict","Biological","cell_type","hematopoietic progenitor cell","hematopoietic progenitor cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""hematopoietic progenitor cell"" is a valid cell type/lineage.
-SOURCE CHECK: The MS experiment (""N-terminal proteomics"") was performed on HAP1 cells; HAP1 is a well-known human hematopoietic progenitor cell line.
-TRUTH CHECK: The value is factually correct as HAP1 cells are derived from hematopoietic progenitor cells.
-COMPLETENESS CHECK: The full set contains the correct lineage for the cell line used in the proteomics analysis.
+"PXD006856","","strict","Biological","cell_type","hematopoietic progenitor cell","hematopoietic progenitor cell","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""hematopoietic progenitor cell"" is a valid category for the cell_type field.
+SOURCE CHECK: The paper describes ""N-terminal proteomics"" performed on ""control and NAA80 KO1 cell lysates,"" where the cells used are ""HAP1 cells."" HAP1 is a well-known human hematopoietic progenitor cell line.
+TRUTH CHECK: HAP1 cells are derived from human hematopoietic progenitor cells, making this value factually correct for the MS sample.
+COMPLETENESS CHECK: The full set contains the correct lineage for the HAP1 cells used in the proteomics experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -22,10 +22,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Biological","disease","normal, naa80-knockout","normal, naa80-knockout","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value contains a safe default (""normal"") and a genetic modification (""naa80-knockout""), which are acceptable for the disease/disease state field.
-SOURCE CHECK: The values refer to the HAP1 control and NAA80-KO cells used for the N-terminal proteomics experiment.
-TRUTH CHECK: The paper describes comparing ""control"" (normal) and ""NAA80 KO1"" (naa80-knockout) cell lysates to assess Nt-acetylation status.
-COMPLETENESS CHECK: The full set covers the two primary conditions compared in the proteomics analysis.
+"PXD006856","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes a study using HAP1 and HeLa cells to investigate the function of NAA80; there is no mention of a disease state or pathology being studied.
+TRUTH CHECK: Since the study is not a disease-focused study and uses standard cell lines for mechanistic research, ""normal"" is a correct safe default.
+COMPLETENESS CHECK: The full set of extracted values consists of this single safe default, which is exhaustive for this context.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -34,9 +34,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006856","","strict","Biological","organ","blood","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""blood"" is the correct category (organ/tissue) for this field.
-SOURCE CHECK: The value ""blood"" is not mentioned in the paper text, nor is it inferable from the MS experiment context.
-TRUTH CHECK: The MS experiment was performed on HAP1 cells (""N-terminal proteomics by quantitatively assessing the Nt-acetylation status of 402 unique N termini from control and NAA80 KO1 cell lysates""). HAP1 is a human hematopoietic progenitor cell line, but the material analyzed was the cell line itself, not ""blood"" as a tissue/organ.
-COMPLETENESS CHECK: The full set contains only ""blood"", which is incorrect.
+SOURCE CHECK: The paper mentions HAP1 cells and HeLa cells; it does not mention blood as the source of the MS sample.
+TRUTH CHECK: The MS experiment (""N-terminal proteomics"") was performed on lysates from HAP1 control and NAA80 KO1 cells. HAP1 is a human hematopoietic progenitor cell line (derived from blood/bone marrow), but the text does not explicitly mention ""blood"", and the primary material is a cell line.
+COMPLETENESS CHECK: The full set contains only ""blood"", which is not explicitly stated or the primary description of the material.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -45,10 +45,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a valid species name.
+"PXD006856","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
 SOURCE CHECK: The paper describes the use of human HAP1 cells and HeLa cells for the N-terminal proteomics experiment.
-TRUTH CHECK: The text explicitly mentions ""human HAP1 cells"" and ""HeLa cells"" (which are human), confirming the species.
-COMPLETENESS CHECK: The full set contains the only species involved in the MS experiment.
+TRUTH CHECK: The text explicitly mentions ""human HAP1 cells"" and ""HeLa cells"" (a well-known human cell line), confirming the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species involved in the MS analysis.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -56,10 +56,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","ExperimentalDesign","factor_value","NAA80 status (control, KO1, KO2)","NAA80 status (control, KO1, KO2) | normal, naa80-knockout","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (NAA80 status) and its levels (control, KO1, KO2), which is the correct category for factor_value.
-SOURCE CHECK: The value is derived from the MS experiment context, where the authors used N-terminal proteomics to assess the Nt-acetylation status of proteins in control and NAA80 KO1 cell lysates.
-TRUTH CHECK: The paper explicitly mentions ""control"" and ""NAA80 KO1"" (and KO2) cell lines in the context of the proteomics analysis and subsequent validation.
-COMPLETENESS CHECK: The full set of extracted values covers both the specific group names (control, KO1, KO2) and the general condition (normal, knockout), which is exhaustive.
+"PXD006856","","strict","ExperimentalDesign","factor_value","NAA80 status (control, KO1, KO2)","NAA80 status (control, KO1, KO2) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (NAA80 status) and its levels (control, KO1, KO2), which is the correct category for a factor_value.
+SOURCE CHECK: The value is present in the text; the proteomics experiment specifically compared ""control and NAA80 KO1 cell lysates"" and mentioned ""both KO cell lines"" (KO1 and KO2).
+TRUTH CHECK: The value is factually correct as the study focuses on the effect of NAA80 knockout (KO1 and KO2) versus control cells.
+COMPLETENESS CHECK: The full set of extracted values covers the experimental groups (control, KO1, KO2) and the baseline state (normal).
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -67,10 +67,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","ExperimentalDesign","factor_value","normal, naa80-knockout","NAA80 status (control, KO1, KO2) | normal, naa80-knockout","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value describes the experimental groups (conditions) under study, which is the correct category for factor_value.
-SOURCE CHECK: The values are present in the MS experiment context; the paper describes ""N-terminal proteomics"" comparing ""control and NAA80 KO1 cell lysates"".
-TRUTH CHECK: The values are factually correct; ""normal"" is a safe default for ""control"" and ""naa80-knockout"" matches the KO cell lines used.
-COMPLETENESS CHECK: The full set of extracted values (""NAA80 status (control, KO1, KO2)"" and ""normal, naa80-knockout"") comprehensively covers the experimental groups described in the proteomics analysis.
+"PXD006856","","strict","ExperimentalDesign","factor_value","normal","NAA80 status (control, KO1, KO2) | normal","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, mirroring a characteristic (e.g., disease or genotype status).
+SOURCE CHECK: The paper describes ""control"" cells used as the baseline for comparison against NAA80-KO cells in the proteomics experiment.
+TRUTH CHECK: Per the field definitions, ""normal"", ""healthy"", and ""control"" are equivalent safe defaults when subjects are not part of a disease study or serve as the baseline.
+COMPLETENESS CHECK: The full set of extracted values includes both the specific experimental groups (""control, KO1, KO2"") and the general status (""normal""), which together exhaustively cover the experimental design.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -78,10 +78,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the fractions field.
-SOURCE CHECK: The paper describes N-terminal proteomics on cell lysates but does not mention any offline fractionation steps.
+"PXD006856","","strict","ExperimentalDesign","fractions","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of fractions.
+SOURCE CHECK: The paper describes ""N-terminal proteomics"" on cell lysates but does not mention any offline fractionation steps (e.g., high-pH RP or SAX).
 TRUTH CHECK: Since no fractionation is mentioned, the safe default of ""1"" is correct.
-COMPLETENESS CHECK: The value ""1"" is complete as no other fractionation information is provided.
+COMPLETENESS CHECK: The full set contains only the safe default, which is exhaustive for this paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -90,9 +90,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD006856","","strict","ExperimentalDesign","replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK: The paper does not explicitly state the number of biological replicates used for the N-terminal proteomics experiment.
+SOURCE CHECK: The paper does not explicitly state the number of biological replicates for the N-terminal proteomics experiment.
 TRUTH CHECK: According to the field definition, ""1"" is the correct value when no replication is mentioned.
-COMPLETENESS CHECK: The full set contains only the default value ""1"", which is exhaustive given the lack of explicit information in the text.
+COMPLETENESS CHECK: The full set contains only this value, which is the appropriate default for the described experiment.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -100,10 +100,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct type for technical_replicates.
+"PXD006856","","strict","ExperimentalDesign","technical_replicates","1","1","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
 SOURCE CHECK: The paper does not explicitly mention the number of technical replicates for the N-terminal proteomics experiment.
-TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replicates.
-COMPLETENESS CHECK: The full set contains only the default value ""1"", which is exhaustive given the absence of specific information in the text.
+TRUTH CHECK: According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The value ""1"" is a complete representation of the information provided (or not provided) in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -111,9 +111,9 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+"PXD006856","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a valid acquisition scheme name.
 SOURCE CHECK: The paper mentions ""N-terminal proteomics"" to assess Nt-acetylation status, but it does not explicitly state the acquisition method (e.g., DDA or DIA) used for the mass spectrometry.
-TRUTH CHECK: The value is not mentioned in the provided text.
+TRUTH CHECK: The value is not explicitly mentioned in the provided text.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -125,7 +125,7 @@ CORRECTED_VALUE: NONE",""
 "PXD006856","","strict","Technical","cleavage_agent","Trypsin","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the category for the cleavage_agent field.
 SOURCE CHECK: The paper mentions ""N-terminal proteomics"" was used to assess Nt-acetylation status, but the provided text (title, abstract, results, and methods summary) does not explicitly name the protease used for digestion.
 TRUTH CHECK: While trypsin is the most common protease in proteomics, it is not explicitly mentioned in the provided text.
-COMPLETENESS CHECK: The full set contains only ""Trypsin"", but this value is not supported by the text.
+COMPLETENESS CHECK: The full set contains only one value, but that value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -133,9 +133,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
-SOURCE CHECK: The provided paper text (title, abstract, results, and methods) does not mention any mass spectrometry search parameters, including fragment mass tolerance.
-TRUTH CHECK: The value is not present in the text and cannot be verified.
+"PXD006856","","strict","Technical","fragment_mass_tolerance","10 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance value, which is the correct category for this field.
+SOURCE CHECK: I have searched the provided text (title, abstract, results, and methods) and cannot find any mention of ""10 ppm"" or any other fragment mass tolerance value.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct.
 COMPLETENESS CHECK: The value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -144,9 +144,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
-SOURCE CHECK: The value is not present in the provided paper text.
-TRUTH CHECK: The paper mentions ""N-terminal proteomics"" but does not specify the fragmentation method used.
+"PXD006856","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The value cannot be verified as correct because it is not mentioned in the text.
 COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -155,9 +155,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
-SOURCE CHECK: The candidate value ""Q Exactive HF"" is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: Since the value is not present in the text, it cannot be verified as correct.
+"PXD006856","","strict","Technical","instrument","Q Exactive HF","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category for the instrument field.
+SOURCE CHECK: The provided paper text (title, abstract, and results/methods sections) does not mention any mass spectrometer model, including ""Q Exactive HF"".
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -166,9 +166,9 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
-SOURCE CHECK: The paper describes ""N-terminal proteomics"" to assess Nt-acetylation status, but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ) for the MS analysis.
-TRUTH CHECK: Since no labeling methods are mentioned, ""label-free"" is the correct safe default.
+"PXD006856","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category of labeling methods.
+SOURCE CHECK: The paper describes ""N-terminal proteomics"" to assess Nt-acetylation status, but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl) for the MS analysis.
+TRUTH CHECK: Since no labeling method is mentioned, the safe default ""label-free"" is applicable.
 COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the absence of labeling described in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -177,10 +177,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper text does not mention the mass spectrometer model or the mass analyzer used for the N-terminal proteomics.
-TRUTH CHECK: There is no mention of an Orbitrap (or any other mass analyzer) in the provided text.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+"PXD006856","","strict","Technical","mass_analyzer","orbitrap","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The paper text does not mention the mass spectrometer model or the mass analyzer used for the ""N-terminal proteomics"" experiment.
+TRUTH CHECK: There is no evidence in the provided text to support the use of an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -189,10 +189,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD006856","","strict","Technical","modification","Carbamidomethyl (C)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
-SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned in the provided paper text.
-TRUTH CHECK: The paper does not explicitly state that carbamidomethylation was used or searched for in the proteomics experiment.
-COMPLETENESS CHECK: The full set of extracted values includes modifications not mentioned in the text.
-
+SOURCE CHECK: The value ""Carbamidomethyl (C)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; there is no mention of carbamidomethylation or the use of iodoacetamide.
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -200,11 +199,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value ""Oxidation (M)"" is the correct category for the modification field.
-SOURCE CHECK: The term ""Oxidation"" or ""Oxidation (M)"" does not appear anywhere in the provided paper text.
+"PXD006856","","strict","Technical","modification","Oxidation (M)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Oxidation (M)"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The value is not supported by the text.
-COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
-
+COMPLETENESS CHECK: The full set of extracted values contains modifications not mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -215,7 +213,7 @@ CORRECTED_VALUE: NONE",""
 "PXD006856","","strict","Technical","modification","deuterated methyl ester (D)","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value describes a chemical modification, which is the correct category for this field.
 SOURCE CHECK: The value ""deuterated methyl ester (D)"" is not mentioned anywhere in the provided paper text.
 TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
-COMPLETENESS CHECK: The full set of extracted values includes modifications that are not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -224,10 +222,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD006856","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with ppm unit), which matches the field definition.
+"PXD006856","","strict","Technical","precursor_mass_tolerance","6 ppm","","low","False","","False","False","True","False","","hallucinated","TYPE CHECK: The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.
 SOURCE CHECK: The value ""6 ppm"" is not present in the provided paper text.
-TRUTH CHECK: The value is not mentioned in the text and therefore cannot be verified as correct.
-COMPLETENESS CHECK: The full set of extracted values is not based on any information in the text.
+TRUTH CHECK: The value cannot be verified as correct because it is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values is insufficient as the information is missing from the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

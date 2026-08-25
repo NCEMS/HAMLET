@@ -1,9 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD006603","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper mentions ""human reference genome"", ""human EMC1-10"", and uses human cell lines (U2OS, HEK293), making ""Homo sapiens"" a correct and inferable value.
-TRUTH CHECK: The experimental work is performed using human cell lines and human protein sequences.
-COMPLETENESS CHECK: The full set contains the only relevant species used in the study.
-
+SOURCE CHECK: The paper mentions ""human reference genome"" and ""human EMC1-10"", and uses human cell lines (U2OS, HEK293), making ""Homo sapiens"" a correct and inferable value.
+TRUTH CHECK: The experiment uses human cell lines and human protein sequences, so the species is indeed Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -11,23 +10,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD006603","BiologicalAgent","organ","bone","","low","False","","False","False","False","TYPE CHECK: The candidate value ""bone"" is a type of tissue/organ, which matches the field definition.
-SOURCE CHECK: The paper mentions ""U2OS"" and ""A673"" cells; U2OS is a well-known osteosarcoma cell line (bone cancer) and A673 is an Ewing sarcoma cell line (bone/soft tissue), but the text does not explicitly mention ""bone"" as the organ of origin.
-TRUTH CHECK: While the cell lines used (U2OS, A673) are derived from bone-related tumors, the experiment was performed on immortalized cell lines, not on bone tissue itself.
-COMPLETENESS CHECK: The full set contains only ""bone"", which is an incorrect attribution of the material source.
-
-TYPE_CORRECT: yes
+"PXD006603","BiologicalAgent","organ","bone","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""bone"" is a valid category for the organ/tissue field.
+SOURCE CHECK:      The paper mentions ""U2OS"" and ""A673"" cells; U2OS is a bone osteosarcoma cell line and A673 is an Ewing sarcoma (bone/soft tissue) cell line, but the text does not explicitly name ""bone"" as the organ of origin.
+TRUTH CHECK:       While the cell lines used are derived from bone tumors, the experimental material used in the proteomics/lipidomics is the cell lines themselves, not bone tissue.
+COMPLETENESS CHECK: The full set contains only ""bone"", which is an inference from the cell line origin rather than a description of the sample material.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: NONE",""
-"PXD006603","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""osteosarcoma"" is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK:      The paper mentions the use of ""Ewing sarcoma A673 cells"" and ""U2OS"" cells. U2OS is a well-known osteosarcoma cell line, and A673 is an Ewing sarcoma cell line. However, the text does not explicitly use the word ""osteosarcoma"".
-TRUTH CHECK:       While U2OS is derived from osteosarcoma, the paper describes the study as an investigation into the ""ER membrane protein complex"" and ""cholesterol homeostasis"" using these cells as models, rather than a study of the disease ""osteosarcoma"" itself. More importantly, the text does not explicitly name the disease state of the cells.
-COMPLETENESS CHECK:    The full set contains only ""osteosarcoma"", but the paper also uses A673 (Ewing sarcoma).
-
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions U2OS, HEK293, and A673 cells, but does not explicitly describe them as ""epithelial cells"" in the provided text.
+TRUTH CHECK:       While U2OS and HEK293 are often characterized as epithelial-like or derived from epithelial origins, the text does not state this; it identifies them as specific cell lines.
+COMPLETENESS CHECK:The full set contains only this value, which is not explicitly supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -35,32 +32,43 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD006603","BiologicalAgent","material_type","U2OS Flp-In™ T-Rex™ cells","","low","True","","False","False","False","TYPE CHECK: No. The candidate value is a specific cell line name, not a broad material class as defined for this field.
-SOURCE CHECK: Yes, the text mentions ""U2OS Flp-In™ T-Rex™ cells"".
-TRUTH CHECK: Yes, these cells were used in the experiment.
-COMPLETENESS CHECK: The full set contains only the specific cell line name, failing to provide the broad material class ""cell line"".
-TYPE_CORRECT: no
+"PXD006603","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""osteosarcoma"" is a disease state, which matches the field definition.
+SOURCE CHECK:      The paper mentions the use of ""Ewing sarcoma A673 cells"" and ""U2OS"" cells. U2OS is a well-known osteosarcoma cell line, but the word ""osteosarcoma"" does not appear in the provided text.
+TRUTH CHECK:       While U2OS is derived from osteosarcoma, the text does not explicitly state the disease state of the cells; it only provides the cell line names.
+COMPLETENESS CHECK: The full set contains only this value, but it is not explicitly supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","BiologicalAgent","material_type","U2OS Flp-In™ T-Rex™ cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific cell line name, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The value is present in the text, but it is the specific name of the cell line, not the material class.
+TRUTH CHECK:       The cells used are indeed U2OS Flp-In™ T-Rex™ cells, but this is a specific entity, not a broad category.
+COMPLETENESS CHECK:The full set contains only the specific cell line name, failing to provide the broad material class required by the definition.
+TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: no
-VERDICT: low
-CORRECTED_VALUE: [""cell line""]","cell line"
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
 "PXD006603","BiologicalAgent","cell_line","U2OS","U2OS","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK:      The text explicitly mentions ""U2OS Flp-In™ T-Rex™ cells"" and ""U2OS Flp-In™ T-Rex™"" multiple times.
 TRUTH CHECK:       The value is factually correct as U2OS is the base cell line used.
-COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses ""Flp-In™ T-Rex™ 293"" (HEK293 derivative), ""A673"", and ""HEK293"" cell lines.
+COMPLETENESS CHECK:The full set of extracted values is incomplete because the paper also explicitly mentions ""Flp-In™ T-Rex™ 293"" (HEK293 derivative) and ""A673"" cell lines.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""U2OS"", ""Flp-In™ T-Rex™ 293"", ""A673"", ""HEK293""]","U2OS, Flp-In™ T-Rex™ 293, A673, HEK293"
+CORRECTED_VALUE:   [""U2OS"", ""Flp-In™ T-Rex™ 293"", ""A673""]","U2OS, Flp-In™ T-Rex™ 293, A673"
 "PXD006603","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""tandem mass spectrometry (Q Exactive, Thermo Fisher Scientific)"".
-TRUTH CHECK:       The value is factually correct based on the provided text.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+SOURCE CHECK:      The text explicitly mentions ""tandem mass spectrometry (Q Exactive, Thermo Fisher Scientific)"" in the Peptide analysis section.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -68,31 +76,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD006603","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK: The candidate value ""SILAC"" is a metabolic labeling method, which matches the definition for the label field.
-SOURCE CHECK: The paper explicitly mentions ""stable isotope labelling with amino acids in cell culture (SILAC)"" in the results and ""SILAC labelling"" in the methods.
-TRUTH CHECK: The use of SILAC for quantitative proteomic analysis is factually correct as described in the text.
-COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method mentioned in the paper.
-TYPE_CORRECT: yes
+"PXD006603","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""stable isotope labelling with amino acids in cell culture (SILAC)"" in the results and ""SILAC labelling"" in the methods.
+TRUTH CHECK:       The value is factually correct as the study used SILAC for quantitative proteomic analysis.
+COMPLETENESS CHECK: The full set of extracted values contains ""SILAC"", which is the only labeling method described in the paper.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD006603","ExperimentalDesignAgent","replicates","independent ΔEMC5 and ΔEMC6 cell lines","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value is a description of the sample groups/cell lines, not a numeric count of biological replicates.
-SOURCE CHECK:      The phrase ""two independent ΔEMC5 and ΔEMC6 cell lines"" appears in the text, but the candidate value itself is the description of the lines, not the count.
-TRUTH CHECK:       The value is factually present as a description, but it does not answer the question ""how many replicates"".
-COMPLETENESS CHECK: The full set contains ""5"", which is also not supported by the text (the text mentions ""two independent... cell lines"" for the proteomics selection criteria).
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","replicates","two independent $\Delta$EMC5 and $\Delta$EMC6 cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the number of cell lines used, which is a proxy for biological replicates, but it is phrased as a description rather than a numeric count.
+SOURCE CHECK:      The text states ""two independent $\Delta$EMC5 and $\Delta$EMC6 cell lines"" in the context of the SILAC-MS/MS analysis.
+TRUTH CHECK:       The value is factually present, but the field ""replicates"" specifically asks for the number of biological replicates (typically a numeric value).
+COMPLETENESS CHECK:    The full set includes ""two independent..."" and ""5"", neither of which clearly defines a single, consistent number of biological replicates for the overall experiment. The ""two independent cell lines"" refers to the genetic backgrounds used for comparison, not necessarily the number of biological replicates per condition.
+
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   [""2""]",""
-"PXD006603","ExperimentalDesignAgent","replicates","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
-SOURCE CHECK:      The paper does not mention ""5"" biological replicates; it mentions ""two independent ΔEMC5 and ΔEMC6 cell lines"" for the proteomic analysis.
-TRUTH CHECK:       The value ""5"" is not supported by the text.
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","replicates","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The value ""5"" is not present in the text; the text mentions ""two independent $\Delta$EMC5 and $\Delta$EMC6 cell lines"" and ""four cell lines"" in the context of the SILAC analysis, but never a count of 5 replicates.
+TRUTH CHECK:       The value is factually incorrect as it is not supported by the provided text.
 COMPLETENESS CHECK: The full set of extracted values is incorrect and does not accurately reflect the biological replication described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -101,21 +110,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD006603","ExperimentalDesignAgent","experimental_design","SILAC-based quantitative proteomic comparison of WT and ΔEMC (ΔEMC5 and ΔEMC6) cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental procedure and comparison rather than a study design type (e.g., ""treated vs control"").
-SOURCE CHECK:      The information is present in the text, but the value is formulated as a description of the experiment rather than a design category.
-TRUTH CHECK:       The value accurately describes the proteomic part of the study, but it does not fit the definition of ""experimental_design"".
-COMPLETENESS CHECK: The full set contains only this value, which is a description of a specific assay rather than the overall study design.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   treated vs control","treated vs control"
-"PXD006603","ExperimentalDesignAgent","factor_value","genotype (WT, ΔEMC5, ΔEMC6)","genotype (WT, ΔEMC5, ΔEMC6)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (genotypes) being compared, which fits the definition of a factor value.
-SOURCE CHECK:      The paper explicitly compares ""WT"", ""ΔEMC5"", and ""ΔEMC6"" cell lines throughout the results and methods.
-TRUTH CHECK:       The values are factually correct as these are the primary genetic conditions studied.
-COMPLETENESS CHECK: The full set captures the primary experimental factor (genotype) and its specific levels used in the study.
+"PXD006603","ExperimentalDesignAgent","experimental_design","comparison of WT and $\Delta$EMC cells","comparison of WT and $\Delta$EMC cells","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental groups being compared, which fits the ""treated vs control"" or ""case-control"" nature of an experimental design.
+SOURCE CHECK:      The paper explicitly compares wild-type (WT) cells with EMC-deficient ($\Delta$EMC) cells throughout the results (e.g., ""compare WT and $\Delta$EMC cells"").
+TRUTH CHECK:       The value is factually correct as the study focuses on the differences between WT and $\Delta$EMC (knockout) cell lines.
+COMPLETENESS CHECK:    The full set captures the primary design of the proteomic and phenotypic experiments described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -123,10 +121,11 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD006603","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'fractions' field.
-SOURCE CHECK:      The paper describes a SILAC-MS/MS experiment but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.
-TRUTH CHECK:       Per the field definition, ""1"" is the correct value when no fractionation occurred.
-COMPLETENESS CHECK: The full set contains only ""1"", which accurately reflects the lack of fractionation described in the text.
+"PXD006603","ExperimentalDesignAgent","factor_value","genotype (WT, $\Delta$EMC5, $\Delta$EMC6)","genotype (WT, $\Delta$EMC5, $\Delta$EMC6)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (genotype) and its levels, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly describes the use of wild-type (WT), EMC5 knockout ($\Delta$5), and EMC6 knockout ($\Delta$6) cell lines to study the effects of EMC deficiency.
+TRUTH CHECK:       The value is factually correct based on the results section describing the genetic modification of U2OS cells.
+COMPLETENESS CHECK:    The full set of extracted values captures the primary experimental variable (genotype) used across the proteomic and lipidomic analyses.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -134,10 +133,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD006603","ExperimentalDesignAgent","number_of_samples","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the proteomics/SILAC experiment.
-TRUTH CHECK:       The value ""5"" is not supported by the text. The SILAC experiment compared WT and $\Delta$EMC cells, specifically mentioning ""two independent $\Delta$EMC5 and $\Delta$EMC6 cell lines"" (total of 4 $\Delta$EMC lines) plus WT, but this is an inference and not a stated total sample count for the study.
-COMPLETENESS CHECK:The full set contains only this unsupported value.
+"PXD006603","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a ""SILAC-MS/MS"" experiment and ""Sample preparation for MS/MS"" but does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.
+TRUTH CHECK:        Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","number_of_samples","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the proteomics/lipidomics experiments. It mentions ""two independent ΔEMC5 and ΔEMC6 cell lines"" and ""four cell lines"" in the context of SILAC, but there is no single total count of ""5"" mentioned in the text.
+TRUTH CHECK:       The value ""5"" is not supported by the text. The SILAC analysis compared WT and ΔEMC cells (specifically ΔEMC5 and ΔEMC6), but the total number of processed samples is not explicitly summed as 5.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no

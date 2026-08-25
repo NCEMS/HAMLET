@@ -1,52 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD002132","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""NCBI Human RefSeq protein database"" and uses human cell lines (HNSCC and oral keratinocytes), making ""Homo sapiens"" a correct and inferable value.
-TRUTH CHECK:       The proteomics analysis was performed on human cell lines, so the species is correctly identified.
+"PXD002132","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""NCBI Human RefSeq protein database"" and uses human cell lines (HNSCC and oral keratinocytes), making ""Homo sapiens"" a correct and reasonable extraction.
+TRUTH CHECK: The proteomics analysis was performed on human cell lines.
 COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which covers the source organism for the mass spectrometry experiments described.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD002132","BiologicalAgent","organ","oral","oral","high","False","","True","True","False","TYPE CHECK:        The candidate value ""oral"" refers to the anatomical site/tissue of origin.
-SOURCE CHECK:      The paper mentions ""normal oral keratinocyte"" and ""head and neck squamous cell carcinoma,"" from which ""oral"" is reasonably inferable as the organ/tissue site.
-TRUTH CHECK:       The study focuses on oral keratinocytes and head and neck cancer, making ""oral"" a factually correct description of the tissue origin.
-COMPLETENESS CHECK:   The full set contains only ""oral""; while the paper mentions ""head and neck,"" ""oral"" is the specific tissue type described for the control and the primary site of the cancer.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD002132","BiologicalAgent","cell_type","keratinocyte","keratinocyte","high","False","","True","True","False","TYPE CHECK:        The candidate value ""keratinocyte"" describes a cell type/lineage, which matches the field definition.
-SOURCE CHECK:      The paper mentions ""normal oral keratinocyte OKF6/TERT1"" in the results and methods sections.
-TRUTH CHECK:       The value is factually correct as the study uses a keratinocyte cell line as a control.
-COMPLETENESS CHECK: The full set contains ""keratinocyte"", which correctly identifies the primary cell lineage used for the control; however, the study also uses HNSCC (head and neck squamous cell carcinoma) cells, which are cancerous keratinocytes. While ""keratinocyte"" is correct, the set is exhaustive for the non-cancerous lineage.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD002132","BiologicalAgent","disease","head and neck squamous cell carcinoma","head and neck squamous cell carcinoma","high","False","","True","True","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
-SOURCE CHECK:      The value is explicitly mentioned in the title and abstract (""head and neck squamous cell carcinoma"").
-TRUTH CHECK:       The value is factually correct as the primary disease studied in the paper.
-COMPLETENESS CHECK: The full set of extracted values covers the disease state described; while ""normal oral keratinocyte"" is mentioned as a control, the primary disease is correctly captured.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD002132","BiologicalAgent","material_type","cell lines","cell lines","high","False","","True","True","False","TYPE CHECK: Yes, ""cell lines"" is a valid category for the material_type field.
-SOURCE CHECK: Yes, the paper explicitly mentions using a panel of HNSCC cell lines (JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27) and a normal oral keratinocyte cell line (OKF6/TERT1) for the LC-MS/MS analysis.
-TRUTH CHECK: Yes, the material used for the proteomics experiment was cell lines.
-COMPLETENESS CHECK: The full set contains only ""cell lines"", which accurately describes the source material for the mass spectrometry analysis described in the ""Sample Preparation for LC-MS/MS analysis"" section.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -55,9 +11,54 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
+"PXD002132","BiologicalAgent","organ","oral mucosa","","low","False","","False","False","True","TYPE CHECK: The candidate value ""oral mucosa"" is a tissue/organ, which matches the field definition.
+SOURCE CHECK: The paper mentions ""normal oral keratinocyte OKF6/TERT1"" and ""head and neck squamous cell carcinoma (HNSCC)"", but the specific term ""oral mucosa"" does not appear in the text.
+TRUTH CHECK: While HNSCC and oral keratinocytes are derived from the oral mucosa, the text does not explicitly name the organ as ""oral mucosa""; it refers to ""oral keratinocyte"" (cell type) and ""HNSCC tissues"" (disease-state tissue).
+COMPLETENESS CHECK: The full set contains only this value, which is an inference rather than an explicit extraction from the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD002132","BiologicalAgent","cell_type","keratinocyte","keratinocyte","high","False","","True","True","False","TYPE CHECK:        The candidate value ""keratinocyte"" describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""normal oral keratinocyte OKF6/TERT1"" in the results and methods sections.
+TRUTH CHECK:       The value is factually correct as the study uses a keratinocyte cell line as a control.
+COMPLETENESS CHECK:    The full set contains ""keratinocyte"", which correctly identifies the primary cell type used for the control; the other cells are HNSCC cell lines (which would fall under cell_line).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD002132","BiologicalAgent","disease","head and neck squamous cell carcinoma","head and neck squamous cell carcinoma","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The value is explicitly mentioned in the title and abstract (""head and neck squamous cell carcinoma"").
+TRUTH CHECK:       The value is factually correct as the primary disease studied in the paper.
+COMPLETENESS CHECK: The full set contains the primary disease; however, the paper also uses a ""normal oral keratinocyte cell line"" as a control, which should be represented as ""normal"" or ""healthy"" per the field definition.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""head and neck squamous cell carcinoma"", ""normal""]","head and neck squamous cell carcinoma, normal"
+"PXD002132","BiologicalAgent","material_type","cell lines","cell lines","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cell lines"" matches the defined category for material_type.
+SOURCE CHECK:      The paper explicitly mentions using a panel of HNSCC cell lines (JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, and CAL 27) and a normal oral keratinocyte cell line (OKF6/TERT1) for the LC-MS/MS analysis.
+TRUTH CHECK:       The value is factually correct as cell lines were the source material for the proteomics experiment.
+COMPLETENESS CHECK: The full set contains ""cell lines"", which accurately describes the material used for the mass spectrometry analysis described in the ""Sample Preparation for LC-MS/MS analysis"" section.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD002132","BiologicalAgent","anatomic_site_tumor","head and neck","head and neck","high","False","","True","True","False","TYPE CHECK:        The candidate value ""head and neck"" describes the anatomical location of the tumor.
-SOURCE CHECK:      The paper explicitly mentions ""head and neck squamous cell carcinoma"" throughout the text.
-TRUTH CHECK:       The value is factually correct as the study focuses on HNSCC.
+SOURCE CHECK:      The paper explicitly mentions ""head and neck squamous cell carcinoma (HNSCC)"" multiple times.
+TRUTH CHECK:       The value is factually correct based on the disease name provided in the text.
 COMPLETENESS CHECK: The full set of extracted values correctly identifies the anatomical site described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -66,10 +67,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002132","BiologicalAgent","cell_line","OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27","OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27","high","False","","True","True","False","TYPE CHECK:        The candidate value is a list of cell line names, which matches the definition.
+"PXD002132","BiologicalAgent","cell_line","OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27","OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27","high","False","","True","True","False","TYPE CHECK:        The candidate value is a list of cell line names, which matches the field definition.
 SOURCE CHECK:      All listed cell lines (OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, and CAL 27) are explicitly mentioned in the ""Results"" and ""Methods"" sections.
 TRUTH CHECK:       The values are factually correct as per the text.
-COMPLETENESS CHECK:The full set of extracted values covers all cell lines used in the LC-MS/MS and subsequent experiments described in the paper.
+COMPLETENESS CHECK:The full set of extracted values covers all cell lines used in the LC-MS/MS analysis and subsequent assays described in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -77,10 +78,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002132","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+"PXD002132","TechnicalAgent","instrument","LTQ Orbitrap Velos","LTQ Orbitrap Velos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
 SOURCE CHECK:      The text explicitly mentions ""LTQ-Orbitrap Velos mass spectrometer"" in the LC-MS/MS analysis section.
 TRUTH CHECK:       The value is factually correct as stated in the paper.
-COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -88,10 +89,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002132","TechnicalAgent","label","TMT 10 plex reagents","TMT 10 plex reagents","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to a TMT labeling method, which fits the definition of an isobaric labeling method.
+"PXD002132","TechnicalAgent","label","TMT 10 plex reagents","TMT 10 plex reagents","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to a specific isobaric labeling method, which matches the field definition.
 SOURCE CHECK:      The text explicitly states, ""Peptide samples were labeled using TMT 10 plex reagents (Thermo Scientific, Bremen, Germany)"".
 TRUTH CHECK:       The value is factually correct as described in the methods section.
-COMPLETENESS CHECK: The full set contains the specific TMT reagent used, which is exhaustive for the labeling method described.
+COMPLETENESS CHECK: The full set contains the specific labeling method used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -99,10 +100,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD002132","ExperimentalDesignAgent","replicates","7 cell lines (OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27)","","low","True","","False","False","False","TYPE CHECK:        no
-SOURCE CHECK:      yes
-TRUTH CHECK:       no
-COMPLETENESS CHECK:The full set of values incorrectly identifies the number of distinct cell lines as the number of biological replicates.
+"PXD002132","ExperimentalDesignAgent","replicates","cell lines (OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, CAL 27)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a list of cell lines, not a numeric count of biological replicates.
+SOURCE CHECK:      The cell lines are mentioned in the text, but they represent different biological samples (conditions/types), not replicates of a single condition.
+TRUTH CHECK:       The candidate value is factually incorrect for the field 'replicates'; it describes the sample set, not the number of times each sample was replicated.
+COMPLETENESS CHECK: The full set contains ""7"", which is the count of the cell lines listed, but the paper does not explicitly state the number of biological replicates for the MS experiment (though it mentions triplicates for other assays).
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
 VALUE_CORRECT:     no
@@ -111,9 +112,9 @@ HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD002132","ExperimentalDesignAgent","replicates","7","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
-SOURCE CHECK:      The paper mentions a panel of 7 cell lines (OKF6/TERT1 and 6 HNSCC lines) used in the TMT experiment, but it does not state that these are biological replicates of the same condition; they are distinct biological samples (different cell lines).
-TRUTH CHECK:       The value ""7"" refers to the number of unique cell lines/samples processed in the TMT experiment, not the number of biological replicates per sample. The field 'replicates' refers to the number of times the same biological condition was repeated.
-COMPLETENESS CHECK:    The full set of extracted values confuses the number of samples (7 cell lines) with the number of biological replicates.
+SOURCE CHECK:      The paper mentions a panel of 7 cell lines (OKF6/TERT1, JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, and CAL 27) used in the TMT-based phosphoproteomics experiment.
+TRUTH CHECK:       The value ""7"" refers to the number of distinct biological samples (cell lines) compared in the study, not the number of biological replicates per condition. In proteomics, biological replicates are multiple independent samples of the same condition; here, the 7 cell lines are the experimental groups/samples.
+COMPLETENESS CHECK:    The full set of extracted values includes the list of cell lines and the number 7, but neither correctly identifies the number of biological replicates (which is not explicitly stated for the MS experiment, making ""1"" the safe default).
 
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -121,33 +122,33 @@ VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   1","1"
-"PXD002132","ExperimentalDesignAgent","experimental_design","Comparison of phosphotyrosine profiles between HNSCC cell lines and a normal oral keratinocyte cell line","Comparison of phosphotyrosine profiles between HNSCC cell lines and a normal oral keratinocyte cell line","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the experimental comparison, which fits the category of study design.
-SOURCE CHECK:      The text explicitly states, ""we compared the phosphotyrosine profiles of a panel of HNSCC cell lines to a normal oral keratinocyte cell line.""
-TRUTH CHECK:       The value accurately reflects the primary experimental design of the proteomics portion of the study.
-COMPLETENESS CHECK: The full set captures the core design of the phosphoproteomics experiment.
+CORRECTED_VALUE:   NONE",""
+"PXD002132","ExperimentalDesignAgent","experimental_design","comparison of phosphotyrosine profiles between HNSCC cell lines and a normal oral keratinocyte cell line","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the experimental objective/comparison rather than a standard study design type (e.g., ""case-control"" or ""treated vs control"").
+SOURCE CHECK:      The text explicitly states the authors ""compared the phosphotyrosine profiles of a panel of HNSCC cell lines to a normal oral keratinocyte cell line.""
+TRUTH CHECK:       The description is factually accurate to the paper's methodology.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the primary proteomics comparison.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control","case-control"
+"PXD002132","ExperimentalDesignAgent","factor_value","cell type (normal oral keratinocyte, HNSCC cell lines)","cell type (normal oral keratinocyte, HNSCC cell lines)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (cell type) and the specific levels used, which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly compares ""normal oral keratinocyte OKF6/TERT1"" and a ""panel of HNSCC cell lines"" for the phosphotyrosine analysis.
+TRUTH CHECK:       The value is factually correct as the study uses these two groups as the primary comparison factor for the proteomics experiment.
+COMPLETENESS CHECK: The full set captures the primary experimental factor for the MS analysis; while other factors (like DYRK1A inhibition) are studied via Western Blot/assays, the MS part of the study focuses on these cell types.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
-CORRECTED_VALUE:   NONE","case-control"
-"PXD002132","ExperimentalDesignAgent","factor_value","cell line condition (normal oral keratinocyte, HNSCC)","cell line condition (normal oral keratinocyte, HNSCC)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (cell line conditions) being compared, which fits the definition of a factor_value.
-SOURCE CHECK:      The paper explicitly compares ""normal oral keratinocyte OKF6/TERT1"" and a ""panel of HNSCC cell lines"".
-TRUTH CHECK:       The value accurately reflects the primary experimental comparison described in the phosphotyrosine analysis.
-COMPLETENESS CHECK: The full set captures the primary factor (cell line condition), although the study also investigates ""DYRK1A inhibition"" (via siRNA or harmine) as a subsequent factor.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""cell line condition (normal oral keratinocyte, HNSCC)"", ""DYRK1A inhibition (siRNA, harmine)""]",""
-"PXD002132","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) before LC-MS/MS; therefore, the safe default of ""1"" applies.
-TRUTH CHECK:       The value is correct as no fractionation was described.
-COMPLETENESS CHECK: The full set contains the single correct value for this experiment.
+CORRECTED_VALUE:   NONE",""
+"PXD002132","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values consists of only this value, which accurately reflects the lack of fractionation in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -156,9 +157,9 @@ HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
 "PXD002132","ExperimentalDesignAgent","number_of_samples","7","7","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
-SOURCE CHECK:      The paper describes a phosphotyrosine analysis comparing one normal oral keratinocyte cell line (OKF6/TERT1) and a panel of six HNSCC cell lines (JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, and CAL 27).
-TRUTH CHECK:       1 (normal) + 6 (HNSCC) = 7 samples processed for the LC-MS/MS analysis.
-COMPLETENESS CHECK: The full set contains the value ""7"", which accurately reflects the total number of cell line samples used in the proteomics experiment.
+SOURCE CHECK:      The paper describes a panel of HNSCC cell lines (JHU-O11, JHU-O22, JHU-O28, JHU-O29, FaDu, and CAL 27) and one normal oral keratinocyte cell line (OKF6/TERT1), totaling 7 cell lines used for the TMT-based LC-MS/MS analysis.
+TRUTH CHECK:       The count of 7 is factually correct based on the listed cell lines used in the proteomics experiment.
+COMPLETENESS CHECK: The full set contains the value ""7"", which accurately covers the samples processed for the mass spectrometry analysis.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

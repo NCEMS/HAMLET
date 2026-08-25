@@ -3,40 +3,40 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "H1299, A2780, MDA-MB-231, SQ1, SQ2, SQ3",
-      "verdict": "low",
+      "extracted_value": "H1299",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "H1299",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category.",
-        "SOURCE_CHECK": "Only H1299 is used for the MS experiment; A2780, MDA-MB-231, SQ1, SQ2, and SQ3 are used in functional assays (migration, ECM deposition, etc.) and not for proteomics.",
-        "TRUTH_CHECK": "The value is factually incorrect because it includes multiple cell lines that were not analyzed by mass spectrometry.",
-        "COMPLETENESS_CHECK": "The full set is incorrect as it conflates MS samples with assay samples."
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"SILAC proteomics\" section, where it is explicitly stated that exosomes were purified from H1299-p53−/− and H1299-p53R273H cells for mass spectrometry analysis.",
+        "TRUTH_CHECK": "The candidate value \"H1299\" is the correct base cell line used for the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set contains \"H1299\", which covers the cell line source for the MS analysis described in the paper."
       }
     },
     {
       "annotation_type": "cell_type",
-      "extracted_value": "carcinoma cell, fibroblasts",
-      "verdict": "low",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
-      "corrected_value": "carcinoma cell",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains cell types, which matches the field definition.",
-        "SOURCE_CHECK": "The MS experiment specifically analyzed exosomes purified from H1299 cells (a non-small cell lung carcinoma cell line); however, fibroblasts (TIFs) were used in separate assays to study ECM deposition and were not the source of the material analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "While \"carcinoma cell\" is correct for the H1299 cells analyzed by MS, \"fibroblasts\" is incorrect as they were not the MS sample source.",
-        "COMPLETENESS_CHECK": "The full set is incorrect because it includes a cell type from an unrelated experimental context."
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
+        "SOURCE_CHECK": "The MS experiment analyzed exosomes purified from H1299 cells; H1299 is a well-known non-small cell lung carcinoma cell line, which is of epithelial origin.",
+        "TRUTH_CHECK": "H1299 cells are epithelial-derived cancer cells, making \"epithelial cell\" a factually correct lineage.",
+        "COMPLETENESS_CHECK": "The full set contains the correct lineage for the cell line used in the proteomics experiment."
       }
     },
     {
@@ -53,9 +53,9 @@
       "corrected_value": "non-small cell lung carcinoma",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains disease names, which matches the definition for the disease field.",
-        "SOURCE_CHECK": "The values appear in the text, but only one refers to the material actually analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The SILAC proteomics experiment specifically used exosomes from H1299 cells, which the paper identifies as \"non-small cell lung carcinoma cells\". The \"pancreatic adenocarcinomas\" and \"breast cancer\" (MDA-MB-231) mentions refer to in vivo models and cell migration assays, not the MS sample.",
-        "COMPLETENESS_CHECK": "The full set is incorrect because it includes diseases from unrelated experimental contexts."
+        "SOURCE_CHECK": "The values appear in the text, but only \"non-small cell lung carcinoma\" (H1299 cells) is associated with the SILAC proteomics experiment; \"pancreatic adenocarcinomas\" and \"breast cancer\" (MDA-MB-231) refer to in vivo models or functional assays, not the MS sample.",
+        "TRUTH_CHECK": "While the diseases are mentioned in the paper, only the one associated with the H1299 cells is correct for the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set includes diseases from unrelated experimental contexts, making it factually incorrect as a description of the MS sample."
       }
     },
     {
@@ -72,9 +72,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"lung\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The value \"lung\" appears in the text in the context of in vivo experiments (lung ECM of mice and lung parenchyma), but the actual mass spectrometry experiment was performed on exosomes purified from H1299 cells.",
-        "TRUTH_CHECK": "H1299 is a non-small cell lung carcinoma cell line; therefore, the organ of origin for the MS sample is the lung.",
-        "COMPLETENESS_CHECK": "The full set contains \"lung\", which correctly identifies the tissue of origin for the H1299 cell line used in the SILAC proteomics."
+        "SOURCE_CHECK": "The MS sample was derived from exosomes purified from H1299 cells, which are described in the text as \"non-small cell lung carcinoma cells\".",
+        "TRUTH_CHECK": "The H1299 cell line is a well-established lung cancer cell line, making \"lung\" the correct organ of origin.",
+        "COMPLETENESS_CHECK": "The full set contains \"lung\", which correctly identifies the origin of the biological material used for the SILAC proteomics experiment."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "wrong_value",
       "corrected_value": "Homo sapiens",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains species names, which matches the required category for this field.",
-        "SOURCE_CHECK": "The paper describes SILAC proteomics on exosomes from H1299 cells (human) and also describes experiments using various mouse models (KPC, KPflC, etc.), although the specific mass spectrometry experiment described in the \"SILAC proteomics\" section only mentions H1299 cells (human).",
-        "TRUTH_CHECK": "While the paper uses both human cells and mice, the proteomics experiment specifically analyzed exosomes from H1299 cells, which are human. The mouse models were analyzed using SHG microscopy and histology, not mass spectrometry.",
-        "COMPLETENESS_CHECK": "The set includes a species (Mus musculus) that was not part of the MS analysis."
+        "TYPE_CHECK": "The candidate value contains species names, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes SILAC proteomics on exosomes from H1299 cells (human) and also describes experiments using various mouse models (KPC, KPflC, etc.), although the proteomics specifically targeted the human cell line exosomes.",
+        "TRUTH_CHECK": "While both species are mentioned in the paper, the proteomics experiment (SILAC-based) was performed specifically on exosomes from H1299 cells, which are human. The mouse models were used for SHG microscopy and histology, not for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The set is not correct because it includes a species not analyzed by MS."
       }
     },
     {
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental factor (p53 status) and its specific levels, which is the correct category for factor_value.",
+        "TYPE_CHECK": "The candidate value describes the experimental factor (p53 status) and its specific levels (mutant vs null), which fits the definition of a factor_value.",
         "SOURCE_CHECK": "The value is derived from the SILAC proteomics experiment where exosomes from H1299-p53R273H and H1299-p53−/− cells were compared.",
-        "TRUTH_CHECK": "The paper explicitly compares these two p53 statuses (mutant p53R273H vs p53 null/p53−/−) in the proteomics analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the p53 status and the cancer types; together they cover the primary experimental variables described in the proteomics context."
+        "TRUTH_CHECK": "The paper explicitly compares these two p53 statuses in the proteomics section (\"SILAC-based proteomics allowed comparison of exosomes purified from H1299-p53R273H and H1299-p53−/− cells\").",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the p53 status and the cancer types; together they cover the primary experimental variables described in the proteomics and broader study."
       }
     },
     {
@@ -121,17 +121,17 @@
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
       "error_category": "wrong_value",
       "corrected_value": "non-small cell lung carcinoma",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value consists of disease/cancer types, which is the correct category for a factor_value mirroring a disease characteristic.",
-        "SOURCE_CHECK": "While these diseases are mentioned in the paper, they describe the origin of various cell lines used in different assays; however, the only material actually analysed by mass spectrometry (SILAC proteomics) was exosomes from H1299 cells (a non-small cell lung carcinoma line). Pancreatic adenocarcinomas and breast cancer (MDA-MB-231) were used in-vivo or in-vitro assays, not in the MS experiment.",
-        "TRUTH_CHECK": "The value is factually present in the text but includes entities not associated with the MS sample.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive of the MS experiment's design, and the candidate value includes irrelevant contexts."
+        "TYPE_CHECK": "The candidate value lists disease types, which is the correct category for a factor_value mirroring a disease characteristic.",
+        "SOURCE_CHECK": "The values appear in the text, but they refer to different experimental contexts: \"non-small cell lung carcinoma\" (H1299 cells) and \"pancreatic adenocarcinomas\" (KPC models) are mentioned, but \"breast cancer\" (MDA-MB-231 cells) is used only for an adhesion/migration assay and was NOT analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is partially incorrect because it includes \"breast cancer\" (MDA-MB-231), which was not part of the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive of the MS experiment's specific factors (which focused on p53 status in H1299 exosomes)."
       }
     },
     {
@@ -148,9 +148,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
-        "SOURCE_CHECK": "The paper describes the SILAC proteomics workflow (reduction, alkylation, digestion, and application to an Orbitrap Elite) but does not mention any offline fractionation step.",
-        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
-        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation information is provided in the text."
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS analysis.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as it accurately reflects the lack of fractionation described in the text."
       }
     },
     {
@@ -185,10 +185,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
-        "SOURCE_CHECK": "The paper text does not mention the number of technical replicates for the SILAC proteomics experiment.",
-        "TRUTH_CHECK": "There is no evidence in the text to support the value \"2\".",
-        "COMPLETENESS_CHECK": "The value is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical_replicates.",
+        "SOURCE_CHECK": "I have scanned the \"SILAC proteomics\" and \"Exosome purification and characterisation\" sections, and there is no mention of technical replicates (e.g., \"each sample was run in duplicate\") for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The value \"2\" is not supported by the text; the paper does not specify the number of technical replicates.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so it cannot be complete."
       }
     },
     {
@@ -205,8 +205,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", \"DIA\", or any other specific acquisition scheme.",
-        "TRUTH_CHECK": "There is no evidence in the text to support this specific acquisition method; while DDA is common for the described Orbitrap Elite setup, it is not stated.",
+        "SOURCE_CHECK": "The paper does not mention \"data-dependent acquisition\", \"DDA\", or any other specific acquisition scheme in the text.",
+        "TRUTH_CHECK": "There is no evidence in the text to support this specific acquisition method.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
@@ -223,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC proteomics\" section of the methods (\"alkylated (55 mM iodoacetamide)\").",
-        "TRUTH_CHECK": "The value is factually correct as it is the reagent used for alkylation in the described proteomics experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only alkylation reagent mentioned in the text."
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC proteomics\" section of the methods, describing the sample preparation for the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The paper states that exosome proteins were \"alkylated (55 mM iodoacetamide)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"iodoacetamide\", which is the only alkylation reagent mentioned in the text."
       }
     },
     {
@@ -242,7 +242,7 @@
       "error_category": "incomplete",
       "corrected_value": "Lys C, trypsin",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease, which matches the definition of a cleavage agent.",
+        "TYPE_CHECK": "The candidate value \"Lys-C\" is a protease used for protein digestion, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC proteomics\" section of the methods, describing the digestion of exosome proteins for mass spectrometry analysis.",
         "TRUTH_CHECK": "The paper states that exosome proteins were \"digested (Lys C and trypsin)\".",
         "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Lys-C\", but the paper explicitly mentions both \"Lys C and trypsin\". Therefore, the extraction is incomplete."
@@ -281,9 +281,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not specify the fragmentation method used for the Orbitrap Elite LC-MS analysis.",
-        "COMPLETENESS_CHECK": "The full set contains a value that is not present in the text."
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"beam-type collision-induced dissociation\" or any other specific fragmentation method.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
       }
     },
     {
@@ -301,7 +301,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC proteomics\" section of the methods as the instrument used for the mass spectrometry analysis of exosome proteins.",
-        "TRUTH_CHECK": "The paper states \"Protein samples were then applied directly to an Orbitrap Elite (LC-MS)\".",
+        "TRUTH_CHECK": "The value \"Orbitrap Elite\" is factually correct as stated in the text.",
         "COMPLETENESS_CHECK": "Only one instrument is mentioned for the proteomics experiment, so the extraction is complete."
       }
     },
@@ -318,10 +318,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the \"SILAC proteomics\" section of the methods, where it states \"Protein samples were then applied directly to an Orbitrap Elite (LC-MS)\".",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used was an Orbitrap Elite.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only one mass analyzer is mentioned for the proteomics experiment."
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"SILAC proteomics\" section which describes the MS analysis of exosome proteins.",
+        "TRUTH_CHECK": "The paper explicitly states that \"Protein samples were then applied directly to an Orbitrap Elite (LC-MS)\", confirming the use of an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the proteomics experiment."
       }
     },
     {
@@ -340,7 +340,7 @@
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
         "SOURCE_CHECK": "The paper mentions the use of \"iodoacetamide\" for alkylation in the SILAC proteomics section, but it does not explicitly name the resulting modification \"Carbamidomethyl\" or \"carbamidomethylation\".",
         "TRUTH_CHECK": "According to the field-specific rules, modifications must be explicitly named in the text; they cannot be inferred from the reagents used (e.g., iodoacetamide).",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications not mentioned in the text."
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications and \"not applicable\", but none of these are explicitly mentioned in the text."
       }
     },
     {
@@ -394,10 +394,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The value \"not applicable\" is a placeholder indicating the absence of a value, but the field expects a specific modification name.",
+        "TYPE_CHECK": "The candidate value \"not applicable\" is a placeholder indicating the absence of a value, but the field expects a specific modification name.",
         "SOURCE_CHECK": "The paper does not explicitly name any modifications searched during the MS analysis.",
-        "TRUTH_CHECK": "The paper mentions \"alkylated (55 mM iodoacetamide)\", but per the field rules, this does not allow the inference of \"Carbamidomethyl (C)\". No modification names are explicitly written.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Carbamidomethyl (C)\" and \"Deamidation (NQ)\", both of which are hallucinated as they are not explicitly named in the text."
+        "TRUTH_CHECK": "The paper mentions the use of iodoacetamide for alkylation, but the modification name \"Carbamidomethyl (C)\" is not explicitly written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (Carbamidomethyl, Deamidation, etc.) that are not mentioned in the text, and \"not applicable\" is an incorrect way to represent the absence of explicit mentions when other hallucinated values are present."
       }
     },
     {
@@ -413,10 +413,10 @@
       "error_category": "hallucinated",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass tolerance (numeric value with unit), which is the correct category for this field.",
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
         "SOURCE_CHECK": "The value \"6 ppm\" does not appear anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not supported by the text.",
-        "COMPLETENESS_CHECK": "The full set contains only this unsupported value."
+        "TRUTH_CHECK": "The value is not supported by the text; the paper mentions the use of MaxQuant for data analysis but does not specify the precursor mass tolerance used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not based on any information in the text."
       }
     },
     {
@@ -434,8 +434,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
         "SOURCE_CHECK": "The value is explicitly mentioned in the \"SILAC proteomics\" section of the methods, describing the sample preparation for the mass spectrometry analysis.",
-        "TRUTH_CHECK": "The paper states \"Exosome proteins were reduced (10 mM dithiothreitol)\", confirming the value is factually correct.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, which is the only reduction reagent mentioned for the MS experiment."
+        "TRUTH_CHECK": "The paper states \"Exosome proteins were reduced (10 mM dithiothreitol)\", confirming the value is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only reduction reagent mentioned in the text."
       }
     }
   ]

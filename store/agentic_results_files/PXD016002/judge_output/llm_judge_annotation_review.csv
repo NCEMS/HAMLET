@@ -1,7 +1,7 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD016002","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""human CSF specimens"" and ""human melanoma cell lines,"" making ""Homo sapiens"" a correct and reasonable extraction.
-TRUTH CHECK:       The source material is indeed from humans.
+"PXD016002","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human CSF specimens"" and ""human melanoma cell lines"".
+TRUTH CHECK:       The samples are derived from human patients and human cell lines, making ""Homo sapiens"" correct.
 COMPLETENESS CHECK: The full set contains the only species involved in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -10,10 +10,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","BiologicalAgent","organ","CSF","CSF","high","False","","True","True","False","TYPE CHECK:        The candidate value ""CSF"" (cerebrospinal fluid) refers to the biofluid/organ of origin for the proteomics analysis.
-SOURCE CHECK:      The paper explicitly states ""Proteomic analysis of CSF from patients"" and ""CSF samples were analyzed by mass spectrometry.""
-TRUTH CHECK:       The value is factually correct as the samples analyzed were cerebrospinal fluid.
-COMPLETENESS CHECK: The full set contains ""CSF"", which is the only source material used for the proteomics experiment described.
+"PXD016002","BiologicalAgent","organ","CSF","CSF","high","False","","True","True","False","TYPE CHECK:        The candidate value ""CSF"" (cerebrospinal fluid) represents the biofluid/organ of origin for the proteomics analysis.
+SOURCE CHECK:      The paper explicitly states ""Proteomic analysis of CSF from patients"" and ""CSF samples were analyzed by mass spectrometry"".
+TRUTH CHECK:       The value is factually correct as the source material for the MS experiment.
+COMPLETENESS CHECK: The full set contains ""CSF"", which is the only organ/tissue source used for the proteomics experiment described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -21,21 +21,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","BiologicalAgent","disease","leptomeningeal melanoma metastases","leptomeningeal melanoma metastases","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK:      The value is explicitly mentioned in the title and abstract (""leptomeningeal melanoma metastases (LMM)"").
-TRUTH CHECK:       The value is factually correct as the primary disease state being studied in the patients.
-COMPLETENESS CHECK: The full set contains the primary disease; however, the paper also mentions a ""non-LMM control group"" (healthy/normal controls), which is a standard part of the disease field for this study design.
-TYPE_CORRECT:      yes
+"PXD016002","BiologicalAgent","disease","leptomeningeal melanoma metastases","leptomeningeal melanoma metastases","medium","False","","True","False","False","TYPE CHECK: The candidate value is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the title and abstract (""leptomeningeal melanoma metastases (LMM)"").
+TRUTH CHECK: The paper describes a study of patients with this specific condition.
+COMPLETENESS CHECK: The full set contains the primary disease studied; however, the paper also mentions a ""non-LMM control group"" (healthy/normal controls), which is typically captured in this field.
+
+TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""leptomeningeal melanoma metastases"", ""normal""]","leptomeningeal melanoma metastases, normal"
-"PXD016002","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is not a broad material class (e.g., tissue, biofluid) as defined; it describes the source subject, not the material type.
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""leptomeningeal melanoma metastases"", ""normal""]","leptomeningeal melanoma metastases, normal"
+"PXD016002","BiologicalAgent","material_type","patients","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""patients"" is a subject/source, not a broad material class as defined (e.g., ""biofluid"", ""tissue"").
 SOURCE CHECK:      The paper mentions patients, but the material actually analyzed by mass spectrometry was CSF (cerebrospinal fluid).
-TRUTH CHECK:       The material analyzed was CSF, which is a biofluid, not ""patients"".
-COMPLETENESS CHECK:   The full set contains only ""patients"", which is incorrect and fails to capture the actual material used (CSF).
+TRUTH CHECK:       The material analyzed was CSF, which is a biofluid; ""patients"" is the source of the material, not the material type itself.
+COMPLETENESS CHECK:The full set contains only ""patients"", which is a type mismatch and does not correctly identify the material used.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: material_type
 VALUE_CORRECT:     no
@@ -43,10 +44,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
 CORRECTED_VALUE:   [""biofluid""]","biofluid"
-"PXD016002","BiologicalAgent","anatomic_site_tumor","leptomeninges","leptomeninges","high","False","","True","True","False","TYPE CHECK:        The candidate value ""leptomeninges"" describes an anatomical location of a tumor, which matches the field definition.
-SOURCE CHECK:      The paper explicitly mentions ""leptomeningeal melanoma metastases"" and ""tissues collected from one LMM patient at autopsy... in the leptomeninges.""
+"PXD016002","BiologicalAgent","anatomic_site_tumor","leptomeninges","leptomeninges","high","False","","True","True","False","TYPE CHECK:        The candidate value ""leptomeninges"" describes an anatomical location of a tumor.
+SOURCE CHECK:      The paper explicitly mentions ""leptomeningeal melanoma metastases"" and ""tissues collected from one LMM patient at autopsy... in the leptomeninges"".
 TRUTH CHECK:       The value is factually correct as the study focuses on melanoma metastases in the leptomeninges.
-COMPLETENESS CHECK: The full set of extracted values correctly identifies the primary anatomical site of the tumors discussed in the study.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the primary anatomical site of the tumors discussed.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -54,20 +55,20 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
-SOURCE CHECK: The text explicitly mentions ""analysis in technical duplicates on a QExactive Plus mass spectrometer"".
-TRUTH CHECK: The value is factually correct as stated in the paper.
+"PXD016002","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""analysis in technical duplicates on a QExactive Plus mass spectrometer"".
+TRUTH CHECK:       The value is factually correct as stated in the paper.
 COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
-TYPE_CORRECT: yes
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
 "PXD016002","TechnicalAgent","label","TMT-6plex","TMT-6plex","high","False","","True","True","False","TYPE CHECK:        The candidate value ""TMT-6plex"" describes an isobaric labeling method, which matches the field definition.
-SOURCE CHECK:      The text explicitly states ""Tryptic peptides (10 μg) were labeled with TMT-6plex reagents (Thermo).""
-TRUTH CHECK:       The value is factually correct as per the methods section.
+SOURCE CHECK:      The text explicitly states that samples were ""labeled with TMT-6plex reagents (Thermo)"".
+TRUTH CHECK:       The value is factually correct based on the methods section.
 COMPLETENESS CHECK: The full set contains the only labeling method mentioned in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -76,10 +77,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","replicates","45 serial CSF samples from 16 patients","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value is a description of the sample set rather than a numeric count of biological replicates.
+"PXD016002","ExperimentalDesignAgent","replicates","45 serial CSF samples from 16 patients","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value is a description of the sample cohort rather than a numeric count of biological replicates.
 SOURCE CHECK:      The text mentions 45 serial CSF samples from 16 patients, but this describes the total sample size, not the number of biological replicates per condition.
-TRUTH CHECK:       The value is factually present in the text but is not the correct answer for ""replicates"" (which should be a numeric count of biological replicates).
-COMPLETENESS CHECK: The full set of extracted values consists of the sample description and the total sample count, neither of which correctly identifies the number of biological replicates.
+TRUTH CHECK:       The value is factually present in the text but is incorrectly assigned to the 'replicates' field.
+COMPLETENESS CHECK:The full set of extracted values consists of the sample count and a descriptive phrase, neither of which correctly identifies the number of biological replicates.
 
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: replicates
@@ -90,8 +91,8 @@ VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD016002","ExperimentalDesignAgent","replicates","45","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the category for replicates.
 SOURCE CHECK:      The paper mentions ""A total of 45 serial CSF samples were collected from 16 patients"".
-TRUTH CHECK:       The value ""45"" refers to the total number of samples collected, not the number of biological replicates per condition or group. In proteomics, biological replicates typically refer to the number of independent biological units (patients/subjects) per group. Here, there are 16 patients.
-COMPLETENESS CHECK: The full set of extracted values confuses the total sample count with the number of biological replicates.
+TRUTH CHECK:       The value ""45"" refers to the total number of samples (including serial samples from the same patients), not the number of biological replicates. Biological replicates typically refer to the number of distinct biological entities (patients) per group.
+COMPLETENESS CHECK:    The full set of extracted values confuses the total sample count with the number of biological replicates.
 
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
@@ -99,22 +100,22 @@ VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","technical_replicates","technical duplicates","2","high","True","","False","True","False","TYPE CHECK:        The candidate value ""technical duplicates"" describes the nature of the replication, but the field definition specifically asks for the number (e.g., ""2"").
-SOURCE CHECK:      The text explicitly states that samples were analyzed ""in technical duplicates"".
-TRUTH CHECK:       ""Technical duplicates"" is factually correct and implies the number 2.
-COMPLETENESS CHECK:    The full set of extracted values [""technical duplicates"", ""2""] covers the information provided in the paper.
-TYPE_CORRECT:      no
-CORRECT_TYPE_NAME: technical_replicates
+CORRECTED_VALUE:   NONE","16"
+"PXD016002","ExperimentalDesignAgent","technical_replicates","technical duplicates","technical duplicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value ""technical duplicates"" describes the number of technical replicates, although it is a descriptive phrase rather than a numeric count.
+SOURCE CHECK:      The text explicitly states that samples were analyzed ""in technical duplicates on a QExactive Plus mass spectrometer"".
+TRUTH CHECK:       ""Technical duplicates"" is factually correct and equivalent to 2 technical replicates.
+COMPLETENESS CHECK:    The full set of extracted values (""technical duplicates"", ""2"") covers the information provided in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","technical_replicates","2","2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for technical replicates.
+"PXD016002","ExperimentalDesignAgent","technical_replicates","2","technical duplicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for technical replicates.
 SOURCE CHECK:      The paper states that samples were analyzed ""in technical duplicates on a QExactive Plus mass spectrometer.""
 TRUTH CHECK:       ""Technical duplicates"" means 2 technical replicates per sample.
-COMPLETENESS CHECK: The full set of extracted values (""technical duplicates"", ""2"") accurately and exhaustively captures the information provided in the text.
+COMPLETENESS CHECK:    The full set of extracted values (""technical duplicates"", ""2"") correctly and exhaustively captures the information provided in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -122,10 +123,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","experimental_design","Comparison of CSF from LMM patients (responders vs non-responders) and non-LMM controls","Comparison of CSF from LMM patients (responders vs non-responders) and non-LMM controls","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design/comparison groups, which fits the definition of experimental_design.
-SOURCE CHECK:      The text describes a cohort of 16 patients, including 8 with LMM (further divided into responders and non-responders) and 8 non-LMM controls.
-TRUTH CHECK:       The value accurately reflects the experimental setup described in the ""Results"" and ""Patients and Methods"" sections.
-COMPLETENESS CHECK: The full set captures the primary comparative structure of the proteomics experiment.
+"PXD016002","ExperimentalDesignAgent","experimental_design","Comparison between LMM patients (responders vs non-responders) and non-LMM controls","Comparison between LMM patients (responders vs non-responders) and non-LMM controls","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design/comparison groups, which fits the definition of experimental_design.
+SOURCE CHECK:      The text explicitly mentions a cohort of 16 patients, 8 with LMM (including responders and non-responders) and 8 non-LMM controls.
+TRUTH CHECK:       The value accurately reflects the experimental setup described in the ""Results"" section.
+COMPLETENESS CHECK: The full set of extracted values captures the primary comparative nature of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -133,21 +134,10 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","factor_value","disease status (LMM, non-LMM), clinical response (extraordinary responder, poor responder)","disease status (LMM, non-LMM), clinical response (extraordinary responder, poor responder)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variables (disease status and clinical response) used to group the samples, which fits the definition of a factor value.
-SOURCE CHECK: The paper explicitly compares CSF from patients with LMM versus non-LMM controls, and further distinguishes between ""poor responders"" and an ""extraordinary responder.""
-TRUTH CHECK: The values are factually correct based on the ""Results"" section, which details the cohort of 16 patients (8 LMM, 8 non-LMM) and the stratification of LMM patients by survival/response.
-COMPLETENESS CHECK: The full set captures the primary experimental variables used for the proteomic and clinical comparisons described in the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD016002","ExperimentalDesignAgent","fractions","24","24","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of fractions, which matches the field definition.
-SOURCE CHECK:      The text explicitly states that samples were separated into ""final 24 concatenated fractions.""
-TRUTH CHECK:       The value is factually correct based on the methods section.
-COMPLETENESS CHECK: The full set contains the single correct value mentioned in the paper.
+"PXD016002","ExperimentalDesignAgent","factor_value","LMM status (LMM, non-LMM), therapeutic response (responder, non-responder)","LMM status (LMM, non-LMM), therapeutic response (responder, non-responder)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes experimental factors/variables (disease status and response), which matches the definition.
+SOURCE CHECK:      The paper explicitly compares patients with LMM vs. non-LMM controls and ""extraordinary responders"" vs. ""poor responders"" (non-responders).
+TRUTH CHECK:       The values are factually correct based on the study's cohort division and analysis.
+COMPLETENESS CHECK:The full set captures the primary experimental variables used to group the samples for the proteomic and RNA-seq analyses.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -155,10 +145,21 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD016002","ExperimentalDesignAgent","number_of_samples","45","45","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+"PXD016002","ExperimentalDesignAgent","fractions","24","24","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count representing the number of fractions, which matches the field definition.
+SOURCE CHECK:      The text explicitly states that samples ""were separated via basic pH RPLC fractionation into final 24 concatenated fractions.""
+TRUTH CHECK:       The value ""24"" is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values contains the single correct number of fractions mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD016002","ExperimentalDesignAgent","number_of_samples","45","45","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition of number_of_samples.
 SOURCE CHECK:      The paper explicitly states in the abstract and methods: ""A total of 45 serial CSF samples were collected from 16 patients"".
-TRUTH CHECK:       The value 45 is factually correct based on the text.
-COMPLETENESS CHECK: The full set contains the total number of CSF samples processed for the proteomic analysis.
+TRUTH CHECK:       The value 45 is factually correct as the total number of CSF samples processed.
+COMPLETENESS CHECK: The full set contains the total count of samples mentioned in the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes

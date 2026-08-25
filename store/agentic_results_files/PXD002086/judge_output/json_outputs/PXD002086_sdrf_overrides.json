@@ -11,6 +11,8 @@
     "material_type",
     "instrument",
     "label",
+    "precursor_mass_tolerance",
+    "fragment_mass_tolerance",
     "replicates",
     "technical_replicates",
     "fractions",
@@ -40,40 +42,60 @@
     "organ": {
       "builder_field": "organism_part",
       "pipeline_values": [
-        "colon"
+        "colon, rectum"
       ],
       "selected_value": "colon, rectum",
-      "selection_source": "judge_corrected_value",
-      "apply_override": true,
+      "selection_source": "judge_high_confidence",
+      "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "colon",
-          "verdict": "medium",
+          "extracted_value": "colon, rectum",
+          "verdict": "high",
           "value_correct": true,
-          "value_complete": false,
+          "value_complete": true,
           "hallucination": false,
           "type_mismatch": false,
-          "corrected_value": "colon, rectum"
+          "corrected_value": null
         }
       ]
     },
     "disease": {
       "builder_field": "disease",
       "pipeline_values": [
-        "cancer"
+        "colon and rectal cancer"
       ],
-      "selected_value": "colon cancer, rectal cancer",
+      "selected_value": "colon and rectal cancer",
+      "selection_source": "judge_high_confidence",
+      "apply_override": false,
+      "judge_rows": [
+        {
+          "extracted_value": "colon and rectal cancer",
+          "verdict": "high",
+          "value_correct": true,
+          "value_complete": true,
+          "hallucination": false,
+          "type_mismatch": false,
+          "corrected_value": null
+        }
+      ]
+    },
+    "material_type": {
+      "builder_field": "sample_source",
+      "pipeline_values": [
+        "TCGA Biospecimen Core Resource (BCR)"
+      ],
+      "selected_value": "tissue",
       "selection_source": "judge_corrected_value",
       "apply_override": true,
       "judge_rows": [
         {
-          "extracted_value": "cancer",
-          "verdict": "medium",
-          "value_correct": true,
+          "extracted_value": "TCGA Biospecimen Core Resource (BCR)",
+          "verdict": "low",
+          "value_correct": false,
           "value_complete": false,
           "hallucination": false,
-          "type_mismatch": false,
-          "corrected_value": "colon cancer, rectal cancer"
+          "type_mismatch": true,
+          "corrected_value": "tissue"
         }
       ]
     },
@@ -120,14 +142,14 @@
     "replicates": {
       "builder_field": "biological_replicate",
       "pipeline_values": [
-        "colon and rectal tumors, normal colon biopsies"
+        "tumor samples and normal colon biopsies"
       ],
       "selected_value": null,
       "selection_source": null,
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "colon and rectal tumors, normal colon biopsies",
+          "extracted_value": "tumor samples and normal colon biopsies",
           "verdict": "low",
           "value_correct": false,
           "value_complete": false,
@@ -160,14 +182,14 @@
     "factor_value": {
       "builder_field": "factor_value",
       "pipeline_values": [
-        "tissue type (colon tumor, rectal tumor, normal colon biopsy)"
+        "tissue type (colon, rectal), condition (tumor, normal)"
       ],
-      "selected_value": "tissue type (colon tumor, rectal tumor, normal colon biopsy)",
+      "selected_value": "tissue type (colon, rectal), condition (tumor, normal)",
       "selection_source": "judge_high_confidence",
       "apply_override": false,
       "judge_rows": [
         {
-          "extracted_value": "tissue type (colon tumor, rectal tumor, normal colon biopsy)",
+          "extracted_value": "tissue type (colon, rectal), condition (tumor, normal)",
           "verdict": "high",
           "value_correct": true,
           "value_complete": true,

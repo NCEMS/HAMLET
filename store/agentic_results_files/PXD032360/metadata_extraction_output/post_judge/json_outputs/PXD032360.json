@@ -1,0 +1,480 @@
+{
+  "paper_id": "PXD032360",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "RAW 264.7, HFF-1, THP-1",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "RAW 264.7",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions these cell lines, but the MS experiment specifically used \"protein extracts from Raw cells infected with RHΔku80 GRA28-HA–FLAG-tachyzoites\" for the co-immunoprecipitation and subsequent proteomics. HFF-1 and THP-1 were used for other assays (tachyzoite maintenance, qPCR, etc.) but not for the MS sample.",
+        "TRUTH_CHECK": "Only RAW 264.7 (referred to as \"Raw cells\" in the MS section) was the source of the material analyzed by mass spectrometry. HFF-1 and THP-1 are incorrect in this context.",
+        "COMPLETENESS_CHECK": "The set is incorrect because it includes cell lines not used for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "macrophage, dendritic cell, monocyte",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "macrophage",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes cell types, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment was performed on protein complexes purified from \"Raw cells infected with RHΔku80 GRA28-HA–FLAG-tachyzoites\". RAW 264.7 is a well-known macrophage cell line. While the paper discusses macrophages, dendritic cells, and monocytes extensively in other assays (qPCR, flow cytometry, chemotaxis), the actual MS sample was derived specifically from RAW 264.7 cells.",
+        "TRUTH_CHECK": "The value is partially incorrect because it includes \"dendritic cell\" and \"monocyte\", which were used in other experiments but not for the MS proteomics analysis. The MS sample was specifically from RAW 264.7 cells (macrophages).",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it over-includes cell types from unrelated assays."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "infected, healthy",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes disease/health states, which fits the definition of the disease field.",
+        "SOURCE_CHECK": "The paper describes experiments comparing macrophages infected with *T. gondii* (disease/infected state) and unchallenged/bystander macrophages (healthy/normal state).",
+        "TRUTH_CHECK": "The values \"infected\" and \"healthy\" accurately reflect the two primary conditions compared in the study.",
+        "COMPLETENESS_CHECK": "The full set \"infected, healthy\" covers the primary experimental contrast described in the paper."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "bone marrow",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"bone marrow\" is a tissue/organ, which matches the definition for the organ field.",
+        "SOURCE_CHECK": "The MS sample was derived from \"protein extracts from Raw cells infected with RHΔku80 GRA28-HA–FLAG-tachyzoites\"; RAW 264.7 is a macrophage cell line derived from bone marrow.",
+        "TRUTH_CHECK": "RAW 264.7 cells are a well-known murine macrophage cell line derived from bone marrow.",
+        "COMPLETENESS_CHECK": "The full set contains only \"bone marrow\", which correctly identifies the origin of the cell line used for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "sex",
+      "extracted_value": "male",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"male\" is a valid category for the sex field.",
+        "SOURCE_CHECK": "The paper mentions \"male and female\" C57BL/6 mice and \"male\" RAW 264.7 and THP-1 cells, but the MS experiment specifically used protein extracts from \"Raw cells\" (RAW 264.7), which are explicitly described as \"male\".",
+        "TRUTH_CHECK": "The text states \"murine RAW 264.7 (male, BALB/c) cells were used for in vitro experiments\" and the MS proteomics section specifies \"Protein extracts from Raw cells infected with RHΔku80 GRA28-HA–FLAG-tachyzoites\".",
+        "COMPLETENESS_CHECK": "The full set contains \"male\", which accurately describes the sex of the RAW 264.7 cell line used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Mus musculus, Homo sapiens",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Mus musculus",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organism names, which matches the definition of the species field.",
+        "SOURCE_CHECK": "The paper describes proteomics on complexes purified from \"murine macrophages\" (Mus musculus) and also mentions \"human macrophages\" and \"human fibroblasts\" in other contexts, but the specific MS-based proteomics section describes the analysis of complexes from \"Raw cells\" (a murine macrophage cell line) infected with T. gondii.",
+        "TRUTH_CHECK": "The MS experiment specifically used \"Raw cells\" (murine) infected with T. gondii. While the paper discusses human cells extensively in other assays (qPCR, ChIP-seq), the \"Mass spectrometry-based proteomics\" section only describes the analysis of complexes from Raw cells (Mus musculus). The search was performed against both T. gondii and Mus musculus databases. There is no mention of human samples being analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The set is not complete because it includes a species (Homo sapiens) not used in the MS experiment and correctly identifies the murine source."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "SEC fraction (F14-F19, F20-F22)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the specific fractions collected from size-exclusion chromatography, which is a valid experimental factor/variable for the samples analyzed.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Chromatographic purification of GRA28-containing complexes\" section, where it describes the fractions (F14-F19 and F20-F22) that were subsequently analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the paper states \"two distinct complexes... (complex 1, fractions F14-F19) and... (complex 2, fractions F20-F22)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the technical fractionation factor and the biological state (infected/healthy), covering the primary axes of the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "infected, healthy",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "unchallenged",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental conditions (infected vs healthy), which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The MS experiment analyzed proteins from \"extracts from murine macrophages infected with tachyzoites expressing a HAFlag-tagged version of GRA28\". While the paper describes \"unchallenged\" (healthy) macrophages in other assays (qPCR, flow cytometry, chemotaxis), the specific proteomics experiment described in the \"Mass spectrometry-based proteomics\" section only mentions the analysis of fractions from the GRA28-containing complexes purified from infected cells.",
+        "TRUTH_CHECK": "The proteomics experiment was specifically designed to identify partners of GRA28, which requires the cells to be infected with the tagged parasite. There is no mention of a \"healthy\" or \"uninfected\" control sample being processed through the same FLAG-affinity chromatography and MS pipeline to generate the data in Table S1.",
+        "COMPLETENESS_CHECK": "The full set includes the SEC fractions, which are the actual samples analyzed by MS, but the \"infected, healthy\" contrast is not supported by the MS experimental description."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "9",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the fractions field.",
+        "SOURCE_CHECK": "The value is not present in the text; the paper mentions \"fractions F14-F19\" and \"fractions F20-F22\" during size-exclusion chromatography, but does not state a total number of fractions per sample.",
+        "TRUTH_CHECK": "The value \"9\" is not supported by the text. While the range F14 to F22 covers 9 fractions, this is a specific range of interest for complexes, not the total number of fractions generated per sample.",
+        "COMPLETENESS_CHECK": "The full set consists of only this unsupported value."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of biological replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly state the number of biological replicates specifically for the mass spectrometry experiment; it only mentions that \"All experiments were performed in biological replicates\" generally.",
+        "TRUTH_CHECK": "According to the field definition, \"1\" is the correct value when no specific replication number is mentioned.",
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for this field when the text is silent on the specific count."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "According to the safe defaults in the instructions, \"1\" is correct when the paper is silent regarding the number of replicates.",
+        "COMPLETENESS_CHECK": "The value \"1\" is a complete representation of the information provided (or lack thereof) in the text."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; however, it describes a standard \"online nanoliquid chromatography coupled to MS/MS\" workflow using a Q-Exactive Plus and Mascot search, which is the hallmark of DDA.",
+        "TRUTH_CHECK": "While the specific phrase is not in the text, DDA is the standard acquisition method for the described setup (Q-Exactive Plus, Mascot search, iBAQ quantification), but the instructions state that for this field, the value must be a scheme name and not an instrument name. However, the \"SOURCE CHECK\" rules for \"INFERABLE FIELDS\" only explicitly list material_type, acquisition_method, and cell_type. While it is highly inferable, the text does not explicitly state \"DDA\" or \"data-dependent\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry-based proteomics\" section (\"proteins were digested in-gel using trypsin\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper states trypsin was used for digestion.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Trypsin\", which is the only cleavage agent mentioned for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "25 mmu",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"25 mmu\" is explicitly stated in the \"Mass spectrometry-based proteomics\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Precursor and fragment mass error tolerances were set at respectively at 10 ppm and 25 mmu,\" confirming that 25 mmu is the fragment mass tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only fragment mass tolerance value mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "While the instrument used (Q-Exactive Plus) typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific term \"beam-type collision-induced dissociation\" is not mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but since the value is not in the text, it is not a valid extraction."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry-based proteomics\" section as the instrument used for the MS/MS analysis.",
+        "TRUTH_CHECK": "The paper states the peptides were analyzed using a \"Q-Exactive Plus, Thermo Fisher Scientific\".",
+        "COMPLETENESS_CHECK": "Only one mass spectrometer is mentioned for the proteomics experiment, so the set is complete."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes a proteomics workflow using \"online nanoliquid chromatography coupled to MS/MS\" and \"intensity-based absolute quantification values (iBAQ)\" without mentioning any isobaric, metabolic, or chemical labeling.",
+        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is inferable from the instrument model \"Q-Exactive Plus\" mentioned in the \"Mass spectrometry-based proteomics\" section.",
+        "TRUTH_CHECK": "The Q-Exactive Plus is an Orbitrap-based mass spectrometer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry-based proteomics\" section of the methods.",
+        "TRUTH_CHECK": "The paper explicitly states \"Peptide modifications allowed during the search were: Carbamidomethyl (C, fixed)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text, but contains \"Acetyldeoxyhypusine (K)\" and \"not applicable\" which are not in the text. However, the candidate value itself is correct."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry-based proteomics\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Peptide modifications allowed during the search were: Carbamidomethyl (C, fixed), Acetyl (Protein N-term, variable) and Oxidation (M, variable)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"Oxidation (M)\", \"Carbamidomethyl (C)\", and \"Acetyl (K)\" (though the paper specifies Protein N-term), but it also includes \"Acetyldeoxyhypusine (K)\" and \"not applicable\", which are not in the text. However, \"Oxidation (M)\" itself is a correct individual extraction."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acetyl (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Acetyl (Protein N-term)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Acetyl (K)\" is the correct category (a protein modification) for this field.",
+        "SOURCE_CHECK": "The paper text explicitly mentions \"Acetyl (Protein N-term, variable)\" in the Mass spectrometry-based proteomics section.",
+        "TRUTH_CHECK": "The candidate value \"Acetyl (K)\" specifies the target residue as Lysine (K), but the paper explicitly states the modification is \"Acetyl (Protein N-term)\". These are different sites of acetylation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"Acetyl (K)\" and \"Acetyldeoxyhypusine (K)\", neither of which are supported by the text; the text only supports \"Acetyl (Protein N-term)\"."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acetyldeoxyhypusine (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Acetyldeoxyhypusine (K)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text; the only modifications listed in the \"Mass spectrometry-based proteomics\" section are Carbamidomethyl (C), Acetyl (Protein N-term), and Oxidation (M).",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinations and incorrect entries."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"not applicable\" is not a protein modification.",
+        "SOURCE_CHECK": "The paper explicitly lists several modifications used in the MS search.",
+        "TRUTH_CHECK": "The candidate value is incorrect because the paper explicitly defines the modifications searched.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains both correct modifications and incorrect ones (including \"not applicable\" and \"Acetyldeoxyhypusine (K)\")."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "10 ppm",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance window, which matches the definition for this field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Mass spectrometry-based proteomics\" section of the methods.",
+        "TRUTH_CHECK": "The paper states \"Precursor and fragment mass error tolerances were set at respectively at 10 ppm and 25 mmu,\" confirming 10 ppm is the precursor tolerance.",
+        "COMPLETENESS_CHECK": "The full set contains the only precursor mass tolerance value mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the \"Chromatographic purification of GRA28-containing complexes\" section, where it is listed as part of the BC500 buffer used for washing the affinity gel before the proteins were eluted and analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"1 mM dithiothreitol\" in the buffer used during the purification of the complexes that were subsequently analyzed by MS.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, and no other reduction reagents are mentioned in the proteomics workflow."
+      }
+    }
+  ]
+}

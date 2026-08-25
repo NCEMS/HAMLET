@@ -1,0 +1,442 @@
+{
+  "paper_id": "PXD051954",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T, NCI-H520, NCI-H1975, PANC-1, HCC827, A549, NCI-H2009, BxPC-3, MIA PaCa-2, AsPC-1, NCI-H358, NCI-H23, Capan-1",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "HEK293T, MIA PaCa-2",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category.",
+        "SOURCE_CHECK": "While these cell lines are mentioned in the paper, only HEK293T and MIA PaCa-2 were actually used for the mass spectrometry experiments (HEK293T for the NDRG3-binding protein search and MIA PaCa-2 for the phosphorylated NDRG3 peptide analysis). The other cell lines (e.g., NCI-H520, PANC-1, BxPC-3) were used for RNA-seq, western blotting, proliferation assays, or xenografts, but not for MS analysis.",
+        "TRUTH_CHECK": "The value is factually incorrect because it includes numerous cell lines that were not the source of the MS samples.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it over-includes non-MS samples."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The value is inferable from the cell lines used for the MS experiments; the paper describes MS analysis of HEK293T cells (used to identify NDRG3-binding proteins) and MIA PaCa-2 cells (used for phospho-peptide identification), both of which are epithelial-derived lineages.",
+        "TRUTH_CHECK": "HEK293T and MIA PaCa-2 are well-established epithelial cell lines.",
+        "COMPLETENESS_CHECK": "The full set contains \"epithelial cell\", which accurately covers the lineage of the biological materials analyzed by mass spectrometry in this study."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "pancreatic adenocarcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"pancreatic adenocarcinoma\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; the paper describes \"pancreatic ductal adenocarcinoma\" (PDAC) in the context of the mouse models and human cell lines analyzed.",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on KRAS-driven pancreatic ductal adenocarcinoma.",
+        "COMPLETENESS_CHECK": "The full set contains \"pancreatic adenocarcinoma\", which accurately describes the disease state of the biological materials (PDAC cell lines and mouse models) analyzed by mass spectrometry."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "pancreas",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The word \"kidney\" does not appear in the paper text, nor is any kidney-derived material used in the MS experiments.",
+        "TRUTH_CHECK": "The MS experiments used HEK293T cells (human embryonic kidney) and MIA PaCa-2 cells (pancreatic cancer). While HEK293T is derived from kidney, the paper focuses on pancreatic and lung cancer; however, the candidate value \"kidney\" is not explicitly mentioned or the primary focus of the MS samples. More importantly, the text describes the MS samples as being derived from HEK293T and MIA PaCa-2.",
+        "COMPLETENESS_CHECK": "The full set contains only \"kidney\", which fails to capture the pancreatic origin of the other MS sample (MIA PaCa-2)."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which matches the definition of the species field.",
+        "SOURCE_CHECK": "Both species are used in the MS experiments: \"Homo sapiens\" (HEK293T and MIA PaCa-2 cells were analyzed by mass spectrometry) and \"Mus musculus\" (the paper describes \"Kras protein levels\" in pancreatic tissues of KNC/KC mice, though the specific MS analysis for the mouse tissues is less detailed than the cell lines, the study is centered on both).",
+        "TRUTH_CHECK": "The paper explicitly uses human cell lines (HEK293T, MIA PaCa-2) and mouse models (C57BL/6, KrasG12D knock-in) for its protein analysis.",
+        "COMPLETENESS_CHECK": "The full set covers all biological sources analyzed in the proteomics context of the paper."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "bait protein (Flag-vector, Flag-NDRG3)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental condition (the bait used for immunoprecipitation) which is a valid experimental factor.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the \"Sample preparation for mass spectrometric analysis\" section explicitly states that \"Flag-vector or Flag-NDRG3 was transfected into HEK293T cells\" for the IP-MS to search for NDRG3-binding proteins.",
+        "TRUTH_CHECK": "The value is factually correct as it accurately reflects the two groups (control vector vs. protein of interest) used as baits in the proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the bait condition and the disease context, which covers the primary experimental variables for the MS analysis described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "pancreatic adenocarcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The paper describes the study of KRAS-driven cancer development, specifically focusing on pancreatic ductal adenocarcinoma (PDAC) in both human cell lines and mouse models.",
+        "TRUTH_CHECK": "The value \"pancreatic adenocarcinoma\" is factually correct as the study focuses on PDAC.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the bait protein used in the MS experiment and the disease context; together they describe the primary experimental variables."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of fractions.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) for the MS experiments; it describes direct loading of peptides onto the trap column.",
+        "TRUTH_CHECK": "Since no fractionation is described, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The value \"1\" is complete as no other fractionation schemes are mentioned."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "2",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "3",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
+        "SOURCE_CHECK": "The paper does not explicitly state a biological replicate count of \"2\" for the mass spectrometry experiments.",
+        "TRUTH_CHECK": "In the \"Statistics and reproducibility\" section, the authors state that \"all representative experiments, including... [various figures]... were performed with a sample size greater than or equal to three independent replicates.\" This contradicts the candidate value of \"2\".",
+        "COMPLETENESS_CHECK": "The full set contains only the value \"2\", which is incorrect based on the text."
+      }
+    },
+    {
+      "annotation_type": "technical_replicates",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for technical replicates.",
+        "SOURCE_CHECK": "The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.",
+        "TRUTH_CHECK": "According to the \"SAFE DEFAULTS\" rule, \"1\" is the correct value when the paper is silent regarding replicates.",
+        "COMPLETENESS_CHECK": "The value \"1\" is the standard default for a silent paper and is complete."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The value is present in the paper text under \"LC-MS/MS analysis for phosphor-peptide identification,\" which describes the mass spectrometry analysis of phosphorylated NDRG3 peptides.",
+        "TRUTH_CHECK": "The paper explicitly states that the MS survey scan \"was acquired in data-dependent mode.\"",
+        "COMPLETENESS_CHECK": "The full set contains this value, which correctly describes the acquisition method for the phosphor-peptide identification experiment. While the first MS experiment (Orbitrap Exploris 240) describes \"Top15 double play\" (a DDA variant), \"data-dependent acquisition\" is a correct and representative extraction for the described MS workflows."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Lys-C",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "trypsin, Lys-C",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is present in the \"Sample preparation for mass spectrometric analysis\" section, where it states \"1 μg trypsin/lysC (Promega, part no. V5073) was added to each sample\".",
+        "TRUTH_CHECK": "The paper explicitly mentions the use of \"trypsin/lysC\" for the digestion of proteins analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"Lys-C\", but the paper specifies \"trypsin/lysC\", meaning trypsin is also a cleavage agent used in this experiment."
+      }
+    },
+    {
+      "annotation_type": "fragment_mass_tolerance",
+      "extracted_value": "1.0 Da",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"1.0 Da\" is explicitly mentioned in the \"LC-MS/MS analysis for phosphor-peptide identification\" section of the methods.",
+        "TRUTH_CHECK": "The text states, \"For protein identification, precursor and fragment mass tolerance were set to 3.0 Da and 1.0 Da, respectively,\" confirming that 1.0 Da is the fragment mass tolerance.",
+        "COMPLETENESS_CHECK": "The paper describes two different MS experiments; the first (Orbitrap Exploris 240) uses \"10 ppm\" for mass tolerance (though not explicitly split by precursor/fragment in that sentence), and the second (Finnigan LTQ) explicitly uses \"1.0 Da\" for fragments. The extracted value covers the explicit fragment tolerance mentioned for the phosphoproteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HCD",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"beam-type collision-induced dissociation\" is not present in the provided text; the text explicitly mentions \"HCD\" (Higher-energy Collisional Dissociation) for the Orbitrap Exploris 240 and \"normalized collision energy\" for the LTQ linear ion trap.",
+        "TRUTH_CHECK": "While HCD is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" does not appear in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Exploris 240",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "Orbitrap Exploris 240, Finnigan LTQ linear ion trap",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis\" section as part of the \"RSLCnano u3000 / Orbitrap Exploris 240 (Thermo) system\" used for the proteomics analysis.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The paper describes two MS experiments; one uses the Orbitrap Exploris 240 and the other uses a Finnigan LTQ linear ion trap. The full set of extracted values only contains one of these."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis (using an Orbitrap Exploris 240 and a Finnigan LTQ linear ion trap) but does not mention any isobaric, metabolic, or chemical labeling reagents or methods.",
+        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiments."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"LC-MS/MS analysis\" section (\"The selected precursor was fragmented by HCD and analyzed by orbitrap\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly states the use of an orbitrap for analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for the primary LC-MS/MS experiment described. (Note: While a \"linear ion trap\" is mentioned for the phosphor-peptide identification, \"orbitrap\" is a correct extraction for the main proteomics workflow)."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamidomethyl (C)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis\" section as a fixed modification.",
+        "TRUTH_CHECK": "The paper explicitly states \"fixed modification = carbamidomethyl (C)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (Oxidation, Acetyl), but contains some hallucinated values (Lysine oxidation to aminoadipic semialdehyde is not in the text). However, the candidate value itself is correct."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation (M)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis\" section as a variable modification (\"variable modification = Oxidation (M)\").",
+        "TRUTH_CHECK": "The value is factually correct as stated in the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications; \"Oxidation (M)\" is one of the explicitly listed variable modifications for the main LC-MS/MS experiment."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acetyl (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Acetyl (protein N-term)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"Acetyl (protein N-term)\" in the LC-MS/MS analysis section for the Orbitrap Exploris 240 experiment.",
+        "TRUTH_CHECK": "The candidate value \"Acetyl (K)\" specifies acetylation on Lysine (K), but the paper explicitly states \"Acetyl (protein N-term)\", which refers to N-terminal acetylation, not internal lysine acetylation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, but \"Acetyl (K)\" is factually incorrect based on the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Lysine oxidation to aminoadipic semialdehyde (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Lysine oxidation to aminoadipic semialdehyde\" as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, but this specific one is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "not applicable",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"not applicable\" is not a valid modification name or residue target.",
+        "SOURCE_CHECK": "The paper explicitly lists several modifications used in the MS analysis (e.g., \"carbamidomethyl (C)\", \"Oxidation (M)\").",
+        "TRUTH_CHECK": "The value is factually incorrect as modifications were explicitly searched and reported in the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains both correct modifications and an incorrect \"not applicable\" entry."
+      }
+    },
+    {
+      "annotation_type": "precursor_mass_tolerance",
+      "extracted_value": "10 ppm",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "10 ppm, 3.0 Da",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass tolerance value, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"10 ppm\" is explicitly stated in the \"LC-MS/MS analysis\" section as the mass tolerance for the Orbitrap Exploris 240 experiment.",
+        "TRUTH_CHECK": "The text states \"mass tolerance low/high = 10 ppm\" in the context of the survey scan and MS/MS parameters for the main proteomics experiment.",
+        "COMPLETENESS_CHECK": "The paper describes two different MS experiments: one using an Orbitrap Exploris 240 (10 ppm) and one using a Finnigan LTQ (3.0 Da for precursor). The full set only contains the value for the first experiment."
+      }
+    }
+  ]
+}
