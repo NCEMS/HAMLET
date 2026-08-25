@@ -1,12 +1,12 @@
 """
-analyzeMeti.py — Modular analysis of HAMLET aggregated results.
+make_figure_3.py — Modular analysis of HAMLET aggregated results.
 
 Analyses
 --------
 taxid_prediction
     Evaluates whether organism_identification predictions recover the
     ground-truth taxids listed in pride_metadata.project.organisms.
-    Reports per-PXD recall, precision, F1 and distribution plots.
+    Reports per-raw-file recall, precision, F1 and distribution plots.
 
 Usage
 -----
@@ -113,29 +113,41 @@ def _parse_llm_taxids(llm_meta: dict) -> set[str]:
     return taxids
 
 
-def _parse_predicted_taxids(organism_id: dict, threshold: float | str,
-                            n_best: int = 1) -> set[str]:
-    """Return union of predicted taxids across all raw files.
+def _result_raw_file(result: dict) -> str:
+    """Return the raw-file identifier embedded in a Peptonizer result path."""
+    path = str(result.get("file_path", ""))
+    parts = os.path.normpath(path).split(os.sep)
+    try:
+        idx = parts.index("Peptonizer2000_data")
+    except ValueError:
+        return path or "unknown"
+    return parts[idx - 1] if idx else path
 
-    threshold : float  — include all taxids with score >= threshold
-                'best' — include the top-*n_best* scoring taxids per file,
-                         where n_best is the number of ground-truth organisms
-    n_best    : int    — used only when threshold='best'
-    """
-    predicted = set()
-    for file_result in organism_id.get("results", []):
-        data = file_result.get("data", [])
-        if not data:
-            continue
-        if threshold == "best":
-            top = sorted(data, key=lambda e: e.get("score", 0.0), reverse=True)[:n_best]
-            for entry in top:
-                predicted.add(str(entry["taxon_id"]))
-        else:
-            for entry in data:
-                if entry.get("score", 0.0) >= threshold:
-                    predicted.add(str(entry["taxon_id"]))
-    return predicted
+
+def _parse_result_taxids(
+    result: dict,
+    score_threshold: float | None = None,
+    top_n: int | None = None,
+) -> set[str]:
+    """Return positive taxa for one raw file by score threshold or top-N rank."""
+    if (score_threshold is None) == (top_n is None):
+        raise ValueError("Specify exactly one of score_threshold or top_n.")
+
+    entries = [
+        entry for entry in result.get("data", [])
+        if entry.get("taxon_id") is not None
+    ]
+    if top_n is not None:
+        return {
+            str(entry["taxon_id"])
+            for entry in sorted(entries, key=lambda entry: float(entry.get("score", 0.0)), reverse=True)[:top_n]
+        }
+
+    return {
+        str(entry["taxon_id"])
+        for entry in entries
+        if float(entry.get("score", 0.0)) >= score_threshold
+    }
 
 
 def _compute_metrics(ground_truth: set[str], predicted: set[str]) -> dict:
@@ -295,28 +307,31 @@ def _normalize_to_species(taxids: set[str], email: str) -> set[str]:
 
 def run_taxid_prediction(
     store_dir: str,
-    threshold: float | str,
+    threshold: float | None,
     outdir: str,
     email: str | None = None,
     allowed_pxds: set[str] | None = None,
-) -> None:
-    """Evaluate organism-identification accuracy against PRIDE ground truth.
+    top_n: int | None = None,
+) -> pd.DataFrame:
+    """Evaluate Peptonizer calls independently for every raw file.
 
-    For each PXD in *store_dir*/aggregated_results_files/:
-    - Ground truth  = taxids in pride_metadata.project.organisms
-    - Predictions   = union of taxids with score >= *threshold* across all
-                      raw files in organism_identification.results;
-                      or if threshold='best', the single top-scoring taxid per file
-    - Metrics       = set-based recall, precision, F1
+    For each Peptonizer result in *store_dir*/aggregated_results_files/:
+    - Ground truth = taxids in pride_metadata.project.organisms
+    - Positives    = taxa with Peptonizer score >= *threshold*, or the top-N
+                     scoring taxa, in that raw file
+    - Metrics      = set-based recall, precision, F1 for that raw file only
 
     If *email* is supplied, both ground-truth and predicted taxids are
     resolved to their species-rank ancestor via NCBI Entrez before scoring,
     so strain-level IDs (e.g. 208964 = PAO1) match their parent species
     (287 = *P. aeruginosa*).
 
+    LLM-derived taxids are deliberately excluded: this measures only
+    Peptonizer2000's per-raw-file calls.
+
     Outputs
     -------
-    <outdir>/taxid_prediction.csv        per-PXD metrics table
+    <outdir>/taxid_prediction.csv        per-raw-file metrics table
     <outdir>/taxid_prediction_plot.png   distribution histograms
     """
     agg_dir = os.path.join(store_dir, "aggregated_results_files")
@@ -326,10 +341,11 @@ def run_taxid_prediction(
 
     if not files:
         print(f"[taxid_prediction] No aggregated results found in: {agg_dir}", file=sys.stderr)
-        return
+        return pd.DataFrame()
 
     print(f"[taxid_prediction] Found {len(files)} aggregated result files.")
-    print(f"[taxid_prediction] Score threshold: {threshold}")
+    selection_label = f"top {top_n}" if top_n is not None else f"score >= {threshold:.0%}"
+    print(f"[taxid_prediction] Positive-call rule: {selection_label}")
     if email:
         print(f"[taxid_prediction] Species normalisation: ON (email={email})")
     else:
@@ -353,67 +369,41 @@ def run_taxid_prediction(
         if not ground_truth:
             n_empty_ground_truth += 1
 
-        # ------------------------------------------------------------------
-        # Predictions — union of organism_identification + LLM metadata
-        # ------------------------------------------------------------------
-        organism_id = data.get("organism_identification")
-        llm_meta    = data.get("llm_extracted_metadata") or {}
-        llm_taxids  = _parse_llm_taxids(llm_meta)
-
-        has_org_id = bool(organism_id and organism_id.get("results"))
-        if not has_org_id:
+        organism_results = (data.get("organism_identification") or {}).get("results") or []
+        if not organism_results:
             n_no_organism_id += 1
-
-        if has_org_id:
-            predicted = _parse_predicted_taxids(
-                organism_id, threshold, n_best=max(1, len(ground_truth))
-            ) | llm_taxids
-        else:
-            predicted = llm_taxids
-
-        if not predicted:
-            rows.append(dict(
-                pxd=pxd,
-                n_ground_truth=len(ground_truth),
-                ground_truth_taxids="; ".join(sorted(ground_truth)),
-                n_predicted=0,
-                predicted_taxids="",
-                tp=0, fp=0, fn=len(ground_truth),
-                recall=float("nan"),
-                precision=float("nan"),
-                f1=float("nan"),
-                balanced_accuracy=float("nan"),
-                has_organism_id=has_org_id,
-                has_llm_taxids=False,
-            ))
             continue
 
-        # Species-level normalisation (only when --email is provided)
-        if email:
-            gt_for_metrics   = _normalize_to_species(ground_truth, email)
-            pred_for_metrics = _normalize_to_species(predicted, email)
-        else:
-            gt_for_metrics   = ground_truth
-            pred_for_metrics = predicted
+        for result in organism_results:
+            predicted = _parse_result_taxids(result, threshold, top_n)
+            if email:
+                gt_for_metrics = _normalize_to_species(ground_truth, email)
+                pred_for_metrics = _normalize_to_species(predicted, email)
+            else:
+                gt_for_metrics = ground_truth
+                pred_for_metrics = predicted
 
-        metrics = _compute_metrics(gt_for_metrics, pred_for_metrics)
-
-        rows.append(dict(
-            pxd=pxd,
-            n_ground_truth=len(ground_truth),
-            ground_truth_taxids="; ".join(sorted(ground_truth)),
-            n_predicted=len(predicted),
-            predicted_taxids="; ".join(sorted(predicted)),
-            tp=metrics["tp"],
-            fp=metrics["fp"],
-            fn=metrics["fn"],
-            recall=metrics["recall"],
-            precision=metrics["precision"],
-            f1=metrics["f1"],
-            balanced_accuracy=metrics["balanced_accuracy"],
-            has_organism_id=has_org_id,
-            has_llm_taxids=bool(llm_taxids),
-        ))
+            metrics = _compute_metrics(gt_for_metrics, pred_for_metrics)
+            rows.append(dict(
+                pxd=pxd,
+                raw_file=_result_raw_file(result),
+                result_file_path=result.get("file_path", ""),
+                peptonizer_threshold=threshold,
+                peptonizer_top_n=top_n,
+                peptonizer_call_rule=selection_label,
+                n_ground_truth=len(ground_truth),
+                ground_truth_taxids="; ".join(sorted(ground_truth)),
+                n_predicted=len(predicted),
+                predicted_taxids="; ".join(sorted(predicted)),
+                tp=metrics["tp"],
+                fp=metrics["fp"],
+                fn=metrics["fn"],
+                recall=metrics["recall"],
+                precision=metrics["precision"],
+                f1=metrics["f1"],
+                balanced_accuracy=metrics["balanced_accuracy"],
+                n_scored_taxa=len(result.get("data", [])),
+            ))
 
     # ----------------------------------------------------------------------
     # Summary statistics
@@ -439,15 +429,15 @@ def run_taxid_prediction(
     # ----------------------------------------------------------------------
     # Plot — only evaluable rows (has_organism_id=True, ground_truth != empty)
     # ----------------------------------------------------------------------
-    eval_df = df[(df["has_organism_id"] | df["has_llm_taxids"]) & (df["n_ground_truth"] > 0)].copy()
+    eval_df = df[df["n_ground_truth"] > 0].copy()
     eval_df = eval_df.dropna(subset=["recall", "precision", "f1", "balanced_accuracy"])
 
     n_eval = len(eval_df)
-    print(f"  PXDs used for metric plots    : {n_eval}")
+    print(f"  Raw files used for metric plots: {n_eval}")
 
     if n_eval == 0:
         print("[taxid_prediction] No evaluable PXDs — skipping plot.", file=sys.stderr)
-        return
+        return eval_df
 
     metrics_cfg = [
         ("recall",            "Recall",             "#4C72B0"),
@@ -457,9 +447,8 @@ def run_taxid_prediction(
     ]
 
     fig, axes = plt.subplots(1, 4, figsize=(20, 5))
-    threshold_label = "best (top-1 per file)" if threshold == "best" else f"threshold={threshold}"
     fig.suptitle(
-        f"Taxid Prediction Metrics  (n={n_eval}, {threshold_label})",
+        f"Per-raw-file Peptonizer Metrics  (n={n_eval}, {selection_label})",
         fontsize=13, fontweight="bold",
     )
 
@@ -487,6 +476,7 @@ def run_taxid_prediction(
     fig.savefig(plot_path, dpi=150)
     plt.close(fig)
     print(f"[taxid_prediction] Saved plot to:    {plot_path}")
+    return eval_df
 
 
 # ---------------------------------------------------------------------------

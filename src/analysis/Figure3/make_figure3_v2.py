@@ -26,7 +26,7 @@ c - PTM group frequency and occupancy (fraction of PXDs / mean occupancy).
 Outputs (all under output_v2/)
 -------------------------------
 qc_organism_ptm_pxd_list.txt        the uniform-cohort PXD accessions
-taxid_prediction.csv                 per-PXD organism-ID metrics (uniform cohort)
+taxid_prediction.csv                 per-raw-file organism-ID metrics (uniform cohort)
 modification_frequency.csv           per-modification detail table (uniform cohort)
 modification_grouped.csv             per-PTM-group summary (uniform cohort)
 runassessor_technical_summary.csv    per-domain/category summary (uniform cohort)
@@ -63,11 +63,7 @@ from plot_style import COLORS, clean_axes, add_suptitle, save_fig  # noqa: E402
 
 from make_figure_3 import (  # noqa: E402
     _parse_ground_truth_taxids,
-    _parse_llm_taxids,
-    _parse_predicted_taxids,
-    _compute_metrics,
     _collect_runassessor_stats,
-    _compute_taxid_metrics_for_composite,
     _compute_mod_grouped_for_composite,
     run_taxid_prediction,
     run_modification_frequency,
@@ -75,7 +71,7 @@ from make_figure_3 import (  # noqa: E402
 )
 
 BLUE = COLORS["blue"]
-THRESHOLD = 0.75  # organism-ID success-rate threshold (panel b)
+PEPTONIZER_THRESHOLD = 0.90
 
 
 # -----------------------------------------------------------------------------
@@ -83,8 +79,7 @@ THRESHOLD = 0.75  # organism-ID success-rate threshold (panel b)
 # over aggregated_results_files, so every panel draws from the same PXDs.
 # -----------------------------------------------------------------------------
 
-def determine_uniform_cohort(store_dir: str, threshold: float | str = "best",
-                              email: str | None = None) -> tuple[set[str], int]:
+def determine_uniform_cohort(store_dir: str) -> tuple[set[str], int]:
     agg_dir = os.path.join(store_dir, "aggregated_results_files")
     files = sorted(glob.glob(os.path.join(agg_dir, "PXD*_aggregated_results.json")))
 
@@ -105,20 +100,9 @@ def determine_uniform_cohort(store_dir: str, threshold: float | str = "best",
 
         project = (data.get("pride_metadata") or {}).get("project") or {}
         ground_truth = _parse_ground_truth_taxids(project)
-        if ground_truth:
-            organism_id = data.get("organism_identification")
-            llm_meta = data.get("llm_extracted_metadata") or {}
-            llm_taxids = _parse_llm_taxids(llm_meta)
-            has_org_id = bool(organism_id and organism_id.get("results"))
-            predicted = (
-                _parse_predicted_taxids(organism_id, threshold, n_best=max(1, len(ground_truth)))
-                | llm_taxids if has_org_id else llm_taxids
-            )
-            if predicted:
-                metrics = _compute_metrics(ground_truth, predicted)
-                if metrics.get("f1") is not None and not (
-                        isinstance(metrics["f1"], float) and math.isnan(metrics["f1"])):
-                    organism_pxds.add(pxd)
+        has_org_results = bool((data.get("organism_identification") or {}).get("results"))
+        if ground_truth and has_org_results:
+            organism_pxds.add(pxd)
 
     cohort = qc_pxds & organism_pxds & ptm_pxds
     print(f"[uniform_cohort] QC (RunAssessor)        : {len(qc_pxds):,} PXDs")
@@ -247,42 +231,32 @@ def _ci95(values: np.ndarray) -> float:
 
 
 def build_panel_b(fig: plt.Figure, spec, eval_df: pd.DataFrame) -> None:
-    metrics = ["recall", "precision", "f1", "balanced_accuracy"]
-    metric_labels = ["Recall", "Precision", "F1", "Balanced acc."]
-
-    gs = spec.subgridspec(1, 2, wspace=0.3)
-    ax1 = fig.add_subplot(gs[0, 0])
-    ax2 = fig.add_subplot(gs[0, 1])
-
-    success_rates = [(eval_df[m] >= THRESHOLD).mean() for m in metrics]
-    x = np.arange(len(metrics))
-    bars = ax1.bar(x, success_rates, color=BLUE, alpha=0.87, edgecolor="white", linewidth=0.5, zorder=3)
-    for bar, v in zip(bars, success_rates):
-        ax1.text(bar.get_x() + bar.get_width() / 2, v + 0.02, f"{v:.0%}",
-                  ha="center", va="bottom", fontsize=9.5, fontweight="bold")
-    ax1.set_xticks(x)
-    ax1.set_xticklabels(metric_labels, fontsize=9.5)
-    ax1.set_ylabel(f"% of PXDs with score >= {THRESHOLD}", fontsize=10)
-    ax1.set_ylim(0, 1.08)
-    ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0%}"))
-    ax1.set_title("Success rate is ~equal across all four metrics",
-                  fontsize=10.5, fontstyle="italic", fontweight="normal")
-    clean_axes(ax1, grid_axis="y")
-
-    vals = eval_df["f1"].values.astype(float)
-    mean_val = float(np.mean(vals))
-    ci = _ci95(vals)
-    ax2.hist(vals, bins=20, range=(0, 1), color=BLUE, alpha=0.75, edgecolor="white", zorder=3)
-    ax2.axvline(mean_val, color="black", linewidth=1.5, linestyle="--")
-    ax2.axvspan(max(0, mean_val - ci), min(1, mean_val + ci), alpha=0.15, color="black")
-    ax2.text(0.03, 0.95, f"mean = {mean_val:.2f}\n95% CI +/- {ci:.2f}", transform=ax2.transAxes,
-              ha="left", va="top", fontsize=8.5,
-              bbox=dict(boxstyle="round,pad=0.4", fc="white", alpha=0.85))
-    ax2.set_xlabel("F1 score", fontsize=10)
-    ax2.set_ylabel("Number of PXDs", fontsize=10)
-    ax2.set_xlim(-0.02, 1.02)
-    ax2.set_title("F1 distribution", fontsize=10.5, fontstyle="italic", fontweight="normal")
-    clean_axes(ax2, grid_axis="y")
+    metrics = [("recall", "Recall"), ("precision", "Precision"), ("f1", "F1")]
+    grid = spec.subgridspec(1, 3, wspace=0.32)
+    for index, (metric, label) in enumerate(metrics):
+        axis = fig.add_subplot(grid[0, index])
+        values = eval_df[metric].values.astype(float)
+        mean_value = float(np.mean(values))
+        ci = _ci95(values)
+        axis.hist(
+            values, bins=20, range=(0, 1), color=BLUE, alpha=0.75,
+            edgecolor="white", zorder=3,
+        )
+        axis.axvline(mean_value, color="black", linewidth=1.5, linestyle="--")
+        axis.axvspan(
+            max(0, mean_value - ci), min(1, mean_value + ci), alpha=0.15, color="black",
+        )
+        axis.text(
+            0.03, 0.95, f"mean = {mean_value:.2f}\n95% CI +/- {ci:.2f}",
+            transform=axis.transAxes, ha="left", va="top", fontsize=8.5,
+            bbox=dict(boxstyle="round,pad=0.4", fc="white", alpha=0.85),
+        )
+        axis.set_xlabel(f"{label} score", fontsize=10)
+        axis.set_ylabel("Number of raw files", fontsize=10)
+        axis.set_xlim(-0.02, 1.02)
+        axis.set_title(f"{label} distribution", fontsize=10.5,
+                       fontstyle="italic", fontweight="normal")
+        clean_axes(axis, grid_axis="y")
 
 
 # -----------------------------------------------------------------------------
@@ -334,21 +308,29 @@ def main() -> None:
     parser.add_argument("--store", default=str(REPO_ROOT / "store"),
                          help="Path to the HAMLET store directory (contains aggregated_results_files/).")
     parser.add_argument("--outdir", default=str(FIGURE3_DIR / "output_v2"))
-    parser.add_argument("--threshold", type=str, default="best",
-                         help="Minimum score for a taxid prediction to count as positive, "
-                              "or 'best' to select only the top-scoring taxid per raw file.")
+    call_rule = parser.add_mutually_exclusive_group()
+    call_rule.add_argument(
+        "--threshold", type=float, default=None,
+        help=("Peptonizer score required for a positive organism call per raw file "
+              f"(default: {PEPTONIZER_THRESHOLD:.0%}).".replace("%", "%%")),
+    )
+    call_rule.add_argument(
+        "--topN", type=int, default=None,
+        help="Call the N highest-scoring Peptonizer taxa independently for each raw file.",
+    )
     parser.add_argument("--email", type=str, default=None,
                          help="Email for NCBI Entrez species-level taxid normalisation (optional).")
     args = parser.parse_args()
-
-    raw_threshold = args.threshold.strip()
-    threshold: float | str = "best" if raw_threshold.lower() == "best" else float(raw_threshold)
+    if args.topN is not None and args.topN < 1:
+        parser.error("--topN must be at least 1.")
+    threshold = PEPTONIZER_THRESHOLD if args.topN is None and args.threshold is None else args.threshold
+    selection_label = f"top {args.topN}" if args.topN is not None else f"score >= {threshold:.0%}"
 
     store_dir = os.path.abspath(args.store)
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    cohort, n_total_files = determine_uniform_cohort(store_dir, threshold=threshold, email=args.email)
+    cohort, n_total_files = determine_uniform_cohort(store_dir)
     if not cohort:
         print("ERROR: uniform cohort is empty -- nothing to plot.", file=sys.stderr)
         sys.exit(1)
@@ -358,22 +340,25 @@ def main() -> None:
     print(f"[uniform_cohort] PXD list written to: {pxd_list_path}")
 
     # CSV results (also produces each function's own legacy-styled plot, harmless leftovers)
-    run_taxid_prediction(store_dir, threshold, str(outdir), email=args.email, allowed_pxds=cohort)
+    eval_df = run_taxid_prediction(
+        store_dir, threshold, str(outdir), email=args.email, allowed_pxds=cohort, top_n=args.topN,
+    )
     run_modification_frequency(store_dir, str(outdir), allowed_pxds=cohort)
     run_runassessor_technical_summary(store_dir, str(outdir), allowed_pxds=cohort)
 
-    # In-memory recomputation (same criteria, same cohort) for the restyled panels
+    # In-memory calculations for the non-organism panels.
     agg_dir = os.path.join(store_dir, "aggregated_results_files")
     files = sorted(glob.glob(os.path.join(agg_dir, "PXD*_aggregated_results.json")))
     files = [f for f in files if Path(f).name.split("_aggregated")[0] in cohort]
 
     stats = _collect_runassessor_stats(files)
-    metrics_lists = _compute_taxid_metrics_for_composite(files, threshold=threshold, email=args.email)
-    eval_df = pd.DataFrame(metrics_lists).dropna(subset=["recall", "precision", "f1", "balanced_accuracy"])
     grp_df, n_with_msf = _compute_mod_grouped_for_composite(files)
 
     n_pxds = len(cohort)
-    subtitle = f"n = {n_pxds:,} PXDs (uniform cohort: QC ∩ organism-ID ∩ PTM)"
+    subtitle = (
+        f"n = {n_pxds:,} PXDs (uniform cohort: QC ∩ organism-ID ∩ PTM); "
+        f"organism metrics: n = {len(eval_df):,} raw files, {selection_label}"
+    )
 
     # --- individual panels ---
     fig = plt.figure(figsize=(16, 7))
