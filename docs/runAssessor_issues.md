@@ -1,46 +1,140 @@
-# runAssessor Issues
+# RunAssessor Task Failures
 
-## Latest `--runAssessorOnly` batch
+This document records failures of the **runAssessor program or its Nextflow
+task**. It is not a record of HAMLET's `sdrf_builder.py` output quality or of
+SDRF values derived from runAssessor metadata.
 
-The most recent dedicated runAssessor execution was launched on 2026-08-12 and completed on 2026-08-14:
+## Issue 1: SDRF Export Crashes After Unknown Fragmentation Analysis
 
-```bash
-nextflow run main.nf \
-  -c assets/nextflow_configs/nextflow_JS2.config \
-  -profile js2_large \
-  --runAssessorOnly \
-  --pxd_csv assets/pxd_lists/completedAsOf08112026_part3.csv \
-  -resume
+### Failure
+
+The pinned runAssessor revision `eb5cbb98c3c1cea0d97e5da99fba3c902946c21d`
+reproducibly exits with code `1` when its standalone CLI processes each of the
+nine locally available files below. The CLI reads the mzML spectra and completes
+per-file analysis, then fails while generating its own SDRF table:
+
+```text
+INFO: Inferring search criteria from the available information
+ERROR: Unable to compute fragmentation tolerance: TypeError - string indices must be integers, not 'str'
+Traceback (most recent call last):
+  File ".../src/runassessor.py", line 196, in <module>
+    if __name__ == "__main__": main()
+                               ^^^^^^
+  File ".../src/runassessor.py", line 154, in main
+    study.generate_sdrf_table(include_provenance=params.include_sdrf_provenance)
+  File ".../src/runassessor/metadata_handler.py", line 860, in generate_sdrf_table
+    if self.metadata['files'][file]['spectra_stats']['high_accuracy_precursors'] == 'true' and self.metadata['files'][file]['summary']['combined summary']['recommended precursor tolerance (ppm)'] != None:
+                                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'recommended precursor tolerance (ppm)'
 ```
 
-The Nextflow log records 987 completed `run_assessor` tasks: 941 exited successfully and 46 exited with status 1. At the time of that run, `run_assessor` used `errorStrategy 'ignore'`, so the batch continued after each failed PXD.
+This is a complete runAssessor failure, not a HAMLET `sdrf_builder.py` failure.
+It occurs after raw/mzML analysis, in runAssessor's internal metadata export,
+because `generate_sdrf_table()` assumes a recommended precursor tolerance was
+written to every combined summary. The preceding fragmentation-tolerance
+calculation logs a `TypeError` and leaves that field absent.
 
-All 46 failures occurred during runAssessor's final SDRF-table generation after spectra had been read. The quality warnings about mixed instruments, fragmentation, acquisition, or labeling types explain why expected metadata is absent; they are not themselves task failures.
+### Standalone Reproduction
 
-| Failure signature | Failed PXDs | Count |
-|---|---|---:|
-| Missing `recommended precursor tolerance (ppm)` in the combined summary | PXD006156, PXD006246, PXD006403, PXD008215, PXD010154, PXD015793, PXD015949, PXD019599, PXD019827, PXD019713, PXD019868, PXD019944, PXD019939, PXD021263, PXD012083, PXD012437, PXD012466, PXD012143, PXD012886, PXD013057, PXD013601, PXD014547, PXD015833 | 23 |
-| Missing peak-fit data (`KeyError: 'fit'`) | PXD006506, PXD006504, PXD005699, PXD007078, PXD007114, PXD007073, PXD007681, PXD007867, PXD008510, PXD008310, PXD017239, PXD021960, PXD022278, PXD010989, PXD013292, PXD012627, PXD014473, PXD014342 | 18 |
-| Per-file record has no `summary` block | PXD008465, PXD016146, PXD022833, PXD012045, PXD015349 | 5 |
+The validation ran the normal CLI with one file per invocation, using the
+`meti_env` environment and a fresh `--metadata_filepath` for each run:
 
-Representative failures:
+```bash
+PYTHONPATH=/tmp/runassessor-pre-key-guard/src \
+  /home/ubuntu/miniconda3/envs/meti_env/bin/python \
+  /tmp/runassessor-pre-key-guard/src/runassessor.py \
+  --verbose --n_threads 1 --metadata_filepath study_metadata.json input.mzML
+```
 
-- `PXD015349` contains mixed acquisition and fragmentation types; final SDRF generation assumes every file has `summary` and raises `KeyError: 'summary'`.
-- `PXD015833` contains mixed instruments, fragmentation, and labeling types; tolerance inference emits `TypeError` diagnostics, then SDRF generation raises `KeyError: 'recommended precursor tolerance (ppm)'`.
+All nine invocations completed `read_spectra()` and the per-file ROI assessment,
+then failed with the traceback above. The captured validation artifacts are in
+`/tmp/runassessor-cli-validation/` for this session.
 
-## Submodule crash guard
+| PXD | Input mzML files | Exit code |
+|---|---|---|
+| PXD001454 | `Zou_Rappsilber_7TAF_2014_01.mzML`, `Zou_Rappsilber_7TAF_2014_02.mzML`, `Zou_Rappsilber_8TAF_2014_01.mzML`, `Zou_Rappsilber_8TAF_2014_02.mzML` | 1 |
+| PXD006156 | `NONO-KGG-RAW.mzML`, `RNF8-BirA-RAW.mzML` | 1 |
+| PXD008215 | `Zou_Rappsilber_JW_MCAK_MT.mzML`, `Zou_Rappsilber_JW_MCAK_Phosphorylated.mzML`, `Zou_Rappsilber_JW_MCAK_Unphosphorylated.mzML` | 1 |
 
-The HAMLET-pinned `submodules/runassessor` revision has a local, uncommitted fix in `src/runassessor/mzML_assessor.py`. Per project policy, this change is not committed or pushed to the runAssessor submodule and HAMLET continues to reference its published revision.
+### ROI Fallback Observation
 
-Before the fix, assessment of a fragmentation type assumed both of these structures existed:
+The nine files above all emit `UnknownFragmentation` warnings and produce a
+combined summary with `call`, `fragmentation tolerance`, `has water_loss`, and
+`has phospho_spectra` set to `"unavailable"` during direct per-file analysis.
+That analysis path exits successfully on the pinned revision. It demonstrates
+the existing top-level ROI fallback; it does **not** reproduce a missing
+specific-ROI-key `KeyError`.
 
-- `lowend_peaks["lowend_<fragmentation>"]`
-- `neutral_loss_peaks["precursor_loss_<fragmentation>"]`
+A local, uncommitted runAssessor patch adds a narrower key-level guard for
+`lowend_<fragmentation>` and `precursor_loss_<fragmentation>`. The patch does
+not fix this issue because the reproducible exception is later in
+`metadata_handler.py`. Do not characterize this guard as part of the pinned
+revision unless its own triggering traceback is recovered and it is committed.
 
-Some runs do not populate one or both structures. The assessor then raised `KeyError` while computing water-loss and phospho-spectrum metrics. The guard now detects either missing structure, marks the affected fragment summary as `"unavailable"` for `call`, `has water_loss`, and `has phospho_spectra`, and continues processing the remaining data.
+The following two stored fallback outputs cannot yet be retested because their
+mzML inputs are absent from local spectral storage:
 
-This guard prevents that low-level assessment crash only. It does not address the 46 historical failures above, which occur later in `metadata_handler.py` while generating the runAssessor SDRF table. Those need separate null-safe handling for missing `summary`, peak-fit, and tolerance fields.
+| PXD | Affected mzML files |
+|---|---|
+| PXD009777 | `HSP90-p53-CHIPEThcD.mzML` |
+| PXD030978 | `Andrew_45kDa_digest.mzML` |
 
-## Pipeline behavior after this update
+## Other Complete RunAssessor Failures
 
-HAMLET now exposes `--runAssessorOnly` as a supported limited workflow (`fetch_pxd -> run_assessor`). The workflow also passes the process CPU allocation to runAssessor, retains RAW files until their corresponding mzML files validate, and fails a dedicated runAssessor task when the assessor exits nonzero. This makes failed PXDs observable for reruns instead of creating placeholder assessor output.
+The standalone reproduction above is sufficient evidence of a runAssessor CLI
+failure. Any additional Nextflow task incidents should be documented only after
+recovering the original Nextflow trace and the corresponding work-directory
+`.command.err` or `.command.log` files. The retained
+`/data/HAMLETvol/.nextflow.log` and `/data/HAMLETvol/.nextflow.log.1` files are
+failed launcher attempts from the wrong working directory; they do not contain
+scheduled `run_assessor` tasks or the missing tracebacks.
+
+Do not list metadata-quality warnings or HAMLET SDRF-builder symptoms as
+runAssessor crashes. Each additional issue needs the failed PXD, input RAW/mzML
+file, task work directory, nonzero exit code, and traceback.
+
+## What Counts as a RunAssessor Failure
+
+A documented pipeline incident requires all of the following:
+
+1. A scheduled `run_assessor` task in the Nextflow trace or `.nextflow.log`.
+2. A nonzero task exit code.
+3. The task's `.command.err` or `.command.log`, including the runAssessor
+   traceback or the `ERROR: runAssessor failed for <PXD>` wrapper message.
+4. The PXD accession, task work directory, command, and failure signature.
+
+A standalone runAssessor incident instead requires the executable source
+revision, environment, exact command, input mzML, nonzero exit code, and
+captured traceback.
+
+Warnings about mixed instruments, acquisition types, fragmentation types, or
+labels are metadata-quality observations. They are not task failures unless the
+assessor process exits nonzero.
+
+## Current Pipeline Behavior
+
+`run_assessor` in [main.nf](../main.nf) invokes the runAssessor CLI, captures
+its exit code, and exits with that same nonzero code after printing:
+
+```text
+ERROR: runAssessor failed for <PXD> with exit code <code>
+```
+
+The process currently uses `errorStrategy 'ignore'`. Thus a failed assessor task
+is visible as a nonzero task exit but does not stop the rest of the batch. The
+limited `--runAssessorOnly` workflow remains the appropriate way to isolate and
+rerun a failing PXD.
+
+## Evidence to Preserve for Future Batches
+
+Run dedicated batches from the HAMLET repository and retain:
+
+- the complete `.nextflow.log`;
+- a `-with-trace` report containing task name, PXD, work directory, and exit
+  status;
+- `.command.err`, `.command.out`, and `.command.log` for every nonzero
+  `run_assessor` task; and
+- the exact Nextflow command, configuration, input PXD list, and run date.
+
+With these artifacts, this document can list real runAssessor crashes by PXD and
+traceback signature without conflating them with downstream SDRF behavior.

@@ -183,7 +183,7 @@ def main():
         "--min-percent",
         type=float,
         default=0.005,
-        help="Minimum percent of PSMs to validate a PTM (default: 0.005 = 0.5%)"
+        help="Minimum percent of PSMs to validate a PTM (default: 0.005 = 0.5%%)"
     )
     parser.add_argument(
         "--max-ptm-classes",

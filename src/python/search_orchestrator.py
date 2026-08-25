@@ -662,8 +662,11 @@ def run_dda_search(
             all_variable_mods = ptm_data.get('variable_mods', {})
             all_static_mods = ptm_data.get('static_mods', {})
         except Exception as e:
-            print(f"  ERROR: Could not load validated PTMs: {e}")
-            return False
+            print(f"  WARNING: Could not load validated PTMs: {e}")
+            print("  Skipping PASS 2 (closed search) - using PASS 1 open search results as final results")
+            top_ptms = []
+            all_variable_mods = {}
+            all_static_mods = {}
         
         if not top_ptms:
             print("  No validated PTMs found (no PTMs met filtering criteria)")
