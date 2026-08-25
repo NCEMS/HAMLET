@@ -58,7 +58,7 @@ sudo mv nextflow /usr/local/bin/
 For publication text extraction via LLMs:
 
 ```bash
-export OPENAI_API_KEY="sk-..."
+export OPENROUTER_API_KEY="sk-or-..."
 ```
 
 ### 4. Disk Space
@@ -244,7 +244,7 @@ bash src/setup.sh
 
 **Solution:** Set the API key:
 ```bash
-export OPENAI_API_KEY="sk-..."
+export OPENROUTER_API_KEY="sk-or-..."
 ./src/bash/run_single_pxd_test.sh PXD000070
 ```
 
@@ -303,8 +303,7 @@ See `assets/pxd_test_files/README.md` for details on test datasets.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | (none) | OpenAI API key for LLM extraction |
-| `LLM_API_KEY` | (none) | Alternative API key variable |
+| `OPENROUTER_API_KEY` | (none) | OpenRouter API key for all LLM calls |
 | `NEXTFLOW_HOME` | `~/.nextflow` | Nextflow config directory |
 
 ## Related Documentation

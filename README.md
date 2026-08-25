@@ -119,10 +119,10 @@ If you only process DDA datasets you can skip this step.
 ### 5. Set your API key (required for LLM/agentic features)
 
 ```bash
-export OPENAI_API_KEY="sk-..."   # or any OpenAI-compatible key
+export OPENROUTER_API_KEY="sk-or-..."
 ```
 
-Add this to `~/.bashrc` to make it persistent. The pipeline reads it from the environment — **never put API keys in source files**.
+HAMLET sends all LLM requests to OpenRouter. Add this to `~/.bashrc` to make it persistent. The pipeline reads it from the environment — **never put API keys in source files**.
 
 ### 6. Verify setup
 
@@ -277,7 +277,7 @@ PY
 ### With optional LLM extraction
 
 ```bash
-export OPENAI_API_KEY="sk-..."
+export OPENROUTER_API_KEY="sk-or-..."
 
 nextflow run main.nf \
   --pxd_csv master.csv \

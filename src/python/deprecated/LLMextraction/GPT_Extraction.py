@@ -11,9 +11,8 @@ import multiprocessing
 python ../../sample_code/GPT_Extraction.py --inpath PubText/PubText.json --prompt ../prompt/Hari_prompt.txt --outpath GPT_Extract/
 nohup python ../../sample_code/GPT_Extraction.py --inpath PubText/PubText.json --prompt ../prompt/BaselinePrompt.txt --outpath GPT_Extract/ > logs/GPT_Extraction_01152025.log 2>&1 &
 """
-# Define model to use
-# MODEL = "o4-mini-2025-04-16" 
-MODEL = "gpt-5-mini-2025-08-07"
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+MODEL = os.environ.get("OPENROUTER_LLM_MODEL", "openai/gpt-5-mini")
 
 ########################################################################################################
 def CallGPT(text, prompt, client, MODEL):
@@ -27,7 +26,8 @@ def CallGPT(text, prompt, client, MODEL):
         completion = client.chat.completions.create(
             model=MODEL,
             messages=messages,  
-            store=True,)
+            timeout=9000,
+        )
     except Exception as e:
         print(f"Error during API call: {e}")
         logging.error(f"Error during API call: {e}")
@@ -46,8 +46,10 @@ def process_pxd(args_tuple):
     """Worker function to process a single PXD"""
     pxd, pxd_data, prompt, MODEL, OUTPUT_DIR = args_tuple
     
-    # Create OpenAI client in each process
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise EnvironmentError("OPENROUTER_API_KEY environment variable is not set.")
+    client = OpenAI(api_key=api_key, base_url=OPENROUTER_BASE_URL)
     
     print(f'\n{"#"*20}\nProcessing PXD: {pxd}\n{"#"*20}')
     pubtext = ''
@@ -83,6 +85,9 @@ def main():
     parser.add_argument("--workers", type=int, default=4, help="Number of parallel workers (default: 4)")
     parser.add_argument("--PXD", type=str, default=None, help="Optional single PXD to process")
     args = parser.parse_args()
+
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        raise EnvironmentError("OPENROUTER_API_KEY environment variable is not set.")
 
     # Create output directory if it doesn't exist
     OUTPUT_DIR = os.path.join(args.outpath, MODEL)

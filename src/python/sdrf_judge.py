@@ -77,31 +77,15 @@ FIELD_CATEGORY = {
     "replicates": "ExperimentalDesign", "factor_value": "ExperimentalDesign",
 }
 
-#judge backend: "openrouter" (default, cloud API, needs OPENROUTER_API_KEY) or
-#"local" (a self-hosted OpenAI-compatible Gemma server, e.g. Ollama on a lab GPU
-#box -- see docs/local_judge_setup.md for how to stand one up). No API key is
-#required for "local"; a dummy key is sent since the OpenAI client demands one.
-JUDGE_BACKEND = os.environ.get("HAMLET_SDRF_JUDGE_BACKEND", "openrouter").strip().lower()
-
 OPENROUTER_BASE_URL   = "https://openrouter.ai/api/v1"
 OPENROUTER_MODEL      = "google/gemma-4-31b-it"
-
-#base_url/model/api_key for a locally (or lab-network) hosted judge server exposing
-#an OpenAI-compatible /v1/chat/completions endpoint, e.g. `ollama serve` on a GPU
-#machine (ollama's OpenAI-compatible API needs no real key -- any non-empty string works)
-LOCAL_BASE_URL = os.environ.get("HAMLET_SDRF_JUDGE_LOCAL_BASE_URL", "http://10.127.10.113:11434/v1")
-LOCAL_MODEL    = os.environ.get("HAMLET_SDRF_JUDGE_LOCAL_MODEL", "gemma3:27b")
-LOCAL_API_KEY  = os.environ.get("HAMLET_SDRF_JUDGE_LOCAL_API_KEY", "ollama")
-
-EVALUATION_MODEL = LOCAL_MODEL if JUDGE_BACKEND == "local" else OPENROUTER_MODEL
+EVALUATION_MODEL = OPENROUTER_MODEL
 
 MODEL_TEMPERATURE     = 0
-#enable extended thinking mode for the judge model when supported -- OpenRouter's
-#reasoning models support the "thinking" extra_body param; most local Ollama-served
-#Gemma builds do not, so default it off for the local backend unless overridden
+# Enable extended thinking mode when supported by the configured OpenRouter model.
 MODEL_ENABLE_THINKING = os.environ.get(
     "HAMLET_SDRF_JUDGE_ENABLE_THINKING",
-    "0" if JUDGE_BACKEND == "local" else "1",
+    "1",
 ) == "1"
 
 USE_LLM_JUDGE = True
@@ -867,12 +851,7 @@ def _build_messages(paper_text: str, entity_context: dict, mode: str = "strict")
 
 
 def _build_llm_client() -> openai.OpenAI:
-    """create and return an OpenAI-compatible client for the configured judge backend:
-    OpenRouter (cloud, needs OPENROUTER_API_KEY) or a local/lab-network Gemma server
-    (e.g. Ollama, selected via HAMLET_SDRF_JUDGE_BACKEND=local)"""
-    if JUDGE_BACKEND == "local":
-        print(f"  [judge backend] local  base_url={LOCAL_BASE_URL}  model={LOCAL_MODEL}")
-        return openai.OpenAI(api_key=LOCAL_API_KEY, base_url=LOCAL_BASE_URL)
+    """Create an OpenAI-compatible client for the OpenRouter endpoint."""
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         raise EnvironmentError("OPENROUTER_API_KEY environment variable is not set.")
@@ -3210,9 +3189,7 @@ def main():
     print(f"  Manuscripts    : {TEXT_FILES_DIR}/<PXD>")
     print(f"  SDRF input     : <PXD>/<PXD>{SDRF_SUFFIX}")
     print(f"  Output folder  : {out_dir}")
-    backend_desc = (f"local server at {LOCAL_BASE_URL}" if JUDGE_BACKEND == "local"
-                     else "OpenRouter")
-    print(f"  Judge model    : {EVALUATION_MODEL}  (via {backend_desc})")
+    print(f"  Judge model    : {EVALUATION_MODEL}  (via OpenRouter)")
     print(f"  Prompt version : {PROMPT_VERSION}")
     print(f"  Temperature    : {MODEL_TEMPERATURE}")
     print(f"  Thinking       : {'ENABLED' if MODEL_ENABLE_THINKING else 'DISABLED'}")

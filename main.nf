@@ -619,9 +619,9 @@ process llm_extraction {
         exit 0
     fi
     
-    # Check if OPENAI_API_KEY is set (use parameter expansion to avoid unbound variable error)
-    if [ -z "\${OPENAI_API_KEY:-}" ]; then
-        echo "WARNING: OPENAI_API_KEY not set. Skipping LLM extraction."
+    # OpenRouter is the sole configured LLM endpoint.
+    if [ -z "\${OPENROUTER_API_KEY:-}" ]; then
+        echo "WARNING: OPENROUTER_API_KEY not set. Skipping LLM extraction."
         echo '{}' > llm_results/empty.json
         exit 0
     fi
@@ -1324,9 +1324,10 @@ process agentic_metadata_extraction {
 
     mkdir -p agentic_stage_output
 
-    # Ensure both variable names are available inside the task and inherited by conda run.
-    export LLM_API_KEY="\${LLM_API_KEY:-\${OPENAI_API_KEY:-}}"
-    export OPENAI_API_KEY="\${OPENAI_API_KEY:-\${LLM_API_KEY:-}}"
+    if [ -z "\${OPENROUTER_API_KEY:-}" ]; then
+        echo "ERROR: OPENROUTER_API_KEY is required for agentic metadata extraction." >&2
+        exit 1
+    fi
 
     # Run unified wrapper: performs agentic extraction and writes SDRF TSV.
     echo "=== Running Agentic Metadata Extraction wrapper for ${pxd} ==="

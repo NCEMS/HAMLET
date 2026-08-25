@@ -57,9 +57,9 @@ sudo singularity build llm-extraction.sif llm-extraction.def
 
 ### 2. Set OpenAI API Key
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+export OPENROUTER_API_KEY="your-api-key-here"
 ```
-**Important**: The pipeline requires `OPENAI_API_KEY` to be set as an environment variable.
+**Important**: The pipeline requires `OPENROUTER_API_KEY` to be set as an environment variable.
 
 ### 3. Configure Database Path
 Update `nextflow.config` with your local database path:
@@ -177,10 +177,10 @@ Use `gpt-4o-mini` for cost-effective extraction or `gpt-4` for maximum accuracy.
 ### API Key Not Found
 ```bash
 # Set the environment variable
-export OPENAI_API_KEY="sk-..."
+export OPENROUTER_API_KEY="sk-or-..."
 
 # Verify it's set
-echo $OPENAI_API_KEY
+echo $OPENROUTER_API_KEY
 ```
 
 ### Publication Not Found

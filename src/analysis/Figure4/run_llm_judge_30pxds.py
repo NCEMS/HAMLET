@@ -20,8 +20,7 @@ the manuscript text, so it must not be scored as a fabrication. This applies
 to all three sources (hamlet_raw, hamlet_harmonized, human_annotation): a
 correct value is correct regardless of who/what produced it.
 
-Requires OPENROUTER_API_KEY in the environment (or HAMLET_SDRF_JUDGE_BACKEND=local
-with a local judge server configured, see sdrf_judge.py).
+Requires OPENROUTER_API_KEY in the environment.
 """
 
 from __future__ import annotations

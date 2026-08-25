@@ -1,6 +1,4 @@
-"""
-LLM Client for querying OpenAI with various prompts
-"""
+"""OpenRouter client for querying LLMs with various prompts."""
 
 import os
 import logging
@@ -9,27 +7,27 @@ from openai import OpenAI
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 class LLMClient:
     """Client for LLM interactions with caching support"""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4o-mini-2024-07-18", 
+    def __init__(self, model: str = "openai/gpt-4o-mini",
                  temperature: float = 0.3, timeout: int = 300):
         """
         Initialize LLM client
         
         Args:
-            api_key: OpenAI API key (defaults to OPENAI_API_KEY env var)
-            model: Model to use (default: gpt-4-turbo)
+            model: OpenRouter model identifier
             temperature: Temperature for model (default: 0.3, lower = more deterministic)
             timeout: Request timeout in seconds
         """
-        self.api_key = api_key or os.environ.get("OPENAI_API_KEY")
+        self.api_key = os.environ.get("OPENROUTER_API_KEY")
         if not self.api_key:
-            raise ValueError("API key not found. Set OPENAI_API_KEY environment variable.")
+            raise ValueError("API key not found. Set OPENROUTER_API_KEY environment variable.")
         
-        self.client = OpenAI(api_key=self.api_key, timeout=timeout)
+        self.client = OpenAI(api_key=self.api_key, base_url=OPENROUTER_BASE_URL, timeout=timeout)
         self.model = model
         self.temperature = temperature
         logger.info(f"LLMClient initialized with model: {model}")
