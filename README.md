@@ -116,13 +116,13 @@ The Cascadia checkpoint (558 MB) is stored separately from the repo:
 
 If you only process DDA datasets you can skip this step.
 
-### 5. Set your API key (required for LLM/agentic features)
+### 5. Set the OpenRouter API key (required for LLM/agentic features)
 
 ```bash
 export OPENROUTER_API_KEY="sk-or-..."
 ```
 
-HAMLET sends all LLM requests to OpenRouter. Add this to `~/.bashrc` to make it persistent. The pipeline reads it from the environment — **never put API keys in source files**.
+`OPENROUTER_API_KEY` is the only API credential HAMLET requires. HAMLET sends all LLM requests to OpenRouter. Add the export to `~/.bashrc` to make it persistent. The pipeline reads it from the environment — **never put API keys in source files**.
 
 ### 6. Verify setup
 

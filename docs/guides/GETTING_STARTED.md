@@ -46,13 +46,13 @@ The setup script creates the conda environments under `~/miniconda3/envs/` by de
 
 2. If you will process DIA data, download the Cascadia checkpoint and place it at `assets/cascadia.ckpt`.
 
-3. Export an API key before an agentic or full run:
+3. Export the OpenRouter API key before an agentic or full run:
 
    ```bash
   export OPENROUTER_API_KEY="sk-or-..."
    ```
 
-Do not put an API key in a Nextflow config file or commit it to the repository.
+`OPENROUTER_API_KEY` is the only API credential HAMLET requires. Do not put it in a Nextflow config file or commit it to the repository.
 
 ### Quick environment check
 
