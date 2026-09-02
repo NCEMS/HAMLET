@@ -162,12 +162,24 @@ class AgenticToSDRF:
         737: "K",
     }
 
-    # Instrument model → MS2 analyzer
+    #analyzer terms this column may carry, as PSI MS CV terms
+    _ANALYZER_CV: dict[str, str] = {
+        "orbitrap": "NT=orbitrap;AC=MS:1000484",
+        "ion trap": "NT=ion trap;AC=MS:1000264",
+        "TOF": "NT=time-of-flight;AC=MS:1000084",
+        "quadrupole": "NT=quadrupole;AC=MS:1000081",
+        "FT-ICR": "NT=fourier transform ion cyclotron resonance mass spectrometer;AC=MS:1000079",
+    }
+
+    #instrument model -> MS2 analyzer, used only when the spectra do not say & Ion-trap models are matched first: on a hybrid such as an LTQ Orbitrap the
+    # model name contains "orbitrap" while the MS2 scan may still be read out in the linear trap, so the broader orbitrap pattern must not claim it.
+    # character classes allow a hyphen or underscore because instrument name reach this point spelled "Q Exactive", "Q-Exactive" and "QExactive".
     _ANALYZER_PATTERNS: list[tuple[re.Pattern, str]] = [
-        (re.compile(r"q\s*exactive|exploris|orbitrap|fusion|eclipse|astral|tribrid", re.I), "orbitrap"),
-        (re.compile(r"timstof|qtof|tripletoF|synapt|xevo|impact|maXis", re.I), "TOF"),
-        (re.compile(r"\bvelos\b|\belite\b|\bltq\b|ion\s*trap", re.I), "ion trap"),
-        (re.compile(r"tsq|triple\s*quadrupole", re.I), "quadrupole"),
+        (re.compile(r"\bltq\b|\bvelos\b|\belite\b|\blcq\b|ion\s*trap", re.I), "ion trap"),
+        (re.compile(r"q[\s\-_]*exactive|exploris|orbitrap|fusion|eclipse|astral|tribrid|lumos", re.I), "orbitrap"),
+        (re.compile(r"timstof|q[\s\-_]*tof|triple\s*tof|synapt|xevo|impact|maxis|\btof\b", re.I), "TOF"),
+        (re.compile(r"\btsq\b|triple\s*quadrupole", re.I), "quadrupole"),
+        (re.compile(r"ft[\s\-]?icr|ltq[\s\-]?ft", re.I), "FT-ICR"),
     ]
 
     # ------------------------------------------------------------------ #
@@ -619,11 +631,41 @@ class AgenticToSDRF:
     def _get_collision_energy(self) -> str | None:
         return parse_collision_energy(self._sample_proc)
 
-    def _get_ms2_analyzer(self, instrument: str) -> str | None:
-        for pattern, analyzer in self._ANALYZER_PATTERNS:
-            if pattern.search(instrument):
-                return analyzer
+    def _ms2_analyzer_from_run(self, raw_stem: str) -> str | None:
+        """return the MS2 analyzer this run used when runAssessor names it -> only an IT tag names an analyzer & HR_HCD means high resolution beam type CID which a timsTOF gives as readily as an orbitrap so those runs fall through to the instrument model"""
+        spectra_stats = self._ra_file_data(raw_stem).get("spectra_stats", {})
+        if not isinstance(spectra_stats, dict):
+            spectra_stats = {}
+        fragmentation = self._clean_fragmentation(
+            spectra_stats.get("fragmentation_type")
+            or spectra_stats.get("fragmentation_tag")
+            or self._ra_search.get("fragmentation_type")
+        )
+        if not fragmentation:
+            return None
+        tag = re.sub(r"[\s\-]+", "_", fragmentation.upper())
+        if "_IT_" in tag or tag.startswith("IT_") or tag.endswith("_IT"):
+            return "ion trap"
         return None
+
+    def _get_ms2_analyzer(self, instrument: str, raw_stem: str | None = None) -> str | None:
+        analyzer = self._ms2_analyzer_from_run(raw_stem) if raw_stem else None
+        if analyzer is None:
+            # The instrument model is a concrete instrument identity and comes
+            # ahead of the agent's free-text mass_analyzer, which contradicts it
+            # on several studies (it reads "Orbitrap" for timsTOF Pro runs).
+            for source in (instrument, self._agentic_field(self._tech, "mass_analyzer") or ""):
+                if not source:
+                    continue
+                analyzer = next(
+                    (name for pattern, name in self._ANALYZER_PATTERNS if pattern.search(source)),
+                    None,
+                )
+                if analyzer:
+                    break
+        if analyzer is None:
+            return None
+        return self._ANALYZER_CV.get(analyzer, analyzer)
 
     # ------------------------------------------------------------------ #
     # Modification parameters
@@ -816,7 +858,7 @@ class AgenticToSDRF:
                 "label": self._get_label(stem),
                 "channels": self._get_channels(stem),
                 "dissociation": self._get_dissociation_method(stem),
-                "ms2_analyzer": self._get_ms2_analyzer(self._get_instrument_name(stem)),
+                "ms2_analyzer": self._get_ms2_analyzer(self._get_instrument_name(stem), stem),
                 "mods": self._get_modification_params(stem),
                 "treatment": self._get_treatment(raw_file),
                 "enrichment": self._get_enrichment_process(raw_file),
