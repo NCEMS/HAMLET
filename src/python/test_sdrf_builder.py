@@ -318,6 +318,57 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         ])
         self.assertEqual(len({row["comment[data file]"] for row in rows[:10]}), 1)
 
+    def test_ms2_analyzer_prefers_measured_ion_trap_readout(self) -> None:
+        #PXD000651 is an LTQ Orbitrap hybrid whose runs are tagged LR_IT_CID so MS2 scan was read out in the linear trap even though the model name contain "orbitrap" and curated file record ion trap
+        builder = self._builder_from_archive("PXD000651")
+
+        self.assertEqual(builder._ms2_analyzer_from_run("HV_map_A1"), "ion trap")
+
+        _, rows = builder.build_rows()
+        self.assertEqual(
+            {row["comment[ms2 mass analyzer]"] for row in rows},
+            {"NT=ion trap;AC=MS:1000264"},
+        )
+
+    def test_ms2_analyzer_matches_hyphenated_instrument_names(self) -> None:
+        #PXD001725 resolve its instrument as "Q-Exactive" and has no runAssessor coverage so the model name is the only source and the old r"q\s*exactive" pattern could not match across the hyphen and the column was dropped from the file entirely
+        builder = self._builder_from_archive("PXD001725")
+
+        self.assertIsNone(builder._ms2_analyzer_from_run("HL60_1"))
+        self.assertEqual(
+            builder._get_ms2_analyzer("Q-Exactive"), "NT=orbitrap;AC=MS:1000484"
+        )
+
+        columns, rows = builder.build_rows()
+        self.assertIn("comment[ms2 mass analyzer]", columns)
+        self.assertEqual(
+            {row["comment[ms2 mass analyzer]"] for row in rows},
+            {"NT=orbitrap;AC=MS:1000484"},
+        )
+
+    def test_high_resolution_tag_does_not_imply_an_orbitrap(self) -> None:
+        builder = self._builder_from_archive("PXD043535")
+        stem = "R20211002056_IGG"
+
+        self.assertEqual(
+            builder._ra_file_data(stem)["spectra_stats"]["fragmentation_type"], "HR_HCD"
+        )
+        self.assertIsNone(builder._ms2_analyzer_from_run(stem))
+        self.assertEqual(builder._agentic_field(builder._tech, "mass_analyzer"), "Orbitrap")
+        self.assertEqual(
+            builder._get_ms2_analyzer("timsTOF Pro", stem),
+            "NT=time-of-flight;AC=MS:1000084",
+        )
+
+    def test_ion_trap_pattern_precedes_orbitrap_for_hybrid_models(self) -> None:
+        builder = self._builder_from_archive("PXD000651")
+        for model, expected in (
+            ("LTQ Orbitrap Velos", "NT=ion trap;AC=MS:1000264"),
+            ("Orbitrap Fusion Lumos", "NT=orbitrap;AC=MS:1000484"),
+            ("QExactive Orbitrap MS", "NT=orbitrap;AC=MS:1000484"),
+            ("timsTOF Pro", "NT=time-of-flight;AC=MS:1000084"),
+        ):
+            self.assertEqual(builder._get_ms2_analyzer(model), expected, model)
 
 if __name__ == "__main__":
     unittest.main()
