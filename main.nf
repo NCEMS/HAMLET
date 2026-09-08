@@ -1538,6 +1538,14 @@ process finalize_sdrf {
         mkdir -p ${outputDir}/${pxd}/agentic_metadata
         cp finalize_stage_output/${pxd}.confidence.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.confidence.sdrf.tsv
     fi
+    if [ -f "finalize_stage_output/${pxd}.sdrf_refinement_report.json" ]; then
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf_refinement_report.json ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf_refinement_report.json
+    fi
+    if [ -f "finalize_stage_output/${pxd}.sdrf_refinement_metrics.json" ]; then
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf_refinement_metrics.json ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf_refinement_metrics.json
+    fi
 
     # Publish the post_judge/ subtree (second-pass judge evaluation run after
     # overrides are applied) explicitly via cp -- Nextflow's publishDir/saveAs

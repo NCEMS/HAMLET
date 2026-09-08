@@ -539,9 +539,11 @@ def _get_model_weights(cache_dir: Path) -> Path:
     for filename in os.listdir(cache_dir):
         root, ext = os.path.splitext(filename)
         if ext == ".ckpt":
-            file_version = tuple(
-                g for g in re.match(r".*_v(\d+)_(\d+)_(\d+)", root).groups()
-            )
+            version_match_result = re.match(r".*_v(\d+)[_-](\d+)[_-](\d+)$", root)
+            if version_match_result is None:
+                logger.warning("Ignoring checkpoint with unrecognized version format: %s", filename)
+                continue
+            file_version = version_match_result.groups()
             match = (
                 sum(m)
                 if (m := [i == j for i, j in zip(version, file_version)])[0]

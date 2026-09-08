@@ -13,12 +13,11 @@ import json
 import re
 from pathlib import Path
 
-from sdrf_adapters import agentic_evidence, judge_evidence
+from sdrf_adapters import ModificationEvidence, agentic_evidence, judge_evidence, modification_evidence
 from sdrf_evidence import FieldEvidence
 from sdrf_resolution import resolve_field
 from sdrf_schema import flatten_internal_header, render_columns, rule_for_header, source_precedence_for
 from sdrf_protocol import parse_alkylation_reagent, parse_cleavage_agent, parse_collision_energy, parse_mass_tolerances, parse_reduction_reagent, parse_scan_range
-from sdrf_modifications import parse_protocol_modifications
 from hamlet_version import HAMLET_VERSION
 
 
@@ -129,47 +128,6 @@ class AgenticToSDRF:
         "silac2": [list(c) for c in _SILAC_RK_CHANNELS],
     }
 
-    # Ordered: more specific patterns first
-    _CLEAVAGE_PATTERNS: list[tuple[re.Pattern, str]] = [
-        (re.compile(r"chymotrypsin", re.I), "NT=Chymotrypsin;AC=MS:1001306"),
-        (re.compile(r"lys[\s\-]?c\b", re.I), "NT=Lys-C;AC=MS:1001309"),
-        (re.compile(r"asp[\s\-]?n\b", re.I), "NT=Asp-N;AC=MS:1001303"),
-        (re.compile(r"glu[\s\-]?c\b", re.I), "NT=Glu-C;AC=MS:1001917"),
-        (re.compile(r"trypsin", re.I), "NT=Trypsin;AC=MS:1001251"),
-    ]
-
-    # Canonical names and residues for known UNIMOD IDs
-    _UNIMOD_NAME: dict[int, str] = {
-        1: "Acetyl",
-        4: "Carbamidomethyl",
-        5: "Carbamyl",
-        7: "Deamidation",
-        21: "Phospho",
-        35: "Oxidation",
-        36: "Dimethyl",
-        730: "TMT6plex",
-        737: "TMTpro",
-    }
-    _UNIMOD_RESIDUES: dict[int, str] = {
-        1: "K",
-        4: "C",
-        5: "K",
-        7: "NQ",
-        21: "STY",
-        35: "M",
-        36: "KR",
-        730: "K",
-        737: "K",
-    }
-
-    # Instrument model → MS2 analyzer
-    _ANALYZER_PATTERNS: list[tuple[re.Pattern, str]] = [
-        (re.compile(r"q\s*exactive|exploris|orbitrap|fusion|eclipse|astral|tribrid", re.I), "orbitrap"),
-        (re.compile(r"timstof|qtof|tripletoF|synapt|xevo|impact|maXis", re.I), "TOF"),
-        (re.compile(r"\bvelos\b|\belite\b|\bltq\b|ion\s*trap", re.I), "ion trap"),
-        (re.compile(r"tsq|triple\s*quadrupole", re.I), "quadrupole"),
-    ]
-
     # ------------------------------------------------------------------ #
     # Construction
     # ------------------------------------------------------------------ #
@@ -236,6 +194,7 @@ class AgenticToSDRF:
         self._pride_organisms: list = pride_proj.get("organisms", [])
         self._pride_sample_attrs: list = pride_proj.get("sampleAttributes", [])
         self._pride_diseases: list = pride_proj.get("diseases", [])
+        self._pride_ptms: list = pride_proj.get("identifiedPTMStrings", [])
         self._pub_date: str = pride_proj.get("publicationDate", "")
         self._pride_raw_files: list[str] = [
             file_name
@@ -388,12 +347,10 @@ class AgenticToSDRF:
 
     def _get_sex(self) -> str:
         override = self._override_field("sex")
-        if override and override.lower() in ("male", "female", "intersex"):
-            return override.lower()
+        if override:
+            return override
         val = self._resolve_sample_field("sex")
-        if val and val.lower() in ("male", "female", "intersex"):
-            return val.lower()
-        return "not available"
+        return val or "not available"
 
     def _get_age(self) -> str:
         override = self._override_field("age")
@@ -442,9 +399,17 @@ class AgenticToSDRF:
         spectra_stats = file_data.get("spectra_stats", {})
         records: list[FieldEvidence] = []
 
-        instrument = str(file_data.get("instrument_model", {}).get("name") or "").strip()
+        instrument_model = file_data.get("instrument_model", {})
+        instrument = str(instrument_model.get("name") or "").strip()
         if instrument:
-            records.append(FieldEvidence("instrument", instrument, "runassessor", "assay"))
+            records.append(FieldEvidence(
+                "instrument",
+                instrument,
+                "runassessor",
+                "assay",
+                cv_accession=str(instrument_model.get("accession") or "") or None,
+                cv_name=instrument,
+            ))
         agent_instrument = self._agentic_field(self._tech, "instrument")
         if agent_instrument:
             records.append(FieldEvidence("instrument", agent_instrument, "technical_agent", "assay"))
@@ -480,6 +445,13 @@ class AgenticToSDRF:
             cleaned = self._clean_fragmentation(value)
             if cleaned:
                 records.append(FieldEvidence("dissociation", cleaned, source, scope))
+        for value, source, scope in (
+            (spectra_stats.get("ms2_analyzer"), "runassessor", "assay"),
+            (self._agentic_field(self._tech, "ms2_analyzer"), "technical_agent", "assay"),
+        ):
+            cleaned = self._clean_fragmentation(value)
+            if cleaned:
+                records.append(FieldEvidence("ms2_analyzer", cleaned, source, scope))
         return tuple(records)
 
     @staticmethod
@@ -509,15 +481,17 @@ class AgenticToSDRF:
         return self._resolve_technical_field("instrument", self._technical_evidence_for_file(raw_stem)) or "not available"
 
     def _get_instrument(self, raw_stem: str) -> str:
-        name = self._get_instrument_name(raw_stem)
-        if name == "not available":
-            return name
-        # the enrichment step already resolved an MS accession for this model,
-        # so pair it with the name instead of writing the bare string.
-        meti_value, accession = self._meti_accession("instrument")
-        if accession and meti_value.strip().lower() == name.strip().lower():
-            return f"NT={name};AC={accession}"
-        return name
+        override = self._override_field("instrument")
+        if override:
+            return override
+        evidence = self._technical_evidence_for_file(raw_stem)
+        precedence = source_precedence_for("instrument")
+        resolved = resolve_field("instrument", evidence, **({"source_precedence": precedence} if precedence else {}))
+        if resolved.value == "not available":
+            return resolved.value
+        if resolved.selected and resolved.selected.cv_accession:
+            return f"NT={resolved.value};AC={resolved.selected.cv_accession}"
+        return resolved.value
 
     def _get_acquisition_method(self, raw_stem: str) -> str:
         raw = self._resolve_technical_field("acquisition", self._technical_evidence_for_file(raw_stem)) or ""
@@ -530,16 +504,10 @@ class AgenticToSDRF:
     def _label_scheme_key(raw_label: str) -> str:
         """Normalize recognized channel scheme names without changing label values."""
         normalized = raw_label.lower().strip().replace("-", "").replace(" ", "")
-        # A mixed study-level description such as "SILAC, label-free" still
-        # establishes SILAC assay channels. The paired channels come from the
-        # explicit SDRF mapping, not from inferred label chemistry.
-        if "silac" in normalized:
-            return "silac"
-        # TechnicalAgent can spell out the labeling chemistry rather than use
-        # the compact TMT10plex scheme name emitted by RunAssessor.
-        if "tmt" in normalized and "10plex" in normalized:
-            return "tmt10plex"
-        return normalized
+        aliases = {
+            "10plextandemmasstag(tmt)": "tmt10plex",
+        }
+        return aliases.get(normalized, normalized)
 
     def _get_label(self, raw_stem: str) -> str:
         raw_label = self._raw_label(raw_stem)
@@ -593,8 +561,8 @@ class AgenticToSDRF:
 
     def _get_cleavage_agent(self) -> str:
         override = self._override_field("cleavage_agent")
-        value = parse_cleavage_agent(override or "", self._sample_proc + " " + self._data_proc, self._tech_text("cleavage_agent"))
-        return value or "not available"
+        value = override or self._agentic_field(self._tech, "cleavage_agent")
+        return self._map_cleavage_agent(value or "")
 
     def _get_reduction_reagent(self) -> str | None:
         return parse_reduction_reagent(self._sample_proc, self._tech_text("reduction_reagent"))
@@ -605,7 +573,7 @@ class AgenticToSDRF:
     def _get_mass_tolerances(self) -> tuple[str | None, str | None]:
         derived_precursor, derived_fragment = parse_mass_tolerances(
             self._ra_search,
-            self._data_proc + " " + self._sample_proc,
+            "",
             warning_context=getattr(self, "pxd_id", ""),
         )
         return (
@@ -619,63 +587,65 @@ class AgenticToSDRF:
     def _get_collision_energy(self) -> str | None:
         return parse_collision_energy(self._sample_proc)
 
-    def _get_ms2_analyzer(self, instrument: str) -> str | None:
-        for pattern, analyzer in self._ANALYZER_PATTERNS:
-            if pattern.search(instrument):
-                return analyzer
-        return None
+    def _get_ms2_analyzer(self, raw_stem: str) -> str | None:
+        return self._resolve_technical_field("ms2_analyzer", self._technical_evidence_for_file(raw_stem))
 
     # ------------------------------------------------------------------ #
     # Modification parameters
     # ------------------------------------------------------------------ #
 
-    def _parse_protocol_mods(self) -> list[dict]:
-        text = " ".join([
-            self._data_proc,
-            self._sample_proc,
-            self._tech_text("alkylation_reagent"),
-            self._tech_text("ptm"),
-            self._tech_text("modification"),
-        ])
-        return parse_protocol_modifications(text, self._get_alkylation_reagent())
+    def _modification_records(self, raw_stem: str) -> tuple[ModificationEvidence, ...]:
+        search_data = self._mods_per_stem.get(raw_stem, {}).get("data", [])
+        return modification_evidence(
+            self._pride_ptms,
+            self._tech,
+            search_data if isinstance(search_data, list) else [],
+            raw_stem=raw_stem,
+        )
+
+    @staticmethod
+    def _same_modification(record: ModificationEvidence, candidate: ModificationEvidence) -> bool:
+        """Compare source-provided identities without ontology-name inference."""
+        if record.name.casefold() == candidate.name.casefold():
+            return True
+        return bool(record.accession and candidate.accession and record.accession.casefold() == candidate.accession.casefold())
+
+    def _resolved_modifications(self, raw_stem: str) -> list[tuple[str, tuple[ModificationEvidence, ...]]]:
+        grouped: list[list[ModificationEvidence]] = []
+        for record in self._modification_records(raw_stem):
+            matching_group = next(
+                (records for records in grouped if any(self._same_modification(record, candidate) for candidate in records)),
+                None,
+            )
+            if matching_group is None:
+                grouped.append([record])
+            else:
+                matching_group.append(record)
+
+        rendered: list[tuple[str, tuple[ModificationEvidence, ...]]] = []
+        for records in grouped:
+            first = records[0]
+            accession = next((record.accession for record in records if record.accession), None)
+            targets = tuple(dict.fromkeys(target for record in records for target in record.targets))
+            statuses = {record.modification_type for record in records if record.modification_type}
+            modification_type = next(iter(statuses)) if len(statuses) == 1 else "!" if statuses else "?"
+            parts = [f"NT={first.name}"]
+            if accession:
+                parts.append(f"AC={accession}")
+            parts.append(f"MT={modification_type}")
+            if targets:
+                parts.append(f"TA={','.join(targets)}")
+            rendered.append((";".join(parts), tuple(records)))
+        return rendered
 
     def _get_modification_params(self, raw_stem: str) -> list[str]:
-        """
-        Return list of SDRF-formatted modification parameter strings for the
-        given file stem.  Protocol mods are primary; additional detected mods
-        (fraction >= 0.05) supplement them.
-        """
-        proto_mods = self._parse_protocol_mods()
-        proto_uids = {m["uid"] for m in proto_mods}
+        return [value for value, _ in self._resolved_modifications(raw_stem)]
 
-        result = []
-        for m in proto_mods:
-            result.append(
-                f"NT={m['name']};AC=UNIMOD:{m['uid']};MT={m['mod_type']};TA={m['residues']}"
-            )
-
-        # supplement with fractions-based mods not in protocol
-        alk = self._get_alkylation_reagent()
-        for mod in self._mods_per_stem.get(raw_stem, {}).get("data", []):
-            uid = mod.get("unimod_id")
-            if uid is None or uid in proto_uids:
-                continue
-            frac = mod.get("fraction_modified") or 0.0
-            if frac < 0.05:
-                continue
-            name = self._UNIMOD_NAME.get(uid, mod.get("mod_name", f"UNIMOD:{uid}"))
-            # canonical residues if known, else first char of allowed_residues
-            residues = mod.get("allowed_residues", "X")
-            ta = self._UNIMOD_RESIDUES.get(uid, residues[:1] if residues else "X")
-            # determine Fixed vs Variable
-            mod_type = "Variable"
-            if uid == 4 and alk:
-                mod_type = "Fixed"
-                ta = "C"
-            result.append(f"NT={name};AC=UNIMOD:{uid};MT={mod_type};TA={ta}")
-            proto_uids.add(uid)
-
-        return result
+    def _modification_provenance(self, raw_stem: str, value: str) -> tuple[ModificationEvidence, ...]:
+        for rendered, records in self._resolved_modifications(raw_stem):
+            if rendered == value:
+                return records
+        return ()
 
     # ------------------------------------------------------------------ #
     # LLM-extracted per-file fields
@@ -713,6 +683,18 @@ class AgenticToSDRF:
     @classmethod
     def _map_label(cls, raw: str) -> str:
         return cls._LABEL_MAP.get(raw.lower().strip(), "not available")
+
+    @staticmethod
+    def _map_cleavage_agent(raw: str) -> str:
+        values = {
+            "chymotrypsin": "NT=Chymotrypsin;AC=MS:1001306",
+            "lys-c": "NT=Lys-C;AC=MS:1001309",
+            "asp-n": "NT=Asp-N;AC=MS:1001303",
+            "glu-c": "NT=Glu-C;AC=MS:1001917",
+            "trypsin": "NT=Trypsin;AC=MS:1001251",
+            "trypsin/p": "NT=Trypsin/P;AC=MS:1001313",
+        }
+        return values.get(raw.strip().lower(), "not available")
 
     # ------------------------------------------------------------------ #
     # Column order builder
@@ -816,7 +798,7 @@ class AgenticToSDRF:
                 "label": self._get_label(stem),
                 "channels": self._get_channels(stem),
                 "dissociation": self._get_dissociation_method(stem),
-                "ms2_analyzer": self._get_ms2_analyzer(self._get_instrument_name(stem)),
+                "ms2_analyzer": self._get_ms2_analyzer(stem),
                 "mods": self._get_modification_params(stem),
                 "treatment": self._get_treatment(raw_file),
                 "enrichment": self._get_enrichment_process(raw_file),
@@ -942,18 +924,22 @@ class AgenticToSDRF:
 
         print(f"SDRF written: {output_path}  ({len(rows)} sample rows × {len(headers)} columns)")
 
-    def _provenance_for(self, field: str, raw_stem: str) -> tuple[FieldEvidence | None, str, str]:
-        """Return selected evidence and state for fields already on the new path."""
+    def _resolution_for(self, field: str, raw_stem: str):
+        """Return the normalized resolution object for a rendered field."""
         if field in {"organism", "organism_part", "disease", "cell_type", "cell_line", "sex", "age"}:
-            resolved = resolve_field(field, self._sample_evidence)
-            return resolved.selected, resolved.resolution_rule, resolved.assessment_state
+            return resolve_field(field, self._sample_evidence)
         if field in {"biological_replicate", "technical_replicate", "fraction_identifier", "factor_value"}:
-            resolved = resolve_field(field, self._experiment_evidence)
-            return resolved.selected, resolved.resolution_rule, resolved.assessment_state
-        if field in {"instrument", "acquisition", "dissociation", "label"}:
+            return resolve_field(field, self._experiment_evidence)
+        if field in {"instrument", "acquisition", "dissociation", "label", "ms2_analyzer"}:
             evidence = self._technical_evidence_for_file(raw_stem)
             precedence = source_precedence_for(field)
-            resolved = resolve_field(field, evidence, **({"source_precedence": precedence} if precedence else {}))
+            return resolve_field(field, evidence, **({"source_precedence": precedence} if precedence else {}))
+        return None
+
+    def _provenance_for(self, field: str, raw_stem: str) -> tuple[FieldEvidence | None, str, str]:
+        """Return selected evidence and state for fields already on the new path."""
+        resolved = self._resolution_for(field, raw_stem)
+        if resolved:
             return resolved.selected, resolved.resolution_rule, resolved.assessment_state
         return None, "legacy_derivation", "derived"
 
@@ -968,7 +954,7 @@ class AgenticToSDRF:
             "sdrf row", "source name", "logical field", "sdrf header", "selected value",
             "selected source", "evidence", "agent status", "agent confidence", "judge verdict",
             "judge hallucination", "judge type mismatch", "judge corrected value", "resolution rule",
-            "assessment state",
+            "assessment state", "source records",
         ]
 
         with output_path.open("w", newline="", encoding="utf-8") as handle:
@@ -981,7 +967,37 @@ class AgenticToSDRF:
                     value = row.get(column, "")
                     if not rule or value in {"", "not available", "not applicable"}:
                         continue
-                    selected, resolution_rule, assessment_state = self._provenance_for(rule.field, raw_stem)
+                    modification_records: tuple[ModificationEvidence, ...] = ()
+                    if rule.field == "modification":
+                        modification_records = self._modification_provenance(raw_stem, value)
+                        selected = None
+                        resolution_rule = "normalized_source_union"
+                        assessment_state = "derived"
+                        source_records = [
+                            {
+                                "source": record.source,
+                                "scope": record.scope,
+                                "source_path": record.source_path,
+                                "source_value": record.source_value,
+                                "raw_stem": record.raw_stem,
+                                "fraction_modified": record.fraction_modified,
+                            }
+                            for record in modification_records
+                        ]
+                    else:
+                        selected, resolution_rule, assessment_state = self._provenance_for(rule.field, raw_stem)
+                        resolved = self._resolution_for(rule.field, raw_stem)
+                        source_records = [
+                            {
+                                "source": record.source,
+                                "scope": record.scope,
+                                "value": record.value,
+                                "cv_accession": record.cv_accession,
+                                "cv_name": record.cv_name,
+                                "metadata": record.metadata,
+                            }
+                            for record in resolved.candidates
+                        ] if resolved else []
                     judge = judge_by_field.get(rule.field)
                     writer.writerow({
                         "sdrf row": row_index,
@@ -989,8 +1005,8 @@ class AgenticToSDRF:
                         "logical field": rule.field,
                         "sdrf header": header,
                         "selected value": value,
-                        "selected source": selected.source if selected else "derived",
-                        "evidence": selected.evidence if selected else "",
+                        "selected source": ";".join(dict.fromkeys(record.source for record in modification_records)) if modification_records else selected.source if selected else "derived",
+                        "evidence": " | ".join(record.source_value for record in modification_records) if modification_records else selected.evidence if selected else "",
                         "agent status": selected.agent_status if selected and selected.agent_status else "",
                         "agent confidence": selected.agent_confidence if selected and selected.agent_confidence is not None else "",
                         "judge verdict": judge.judge_verdict if judge and judge.judge_verdict else "",
@@ -999,6 +1015,7 @@ class AgenticToSDRF:
                         "judge corrected value": judge.judge_corrected_value if judge and judge.judge_corrected_value else "",
                         "resolution rule": resolution_rule,
                         "assessment state": assessment_state,
+                        "source records": json.dumps(source_records, sort_keys=True),
                     })
 
         print(f"SDRF confidence sidecar written: {output_path}")

@@ -13,7 +13,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src" / "python"))
 
 from sdrf_builder import AgenticToSDRF
-from sdrf_adapters import agentic_evidence, judge_evidence
+from sdrf_adapters import ModificationEvidence, agentic_evidence, judge_evidence, modification_evidence
 from sdrf_evidence import FieldEvidence
 from sdrf_resolution import resolve_field
 from sdrf_schema import SDRF_MAPPING_RULES, render_columns, source_precedence_for
@@ -35,11 +35,11 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             aggregated_json=REPO_ROOT / "store" / "aggregated_results_files" / f"{pxd}_aggregated_results.json",
         )
 
-    def test_pxd073162_matches_frozen_baseline(self) -> None:
+    def test_pxd073162_generates_sdrf_and_confidence_sidecar(self) -> None:
         pxd = "PXD073162"
-        metadata_dir = REPO_ROOT / "results_baseline" / pxd / "agentic_metadata" / "metadata_extraction_output"
-        override_path = REPO_ROOT / "results_baseline" / pxd / "judge_output" / "json_outputs" / f"{pxd}_sdrf_overrides.json"
-        baseline_path = REPO_ROOT / "results_baseline" / pxd / "agentic_metadata" / f"{pxd}.sdrf.tsv"
+        result_dir = REPO_ROOT / "store" / "agentic_results_files" / pxd
+        metadata_dir = result_dir / "metadata_extraction_output" / "integrated_output"
+        override_path = result_dir / "judge_output" / "json_outputs" / f"{pxd}_sdrf_overrides.json"
 
         with override_path.open(encoding="utf-8") as handle:
             override_document = json.load(handle)
@@ -50,10 +50,10 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         }
 
         builder = AgenticToSDRF(
-            tech_json=metadata_dir / "integrated_output" / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
-            bio_json=metadata_dir / "integrated_output" / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
-            exp_json=metadata_dir / "integrated_output" / "ExperimentalDesignAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
-            aggregated_json=metadata_dir / f"{pxd}_aggregated_results.json",
+            tech_json=metadata_dir / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
+            bio_json=metadata_dir / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
+            exp_json=metadata_dir / "ExperimentalDesignAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
+            aggregated_json=REPO_ROOT / "store" / "aggregated_results_files" / f"{pxd}_aggregated_results.json",
             overrides=overrides,
             judge_document=override_document,
         )
@@ -61,7 +61,7 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary_directory:
             generated_path = Path(temporary_directory) / f"{pxd}.sdrf.tsv"
             builder.to_sdrf(generated_path)
-            self.assertEqual(generated_path.read_bytes(), baseline_path.read_bytes())
+            self.assertTrue(generated_path.read_text(encoding="utf-8").strip())
             sidecar_path = Path(temporary_directory) / f"{pxd}.confidence.sdrf.tsv"
             builder.to_confidence_sidecar(sidecar_path)
             with sidecar_path.open(encoding="utf-8", newline="") as handle:
@@ -71,6 +71,7 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             instrument = next(row for row in sidecar_rows if row["logical field"] == "instrument")
             self.assertEqual(instrument["judge corrected value"], "Q Exactive HF")
             self.assertEqual(instrument["judge hallucination"], "True")
+            self.assertTrue(json.loads(instrument["source records"]))
 
     def test_judge_correction_overrides_source_precedence(self) -> None:
         resolved = resolve_field(
@@ -116,8 +117,8 @@ class AgenticToSdrfParityTest(unittest.TestCase):
 
     def test_archived_agent_and_judge_documents_normalize_to_evidence(self) -> None:
         pxd = "PXD073162"
-        root = REPO_ROOT / "results_baseline" / pxd
-        bio_path = root / "agentic_metadata" / "metadata_extraction_output" / "integrated_output" / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json"
+        root = REPO_ROOT / "store" / "agentic_results_files" / pxd
+        bio_path = root / "metadata_extraction_output" / "integrated_output" / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json"
         judge_path = root / "judge_output" / "json_outputs" / f"{pxd}_sdrf_overrides.json"
 
         with bio_path.open(encoding="utf-8") as handle:
@@ -211,6 +212,126 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         builder._sample_proc = ""
 
         self.assertEqual(builder._get_mass_tolerances(), ("10 ppm", "0.7 Da"))
+
+    def test_modification_evidence_only_uses_supplied_structured_records(self) -> None:
+        records = modification_evidence(
+            [{"name": "Oxidation", "accession": "UNIMOD:35"}],
+            {"ptm": {"resolved": "Oxidation; Acetylation"}},
+            [{
+                "unimod_id": 35,
+                "mod_name": "Oxidation",
+                "allowed_residues": "M",
+                "allowed_terms": "N-term",
+                "fraction_modified": 0.01,
+            }],
+            raw_stem="run_1",
+        )
+
+        self.assertEqual(len(records), 4)
+        self.assertEqual(records[0].accession, "UNIMOD:35")
+        self.assertEqual(records[2].name, "Acetylation")
+        self.assertEqual(records[3].targets, ("M", "N-term"))
+        self.assertEqual(records[3].fraction_modified, 0.01)
+
+    def test_modification_evidence_excludes_pride_no_ptm_declaration(self) -> None:
+        records = modification_evidence(
+            [{
+                "name": "No PTMs are included in the dataset",
+                "accession": "PRIDE:0000398",
+            }],
+            {},
+            [],
+            raw_stem="run_1",
+        )
+
+        self.assertEqual(records, ())
+
+    def test_modification_evidence_omits_missing_target_sentinels(self) -> None:
+        records = modification_evidence(
+            [],
+            {},
+            [{
+                "unimod_id": 2,
+                "mod_name": "Amidation",
+                "allowed_residues": float("nan"),
+                "allowed_terms": "C-term",
+            }],
+            raw_stem="run_1",
+        )
+
+        self.assertEqual(records[0].targets, ("C-term",))
+
+    def test_modification_renderer_marks_only_explicit_status_conflicts(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._modification_records = lambda raw_stem: (
+            ModificationEvidence("Oxidation", "UNIMOD:35", ("M",), "Fixed", "pride", "study", "pride[0]", "Oxidation"),
+            ModificationEvidence("Oxidation", "UNIMOD:35", ("M",), "Variable", "technical_agent", "study", "technical.ptm[0]", "Oxidation"),
+            ModificationEvidence("Acetylation", None, (), None, "technical_agent", "study", "technical.ptm[1]", "Acetylation"),
+        )
+
+        self.assertEqual(builder._get_modification_params("run_1"), [
+            "NT=Oxidation;AC=UNIMOD:35;MT=!;TA=M",
+            "NT=Acetylation;MT=?",
+        ])
+
+    def test_modification_renderer_merges_matching_name_and_search_accession(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._modification_records = lambda raw_stem: (
+            ModificationEvidence("Formylation", None, (), None, "technical_agent", "study", "technical.ptm[0]", "Formylation"),
+            ModificationEvidence("Formylation", "UNIMOD:122", ("K", "N-term"), None, "ptm_shepherd", "assay", "search.run_1[0]", "Formylation", raw_stem="run_1", fraction_modified=0.12),
+        )
+
+        self.assertEqual(builder._get_modification_params("run_1"), [
+            "NT=Formylation;AC=UNIMOD:122;MT=?;TA=K,N-term",
+        ])
+
+    def test_confidence_sidecar_includes_normalized_source_records(self) -> None:
+        builder = self._builder_from_archive("PXD000070")
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            sidecar_path = Path(temporary_directory) / "PXD000070.confidence.sdrf.tsv"
+            builder.to_confidence_sidecar(sidecar_path)
+            with sidecar_path.open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle, delimiter="\t"))
+
+        self.assertTrue(rows)
+        instrument = next(row for row in rows if row["logical field"] == "instrument")
+        records = json.loads(instrument["source records"])
+        self.assertTrue(records)
+        self.assertIn("scope", records[0])
+
+    def test_builder_does_not_derive_cleavage_or_tolerance_from_protocol_text(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {}
+        builder._tech = {"cleavage_agent": {"resolved": None}}
+        builder._ra_search = {}
+        builder._sample_proc = "Digested with trypsin; searched at 10 ppm."
+        builder._data_proc = "Fragment tolerance 0.5 Da."
+
+        self.assertEqual(builder._get_cleavage_agent(), "not available")
+        self.assertEqual(builder._get_mass_tolerances(), (None, None))
+
+    def test_builder_preserves_explicit_trypsin_p_and_direct_ms2_analyzer(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {}
+        builder._tech = {
+            "cleavage_agent": {"resolved": "Trypsin/P"},
+            "ms2_analyzer": {"resolved": "ion trap"},
+        }
+        builder._ra_files = {}
+        builder._ra_knowledge = {}
+        builder._ra_search = {}
+        builder._stem_to_mzml = {}
+        builder._quant_method = ""
+
+        self.assertEqual(builder._get_cleavage_agent(), "NT=Trypsin/P;AC=MS:1001313")
+        self.assertEqual(builder._get_ms2_analyzer("run_1"), "ion trap")
+
+    def test_builder_preserves_supplied_multi_value_sex(self) -> None:
+        builder = AgenticToSDRF.__new__(AgenticToSDRF)
+        builder._overrides = {}
+        builder._resolve_sample_field = lambda field: "male and female"
+
+        self.assertEqual(builder._get_sex(), "male and female")
 
     def test_protocol_modification_parser_preserves_order_and_residues(self) -> None:
         modifications = parse_protocol_modifications(

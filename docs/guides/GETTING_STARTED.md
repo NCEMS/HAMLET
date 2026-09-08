@@ -14,8 +14,8 @@ Install these prerequisites before cloning HAMLET:
 
 | Requirement | Purpose |
 |---|---|
-| Nextflow 25.04 or newer | Workflow engine |
 | Git | Clone HAMLET and its submodules |
+| GitHub CLI (`gh`) | Authenticate to the private agentic-metadata submodule over HTTPS |
 | curl or wget | Bootstrap Miniconda and downloads |
 | Conda/Miniconda | HAMLET tool environments |
 | NVIDIA GPU, optional | Accelerates organism identification |
@@ -23,33 +23,66 @@ Install these prerequisites before cloning HAMLET:
 
 For a full PXD, plan for at least 50 GB free disk. The actual requirement depends on the number and size of the RAW files.
 
+`src/setup.sh` installs Nextflow 25.04.4 and Java 17 in `meti_env`; use that environment to launch HAMLET. A separate system-wide Nextflow installation is not required.
+
 ### Clone and bootstrap
 
 ```bash
 git clone <HAMLET-repository-url> HAMLET
 cd HAMLET
-git submodule update --init --recursive
+gh auth login --hostname github.com --git-protocol https --web
 bash src/setup.sh
 ```
 
+Authorize the GitHub CLI as the collaborator account that can access `CompOmics/agentic-metadata`. `src/setup.sh` initializes both required submodules, including agentic-metadata, so do not run a separate generic submodule update command. GitHub SSH keys are not required.
+
 If the installer adds Miniconda to your shell configuration, open a new shell or run the command it prints before rerunning `src/setup.sh`.
 
-The setup script creates the conda environments under `~/miniconda3/envs/` by default. Override the base location at run time with `--conda_base /path/to/miniconda` when needed.
+Recent Conda installations can require acceptance of Anaconda's Terms of Service before the environment files can use their `defaults` channel. Review and accept the terms in your own Conda installation before running setup:
+
+```bash
+conda tos interactive --override-channels \
+  --channel https://repo.anaconda.com/pkgs/main \
+  --channel https://repo.anaconda.com/pkgs/r
+```
+
+Or, after reviewing the terms, accept them non-interactively:
+
+```bash
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+```
+
+The setup script creates the conda environments under the active Conda installation's `envs/` directory. Use `--conda_base /path/to/miniconda` at pipeline run time only when its environments are located under a different Conda base.
 
 ### Required external assets
 
-1. Download the NCBI taxonomy database:
+`src/setup.sh` provisions the two large, local assets below when they are absent. It stops if it cannot obtain the Cascadia checkpoint and warns if taxonomy download fails. You can rerun the individual taxonomy downloader after resolving a network failure:
+
+| Asset | Required for | Location | Provisioning |
+|---|---|---|---|
+| Cascadia checkpoint (558 MB) | DIA organism identification | `assets/cascadia.ckpt` | Downloaded by `src/setup.sh`; override with `--cascadia_model_path` if needed. |
+| NCBI taxonomy database (about 500 MB) | Species-level organism identification | `assets/taxonomy/nodes.dmp`, `assets/taxonomy/names.dmp` | Downloaded by `src/setup.sh`; retry with `bash src/bash/download_ncbi_taxonomy.sh`. |
+| Casanovo checkpoint | DDA organism identification | `${XDG_CACHE_HOME:-$HOME/.cache}/casanovo/` | Downloaded automatically on the first DDA organism-identification task and reused from the persistent user cache. Keep network access available until it has been cached. |
+| UniProt organism FASTA | DDA SAGE and DIA-NN search | Results FASTA cache or search output | Downloaded automatically for the selected taxid at search time. Keep network access available. |
+
+The repository already includes the static inputs required at launch: `assets/UniversalContaminats.fasta`, `assets/taxid_lists/CommonPRIDEtaxids.txt`, and `assets/default_sage.config`. `assets/diann_libraries/` is an optional reusable DIA-NN library cache; HAMLET creates it when absent. Do not download organism FASTA files in advance unless you need an offline run; HAMLET selects them from the resolved taxid and caches them.
+
+Verify the local assets before a full run:
+
+```bash
+test -s assets/cascadia.ckpt
+test -s assets/taxonomy/nodes.dmp
+test -s assets/taxonomy/names.dmp
+test -s assets/UniversalContaminats.fasta
+test -s assets/taxid_lists/CommonPRIDEtaxids.txt
+test -s assets/default_sage.config
+```
+
+Export the OpenRouter API key before an agentic or full run:
 
    ```bash
-   bash src/bash/download_ncbi_taxonomy.sh
-   ```
-
-2. If you will process DIA data, download the Cascadia checkpoint and place it at `assets/cascadia.ckpt`.
-
-3. Export the OpenRouter API key before an agentic or full run:
-
-   ```bash
-  export OPENROUTER_API_KEY="sk-or-..."
+export OPENROUTER_API_KEY="sk-or-..."
    ```
 
 `OPENROUTER_API_KEY` is the only API credential HAMLET requires. Do not put it in a Nextflow config file or commit it to the repository.
@@ -59,12 +92,16 @@ The setup script creates the conda environments under `~/miniconda3/envs/` by de
 ```bash
 source "${HOME}/miniconda3/etc/profile.d/conda.sh"
 conda activate meti_env
+nextflow -version
 which ThermoRawFileParser
 which aria2c
 python -c "import pandas; print('HAMLET core environment OK')"
-conda deactivate
-nextflow -version
+conda run -n search_env sh -c 'command -v sage && command -v diann'
+conda run -n casanovo_env python -c "import casanovo; print('Casanovo environment OK')"
+conda run -n cascadia_env python -c "import torch; print('Cascadia environment OK')"
 ```
+
+Keep `meti_env` active for all `nextflow run` commands below. Run `conda deactivate` only after the pipeline exits.
 
 ## Choose a Run Mode
 
@@ -73,6 +110,7 @@ nextflow -version
 Use this mode when HAMLET needs to download and process the experimental files.
 
 ```bash
+conda activate meti_env
 nextflow run main.nf \
   --pxd PXD000070 \
   -resume
@@ -87,6 +125,7 @@ PXD000534
 ```
 
 ```bash
+conda activate meti_env
 nextflow run main.nf \
   --pxd_csv pxds.csv \
   --max_raw_files 5 \
@@ -100,6 +139,7 @@ Start with a small `--max_raw_files` value for an unfamiliar PXD. Remove the lim
 Use this mode when a valid aggregate JSON is already available in `store/aggregated_results_files/`. It skips RAW download, organism identification, and search; it runs metadata extraction, LLM judging, and SDRF finalization.
 
 ```bash
+conda activate meti_env
 nextflow run main.nf \
   --agentic_only true \
   --pxd PXD000070 \
@@ -112,6 +152,7 @@ nextflow run main.nf \
 For a batch:
 
 ```bash
+conda activate meti_env
 nextflow run main.nf \
   --agentic_only true \
   --pxd_csv assets/pxd_lists/Hamlet_GS_pride_sdrf_union.csv \
@@ -128,6 +169,7 @@ An agentic-only PXD must have `store/aggregated_results_files/PXD######_aggregat
 Use this mode to download/convert input and capture runAssessor metadata without running the later stages.
 
 ```bash
+conda activate meti_env
 nextflow run main.nf \
   --pxd PXD000070 \
   --runAssessorOnly true \
