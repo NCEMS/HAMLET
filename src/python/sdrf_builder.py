@@ -51,13 +51,14 @@ class AgenticToSDRF:
 
     _DISSOCIATION_MAP: dict[str, str] = {
         "hcd": "NT=beam-type collision-induced dissociation;AC=MS:1000422",
-        "hr hcd": "NT=beam-type collision-induced dissociation;AC=MS:1000422",
         "hr_hcd": "NT=beam-type collision-induced dissociation;AC=MS:1000422",
+        "lr_hcd": "NT=beam-type collision-induced dissociation;AC=MS:1000422",
         "cid": "NT=collision-induced dissociation;AC=MS:1000133",
         "lr_it_cid": "NT=collision-induced dissociation;AC=MS:1000133",
         "hr_it_cid": "NT=collision-induced dissociation;AC=MS:1000133",
         "etd": "NT=electron transfer dissociation;AC=MS:1001356",
         "hr_it_etd": "NT=electron transfer dissociation;AC=MS:1001356",
+        "lr_it_etd": "NT=electron transfer dissociation;AC=MS:1001356",
         "ethcd": "NT=electron transfer higher energy collision dissociation;AC=MS:1002631",
         "hr_ethcd": "NT=electron transfer higher energy collision dissociation;AC=MS:1002631",
         "etcid": "NT=electron transfer collision induced dissociation;AC=MS:1003182",
@@ -706,9 +707,14 @@ class AgenticToSDRF:
     def _map_acquisition(cls, raw: str) -> str:
         return cls._ACQUISITION_MAP.get(raw.lower().strip(), "not available")
 
+    @staticmethod
+    def _canonical_fragmentation(raw: str) -> str:
+        """Collapse a RunAssessor fragmentation code to its canonical map key."""
+        return re.sub(r"[\s\-_]+", "_", str(raw).strip().lower()).strip("_")
+
     @classmethod
     def _map_dissociation(cls, raw: str) -> str:
-        return cls._DISSOCIATION_MAP.get(raw.lower().strip(), "not available")
+        return cls._DISSOCIATION_MAP.get(cls._canonical_fragmentation(raw), "not available")
 
     @classmethod
     def _map_label(cls, raw: str) -> str:

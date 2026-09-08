@@ -307,6 +307,20 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         builder._mods_per_stem = {}
         self.assertEqual(builder._get_channels("qExPlus02_01602"), [["not available"]])
 
+    def test_dissociation_map_accepts_every_runassessor_separator_spelling(self) -> None:
+        cid = "NT=collision-induced dissociation;AC=MS:1000133"
+        hcd = "NT=beam-type collision-induced dissociation;AC=MS:1000422"
+        for raw in ("LR IT CID", "LR_IT_CID", "lr-it-cid", " lr it cid "):
+            self.assertEqual(AgenticToSDRF._map_dissociation(raw), cid, raw)
+        for raw in ("HR HCD", "HR_HCD", "hcd"):
+            self.assertEqual(AgenticToSDRF._map_dissociation(raw), hcd, raw)
+        self.assertEqual(AgenticToSDRF._map_dissociation("??"), "not available")
+
+    def test_space_separated_fragmentation_tag_no_longer_drops_rows(self) -> None:
+        _, rows = self._builder_from_archive("PXD000651").build_rows()
+        values = {row["comment[dissociation method]"] for row in rows}
+        self.assertEqual(values, {"NT=collision-induced dissociation;AC=MS:1000133"})
+
     def test_tmt10_technical_label_expands_pride_inventory(self) -> None:
         columns, rows = self._builder_from_archive("PXD011799").build_rows()
         self.assertEqual(len(rows), 480)
