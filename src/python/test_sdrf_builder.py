@@ -326,6 +326,16 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         self.assertEqual(builder._get_cleavage_agent(), "NT=Trypsin/P;AC=MS:1001313")
         self.assertEqual(builder._get_ms2_analyzer("run_1"), "ion trap")
 
+    def test_dissociation_map_normalizes_runassessor_separator_spellings(self) -> None:
+        cid = "NT=collision-induced dissociation;AC=MS:1000133"
+        hcd = "NT=beam-type collision-induced dissociation;AC=MS:1000422"
+
+        for raw in ("LR IT CID", "LR_IT_CID", "lr-it-cid", " lr it cid "):
+            self.assertEqual(AgenticToSDRF._map_dissociation(raw), cid, raw)
+        for raw in ("HR HCD", "HR_HCD", "hr-hcd", "hcd"):
+            self.assertEqual(AgenticToSDRF._map_dissociation(raw), hcd, raw)
+        self.assertEqual(AgenticToSDRF._map_dissociation("??"), "not available")
+
     def test_builder_preserves_supplied_multi_value_sex(self) -> None:
         builder = AgenticToSDRF.__new__(AgenticToSDRF)
         builder._overrides = {}
