@@ -210,16 +210,13 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
 ######################################################################################################
 def agentic_to_sdrf(agentic_output: list[Path], sdrf_output: Path) -> None:
     """
-    Convert the three agentic enriched JSONs + the aggregated_results.json
-    (resolved from the input path stored in run_agentic_extraction) into an
-    SDRF-Proteomics v1.1.0 TSV file.
+    Convert the three enriched agent JSONs into an SDRF-Proteomics v1.1.0 TSV.
 
     agentic_output is expected to be the list returned by run_agentic_extraction:
         [TechnicalAgent enriched JSON, BiologicalAgent enriched JSON,
          ExperimentalDesignAgent enriched JSON]
 
-    The aggregated_results.json is resolved from the input argument kept at
-    module level as _last_input_json.
+    The TechnicalAgent enriched JSON provides the upstream RAW manifest.
     """
     from sdrf_builder import AgenticToSDRF
     print(agentic_output)
@@ -228,12 +225,25 @@ def agentic_to_sdrf(agentic_output: list[Path], sdrf_output: Path) -> None:
         return
 
     tech_json, bio_json, exp_json = agentic_output[0], agentic_output[1], agentic_output[2]
+    with tech_json.open(encoding="utf-8") as handle:
+        technical_document = json.load(handle)
+    raw_files = [
+        str(record.get("raw_file") or "").strip()
+        for record in technical_document.get("raw_file_manifest", [])
+        if isinstance(record, dict) and str(record.get("raw_file") or "").strip()
+    ]
+    if not raw_files:
+        raise ValueError("TechnicalAgent enriched JSON is missing raw_file_manifest")
+    pxd_match = re.match(r"(PXD\d+)", tech_json.name)
+    if not pxd_match:
+        raise ValueError(f"Could not extract PXD accession from TechnicalAgent JSON name: {tech_json.name}")
 
     builder = AgenticToSDRF(
         tech_json=tech_json,
         bio_json=bio_json,
         exp_json=exp_json,
-        aggregated_json=_last_input_json,
+        raw_files=raw_files,
+        pxd_id=pxd_match.group(1),
     )
     builder.to_sdrf(sdrf_output)
 ######################################################################################################
@@ -253,10 +263,7 @@ def main():
         sys.exit(f"ERROR: Input file not found: {args.input}")
 
     ###-------------------------------------------------------------------------------
-    ### Store the input path for use by agentic_to_sdrf()
-    global _last_input_json
-    _last_input_json = args.input.resolve()
-    pxd_match = re.match(r"(PXD\d+)", _last_input_json.name)
+    pxd_match = re.match(r"(PXD\d+)", args.input.name)
     if not pxd_match:
         sys.exit(f"ERROR: Could not extract PXD ID from filename: {_last_input_json.name}")
     pxd = pxd_match.group(1)

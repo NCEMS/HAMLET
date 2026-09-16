@@ -72,12 +72,12 @@ def modification_evidence(
         records.append(ModificationEvidence(
             name=name or accession or "",
             accession=accession,
-            targets=_targets(item.get("target") or item.get("residue") or item.get("position")),
+            targets=_targets(item.get("targets") or item.get("target") or item.get("residue") or item.get("position")),
             modification_type=_explicit_modification_type(item.get("modificationType") or item.get("mod_type")),
-            source="pride",
-            scope="study",
-            source_path=f"pride_metadata.project.identifiedPTMStrings[{index}]",
-            source_value=name or accession or "",
+            source=str(item.get("source") or "pride"),
+            scope=str(item.get("scope") or "study"),
+            source_path=str(item.get("source_path") or f"pride_metadata.project.identifiedPTMStrings[{index}]"),
+            source_value=str(item.get("source_value") or name or accession or ""),
         ))
 
     for field in ("ptm", "modification"):
@@ -104,20 +104,20 @@ def modification_evidence(
         if not isinstance(item, dict):
             continue
         unimod_id = item.get("unimod_id")
-        accession = f"UNIMOD:{unimod_id}" if unimod_id not in (None, "") else None
-        name = str(item.get("mod_name") or "").strip()
+        accession = str(item.get("accession") or "").strip() or (f"UNIMOD:{unimod_id}" if unimod_id not in (None, "") else None)
+        name = str(item.get("name") or item.get("mod_name") or "").strip()
         if not name and not accession:
             continue
         fraction = item.get("fraction_modified")
         records.append(ModificationEvidence(
             name=name or accession or "",
             accession=accession,
-            targets=_targets(item.get("allowed_residues")) + _targets(item.get("allowed_terms")),
+            targets=_targets(item.get("targets")) or (_targets(item.get("allowed_residues")) + _targets(item.get("allowed_terms"))),
             modification_type=_explicit_modification_type(item.get("modification_type") or item.get("mod_type")),
-            source="ptm_shepherd",
-            scope="assay",
-            source_path=f"modification_site_fractions.dda_closed_search.per_sample_files.{raw_stem}.data[{index}]",
-            source_value=name or accession or "",
+            source=str(item.get("source") or "ptm_shepherd"),
+            scope=str(item.get("scope") or "assay"),
+            source_path=str(item.get("source_path") or f"modification_site_fractions.dda_closed_search.per_sample_files.{raw_stem}.data[{index}]"),
+            source_value=str(item.get("source_value") or name or accession or ""),
             raw_stem=raw_stem,
             fraction_modified=float(fraction) if isinstance(fraction, (int, float)) else None,
         ))

@@ -22,7 +22,35 @@ from sdrf_modifications import parse_protocol_modifications
 from hamlet_version import HAMLET_VERSION
 
 
+def _direct_per_raw(value, *, unit=None, accession=None):
+    candidate = {
+        "value": value,
+        "source": "runassessor",
+        "scope": "assay",
+        "source_path": "runAssessor.files.run_1.mzML",
+        "cv_accession": accession,
+        "cv_name": unit,
+        "valid": True,
+    }
+    return {
+        "resolved": value,
+        "candidates": [candidate],
+        "selected_source_index": 0,
+    }
+
+
 class AgenticToSdrfParityTest(unittest.TestCase):
+    @staticmethod
+    def _archive_raw_files(pxd: str) -> list[str]:
+        aggregate_path = REPO_ROOT / "store" / "aggregated_results_files" / f"{pxd}_aggregated_results.json"
+        with aggregate_path.open(encoding="utf-8") as handle:
+            aggregate = json.load(handle)
+        return [
+            str(record.get("fileName") or "").strip()
+            for record in aggregate.get("pride_metadata", {}).get("files", [])
+            if isinstance(record, dict) and str(record.get("fileName") or "").lower().endswith(".raw")
+        ]
+
     def _builder_from_archive(self, pxd: str) -> AgenticToSDRF:
         result_dir = REPO_ROOT / "store" / "agentic_results_files" / pxd
         metadata_dir = result_dir / "metadata_extraction_output" / "integrated_output"
@@ -32,7 +60,8 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             tech_json=metadata_dir / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
             bio_json=metadata_dir / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
             exp_json=metadata_dir / "ExperimentalDesignAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
-            aggregated_json=REPO_ROOT / "store" / "aggregated_results_files" / f"{pxd}_aggregated_results.json",
+            raw_files=self._archive_raw_files(pxd),
+            pxd_id=pxd,
         )
 
     def test_pxd073162_generates_sdrf_and_confidence_sidecar(self) -> None:
@@ -53,7 +82,8 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             tech_json=metadata_dir / "TechnicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
             bio_json=metadata_dir / "BiologicalAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
             exp_json=metadata_dir / "ExperimentalDesignAgent" / "temp_0.0" / f"{pxd}_PubText_enriched.json",
-            aggregated_json=REPO_ROOT / "store" / "aggregated_results_files" / f"{pxd}_aggregated_results.json",
+            raw_files=self._archive_raw_files(pxd),
+            pxd_id=pxd,
             overrides=overrides,
             judge_document=override_document,
         )
@@ -202,16 +232,9 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             "precursor_tolerance": "10 ppm",
             "fragment_tolerance": "0.7 Da",
         }
-        builder._ra_search = {
-            "tolerances": {
-                "recommended overall precursor tolerance (ppm)": 3951,
-                "recommended overall fragment tolerance (ppm)": -0.488816,
-            },
-        }
-        builder._data_proc = ""
-        builder._sample_proc = ""
+        builder._tech = {"per_raw_file": {}}
 
-        self.assertEqual(builder._get_mass_tolerances(), ("10 ppm", "0.7 Da"))
+        self.assertEqual(builder._get_mass_tolerances("run_1"), ("10 ppm", "0.7 Da"))
 
     def test_modification_evidence_only_uses_supplied_structured_records(self) -> None:
         records = modification_evidence(
@@ -308,7 +331,47 @@ class AgenticToSdrfParityTest(unittest.TestCase):
         builder._data_proc = "Fragment tolerance 0.5 Da."
 
         self.assertEqual(builder._get_cleavage_agent(), "not available")
-        self.assertEqual(builder._get_mass_tolerances(), (None, None))
+        self.assertEqual(builder._get_mass_tolerances("run_1"), (None, None))
+
+    def test_builder_renders_enriched_documents_without_aggregate(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            tech_path = root / "technical.json"
+            bio_path = root / "biological.json"
+            exp_path = root / "experimental.json"
+            tech_path.write_text(json.dumps({
+                "instrument": {"resolved": "Q Exactive"},
+                "cleavage_agent": {"resolved": "trypsin"},
+                "precursor_tolerance": {"resolved": "10 ppm"},
+                "fragment_tolerance": {"resolved": "0.02 Da"},
+                "per_raw_file": {
+                    "run_1": {
+                        "instrument": _direct_per_raw("Q Exactive", accession="MS:1001911"),
+                        "acquisition": _direct_per_raw("DDA"),
+                        "label": _direct_per_raw("label-free"),
+                        "dissociation": _direct_per_raw("HCD"),
+                        "ms2_analyzer": _direct_per_raw("Orbitrap"),
+                        "modifications": [],
+                    },
+                },
+                "_meti_data": {"ptms": {"records": []}},
+            }), encoding="utf-8")
+            bio_path.write_text(json.dumps({"species": {"resolved": "Homo sapiens"}}), encoding="utf-8")
+            exp_path.write_text("{}", encoding="utf-8")
+
+            builder = AgenticToSDRF(
+                tech_json=tech_path,
+                bio_json=bio_path,
+                exp_json=exp_path,
+                raw_files=["run_1.raw"],
+                pxd_id="PXD999999",
+            )
+            columns, rows = builder.build_rows()
+
+        self.assertIn("comment[precursor mass tolerance]", columns)
+        self.assertEqual(rows[0]["comment[data file]"], "run_1.raw")
+        self.assertEqual(rows[0]["comment[instrument]"], "NT=Q Exactive;AC=MS:1001911")
+        self.assertEqual(rows[0]["comment[fragment mass tolerance]"], "0.02 Da")
 
     def test_builder_preserves_explicit_trypsin_p_and_direct_ms2_analyzer(self) -> None:
         builder = AgenticToSDRF.__new__(AgenticToSDRF)
@@ -317,11 +380,6 @@ class AgenticToSdrfParityTest(unittest.TestCase):
             "cleavage_agent": {"resolved": "Trypsin/P"},
             "ms2_analyzer": {"resolved": "ion trap"},
         }
-        builder._ra_files = {}
-        builder._ra_knowledge = {}
-        builder._ra_search = {}
-        builder._stem_to_mzml = {}
-        builder._quant_method = ""
 
         self.assertEqual(builder._get_cleavage_agent(), "NT=Trypsin/P;AC=MS:1001313")
         self.assertEqual(builder._get_ms2_analyzer("run_1"), "ion trap")
@@ -370,6 +428,19 @@ class AgenticToSdrfParityTest(unittest.TestCase):
 
     def test_silac_technical_labeling_expands_each_file_to_heavy_and_light_rows(self) -> None:
         builder = self._builder_from_archive("PXD005463")
+        builder._tech["per_raw_file"] = {
+            Path(raw_file).stem: {
+                "modifications": [{
+                    "name": "SILAC heavy K",
+                    "accession": "UNIMOD:259",
+                    "source": "ptm_shepherd",
+                    "scope": "assay",
+                    "source_path": "test.fixture",
+                    "source_value": "SILAC heavy K",
+                }],
+            }
+            for raw_file in builder._get_raw_files()
+        }
         columns, rows = builder.build_rows()
         self.assertEqual(len(rows), 6)
         self.assertEqual([row["comment[data file]"] for row in rows], [

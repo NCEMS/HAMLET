@@ -239,11 +239,12 @@ workflow {
         // llm_judge outputs: [pxd, judge_stage_output]
         llm_judge_ch_minimal = llm_judge(llm_judge_input_ch_minimal)[0]
         
-        // finalize_sdrf needs: [pxd, agentic_stage_output, aggregated_results, judge_stage_output]
+        // finalize_sdrf needs: [pxd, agentic_stage_output, judge_stage_output]
         // agentic_results_ch_minimal = [pxd, agentic_stage_output, aggregated_results]
         // llm_judge_ch_minimal = [pxd, judge_stage_output]
-        // Join on pxd to get all 4 elements
+        // Drop the aggregate before finalization and join on pxd.
         finalize_input_ch_minimal = agentic_results_ch_minimal
+            .map { pxd, agentic_output, agg_results -> [pxd, agentic_output] }
             .join(llm_judge_ch_minimal, by: 0)
         
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
@@ -307,6 +308,7 @@ workflow {
         '--base_dir', baseDir.toString(),
         '--outdir', params.outdir.toString(),
         '--central_dir', params.central_mzml_dir.toString(),
+        '--max_raw_files', (params.max_raw_files ?: 0).toString(),
         '--pxds', pxd_list.join(','),
     ]
     def manifestProc = new ProcessBuilder(manifestCmd.collect { it.toString() })
@@ -437,7 +439,7 @@ workflow {
     organism_with_context_ch = organism_id(organism_input_ch)
     
     // Extract just organism_results for downstream processes that don't need context
-    organism_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results ->
+    organism_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results, organism_status ->
         tuple(pxd, organism_results)
     }
     
@@ -509,10 +511,8 @@ workflow {
     llm_judge_ch = llm_judge(llm_judge_input_ch)[0]
 
     finalized_sdrf_input_ch = agentic_results_ch
+        .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output) }
         .join(llm_judge_ch)
-        .map { pxd, metadata_extraction_output, aggregated_results, judge_output ->
-            tuple(pxd, metadata_extraction_output, aggregated_results, judge_output)
-        }
 
     finalized_sdrf_ch = finalize_sdrf(finalized_sdrf_input_ch)[0]
 
@@ -758,6 +758,7 @@ process fetch_pxd {
     script:
     def aria2c_args = params.use_aria2c ? "--use_aria2c --aria2c_threads ${params.aria2c_threads}" : ""
     def max_files_arg = params.max_raw_files ? "--max_raw_files ${params.max_raw_files}" : ""
+    def manifest_max_raw_files = params.max_raw_files ?: 0
     def globus_destination_base = params.globus_destination_base ?: params.central_mzml_dir
     def globus_args = params.globus ? "--globus --globus_source_collection ${params.globus_source_collection} --globus_destination_base ${globus_destination_base}" : ""
     def globus_destination_arg = params.globus_destination_collection ? "--globus_destination_collection ${params.globus_destination_collection}" : ""
@@ -771,6 +772,7 @@ process fetch_pxd {
         --base_dir ${baseDir} \
         --outdir ${params.outdir} \
         --central_dir ${params.central_mzml_dir} \
+        --max_raw_files ${manifest_max_raw_files} \
         --pxd ${pxd} \
         --stage fetch || MANIFEST_RC=\$?
     if [ \$MANIFEST_RC -eq 0 ]; then
@@ -801,6 +803,7 @@ process fetch_pxd {
         --base_dir ${baseDir} \
         --outdir ${params.outdir} \
         --central_dir ${params.central_mzml_dir} \
+        --max_raw_files ${manifest_max_raw_files} \
         --pxd ${pxd} \
         --stage fetch || true
     """
@@ -914,7 +917,7 @@ process organism_id {
     tag "organism-${pxd}"
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false,
-        saveAs: { name -> name == 'organism_results' ? name : null }
+        saveAs: { name -> name in ['organism_results', 'organism_status.json'] ? name : null }
 
     cache 'deep'
 
@@ -926,7 +929,7 @@ process organism_id {
     tuple val(pxd), path(fetched_dir), path(detected_params), path(contaminants_fasta), path(taxid_list_file), path(llm_results)
 
     output:
-    tuple val(pxd), path(fetched_dir), path(detected_params), path("organism_results")
+    tuple val(pxd), path(fetched_dir), path(detected_params), path("organism_results"), path("organism_status.json")
 
     script:
     def peptonizer_container_arg = params.peptonizer_container ? "--peptonizer_container ${params.peptonizer_container}" : ""
@@ -958,6 +961,9 @@ process organism_id {
         fi
         if [ ! -f "organism_results/empty.json" ]; then
             echo '{}' > organism_results/empty.json
+        fi
+        if [ ! -f "organism_status.json" ]; then
+            echo '{"status":"interrupted_or_wrapper_failure","reason":"organism_id did not write a status file"}' > organism_status.json
         fi
         echo "TRAP: Ensured organism_results/empty.json exists"
     }
@@ -1041,7 +1047,8 @@ process organism_id {
         ${peptonizer_container_arg} \
         --log_file organism/events.jsonl \
         --results_base_dir ${params.outdir} \
-        --pxd ${pxd}
+        --pxd ${pxd} \
+        --status_file organism_status.json
     
     ORGANISM_EXIT_CODE=\$?
     
@@ -1050,6 +1057,7 @@ process organism_id {
         echo "WARNING: organism_id process failed with exit code \$ORGANISM_EXIT_CODE (likely timeout or GPU error)"
         echo "Creating empty organism_results so downstream processes can continue with PRIDE/LLM taxids only"
         echo '{}' > organism_results/empty.json
+        printf '{"status":"execution_failed","reason":"organism_id exit code %s"}\n' "\$ORGANISM_EXIT_CODE" > organism_status.json
     fi
 
     ls -R organism_results || true
@@ -1483,7 +1491,7 @@ process finalize_sdrf {
     errorStrategy 'terminate'
 
     input:
-    tuple val(pxd), path(agentic_stage_output), path(aggregated_results), path(judge_stage_output)
+    tuple val(pxd), path(agentic_stage_output), path(judge_stage_output)
 
     output:
     tuple val(pxd), path("finalize_stage_output")
@@ -1523,9 +1531,7 @@ process finalize_sdrf {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/finalize_sdrf.py \
         --pxd ${pxd} \
         --input_dir ${agentic_stage_output} \
-        --aggregated_json ${aggregated_results} \
         --output_dir finalize_stage_output \
-        --pmc_cache ${baseDir}/pride_survey/pmc_cache \
         \${judge_args}
 
     # Promote flat SDRF to task root so Nextflow can publish it directly to hamlet_sdrfs/

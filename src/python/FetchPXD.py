@@ -21,6 +21,7 @@ from pmc_client import PMCClient
 
 EXIT_NO_RAW_FILES = 42
 PRIDE_GLOBUS_COLLECTION = "47772002-3e5b-4fd3-b97c-18cee38d6df2"
+FETCH_INVENTORY_FILENAME = "fetch_inventory.json"
 ###################################################################################################################################################
 def fetch_pride_project_and_files(pxd: str, page_size: int = 200, timeout: int = 20, max_pages: Optional[int] = 100, session: Optional[requests.Session] = None) -> Dict[str, Any]:
     """
@@ -223,6 +224,66 @@ def select_raw_file_records(files_info: List[Dict[str, Any]], max_raw_files: Opt
     return selected
 
 
+def raw_file_stem(file_name: str) -> str:
+    """Return the extension-free stem used by matching RAW and mzML files."""
+    return Path(file_name).stem
+
+
+def missing_raw_file_records(
+    selected_files: List[Dict[str, str]],
+    valid_mzml_stems: set[str],
+) -> List[Dict[str, str]]:
+    """Return selected PRIDE RAW records without a valid converted mzML file."""
+    return [
+        file_record
+        for file_record in selected_files
+        if raw_file_stem(file_record["file_name"]) not in valid_mzml_stems
+    ]
+
+
+def local_raw_files_by_stem(pxd_dir: str) -> Dict[str, str]:
+    """Index retained RAW files by normalized stem for incremental conversion."""
+    return {
+        raw_file_stem(file_name): os.path.join(pxd_dir, file_name)
+        for file_name in os.listdir(pxd_dir)
+        if file_name.lower().endswith(".raw")
+    }
+
+
+def normalized_max_raw_files(max_raw_files: Optional[int]) -> Optional[int]:
+    """Represent zero and omitted caps consistently as an uncapped selection."""
+    return max_raw_files if max_raw_files and max_raw_files > 0 else None
+
+
+def write_fetch_inventory(
+    pxd_dir: str,
+    pxd: str,
+    selected_files: List[Dict[str, str]],
+    max_raw_files: Optional[int],
+) -> None:
+    """Persist the exact PRIDE RAW selection used to populate a central cache."""
+    inventory = {
+        "pxd": pxd,
+        "max_raw_files": normalized_max_raw_files(max_raw_files),
+        "complete": False,
+        "selected_raw_files": [file_record["file_name"] for file_record in selected_files],
+        "expected_mzml_stems": [raw_file_stem(file_record["file_name"]) for file_record in selected_files],
+    }
+    inventory_path = os.path.join(pxd_dir, FETCH_INVENTORY_FILENAME)
+    with open(inventory_path, "w", encoding="utf-8") as handle:
+        json.dump(inventory, handle, indent=2)
+
+
+def mark_fetch_inventory_complete(pxd_dir: str) -> None:
+    """Record that every selected PRIDE RAW file has a valid mzML output."""
+    inventory_path = os.path.join(pxd_dir, FETCH_INVENTORY_FILENAME)
+    with open(inventory_path, "r", encoding="utf-8") as handle:
+        inventory = json.load(handle)
+    inventory["complete"] = True
+    with open(inventory_path, "w", encoding="utf-8") as handle:
+        json.dump(inventory, handle, indent=2)
+
+
 def pride_ftp_url_to_globus_path(ftp_url: str) -> str:
     parsed = urlparse(ftp_url)
     prefix = "/pride/data/archive/"
@@ -356,7 +417,7 @@ def extract_zip_file(zip_path: str, extract_to: str) -> bool:
         return False
 
 ###################################################################################################################################################
-def convert_spectral_file_to_mzml(file_path: str, max_retries: int = 3):
+def convert_spectral_file_to_mzml(file_path: str):
     """
     Convert .RAW files to centroided .mzML.
     
@@ -365,8 +426,6 @@ def convert_spectral_file_to_mzml(file_path: str, max_retries: int = 3):
     
     Args:
         file_path: Path to .raw file
-        max_retries: Number of retries on failure (default 3, exponential backoff)
-    
     Returns:
         Path to output .mzML if successful, None otherwise
     """
@@ -385,10 +444,10 @@ def convert_spectral_file_to_mzml(file_path: str, max_retries: int = 3):
         return outfile
     
     # Convert .raw to .mzML using ThermoRawFileParser
-    return _convert_thermo_raw_to_mzml(file_path, outfile, max_retries)
+    return _convert_thermo_raw_to_mzml(file_path, outfile)
 
 ###################################################################################################################################################
-def _convert_thermo_raw_to_mzml(file_path: str, outfile: str, max_retries: int = 3):
+def _convert_thermo_raw_to_mzml(file_path: str, outfile: str):
     """
     Convert Thermo .RAW files to .mzML using ThermoRawFileParser.
     
@@ -398,96 +457,51 @@ def _convert_thermo_raw_to_mzml(file_path: str, outfile: str, max_retries: int =
     Args:
         file_path: Path to .raw file
         outfile: Path to output .mzML file
-        max_retries: Number of retries on failure
     """
     abs_file_path = os.path.abspath(file_path)
     abs_outdir = os.path.dirname(abs_file_path)
     filename_only = os.path.basename(file_path)
     
-    # Retry loop with exponential backoff
-    for attempt in range(max_retries + 1):
-        try:
-            print(f"\n{'='*80}")
-            print(f"Converting {file_path} --> .mzML via ThermoRawFileParser")
-            if attempt > 0:
-                print(f"RETRY ATTEMPT {attempt}/{max_retries}")
-            print(f"{'='*80}")
-            
-            # Build ThermoRawFileParser command
-            # -i: input file
-            # -b: output file path
-            # -f: format (2 = indexed mzML)
-            # By default: peak picking enabled, zlib compression enabled
-            cmd = [
-                "ThermoRawFileParser",
-                "-i", abs_file_path,
-                "-b", outfile,
-                "-f", "2"  # 2 = indexed mzML (includes peak picking and zlib by default)
-            ]
-            
-            print(f"\nCommand:")
-            print(f"  {' '.join(cmd)}")
-            
-            print(f"\nInput file:")
-            print(f"  {abs_file_path} ({os.path.getsize(abs_file_path)} bytes)")
-            print(f"Output directory:")
-            print(f"  {abs_outdir}")
-            
-            print(f"\nRunning ThermoRawFileParser...")
-            result = subprocess.run(
-                cmd,
-                check=True,
-                capture_output=True,
-                text=True,
-                timeout=6000  # 100 minute timeout
-            )
-            print(result.stdout)
-            if result.stderr:
-                print(f"(stderr): {result.stderr}")
-            
-            # Verify output file was created
-            if os.path.exists(outfile):
-                print(f"\nSuccess! Finished converting {file_path} --> {outfile}")
-                return outfile
-            else:
-                raise RuntimeError(f"Output file not created: {outfile}")
-
-        except subprocess.TimeoutExpired:
-            error_msg = f"TIMEOUT: ThermoRawFileParser conversion exceeded 10 minutes for {file_path}"
-            print(f"ERROR: {error_msg}")
-            if attempt < max_retries:
-                backoff_seconds = 2 ** attempt
-                print(f"Retrying in {backoff_seconds} seconds...")
-                time.sleep(backoff_seconds)
-                continue
-            else:
-                print(f"Giving up after {max_retries} retries")
-                return None
-                
-        except subprocess.CalledProcessError as e:
-            print(f"ERROR: ThermoRawFileParser failed with exit code {e.returncode}")
-            print(f"stdout:\n{e.stdout}")
-            print(f"stderr:\n{e.stderr}")
-            
-            if attempt < max_retries:
-                backoff_seconds = 2 ** attempt
-                print(f"Retrying in {backoff_seconds} seconds...")
-                time.sleep(backoff_seconds)
-                continue
-            else:
-                print("Continuing to next file...")
-                return None
-                
-        except Exception as e:
-            print(f"ERROR: Unexpected error converting {file_path}: {e}")
-            if attempt < max_retries:
-                backoff_seconds = 2 ** attempt
-                print(f"Retrying in {backoff_seconds} seconds...")
-                time.sleep(backoff_seconds)
-                continue
-            else:
-                return None
-    
+    try:
+        print(f"\n{'='*80}")
+        print(f"Converting {file_path} --> .mzML via ThermoRawFileParser")
+        print(f"{'='*80}")
+        cmd = [
+            "ThermoRawFileParser",
+            "-i", abs_file_path,
+            "-b", outfile,
+            "-f", "2",
+        ]
+        print(f"\nCommand:")
+        print(f"  {' '.join(cmd)}")
+        print(f"\nInput file:")
+        print(f"  {abs_file_path} ({os.path.getsize(abs_file_path)} bytes)")
+        print(f"Output directory:")
+        print(f"  {abs_outdir}")
+        print(f"\nRunning ThermoRawFileParser...")
+        result = subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=6000,
+        )
+        print(result.stdout)
+        if result.stderr:
+            print(f"(stderr): {result.stderr}")
+        if os.path.exists(outfile):
+            print(f"\nSuccess! Finished converting {file_path} --> {outfile}")
+            return outfile
+        raise RuntimeError(f"Output file not created: {outfile}")
+    except subprocess.TimeoutExpired:
+        print(f"ERROR: ThermoRawFileParser conversion exceeded 10 minutes for {file_path}")
+    except subprocess.CalledProcessError as e:
+        print(f"ERROR: ThermoRawFileParser failed with exit code {e.returncode}")
+        print(f"stdout:\n{e.stdout}")
+        print(f"stderr:\n{e.stderr}")
+    except Exception as e:
+        print(f"ERROR: Unexpected error converting {file_path}: {e}")
+    print("Continuing to next file...")
     return None
 
 ###################################################################################################################################################
@@ -879,54 +893,6 @@ def processes_pxds(
         # Create directory for this PXD
         pxd_dir = os.path.join(download_dir, pxd)
         os.makedirs(pxd_dir, exist_ok=True)
-        
-        # CHECK: Skip if mzML files already exist in central repository
-        exists, mzml_files = check_existing_mzml_files(pxd_dir)
-        if exists:
-            print(f"✓ Found {len(mzml_files)} existing mzML file(s) in central repository: {pxd_dir}")
-            # Validate existing files
-            all_valid = True
-            for mzml in mzml_files:
-                is_valid, reason = validate_mzml_file(mzml)
-                if is_valid:
-                    print(f"  ✓ {os.path.basename(mzml)} is valid")
-                else:
-                    print(f"  ✗ {os.path.basename(mzml)} is corrupted: {reason}")
-                    # Delete corrupted file so it can be re-downloaded
-                    os.remove(mzml)
-                    all_valid = False
-            
-            if all_valid:
-                removed_raw_count = remove_converted_raw_files(pxd_dir)
-                if removed_raw_count:
-                    print(f"✓ Removed {removed_raw_count} converted RAW file(s) from central storage")
-                print(f"✓ All files valid, skipping download for {pxd}")
-                # Run runAssessor if requested and its output is missing.
-                if skip_run_assessor:
-                    print("  Skipping runAssessor (handled by separate pipeline stage)")
-                else:
-                    runAssessor_outfile = os.path.join(download_dir, pxd, "runAssessor", "study_metadata.json")
-                    if not os.path.exists(runAssessor_outfile):
-                        print(f"  runAssessor output missing for {pxd}, running now...")
-                        run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
-                    else:
-                        print(f"  ✓ runAssessor output already exists: {runAssessor_outfile}")
-                # Create symlink in current work directory for Nextflow output
-                work_pxd_dir = os.path.join('.', pxd)
-                if os.path.islink(work_pxd_dir):
-                    os.unlink(work_pxd_dir)
-                else:
-                    if os.path.isdir(work_pxd_dir):
-                        shutil.rmtree(work_pxd_dir)
-                os.symlink(pxd_dir, work_pxd_dir)
-                print(f"✓ Created symlink: {work_pxd_dir} → {pxd_dir}")
-                if logger:
-                    logger.process_step("fetch", f"Reusing existing files for {pxd}", {"pxd": pxd, "mzml_count": len(mzml_files)})
-                continue
-            else:
-                print(f"⚠ Some files corrupted, will re-download missing files...")
-
-        print(f"Created directory for PXD {pxd}: {pxd_dir}")
 
         pride_data = fetch_pride_project_and_files(pxd)
         project_info = pride_data['project']
@@ -937,6 +903,75 @@ def processes_pxds(
         with open(metadata_file, 'w') as mf:
             json.dump(pride_data, mf, indent=2)
         print(f"Saved project metadata to {metadata_file}")
+
+        selected_files = select_raw_file_records(files_info, max_raw_files)
+        if not selected_files:
+            warning_msg = f"WARNING: No downloadable .raw files were found for {pxd}. This PXD will be skipped."
+            print(warning_msg)
+            if logger:
+                logger.process_error("fetch", warning_msg, is_fatal=True, details={"pxd": pxd})
+            sys.exit(EXIT_NO_RAW_FILES)
+        write_fetch_inventory(pxd_dir, pxd, selected_files, max_raw_files)
+
+        _, mzml_files = check_existing_mzml_files(pxd_dir)
+        valid_mzml_stems = set()
+        for mzml in mzml_files:
+            is_valid, reason = validate_mzml_file(mzml)
+            if is_valid:
+                valid_mzml_stems.add(raw_file_stem(mzml))
+            else:
+                print(f"  ✗ {os.path.basename(mzml)} is corrupted: {reason}")
+                os.remove(mzml)
+
+        missing_files = missing_raw_file_records(selected_files, valid_mzml_stems)
+        if not missing_files:
+            mark_fetch_inventory_complete(pxd_dir)
+            removed_raw_count = remove_converted_raw_files(pxd_dir)
+            if removed_raw_count:
+                print(f"✓ Removed {removed_raw_count} converted RAW file(s) from central storage")
+            print(
+                f"✓ Reusing {len(valid_mzml_stems)} valid mzML file(s) for {pxd}; "
+                f"all {len(selected_files)} selected PRIDE RAW file(s) are covered"
+            )
+            if skip_run_assessor:
+                print("  Skipping runAssessor (handled by separate pipeline stage)")
+            else:
+                runAssessor_outfile = os.path.join(download_dir, pxd, "runAssessor", "study_metadata.json")
+                if not os.path.exists(runAssessor_outfile):
+                    print(f"  runAssessor output missing for {pxd}, running now...")
+                    run_runAssessor(output_dir=pxd_dir, central_mzml_dir=download_dir, pxd=pxd)
+                else:
+                    print(f"  ✓ runAssessor output already exists: {runAssessor_outfile}")
+            work_pxd_dir = os.path.join('.', pxd)
+            if os.path.islink(work_pxd_dir):
+                os.unlink(work_pxd_dir)
+            elif os.path.isdir(work_pxd_dir):
+                shutil.rmtree(work_pxd_dir)
+            os.symlink(pxd_dir, work_pxd_dir)
+            print(f"✓ Created symlink: {work_pxd_dir} → {pxd_dir}")
+            if logger:
+                logger.process_step(
+                    "fetch",
+                    f"Reusing complete selected inventory for {pxd}",
+                    {"pxd": pxd, "mzml_count": len(valid_mzml_stems), "selected_raw_count": len(selected_files)},
+                )
+            continue
+
+        print(
+            f"Found {len(valid_mzml_stems)}/{len(selected_files)} selected PRIDE RAW file(s) "
+            f"as valid mzML; fetching {len(missing_files)} missing file(s) for {pxd}"
+        )
+        retained_raw_files = local_raw_files_by_stem(pxd_dir)
+        files_to_download = [
+            file_record
+            for file_record in missing_files
+            if raw_file_stem(file_record["file_name"]) not in retained_raw_files
+        ]
+        if len(files_to_download) != len(missing_files):
+            print(
+                f"Reusing {len(missing_files) - len(files_to_download)} retained RAW file(s) "
+                "for conversion"
+            )
 
         # Fetch PMC publication text if PMID is available
         try:
@@ -994,11 +1029,10 @@ def processes_pxds(
             if logger:
                 logger.process_error("fetch", f"PMC fetch error: {str(e)}", is_fatal=False)
 
-        selected_files = select_raw_file_records(files_info, max_raw_files)
-        if use_globus and selected_files:
+        if use_globus and files_to_download:
             transfer_files_via_globus(
                 pxd,
-                selected_files,
+                files_to_download,
                 pxd_dir,
                 globus_source_collection,
                 globus_destination_collection,
@@ -1007,12 +1041,14 @@ def processes_pxds(
 
         num_raw_downloaded = 0
         num_download_failures = 0
-        for selected_file in selected_files:
+        for selected_file in missing_files:
             file_name = selected_file["file_name"]
             ftp_url = selected_file["ftp_url"]
-            outfile_path = os.path.join(pxd_dir, file_name)
+            raw_stem = raw_file_stem(file_name)
+            retained_raw = raw_stem in retained_raw_files
+            outfile_path = retained_raw_files.get(raw_stem, os.path.join(pxd_dir, file_name))
 
-            if not use_globus:
+            if not retained_raw and not use_globus:
                 print(f"Downloading .raw file {file_name} from {ftp_url} to {outfile_path}")
                 try:
                     if use_aria2c:
@@ -1056,30 +1092,50 @@ def processes_pxds(
                 })
         print(f"{'='*80}\n")
 
-        # ERROR HANDLING: Check if any spectral files were downloaded
-        if num_raw_downloaded == 0:
-            warning_msg = f"WARNING: No .raw or .wiff files could be downloaded for {pxd}. This PXD will be skipped."
+        _, completed_mzml_files = check_existing_mzml_files(pxd_dir)
+        completed_mzml_stems = set()
+        for mzml in completed_mzml_files:
+            is_valid, reason = validate_mzml_file(mzml)
+            if is_valid:
+                completed_mzml_stems.add(raw_file_stem(mzml))
+            else:
+                print(f"  ✗ {os.path.basename(mzml)} is corrupted: {reason}")
+                os.remove(mzml)
+
+        incomplete_files = missing_raw_file_records(selected_files, completed_mzml_stems)
+        if incomplete_files:
+            incomplete_names = ", ".join(file_record["file_name"] for file_record in incomplete_files)
+            warning_msg = (
+                f"WARNING: Fetch did not produce valid mzML files for all selected PRIDE RAW files "
+                f"for {pxd}: {incomplete_names}"
+            )
             print(f"\n{'='*80}")
             print(warning_msg)
             print(f"{'='*80}\n")
             
             # Log to pipeline logger
             if logger:
-                logger.process_error("fetch", "No .raw or .wiff files could be downloaded", is_fatal=True, details={"pxd": pxd})
+                logger.process_error("fetch", warning_msg, is_fatal=True, details={"pxd": pxd})
             
             # Log warning to file
-            warning_log_file = os.path.join(pxd_dir, f"{pxd}_NO_SPECTRAL_FILES_WARNING.log")
+            warning_log_file = os.path.join(pxd_dir, f"{pxd}_INCOMPLETE_FETCH_WARNING.log")
             with open(warning_log_file, 'w') as wf:
                 wf.write(warning_msg + "\n")
                 wf.write(f"Timestamp: {pd.Timestamp.now()}\n")
-                wf.write(f"No .raw or .wiff files were found or downloadable for this PXD.\n")
+                wf.write(
+                    f"Valid mzML coverage: {len(completed_mzml_stems)}/{len(selected_files)} "
+                    "selected PRIDE RAW files.\n"
+                )
+                wf.write("One or more selected PRIDE RAW files were not converted to valid mzML.\n")
             
             print(f"Warning logged to: {warning_log_file}")
-            # Use a distinct exit code so Nextflow can ignore/skip this PXD without
-            # treating it as a transient download failure.
-            sys.exit(EXIT_NO_RAW_FILES)
+            raise RuntimeError(warning_msg)
 
-        print(f"\nSuccessfully downloaded and converted {num_raw_downloaded} spectrum file(s) for {pxd}")
+        print(
+            f"\nSelected inventory complete for {pxd}: {len(completed_mzml_stems)}/"
+            f"{len(selected_files)} RAW file(s) have valid mzML outputs"
+        )
+        mark_fetch_inventory_complete(pxd_dir)
         
         # VALIDATION: Verify all mzML files are valid
         exists, mzml_files = check_existing_mzml_files(pxd_dir)

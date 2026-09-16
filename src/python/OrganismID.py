@@ -866,7 +866,7 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                     text=True,
                     check=True,
                     env=env,
-                    timeout=7200,  # 2-hour per-file safety timeout
+                    timeout=43200,  # 12-hour per-file safety timeout
                 )
             print(f"{tool_name} (GPU) succeeded.")
             
@@ -937,9 +937,9 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 continue
 
         except subprocess.TimeoutExpired:
-            print(f"\u2717 {tool_name} timed out (>2h) for {mzml_path}, skipping file")
+            print(f"\u2717 {tool_name} timed out (>12h) for {mzml_path}, skipping file")
             with open(log_file, "w") as lf:
-                lf.write(f"ERROR: {tool_name} timed out after 7200s for {mzml_path}\n")
+                lf.write(f"ERROR: {tool_name} timed out after 43200s for {mzml_path}\n")
             continue
 
         # only count it if the .mztab is actually there
@@ -1134,6 +1134,18 @@ def count_unique_species(taxid_list, taxonomy):
     return len(species)
 
 ###############################################
+def write_organism_status(status_file, **status):
+    """Persist the usable-result state for a completed organism-ID attempt."""
+    if not status_file:
+        return
+    status_path = Path(status_file)
+    status_path.parent.mkdir(parents=True, exist_ok=True)
+    with status_path.open("w", encoding="utf-8") as handle:
+        json.dump(status, handle, indent=2)
+        handle.write("\n")
+
+
+###############################################
 def main():
 
     ## Get the user arguments
@@ -1163,6 +1175,8 @@ def main():
     parser.add_argument('--organism_id_all', action='store_true', default=False,
                         help='Force organism_id on every file even when only a single taxid is reported '
                              'by PRIDE metadata and LLM results')
+    parser.add_argument('--status_file', default=None,
+                        help='Optional JSON file describing whether usable Peptonizer results were produced')
     args = parser.parse_args()
 
     # Initialize logger if log_file specified
@@ -1206,6 +1220,20 @@ def main():
         
         shutil.copytree(cached_organism_results, args.output_dir)
         print(f"✓ Copied cached results to {args.output_dir}")
+
+        cached_results = sorted(
+            str(path) for path in Path(args.output_dir).rglob("peptonizer_result.csv")
+            if path.is_file() and path.stat().st_size > 0
+        )
+        write_organism_status(
+            args.status_file,
+            pxd=pxd,
+            status="usable_results" if cached_results else "no_usable_results",
+            reason="cached_peptonizer_results" if cached_results else "cached_results_missing_peptonizer_csv",
+            cached=True,
+            usable_result_count=len(cached_results),
+            usable_result_files=cached_results,
+        )
         
         # Log completion
         if logger:
@@ -1342,6 +1370,39 @@ def main():
             pxd_name=os.path.basename(args.input_dir.rstrip("/")),
             denovo_threshold_pct=denovo_threshold_pct,
         )
+
+    usable_results = sorted(
+        str(path) for path in Path(args.output_dir).rglob("peptonizer_result.csv")
+        if path.is_file() and path.stat().st_size > 0
+    )
+    if usable_results:
+        status = "usable_results"
+        reason = "peptonizer_results_created"
+    elif not denovo_files:
+        status = "no_usable_results"
+        reason = "no_denovo_output"
+    elif not filtered_files:
+        status = "no_usable_results"
+        reason = "no_filtered_denovo_peptides"
+    else:
+        status = "no_usable_results"
+        reason = "no_peptonizer_result"
+
+    write_organism_status(
+        args.status_file,
+        pxd=pxd,
+        status=status,
+        reason=reason,
+        cached=False,
+        run_all_files=run_all_files,
+        total_mzml_files=len(all_mzml_files),
+        processed_mzml_files=len(file_subset) if file_subset is not None else len(all_mzml_files),
+        representative_mzml=representative_mzml,
+        denovo_output_count=len(denovo_files),
+        filtered_output_count=len(filtered_files),
+        usable_result_count=len(usable_results),
+        usable_result_files=usable_results,
+    )
 
     # Log completion
     if logger:
