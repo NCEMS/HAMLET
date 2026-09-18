@@ -1,4 +1,15 @@
-const state = { records: [], selected: null, summary: null, qcSummary: null, tableDefinitions: null, qcMetric: "judge_accuracy", qcDeltaMode: "relative_delta", qcComparisonId: null };
+const state = {
+  records: [],
+  selected: null,
+  summary: null,
+  qcSummary: null,
+  tableDefinitions: null,
+  qcMetric: "judge_accuracy",
+  qcDeltaMode: "relative_delta",
+  qcComparisonId: null,
+  qcBaselineVersion: null,
+  qcCandidateVersion: null,
+};
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
 const filter = document.querySelector("#pxd-filter");
@@ -275,10 +286,20 @@ function qcComparisons(summary) {
 function activeQcComparison(summary) {
   const comparisons = qcComparisons(summary);
   if (!comparisons.length) return null;
+  if (state.qcBaselineVersion && state.qcCandidateVersion) {
+    const chosen = comparisons.find(comparison => comparison.baseline_version === state.qcBaselineVersion && comparison.candidate_version === state.qcCandidateVersion)
+      || comparisons.find(comparison => comparison.baseline_version === state.qcCandidateVersion && comparison.candidate_version === state.qcBaselineVersion);
+    if (chosen) {
+      state.qcComparisonId = chosen.comparison_id;
+      return chosen;
+    }
+  }
   const selected = comparisons.find(comparison => comparison.comparison_id === state.qcComparisonId);
   if (selected) return selected;
   const fallback = comparisons.find(comparison => comparison.comparison_id === summary.default_comparison_id) || comparisons[0];
   state.qcComparisonId = fallback.comparison_id;
+  state.qcBaselineVersion = fallback.baseline_version;
+  state.qcCandidateVersion = fallback.candidate_version;
   return fallback;
 }
 
@@ -365,17 +386,25 @@ function qcOverview(summary) {
     ["Judge pairs", formatNumber(comparison.summary?.judge_pairs_available || 0)],
   ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>Static release comparison from versioned store artifacts</small></article>`).join("");
   const metrics = qcCategoryMetricOptions(comparison);
-  const comparisonSelector = comparisons.length > 1
-    ? `<div class="qc-controls"><label for="qc-comparison">Version pair</label><select id="qc-comparison">${comparisons.map(item => `<option value="${esc(item.comparison_id)}"${item.comparison_id === comparison.comparison_id ? " selected" : ""}>${esc(`${item.baseline_version} -> ${item.candidate_version}`)}</option>`).join("")}</select></div>`
-    : `<p class="section-note">Comparing ${esc(comparison.baseline_version)} to ${esc(comparison.candidate_version)}.</p>`;
+  const versionOptions = [...new Set(comparisons.flatMap(item => [item.baseline_version, item.candidate_version]))]
+    .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+  const comparisonSelector = `<div class="qc-controls"><label for="qc-baseline-version">Baseline</label><select id="qc-baseline-version">${versionOptions.map(version => `<option value="${esc(version)}"${version === comparison.baseline_version ? " selected" : ""}>${esc(version)}</option>`).join("")}</select><label for="qc-candidate-version">Candidate</label><select id="qc-candidate-version">${versionOptions.map(version => `<option value="${esc(version)}"${version === comparison.candidate_version ? " selected" : ""}>${esc(version)}</option>`).join("")}</select></div>`;
   const metricControls = metrics.length
     ? `<div class="qc-controls"><label for="qc-metric">Judge metric</label><select id="qc-metric">${metrics.map(metric => `<option value="${esc(metric)}"${metric === state.qcMetric ? " selected" : ""}>${esc(metric)}</option>`).join("")}</select><label for="qc-delta-mode">Change</label><select id="qc-delta-mode"><option value="relative_delta"${state.qcDeltaMode === "relative_delta" ? " selected" : ""}>Relative</option><option value="absolute_delta"${state.qcDeltaMode === "absolute_delta" ? " selected" : ""}>Absolute</option></select></div><div id="qc-metric-plot" class="qc-plot"></div>`
     : "<p class=\"section-note\">No category-level judge deltas are available for this published comparison.</p>";
   setTimeout(() => {
-    const comparisonSelect = document.querySelector("#qc-comparison");
+    const baselineSelect = document.querySelector("#qc-baseline-version");
+    const candidateSelect = document.querySelector("#qc-candidate-version");
     const metricSelect = document.querySelector("#qc-metric");
     const deltaSelect = document.querySelector("#qc-delta-mode");
-    if (comparisonSelect) comparisonSelect.addEventListener("change", () => { state.qcComparisonId = comparisonSelect.value; renderOverview(); });
+    if (baselineSelect) baselineSelect.addEventListener("change", () => {
+      state.qcBaselineVersion = baselineSelect.value;
+      renderOverview();
+    });
+    if (candidateSelect) candidateSelect.addEventListener("change", () => {
+      state.qcCandidateVersion = candidateSelect.value;
+      renderOverview();
+    });
     if (metricSelect) metricSelect.addEventListener("change", () => { state.qcMetric = metricSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
     if (deltaSelect) deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
     renderQcMetricPlot(activeQcComparison(summary));
