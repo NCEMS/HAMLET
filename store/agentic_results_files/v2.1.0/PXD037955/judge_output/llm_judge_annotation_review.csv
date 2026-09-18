@@ -1,0 +1,100 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD037955","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""human CD147 transgenic mouse model"", ""human angiotensin-converting enzyme 2"", and the use of ""PBMCs from ten convalescent individuals"" and ""volunteers"", confirming the use of human samples.
+TRUTH CHECK:       The use of human PBMCs and serum for the mass spectrometry and metabolomics experiments is factually correct.
+COMPLETENESS CHECK:    The full set contains ""Homo sapiens"", which covers the primary human subjects used in the proteomics/metabolomics parts of the study. While mice were used for antibody production and infection models, the core proteomics (ligandome) and metabolomics were performed on human samples.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE","Homo sapiens, Mus musculus"
+"PXD037955","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text explicitly mentions ""Q Exactive™ Plus (Thermo Fisher Scientific)"" in the Ligandome LC-MS/MS analysis section.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The paper mentions two different mass spectrometers: the ""timsTOF Pro2"" (for HBV peptides) and the ""Q Exactive Plus"" (for Delta/Omicron peptides). The current set only includes one of them.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Q Exactive Plus"", ""timsTOF Pro2""]","Q Exactive Plus, timsTOF Pro2"
+"PXD037955","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes LC-MS/MS analysis of HLA-peptide complexes and metabolomics profiling without mentioning any isobaric or metabolic labels.
+TRUTH CHECK:       Since no labeling reagents (like TMT or SILAC) are mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD037955","ExperimentalDesignAgent","replicates","aAPC cell lines (Cos-7)","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""aAPC cell lines (Cos-7)"" is a cell line name, not a numeric count of biological replicates.
+SOURCE CHECK:      The value ""aAPC cell lines (Cos-7)"" is present in the text, but it refers to the material used, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains a cell line name and a number (""4""), neither of which is clearly supported as the biological replicate count for the MS experiments in the text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD037955","ExperimentalDesignAgent","replicates","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""4"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper does not mention ""4"" as the number of biological replicates for any of the experiments described.
+TRUTH CHECK:       The value is not supported by the text. The paper mentions ""ten convalescent individuals"" and ""nine volunteers (3-dose vaccinees)"", but not 4 replicates.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; ""aAPC cell lines (Cos-7)"" is a cell line, not a replicate count, and ""4"" is not found in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD037955","ExperimentalDesignAgent","experimental_design","Comparison of HLA-peptide complexes between Delta and BA.1 Omicron variants across different HLA-A alleles","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental objective/comparison rather than a study design type (e.g., ""case-control"", ""treated vs control"").
+SOURCE CHECK:      The comparison described is present in the text, but the value is a description of the experiment's goal, not its design category.
+TRUTH CHECK:       While the experiment did compare these complexes, the value does not fit the definition of ""experimental_design"".
+COMPLETENESS CHECK: The full set contains only this descriptive value and fails to provide a standard study design type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD037955","ExperimentalDesignAgent","factor_value","variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*24:02)","variant (Delta, BA.1 Omicron), HLA allele (HLA-A*02:01, HLA-A*24:02)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes experimental variables (virus variants and HLA alleles), which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly compares Delta and BA.1 Omicron variants and specifies the use of HLA-A*02:01, HLA-A*11:01, and HLA-A*24:02.
+TRUTH CHECK:       The values are factually correct, although the candidate value omits HLA-A*11:01.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because it omits the HLA-A*11:01 allele and fails to mention other key factors such as vaccination status (2-dose vs 3-dose) and the comparison between SARS-CoV-2 wildtype and variants.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:     no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""variant (SARS-CoV-2 wildtype, Delta, BA.1 Omicron)"", ""HLA allele (HLA-A*02:01, HLA-A*11:01, HLA-A*24:02)"", ""vaccination status (non-vaccinated, 2-dose, 3-dose)""]",""
+"PXD037955","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation steps for the MS analyses; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK:       The value is factually correct based on the absence of fractionation descriptions in the methods.
+COMPLETENESS CHECK: The full set of extracted values consists of only this default value, which is exhaustive for this paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD037955","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The value ""4"" is not explicitly mentioned as the total number of samples in the text.
+TRUTH CHECK:       The paper describes multiple distinct cohorts: 10 convalescent individuals for neutralization/T-cell assays, 2-dose and 3-dose vaccinees for T-cell responses, and 9 volunteers (3-dose vaccinees) for metabolomics. The value ""4"" does not correspond to the total count of samples processed.
+COMPLETENESS CHECK: The full set of extracted values (only ""4"") is incorrect and does not cover the samples described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

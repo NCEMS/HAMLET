@@ -1,0 +1,144 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD043558","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""healthy volunteers"", ""patients with VITT"", and ""recombinant human thrombopoietin"", making ""Homo sapiens"" a reasonable and correct inference.
+TRUTH CHECK:       The study uses human blood, platelets, and patient samples.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","BiologicalAgent","organ","blood","blood","high","False","","True","True","False","TYPE CHECK:        Yes, ""blood"" is a valid organ/tissue type.
+SOURCE CHECK:      Yes, the paper mentions collecting ""blood from healthy volunteers"" and ""whole blood concentration"".
+TRUTH CHECK:       Yes, the study uses platelets derived from blood.
+COMPLETENESS CHECK:The full set contains ""blood"", which accurately describes the source material for the platelets used in the experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","BiologicalAgent","cell_type","platelets","platelets","high","False","","True","True","False","TYPE CHECK:        Yes, ""platelets"" is a primary cell type/lineage.
+SOURCE CHECK:      Yes, the paper explicitly mentions ""platelets"" throughout the title, abstract, and methods.
+TRUTH CHECK:       Yes, the experiments were performed using platelets.
+COMPLETENESS CHECK:The full set of extracted values (""platelets"") covers all cell types used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","BiologicalAgent","disease","normal","normal","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field, used to denote healthy controls.
+SOURCE CHECK:      The text explicitly mentions collecting blood from ""healthy volunteers"" in the Ethical approval section.
+TRUTH CHECK:       The use of ""normal"" is factually correct as the study utilized healthy volunteers as controls.
+COMPLETENESS CHECK: The full set contains ""normal"", but the paper also describes samples from patients with ""vaccine-induced immune thrombocytopenia and thrombosis (VITT)"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""normal"", ""vaccine-induced immune thrombocytopenia and thrombosis (VITT)""]","normal, vaccine-induced immune thrombocytopenia and thrombosis (VITT)"
+"PXD043558","BiologicalAgent","material_type","healthy volunteers","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""healthy volunteers"" refers to the source of the samples (subjects), not the broad material class (e.g., tissue, biofluid, primary cells).
+SOURCE CHECK:      The text mentions ""blood from healthy volunteers,"" but the material used for the experiments was ""washed platelets.""
+TRUTH CHECK:       The value is factually incorrect as a material type; ""healthy volunteers"" is a subject description, not a material class.
+COMPLETENESS CHECK:The full set contains only this incorrect value and fails to capture the actual material used (platelets/primary cells).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE","primary cells"
+"PXD043558","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions that ""Analysis by mass spectrometry revealed the presence of a signal transducer and activator of transcription (STAT) 5a/b peptide"", but it does not specify the make or model of the instrument used.
+TRUTH CHECK:       The value is not mentioned in the provided text.
+COMPLETENESS CHECK: The full set contains a value that is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043558","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper mentions mass spectrometry was used to identify STAT proteins, but no isobaric or metabolic labels (like TMT or SILAC) are mentioned.
+TRUTH CHECK:       Per the field definition, ""label-free"" is the correct value when no specific labeling method is described.
+COMPLETENESS CHECK: The full set contains ""label-free"", which accurately reflects the absence of labeling in the described MS experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","ExperimentalDesignAgent","replicates","donors","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""donors"" is a description of the source of the replicates, not a numeric count as required by the field definition.
+SOURCE CHECK:      The paper mentions ""some donors"" and ""high-responding donor platelets,"" but ""donors"" is not a numeric value.
+TRUTH CHECK:       The value is not a count of replicates.
+COMPLETENESS CHECK: The full set [""donors"", ""2""] is incorrect because ""donors"" is a type mismatch and ""2"" is not explicitly stated as the number of biological replicates in the provided text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043558","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""some donors"" and ""high-responding donor platelets,"" but it does not explicitly state a specific number of biological replicates (e.g., ""n=2"") for the experiments.
+TRUTH CHECK:       There is no evidence in the provided text to support the value ""2"" as the number of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values (""donors"", ""2"") is incorrect; ""donors"" is a type of subject, not a count, and ""2"" is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD043558","ExperimentalDesignAgent","experimental_design","Resting vs PF4-stimulated comparison","Resting vs PF4-stimulated comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a comparison between two states, which fits the category of study design.
+SOURCE CHECK:      The paper describes experiments where platelets were either unstimulated (resting) or stimulated with PF4 to measure aggregation and phosphorylation.
+TRUTH CHECK:       The study compares the effects of PF4 stimulation against baseline/resting states to identify the c-Mpl-JAK2 pathway activation.
+COMPLETENESS CHECK: The full set captures the primary experimental comparison used to establish the mechanism of PF4 activation.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","ExperimentalDesignAgent","factor_value","treatment (Resting, PF4)","treatment (Resting, PF4)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental variable (treatment) and its levels, which fits the definition of factor_value.
+SOURCE CHECK:      The paper describes experiments comparing resting platelets to those stimulated with PF4 (e.g., ""PF4 stimulated biphasic platelet aggregation"").
+TRUTH CHECK:       The value is factually correct as the study investigates the effect of PF4 treatment compared to baseline/resting states.
+COMPLETENESS CHECK: The full set captures the primary experimental variable, although other factors like the use of inhibitors (ruxolitinib) are also studied.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""treatment (Resting, PF4)"", ""inhibitor treatment (ruxolitinib, dasatinib, PRT-060318)""]","treatment (Resting, PF4), inhibitor treatment (ruxolitinib, dasatinib, PRT-060318)"
+"PXD043558","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any peptide or protein fractionation steps; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set contains the single correct value for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043558","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions ""some donors"", ""high-responding donor platelets"", and ""2 other patients"", but it does not provide a total count of samples processed in the study.
+TRUTH CHECK:       There is no evidence in the text to support the specific number ""4"" as the total sample count.
+COMPLETENESS CHECK:The value is not supported by the text, and therefore the set is not exhaustive or correct.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

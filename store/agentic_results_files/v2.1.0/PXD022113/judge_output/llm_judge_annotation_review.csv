@@ -1,0 +1,124 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD022113","BiologicalAgent","species","Lactobacillus jensenii","Lactobacillus jensenii","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a species name, which matches the required category for this field.
+SOURCE CHECK:      The value ""Lactobacillus jensenii"" is explicitly mentioned in the ""Bacterial cultures and antimicrobial assays"" section.
+TRUTH CHECK:       The value is factually correct as the paper uses this species in its experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the study also uses ""Lactobacillus crispatus"", ""Lactobacillus iners"", ""Gardnerella vaginalis"", ""Homo sapiens"" (human), and ""Mus musculus"" (mouse).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus"", ""Lactobacillus crispatus"", ""Lactobacillus jensenii"", ""Lactobacillus iners"", ""Gardnerella vaginalis""]","Homo sapiens, Mus musculus, Lactobacillus crispatus, Lactobacillus jensenii, Lactobacillus iners, Gardnerella vaginalis"
+"PXD022113","BiologicalAgent","material_type","Bacterial strains","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Bacterial strains"" does not belong to the defined categories for material_type (e.g., tissue, cell line, biofluid).
+SOURCE CHECK:      Bacterial strains (L. crispatus, L. jensenii, L. iners, G. vaginalis) are mentioned and used in the study.
+TRUTH CHECK:       While bacteria were used, ""Bacterial strains"" is not a valid value for the material_type field according to the provided definition.
+COMPLETENESS CHECK:The full set contains only this invalid value; it fails to capture the actual materials used for the proteomics/MS experiments (e.g., bacterial cells/proteins).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD022113","BiologicalAgent","strain","DSM 20356","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a bacterial strain identifier, but the field definition for ""strain"" in this context refers to animal or plant strains.
+SOURCE CHECK:      The value ""DSM 20356"" is present in the text as a strain of Lactobacillus crispatus.
+TRUTH CHECK:       The value is factually correct as a bacterial strain, but it is the wrong category for the ""strain"" field (which targets the animal model, e.g., FVB/n).
+COMPLETENESS CHECK: The full set only contains this bacterial strain, missing the actual animal strain (FVB/n) mentioned in the text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""FVB/n""]","FVB/n"
+"PXD022113","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Q Exactive Plus Hybrid Quadrupole-Orbitrap MS (Thermo Fisher Scientific)"" in the Mass spectrometry (MS) section.
+TRUTH CHECK: The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the protein identification experiment described in the MS section. (Note: The rapifleX TOF/TOF is used for MALDI, but the Q Exactive Plus is the primary instrument for the proteomics analysis).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD022113","TechnicalAgent","label","13C615N2-labeled lysines","","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a specific isotopic label used for a peptide, but the field ""label"" refers to the overall proteomics labeling strategy (e.g., SILAC, TMT, or label-free).
+SOURCE CHECK:      The value is present in the text (""13C615N2-labeled lysines"").
+TRUTH CHECK:       While the peptides were labeled with these isotopes, this is a targeted labeling of a synthetic peptide for a tracing experiment, not a global proteomics labeling method like SILAC or TMT.
+COMPLETENESS CHECK:    The extraction is incorrect as it confuses a specific isotopic tracer with the experimental labeling strategy.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: label
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   label-free",""
+"PXD022113","ExperimentalDesignAgent","replicates","3 bacterial species (L. crispatus, L. jensenii, L. iners)","3","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the number of bacterial species used, not the number of biological replicates per sample/condition.
+SOURCE CHECK:      The text mentions these three species, but this is a description of the experimental groups/strains, not the replication count.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates""; it confuses the number of distinct species with the number of times an experiment was repeated.
+COMPLETENESS CHECK: The full set contains ""3"", which may refer to the qPCR triplicates mentioned in the text, but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD022113","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions that ""experiments were performed in triplicate"" in the RT-qPCR section.
+TRUTH CHECK:       The value ""3"" correctly reflects the number of replicates used for the transcriptional analyses.
+COMPLETENESS CHECK: The full set of extracted values includes ""3"" and a value that is actually a count of species (""3 bacterial species...""), which is a type mismatch. However, the value ""3"" itself is correct for the replicates used in the qPCR experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD022113","ExperimentalDesignAgent","experimental_design","incorporation of 13C615N2-labeled elafin into bacterial proteins across three Lactobacillus species","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       yes
+COMPLETENESS CHECK:The full set contains a description of a specific experimental goal/observation rather than a study design type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD022113","ExperimentalDesignAgent","factor_value","bacterial species (L. crispatus, L. jensenii, L. iners)","bacterial species (L. crispatus, L. jensenii, L. iners)","medium","False","","True","False","False","TYPE CHECK:        Yes, the candidate value describes a variable (bacterial species) used to compare experimental outcomes.
+SOURCE CHECK:      Yes, the paper explicitly tests these three Lactobacillus species (L. crispatus, L. jensenii, and L. iners) in the antimicrobial and mass spectrometry assays.
+TRUTH CHECK:       Yes, these species are the primary biological variables used to evaluate the effect of innate peptides on survival and proteolysis.
+COMPLETENESS CHECK: The full set is incomplete; the study also investigates other major factors such as HPV infection status (HPV-positive vs. normal), viral oncoproteins (E6, E7), and different bacterial strains including Gardnerella vaginalis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""bacterial species (L. crispatus, L. jensenii, L. iners, G. vaginalis)"", ""HPV infection status"", ""viral oncoproteins (E6, E7)""]","bacterial species (L. crispatus, L. jensenii, L. iners, G. vaginalis), HPV infection status, viral oncoproteins (E6, E7)"
+"PXD022113","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper describes LC-MS/MS experiments (using a Q Exactive Plus) but does not mention any offline fractionation steps (e.g., high-pH RP or SAX).
+TRUTH CHECK:       According to the field definitions, ""1"" is the correct value when no fractionation occurred.
+COMPLETENESS CHECK: The full set of extracted values consists of a single ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD022113","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The value ""3"" is not mentioned as the total number of samples in the paper; the study involves thousands of patients in a retrospective cohort, 44 human tissue specimens, 24 mice, and various cell culture experiments.
+TRUTH CHECK:       The value is factually incorrect. The study is a multi-part experiment involving a retrospective cohort of 6,085 patients, 44 human tissue samples, and 24 mice (12 per condition).
+COMPLETENESS CHECK: The full set of extracted values does not cover the total number of samples processed across the different experimental arms of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

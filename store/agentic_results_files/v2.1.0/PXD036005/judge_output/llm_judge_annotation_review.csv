@@ -1,0 +1,134 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD036005","BiologicalAgent","species","Saccharomyces cerevisiae","Saccharomyces cerevisiae","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The paper repeatedly mentions ""yeast cells"" and ""budding yeast,"" and refers to the ""yeast genome sacCer3,"" which is the standard reference genome for Saccharomyces cerevisiae.
+TRUTH CHECK:       The experimental work is performed using budding yeast, for which Saccharomyces cerevisiae is the standard scientific name.
+COMPLETENESS CHECK: The paper also uses mammalian cells (HeLa, HUVECs, HEK293T), meaning ""Homo sapiens"" is also a source organism for this study. The current set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Saccharomyces cerevisiae"", ""Homo sapiens""]","Saccharomyces cerevisiae, Homo sapiens"
+"PXD036005","BiologicalAgent","cell_type","yeast cells","yeast cells","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""yeast cells"" refers to a type of cell/organism, which fits the category of cell type.
+SOURCE CHECK:      The paper explicitly mentions ""yeast cells"" multiple times throughout the results and methods sections.
+TRUTH CHECK:       The experiment uses yeast cells (specifically budding yeast) as a primary biological system.
+COMPLETENESS CHECK:    The full set contains ""yeast cells"", but the paper also uses ""HeLa cells"", ""HEK293T cells"", and ""primary human vein endothelial cells (HUVECs)"". The current set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""yeast cells"", ""HeLa cells"", ""HEK293T cells"", ""primary human vein endothelial cells""]","yeast cells, HeLa cells, HEK293T cells, primary human vein endothelial cells"
+"PXD036005","BiologicalAgent","material_type","yeast cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""yeast cells"" describes the source material, but it is not one of the allowed broad material classes defined for this field (e.g., ""whole organism"", ""cell line"", ""primary cells"").
+SOURCE CHECK:      The use of yeast cells is explicitly stated throughout the paper.
+TRUTH CHECK:       While factually true that yeast cells were used, the value does not adhere to the required categorical taxonomy of the field definition.
+COMPLETENESS CHECK: The full set contains only ""yeast cells"", which is a specific entity rather than a broad material class.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   whole organism","whole organism"
+"PXD036005","BiologicalAgent","strain","Glc7-FLAG","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a protein tag/construct, not an animal or plant strain.
+SOURCE CHECK:      The text mentions ""endogenous FLAG-tagged Glc7 (Glc7-FLAG)"", but this refers to the protein modification, not the strain name.
+TRUTH CHECK:       The value is factually incorrect as a ""strain""; it is a tagged protein.
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: strain
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036005","TechnicalAgent","instrument","Q Exactive HF-X","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper text mentions a ""Q Exactive HF mass spectrometer (Thermo Fisher)"", but it does not mention the ""HF-X"" model specifically.
+TRUTH CHECK:       The value ""Q Exactive HF-X"" is not supported by the text; the text explicitly states ""Q Exactive HF"".
+COMPLETENESS CHECK: The full set contains only this incorrect value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036005","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes an IP-MS analysis but does not mention any isobaric or metabolic labeling (such as TMT or SILAC), making ""label-free"" a safe default.
+TRUTH CHECK:       The value is factually correct based on the absence of labeling reagents in the methods.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036005","ExperimentalDesignAgent","replicates","1 yeast culture","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""1 yeast culture"" is not a numeric count of biological replicates; it describes a sample quantity.
+SOURCE CHECK:      The paper does not explicitly state the number of biological replicates for the MS analysis, but it does mention ""Three biological replicates were performed for WT and glc7-12 mutant"" in the RNA-seq section.
+TRUTH CHECK:       The value ""1 yeast culture"" is not a correct representation of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values does not accurately reflect the biological replication described in the paper (which is 3 for RNA-seq, and unspecified/default 1 for MS).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE","3"
+"PXD036005","ExperimentalDesignAgent","replicates","1","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""Three biological replicates were performed for WT and glc7-12 mutant"" in the RNA-seq section.
+TRUTH CHECK:       The candidate value ""1"" is factually incorrect as the paper explicitly states three biological replicates for the RNA-seq experiments.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and does not reflect the biological replicates mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   3","3"
+"PXD036005","ExperimentalDesignAgent","experimental_design","IP-MS of FLAG-tagged Glc7 to identify interaction partners","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value describes a specific experimental procedure/goal rather than a study design type.
+SOURCE CHECK:      The procedure is mentioned in the text, but the value does not fit the field definition.
+TRUTH CHECK:       The value is a correct description of a step in the paper, but it is not an ""experimental design"" (e.g., treated vs control).
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036005","ExperimentalDesignAgent","factor_value","bait protein (Glc7-FLAG)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific protein used as a bait in an IP-MS experiment, which is a technical component rather than an experimental factor or variable under study.
+SOURCE CHECK:      The text mentions ""immunoprecipitated the endogenous FLAG-tagged Glc7 (Glc7-FLAG)"" for MS analysis.
+TRUTH CHECK:       While the protein is used, it is not the ""factor"" being studied (the factors are glucose availability, Glc7 expression/activity, and the resulting autophagy/telomere silencing).
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: factor_value
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036005","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036005","ExperimentalDesignAgent","number_of_samples","1","","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes multiple experimental conditions and groups (WT, glc7-12, H3T11A, etc.) across yeast and mammalian cells, but does not explicitly state a total sample count for the MS analysis.
+TRUTH CHECK:       The value ""1"" is not supported by the text; the study involves multiple strains and conditions. While ""1"" is a safe default for replicates/fractions, it is not a safe default for the total number of samples in a study of this complexity.
+COMPLETENESS CHECK:The full set contains only ""1"", which does not accurately reflect the multiple samples/conditions processed in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

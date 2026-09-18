@@ -12,8 +12,9 @@
 store/
 ├── README.md                         ← this file
 ├── aggregated_results_files/         ← one JSON per PXD (primary output)
-├── hamlet_sdrfs/                     ← curated SDRF TSV files per PXD
-├── agentic_results_files/            ← per-PXD agentic LLM extraction outputs
+├── hamlet_sdrfs/                     ← active curated SDRFs plus immutable release snapshots
+├── agentic_results_files/            ← active agentic outputs plus immutable release snapshots
+├── releases/                         ← immutable per-release manifests and active-version index
 └── intermediate_files/               ← per-PXD intermediate pipeline artefacts
 ```
 
@@ -120,7 +121,40 @@ intermediate_files/PXD######/
 
 ---
 
-## STATUS — as of 2026-08-18
+## Release Structure
+
+The active SDRF and agentic directories are a mixed-version materialization: each PXD is associated with one release in `releases/active.json`. Flat paths remain the backwards-compatible active copies, while versioned child directories preserve the actual immutable artifacts for each release:
+
+```text
+hamlet_sdrfs/
+├── PXD######.sdrf.tsv                ← active compatibility copy
+├── v2.1.0/PXD######.sdrf.tsv         ← immutable historical snapshot from Git revision 18d4e458
+└── v2.1.1/PXD######.sdrf.tsv         ← immutable promoted v2.1.1 artifact
+
+agentic_results_files/
+├── PXD######/                        ← active compatibility copy
+├── v2.1.0/PXD######/                 ← immutable historical agentic artifacts
+└── v2.1.1/PXD######/                 ← immutable promoted agentic artifacts
+
+releases/
+├── active.json                       ← PXD -> active HAMLET release version
+├── v2.1.0/manifest.json              ← Git-HEAD baseline hashes and judge metrics
+└── v2.1.1/manifest.json              ← promoted v2.1.1 source and active SDRF hashes
+```
+
+`v2.1.1` promotes the 299 PXDs in `assets/pxd_lists/HamletPXDs.csv`. It does not relabel or overwrite unpromoted active records. Every promoted active SDRF has `comment[sdrf annotation tool] = HAMLET-agentic v2.1.1`; the remaining active SDRFs retain their own annotated release values. The `v2.1.0` snapshot preserves its Git-source bytes exactly, including its historical `HAMLET-agentic v0.1.0` row annotation; its directory name and release manifest identify the reviewed v2.1.0 baseline snapshot.
+
+Use the release-aware promotion utility rather than copying result directories directly:
+
+```bash
+conda run -n meti_env python src/job_scripts/updatestore.py \
+    results_hamletpxds_agentic_v2_1_1 store \
+    --release-version v2.1.1
+```
+
+The utility validates every PXD bundle before modifying the store, writes immutable versioned artifacts before refreshing active copies, and refuses to overwrite an existing release manifest or versioned artifact directory. Use `materialize_store_versions.py` only to backfill a release from an explicit Git revision or from already promoted active records; it also refuses to replace existing snapshots.
+
+## STATUS — historical snapshot as of 2026-08-18
 
 ### 1. `aggregated_results_files/` — 2,756 PXDs
 
@@ -171,7 +205,7 @@ Raw per-agent LLM extraction outputs (BiologicalAgent, ExperimentalDesignAgent, 
 
 ## Version and run-mode reference
 
-HAMLET has one release version. The current release, incorporating the merged SDRF-builder fixes, is **`v2.1.0`**. Each new aggregated-results JSON records this value in its top-level `pipeline_version` field.
+HAMLET uses release-aware SDRF promotion. The current generator release is **`v2.1.1`**, while the active store legitimately contains v0.1.0, v2.1.0, and v2.1.1 records. Per-PXD release identity is determined by the final SDRF's `comment[sdrf annotation tool]` and indexed by `releases/active.json`; historical aggregate `pipeline_version` fields can predate the current release convention.
 
 `run_mode` is separate from the release version and describes how the individual PXD was processed.
 

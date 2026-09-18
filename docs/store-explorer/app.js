@@ -1,4 +1,4 @@
-const state = { records: [], selected: null, summary: null, tableDefinitions: null };
+const state = { records: [], selected: null, summary: null, qcSummary: null, tableDefinitions: null, qcMetric: "judge_accuracy", qcDeltaMode: "relative_delta" };
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
 const filter = document.querySelector("#pxd-filter");
@@ -56,6 +56,13 @@ async function fetchText(path) {
   const response = await fetch(`data/${path}`);
   if (!response.ok) throw new Error(`Could not load ${path}`);
   return response.text();
+}
+
+async function fetchOptionalJson(path) {
+  const response = await fetch(`data/${path}`);
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Could not load ${path}`);
+  return response.json();
 }
 
 function headerDefinition(tableKey, header) {
@@ -229,6 +236,107 @@ function histogramCard(field) {
   return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
 }
 
+function qcStatus(value) {
+  return value === "passed" ? "Pass" : value === "failed" ? "Failed" : value === "skipped" ? "Skipped" : "Not run";
+}
+
+function qcCategoryMetricOptions(summary) {
+  const metrics = new Set();
+  for (const result of summary?.results || []) {
+    for (const category of Object.values(result.judge_category_deltas || {})) {
+      Object.keys(category).forEach(metric => metrics.add(metric));
+    }
+  }
+  return [...metrics].sort();
+}
+
+function renderQcMetricPlot(summary) {
+  const container = document.querySelector("#qc-metric-plot");
+  if (!container) return;
+  if (!globalThis.Plotly) {
+    container.textContent = "Interactive plotting library is unavailable.";
+    return;
+  }
+  const traces = ["Biological", "Technical", "ExperimentalDesign"].map(category => {
+    const points = [];
+    for (const result of summary.results || []) {
+      const delta = result.judge_category_deltas?.[category]?.[state.qcMetric];
+      if (delta && Number.isFinite(delta[state.qcDeltaMode])) points.push({ pxd: result.pxd, ...delta });
+    }
+    return {
+      name: category,
+      type: "bar",
+      x: points.map(point => point.pxd),
+      y: points.map(point => point[state.qcDeltaMode]),
+      customdata: points.map(point => [point.baseline, point.candidate, point.absolute_delta, point.relative_delta]),
+      hovertemplate: "<b>%{x}</b><br>Category: " + category + "<br>Baseline: %{customdata[0]}<br>Candidate: %{customdata[1]}<br>Absolute delta: %{customdata[2]:+.4f}<br>Relative delta: %{customdata[3]:+.2%}<extra></extra>",
+    };
+  }).filter(trace => trace.x.length);
+  if (!traces.length) {
+    container.textContent = "No fresh post-store category judge deltas are available in this reviewed QC run.";
+    return;
+  }
+  const label = state.qcDeltaMode === "relative_delta" ? "Relative change" : "Absolute change";
+  globalThis.Plotly.newPlot(container, traces, {
+    barmode: "group",
+    margin: { l: 62, r: 20, t: 32, b: 130 },
+    paper_bgcolor: "#fffdf8",
+    plot_bgcolor: "#fffdf8",
+    font: { family: "Georgia, Times New Roman, serif", color: "#17212b" },
+    title: { text: `${state.qcMetric}: ${label} by PXD and metadata category`, font: { size: 16 } },
+    xaxis: { title: "PXD", tickangle: -55, tickfont: { family: "ui-monospace, monospace", size: 9 } },
+    yaxis: { title: label, tickformat: state.qcDeltaMode === "relative_delta" ? ".0%" : ".3f", zeroline: true, zerolinecolor: "#66727c" },
+    legend: { orientation: "h", y: 1.15 },
+  }, { responsive: true, displaylogo: false });
+}
+
+function qcOverview(summary) {
+  if (!summary) {
+    return section("Quality control", "No reviewed QC summary has been published with this Store Explorer build.", "<p class=\"section-note\">QC artifacts remain available from their reviewed workflow run.</p>");
+  }
+  const results = Array.isArray(summary.results) ? summary.results : [];
+  const compared = results.filter(result => result.comparison);
+  const passed = compared.filter(result => result.comparison.status === "passed").length;
+  const failed = compared.filter(result => result.comparison.status === "failed").length;
+  const rows = [["PXD", "Candidate", "Gold cohort", "Comparison", "Coverage", "Post-judge", "Report"]];
+  for (const result of results) {
+    const comparison = result.comparison || {};
+    const judge = result.judge || {};
+    const coverage = comparison.summary?.files?.coverage;
+    const reportPath = comparison.public_report_path;
+    rows.push([
+      result.pxd || "",
+      result.candidate_status || "",
+      result.gold_cohort_member ? "Yes" : "No",
+      qcStatus(comparison.status),
+      Number.isFinite(coverage) ? `${(coverage * 100).toFixed(1)}%` : "-",
+      qcStatus(judge.status),
+      reportPath ? `<a href="data/${esc(reportPath)}/conflict_report.md" target="_blank">Comparison</a>` : "-",
+    ]);
+  }
+  const tableRows = rows.map((row, index) => index === 0 ? row : row.map((cell, cellIndex) => cellIndex === 6 ? cell : esc(cell)));
+  const tableHtml = `<div class="table-frame"><table><thead><tr>${tableRows[0].map(cell => `<th>${cell}</th>`).join("")}</tr></thead><tbody>${tableRows.slice(1).map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const cards = [
+    ["Fixture baseline", summary.fixture_version || "Unknown"],
+    ["Evaluated commit", summary.evaluated_commit ? summary.evaluated_commit.slice(0, 12) : "Unknown"],
+    ["Gold comparisons", `${passed} pass / ${failed} failed`],
+    ["Changed SDRFs", formatNumber((summary.changed_pxds || []).length)],
+  ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>${summary.report_only ? "Report-only QC run" : "Blocking QC run"}</small></article>`).join("");
+  const metrics = qcCategoryMetricOptions(summary);
+  const metricControls = metrics.length
+    ? `<div class="qc-controls"><label for="qc-metric">Judge metric</label><select id="qc-metric">${metrics.map(metric => `<option value="${esc(metric)}"${metric === state.qcMetric ? " selected" : ""}>${esc(metric)}</option>`).join("")}</select><label for="qc-delta-mode">Change</label><select id="qc-delta-mode"><option value="relative_delta"${state.qcDeltaMode === "relative_delta" ? " selected" : ""}>Relative</option><option value="absolute_delta"${state.qcDeltaMode === "absolute_delta" ? " selected" : ""}>Absolute</option></select></div><div id="qc-metric-plot" class="qc-plot"></div>`
+    : "<p class=\"section-note\">No fresh post-store category judge deltas are available in this reviewed QC run.</p>";
+  setTimeout(() => {
+    const metricSelect = document.querySelector("#qc-metric");
+    const deltaSelect = document.querySelector("#qc-delta-mode");
+    if (!metricSelect || !deltaSelect) return;
+    metricSelect.addEventListener("change", () => { state.qcMetric = metricSelect.value; renderQcMetricPlot(summary); });
+    deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(summary); });
+    renderQcMetricPlot(summary);
+  }, 0);
+  return section("Quality control", "Reviewed post-store QC results. Gold comparisons are deterministic; post-judge status records whether the external evaluation was available for this run.", `<div class="stat-grid">${cards}</div>${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No changed SDRFs were evaluated.</p>"}`);
+}
+
 function renderOverview() {
   state.selected = null;
   history.replaceState(null, "", `${location.pathname}${location.search}`);
@@ -248,7 +356,7 @@ function renderOverview() {
     formatNumber(item.pxd_count),
   ]);
   const categoryRows = [["SDRF header", "Definition", "Requirement", "Type", "Ontology accession", "PXDs"], ...categories];
-  detail.innerHTML = `<header class="record-header overview-header"><div><p class="eyebrow">Store overview</p><h2>HAMLET record summary</h2></div><span class="availability">${esc(formatNumber(summary.total_pxds))} catalogued PXDs</span></header>${section("HAMLET SDRFs by version", "Counts include PXDs with a final HAMLET SDRF, grouped by the schema version detected in the store.", `<div class="stat-grid">${versionCards}</div>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(summary.judge_records)} final per-paper judge records. Hover a bar to see its bin count.`, `<div class="histogram-grid">${summary.judge_fields.map(histogramCard).join("")}</div>`)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs. Definitions are sourced from the editable table-definitions.json glossary, with term metadata from the SDRF catalog.", tableContent(categoryRows, "SDRF metadata categories"))}`;
+  detail.innerHTML = `<header class="record-header overview-header"><div><p class="eyebrow">Store overview</p><h2>HAMLET record summary</h2></div><span class="availability">${esc(formatNumber(summary.total_pxds))} catalogued PXDs</span></header>${qcOverview(state.qcSummary)}${section("HAMLET SDRFs by version", "Counts include PXDs with a final HAMLET SDRF, grouped by the schema version detected in the store.", `<div class="stat-grid">${versionCards}</div>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(summary.judge_records)} final per-paper judge records. Hover a bar to see its bin count.`, `<div class="histogram-grid">${summary.judge_fields.map(histogramCard).join("")}</div>`)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs. Definitions are sourced from the editable table-definitions.json glossary, with term metadata from the SDRF catalog.", tableContent(categoryRows, "SDRF metadata categories"))}`;
 }
 
 async function renderRecord(record) {
@@ -316,7 +424,7 @@ function renderCatalog() {
 }
 
 async function initialize() {
-  const [response, definitionsResponse, summaryResponse] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json"), fetch("data/site-summary.json")]);
+  const [response, definitionsResponse, summaryResponse, qcSummary] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json"), fetch("data/site-summary.json"), fetchOptionalJson("qc-summary.json")]);
   if (!response.ok) {
     throw new Error(`Could not load store index (${response.status} ${response.statusText})`);
   }
@@ -329,6 +437,7 @@ async function initialize() {
   if (!summaryResponse.ok) throw new Error(`Could not load site summary (${summaryResponse.status} ${summaryResponse.statusText})`);
   state.tableDefinitions = await definitionsResponse.json();
   state.summary = await summaryResponse.json();
+  state.qcSummary = qcSummary;
   state.records = index.pxds;
   const versions = [...new Set(state.records.map(record => record.version || "Unknown"))].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
   versionFilter.innerHTML += versions.map(version => `<option value="${esc(version)}">${esc(version)}</option>`).join("");

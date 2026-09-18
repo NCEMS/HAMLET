@@ -1,0 +1,167 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD030548","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human GPR35a"" and ""human"" multiple times throughout the text.
+TRUTH CHECK:       The study uses human GPR35a expressed in cells, making ""Homo sapiens"" a factually correct source organism.
+COMPLETENESS CHECK: The paper also describes experiments using mouse (Mus musculus) and rat (Rattus norvegicus) orthologues of GPR35. The full set of extracted values only contains ""Homo sapiens"", missing the other two species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus"", ""Rattus norvegicus""]","Homo sapiens, Mus musculus, Rattus norvegicus"
+"PXD030548","BiologicalAgent","organ","kidney","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper mentions ""Human embryonic kidney (HEK) 293T cells"" and ""Flp-In TREx 293 cells"", but these are immortalized cell lines, not organ samples.
+TRUTH CHECK:       The experiment used cell lines (HEK293T, Flp-In TREx 293), not kidney tissue.
+COMPLETENESS CHECK: The full set contains only ""kidney"", which is an incorrect extraction of the source material.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK293T cells"" and ""Flp-In TREx 293 cells""; while HEK (Human Embryonic Kidney) cells are derived from kidney tissue, the text never explicitly describes them as ""epithelial cells"".
+TRUTH CHECK:       The value is not explicitly stated in the text, and while HEK293 cells have epithelial-like characteristics, ""epithelial cell"" is not a factual description provided by the authors in this paper.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","BiologicalAgent","material_type","Flp-In-TREx 293 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific cell line name, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The text explicitly mentions the use of ""Flp-In-TREx 293 cells"".
+TRUTH CHECK:       The value is factually present, but it is a specific entity rather than a broad category.
+COMPLETENESS CHECK:The full set contains only the specific cell line name, failing to provide the broad material class required by the definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD030548","BiologicalAgent","cell_line","Flp-In-TREx 293 cells","Flp-In-TREx 293 cells","medium","False","","True","False","False","TYPE CHECK:        The candidate value is the name of an immortalized cell line.
+SOURCE CHECK:      The value ""Flp-In-TREx 293 cells"" is explicitly mentioned multiple times in the text (e.g., in the Results and Methods sections).
+TRUTH CHECK:       The value is factually correct as the cell line used for stable expression of GPR35 orthologues.
+COMPLETENESS CHECK: The full set of extracted values is missing ""HEK293T"" and ""HEK293"", which are also used in the study (e.g., for BRET assays and internalization studies).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Flp-In-TREx 293 cells"", ""HEK293T"", ""HEK293""]","Flp-In-TREx 293 cells, HEK293T, HEK293"
+"PXD030548","TechnicalAgent","instrument","LTQ Orbitrap Velos","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper mentions an ""LTQ Orbitrap mass spectrometer (Thermo Fisher Scientific)"", but it does not explicitly mention the ""Velos"" model.
+TRUTH CHECK:       The text specifies ""LTQ Orbitrap"", but adding ""Velos"" is an assumption/hallucination not supported by the provided text.
+COMPLETENESS CHECK:The full set contains only this value, which is incorrect because it adds a specific model name not found in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The extraction is factually correct as the mass spectrometry analysis described did not utilize labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD030548","ExperimentalDesignAgent","replicates","affinity-purified hGPR35a-HA","1","low","True","","False","False","False","TYPE CHECK:        The candidate value is a sample description, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""affinity-purified hGPR35a-HA"" is present in the text, but it refers to the material being analyzed, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains a sample name and the default value ""1""; however, the sample name is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper does not explicitly state the number of biological replicates for the mass spectrometry experiment; therefore, ""1"" is a safe default.
+TRUTH CHECK:       The value is a valid default when no specific replication count is mentioned for the MS analysis.
+COMPLETENESS CHECK:   The full set of extracted values contains ""1"" and a sample description (""affinity-purified hGPR35a-HA""), which is a type mismatch for this field. However, the value ""1"" correctly represents the default for the number of replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","technical_replicates","technical duplicates","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""technical duplicates"" describes a count of replicates, which fits the category of the technical_replicates field.
+SOURCE CHECK:      The paper does not explicitly mention ""technical duplicates"" or a specific number of technical replicates for the mass spectrometry experiments.
+TRUTH CHECK:       The text does not provide evidence that technical replicates were performed for the MS analysis; it mentions ""at least three independent experiments"" (biological replicates) and ""triplicate"" for BRET/internalization assays, but not for the MS.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not explicitly state the number of technical replicates for the mass spectrometry experiments; it mentions ""at least three independent experiments"" (biological replicates) and ""triplicate"" for BRET and internalization assays, but not for the MS analysis.
+TRUTH CHECK:       There is no evidence in the text to support the value ""2"" for technical replicates in the proteomics/MS context.
+COMPLETENESS CHECK:    The full set of extracted values is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","experimental_design","identification of phosphorylation sites in zaprinast-treated hGPR35a-HA","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental goal/procedure rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The text mentions that mass spectrometry was performed on hGPR35a-HA following treatment with zaprinast to identify phosphorylation sites.
+TRUTH CHECK:       While the activity is described in the paper, it is not a ""study design type"" as defined by the field.
+COMPLETENESS CHECK: The full set contains only this value, which is a description of a task, not a design category.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","factor_value","receptor (hGPR35a-HA), treatment (zaprinast)","receptor (hGPR35a-HA), treatment (zaprinast)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes experimental variables (receptor type and drug treatment), which fits the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions the use of hGPR35a-HA and treatment with zaprinast in the mass spectrometry and phosphorylation studies.
+TRUTH CHECK:       The values are factually correct based on the results and methods sections.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the study also investigates other receptors (mGPR35, rGPR35), other treatments (pamoic acid, CID-2745687, vehicle), and mutant versions (PDM).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""hGPR35a-HA"", ""mGPR35-HA"", ""rGPR35-HA"", ""hGPR35a-PDM"", ""mGPR35-PDM"", ""zaprinast"", ""pamoic acid"", ""CID-2745687"", ""vehicle""]","hGPR35a-HA, mGPR35-HA, rGPR35-HA, hGPR35a-PDM, mGPR35-PDM, zaprinast, pamoic acid, CID-2745687, vehicle"
+"PXD030548","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD030548","ExperimentalDesignAgent","number_of_samples","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the mass spectrometry experiment; it describes analyzing tryptic peptides from affinity-purified hGPR35a-HA.
+TRUTH CHECK:       While the paper describes multiple conditions and orthologues, the specific mass spectrometry analysis was performed on a single group (hGPR35a-HA treated with zaprinast). In the absence of a specified count, ""1"" is a safe default for a single processed sample/group.
+COMPLETENESS CHECK: The full set contains only ""1"", which is the most reasonable inference given the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

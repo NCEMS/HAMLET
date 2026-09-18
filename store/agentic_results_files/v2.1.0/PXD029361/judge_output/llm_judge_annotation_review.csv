@@ -1,0 +1,112 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD029361","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Human glioma cell line U251"", ""Human embryonic kidney cells (HEK293T)"", and ""Human protein database (SwissProt Dec20)"".
+TRUTH CHECK: The use of human cell lines and the reference to the human protein database confirm the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species involved in the experimental proteomics/cell work.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029361","BiologicalAgent","material_type","non-radioactive methylation assay","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of an experimental assay, not a broad material class (e.g., ""cell line"", ""tissue"").
+SOURCE CHECK:      The phrase ""non-radioactive methylation assay"" is present in the text, but it refers to the procedure, not the material type.
+TRUTH CHECK:       The value is factually incorrect for this field; the materials used in that assay were recombinant proteins (purified from E. coli).
+COMPLETENESS CHECK:The full set contains only this incorrect value and fails to capture the actual material used (recombinant proteins/cell lines).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD029361","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text explicitly mentions a ""quadrupole orbitrap mass spectrometer (Q Exactive Plus, Thermo Scientific)"".
+TRUTH CHECK:       The value is factually correct as stated in the Mass spectrometry section of the methods.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD029361","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a mass spectrometry analysis of TWIST1 methylation but mentions no isobaric or metabolic labeling reagents; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The experimental description is consistent with a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD029361","ExperimentalDesignAgent","replicates","in-vitro reaction samples","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""in-vitro reaction samples"" is a description of a sample type, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""in-vitro reaction samples"" is not used in the text to describe the number of replicates.
+TRUTH CHECK:       The value is not a count of replicates; it is a categorical description.
+COMPLETENESS CHECK: The full set contains ""2"" (likely from the RNA-seq duplicates mention), but ""in-vitro reaction samples"" is not a valid replicate count.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD029361","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper mentions ""Samples were prepared in triplicates (SETD6 KO) or duplicates (TWIST1-WT cells)"" in the RNA-seq section, but the mass spectrometry section (where the protein samples were processed) does not explicitly state the number of biological replicates.
+TRUTH CHECK:       The value ""2"" likely comes from the RNA-seq ""duplicates"" mention, but the 'replicates' field in a proteomics context usually refers to the MS samples. For the MS experiment, the text describes ""Sample of non-radioactive methylation assay... An additional sample without SAM served as reference,"" which describes experimental conditions rather than biological replicates.
+COMPLETENESS CHECK:    The full set of extracted values [""in-vitro reaction samples"", ""2""] is inconsistent; one is a description and the other is a number from a different assay (RNA-seq). It does not accurately capture the biological replication of the proteomics experiment.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD029361","ExperimentalDesignAgent","experimental_design","comparison of TWIST1 methylation with and without SAM","comparison of TWIST1 methylation with and without SAM","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison, which fits the category of a study design (treated vs control).
+SOURCE CHECK:      The paper describes a non-radioactive methylation assay where samples were incubated with SAM and a reference sample was prepared without SAM.
+TRUTH CHECK:       The value is factually correct based on the ""Mass spectrometry"" section of the methods.
+COMPLETENESS CHECK: The full set contains only this value; however, the paper describes multiple experimental designs (e.g., SETD6 KO vs control, TWIST1 WT vs K33R, and the SAM comparison). This extraction only captures the design for the MS experiment, not the overall study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""comparison of TWIST1 methylation with and without SAM"", ""SETD6 KO vs control"", ""TWIST1 WT vs K33R mutant""]","comparison of TWIST1 methylation with and without SAM, SETD6 KO vs control, TWIST1 WT vs K33R mutant"
+"PXD029361","ExperimentalDesignAgent","factor_value","SAM presence (with SAM, without SAM)","SAM presence (with SAM, without SAM)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental variable (presence or absence of a methyl donor), which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly describes a ""non-radioactive methylation assay"" where one sample contained ""3.2 mM SAM"" and an ""additional sample without SAM served as reference.""
+TRUTH CHECK:       The value accurately reflects the experimental design used to identify methylation sites via mass spectrometry.
+COMPLETENESS CHECK:    While the paper explores other factors (e.g., SETD6 KO vs control, TWIST1 WT vs K33R), the extracted value correctly identifies the specific factor used for the mass spectrometry experiment. However, the full set of all_extracted_values is missing the other primary experimental factors (SETD6 status and TWIST1 mutation status) described throughout the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""SAM presence (with SAM, without SAM)"", ""SETD6 expression (control, KO)"", ""TWIST1 mutation (WT, K33R, K73R)""]","SAM presence (with SAM, without SAM), SETD6 expression (control vs KO), TWIST1 mutation (WT vs K33R)"
+"PXD029361","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD029361","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number_of_samples field.
+SOURCE CHECK:      The paper mentions ""two SETD6 CRISPR knock-out (KO) cells derived from two independent gRNAs clones"" and ""U251 control (CT)"", but it does not explicitly state a total sample count for the proteomics/MS experiment.
+TRUTH CHECK:       The value ""2"" is not supported as the total count of samples processed in the study. The MS section describes a ""non-radioactive methylation assay"" with a sample containing His-TWIST1/GST-SETD6 and a reference sample without SAM, which would be 2 samples for that specific MS analysis. However, the study as a whole involves many more samples across RNA-seq and other assays.
+COMPLETENESS CHECK: The full set of extracted values does not accurately reflect the total number of samples processed in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

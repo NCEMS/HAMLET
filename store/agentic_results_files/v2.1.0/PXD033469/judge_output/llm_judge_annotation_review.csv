@@ -1,0 +1,134 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD033469","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human primary chondrocytes"" and ""human knee OA cartilage tissues,"" making ""Homo sapiens"" a correct and reasonable extraction.
+TRUTH CHECK: The value is factually correct as the study uses human samples.
+COMPLETENESS CHECK: While the study also uses ""C57BL/6 mice"" (Mus musculus), the current set of extracted values only contains ""Homo sapiens"". However, the candidate value itself is a correct species used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD033469","BiologicalAgent","organ","cartilage","cartilage","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cartilage"" is a tissue/organ, which matches the definition of the organ field.
+SOURCE CHECK:      The paper explicitly mentions ""human knee OA cartilage tissues"" and ""mouse knee articular cartilage.""
+TRUTH CHECK:       The value is factually correct as the study focuses on cartilage from both humans and mice.
+COMPLETENESS CHECK:   The full set contains ""cartilage,"" which covers the primary tissue source described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD033469","BiologicalAgent","cell_type","chondrocytes","chondrocytes","high","False","","True","True","False","TYPE CHECK:        The candidate value ""chondrocytes"" is a primary cell type, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human primary chondrocytes"" and ""chondrocytes"" throughout the text.
+TRUTH CHECK:       The value is factually correct as the study focuses on the role of circNFKB1 in chondrocytes.
+COMPLETENESS CHECK: The full set of extracted values contains ""chondrocytes"", which exhaustively covers the primary cell type used in the experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD033469","BiologicalAgent","material_type","human chondrocytes","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human chondrocytes"" is a specific cell type, not a broad material class as required by the definition (e.g., ""primary cells"", ""tissue"").
+SOURCE CHECK:      The paper explicitly mentions using ""human primary chondrocytes"" and ""human cartilage"".
+TRUTH CHECK:       While the cells used were indeed human chondrocytes, the value does not follow the categorical constraints of the `material_type` field.
+COMPLETENESS CHECK: The full set contains only this value, which is a specific entity rather than the required broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""primary cells"", ""tissue""]","primary cells, tissue"
+"PXD033469","TechnicalAgent","instrument","Q Exactive","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions ""mass spectrometry analysis"" and provides a ProteomeXchange identifier (PXD033469), but the text does not explicitly name the instrument model used.
+TRUTH CHECK:       The value ""Q Exactive"" is not mentioned in the provided text.
+COMPLETENESS CHECK: The full set contains a value that is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD033469","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a mass spectrometry analysis of RNA pulldown proteins but does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The value is factually correct as no labeling method was specified in the methods section.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD033469","ExperimentalDesignAgent","replicates","human chondrocytes (HCs)","3","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human chondrocytes (HCs)"" is a cell type, not a numeric count of biological replicates.
+SOURCE CHECK:      The value is present in the text, but it refers to the sample source, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains ""3"", which is the correct number of replicates mentioned in the ""Statistical analysis"" section (""All experiments were repeated at least three times""). However, the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD033469","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper states in the Statistical analysis section: ""All experiments were repeated at least three times.""
+TRUTH CHECK:       The value ""3"" is factually correct based on the text.
+COMPLETENESS CHECK:    The full set of extracted values contains ""3"" and ""human chondrocytes (HCs)"". The latter is a type mismatch (cell type), but the value ""3"" correctly and exhaustively captures the biological replication mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD033469","ExperimentalDesignAgent","experimental_design","circNFKB1 probe vs antisense probe pulldown","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value describes a specific experimental procedure (RNA pulldown with specific probes) rather than a study design type.
+SOURCE CHECK:      The use of circNFKB1 probes and antisense probes for pulldown is mentioned in the text.
+TRUTH CHECK:       While the procedure occurred, it is not an ""experimental design"" in the sense of the field definition (e.g., case-control, treated vs control).
+COMPLETENESS CHECK: The full set contains only this value, which is a miscategorization of a method as a design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD033469","ExperimentalDesignAgent","factor_value","probe type (circNFKB1, antisense)","probe type (circNFKB1, antisense)","medium","False","","True","False","False","TYPE CHECK:        Yes, the candidate value describes an experimental variable (the type of probe used in the RNA pulldown assay).
+SOURCE CHECK:      Yes, the text mentions ""biotin-labeled circNFKB1 probes targeting its back-splice and its antisense probes were purchased from GenePharma for RNA pulldown assays.""
+TRUTH CHECK:       Yes, the study compared the proteins pulled down by the circNFKB1 probe versus the antisense control probe.
+COMPLETENESS CHECK:The full set of extracted values is incomplete; the study also investigates other factors such as IL-1β stimulation (treated vs untreated), circNFKB1 expression levels (knockdown vs overexpression), and OA status (DMM surgery vs Sham).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""probe type (circNFKB1, antisense)"", ""IL-1β stimulation"", ""circNFKB1 expression (knockdown, overexpression)"", ""OA status (DMM surgery, Sham)""]","probe type (circNFKB1, antisense), IL-1β stimulation, circNFKB1 expression level (knockdown, overexpression), DMM surgery"
+"PXD033469","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any peptide or protein fractionation prior to mass spectrometry; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was described in the RNA pulldown/MS workflow.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no fractionation occurred.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD033469","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions several different sample sets: 30 human OA cartilage tissues, 20 mice (divided into 4 groups of 5), and a circRNA sequencing experiment with 4 stimulated and 4 untreated human chondrocyte samples.
+TRUTH CHECK:       The value ""2"" is not supported by the text; there is no mention of a total sample count of 2.
+COMPLETENESS CHECK: The full set of extracted values does not cover the samples described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

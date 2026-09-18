@@ -1,0 +1,122 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD043500","BiologicalAgent","species","Escherichia coli","Escherichia coli","low","False","","False","False","False","TYPE CHECK:        Yes, ""Escherichia coli"" is a species name.
+SOURCE CHECK:      Yes, the paper mentions using ""Escherichia coli BL21"" for protein expression in the GST pull-down assays.
+TRUTH CHECK:       Yes, the value is factually present in the text.
+COMPLETENESS CHECK:The full set is incomplete; the study primarily focuses on human (endometrial cancer cells/patients) and mouse (BALB/c mice, CT26 cells) species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus"", ""Escherichia coli""]","Homo sapiens, Mus musculus"
+"PXD043500","BiologicalAgent","material_type","recombinant proteins","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""recombinant proteins"" does not belong to the defined categories for material_type (tissue, cell line, primary cells, biofluid, whole organism, plasma, serum, organoid).
+SOURCE CHECK:      The paper does use recombinant proteins for in vitro kinase assays and GST pull-down assays.
+TRUTH CHECK:       While recombinant proteins were used, they are not a valid ""material_type"" according to the provided field definition.
+COMPLETENESS CHECK: The full set is incorrect as it fails the type check and misses the actual biological materials used in the study (e.g., cell lines and tissues).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""tissue""]","cell line, tissue"
+"PXD043500","BiologicalAgent","strain","BL21","BL21","low","False","","False","False","False","TYPE CHECK:        The candidate value ""BL21"" is a bacterial strain, which fits the category of a strain.
+SOURCE CHECK:      The value is present in the paper text (""...introduced into Escherichia coli BL21"").
+TRUTH CHECK:       The value is factually correct as the strain of E. coli used for protein expression.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also uses ""BALB/c"" and ""BALB/cnu/nu"" mice for the in vivo experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""BL21"", ""BALB/c"", ""BALB/cnu/nu""]","BALB/c, BALB/cnu/nu"
+"PXD043500","TechnicalAgent","instrument","Q Exactive","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions ""mass spectrometry"" and ""mass-spectrometric sequencing"" and provides a PRIDE dataset identifier (PXD043500), but the text provided does not explicitly name the instrument model used.
+TRUTH CHECK:       The value ""Q Exactive"" is not mentioned in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043500","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC) for the mass spectrometry analysis; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The value is factually correct based on the absence of labeling descriptions in the methods.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043500","ExperimentalDesignAgent","replicates","recombinant protein complexes","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value ""recombinant protein complexes"" is a description of a material or sample, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""recombinant protein complexes"" is not explicitly used as a count, though recombinant proteins were used in the study.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates,"" which requires a number.
+COMPLETENESS CHECK: The full set of extracted values contains a type mismatch and a number (""2"") that is not clearly supported as the global biological replicate count for the MS experiment in the text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043500","ExperimentalDesignAgent","replicates","2","","low","True","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper does not explicitly state that there were 2 biological replicates for the mass spectrometry experiments; it mentions ""minimum of three experimental repeats"" in the Statistical analysis section and ""Five mice were used for each data point"" in the mouse assays.
+TRUTH CHECK:       The value ""2"" is not supported by the text; the statistical analysis section explicitly mentions a minimum of three repeats.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and contains a type mismatch (""recombinant protein complexes"" is not a replicate count).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043500","ExperimentalDesignAgent","experimental_design","in vitro kinase assay to identify STAT1 phosphorylation sites","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific laboratory assay/method rather than a study design type (e.g., ""treated vs control"", ""case-control"").
+SOURCE CHECK:      The paper does perform an in vitro kinase assay to identify STAT1 phosphorylation sites, but this is a method, not the experimental design.
+TRUTH CHECK:       The value is factually present as a method, but it is not a valid ""experimental design"" per the field definition.
+COMPLETENESS CHECK: The full set contains only this method-based value and fails to capture the actual study designs (e.g., knockout vs parental cells, treated vs control).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD043500","ExperimentalDesignAgent","factor_value","kinase (LATS1, LATS2)","kinase (LATS1, LATS2)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the biological entities (kinases) being manipulated, which fits the category of an experimental factor/variable.
+SOURCE CHECK:      The paper explicitly focuses on the loss, mutation, and expression of LATS1 and LATS2 kinases.
+TRUTH CHECK:       The study investigates how the presence or absence (KO) of LATS1 and LATS2 affects MHC-I expression and immune evasion.
+COMPLETENESS CHECK:    The full set only contains this value, but the study also involves other factors such as IFN-γ treatment, TNF-α treatment, and the use of the inhibitor TDI-011536.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""kinase (LATS1, LATS2)"", ""IFN-γ treatment"", ""TNF-α treatment"", ""TDI-011536 treatment""]","kinase (LATS1, LATS2), IFN-γ treatment, TNF-α treatment, TDI-011536 treatment"
+"PXD043500","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was described in the methods.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD043500","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The value ""2"" is not explicitly stated as the total number of samples; the paper describes multiple cohorts (TCGA, a 99-specimen cohort, a 42-specimen IHC cohort, and various cell lines).
+TRUTH CHECK:       The value ""2"" is factually incorrect. The study involves hundreds of samples across different experiments (e.g., 528 TCGA cases, 99 primary EC specimens, 42 IHC specimens).
+COMPLETENESS CHECK: The full set of extracted values does not cover the total count of samples processed in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

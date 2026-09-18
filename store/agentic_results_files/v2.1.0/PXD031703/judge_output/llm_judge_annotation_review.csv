@@ -1,0 +1,125 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD031703","BiologicalAgent","species","Escherichia coli","Escherichia coli","medium","False","","True","False","False","TYPE CHECK:        Yes, the candidate value is a species name.
+SOURCE CHECK:      Yes, the text mentions ""prepared from yeast"" and ""prepared from E. coli"" for recombinant protein expression.
+TRUTH CHECK:       Yes, E. coli was used to express the recombinant proteins analyzed by mass spectrometry.
+COMPLETENESS CHECK:The full set contains only ""Escherichia coli"", but the paper also explicitly states that the HuProt microarrays were ""prepared from yeast"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Escherichia coli"", ""Saccharomyces cerevisiae""]",""
+"PXD031703","BiologicalAgent","material_type","recombinant proteins","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""recombinant proteins"" is not one of the allowed broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""primary cells"").
+SOURCE CHECK:      The paper describes the use of recombinant proteins (e.g., ""purified recombinant proteins"", ""recombinant full-length human NDP52""), but this is a protein preparation, not a broad material class/sample source.
+TRUTH CHECK:       While recombinant proteins were used, they do not fit the definition of ""material_type"" which refers to the source material (e.g., the cell line or tissue from which the sample originated).
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD031703","TechnicalAgent","instrument","Q Exactive","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions an ""LTQ Orbitrap Velos Pro mass spectrometer (Thermo Scientific)"", but it does not mention a ""Q Exactive"".
+TRUTH CHECK:       The value is factually incorrect as the instrument used was an LTQ Orbitrap Velos Pro.
+COMPLETENESS CHECK: The full set is incorrect and does not reflect the instrument described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   LTQ Orbitrap Velos Pro",""
+"PXD031703","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK: The paper explicitly states ""Label-free tandem mass spectrometry was used to map the sites of ubiquitination"".
+TRUTH CHECK: The value is factually correct as the study did not use isobaric or metabolic labels for the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as only one labeling approach was used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","ExperimentalDesignAgent","replicates","purified recombinant proteins (NDP52, OPTN, SQSTM1)","3","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of proteins, not a numeric count of biological replicates.
+SOURCE CHECK:      The proteins mentioned are present in the text, but they are the subjects of the experiment, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a measure of replicates.
+COMPLETENESS CHECK:   The full set contains ""3"", which is a correct numeric value for replicates (mentioned in the Western blotting section: ""Western blots were repeated at least three times""), but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD031703","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK: The candidate value ""3"" is a numeric count, which is the correct type for the replicates field.
+SOURCE CHECK: The paper mentions ""Western blots were repeated at least three times"" in the Western blotting section.
+TRUTH CHECK: The value ""3"" is factually correct based on the Western blot repetitions described.
+COMPLETENESS CHECK: The full set of extracted values contains a non-numeric value (""purified recombinant proteins..."") which is a type mismatch for this field, but the numeric value ""3"" correctly captures the biological replication mentioned for the primary assays.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD031703","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not explicitly mention the number of technical replicates for the mass spectrometry experiments.
+TRUTH CHECK:       According to the safe defaults in the instructions, ""1"" is correct when the paper is silent regarding replication.
+COMPLETENESS CHECK: The full set contains the default value ""1"", which is exhaustive given the lack of specific information in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD031703","ExperimentalDesignAgent","experimental_design","mapping of ubiquitination sites on NDP52, OPTN, and SQSTM1 after WWP2Y369E treatment","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental goal or procedure rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The text mentions mapping ubiquitination sites, but this is the objective of the MS experiment, not the design type.
+TRUTH CHECK:       The value is a description of a result/task, not an experimental design category.
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD031703","ExperimentalDesignAgent","factor_value","substrate protein (NDP52, OPTN, SQSTM1)","substrate protein (NDP52, OPTN, SQSTM1)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the specific proteins being tested as substrates, which constitutes an experimental variable/factor.
+SOURCE CHECK:      The paper explicitly focuses on the ubiquitination of NDP52, OPTN, and SQSTM1 as substrates for WWP2.
+TRUTH CHECK:       The value is factually correct based on the results and methods sections.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the study also investigates different WWP2 variants (WT, Y369E, Y392E) and the effect of WWP2 knockout (KO vs parental) in SH-SY5Y cells.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""substrate protein (NDP52, OPTN, SQSTM1)"", ""WWP2 variant (WT, Y369E, Y392E)"", ""WWP2 expression level (parental vs KO)""]",""
+"PXD031703","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of ""1"" applies.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD031703","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total count of samples processed for the MS analysis; it mentions mapping ubiquitination sites for 3 proteins (NDP52, OPTN, and SQSTM1).
+TRUTH CHECK:       The value ""3"" likely refers to the number of proteins analyzed by MS, but ""number_of_samples"" typically refers to the total experimental units (including biological replicates) processed. The text does not provide a definitive total sample count.
+COMPLETENESS CHECK: The full set contains only this value, which is an inference based on the number of proteins studied rather than an explicit sample count.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

@@ -1,0 +1,126 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD021039","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human host factors"" and the use of ""Uniprot human protein database"" for MS analysis.
+TRUTH CHECK: The experiment uses human cells (HEK293T) and identifies human host proteins.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which correctly identifies the source organism for the proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021039","BiologicalAgent","organ","kidney","kidney","high","False","","True","True","False","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper mentions ""Vero (African green monkey kidney) cells"" in the methods and results.
+TRUTH CHECK:       The cells used (Vero) are derived from the kidney of an African green monkey.
+COMPLETENESS CHECK: The full set contains ""kidney"", which correctly identifies the organ of origin for the Vero cells used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021039","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions HEK293T and Vero cells, but it does not explicitly state that they are ""epithelial cells,"" nor is this a safe default for these specific immortalized cell lines in this context.
+TRUTH CHECK:       While HEK293T and Vero cells are derived from epithelial lineages, the paper does not use this term to describe the cells used in the experiment.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021039","BiologicalAgent","material_type","HEK293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK293T cells"" is a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The use of HEK293T cells is explicitly mentioned throughout the paper.
+TRUTH CHECK:       The value is factually correct as the material used, but it is a specific entity rather than a broad category.
+COMPLETENESS CHECK:The full set contains only the specific cell line name, failing to provide the broad material class required by the definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD021039","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""HEK293T"" is explicitly mentioned multiple times in the text (e.g., ""HEK293T cells transfected with plasmids"").
+TRUTH CHECK: The value is factually correct as it is the cell line used for the proteomic interactome mapping and subsequent experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also uses ""Vero"" cells (and a modified ""Vero-ATP6V1A"" line) for the experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""HEK293T"", ""Vero""]","HEK293T, Vero"
+"PXD021039","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions an ""Orbitrap Q Exactive HF-X mass spectrometer"".
+TRUTH CHECK: ""Q Exactive"" is a correct shorthand for the ""Orbitrap Q Exactive HF-X"" mentioned in the text.
+COMPLETENESS CHECK: The full set contains only ""Q Exactive"", but the paper specifies the more precise model ""Orbitrap Q Exactive HF-X"". While ""Q Exactive"" is correct, the extraction is slightly less precise than the text. However, it is not missing other distinct instruments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021039","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes LC-MS/MS analysis of coimmunoprecipitated proteins without mentioning any isobaric (TMT, iTRAQ) or metabolic (SILAC) labeling; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct based on the absence of labeling reagents in the methods.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021039","ExperimentalDesignAgent","replicates","transfected HEK293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of a sample/cell type, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""transfected HEK293T cells"" is present in the text, but it does not represent the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'.
+COMPLETENESS CHECK: The full set contains only a type-mismatched value and does not provide the number of replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021039","ExperimentalDesignAgent","factor_value","M protein tag position (M-NF, M-CF, control)","M protein tag position (M-NF, M-CF, control)","medium","False","","True","False","False","TYPE CHECK: The candidate value describes an experimental variable (the position of the FLAG tag on the M protein), which fits the definition of a factor_value.
+SOURCE CHECK: The paper explicitly mentions using N-terminally FLAG-tagged M protein (M-NF), C-terminally FLAG-tagged M protein (M-CF), and a control plasmid.
+TRUTH CHECK: The value is factually correct based on the ""Results"" section describing the immunoprecipitation of lysates from HEK293T cells transfected with these specific constructs.
+COMPLETENESS CHECK: While this is a correct factor for the initial MS screen, the paper studies several other major factors, including ATP6V1A expression levels (knockdown via siRNA vs. overexpression via pA-Myc) and the use of different cell lines (HEK293T vs. Vero). The full set of extracted values is missing these primary experimental variables.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""M protein tag position (M-NF, M-CF, control)"", ""ATP6V1A expression level (knockdown, overexpression, control)"", ""cell type (HEK293T, Vero)""]","M protein tag position (M-NF, M-CF, control), ATP6V1A expression level (knockdown, overexpression, control), cell type (HEK293T, Vero)"
+"PXD021039","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS.
+TRUTH CHECK:       Per the field definition, ""1"" is the correct value when no fractionation occurred.
+COMPLETENESS CHECK: The full set of extracted values correctly reflects that no fractionation was performed.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021039","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper describes a mass spectrometry experiment comparing lysates of cells transfected with FLAG-tagged M proteins (M-NF or M-CF) against cells transfected with a control plasmid.
+TRUTH CHECK:       The text mentions ""cells transfected with the plasmid expressing FLAG-tagged M proteins but not in those of cells transfected with the control plasmid,"" implying at least two groups (experimental vs control). However, it specifically mentions two different tagged versions (M-NF and M-CF). The total number of distinct sample groups processed for the MS analysis is not explicitly summed as a single integer in the text.
+COMPLETENESS CHECK:The value ""2"" is an under-extraction; the study used M-NF, M-CF, and a control plasmid, suggesting at least 3 sample groups for the MS analysis.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

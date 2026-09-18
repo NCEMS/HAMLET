@@ -44,6 +44,27 @@ def copy_file(source: Path, destination: Path) -> None:
     shutil.copy2(source, destination)
 
 
+def annotated_release_version(agentic_source: Path, pxd: str) -> str | None:
+    sdrf_path = agentic_source / f"{pxd}.sdrf.tsv"
+    if not sdrf_path.is_file():
+        return None
+    with sdrf_path.open(encoding="utf-8", newline="") as handle:
+        rows = csv.reader(handle, delimiter="\t")
+        headers = next(rows, [])
+        try:
+            annotation_index = headers.index("comment[sdrf annotation tool]")
+        except ValueError:
+            return None
+        annotations = {row[annotation_index] for row in rows if len(row) > annotation_index}
+    versions = {
+        match.group(1)
+        for annotation in annotations
+        for match in [re.search(r"HAMLET-agentic\s+(v\d+\.\d+\.\d+)", annotation)]
+        if match
+    }
+    return versions.pop() if len(versions) == 1 else None
+
+
 def release_version(aggregate: Path, agentic_source: Path, pxd: str) -> str | None:
     current_schema = {
         f"{pxd}.sdrf.tsv",
@@ -51,6 +72,9 @@ def release_version(aggregate: Path, agentic_source: Path, pxd: str) -> str | No
         "metadata_extraction_output",
         "judge_output",
     }
+    annotated_version = annotated_release_version(agentic_source, pxd)
+    if annotated_version:
+        return annotated_version
     if agentic_source.is_dir() and current_schema <= {path.name for path in agentic_source.iterdir()}:
         return CURRENT_SCHEMA_VERSION
     if not aggregate.is_file():
@@ -278,12 +302,52 @@ def build_site_summary(records: list[dict], output_data_dir: Path) -> dict:
     }
 
 
+def publish_qc_summary(qc_summary: Path, output_data_dir: Path) -> None:
+    """Copy an explicitly reviewed QC run into the static Explorer data bundle."""
+    try:
+        summary = json.loads(qc_summary.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RuntimeError(f"Could not read QC summary {qc_summary}: {exc}") from exc
+    if not isinstance(summary, dict) or not isinstance(summary.get("results"), list):
+        raise RuntimeError(f"QC summary {qc_summary} has no results list")
+
+    for result in summary["results"]:
+        pxd = result.get("pxd")
+        if not isinstance(pxd, str) or not re.fullmatch(r"PXD\d+", pxd):
+            continue
+        for report_key in ("comparison", "judge"):
+            report = result.get(report_key)
+            if not isinstance(report, dict) or not report.get("report_path"):
+                continue
+            source = Path(report["report_path"])
+            if not source.is_dir():
+                continue
+            relative_destination = Path("qc") / pxd / report_key
+            destination = output_data_dir / relative_destination
+            for artifact in sorted(source.rglob("*")):
+                if not artifact.is_file() or artifact.suffix.lower() not in SUPPORTED_SUFFIXES:
+                    continue
+                if artifact.stat().st_size > MAX_PUBLISHED_FILE_BYTES:
+                    continue
+                copy_file(artifact, destination / artifact.relative_to(source))
+            report["public_report_path"] = relative_destination.as_posix()
+
+    (output_data_dir / "qc-summary.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--store", type=Path, default=Path("store"))
     parser.add_argument("--site-dir", type=Path, default=Path("docs/store-explorer"))
     parser.add_argument("--pxd", action="append", default=[], help="Build only one PXD; repeatable")
     parser.add_argument("--pxd-file", type=Path, help="Build the PXDs listed in a one-column CSV file")
+    parser.add_argument(
+        "--qc-summary",
+        type=Path,
+        help="Reviewed qc-summary.json to publish with its report files",
+    )
     args = parser.parse_args()
 
     output_data_dir = args.site_dir / "data"
@@ -301,6 +365,8 @@ def main() -> None:
         json.dumps(build_site_summary(records, output_data_dir), indent=2) + "\n",
         encoding="utf-8",
     )
+    if args.qc_summary:
+        publish_qc_summary(args.qc_summary, output_data_dir)
     print(f"Built Store Explorer data for {len(records)} PXDs in {output_data_dir}")
 
 

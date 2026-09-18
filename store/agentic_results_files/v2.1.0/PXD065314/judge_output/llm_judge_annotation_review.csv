@@ -1,0 +1,112 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD065314","BiologicalAgent","species","Escherichia coli","Escherichia coli","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a species name, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Rosetta(DE3)pLysS E. coli"" and ""DH10 E. coli"" in the protein expression and purification section.
+TRUTH CHECK:       The value ""Escherichia coli"" is the full scientific name for E. coli used in the experiment.
+COMPLETENESS CHECK:    The full set contains ""Escherichia coli"", which covers the bacterial expression system used. While Sf21 insect cells are also mentioned, the extraction of the bacterial species is correct.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE","Escherichia coli, Spodoptera frugiperda"
+"PXD065314","BiologicalAgent","material_type","in vitro","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""in vitro"" is a description of the experimental setting, not a broad material class as defined (e.g., tissue, cell line, biofluid).
+SOURCE CHECK:      The text mentions ""in vitro"" multiple times, but this refers to the assay condition, not the material type.
+TRUTH CHECK:       The actual materials used were recombinant proteins expressed in E. coli and Sf21 insect cells, which does not map to ""in vitro"" as a material type.
+COMPLETENESS CHECK:The full set contains only an incorrect value.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD065314","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions a ""Fusion Lumos (Thermo Fisher Scientific) mass spectrometer"".
+TRUTH CHECK: The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer used for the LC-MS/MS analysis (the Q-TOF Premier is also mentioned for intact mass, but the current set focuses on the Fusion Lumos; however, for a complete picture of the paper, both instruments should be listed).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Orbitrap Fusion Lumos"", ""Waters Q-TOF Premier""]","Orbitrap Fusion Lumos, Q-TOF Premier MS"
+"PXD065314","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The experiment used standard LC-MS/MS and Q-TOF MS without any mentioned labeling reagents.
+COMPLETENESS CHECK: The full set consists of a single value that correctly describes the labeling state of the experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD065314","ExperimentalDesignAgent","replicates","purified recombinant proteins","1","low","True","","False","False","False","TYPE CHECK:        The candidate value ""purified recombinant proteins"" is a description of the material used, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions the use of purified recombinant proteins, but this is not a value for the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a measure of replicates.
+COMPLETENESS CHECK: The full set contains ""1"", which is the correct safe default when no replication is mentioned. The inclusion of ""purified recombinant proteins"" is a type error.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD065314","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper does not explicitly mention the number of biological replicates for the MS experiments; therefore, ""1"" is a safe default.
+TRUTH CHECK:       The value is correct as a default when no replication is specified.
+COMPLETENESS CHECK:    The full set of extracted values contains ""purified recombinant proteins"", which is a material type, not a replicate count. However, the value ""1"" correctly represents the lack of mentioned replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD065314","ExperimentalDesignAgent","experimental_design","comparison of phosphorylation using ATP vs ADP","comparison of phosphorylation using ATP vs ADP","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup/comparison, which fits the category of study design.
+SOURCE CHECK:      The paper explicitly compares the ability of MAP2Ks to phosphorylate MAPKs using ATP versus ADP across multiple experiments.
+TRUTH CHECK:       The value is factually correct as the core of the study is comparing these two nucleotide sources.
+COMPLETENESS CHECK:    The full set captures the primary design, although the paper also includes a ""time course"" assay (mentioned in the ""Phosphorylation assays using native PAGE gels"" section).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""comparison of phosphorylation using ATP vs ADP"", ""time course""]",""
+"PXD065314","ExperimentalDesignAgent","factor_value","nucleotide donor (ATP, ADP)","nucleotide donor (ATP, ADP)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (the type of nucleotide used as a phosphate donor) being compared.
+SOURCE CHECK:      The paper explicitly compares the use of ATP versus ADP as phosphate donors for the phosphorylation of MAP kinases.
+TRUTH CHECK:       The value is factually correct as the central experiment of the paper is testing whether ADP can serve as a donor instead of ATP.
+COMPLETENESS CHECK: The full set captures the primary experimental factor; while ""time"" is also a variable in the time-course assays, the core study factor is the nucleotide source.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD065314","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD065314","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed; it describes various assays (native PAGE, Q-TOF, LC-MS/MS) with different protein pairs (MKK6/p38α, MKK4/p38α, etc.) and nucleotide conditions (ATP, ADP).
+TRUTH CHECK:       There is no evidence in the text to support the specific number ""3"" as the total count of samples processed in the study.
+COMPLETENESS CHECK:The full set contains only one value (""3""), which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

@@ -1,0 +1,145 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD023906","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Caco-2 human colon cancer cells"", ""HEK293T human embryonic kidney cells"", and specifies the search database as ""homo sapiens (Homo_sapiens_9606_Swiss-Prot)"".
+TRUTH CHECK: The proteins analyzed and the cell lines used are all from humans.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which is the only species used for the proteomics experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023906","BiologicalAgent","organ","kidney","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""kidney"" is the correct category (organ/tissue) for this field.
+SOURCE CHECK:      The paper mentions ""HEK293T human embryonic kidney cells"", but these are an immortalized cell line, not an organ sample.
+TRUTH CHECK:       The experiment used cell lines (Caco-2, RKO, HEK293T), not organ tissues. The ""kidney"" part of ""HEK293T"" refers to the origin of the cell line, not the organ of origin for the experimental material.
+COMPLETENESS CHECK: The full set contains only ""kidney"", which is an incorrect extraction based on the material used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023906","BiologicalAgent","cell_type","embryonic kidney cells","embryonic kidney cells","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""embryonic kidney cells"" describes a cell type/lineage.
+SOURCE CHECK:      The paper mentions ""HEK293T human embryonic kidney cells"" in the methods section.
+TRUTH CHECK:       The value is factually correct as it describes the lineage of the HEK293T cells used.
+COMPLETENESS CHECK: The full set of extracted values only includes ""embryonic kidney cells"", but the paper also uses ""Caco-2 human colon cancer cells"" and ""RKO human epithelial cell lines"" (and mentions intestinal, oral, and vaginal epithelial cells). The current set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""embryonic kidney cells"", ""colon cancer cells"", ""epithelial cells""]","embryonic kidney cells, colon cancer cells, epithelial cells"
+"PXD023906","BiologicalAgent","material_type","HEK293T human embryonic kidney cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific cell line name, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The text explicitly mentions ""HEK293T human embryonic kidney cells"".
+TRUTH CHECK:       The value is factually present, but it is a specific entity rather than a broad material class.
+COMPLETENESS CHECK:The full set contains only the specific cell line name and fails to provide the broad category ""cell line"".
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023906","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""HEK293T"" is explicitly mentioned in the ""Results"" and ""Methods"" sections.
+TRUTH CHECK:       The value is factually correct as the paper uses HEK293T cells for immunoprecipitation and viral generation.
+COMPLETENESS CHECK:The full set of extracted values is incomplete; the paper also mentions ""Caco-2"", ""RKO"", and ""Ca9-22"" as cell lines used in the experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""Caco-2"", ""RKO"", ""Ca9-22""]","HEK293T, Caco-2, RKO, Ca9-22"
+"PXD023906","TechnicalAgent","instrument","Q Exactive","Q Exactive","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""The data processing was conducted using the Q-Exactive or Orbitrap Elite mass spectrometer (Thermo Fisher Scientific).""
+TRUTH CHECK:       The value is factually correct as stated in the methods section.
+COMPLETENESS CHECK:    The full set of extracted values only contains ""Q Exactive"", but the paper explicitly mentions both ""Q-Exactive"" and ""Orbitrap Elite"". Therefore, the set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Q-Exactive"", ""Orbitrap Elite""]","Q-Exactive, Orbitrap Elite"
+"PXD023906","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (like TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct based on the absence of labeling methods in the text.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023906","ExperimentalDesignAgent","replicates","transfected HEK293T cells","1","low","True","","False","False","False","TYPE CHECK:        The candidate value is a cell line/sample description, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""transfected HEK293T cells"" as the source of the proteins for mass spectrometry, but not as a replicate count.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains a type mismatch and a default value; it does not accurately reflect the biological replicates described in the paper.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023906","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK:      The paper does not explicitly state the number of biological replicates for the mass spectrometry experiments.
+TRUTH CHECK:       According to the field definition, ""1"" is the correct value when no replication is mentioned.
+COMPLETENESS CHECK: The full set of extracted values contains ""transfected HEK293T cells"", which is a cell line/material type and does not belong in the replicates field. However, the value ""1"" correctly represents the lack of mentioned replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023906","ExperimentalDesignAgent","experimental_design","stathmin-GFP interactome identification and phosphorylation site analysis under HIV-1 gp120 treatment","","low","True","","False","False","False","TYPE CHECK:        No, the candidate value describes the specific experimental goals/objectives rather than the study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The information is present in the text, but it is a description of the assay, not the design category.
+TRUTH CHECK:       The value accurately describes what was done, but it does not fit the definition of ""experimental_design"".
+COMPLETENESS CHECK:The full set contains only this value, which is a description of the experiment's purpose rather than its design type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""treated vs control""]","treated vs control"
+"PXD023906","ExperimentalDesignAgent","factor_value","treatment (HIV-1 gp120)","treatment (HIV-1 gp120)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental treatment/variable, which matches the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions treatment with ""recombinant gp120 protein"" and ""HIV-1 gp120"" throughout the results and methods.
+TRUTH CHECK:       It is factually correct that HIV-1 gp120 treatment is a primary experimental factor used to induce the observed effects.
+COMPLETENESS CHECK:    The full set contains only this value, but the paper also uses other factors such as PKG1 knockdown (siRNA) and PKG1 inhibition (RPG).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""treatment (HIV-1 gp120)"", ""PKG1 knockdown"", ""PKG1 inhibition (RPG)""]","treatment (HIV-1 gp120), PKG1 knockdown, stathmin mutation"
+"PXD023906","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide/protein fractionation method; therefore, the safe default of ""1"" is applied.
+TRUTH CHECK:       The value is correct as no fractionation is described in the methods.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no fractionation occurred.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023906","ExperimentalDesignAgent","number_of_samples","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for this field.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the mass spectrometry experiments.
+TRUTH CHECK:       While the paper describes multiple conditions (e.g., HIV-1 gp120 treatment vs control), there is no specific count of biological samples provided.
+COMPLETENESS CHECK:The value ""1"" is a safe default when the paper is silent on the number of replicates or samples, but it does not reflect a specific count mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

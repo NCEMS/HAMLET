@@ -1,0 +1,178 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD017670","BiologicalAgent","species","Escherichia coli","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a species name, which matches the field definition.
+SOURCE CHECK:      The text mentions ""Escherichia coli"" in the Bioinformatics section, but only as a background database for FDR calculation during the analysis of in vitro kinase assays.
+TRUTH CHECK:       The actual source organisms for the experiments are mouse (C2 and C2C12 cells) and human (HEK293T cells and recombinant human FLNc). E. coli was used for protein expression and as a computational decoy, not as the biological source of the proteomics samples.
+COMPLETENESS CHECK:    The full set contains only E. coli, which is incorrect as the primary experimental species (mouse and human) are missing.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""Mus musculus"", ""Homo sapiens""]","Mus musculus, Homo sapiens"
+"PXD017670","BiologicalAgent","organ","skeletal muscle","skeletal muscle","high","False","","True","True","False","TYPE CHECK:        The candidate value ""skeletal muscle"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper explicitly mentions ""skeletal muscle growth"", ""contracting skeletal muscle cells"", and ""extracts of mouse skeletal muscle"".
+TRUTH CHECK:       The experiments were performed using skeletal muscle cells (C2 myotubes) and mouse skeletal muscle extracts.
+COMPLETENESS CHECK: The full set of extracted values covers the tissue of origin described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","BiologicalAgent","cell_type","myotubes","myotubes","high","False","","True","True","False","TYPE CHECK: The candidate value ""myotubes"" describes a cell type/lineage, which fits the field definition.
+SOURCE CHECK: The paper explicitly mentions ""contracting skeletal myotubes"" and ""cultured myotubes"" throughout the results and methods sections.
+TRUTH CHECK: The value is factually correct as the primary experimental system used for the phosphoproteomics analysis.
+COMPLETENESS CHECK: The full set of extracted values (""myotubes"") covers the primary cell type used in the main experiments; while other cells like HEK293T and C2 myoblasts are mentioned, they are used for validation/transfection rather than the primary phosphoproteomic study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017670","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field, used to describe healthy controls.
+SOURCE CHECK:      The paper uses C2 myoblasts and HEK293T cells; there is no mention of a disease state or pathology being studied.
+TRUTH CHECK:       The experiments are performed on standard cell lines to study signaling pathways (PI3K/Akt) in a baseline/healthy context.
+COMPLETENESS CHECK: The full set contains ""normal"", which correctly reflects the absence of a disease state in the experimental subjects.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","BiologicalAgent","material_type","C2 myoblasts","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""C2 myoblasts"" is a specific cell type/line, but the field `material_type` requires a broad material class (e.g., ""cell line"").
+SOURCE CHECK:      The paper mentions ""C2 myoblasts"" were used for SILAC and other experiments.
+TRUTH CHECK:       The value is factually present, but it is a specific entity rather than a broad category.
+COMPLETENESS CHECK: The full set contains only the specific cell name, failing to provide the broad material class required by the definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD017670","BiologicalAgent","cell_line","C2","C2","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of a cell line, which matches the field definition.
+SOURCE CHECK:      The value ""C2"" is explicitly mentioned multiple times in the text (e.g., ""C2 myoblasts were cultured"", ""C2 cells were transfected"").
+TRUTH CHECK:       The text confirms that C2 cells/myoblasts were used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is missing ""HEK293T"" (or ""HEK293""), which is also explicitly mentioned as being used for co-expression and FCS experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""C2"", ""HEK293T""]","C2, HEK293T"
+"PXD017670","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions the ""Q Exactive Plus"" in the LC-MS analysis and PRM sections.
+TRUTH CHECK:       The value is factually correct as it is one of the instruments used for the experiments.
+COMPLETENESS CHECK:    The full set of extracted values is incomplete because the paper also mentions the ""Velos Orbitrap Elite"" as an instrument used for LC-MS and BioID experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Q Exactive Plus"", ""Velos Orbitrap Elite""]","Q Exactive Plus, Velos Orbitrap Elite"
+"PXD017670","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""stable isotope labeling by amino acids in cell culture (SILAC)"" in the Methods section under ""Cell culture"".
+TRUTH CHECK:       The use of SILAC for quantitative phosphoproteomics and proximity proteomics is factually correct as described in the text.
+COMPLETENESS CHECK:    The full set of extracted values contains ""SILAC"", which covers the labeling method used for the quantitative experiments described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","replicates","3 independent biological replicates (IGF-1/LY study) and 6 independent biological replicates (LY/MK study)","3 independent biological replicates (IGF-1/LY study) and 6 independent biological replicates (LY/MK study) | 3 and 6","high","False","","True","True","False","TYPE CHECK:        The candidate value provides the number of biological replicates for different experimental arms, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""Experiments were performed in three independent biological replicates"" for the IGF-1/LY study and ""Experiments were performed in six independent biological replicates"" for the LY/MK study.
+TRUTH CHECK:       The values are factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values covers all mentioned biological replicates for the primary phosphoproteomic studies.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","replicates","3 and 6","3 independent biological replicates (IGF-1/LY study) and 6 independent biological replicates (LY/MK study) | 3 and 6","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3 and 6"" represents numeric counts of biological replicates, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""three independent biological replicates"" for the IGF-1/LY study and ""six independent biological replicates"" for the LY/MK study in the Methods section.
+TRUTH CHECK:       The values are factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values correctly identifies the different replicate counts for the two primary phosphoproteomic studies described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","technical_replicates","two technical replicates","two technical replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count of technical replicates, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""two technical replicates"" in the Methods section under ""Cell culture"" (for the LY/MK study) and ""LC-MS analysis"" (for phosphopeptide-enriched mixtures).
+TRUTH CHECK:       The value is factually correct as per the paper.
+COMPLETENESS CHECK:    The full set of extracted values (""two technical replicates"", ""2"") is exhaustive and consistent.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","technical_replicates","2","two technical replicates | 2","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for technical replicates.
+SOURCE CHECK:      The paper explicitly mentions ""two technical replicates"" in the ""Methods"" section under ""Cell culture"" (for the LY/MK study) and ""LC-MS analysis"" (for phosphopeptide-enriched mixtures and EasyPhos/SMOAC experiments).
+TRUTH CHECK:       The value ""2"" is factually correct based on the text.
+COMPLETENESS CHECK:    The full set of extracted values (""two technical replicates"", ""2"") is exhaustive as it captures the reported technical replication across the relevant experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","experimental_design","Quantitative phosphoproteomic comparison of contracting myotubes treated with IGF-1, LY294002, or MK-2206","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the experimental setup but is phrased as a summary of the study rather than a ""study design type"" (e.g., ""treated vs control"").
+SOURCE CHECK:      The information is present in the text; the study compares myotubes treated with IGF-1, LY, and MK.
+TRUTH CHECK:       The factual content is correct, but the format is a descriptive sentence rather than a design category.
+COMPLETENESS CHECK: The full set contains only this descriptive value, which fails to categorize the design type as requested by the field definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""treated vs control""]","treated vs control"
+"PXD017670","ExperimentalDesignAgent","factor_value","treatment (IGF-1, LY294002, MK-2206)","treatment (IGF-1, LY294002, MK-2206)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (drug treatments) used in the study, which matches the definition of factor_value.
+SOURCE CHECK:      The paper explicitly mentions stimulation with IGF-1 and inhibition using LY294002 (LY) and MK-2206 (MK) in the results and methods sections.
+TRUTH CHECK:       The value is factually correct as these are the primary factors manipulated to study the PI3K/Akt signaling network.
+COMPLETENESS CHECK:    The full set captures the primary pharmacological treatments; however, the study also uses ""electrical pulse simulation (EPS)"" and ""differentiation"" as experimental factors to induce the contracting myotube state.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""treatment (IGF-1, LY294002, MK-2206)"", ""electrical pulse simulation (EPS)"", ""differentiation""]","treatment (IGF-1, LY294002, MK-2206), electrical pulse simulation (EPS), differentiation"
+"PXD017670","ExperimentalDesignAgent","fractions","30","30","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper explicitly states in the ""Peptide fractionation"" section: ""Three-minutes fractions (30 fractions per run) were collected"".
+TRUTH CHECK:       The value ""30"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""30"", which is the only fractionation count mentioned for the main phosphoproteomic runs.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017670","ExperimentalDesignAgent","number_of_samples","9","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes multiple distinct experiments (IGF-1/LY study, LY/MK study, PRM, BioID, etc.), but does not provide a single total count of all samples processed across the entire study.
+TRUTH CHECK:       The value ""9"" is not mentioned in the text as a total sample count. For the IGF-1/LY study, there are 3 conditions (control, IGF-1, LY) with 3 biological replicates each (3x3=9), but this only covers one part of the study. The LY/MK study has 6 biological replicates across 3 conditions (6x3=18).
+COMPLETENESS CHECK: The full set contains only ""9"", which is not an exhaustive or accurate total for the entire study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

@@ -1,0 +1,158 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD020482","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""postmortem human tissue"" and ""Homo sapiens proteome database"".
+TRUTH CHECK:       The study uses human brain tissue, making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK: The full set contains the only species used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","BiologicalAgent","organ","brain","brain","high","False","","True","True","False","TYPE CHECK:        The candidate value ""brain"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper explicitly mentions ""postmortem human tissue"" and ""postmortem brain tissue"" multiple times.
+TRUTH CHECK:       The samples were derived from the angular gyrus (BA39) and frontal gyrus (BA46) of the brain.
+COMPLETENESS CHECK: The full set contains ""brain"", which accurately describes the organ of origin for all samples in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","BiologicalAgent","disease","Alzheimer’s disease","Alzheimer’s disease","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a disease diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""Alzheimer’s disease (AD)"" throughout the title, abstract, and results.
+TRUTH CHECK:       The value is factually correct as the study focuses on patients with Alzheimer's disease.
+COMPLETENESS CHECK: The full set contains ""Alzheimer’s disease""; however, the paper also describes a control group. According to the field definition, ""normal"" or ""healthy"" should be extracted for healthy controls.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Alzheimer’s disease"", ""normal""]","Alzheimer’s disease, normal"
+"PXD020482","BiologicalAgent","material_type","postmortem human tissue","","low","True","","False","True","False","TYPE CHECK:        The candidate value describes the source material, but it is a specific description rather than one of the broad material classes defined for this field.
+SOURCE CHECK:      The text explicitly mentions ""postmortem human tissue"" in the abstract and results.
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains only this value, which accurately identifies the source, but it does not map to the required broad categories.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""tissue""]","tissue"
+"PXD020482","TechnicalAgent","instrument","Q Exactive HF","Q Exactive HF","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""analyzed using a Q Exactive HF and QE mass spectrometer"".
+TRUTH CHECK: The value is factually correct as it is listed as one of the instruments used for the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also mentions ""Q Exactive"" (QE) and ""5500 QTRAP"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Q Exactive HF"", ""Q Exactive"", ""5500 QTRAP""]","Q Exactive HF, Q Exactive, 5500 QTRAP"
+"PXD020482","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions ""Label-free quantification was done using the XIC-based in-built label-free quantification (LFQ) algorithm integrated into MaxQuant.""
+TRUTH CHECK:       The value is factually correct as the study used label-free quantification for its proteomics analysis.
+COMPLETENESS CHECK: The full set of extracted values consists of only ""label-free"", which exhaustively covers the labeling method described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","replicates","human subjects (AD patients and controls)","110","low","True","","False","False","False","TYPE CHECK:        The candidate value ""human subjects (AD patients and controls)"" is a description of the sample group, not a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions 49 AD and 42 control subjects (total 91) for the main cohort, and additional subjects for BA46 (10 AD, 9 control), but the candidate value itself is a description, not a count.
+TRUTH CHECK:       The value is not a number; it describes the entities being replicated rather than the number of replicates.
+COMPLETENESS CHECK:    The full set contains both a description and a number (""110""), but the description is a type mismatch for this field.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","replicates","110","110","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the category for the replicates field.
+SOURCE CHECK:      The paper mentions 49 AD and 42 control subjects in the first cohort, and later mentions 10 AD and 9 control subjects for the BA46 region (49+42+10+9 = 110).
+TRUTH CHECK:       The value 110 represents the total number of biological samples/subjects used across the different cohorts and brain regions described in the study.
+COMPLETENESS CHECK: The full set of extracted values includes both the description of the subjects and the total count; together they accurately reflect the biological replication (number of subjects) in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","technical_replicates","three technical replicates per sample","three technical replicates per sample | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of technical replicates, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""three technical replicates per sample"" in the FLEXITau measurements and data analysis section.
+TRUTH CHECK:       The value is factually correct according to the paper.
+COMPLETENESS CHECK: The full set of extracted values (""three technical replicates per sample"", ""3"") is exhaustive as it captures the only mention of technical replication in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","technical_replicates","3","three technical replicates per sample | 3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for technical replicates.
+SOURCE CHECK:      The text explicitly states ""three technical replicates per sample"" in the FLEXITau measurements section.
+TRUTH CHECK:       The value ""3"" is factually correct based on the text.
+COMPLETENESS CHECK:    The full set of extracted values (""three technical replicates per sample"", ""3"") is exhaustive and covers the information provided in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","experimental_design","Comparison of Tau PTMs between AD patients and control subjects across BA39 and BA46 brain regions","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the objective/scope of the study rather than the study design type (e.g., ""case-control"").
+SOURCE CHECK:      The information is present in the text, as the study compares AD patients and control subjects.
+TRUTH CHECK:       While the description is factually accurate regarding what was done, it does not provide the ""design type"" as requested by the field definition.
+COMPLETENESS CHECK: The full set contains only this descriptive phrase, which fails to categorize the design (e.g., as ""case-control"").
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""case-control""]","case-control"
+"PXD020482","ExperimentalDesignAgent","factor_value","diagnosis (AD, control), brain region (BA39, BA46)","diagnosis (AD, control), brain region (BA39, BA46)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (diagnosis and brain region) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly compares AD patients vs. control subjects and analyzes two brain regions: the angular gyrus (BA39) and the frontal gyrus (BA46).
+TRUTH CHECK:       The values are factually correct based on the results and methods sections.
+COMPLETENESS CHECK: The full set captures the primary experimental factors (disease state and anatomical location) used to differentiate the Tau PTM profiles.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD020482","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The paper describes several types of fractionation (sarkosyl-soluble/insoluble, size-exclusion chromatography, and MC1-immunoaffinity), but it does not specify a fixed number of fractions generated per sample for the primary proteomics analysis.
+TRUTH CHECK: According to the field definitions, ""1"" is the correct value when the paper is silent about the specific number of fractions or when no standard offline fractionation (like high-pH RP) is mentioned.
+COMPLETENESS CHECK: The full set contains only ""1"", which is the appropriate default for this paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD020482","ExperimentalDesignAgent","number_of_samples","110","110","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper mentions 49 AD and 42 control subjects in the main cohort (91 total), plus an additional analysis of the BA46 region in 10 AD and 9 control patients (19 total). 91 + 19 = 110.
+TRUTH CHECK:       The sum of the subjects described in the results section (49 AD + 42 controls + 10 AD BA46 + 9 controls BA46) equals 110.
+COMPLETENESS CHECK:The full set of extracted values (110) accurately reflects the total number of human samples processed across the described cohorts.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

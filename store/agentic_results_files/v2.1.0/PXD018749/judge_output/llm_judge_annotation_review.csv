@@ -1,0 +1,145 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD018749","BiologicalAgent","species","Drosophila melanogaster","Drosophila melanogaster","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The paper explicitly mentions ""drosophila ovaries"" and ""D. melanogaster Release 6 (dm6) genome assembly"".
+TRUTH CHECK:       The study is performed using Drosophila (fruit flies), and ""Drosophila melanogaster"" is the correct scientific name.
+COMPLETENESS CHECK: The full set contains the single correct species used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018749","BiologicalAgent","organ","ovary","ovary","high","False","","True","True","False","TYPE CHECK:        The candidate value ""ovary"" is a correct category for the organ/tissue field.
+SOURCE CHECK:      The paper explicitly mentions ""drosophila ovaries"" in the abstract and ""ovarian somatic tissues"" and ""ovaries"" throughout the results and methods.
+TRUTH CHECK:       The value is factually correct as the study focuses on the drosophila ovary.
+COMPLETENESS CHECK: The full set of extracted values (""ovary"") covers the primary organ of origin described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018749","BiologicalAgent","cell_type","ovarian somatic cells","ovarian somatic cells","high","False","","True","True","False","TYPE CHECK:        The candidate value ""ovarian somatic cells"" describes a specific cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""nuclear lysates of cultured OSCs"" and later clarifies that OSCs are ""ovarian somatic cells"" (e.g., in the context of ""adult somatic ovarian cells"").
+TRUTH CHECK:       The value is factually correct as the study focuses on the role of Mi-2 and Rpd3 in ovarian somatic cells (OSCs).
+COMPLETENESS CHECK: The full set contains ""ovarian somatic cells"", which covers the primary cell type used for the majority of the experiments (OSCs). While S2 cells are mentioned for the LUMIER assay, they are a cell line (which belongs in the `cell_line` field), not a primary cell type.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018749","BiologicalAgent","material_type","cultured OSCs","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""cultured OSCs"" describes the source material, but it is a specific cell type/name rather than a broad material class as required by the definition.
+SOURCE CHECK:      The paper explicitly mentions ""nuclear lysates of cultured OSCs"" and ""OSC cell culture"".
+TRUTH CHECK:       The value is factually correct regarding what was used, but it does not follow the categorical constraints of the field definition.
+COMPLETENESS CHECK:   The full set contains only this value, which is a specific entity rather than a broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","primary cells"
+"PXD018749","BiologicalAgent","cell_line","OSCs","","low","True","cell_type","False","False","False","TYPE CHECK:        The candidate value ""OSCs"" refers to a cell type (Ovarian Somatic Cells), not an immortalized cell line.
+SOURCE CHECK:      The value is present in the text, but it describes the source material as ""cultured OSCs"".
+TRUTH CHECK:       OSCs (Ovarian Somatic Cells) are primary cells derived from the ovary, not an immortalized cell line.
+COMPLETENESS CHECK: The full set contains only ""OSCs"", which is a misclassification of the material type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: cell_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD018749","TechnicalAgent","instrument","Orbitrap Elite","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper text mentions ""mass spectrometry analysis"" and refers to ""Supplementary Information"" for the methods, but the specific instrument model ""Orbitrap Elite"" does not appear in the provided text.
+TRUTH CHECK:       The value is not present in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD018749","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: The paper describes mass spectrometry analysis of GST-Gtsf1 pulldowns but does not mention any isobaric or metabolic labeling (like TMT or SILAC).
+TRUTH CHECK: Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains ""label-free"", which accurately reflects the lack of labeling described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD018749","ExperimentalDesignAgent","replicates","cultured OSCs","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""cultured OSCs"" is a cell type/material, not a numeric count of biological replicates.
+SOURCE CHECK:      The term ""cultured OSCs"" is present in the text, but it refers to the sample source, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains ""1"" and ""cultured OSCs""; while ""1"" is a safe default, ""cultured OSCs"" is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD018749","ExperimentalDesignAgent","replicates","1","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""Each experiment was performed in biological triplicates"" in the RNA extraction and quantitative RT-PCR section.
+TRUTH CHECK:       The candidate value ""1"" is factually incorrect because the text explicitly states biological triplicates were used for certain experiments.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and contains a type mismatch (""cultured OSCs"" is a sample/cell type, not a replicate count).
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""3""]","3"
+"PXD018749","ExperimentalDesignAgent","experimental_design","GST-Gtsf1 pulldown vs GST control","GST-Gtsf1 pulldown vs GST control","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison, which fits the category of a study design (treated vs control).
+SOURCE CHECK:      The text explicitly mentions ""GST-Gtsf1 pulldown compared with the GST control"" in the Results section.
+TRUTH CHECK:       The value accurately reflects the comparison used to validate the enrichment of Piwi and other partners.
+COMPLETENESS CHECK: The full set contains only this value, but the paper describes multiple experimental designs including RNAi knockdowns (e.g., Mi-2-KD vs control) and transgenic tethering experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""GST-Gtsf1 pulldown vs GST control"", ""treated vs control""]","GST-Gtsf1 pulldown vs GST control, treated vs control"
+"PXD018749","ExperimentalDesignAgent","factor_value","bait (GST-Gtsf1, GST control)","bait (GST-Gtsf1, GST control)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variable (the bait used in pulldown experiments), which fits the definition of a factor value.
+SOURCE CHECK:      The text explicitly mentions ""pulldown experiments using recombinant GST-Gtsf1... compared with the GST control"".
+TRUTH CHECK:       The value accurately reflects the experimental comparison used to identify Piwi interactors.
+COMPLETENESS CHECK: The full set of extracted values only includes this one; however, the paper also studies the knockdown of Mi-2, Rpd3, and MEP-1 as experimental factors.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""bait (GST-Gtsf1, GST control)"", ""Mi-2 knockdown"", ""Rpd3 knockdown"", ""MEP-1 knockdown"", ""Piwi knockdown""]",""
+"PXD018749","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a ""Superose 6 gel filtration"" experiment where ""Fractions (0.5 ml) were collected,"" but it does not specify the total number of fractions generated per sample.
+TRUTH CHECK:       According to the field definitions, ""1"" is the correct value when the paper is silent about the specific number of fractions or when no fractionation occurred.
+COMPLETENESS CHECK: The full set contains only the default value ""1"", which is appropriate given the lack of a specific count in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD018749","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total count of samples processed for the mass spectrometry experiment; it mentions ""GST-Gtsf1 pulldown compared with the GST control,"" which implies two conditions, but not necessarily a total sample count for the whole study.
+TRUTH CHECK:       The value ""2"" is an inference based on the comparison of a bait and a control, but it is not explicitly stated as the total number of samples processed in the study.
+COMPLETENESS CHECK: The full set contains only this value, but it is not supported by a clear statement in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

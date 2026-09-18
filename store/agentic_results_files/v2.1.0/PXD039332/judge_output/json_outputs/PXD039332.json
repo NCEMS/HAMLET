@@ -1,0 +1,197 @@
+{
+  "paper_id": "PXD039332",
+  "annotations": [
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"human primary neuroblastoma tumor samples\", \"human genome (hg38)\", and the use of human cell lines (Kelly, BE-2C, NLF, SHEP, 293T).",
+        "TRUTH_CHECK": "The experimental proteomics (TurboID and co-IP) was performed using 293T cells, which are human cells.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which correctly identifies the source organism for the proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Yes, \"kidney\" is an organ.",
+        "SOURCE_CHECK": "The word \"kidney\" appears in the text, but only in the context of evaluating toxicity in healthy mice (\"minimal changes in... liver and kidney function parameters\").",
+        "TRUTH_CHECK": "The kidney was not the organ of origin for the proteomics experiments; the experiments used neuroblastoma cell lines (Kelly, BE-2C, NLF, SHEP) and patient-derived neuroblastoma tumors.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it identifies a toxicity-check organ rather than the sample source organ."
+      }
+    },
+    {
+      "annotation_type": "material_type",
+      "extracted_value": "293T cells",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"293T cells\" is a specific cell line name, not a broad material class as required by the definition.",
+        "SOURCE_CHECK": "The value is present in the text, as 293T cells were used for proximity labeling and co-IP.",
+        "TRUTH_CHECK": "While 293T cells were used, the value provided is the specific entity rather than the material category.",
+        "COMPLETENESS_CHECK": "The full set contains only the specific cell line name and fails to provide the broad material class (e.g., \"cell line\")."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "293T",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "293T, Kelly, BE-2C, NLF, SHEP, SHEP MYCN-ER, S2",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"293T\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"293T\" is explicitly mentioned in the \"Cell culture\" and \"Mass spectrometry analysis\" sections of the methods.",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using 293T cells for proximity labeling and co-IP.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also uses several neuroblastoma cell lines (Kelly, BE-2C, NLF, SHEP, and SHEP MYCN-ER) and Drosophila S2 cells."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Exploris 480",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Orbitrap Exploris 480\" is explicitly mentioned in the \"Mass spectrometry analysis\" section of the methods.",
+        "TRUTH_CHECK": "The value is factually correct as it describes the instrument used for the proteomic analysis in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only mass spectrometer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label-free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
+        "SOURCE_CHECK": "The paper describes mass spectrometry analysis of TurboID and co-IP samples but does not mention any isobaric or metabolic labeling (like TMT or SILAC).",
+        "TRUTH_CHECK": "Since no labeling method is mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains the only applicable value for this experiment."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "Transfected 293T cells (Control vs MYCN-TurboID, Control vs Flag-MYCN)",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental groups/conditions, not a numeric count of biological replicates.",
+        "SOURCE_CHECK": "The text mentions these conditions in the mass spectrometry section, but they are not a count of replicates.",
+        "TRUTH_CHECK": "The value is factually incorrect as it does not represent the number of replicates.",
+        "COMPLETENESS_CHECK": "The full set contains a numeric value (\"4\") and a description of groups; neither is explicitly supported by the text as the number of biological replicates."
+      }
+    },
+    {
+      "annotation_type": "replicates",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": "1",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"4\" is a numeric count, which is the correct category for the 'replicates' field.",
+        "SOURCE_CHECK": "I have searched the \"Mass spectrometry analysis\" and \"Materials and Methods\" sections, and there is no mention of the number of biological replicates (e.g., \"n=4\" or \"four replicates\") for the proteomics experiments.",
+        "TRUTH_CHECK": "The value \"4\" is not supported by the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes a description of the experimental groups and a number \"4\", neither of which are stated as the number of biological replicates in the text."
+      }
+    },
+    {
+      "annotation_type": "experimental_design",
+      "extracted_value": "Comparison of MYCN-interacting proteins using TurboID proximity labeling and Co-IP in 293T cells",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a specific experimental procedure/objective rather than a study design type (e.g., \"treated vs control\", \"case-control\").",
+        "SOURCE_CHECK": "The text mentions TurboID and Co-IP in 293T cells to map MYCN proximal proteins, but the candidate value is a description of the experiment, not the design category.",
+        "TRUTH_CHECK": "While the experiment was performed, the value does not represent the \"experimental_design\" as defined by the field.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a type mismatch."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "transfection status (Control, MYCN-TurboID, Flag-MYCN)",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": "transfection status (Control, MYCN-TurboID, Flag-MYCN), drug treatment (KL-2, ABT-199), gene depletion (EAF1, AFF1, AFF4), MYCN activation (4-OHT)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes an experimental variable (transfection status) and its levels, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper mentions 293T cells transfected with \"MYCN-TurboID or Flag-MYCN\" for mass spectrometry analysis in the \"Mass spectrometry analysis\" section.",
+        "TRUTH_CHECK": "The paper explicitly states that 293T cells were transfected with MYCN-TurboID or Flag-MYCN; a control is standard for such experiments, though not explicitly named \"Control\" in the text, the variable itself is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only captures the transfection status for the MS experiments, but the paper studies many other factors (e.g., 4-OHT induction, SEC depletion/knockdown, KL-2 and ABT-199 drug treatments)."
+      }
+    },
+    {
+      "annotation_type": "fractions",
+      "extracted_value": "1",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the 'fractions' field.",
+        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of \"1\" is applicable.",
+        "TRUTH_CHECK": "The value is factually correct based on the absence of fractionation descriptions in the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which accurately reflects the experimental setup described."
+      }
+    },
+    {
+      "annotation_type": "number_of_samples",
+      "extracted_value": "4",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct category for the number of samples.",
+        "SOURCE_CHECK": "The paper describes multiple experiments involving various cell lines (Kelly, BE-2C, NLF, SHEP, SHEP MYCN-ER, 293T), patient-derived xenografts, and drug screens (1430 drugs), but it does not explicitly state a total count of \"4\" samples for the proteomics/MS experiments.",
+        "TRUTH_CHECK": "The value \"4\" is not supported by the text. The MS analysis involved TurboID and co-IP in 293T cells, but the total number of samples processed for these specific MS runs is not explicitly quantified as 4.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    }
+  ]
+}

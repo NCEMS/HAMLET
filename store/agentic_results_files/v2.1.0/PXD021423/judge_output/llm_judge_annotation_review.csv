@@ -1,0 +1,144 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD021423","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name of a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""HEK-293T cells"" and ""HeLa cells"" (human cell lines) and explicitly states that spectra were searched against the ""SwissProt Human database"".
+TRUTH CHECK: The proteins analyzed in the proteomics experiment are from human cells (HEK-293T).
+COMPLETENESS CHECK: The full set contains the correct species for the host cell proteomics described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021423","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The word ""kidney"" does not appear in the paper text, nor is it inferable from the cell lines used (HEK-293T and HeLa).
+TRUTH CHECK:       The experiment used HEK-293T (human embryonic kidney cells) and HeLa (cervix) cell lines, but the material used was the cell lines themselves, not kidney organ tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021423","BiologicalAgent","material_type","HEK-293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK-293T cells"" is a specific cell line, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The paper explicitly mentions the use of HEK-293T cells for the proteomics analysis.
+TRUTH CHECK:       The value is factually correct regarding the source material, but it is a specific entity rather than the broad category requested.
+COMPLETENESS CHECK:The full set contains only the specific cell line name, which is a subtype of the required broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD021423","BiologicalAgent","cell_line","HEK-293T","HEK-293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""HEK-293T"" is explicitly mentioned multiple times in the abstract and methods (e.g., ""BspF overexpressed in HEK-293T cells"").
+TRUTH CHECK:       The value is factually correct as the study used HEK-293T cells for the main proteomics analysis.
+COMPLETENESS CHECK:    The full set of extracted values is missing ""HeLa"", which was also used in the ""Experiment of Brucella Intracellular Survival"" section.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK-293T"", ""HeLa""]","HEK-293T, HeLa"
+"PXD021423","TechnicalAgent","instrument","Q Exactive HF-X","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper text explicitly mentions ""Q ExactiveTM Plus (Thermo)"" in the LC-MS/MS Analysis section, not ""Q Exactive HF-X"".
+TRUTH CHECK:       The candidate value ""Q Exactive HF-X"" is factually incorrect based on the text provided.
+COMPLETENESS CHECK:The full set contains only the incorrect instrument model.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021423","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions using ""label-free quantitative (LFQ) LC-MS/MS proteomics"" in the results section.
+TRUTH CHECK:       The use of LFQ confirms that no isobaric or metabolic labels were used.
+COMPLETENESS CHECK: The full set of extracted values contains the only labeling method used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","replicates","transfected HEK-293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""transfected HEK-293T cells"" is a sample description, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""transfected HEK-293T cells"" is present in the text, but it does not refer to the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a representation of the 'replicates' field.
+COMPLETENESS CHECK: The full set contains ""2"", but ""transfected HEK-293T cells"" is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""2"" is a numeric count, which matches the expected type for the replicates field.
+SOURCE CHECK:      The paper does not explicitly state the number of biological replicates for the proteomics experiment; it mentions ""BspF-transfected and HA-transfected cells"" (two groups), but not the number of replicates per group.
+TRUTH CHECK:       There is no evidence in the text to support the value ""2"" as the number of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values includes a cell line description (""transfected HEK-293T cells""), which is a type mismatch, and the unsupported value ""2"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not explicitly mention the number of technical replicates for the LC-MS/MS analysis.
+TRUTH CHECK:       According to the safe defaults in the instructions, ""1"" is the correct value when the paper is silent regarding replication.
+COMPLETENESS CHECK: The full set contains the default value ""1"", which is exhaustive given the lack of specific information in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","experimental_design","BspF-transfected vs HA-transfected HEK-293T cells comparison","BspF-transfected vs HA-transfected HEK-293T cells comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental groups being compared, which fits the ""treated vs control"" pattern of an experimental design.
+SOURCE CHECK:      The paper explicitly states: ""We used label-free quantitative (LFQ) LC-MS/MS proteomics to compare the crotonylation of host proteins in BspF-transfected and HA-transfected cells.""
+TRUTH CHECK:       The value accurately reflects the comparison between the BspF-overexpressing group and the HA-control group in HEK-293T cells.
+COMPLETENESS CHECK:   The full set contains this single value, which covers the primary proteomics experimental design described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","factor_value","transfection (BspF-transfected, HA-transfected)","transfection (BspF-transfected, HA-transfected)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (transfection of BspF vs HA control) used to compare protein crotonylation.
+SOURCE CHECK:      The paper explicitly states the use of ""BspF-transfected and HA-transfected cells"" to compare crotonylation levels.
+TRUTH CHECK:       The value accurately reflects the experimental design where BspF overexpression is the primary factor being studied.
+COMPLETENESS CHECK: The full set contains the primary experimental factor described in the proteomics study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a direct loading of peptides onto a reversed-phase analytical column after desalting with ZipTips, with no mention of offline fractionation.
+TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021423","ExperimentalDesignAgent","number_of_samples","2","2","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of samples.
+SOURCE CHECK: The paper describes a comparison between ""BspF-transfected and HA-transfected cells"" for the LFQ proteomics experiment.
+TRUTH CHECK: The study compares two experimental groups (BspF-transfected vs. HA-transfected) to identify differentially crotonylated proteins.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the two primary conditions compared in the main proteomics analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

@@ -1,0 +1,146 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD025776","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human"" and ""human heart tissue"" multiple times.
+TRUTH CHECK:       The use of human samples is factually correct as described in the ""Human tissue"" section of the methods.
+COMPLETENESS CHECK: The full set of extracted values is missing ""Mus musculus"" (mouse), as the study extensively uses mouse models (C57BL/6J) and mouse CFs.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD025776","BiologicalAgent","material_type","COS-7 cell lysates","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""COS-7 cell lysates"" describes a sample derived from a cell line, but the field definition requires a broad material class (e.g., ""cell line"").
+SOURCE CHECK:      The paper explicitly mentions using ""COS-7 cell lysates"" for MS analysis.
+TRUTH CHECK:       The value is factually present, but it includes the processing state (""lysates"") rather than just the material class.
+COMPLETENESS CHECK: The full set only contains this value, but the paper also uses primary mouse cardiac fibroblasts and human heart tissue for other experiments. However, for the MS-specific part of the study, COS-7 cells were the source.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""primary cells"", ""tissue""]","cell line, primary cells, tissue"
+"PXD025776","BiologicalAgent","cell_line","COS-7","COS-7","high","False","","True","True","False","TYPE CHECK: The candidate value ""COS-7"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""MS"" and ""Heterologous expression and degradation assays"" sections of the methods.
+TRUTH CHECK: The paper states that HA-tagged βIV-spectrin was expressed in COS-7 cells.
+COMPLETENESS CHECK: The full set of extracted values contains only ""COS-7"", which is the only cell line mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD025776","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions a ""ThermoScientific Fusion Lumos mass spectrometer system"".
+TRUTH CHECK:       The value is factually correct; ""Orbitrap"" is the mass analyzer type for the Fusion Lumos.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD025776","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct based on the absence of labeling methods in the text.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","replicates","COS-7 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""COS-7 cells"" is a cell line name, not a numeric count of biological replicates.
+SOURCE CHECK:      The value ""COS-7 cells"" is present in the text, but it refers to the sample source, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains a cell line and a number, but neither accurately represents the biological replicates for the MS experiment (the text does not explicitly state the number of biological replicates for the MS analysis).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","replicates","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""4"" is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      I have searched the text for mentions of biological replicates, sample sizes (n=), or repetitions of the MS experiments, but no mention of ""4"" replicates is present.
+TRUTH CHECK:       The value ""4"" is not supported by the text; the paper does not specify the number of biological replicates for the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values is incorrect, as it includes a cell line (""COS-7 cells"") which is a type mismatch for this field.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","technical_replicates","second LC–MS/MS experiment","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of an experiment, not a numeric count of technical replicates.
+SOURCE CHECK:      The phrase ""a second LC–MS/MS experiment was performed"" is present in the text.
+TRUTH CHECK:       The phrase describes a repeat experiment for relative abundance measurement, but it is not a ""number of technical replicates"" as defined by the field.
+COMPLETENESS CHECK: The full set contains ""2"" and ""second LC–MS/MS experiment""; while ""2"" might be an inference from the ""second"" experiment, the candidate value itself is the wrong type.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","technical_replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper mentions ""a second LC–MS/MS experiment was performed"" to more accurately measure relative abundance, but it does not explicitly state that each sample was run in duplicate (technical replicates = 2).
+TRUTH CHECK:       The mention of a ""second experiment"" refers to a follow-up targeted analysis, not necessarily a technical replicate of the same sample in the same run. There is no explicit statement that ""2"" technical replicates were used per sample.
+COMPLETENESS CHECK:    The full set of extracted values includes a description of a second experiment and the number ""2"", but neither is explicitly defined as the number of technical replicates per sample.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","experimental_design","comparison of mouse and human βIV-spectrin phosphorylation with or without constitutively active CaMKII","","low","True","","False","False","False","TYPE CHECK:        No. The candidate value describes a specific experimental condition/comparison rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      Yes. The text describes comparing mouse and human βIV-spectrin phosphorylation in the presence or absence of CaMKII.
+TRUTH CHECK:       Yes. This specific comparison was performed.
+COMPLETENESS CHECK: The full set contains only this value, which is a description of a specific experiment, not a design category.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control","treated vs control"
+"PXD025776","ExperimentalDesignAgent","factor_value","species (mouse, human), CaMKII expression (with, without)","species (mouse, human), CaMKII expression (with, without)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes experimental variables (species and CaMKII expression), which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares mouse and human $\beta$IV-spectrin and tests the effect of coexpressing constitutively active CaMKII (with vs without).
+TRUTH CHECK:       The values are factually correct based on the MS experiments described in the results and methods.
+COMPLETENESS CHECK: The full set is incomplete; the study also investigates the effect of $\beta$IV-spectrin mutations (WT, S2254A, S2254E, qv3J, qv4J) and the effect of Angiotensin II (AngII) treatment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""species (mouse, human)"", ""CaMKII expression (with, without)"", ""$\beta$IV-spectrin construct (WT, S2254A, S2254E, qv3J, qv4J)"", ""AngII treatment (with, without)""]",""
+"PXD025776","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper mentions that protein samples were ""fractionated on an SDS-PAGE"" and ""a small area around the band was cut from the gel,"" but it does not specify a number of fractions generated per sample for LC-MS. Per the field definition, ""1"" is the correct default when no specific fractionation count is mentioned.
+TRUTH CHECK:       The value is correct based on the safe default rule for this field.
+COMPLETENESS CHECK: The full set of extracted values consists of this single default value, which is exhaustive given the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD025776","ExperimentalDesignAgent","number_of_samples","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total count of samples processed for the MS experiments or the overall study.
+TRUTH CHECK:       There is no evidence in the text to support the value ""4"". The MS section describes analysis of mouse and human βIV-spectrin with and without CaMKII (which could be 4 conditions), but this is not explicitly stated as the total sample count.
+COMPLETENESS CHECK: The value is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

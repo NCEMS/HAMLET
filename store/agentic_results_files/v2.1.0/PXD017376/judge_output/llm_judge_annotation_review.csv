@@ -1,0 +1,170 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD017376","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human La protein"" and ""MCF7 human breast carcinoma cells"".
+TRUTH CHECK: The use of human cell lines (MCF7, MDA-MB-231) and human proteins confirms the species is Homo sapiens.
+COMPLETENESS CHECK: The full set contains the only species involved in the experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017376","BiologicalAgent","organ","breast","breast","high","False","","True","True","False","TYPE CHECK: The candidate value ""breast"" refers to an organ/tissue, which matches the field definition.
+SOURCE CHECK: The paper mentions ""MCF7 human breast carcinoma cells"" and ""MDA-MB-231... breast cancer cell line,"" from which the organ of origin is clearly breast.
+TRUTH CHECK: The cells used in the experiment are derived from breast tissue.
+COMPLETENESS CHECK: The full set of extracted values (""breast"") correctly identifies the organ of origin for the cell lines used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017376","BiologicalAgent","cell_type","epithelial cell","","low","False","cell_line","False","False","True","TYPE CHECK: No, ""epithelial cell"" is a general cell type, but the paper specifically uses immortalized cell lines.
+SOURCE CHECK: No, the term ""epithelial cell"" does not appear in the text. The paper mentions ""MCF7 human breast carcinoma cells"" and ""MDA-MB-231 cells"".
+TRUTH CHECK: No, while breast cancer cells are derived from epithelial tissue, the paper describes them as carcinoma cell lines, not primary epithelial cells.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: cell_line
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD017376","BiologicalAgent","disease","breast carcinoma","breast carcinoma","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast carcinoma"" is a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""MCF7 human breast carcinoma cells"" and ""MCF7 breast carcinoma cells"" in the methods and results sections.
+TRUTH CHECK:       The value is factually correct as the study uses breast carcinoma cell lines (MCF7 and MDA-MB-231).
+COMPLETENESS CHECK: The full set of extracted values (""breast carcinoma"") accurately covers the disease state of the models used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017376","BiologicalAgent","material_type","MCF7 cell lysate","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""MCF7 cell lysate"" describes a specific sample preparation, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The paper explicitly mentions using ""MCF7 cell lysate"" for the RNA-affinity chromatography and mass spectrometry experiments.
+TRUTH CHECK:       The value is factually present, but it is a specific sample rather than a broad material class.
+COMPLETENESS CHECK: The full set contains only this value, which is too specific and does not map to the allowed broad categories defined for this field.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line""]","cell line"
+"PXD017376","BiologicalAgent","anatomic_site_tumor","breast","breast","high","False","","True","True","False","TYPE CHECK:        The candidate value ""breast"" describes the anatomical location of the tumor.
+SOURCE CHECK:      The paper mentions ""MCF7 human breast carcinoma cells"" and ""MDA-MB-231, an aggressive and highly proliferative breast cancer cell line"".
+TRUTH CHECK:       The cells used are derived from breast tumors, making ""breast"" the correct anatomical site.
+COMPLETENESS CHECK: The full set of extracted values covers the only tumor site mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017376","BiologicalAgent","cell_line","MCF7","MCF7","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""MCF7"" is explicitly mentioned multiple times in the text (e.g., ""pull down the RNA binding proteins from MCF7 cell lysate"").
+TRUTH CHECK: The value is factually correct as the paper describes using MCF7 cells for the experiments.
+COMPLETENESS CHECK: The full set of extracted values is missing ""MDA-MB-231"", which is also used in the study (e.g., ""compared the level of cytoplasmic La and HuR proteins between MCF7 and MDA-MB-231 cells"").
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""MCF7"", ""MDA-MB-231""]","MCF7, MDA-MB-231"
+"PXD017376","TechnicalAgent","instrument","Orbitrap Fusion","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions ""Full MS... was performed on an Orbitrap Mass analyzer"", but it does not specify the ""Fusion"" model.
+TRUTH CHECK:       The text only specifies ""Orbitrap Mass analyzer""; the addition of ""Fusion"" is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is an over-specification (subtype drift) not found in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD017376","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling methods (such as TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The extraction is factually correct as the experiment used standard LC-MS/MS without labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017376","ExperimentalDesignAgent","replicates","MCF7 cells","3","low","True","","False","False","False","TYPE CHECK: No, the candidate value ""MCF7 cells"" is a cell line, not a numeric count of biological replicates.
+SOURCE CHECK: Yes, ""MCF7 cells"" is mentioned in the text, but not as a replicate count.
+TRUTH CHECK: No, ""MCF7 cells"" does not represent the number of replicates.
+COMPLETENESS CHECK: The full set contains ""3"", which is the correct value found in the ""Statistical analysis"" section (""at least three independent experiments (biological replicates)"").
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD017376","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which matches the definition for the number of biological replicates.
+SOURCE CHECK:      The paper states in the Statistical analysis section: ""All graphical data represent mean ± standard deviation of at least three independent experiments (biological replicates).""
+TRUTH CHECK:       The value ""3"" is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""3"" and ""MCF7 cells""; however, ""MCF7 cells"" is a cell line and does not belong in this field. The value ""3"" alone correctly and exhaustively covers the biological replicates mentioned.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD017376","ExperimentalDesignAgent","experimental_design","RNA-affinity chromatography coupled with mass spectrometry to identify RBPs which interact with the 3ʹUTR of PDCD4 mRNA","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a laboratory technique/method, not a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The text mentions this method, but it is not an experimental design.
+TRUTH CHECK:       The value is a correct description of the method used, but it is the wrong category of information for this field.
+COMPLETENESS CHECK: The full set contains only this method description, failing to capture the actual experimental design (e.g., treated vs control).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD017376","ExperimentalDesignAgent","factor_value","RNA bait (PDCD4 3'UTR)","RNA bait (PDCD4 3'UTR)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental tool/bait used to pull down proteins, which is a variable/factor in the RNA-affinity chromatography experiment.
+SOURCE CHECK:      The paper explicitly mentions using ""3ʹ-end biotinylated full-length PDCD4 3ʹUTR"" as a bait to pull down RNA binding proteins.
+TRUTH CHECK:       The value is factually correct based on the ""RNA affinity chromatography followed by mass spectrometry"" section.
+COMPLETENESS CHECK:    The full set contains only this value, but the paper explores multiple factors including LPS treatment, miR-21 expression, and the overexpression/knockdown of La and HuR proteins.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""RNA bait (PDCD4 3'UTR)"", ""LPS treatment"", ""miR-21 expression"", ""La protein expression"", ""HuR protein expression""]",""
+"PXD017376","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The paper describes a ""polysome analysis"" where ""fixed volume fractions were collected using a programmable gradient fractionator,"" but it does not specify the total number of fractions collected for the MS experiment. For the MS part of the study (RNA affinity chromatography), no offline fractionation is mentioned.
+TRUTH CHECK: In the context of the mass spectrometry experiment (RNA affinity chromatography), there is no mention of peptide/protein fractionation; therefore, the default value of ""1"" is appropriate.
+COMPLETENESS CHECK: The full set contains only the default value ""1"", which is correct when no specific fractionation count is provided for the MS workflow.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD017376","ExperimentalDesignAgent","number_of_samples","1","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK: The paper does not explicitly state a total number of samples processed for the mass spectrometry experiment; it describes a pull-down from MCF7 cell lysate.
+TRUTH CHECK: While the MS experiment used MCF7 cells, the ""1"" is a default assumption rather than a stated fact. However, the study involves multiple conditions (LPS treated vs untreated, different cell lines like MCF7 and MDA-MB-231, and various mutants), making a total sample count of ""1"" factually unlikely for the study as a whole.
+COMPLETENESS CHECK: The full set contains only ""1"", which does not reflect the complexity of the experimental design described (multiple cell lines and treatments).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""

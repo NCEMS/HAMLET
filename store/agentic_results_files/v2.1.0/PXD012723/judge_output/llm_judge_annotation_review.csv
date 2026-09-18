@@ -1,0 +1,115 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD012723","BiologicalAgent","species","Escherichia coli","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a species name, which matches the field definition.
+SOURCE CHECK:      The text mentions ""E. coli BL21 Rosetta2 (DE3) cells"" as the system used for protein expression.
+TRUTH CHECK:       While E. coli was used for protein expression, the source organisms for the experimental proteins (the ""source organism"" of the study's biological material) are Drosophila melanogaster, Xenopus laevis, and Homo sapiens. E. coli is the expression host, not the species of interest for the proteomics/structural study.
+COMPLETENESS CHECK: The full set only contains the expression host and misses the actual source species of the proteins being studied.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""Drosophila melanogaster"", ""Xenopus laevis"", ""Homo sapiens""]","Drosophila melanogaster, Xenopus laevis, Homo sapiens"
+"PXD012723","BiologicalAgent","material_type","reconstituted","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""reconstituted"" is not one of the broad material classes (e.g., ""tissue"", ""cell line"", ""primary cells"") defined for this field.
+SOURCE CHECK:      The paper mentions ""reconstituted"" nucleosomes, but this describes the preparation method, not the broad material class.
+TRUTH CHECK:       The material used consists of recombinant proteins (histones) and DNA, which does not fit the provided categories of biological material types.
+COMPLETENESS CHECK: The full set contains only an invalid value.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD012723","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Q Exactive Plus Instrument"" in the Crosslinking mass-spectrometry section.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012723","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling methods (like TMT or SILAC) are mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The extraction is factually correct as the XL-MS experiment did not use labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD012723","ExperimentalDesignAgent","replicates","reconstituted RNF168-nucleosome complex","3","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of a sample/complex, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""reconstituted RNF168-nucleosome complex"" is present in the text, but it describes the material, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains ""3"", which is the correct number of replicates mentioned in the XL-MS section (""observed in all three replicate measurements"").
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD012723","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK:      The paper explicitly states in the Crosslinking mass-spectrometry section: ""one intermolecular crosslink between RNF168 and the nucleosome was observed in all three replicate measurements.""
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""3"" and ""reconstituted RNF168-nucleosome complex""; the latter is a type mismatch (material/sample description), but the value ""3"" correctly and exhaustively captures the number of replicates mentioned for the MS experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012723","ExperimentalDesignAgent","experimental_design","structural mapping of RNF168RING-nucleosome interaction via XL-MS","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental goal/method rather than a study design type (e.g., ""case-control"", ""treated vs control"").
+SOURCE CHECK:      The text describes the use of XL-MS for structural mapping, but this is a technical approach, not an experimental design.
+TRUTH CHECK:       While the activity is described in the paper, it does not fit the definition of ""experimental_design"".
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD012723","ExperimentalDesignAgent","factor_value","complex (RNF168RING + nucleosome)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a molecular complex, which is the subject of the study, but not an experimental factor or variable (like a treatment, genotype, or time point).
+SOURCE CHECK:      The paper describes the interaction and structure of the RNF168RING-nucleosome complex.
+TRUTH CHECK:       While the complex is the focus of the study, it is the material/entity being analyzed, not the ""factor"" or ""variable"" being manipulated or compared.
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD012723","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was performed.
+COMPLETENESS CHECK: The full set of extracted values consists of only this value, which accurately reflects the experimental setup.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD012723","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK: The paper mentions ""three replicate measurements"" in the context of the crosslinking mass-spectrometry (XL-MS) experiments.
+TRUTH CHECK: While the XL-MS part of the study used three replicates, the paper describes multiple distinct experimental setups (NMR titrations, ubiquitination assays, EMSAs, and XL-MS) using different protein constructs and species (Drosophila and Xenopus). The value ""3"" refers specifically to the replicates of the XL-MS experiment, not the total count of unique samples processed across the entire study.
+COMPLETENESS CHECK: The full set of extracted values only contains ""3"", which is an undercount of the total experimental samples/conditions described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: NONE",""

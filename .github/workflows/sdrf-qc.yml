@@ -1,0 +1,83 @@
+name: SDRF quality control
+
+on:
+  push:
+    branches:
+      - sdrf_builder_updates
+      - qc-and-v2.1.1-updates
+    paths:
+      - store/hamlet_sdrfs/**
+      - src/python/conflictAssessment.py
+      - src/python/run_sdrf_qc.py
+      - src/python/sdrf_judge.py
+      - tests/fixtures/sdrf_qc/**
+      - .github/workflows/sdrf-qc.yml
+  workflow_dispatch:
+    inputs:
+      before_sha:
+        description: Commit before the range to assess
+        required: true
+      after_sha:
+        description: Commit after the range to assess
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: self-hosted
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      HAMLET_PMC_CACHE: ${{ vars.HAMLET_PMC_CACHE }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run fixture and changed-SDRF QC
+        id: qc
+        shell: bash
+        run: |
+          set -euo pipefail
+          before_sha="${{ github.event.inputs.before_sha || github.event.before }}"
+          after_sha="${{ github.event.inputs.after_sha || github.sha }}"
+          output_dir="qc-runs/${{ github.sha }}"
+          judge_args=(--skip-judge)
+          if [[ -n "${HAMLET_PMC_CACHE:-}" && -d "${HAMLET_PMC_CACHE}" && -n "${OPENROUTER_API_KEY:-}" ]]; then
+            judge_args=(--pmc-cache "${HAMLET_PMC_CACHE}")
+          fi
+          conda run -n meti_env python src/python/run_sdrf_qc.py \
+            --before-sha "${before_sha}" \
+            --after-sha "${after_sha}" \
+            --commit "${{ github.sha }}" \
+            --output-dir "${output_dir}" \
+            "${judge_args[@]}"
+          echo "output_dir=${output_dir}" >> "${GITHUB_OUTPUT}"
+
+      - name: Write workflow summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          summary="${{ steps.qc.outputs.output_dir }}/qc-summary.json"
+          echo "## HAMLET SDRF QC" >> "${GITHUB_STEP_SUMMARY}"
+          conda run -n meti_env python - "${summary}" >> "${GITHUB_STEP_SUMMARY}" <<'PY'
+          import json
+          import sys
+
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          print(f"Fixture baseline: `{report['fixture_version']}`")
+          print(f"Changed SDRFs: {len(report['changed_pxds'])}")
+          print("| PXD | Candidate | Gold comparison | Post-judge |")
+          print("|---|---|---|---|")
+          for result in report["results"]:
+              comparison = result.get("comparison", {}).get("status", "not run")
+              judge = result.get("judge", {}).get("status", "not run")
+              print(f"| {result['pxd']} | {result['candidate_status']} | {comparison} | {judge} |")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdrf-qc-${{ github.sha }}
+          path: ${{ steps.qc.outputs.output_dir }}
+          if-no-files-found: error

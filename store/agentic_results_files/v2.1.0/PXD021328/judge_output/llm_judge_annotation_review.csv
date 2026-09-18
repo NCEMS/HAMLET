@@ -1,0 +1,158 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD021328","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper describes the use of ""clinical samples"" from ""nasopharyngeal and oropharyngeal swabs"" and mentions ""human beta actin,"" making ""Homo sapiens"" reasonably inferable.
+TRUTH CHECK: The samples are derived from human patients for the detection of SARS-CoV-2.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens,"" which is the only source organism for the clinical samples described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021328","BiologicalAgent","organ","Respiratory tract","Respiratory tract","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Respiratory tract"" describes the anatomical origin of the samples, which fits the definition of an organ/tissue.
+SOURCE CHECK:      The paper explicitly mentions ""Respiratory tract specimens"" and ""Respiratory tract samples"" in the Results and Methods sections.
+TRUTH CHECK:       The value is factually correct as the study used nasopharyngeal and oropharyngeal swabs from the respiratory tract.
+COMPLETENESS CHECK: The full set contains ""Respiratory tract"", which accurately captures the source of the clinical specimens described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","BiologicalAgent","disease","SARS-CoV-2","SARS-CoV-2","medium","False","","False","False","False","TYPE CHECK:        The candidate value is a pathogen/virus, which is the cause of the disease state being studied.
+SOURCE CHECK:      The paper explicitly mentions ""SARS-CoV-2"" and ""COVID-19 pandemic"" throughout the text.
+TRUTH CHECK:       While SARS-CoV-2 is the virus, the disease state is COVID-19. However, in the context of clinical diagnostics, the presence of the virus is the diagnosis.
+COMPLETENESS CHECK: The full set contains only ""SARS-CoV-2"", but the paper also mentions ""real-time RT-PCR negative"" samples, which represent the ""normal"" or ""healthy"" control group.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""SARS-CoV-2"", ""normal""]",""
+"PXD021328","BiologicalAgent","material_type","nasopharyngeal and oropharyngeal swabs","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the sample collection method/source, but it does not match the ""Broad material class"" categories (e.g., ""biofluid"", ""tissue"") defined for this field.
+SOURCE CHECK:      The value is present in the text (""nasopharyngeal and oropharyngeal swabs"").
+TRUTH CHECK:       The value is factually correct regarding the source of the samples.
+COMPLETENESS CHECK: The full set contains only this value, which is a specific sample source rather than a broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""biofluid""]","biofluid"
+"PXD021328","TechnicalAgent","instrument","Q Exactive HF-X","Q Exactive HF-X","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Untargeted LC-MS/MS analysis"" section (""...coupled to a Q-Exactive HF-X mass spectrometer"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The paper mentions two different mass spectrometers: the Q-Exactive HF-X (used for untargeted analysis and PRM) and the TSQ Altis Triple Quadrupole (used for the high-throughput TFC-MS system). The full set of extracted values only contains one of these.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Q Exactive HF-X"", ""TSQ Altis""]","Q Exactive HF-X, TSQ Altis"
+"PXD021328","TechnicalAgent","label","15N-labeled (SIL)","15N-labeled (SIL)","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to a metabolic labeling method (stable isotope labeling), which fits the definition of the 'label' field.
+SOURCE CHECK:      The paper explicitly mentions the use of ""fully 15N-labeled nucleoprotein"" as a ""stable isotope-labeled (SIL) internal standard"".
+TRUTH CHECK:       The value is factually correct as the study uses 15N-labeled proteins for quantification.
+COMPLETENESS CHECK:    The full set contains this value; however, the study also uses ""unlabeled"" proteins for calibration and ""label-free"" (shotgun) analysis for initial peptide selection. In the context of the final targeted assay, the use of SIL standards is the primary labeling strategy.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","replicates","respiratory tract samples","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""respiratory tract samples"" is a description of the sample type, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""respiratory tract samples"" is present in the text, but it does not represent the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for this field; the field requires a count of replicates.
+COMPLETENESS CHECK: The full set contains ""985"", which is the total number of samples, not the number of biological replicates per condition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","replicates","985","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""985"" is a numeric count, which matches the expected type for the replicates field.
+SOURCE CHECK:      The value ""985"" is present in the text, but it refers to the total number of specimens analyzed in the study, not biological replicates of a single condition.
+TRUTH CHECK:       The value is factually incorrect for this field; 985 is the total sample size (number_of_samples), not the number of biological replicates per group.
+COMPLETENESS CHECK: The full set of extracted values includes a non-numeric string (""respiratory tract samples"") and the total sample count, neither of which correctly identifies the number of biological replicates.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","technical_replicates","quintuplicate","quintuplicate | 5","high","False","","True","True","False","TYPE CHECK:        The candidate value ""quintuplicate"" refers to a number of replicates, which matches the field definition.
+SOURCE CHECK:      The text states ""All conditions were analyzed in quintuplicate in the same run"" within the stability study section.
+TRUTH CHECK:       The value is factually correct as it describes the number of times samples were analyzed for the stability study.
+COMPLETENESS CHECK: The full set [""quintuplicate"", ""5""] is exhaustive for the technical replication mentioned in the stability study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","technical_replicates","5","quintuplicate | 5","high","False","","True","True","False","TYPE CHECK:        The candidate value ""5"" is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper states in the Method validation section: ""All conditions were analyzed in quintuplicate in the same run"", referring to the stability study.
+TRUTH CHECK:       The value ""5"" (derived from ""quintuplicate"") is factually correct for the stability study portion of the experiment.
+COMPLETENESS CHECK: The full set [""quintuplicate"", ""5""] correctly captures the replication mentioned for the stability analysis; however, the paper does not specify technical replicates for the primary clinical cohort analysis (985 samples), but ""5"" is the only explicit technical replication mentioned.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","experimental_design","comparison of real-time RT-PCR positive vs negative respiratory tract samples","comparison of real-time RT-PCR positive vs negative respiratory tract samples","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing positive vs negative samples), which fits the category of experimental design.
+SOURCE CHECK:      The paper explicitly states that 985 respiratory tract samples (540 positive and 445 negative by real-time RT-PCR) were included to validate the MS method.
+TRUTH CHECK:       The value accurately reflects the experimental setup used to validate the sensitivity and specificity of the proteomics assay.
+COMPLETENESS CHECK: The full set contains this single value, which comprehensively describes the primary design used for the validation of the system.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","factor_value","RT-PCR status (positive, negative)","RT-PCR status (positive, negative)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (SARS-CoV-2 infection status as determined by RT-PCR) used to group the samples.
+SOURCE CHECK:      The paper explicitly states that specimens were ""previously analyzed by real-time RT-PCR"" and categorized as ""positive"" or ""negative"" to validate the MS method.
+TRUTH CHECK:       The value is factually correct; the study compares the MS-based detection against the gold standard RT-PCR status.
+COMPLETENESS CHECK:The full set contains the primary experimental factor used to differentiate the sample cohorts in this diagnostic validation study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes a direct injection of tryptic digests into the LC-MS system without any mention of offline peptide fractionation.
+TRUTH CHECK:       Since no fractionation is mentioned, the safe default of ""1"" is factually correct.
+COMPLETENESS CHECK: The full set of extracted values consists of a single ""1"", which accurately reflects the lack of fractionation described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021328","ExperimentalDesignAgent","number_of_samples","985","985","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper explicitly states ""A total of 985 respiratory tract samples... were included in the study"" in the Methods section.
+TRUTH CHECK:       The value 985 is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains the total count of samples mentioned in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

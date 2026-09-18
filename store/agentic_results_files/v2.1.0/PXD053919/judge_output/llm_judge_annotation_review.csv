@@ -1,0 +1,144 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD053919","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""human cells"" in the abstract and ""HEK293 cells"" and ""SwissProt Human FASTA file"" in the results and methods.
+TRUTH CHECK:       The use of HEK293 cells (a human cell line) confirms the source organism is Homo sapiens.
+COMPLETENESS CHECK:   The full set contains the only relevant species used for the proteomics/MS analysis of the luciferase protein.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is the correct category (organ/tissue) for this field.
+SOURCE CHECK:      The word ""kidney"" does not appear in the paper text, nor is it inferable from the described experiments.
+TRUTH CHECK:       The paper describes experiments using E. coli in vitro translation systems and HEK293 cells; no kidney tissue was used.
+COMPLETENESS CHECK: The full set of extracted values is incorrect as it contains a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053919","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK293 cells"" and ""293H cells,"" but it does not explicitly use the term ""epithelial cell."" While HEK293 is derived from human embryonic kidney cells, ""epithelial cell"" is not explicitly stated nor is it a ""safe default"" for this specific cell line in the text.
+TRUTH CHECK:       The text specifies HEK293/293H cells; labeling them generally as ""epithelial cells"" is an external inference not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053919","BiologicalAgent","material_type","HEK293 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HEK293 cells"" is a specific cell line, but the field definition requires a broad material class (e.g., ""cell line"").
+SOURCE CHECK:      The paper mentions transfecting mRNAs into ""HEK293 cells"" and ""293H cells"".
+TRUTH CHECK:       The value is factually present, but it is a specific entity rather than a broad material class.
+COMPLETENESS CHECK: The full set contains only the specific cell line name, failing to provide the broad material class required by the definition.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD053919","BiologicalAgent","cell_line","HEK293","HEK293","high","False","","True","True","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK293 cells"" in the results section and ""293H cells"" in the methods section.
+TRUTH CHECK:       The value ""HEK293"" is factually correct as it is explicitly mentioned in the text.
+COMPLETENESS CHECK: The full set contains ""HEK293"", but the methods section specifically identifies the cells as ""293H cells"". While HEK293 is a general term, the specific line used is 293H.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293"", ""293H""]",""
+"PXD053919","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions a ""Thermo Scientific Q Exactive hybrid mass spectrometer"".
+TRUTH CHECK: The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD053919","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct as the MS analysis described (LC-MS/MS of purified luciferase) did not employ labeling.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","ExperimentalDesignAgent","replicates","3 independent transfections per RNA","3 independent transfections per RNA","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the number of biological replicates (transfections), which fits the field definition.
+SOURCE CHECK:      The text explicitly states, ""Three independent transfections were performed for uridine/ N1-methylpseudouridine -containing mRNAs.""
+TRUTH CHECK:       The value is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set of extracted values includes ""3 independent transfections per RNA"" and ""6"". The ""6"" is likely an incorrect summation or misinterpretation, as the paper specifies 3 transfections per RNA (modified and unmodified). Together, the set is redundant/conflicting, but the candidate value itself is the accurate representation of the biological replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","ExperimentalDesignAgent","replicates","6","3 independent transfections per RNA","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper states ""Three independent transfections were performed for uridine/ N1-methylpseudouridine -containing mRNAs"" and ""Three independent transfections were performed for each RNA (modified and unmodified)"".
+TRUTH CHECK:       The value ""6"" is incorrect; the paper specifies 3 independent transfections per RNA condition, not 6 total biological replicates for the experiment.
+COMPLETENESS CHECK:    The full set of extracted values is inconsistent and contains an incorrect value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE","3"
+"PXD053919","ExperimentalDesignAgent","experimental_design","Comparison of luciferase protein from unmodified vs. m1Ψ-substituted mRNA","Comparison of luciferase protein from unmodified vs. m1Ψ-substituted mRNA","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental comparison being made, which fits the category of study design.
+SOURCE CHECK:      The paper explicitly describes transfecting HEK293 cells with either UTP (unmodified) or m1ΨTP (modified) luciferase mRNAs and analyzing the resulting proteins via mass spectrometry.
+TRUTH CHECK:       The value accurately reflects the experimental setup described in the ""Luciferase mRNA transfection and expression analyses"" section.
+COMPLETENESS CHECK: The full set of extracted values captures the primary experimental design of the proteomics portion of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","ExperimentalDesignAgent","factor_value","mRNA modification (unmodified, m1Ψ-substituted)","mRNA modification (unmodified, m1Ψ-substituted)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (mRNA modification state) being compared, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares ""unmodified (UUU)"" and ""m1Ψ modified"" mRNA codons in both in vitro and in cell assays.
+TRUTH CHECK:       The value accurately reflects the primary experimental variable studied in the paper.
+COMPLETENESS CHECK:   The full set of extracted values captures the central experimental factor (the presence or absence of the m1Ψ modification).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes an LC-MS/MS analysis using a gradient but does not mention any offline fractionation steps.
+TRUTH CHECK:       Since no offline fractionation is mentioned, the safe default of ""1"" is applicable.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which correctly reflects the lack of fractionation.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053919","ExperimentalDesignAgent","number_of_samples","6","6","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper states ""Three independent transfections were performed for each RNA (modified and unmodified)"", which implies 3 (modified) + 3 (unmodified) = 6 samples for the MS analysis.
+TRUTH CHECK:       The calculation (3 transfections x 2 RNA types) equals 6, which is factually correct based on the methods section.
+COMPLETENESS CHECK:    The full set contains only this value, and it accurately reflects the total number of biological samples processed for the LC-MS/MS analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

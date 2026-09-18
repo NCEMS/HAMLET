@@ -1,0 +1,134 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD053091","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""mammalian (HEK293T cell) stress granule cores"" and ""human protein sequence databases,"" making ""Homo sapiens"" a correct and inferable species.
+TRUTH CHECK:       The use of HEK293T cells confirms the source organism is human (Homo sapiens).
+COMPLETENESS CHECK:    The full set of extracted values only contains ""Homo sapiens"", but the paper also describes experiments using ""Saccharomyces cerevisiae"" (yeast). Therefore, the set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Saccharomyces cerevisiae""]","Homo sapiens, Saccharomyces cerevisiae"
+"PXD053091","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The word ""kidney"" does not appear in the paper text, nor is it inferable from the experimental models used (Saccharomyces cerevisiae and HEK293T cells).
+TRUTH CHECK:       The value is factually incorrect as the study uses yeast and human embryonic kidney cells (HEK293T), but the ""organ"" of origin for a cell line is not the organ itself, and the paper does not involve kidney tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053091","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK293T cells"" and ""S. cerevisiae"", but the term ""epithelial cell"" does not appear in the text. While HEK293T is derived from an embryonic kidney, it is not explicitly described as an ""epithelial cell"" in this text.
+TRUTH CHECK:       The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053091","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper describes the use of standard yeast strains and HEK293T cells to study a conserved cellular response (stress granules) rather than a specific disease state.
+TRUTH CHECK:       The cells used are standard laboratory models not described as having a disease pathology; therefore, ""normal"" is a safe and correct default.
+COMPLETENESS CHECK: The full set contains ""normal"", which accurately reflects the state of the experimental models used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053091","BiologicalAgent","material_type","stress granule cores","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""stress granule cores"" is a specific subcellular structure/complex, not one of the broad material classes (e.g., ""cell line"", ""tissue"") defined for this field.
+SOURCE CHECK:      The value is present in the text as the object of purification.
+TRUTH CHECK:       While the paper is about stress granule cores, the `material_type` field requires the broad class of the source material used to obtain those cores.
+COMPLETENESS CHECK: The full set contains only the specific purified object, failing to identify the broad material source (yeast cells and HEK293T cell line).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""whole organism""]","cell line, whole organism"
+"PXD053091","BiologicalAgent","cell_line","HEK293T","HEK293T","high","False","","True","True","False","TYPE CHECK:        The candidate value ""HEK293T"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value is explicitly mentioned multiple times in the text (e.g., ""mammalian (HEK293T cell) stress granule cores"").
+TRUTH CHECK:       The value is factually correct as the paper describes the use of HEK293T cells for the mammalian experiments.
+COMPLETENESS CHECK: The full set of extracted values contains ""HEK293T"", which is the only mammalian cell line used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053091","BiologicalAgent","strain","YER165W, JD1370, YAG1021","YER165W, JD1370, YAG1021","high","False","","True","True","False","TYPE CHECK:        The candidate value contains names of yeast strains, which fits the category of ""strain"".
+SOURCE CHECK:      The text explicitly mentions ""three S. cerevisiae strains (YER165W with PAB1-GFP, JD1370, and YAG1021)"".
+TRUTH CHECK:       The values are factually correct as per the paper.
+COMPLETENESS CHECK: The full set of extracted values covers all yeast strains mentioned in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053091","TechnicalAgent","instrument","Orbitrap Exploris 240","Orbitrap Exploris 240","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions the ""Thermo Scientific Orbitrap Exploris 240 Mass Spectrometer"" in the Proteomics section.
+TRUTH CHECK: The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also mentions an ""Orbitrap Fusion Lumos Tribid mass spectrometer"" used for the yeast stress granule core analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Orbitrap Exploris 240"", ""Orbitrap Fusion Lumos Tribid""]","Orbitrap Exploris 240, Orbitrap Fusion Lumos Tribid"
+"PXD053091","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:    The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:  The paper explicitly states in the ""QUANTIFICATION AND STATISTICAL ANALYSIS"" section: ""For the quantitation, a label-free approach was used"".
+TRUTH CHECK:   The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label-free"", which is exhaustive for this study.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD053091","ExperimentalDesignAgent","replicates","3 yeast strains (YER165W, JD1370, YAG1021) and HEK293T cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the biological samples/strains used, not the number of biological replicates.
+SOURCE CHECK:      The text mentions these strains and cells, but they are different biological entities (strains/species), not replicates of the same condition.
+TRUTH CHECK:       The value is factually incorrect as a count of replicates; it is a list of sample types.
+COMPLETENESS CHECK: The full set of extracted values is incorrect because it confuses sample types with replicate counts.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: None
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053091","ExperimentalDesignAgent","replicates","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the 'replicates' field.
+SOURCE CHECK:      The paper does not explicitly state a number of biological replicates for the proteomics experiments; it mentions three yeast strains and the use of HEK293T cells, but not a replicate count of ""4"".
+TRUTH CHECK:       There is no evidence in the text to support the value ""4"" as the number of biological replicates.
+COMPLETENESS CHECK: The full set of extracted values is incorrect; one value describes the sample types/strains and the other is an unsupported number.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE","1"
+"PXD053091","ExperimentalDesignAgent","fractions","1","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a complex fractionation process involving sucrose density gradient centrifugation (SDGC) and size-exclusion chromatography (SEC), but it does not specify the exact number of fractions collected per sample.
+TRUTH CHECK:       While the paper describes fractionation, it does not provide a specific count. According to the field definition, ""1"" is used when no fractionation occurred; however, fractionation clearly occurred here. In the absence of a specific number in the text, ""1"" is not a ""safe default"" for a confirmed multi-fractionation scheme.
+COMPLETENESS CHECK:    The full set contains only ""1"", which does not accurately reflect the fractionation described in the methods.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

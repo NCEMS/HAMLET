@@ -71,7 +71,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Prepare store, user, and PRIDE SDRFs for per-PXD conflict assessment."
     )
-    parser.add_argument("store_dir", type=Path, help="HAMLET store root")
+    parser.add_argument("store_dir", type=Path, nargs="?", help="HAMLET store root")
     parser.add_argument(
         "--sdrf",
         "--sdrf-dir",
@@ -79,6 +79,16 @@ def parse_args():
         type=Path,
         default=None,
         help="Optional user SDRF/CSV file or directory containing per-PXD files",
+    )
+    parser.add_argument(
+        "--assessed-sdrf",
+        type=Path,
+        help="Candidate HAMLET SDRF for an explicit candidate-versus-gold comparison",
+    )
+    parser.add_argument(
+        "--gold-sdrf",
+        type=Path,
+        help="Immutable HAMLET gold SDRF for an explicit candidate-versus-gold comparison",
     )
     parser.add_argument(
         "--pxd",
@@ -883,8 +893,59 @@ def _pxd_directories(store_dir, selected_pxd):
     return [path for path in sorted(root.glob("PXD*")) if path.is_dir()]
 
 
+def _run_explicit_comparison(args):
+    """Compare a candidate SDRF directly with an immutable HAMLET gold SDRF."""
+    if not args.pxd:
+        raise SystemExit("--pxd is required with --assessed-sdrf and --gold-sdrf")
+    if not PXD_PATTERN.match(args.pxd):
+        raise SystemExit("invalid PXD accession: {}".format(args.pxd))
+    if not args.assessed_sdrf.is_file():
+        raise SystemExit("Candidate SDRF file not found: {}".format(args.assessed_sdrf))
+    if not args.gold_sdrf.is_file():
+        raise SystemExit("Gold SDRF file not found: {}".format(args.gold_sdrf))
+
+    try:
+        assessed_table = _load_local_sdrf(args.assessed_sdrf, "candidate")
+        gold_table = _load_local_sdrf(args.gold_sdrf, "hamlet_gold")
+        report_fields = {
+            _canonical_field(header): _field_category(header)
+            for header in assessed_table.headers
+            if _field_category(header) in REPORT_CATEGORIES
+        }
+        summary, report_dir = _comparison_report(
+            args.pxd.upper(),
+            assessed_table,
+            gold_table,
+            report_fields,
+            args.output_dir.resolve(),
+            args.fuzzy_threshold,
+        )
+    except ValueError as exc:
+        raise SystemExit(str(exc))
+
+    print(
+        "{} report: {} (matched={}, missing={}, coverage={:.1%})".format(
+            summary["comparison"],
+            report_dir,
+            summary["files"]["matched"],
+            summary["files"]["missing_from_assessed"],
+            summary["files"]["coverage"],
+        )
+    )
+    return 0
+
+
 def main():
     args = parse_args()
+    if bool(args.assessed_sdrf) != bool(args.gold_sdrf):
+        raise SystemExit("--assessed-sdrf and --gold-sdrf must be supplied together")
+    if not 0.0 <= args.fuzzy_threshold <= 1.0:
+        raise SystemExit("--fuzzy-threshold must be between 0 and 1")
+    if args.assessed_sdrf and args.gold_sdrf:
+        raise SystemExit(_run_explicit_comparison(args))
+    if args.store_dir is None:
+        raise SystemExit("store_dir is required unless --assessed-sdrf and --gold-sdrf are supplied")
+
     store_dir = args.store_dir.resolve()
     sdrf_dir = args.sdrf_dir.resolve() if args.sdrf_dir else None
     output_root = args.output_dir.resolve()
@@ -892,9 +953,6 @@ def main():
         raise SystemExit("User SDRF file or directory not found: {}".format(sdrf_dir))
     if args.limit is not None and args.limit < 1:
         raise SystemExit("--limit must be at least 1")
-    if not 0.0 <= args.fuzzy_threshold <= 1.0:
-        raise SystemExit("--fuzzy-threshold must be between 0 and 1")
-
     selected_pxd = args.pxd
     if sdrf_dir is not None and sdrf_dir.is_file() and selected_pxd is None:
         match = re.search(r"PXD\d{6,}", sdrf_dir.name, flags=re.IGNORECASE)
