@@ -6,53 +6,51 @@ on:
       - sdrf_builder_updates
       - qc-and-v2.1.1-updates
     paths:
-      - store/hamlet_sdrfs/**
-      - src/python/conflictAssessment.py
+      - store/releases/**
+      - store/hamlet_sdrfs/v*/**
+      - store/agentic_results_files/v*/**
       - src/python/run_sdrf_qc.py
-      - src/python/sdrf_judge.py
-      - tests/fixtures/sdrf_qc/**
+      - src/job_scripts/build_store_explorer.py
+      - docs/store-explorer/**
       - .github/workflows/sdrf-qc.yml
   workflow_dispatch:
     inputs:
-      before_sha:
-        description: Commit before the range to assess
-        required: true
-      after_sha:
-        description: Commit after the range to assess
-        required: true
+      baseline_version:
+        description: Baseline release version
+        required: false
+      candidate_version:
+        description: Candidate release version
+        required: false
 
 permissions:
   contents: read
 
 jobs:
   report:
-    runs-on: self-hosted
-    env:
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      HAMLET_PMC_CACHE: ${{ vars.HAMLET_PMC_CACHE }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Run fixture and changed-SDRF QC
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build static release comparison QC
         id: qc
         shell: bash
         run: |
           set -euo pipefail
-          before_sha="${{ github.event.inputs.before_sha || github.event.before }}"
-          after_sha="${{ github.event.inputs.after_sha || github.sha }}"
           output_dir="qc-runs/${{ github.sha }}"
-          judge_args=(--skip-judge)
-          if [[ -n "${HAMLET_PMC_CACHE:-}" && -d "${HAMLET_PMC_CACHE}" && -n "${OPENROUTER_API_KEY:-}" ]]; then
-            judge_args=(--pmc-cache "${HAMLET_PMC_CACHE}")
+          compare_args=()
+          if [[ -n "${{ github.event.inputs.baseline_version || '' }}" || -n "${{ github.event.inputs.candidate_version || '' }}" ]]; then
+            compare_args=(
+              --baseline-version "${{ github.event.inputs.baseline_version }}"
+              --candidate-version "${{ github.event.inputs.candidate_version }}"
+            )
           fi
-          conda run -n meti_env python src/python/run_sdrf_qc.py \
-            --before-sha "${before_sha}" \
-            --after-sha "${after_sha}" \
-            --commit "${{ github.sha }}" \
+          python src/python/run_sdrf_qc.py \
             --output-dir "${output_dir}" \
-            "${judge_args[@]}"
+            "${compare_args[@]}"
           echo "output_dir=${output_dir}" >> "${GITHUB_OUTPUT}"
 
       - name: Write workflow summary
@@ -61,19 +59,22 @@ jobs:
           set -euo pipefail
           summary="${{ steps.qc.outputs.output_dir }}/qc-summary.json"
           echo "## HAMLET SDRF QC" >> "${GITHUB_STEP_SUMMARY}"
-          conda run -n meti_env python - "${summary}" >> "${GITHUB_STEP_SUMMARY}" <<'PY'
+          python - "${summary}" >> "${GITHUB_STEP_SUMMARY}" <<'PY'
           import json
           import sys
 
           report = json.load(open(sys.argv[1], encoding="utf-8"))
-          print(f"Fixture baseline: `{report['fixture_version']}`")
-          print(f"Changed SDRFs: {len(report['changed_pxds'])}")
-          print("| PXD | Candidate | Gold comparison | Post-judge |")
-          print("|---|---|---|---|")
-          for result in report["results"]:
-              comparison = result.get("comparison", {}).get("status", "not run")
-              judge = result.get("judge", {}).get("status", "not run")
-              print(f"| {result['pxd']} | {result['candidate_status']} | {comparison} | {judge} |")
+          print(f"Available versions: {', '.join(report['available_versions'])}")
+          print(f"Comparisons: {len(report['comparisons'])}")
+          print("| Baseline | Candidate | Shared PXDs | Changed SDRFs | Judge pairs |")
+          print("|---|---|---:|---:|---:|")
+          for comparison in report["comparisons"]:
+              summary = comparison.get("summary", {})
+              print(
+                  f"| {comparison['baseline_version']} | {comparison['candidate_version']} "
+                  f"| {summary.get('shared_pxds', 0)} | {summary.get('changed_sdrfs', 0)} "
+                  f"| {summary.get('judge_pairs_available', 0)} |"
+              )
           PY
 
       - uses: actions/upload-artifact@v4

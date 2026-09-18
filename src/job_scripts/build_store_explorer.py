@@ -308,29 +308,42 @@ def publish_qc_summary(qc_summary: Path, output_data_dir: Path) -> None:
         summary = json.loads(qc_summary.read_text(encoding="utf-8"))
     except (OSError, ValueError) as exc:
         raise RuntimeError(f"Could not read QC summary {qc_summary}: {exc}") from exc
-    if not isinstance(summary, dict) or not isinstance(summary.get("results"), list):
+    if not isinstance(summary, dict):
+        raise RuntimeError(f"QC summary {qc_summary} is not a JSON object")
+
+    result_groups = []
+    if isinstance(summary.get("results"), list):
+        result_groups.append(summary["results"])
+    if isinstance(summary.get("comparisons"), list):
+        result_groups.extend(
+            comparison.get("results", [])
+            for comparison in summary["comparisons"]
+            if isinstance(comparison, dict) and isinstance(comparison.get("results"), list)
+        )
+    if not result_groups:
         raise RuntimeError(f"QC summary {qc_summary} has no results list")
 
-    for result in summary["results"]:
-        pxd = result.get("pxd")
-        if not isinstance(pxd, str) or not re.fullmatch(r"PXD\d+", pxd):
-            continue
-        for report_key in ("comparison", "judge"):
-            report = result.get(report_key)
-            if not isinstance(report, dict) or not report.get("report_path"):
+    for results in result_groups:
+        for result in results:
+            pxd = result.get("pxd")
+            if not isinstance(pxd, str) or not re.fullmatch(r"PXD\d+", pxd):
                 continue
-            source = Path(report["report_path"])
-            if not source.is_dir():
-                continue
-            relative_destination = Path("qc") / pxd / report_key
-            destination = output_data_dir / relative_destination
-            for artifact in sorted(source.rglob("*")):
-                if not artifact.is_file() or artifact.suffix.lower() not in SUPPORTED_SUFFIXES:
+            for report_key in ("comparison", "judge", "baseline_judge", "candidate_judge"):
+                report = result.get(report_key)
+                if not isinstance(report, dict) or not report.get("report_path"):
                     continue
-                if artifact.stat().st_size > MAX_PUBLISHED_FILE_BYTES:
+                source = Path(report["report_path"])
+                if not source.is_dir():
                     continue
-                copy_file(artifact, destination / artifact.relative_to(source))
-            report["public_report_path"] = relative_destination.as_posix()
+                relative_destination = Path("qc") / pxd / report_key
+                destination = output_data_dir / relative_destination
+                for artifact in sorted(source.rglob("*")):
+                    if not artifact.is_file() or artifact.suffix.lower() not in SUPPORTED_SUFFIXES:
+                        continue
+                    if artifact.stat().st_size > MAX_PUBLISHED_FILE_BYTES:
+                        continue
+                    copy_file(artifact, destination / artifact.relative_to(source))
+                report["public_report_path"] = relative_destination.as_posix()
 
     (output_data_dir / "qc-summary.json").write_text(
         json.dumps(summary, indent=2) + "\n", encoding="utf-8"

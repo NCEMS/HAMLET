@@ -154,6 +154,21 @@ conda run -n meti_env python src/job_scripts/updatestore.py \
 
 The utility validates every PXD bundle before modifying the store, writes immutable versioned artifacts before refreshing active copies, and refuses to overwrite an existing release manifest or versioned artifact directory. Use `materialize_store_versions.py` only to backfill a release from an explicit Git revision or from already promoted active records; it also refuses to replace existing snapshots.
 
+Static QC comparisons are now version-to-version summaries built from these immutable store snapshots, rather than a fresh post-store judge rerun. Generate a comparison and publish it into the Store Explorer bundle with:
+
+```bash
+python src/python/run_sdrf_qc.py \
+    --baseline-version v2.1.0 \
+    --candidate-version v2.1.1 \
+    --output-dir /tmp/hamlet-static-qc
+
+python3 src/job_scripts/build_store_explorer.py \
+    --pxd-file assets/pxd_lists/Hamlet_GS_pride_sdrf_union.csv \
+    --qc-summary /tmp/hamlet-static-qc/qc-summary.json
+```
+
+The published `docs/store-explorer/data/qc-summary.json` is a static release-comparison artifact. The site reads it directly and lets reviewers switch between any version pairs present in that summary.
+
 ## STATUS — historical snapshot as of 2026-08-18
 
 ### 1. `aggregated_results_files/` — 2,756 PXDs

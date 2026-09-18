@@ -1,4 +1,4 @@
-const state = { records: [], selected: null, summary: null, qcSummary: null, tableDefinitions: null, qcMetric: "judge_accuracy", qcDeltaMode: "relative_delta" };
+const state = { records: [], selected: null, summary: null, qcSummary: null, tableDefinitions: null, qcMetric: "judge_accuracy", qcDeltaMode: "relative_delta", qcComparisonId: null };
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
 const filter = document.querySelector("#pxd-filter");
@@ -237,12 +237,54 @@ function histogramCard(field) {
 }
 
 function qcStatus(value) {
-  return value === "passed" ? "Pass" : value === "failed" ? "Failed" : value === "skipped" ? "Skipped" : "Not run";
+  return value === "passed" ? "Pass"
+    : value === "failed" ? "Failed"
+      : value === "skipped" ? "Skipped"
+        : value === "available" ? "Available"
+          : value === "missing" ? "Missing"
+            : "Not run";
 }
 
-function qcCategoryMetricOptions(summary) {
+function qcComparisons(summary) {
+  if (!summary) return [];
+  if (Array.isArray(summary.comparisons)) return summary.comparisons;
+  if (Array.isArray(summary.results)) {
+    return [{
+      comparison_id: summary.evaluated_commit || "legacy",
+      baseline_version: summary.baseline_release_version || summary.fixture_version || "baseline",
+      candidate_version: "candidate",
+      summary: {
+        shared_pxds: Array.isArray(summary.changed_pxds) ? summary.changed_pxds.length : 0,
+        changed_sdrfs: Array.isArray(summary.changed_pxds) ? summary.changed_pxds.length : 0,
+        unchanged_sdrfs: 0,
+        judge_pairs_available: (summary.results || []).filter(result => result.judge?.status === "passed").length,
+      },
+      pxd_counts: {
+        baseline: Array.isArray(summary.changed_pxds) ? summary.changed_pxds.length : 0,
+        candidate: Array.isArray(summary.changed_pxds) ? summary.changed_pxds.length : 0,
+        shared: Array.isArray(summary.changed_pxds) ? summary.changed_pxds.length : 0,
+        baseline_only: 0,
+        candidate_only: 0,
+      },
+      results: summary.results,
+    }];
+  }
+  return [];
+}
+
+function activeQcComparison(summary) {
+  const comparisons = qcComparisons(summary);
+  if (!comparisons.length) return null;
+  const selected = comparisons.find(comparison => comparison.comparison_id === state.qcComparisonId);
+  if (selected) return selected;
+  const fallback = comparisons.find(comparison => comparison.comparison_id === summary.default_comparison_id) || comparisons[0];
+  state.qcComparisonId = fallback.comparison_id;
+  return fallback;
+}
+
+function qcCategoryMetricOptions(comparison) {
   const metrics = new Set();
-  for (const result of summary?.results || []) {
+  for (const result of comparison?.results || []) {
     for (const category of Object.values(result.judge_category_deltas || {})) {
       Object.keys(category).forEach(metric => metrics.add(metric));
     }
@@ -250,7 +292,7 @@ function qcCategoryMetricOptions(summary) {
   return [...metrics].sort();
 }
 
-function renderQcMetricPlot(summary) {
+function renderQcMetricPlot(comparison) {
   const container = document.querySelector("#qc-metric-plot");
   if (!container) return;
   if (!globalThis.Plotly) {
@@ -259,7 +301,7 @@ function renderQcMetricPlot(summary) {
   }
   const traces = ["Biological", "Technical", "ExperimentalDesign"].map(category => {
     const points = [];
-    for (const result of summary.results || []) {
+    for (const result of comparison?.results || []) {
       const delta = result.judge_category_deltas?.[category]?.[state.qcMetric];
       if (delta && Number.isFinite(delta[state.qcDeltaMode])) points.push({ pxd: result.pxd, ...delta });
     }
@@ -294,47 +336,52 @@ function qcOverview(summary) {
   if (!summary) {
     return section("Quality control", "No reviewed QC summary has been published with this Store Explorer build.", "<p class=\"section-note\">QC artifacts remain available from their reviewed workflow run.</p>");
   }
-  const results = Array.isArray(summary.results) ? summary.results : [];
-  const compared = results.filter(result => result.comparison);
-  const passed = compared.filter(result => result.comparison.status === "passed").length;
-  const failed = compared.filter(result => result.comparison.status === "failed").length;
-  const rows = [["PXD", "Candidate", "Gold cohort", "Comparison", "Coverage", "Post-judge", "Report"]];
+  const comparisons = qcComparisons(summary);
+  const comparison = activeQcComparison(summary);
+  if (!comparison) {
+    return section("Quality control", "A QC summary was published, but it does not contain a recognized comparison payload.", "<p class=\"section-note\">Rebuild the summary with the release-comparison QC script.</p>");
+  }
+  const results = Array.isArray(comparison.results) ? comparison.results : [];
+  const rows = [["PXD", "SDRF", "Baseline judge", "Candidate judge", "judge_accuracy delta", "Category deltas"]];
   for (const result of results) {
-    const comparison = result.comparison || {};
-    const judge = result.judge || {};
-    const coverage = comparison.summary?.files?.coverage;
-    const reportPath = comparison.public_report_path;
+    const accuracyDelta = result.judge_deltas?.judge_accuracy;
+    const categoryCount = Object.keys(result.judge_category_deltas || {}).length;
     rows.push([
       result.pxd || "",
-      result.candidate_status || "",
-      result.gold_cohort_member ? "Yes" : "No",
-      qcStatus(comparison.status),
-      Number.isFinite(coverage) ? `${(coverage * 100).toFixed(1)}%` : "-",
-      qcStatus(judge.status),
-      reportPath ? `<a href="data/${esc(reportPath)}/conflict_report.md" target="_blank">Comparison</a>` : "-",
+      result.sdrf_status === "missing" ? "Missing" : result.sdrf_changed ? "Changed" : "Same",
+      qcStatus(result.baseline_judge?.status),
+      qcStatus(result.candidate_judge?.status),
+      accuracyDelta && Number.isFinite(accuracyDelta.absolute_delta) ? `${accuracyDelta.absolute_delta >= 0 ? "+" : ""}${accuracyDelta.absolute_delta.toFixed(4)}` : "-",
+      categoryCount ? `${categoryCount} categories` : "-",
     ]);
   }
-  const tableRows = rows.map((row, index) => index === 0 ? row : row.map((cell, cellIndex) => cellIndex === 6 ? cell : esc(cell)));
+  const tableRows = rows.map((row, index) => index === 0 ? row : row.map(cell => esc(cell)));
   const tableHtml = `<div class="table-frame"><table><thead><tr>${tableRows[0].map(cell => `<th>${cell}</th>`).join("")}</tr></thead><tbody>${tableRows.slice(1).map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   const cards = [
-    ["Fixture baseline", summary.fixture_version || "Unknown"],
-    ["Evaluated commit", summary.evaluated_commit ? summary.evaluated_commit.slice(0, 12) : "Unknown"],
-    ["Gold comparisons", `${passed} pass / ${failed} failed`],
-    ["Changed SDRFs", formatNumber((summary.changed_pxds || []).length)],
-  ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>${summary.report_only ? "Report-only QC run" : "Blocking QC run"}</small></article>`).join("");
-  const metrics = qcCategoryMetricOptions(summary);
+    ["Baseline version", comparison.baseline_version || "Unknown"],
+    ["Candidate version", comparison.candidate_version || "Unknown"],
+    ["Shared PXDs", formatNumber(comparison.summary?.shared_pxds || 0)],
+    ["Changed SDRFs", formatNumber(comparison.summary?.changed_sdrfs || 0)],
+    ["Judge pairs", formatNumber(comparison.summary?.judge_pairs_available || 0)],
+  ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>Static release comparison from versioned store artifacts</small></article>`).join("");
+  const metrics = qcCategoryMetricOptions(comparison);
+  const comparisonSelector = comparisons.length > 1
+    ? `<div class="qc-controls"><label for="qc-comparison">Version pair</label><select id="qc-comparison">${comparisons.map(item => `<option value="${esc(item.comparison_id)}"${item.comparison_id === comparison.comparison_id ? " selected" : ""}>${esc(`${item.baseline_version} -> ${item.candidate_version}`)}</option>`).join("")}</select></div>`
+    : `<p class="section-note">Comparing ${esc(comparison.baseline_version)} to ${esc(comparison.candidate_version)}.</p>`;
   const metricControls = metrics.length
     ? `<div class="qc-controls"><label for="qc-metric">Judge metric</label><select id="qc-metric">${metrics.map(metric => `<option value="${esc(metric)}"${metric === state.qcMetric ? " selected" : ""}>${esc(metric)}</option>`).join("")}</select><label for="qc-delta-mode">Change</label><select id="qc-delta-mode"><option value="relative_delta"${state.qcDeltaMode === "relative_delta" ? " selected" : ""}>Relative</option><option value="absolute_delta"${state.qcDeltaMode === "absolute_delta" ? " selected" : ""}>Absolute</option></select></div><div id="qc-metric-plot" class="qc-plot"></div>`
-    : "<p class=\"section-note\">No fresh post-store category judge deltas are available in this reviewed QC run.</p>";
+    : "<p class=\"section-note\">No category-level judge deltas are available for this published comparison.</p>";
   setTimeout(() => {
+    const comparisonSelect = document.querySelector("#qc-comparison");
     const metricSelect = document.querySelector("#qc-metric");
     const deltaSelect = document.querySelector("#qc-delta-mode");
-    if (!metricSelect || !deltaSelect) return;
-    metricSelect.addEventListener("change", () => { state.qcMetric = metricSelect.value; renderQcMetricPlot(summary); });
-    deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(summary); });
-    renderQcMetricPlot(summary);
+    if (comparisonSelect) comparisonSelect.addEventListener("change", () => { state.qcComparisonId = comparisonSelect.value; renderOverview(); });
+    if (metricSelect) metricSelect.addEventListener("change", () => { state.qcMetric = metricSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
+    if (deltaSelect) deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
+    renderQcMetricPlot(activeQcComparison(summary));
   }, 0);
-  return section("Quality control", "Reviewed post-store QC results. Gold comparisons are deterministic; post-judge status records whether the external evaluation was available for this run.", `<div class="stat-grid">${cards}</div>${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No changed SDRFs were evaluated.</p>"}`);
+  const comparisonNote = `Static comparison of archived HAMLET release artifacts. Missing judge rows indicate the versioned store lacks a readable per-paper judge record for that PXD.`;
+  return section("Quality control", comparisonNote, `<div class="stat-grid">${cards}</div>${comparisonSelector}${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No shared PXDs were found for this version pair.</p>"}`);
 }
 
 function renderOverview() {

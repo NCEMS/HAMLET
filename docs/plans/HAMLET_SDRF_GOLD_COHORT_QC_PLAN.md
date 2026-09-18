@@ -2,9 +2,11 @@
 
 Date: 2026-09-17
 
-Status: The score-ranked 30-PXD v2.1.0 cohort was approved on 2026-09-17. Fixture and local QC-foundation implementation is in progress; CI and Store Explorer publication follow local validation.
+Status: The score-ranked 30-PXD v2.1.0 cohort was approved on 2026-09-17. The initial live changed-SDRF QC design was simplified on 2026-09-18 to a static versioned-store comparison model for publication and review.
 
 Release storage uses immutable versioned artifacts as well as manifests. The active flat paths remain compatible with pipeline consumers, while `store/hamlet_sdrfs/v2.1.0/`, `store/hamlet_sdrfs/v2.1.1/`, `store/agentic_results_files/v2.1.0/`, and `store/agentic_results_files/v2.1.1/` retain the actual historical files. The v2.1.0 artifact snapshot is copied byte-for-byte from Git revision `18d4e458e8e3a4ebfa9e919e8bb0f35b145b3ff5`; no historical SDRF annotation is rewritten merely to match its snapshot directory name.
+
+The current review path no longer depends on rerunning `sdrf_judge.py` inside CI. Instead, `src/python/run_sdrf_qc.py` compares archived release versions directly, reading their final SDRFs and versioned judge outputs from the immutable store snapshots and emitting a static `qc-summary.json` for the Store Explorer.
 
 ## 1. Decision
 
