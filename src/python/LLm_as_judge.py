@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import json
 import hashlib
 import time
@@ -8,6 +9,9 @@ import threading
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import sdrf_field_contracts as contracts
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -15,9 +19,26 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import openai
 
-from deepeval.metrics import GEval
-from deepeval.models import DeepEvalBaseLLM
-from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+try:
+    from deepeval.metrics import GEval
+    from deepeval.models import DeepEvalBaseLLM
+    from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+    DEEPEVAL_AVAILABLE = True
+except ImportError:
+    DEEPEVAL_AVAILABLE = False
+    GEval = None
+
+    class DeepEvalBaseLLM:
+        pass
+
+    class LLMTestCase:
+        def __init__(self, **kwargs):
+            self.__dict__.update(kwargs)
+
+    class LLMTestCaseParams:
+        ACTUAL_OUTPUT = "actual_output"
+        EXPECTED_OUTPUT = "expected_output"
+
 
 
 #Root directory containing all benchmark inputs and outputs
@@ -63,6 +84,8 @@ RETRY_DELAY = 2
 
 #Values longer than this threshold are treated as evidence sentences rather than metadata values
 MAX_VALUE_LENGTH = 120
+
+PROMPT_VERSION = "v10"
 
 #Thread local storage used to pass per call context into GEval without shared state
 _thread_local = threading.local()
@@ -155,22 +178,22 @@ CONCENTRATION_FIELDS = {"reduction_concentration", "alkylation_concentration"}
 #Structured text block defining every metadata field type used in evaluation prompts
 _FIELD_DEFINITIONS_TEXT = """\
 BIOLOGICAL / SAMPLE FIELD TYPES:
-species              : Source organism (e.g. "Homo sapiens", "Mus musculus"). Common names ("human", "mouse") are equivalent to scientific names.
-organ                : Tissue or organ of origin (e.g. "liver", "brain cortex", "plasma"). Equivalent to the 'tissue' pipeline field.
-cell_type            : Primary cell type or lineage (e.g. "neurons", "fibroblasts").
-cell_line            : Name of immortalized cell line (e.g. "HEK293T", "HeLa").
+species              : Source organism of the material profiled by MS (e.g. "Homo sapiens", "Mus musculus"). Common names ("human", "mouse") are equivalent to scientific names. A host, vector or disease-background organism named in the paper is NOT the assayed organism: VALUE_CORRECT: no.
+organ                : Tissue or organ of origin (e.g. "liver", "brain cortex", "plasma"). Equivalent to the 'tissue' pipeline field. Must be the tissue the MS SAMPLE came from, stated in the paper. The tissue a cell line was originally derived from is NOT the organ of a cell-line experiment, and a sample-preparation product (e.g. "extracellular vesicles", "membrane fraction") is NOT an organ.
+cell_type            : Primary cell type or lineage (e.g. "neurons", "fibroblasts"). Must be stated in the paper for the MS sample. A lineage deduced from a cell line's background is an unsupported inference unless the paper states it: HALLUCINATED: yes.
+cell_line            : Name of immortalized cell line (e.g. "HEK293T", "HeLa"). Must be the line the PROTEOMICS sample was made from. A line used only for transfection, a binding assay, cloning or protein production is NOT the MS sample source: HALLUCINATED: yes, VERDICT: low.
 disease              : Disease state or diagnosis (e.g. "breast cancer", "Type 2 diabetes"). "normal" or "healthy" is correct when subjects are healthy controls. Equivalent to the 'disease_state' pipeline field.
 sex                  : Donor sex (e.g. "male", "female").
 age                  : Age of donor or developmental time point (e.g. "45 years", "E14.5 embryo"). Ranges are acceptable when reported as a range.
 developmental_stage  : Developmental stage of source material (e.g. "adult", "embryonic", "early seed development"). Inferable from subject description (e.g. "adult patients" -> "adult").
 ethnicity            : Donor ancestry or ethnicity (e.g. "European", "East Asian").
-material_type        : Broad material class: "tissue", "cell line", "primary cells", "biofluid", "whole organism", "plasma", "serum", "organoid". Equivalent to the 'sample_source' pipeline field. Must match what was actually used.
+material_type        : Broad material class, ONE OF: "tissue", "cell line", "primary cells", "biofluid", "whole organism", "plasma", "serum", "organoid", "cell culture". Equivalent to the 'sample_source' pipeline field. Must match what was actually used for the MS experiment. A specific biological entity is NOT a permitted value: "HAP1 cells"/"HEK-293T cells" -> "cell line"; "purified EVs"/"human cartilage" -> not a broad class. When the value names an entity rather than a class, the value is INCORRECT for this field (VALUE_CORRECT: no) with CORRECTED_VALUE set to the class -- it is only a TYPE MISMATCH when the value belongs in a different SDRF field entirely (e.g. a cell line name belongs in cell_line).
 strain               : Animal or plant strain (e.g. "BALB/c", "C57BL/6J", "Nipponbare").
 BMI                  : Body-Mass Index of donor (kg/m^2).
 anatomic_site_tumor  : Anatomical location of the tumor, if applicable (e.g. "left lung lobe", "colon").
 
 TECHNICAL / MS FIELD TYPES:
-instrument           : Mass spectrometer make and model (e.g. "Thermo Q-Exactive Plus", "Orbitrap Fusion Lumos"). LC instruments alone are NOT this type.
+instrument           : Mass spectrometer make and model (e.g. "Thermo Q-Exactive Plus", "Orbitrap Fusion Lumos"). LC instruments alone are NOT this type. Vendor-prefix and minor formatting differences are equivalent ("Q Exactive" == "Thermo Q Exactive"). An exact or more specific model supplied without a supporting statement is an unsupported inference: HALLUCINATED: yes. When value_provenance shows the value came from the raw files (RunAssessor/meti) or PRIDE, absence from the manuscript is expected and is NOT a fabrication.
 cleavage_agent       : Protease used for protein digestion (e.g. "trypsin", "Lys-C"). "Trypsin/P" equals "trypsin".
 label                : Isobaric or metabolic labeling method applied (e.g. "TMT", "SILAC", "label-free", "iTRAQ"). "label-free" is correct when no isobaric/metabolic labels are used. Equivalent to the 'labeling' pipeline field.
 fragmentation        : Fragmentation method for MS/MS (e.g. "HCD", "CID", "ETD"). Equivalent to 'fragmentation_method'.
@@ -179,7 +202,7 @@ reduction_reagent    : Chemical used to reduce disulfide bonds (e.g. "DTT", "TCE
 reduction_concentration : Concentration of the reduction reagent (e.g. "5 mM", "2.5 mM", "10 mM"). Must be a numeric quantity with a unit. The reagent name is extracted separately in the 'reduction_reagent' field, so the concentration value alone (e.g. "2.5 mM" without the reagent name) is COMPLETE and sufficient.
 collision_energy     : Collision energy used in MS/MS (e.g. "normalized collision energy 25", "27 eV").
 fractionation        : Offline peptide/protein fractionation method applied before LC-MS (e.g. "high-pH reverse-phase fractionation", "strong anion exchange"). Equivalent to 'fractionation_method'.
-enrichment_method    : Enrichment protocol applied before MS (e.g. "TiO2 phosphopeptide enrichment", "immunoprecipitation").
+enrichment_method    : Enrichment protocol applied before MS (e.g. "TiO2 phosphopeptide enrichment", "immunoprecipitation"). Must be described in the paper; a protocol assumed from common laboratory practice is an unsupported inference.
 acquisition_method   : MS acquisition scheme (e.g. "DDA", "DIA", "data-dependent", "data-independent"). Must be a scheme name, NOT an instrument name. Equivalent to 'acquisition_method'.
 alkylation_reagent   : Chemical used for cysteine alkylation (e.g. "iodoacetamide", "IAA", "NEM").
 alkylation_concentration : Concentration of the alkylation reagent (e.g. "10 mM", "55 mM", "20 mM"). Must be a numeric quantity with a unit. The reagent name is extracted separately in the 'alkylation_reagent' field, so the concentration value alone (e.g. "10 mM" without the reagent name) is COMPLETE and sufficient.
@@ -187,13 +210,13 @@ ionization_type      : Ionization source type (e.g. "electrospray", "nano-ESI", 
 mass_analyzer        : Mass analyzer type used (e.g. "Orbitrap", "TOF", "quadrupole", "ion trap").
 
 EXPERIMENTAL DESIGN FIELD TYPES:
-replicates                    : Number of biological replicates (e.g. "3"). "1" is correct when no replication is mentioned. Equivalent to 'number_of_biological_replicates' / 'biological_replicate'.
-technical_replicates          : Number of technical replicates per sample (e.g. "2"). Equivalent to 'number_of_technical_replicates' / 'technical_replicate'.
-number_of_samples             : Total count of samples processed in the study (e.g. "12").
-fractions                     : Number of fractions generated per sample (e.g. "12"). "1" is correct when no fractionation occurred. Equivalent to 'number_of_fractions'.
+replicates                    : Number of biological replicates, as a PLAIN NUMBER (e.g. "3"). "1" is correct when no replication is mentioned. Equivalent to 'number_of_biological_replicates' / 'biological_replicate'. A cell line, a condition, a sample description or a count from a non-MS experiment is NOT a replicate count. The count is valid only when the paper ties it to the mass-spectrometry sample set AND identifies it as BIOLOGICAL replication; a clone count, a cell-line list or an assay replicate count from another experiment is WRONG.
+technical_replicates          : Number of technical replicates per sample, as a PLAIN NUMBER (e.g. "2"). Equivalent to 'number_of_technical_replicates' / 'technical_replicate'. Valid only when the paper ties the count to repeated measurement of the SAME MS sample. Replication reported for a different experiment is WRONG.
+number_of_samples             : Total count of samples processed in the MS study, as a PLAIN NUMBER (e.g. "12"). A group count, a patient count or a count from a non-proteomics experiment is only correct when the paper ties it to the mass-spectrometry sample set. An arithmetic sum of group sizes each explicitly stated in the text is acceptable; a total guessed from unrelated counts is a hallucination.
+fractions                     : Number of fractions generated per sample, as a PLAIN NUMBER (e.g. "12"). "1" is correct when no fractionation occurred. Equivalent to 'number_of_fractions'.
 technology_type               : Broad technology type applied (e.g. "proteomics", "phosphoproteomics").
-factor_value                  : Experimental factor or variable under study (e.g. "drug treatment", "cell type", "time point").
-experimental_design           : Study design type (e.g. "time course", "cross-sectional", "case-control", "treated vs control").
+factor_value                  : Experimental factor or variable under study (e.g. "drug treatment", "cell type", "time point"). Judge it by the same rules as the characteristic it mirrors, including that field's safe defaults. It may duplicate another field's value and need not vary across samples. A description of the contrast itself ("treated vs untreated", "S0 vs S3 vs S7") is also correct when every group named is confirmed in the paper.
+experimental_design           : Study design type, ONE compact category label from the FIXED SET: "treated vs control", "case vs control", "time course", "dose response", "cross-sectional", "longitudinal". A method ("AP-MS"), an objective ("characterization of X"), or a detailed description of the comparison is NOT a permitted value: VALUE_CORRECT: no with CORRECTED_VALUE set to the closest category. "case vs control"/"treated vs control" is the right category for ANY study comparing two or more groups, even without a literal untreated control arm.
 """
 
 #Dictionary mapping each canonical field name to its full definition line
@@ -260,6 +283,20 @@ JSON input fields:
                             completeness: if together they cover the full
                             picture described in the paper, each individual
                             value is COMPLETE.
+  source_evidence        -- OPTIONAL. A sentence the extraction agent cited when
+                            it produced this value. It is a POINTER only: it may
+                            quote a part of the paper that is not included in the
+                            text you were given. Never hold the cited sentence's
+                            absence against the value.
+  value_provenance       -- OPTIONAL. Where the value came from. A value marked
+                            runassessor/meti or pride was read from the raw
+                            files or the repository record, NOT written by an
+                            LLM: its absence from the manuscript text is
+                            expected and is NOT a fabrication.
+  field_contract         -- OPTIONAL. The machine checked verdict on whether the
+                            value has the permitted form for this field. When it
+                            reports a violation, treat that as settled and do
+                            not argue the value back into the field.
 
 =================================================================
 CORE EVALUATION QUESTIONS (answer in order)
@@ -277,6 +314,51 @@ CORE EVALUATION QUESTIONS (answer in order)
 
 2. SOURCE CHECK : Is the candidate value present in or reasonably inferable
                   from the paper text?
+
+                  CRITICAL -- SOURCE SCOPE RULE:
+                  A paper describes more than the proteomics experiment. Every
+                  value must describe the material that was ACTUALLY LYSED,
+                  DIGESTED AND ANALYSED BY MASS SPECTROMETRY. A value that is
+                  present in the paper but attached to the wrong role is WRONG
+                  for the field, even though it is factually true:
+                  - a host, vector or disease-background organism instead of the
+                    assayed organism (e.g. cattle named as the trypanosomiasis
+                    host when the MS material is Trypanosoma brucei vesicles)
+                  - the tissue a cell line was originally derived from instead of
+                    the sampled tissue (HEK-293T does not make "kidney" the organ)
+                  - a lineage read off a cell line's background instead of a
+                    stated cell type
+                  - a sample-preparation product (vesicle prep, membrane
+                    fraction, immunoprecipitate) instead of a tissue of origin
+                  - an assay control or a non-proteomics experiment instead of
+                    the MS sample's disease state
+                  Mark these VALUE_CORRECT: no, VERDICT: low. Use HALLUCINATED:
+                  yes when the value is not in the paper at all; use
+                  VALUE_CORRECT: no when it is in the paper but in the wrong role.
+
+                  CRITICAL -- DIRECT EVIDENCE RULE:
+                  For instrument, number_of_samples, replicates,
+                  technical_replicates, organ, cell_type, disease and
+                  enrichment_method, require a direct supporting statement in the
+                  paper for the profiled material. Do NOT complete these from
+                  domain knowledge: a plausible instrument model, a sample count
+                  summed from unrelated groups, a replicate count borrowed from a
+                  neighbouring experiment, trypsin/SCX assumed from common
+                  practice, or a tissue/cell type read off a cell line's origin
+                  are all unsupported. Where the evidence does not identify the
+                  value for the MS material, the correct outcome is no value:
+                  HALLUCINATED: yes, VERDICT: low, CORRECTED_VALUE: NONE.
+
+                  CRITICAL -- COUNT RULE:
+                  replicates, technical_replicates and number_of_samples are
+                  plain numbers. A count is valid only when the paper ties it
+                  explicitly to the mass-spectrometry sample set and says which
+                  kind of count it is. Treating a cell-line list, a clone count,
+                  or an assay replicate count from a non-MS experiment as a
+                  count is WRONG. When several experimental groups apply, the
+                  full set must cover them: one valid count with the others
+                  silently dropped is VALUE_COMPLETE: no.
+
                   -- SAFE DEFAULTS that do NOT require explicit mention:
                      "normal"/"healthy" for disease when subjects are healthy;
                      "adult"/"neonatal"/etc. for developmental_stage when
@@ -336,6 +418,9 @@ CORE EVALUATION QUESTIONS (answer in order)
 VERDICT RULES
 =================================================================
 LOW   -- HALLUCINATED, TYPE MISMATCH, or factually INCORRECT.
+         Also LOW for a value taken from the wrong experimental scope
+         (host organism, cell-line origin, non-MS experiment) and for a
+         value that breaks its field contract.
 MEDIUM-- type correct, present, valid, but the FULL SET of
          all_extracted_values still does not cover the complete picture.
 HIGH  -- correct type, present/inferable, factually accurate and
@@ -350,7 +435,13 @@ SOURCE CHECK:      <one sentence>
 TRUTH CHECK:       <one sentence>
 COMPLETENESS CHECK:<one sentence -- assess the FULL SET, not just this value>
 TYPE_CORRECT:      yes | no
-CORRECT_TYPE_NAME: <correct field name if TYPE_CORRECT is no, else NONE>
+                   Answer "no" ONLY when the value belongs in a DIFFERENT SDRF
+                   field, and name that field below. A value of the right kind
+                   but the wrong level of abstraction for THIS field (e.g.
+                   "HAP1 cells" where material_type wants "cell line") is
+                   TYPE_CORRECT: yes with VALUE_CORRECT: no.
+CORRECT_TYPE_NAME: <the DIFFERENT field this value belongs to when TYPE_CORRECT
+                   is no; never repeat the field being assessed; else NONE>
 VALUE_CORRECT:     yes | no
 VALUE_COMPLETE:    yes | no
 HALLUCINATED:      yes | no
@@ -395,6 +486,14 @@ _ANNOTATION_GEVAL_CRITERIA = (
     "(2) SOURCE: is it present in or a valid safe default for the paper text? "
     "    IMPORTANT: For material_type and acquisition_method, the value may be "
     "    reasonably inferable from the experimental context. "
+    "    SOURCE SCOPE: the value must describe the material actually analysed by "
+    "    mass spectrometry, not a host or background organism, a cell line's "
+    "    tissue of origin, a sample-preparation product, or a non-MS experiment. "
+    "    DIRECT EVIDENCE: instrument, counts, organ, cell_type, disease and "
+    "    enrichment_method need a supporting statement in the paper; otherwise "
+    "    the correct outcome is no value. A value marked in value_provenance as "
+    "    coming from the raw files (runassessor/meti) or PRIDE is not a "
+    "    fabrication even when the manuscript never mentions it. "
     "(3) TRUTH: is it factually correct per the paper and field definition? "
     "(4) COMPLETENESS: apply SIBLING-VALUE RULE first -- assess the full set. "
     "    EXCEPTION: For reduction_concentration and alkylation_concentration, "
@@ -408,12 +507,20 @@ _ANNOTATION_GEVAL_CRITERIA = (
 #Step by step instructions for GEval when evaluating an extracted annotation
 _ANNOTATION_GEVAL_STEPS = [
     "TYPE CHECK: determine the fundamental nature of the value. "
-    "If it belongs to a completely different field, set TYPE_CORRECT: no -> VERDICT: low. "
-    "If it is the right category but wrong specific entity, TYPE_CORRECT: yes, VALUE_CORRECT: no.",
+    "Set TYPE_CORRECT: no ONLY when the value belongs in a DIFFERENT SDRF field, and "
+    "name that different field in CORRECT_TYPE_NAME -- never repeat the field being "
+    "assessed. A value of the right kind at the wrong level of abstraction for this "
+    "field is TYPE_CORRECT: yes, VALUE_CORRECT: no.",
 
     "SOURCE CHECK: confirm the candidate value is present in or inferable from the paper. "
     "Safe defaults do NOT require explicit mention. "
     "For material_type and acquisition_method, reasonable inference from context is allowed. "
+    "Check the source scope: a host or background organism, a cell line's tissue of "
+    "origin, a sample-preparation product or a non-MS experiment is the wrong scope "
+    "(VALUE_CORRECT: no) even when the value is really in the paper. "
+    "For instrument, counts, organ, cell_type, disease and enrichment_method require a "
+    "direct supporting statement for the profiled material; do not complete them from "
+    "domain knowledge. "
     "If ABSENT and not a safe default and not inferable: HALLUCINATED: yes -> VERDICT: low.",
 
     "TRUTH CHECK: assess factual correctness. Synonyms, abbreviations, digit/word swaps, "
@@ -460,16 +567,18 @@ class DiskResponseCache:
             self._dir.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
-    def _make_key(paper_id: str, task: str, field_name: str, primary_value: str) -> str:
+    def _make_key(paper_id: str, task: str, field_name: str, primary_value: str,
+                  context_key: str = "") -> str:
         """Compute a deterministic SHA 256 hex key for a given evaluation request"""
-        blob = f"{EVALUATION_MODEL}|{paper_id}|{task}|{field_name.lower()}|{primary_value}"
+        blob = (f"{EVALUATION_MODEL}|{PROMPT_VERSION}|{paper_id}|{task}|"
+                f"{field_name.lower()}|{primary_value}|{context_key}")
         return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
-    def get(self, paper_id, task, field_name, primary_value):
+    def get(self, paper_id, task, field_name, primary_value, context_key: str = ""):
         """Return the cached response string or None if no cache entry exists"""
         if not self._enabled:
             return None
-        key  = self._make_key(paper_id, task, field_name, primary_value)
+        key  = self._make_key(paper_id, task, field_name, primary_value, context_key)
         path = self._dir / f"{key}.json"
         if path.exists():
             try:
@@ -483,11 +592,11 @@ class DiskResponseCache:
             self._misses += 1
         return None
 
-    def put(self, paper_id, task, field_name, primary_value, response):
+    def put(self, paper_id, task, field_name, primary_value, response, context_key: str = ""):
         """Write a response to disk under the computed cache key"""
         if not self._enabled:
             return
-        key  = self._make_key(paper_id, task, field_name, primary_value)
+        key  = self._make_key(paper_id, task, field_name, primary_value, context_key)
         path = self._dir / f"{key}.json"
         try:
             path.write_text(
@@ -506,6 +615,20 @@ class DiskResponseCache:
             "cached_responses_on_disk": n_files, "session_hits": self._hits,
             "session_misses": self._misses,
             "session_hit_rate": f"{self._hits/total*100:.1f}%" if total > 0 else "n/a"}
+
+
+def _context_cache_key(context: dict) -> str:
+    """build the part of the cache key that depend on what the judge was shown"""
+    siblings = context.get("all_extracted_values") or []
+    if isinstance(siblings, str):
+        siblings = [siblings]
+    parts = [
+        "||".join(sorted(str(v) for v in siblings)),
+        str(context.get("source_evidence") or ""),
+        str(context.get("value_provenance") or ""),
+        str(context.get("field_contract") or ""),
+    ]
+    return hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()[:16]
 
 
 def _build_messages(paper_text: str, entity_context: dict) -> list[dict]:
@@ -605,7 +728,8 @@ class Gemma4Judge(DeepEvalBaseLLM):
         field_name  = context.get("field_name", "")
         primary_val = context.get("candidate_value", field_name) if task == "verify" else field_name
 
-        cached = self._response_cache.get(paper_id, task, field_name, primary_val)
+        context_key = _context_cache_key(context)
+        cached = self._response_cache.get(paper_id, task, field_name, primary_val, context_key)
         if cached is not None:
             with self._lock:
                 self._disk_hit_count += 1
@@ -660,7 +784,8 @@ class Gemma4Judge(DeepEvalBaseLLM):
                     time.sleep(RETRY_DELAY * attempt)
 
         if content:
-            self._response_cache.put(paper_id, task, field_name, primary_val, content)
+            self._response_cache.put(paper_id, task, field_name, primary_val, content,
+                                     context_key)
         print(f"  [response] {content[:200]}...")
         return content
 
@@ -721,7 +846,9 @@ def _get_judge_model() -> Gemma4Judge:
     return _judge_model
 
 
-def _get_thread_annotation_metric() -> GEval:
+def _get_thread_annotation_metric():
+    if not DEEPEVAL_AVAILABLE:
+        return None
     if not hasattr(_thread_local, "annotation_metric"):
         _thread_local.annotation_metric = GEval(
             name="AnnotationJudge",
@@ -890,9 +1017,16 @@ def _flatten_extraction_values(val) -> list[str]:
 
 def _run_geval_semantic(field_name: str,
                         extracted_value: str,
-                        all_values_for_field: list[str]) -> dict:
+                        all_values_for_field: list[str],
+                        provenance: dict | None = None,
+                        field_index: dict | None = None) -> dict:
     """Judge one extracted metadata value using the GEval annotation metric"""
-    model   = _get_judge_model()
+    model     = _get_judge_model()
+    provenance = provenance or {}
+    contract  = contracts.check_field_contract(field_name, extracted_value, field_index)
+    evidence  = str(provenance.get("evidence") or "")
+    origin    = provenance.get("origin", "unknown")
+
     context = {
         "task":                  "verify",
         "field_name":            field_name,
@@ -900,6 +1034,14 @@ def _run_geval_semantic(field_name: str,
         "candidate_value":       extracted_value,
         "all_extracted_values":  all_values_for_field,
     }
+    if evidence:
+        context["source_evidence"] = evidence
+    instrument_derived = contracts.provenance_is_instrument_derived(provenance, field_name)
+    if instrument_derived:
+        context["value_provenance"] = contracts.describe_provenance(provenance)
+    if contract.get("applies"):
+        context["field_contract"] = (
+            contract["reason"] or f"{field_name} satisfies its value contract")
     model.set_entity_context(context)
 
     expected_str = (
@@ -927,6 +1069,73 @@ def _run_geval_semantic(field_name: str,
             "because the exact term is absent. "
         )
 
+    fn = field_name.lower()
+    if fn in contracts.COUNT_FIELDS:
+        expected_str += (
+            f"IMPORTANT -- COUNT CONTRACT: {fn} must be a plain number of the MASS "
+            "SPECTROMETRY sample set (e.g. '3'), never a cell line, condition, "
+            "sample description or a count taken from a non-MS experiment. Accept a "
+            "count only when the paper ties it explicitly to the proteomics samples "
+            "AND states which kind of count it is (biological replicates, technical "
+            "replicates, or total samples). A count borrowed from a different "
+            "experiment is WRONG: VALUE_CORRECT: no, VERDICT: low. "
+        )
+    if fn == "material_type":
+        expected_str += (
+            "IMPORTANT -- MATERIAL_TYPE CONTRACT: this field takes a BROAD material "
+            f"class from {sorted(contracts.MATERIAL_TYPE_VOCAB)} only. A specific "
+            "biological entity ('HAP1 cells', 'HEK-293T cells', 'purified EVs', "
+            "'human cartilage') is NOT a permitted value: it is the right fact at the "
+            "wrong level of abstraction, so VALUE_CORRECT: no with CORRECTED_VALUE set "
+            "to the broad class it belongs to. This is NOT a type mismatch unless the "
+            "value belongs in a DIFFERENT SDRF field. "
+        )
+    if fn == "experimental_design":
+        expected_str += (
+            "IMPORTANT -- EXPERIMENTAL_DESIGN CONTRACT: this field takes one compact "
+            f"category label from {contracts.EXPERIMENTAL_DESIGN_VOCAB} only. A method, "
+            "an objective or a detailed description of the comparison is NOT a "
+            "permitted value: VALUE_CORRECT: no with CORRECTED_VALUE set to the "
+            "closest-fitting category label. "
+        )
+    if fn in contracts.EVIDENCE_REQUIRED_FIELDS:
+        expected_str += (
+            "IMPORTANT -- DIRECT EVIDENCE REQUIRED: accept this value only when the "
+            "paper text asserts it for the material actually profiled by mass "
+            "spectrometry. Do NOT complete it from domain knowledge (a cell line's "
+            "tissue or lineage of origin, an instrument model upgraded to a more "
+            "specific one, a count carried over from an unrelated experiment). "
+            "Without a direct supporting statement the correct outcome is "
+            "HALLUCINATED: yes, VERDICT: low, CORRECTED_VALUE: NONE. "
+        )
+    if fn in ("species", "organ", "disease", "cell_type", "cell_line", "material_type"):
+        expected_str += (
+            "IMPORTANT -- SOURCE SCOPE: the value must describe the material that was "
+            "lysed, digested and analysed by MS. A host organism, a disease-background "
+            "or vector organism, the tissue a cell line was originally derived from, a "
+            "sample-preparation product, or material from a non-proteomics experiment "
+            "is present in the paper but WRONG for this field: VALUE_CORRECT: no, "
+            "VERDICT: low. "
+        )
+    if evidence:
+        expected_str += (
+            "IMPORTANT: source_evidence is a sentence the extraction agent cited when it "
+            "produced this value. Treat it as a POINTER, never as something to verify: it "
+            "may quote a part of the paper (results, figures, supplement) that is NOT "
+            "included in the text you were given. NEVER mark a value HALLUCINATED, wrong "
+            "or unsupported because the cited sentence is missing from the paper text -- "
+            "judge only whether the VALUE itself is supported by the paper text you can "
+            "see, exactly as you would with no source_evidence at all. "
+        )
+    if instrument_derived:
+        expected_str += (
+            "IMPORTANT: this value was measured from the raw files / repository record "
+            "(RunAssessor/meti or PRIDE), not produced by an LLM. Absence from the "
+            "manuscript text is expected and is NOT a fabrication -- do not mark it "
+            "HALLUCINATED for that reason alone. Still judge whether it is the right "
+            "kind of value for this field and consistent with the paper. "
+        )
+
     sibling_note = (f"  (all extracted values for this field: {all_values_for_field})"
                     if len(all_values_for_field) > 1 else "")
     test_case = LLMTestCase(
@@ -942,9 +1151,13 @@ def _run_geval_semantic(field_name: str,
     score  = None
     try:
         metric = _get_thread_annotation_metric()
-        metric.measure(test_case)
-        reason = metric.reason or ""
-        score  = metric.score
+        if metric is None:
+            reason = model._generate_single(
+                model._paper_text, model._current_paper_id, context)
+        else:
+            metric.measure(test_case)
+            reason = metric.reason or ""
+            score  = metric.score
     except RecursionError:
         print(f"  [GEval recursion] {field_name}: '{extracted_value[:40]}' direct API fallback")
         reason = model._generate_single(model._paper_text, model._current_paper_id, context)
@@ -982,6 +1195,21 @@ def _run_geval_semantic(field_name: str,
                       reason, re.IGNORECASE))
     correct_type = _parse_correct_type_name(reason, field_name) if is_mismatch else None
 
+    if is_mismatch and not correct_type:
+        if not (contract.get("applies") and contract.get("satisfied") is not False):
+            correct_type = contracts.infer_destination_field(
+                extracted_value, field_name, field_index)
+        if not correct_type:
+            is_mismatch = False
+            value_correct_forced = True
+            reason += ("\n[JUDGE RULE] TYPE_CORRECT: no without a different destination "
+                       "field -- recorded as an incorrect value for this field, not a "
+                       "type mismatch.")
+        else:
+            value_correct_forced = False
+    else:
+        value_correct_forced = False
+
     vc_parsed      = _parse_yes_no(reason, "VALUE_CORRECT")
     vcomp_parsed   = _parse_yes_no(reason, "VALUE_COMPLETE")
     value_correct  = vc_parsed if vc_parsed is not None else (
@@ -989,7 +1217,7 @@ def _run_geval_semantic(field_name: str,
     value_complete = vcomp_parsed if vcomp_parsed is not None else (
         (verdict == "high") and not is_hallucinated and not is_mismatch)
 
-    if is_hallucinated or is_mismatch:
+    if is_hallucinated or is_mismatch or value_correct_forced:
         value_correct = False
     if is_hallucinated:
         value_complete = False
@@ -1009,6 +1237,45 @@ def _run_geval_semantic(field_name: str,
 
     corrected_value = _parse_corrected_value(reason)
 
+    contract_status = None
+    if contract.get("applies"):
+        contract_status = {True: "satisfied", False: "violated",
+                           None: "unmapped"}[contract["satisfied"]]
+        canonical = contract.get("canonical")
+        if contract["satisfied"] and canonical:
+            if contracts._clean(extracted_value).lower() != canonical:
+                contract_status = "normalised"
+                if not corrected_value:
+                    corrected_value = canonical
+                reason += f"\n[FIELD CONTRACT] {contract['reason']}"
+        else:
+            destination = contracts.infer_destination_field(
+                extracted_value, field_name, field_index)
+            if contract["satisfied"] is False or destination:
+                value_correct = False
+                value_complete = False
+                verdict = "low"
+                contract_status = "violated"
+                if destination:
+                    is_mismatch = True
+                    correct_type = destination
+                reason += f"\n[FIELD CONTRACT] {contract['reason']}"
+            else:
+                reason += f"\n[FIELD CONTRACT] {contract['reason']}"
+
+    technical_origin = False
+    if instrument_derived and (is_hallucinated
+                               or contracts.provenance_lacks_text_support(provenance)):
+        is_hallucinated = False
+        technical_origin = True
+        reason += ("\n[VALUE PROVENANCE] value measured by "
+                   f"{contracts.describe_provenance(provenance)} -- verifiable outside "
+                   "the manuscript text, but not confirmed by it.")
+
+    evidence_grounded = None
+    if evidence:
+        evidence_grounded = contracts.evidence_supports(extracted_value, evidence)
+
     #Derive a human readable match type label from the parsed flags
     if is_hallucinated:
         match_type = "HALLUCINATED"
@@ -1024,6 +1291,10 @@ def _run_geval_semantic(field_name: str,
     return {"verdict": verdict, "type_mismatch": is_mismatch, "correct_type": correct_type,
             "value_correct": value_correct, "value_complete": value_complete,
             "hallucination": is_hallucinated, "corrected_value": corrected_value,
+            "value_origin": origin, "evidence_span": evidence,
+            "evidence_grounded": evidence_grounded,
+            "technical_origin": technical_origin,
+            "contract_status": contract_status,
             "issue_summary": reason, "match_type": match_type, "geval_score": score}
 
 
@@ -1097,15 +1368,19 @@ _REVIEW_CSV_FIELDS = [
     "all_values_for_field",
     "verdict", "type_mismatch", "correct_type",
     "value_correct", "value_complete", "hallucination",
+    "value_origin", "evidence_span", "technical_origin", "contract_status",
+    "error_category",
     "issue_summary", "corrected_value",
 ]
 
 #Column names for the per paper statistics CSV
 _STATS_CSV_FIELDS = [
-    "paper_id", "total_extracted",
+    "paper_id", "total_extracted", "judge_n_judged",
     "judge_n_correct", "judge_n_hallucinated", "judge_n_mismatch",
     "judge_n_wrong", "judge_n_incomplete", "judge_n_corrected",
-    "judge_accuracy",
+    "judge_n_contract_violations", "judge_n_contract_normalised",
+    "judge_n_instrument_verified",
+    "judge_accuracy", "judge_accuracy_adjusted",
 ]
 
 #Column names for the field coverage CSV
@@ -1138,33 +1413,64 @@ class _IncrementalCSV:
         self._fh.close()
 
 
+_ERROR_CATEGORIES = (
+    "instrument_verified", "hallucinated", "type_mismatch",
+    "wrong_value", "incomplete", "contract_normalised", "correct_explicit",
+)
+
+
+def _classify_row(row: dict) -> str | None:
+    """assign one final category to judged eval row"""
+    if row.get("value_correct") is None and row.get("verdict") is None:
+        return None
+    if row.get("technical_origin"):
+        return "instrument_verified"
+    if row.get("hallucination"):
+        return "hallucinated"
+    if row.get("type_mismatch"):
+        return "type_mismatch"
+    if row.get("value_correct") is False:
+        return "wrong_value"
+    if row.get("value_complete") is False:
+        return "incomplete"
+    if row.get("contract_status") == "normalised":
+        return "contract_normalised"
+    return "correct_explicit"
+
+
 def _compute_single_paper_stats(paper_id: str, eval_rows: list[dict]) -> dict:
     """Compute quality category counts and accuracy for one paper's evaluation rows"""
     total = len(eval_rows)
     rec   = {"paper_id": paper_id, "total_extracted": total}
-    judged = [r for r in eval_rows if r.get("value_correct") is not None]
+    categories = [row.get("error_category") or _classify_row(row) for row in eval_rows]
+    judged = [c for c in categories if c is not None]
     if judged:
-        n_correct    = sum(1 for r in eval_rows
-                           if r.get("type_mismatch") == False
-                           and r.get("value_correct") == True
-                           and r.get("value_complete") == True
-                           and r.get("hallucination") == False)
-        n_halluc     = sum(1 for r in eval_rows if r.get("hallucination"))
-        n_mismatch   = sum(1 for r in eval_rows if r.get("type_mismatch"))
-        n_wrong      = sum(1 for r in eval_rows
-                           if r.get("value_correct") == False
-                           and not r.get("hallucination"))
-        n_incomplete = sum(1 for r in eval_rows
-                           if r.get("value_correct") == True
-                           and r.get("value_complete") == False)
+        counts = {cat: categories.count(cat) for cat in _ERROR_CATEGORIES}
+        n_judged     = len(judged)
+        n_correct    = counts["correct_explicit"]
+        n_verified   = counts["instrument_verified"]
+        n_normalised = counts["contract_normalised"]
+        n_halluc     = counts["hallucinated"]
+        n_mismatch   = counts["type_mismatch"]
+        n_wrong      = counts["wrong_value"]
+        n_incomplete = counts["incomplete"]
         n_corrected  = sum(1 for r in eval_rows if r.get("corrected_value"))
-        rec["judge_n_correct"]      = n_correct
-        rec["judge_n_hallucinated"] = n_halluc
-        rec["judge_n_mismatch"]     = n_mismatch
-        rec["judge_n_wrong"]        = n_wrong
-        rec["judge_n_incomplete"]   = n_incomplete
-        rec["judge_n_corrected"]    = n_corrected
-        rec["judge_accuracy"]       = round(n_correct / total, 4) if total > 0 else 0.0
+        n_contract   = sum(1 for r in eval_rows
+                           if r.get("contract_status") in ("violated", "normalised"))
+        rec["judge_n_correct"]              = n_correct
+        rec["judge_n_hallucinated"]         = n_halluc
+        rec["judge_n_mismatch"]             = n_mismatch
+        rec["judge_n_wrong"]                = n_wrong
+        rec["judge_n_incomplete"]           = n_incomplete
+        rec["judge_n_corrected"]            = n_corrected
+        rec["judge_n_contract_violations"]  = n_contract
+        rec["judge_n_instrument_verified"]  = n_verified
+        rec["judge_n_contract_normalised"]  = n_normalised
+        rec["judge_n_judged"]               = n_judged
+        rec["judge_accuracy"] = round(n_correct / n_judged, 4) if n_judged else 0.0
+        rec["judge_accuracy_adjusted"] = (
+            round((n_correct + n_verified + n_normalised) / n_judged, 4)
+            if n_judged else 0.0)
     return rec
 
 
@@ -1174,9 +1480,10 @@ def _run_pass(work_items: list[tuple], n_total: int,
     results: dict[int, dict] = {}
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {
-            executor.submit(_run_geval_semantic, field, value, siblings):
+            executor.submit(_run_geval_semantic, field, value, siblings,
+                            provenance, field_index):
                 (idx, field, value)
-            for idx, field, value, siblings in work_items
+            for idx, field, value, siblings, provenance, field_index in work_items
         }
         for future in as_completed(futures):
             idx, field_name, extracted_value = futures[future]
@@ -1217,11 +1524,31 @@ def _is_bad_value(result: dict) -> bool:
     )
 
 
+def _apply_judge_result(row: dict, result: dict) -> None:
+    """Copy one judge result onto its eval row, flags and reasoning together"""
+    row["verdict"]           = result.get("verdict")
+    row["type_mismatch"]     = result.get("type_mismatch")
+    row["correct_type"]      = result.get("correct_type")
+    row["value_correct"]     = result.get("value_correct")
+    row["value_complete"]    = result.get("value_complete")
+    row["hallucination"]     = result.get("hallucination")
+    row["corrected_value"]   = result.get("corrected_value")
+    row["issue_summary"]     = result.get("issue_summary", "")
+    if result.get("value_origin"):
+        row["value_origin"]  = result.get("value_origin")
+    if result.get("evidence_span"):
+        row["evidence_span"] = result.get("evidence_span")
+    row["contract_status"]   = result.get("contract_status")
+    row["technical_origin"]  = bool(result.get("technical_origin"))
+
+
 def evaluate_paper_with_geval(paper_id: str,
                                eval_rows: list[dict],
-                               source_text: str) -> list[dict]:
+                               source_text: str,
+                               all_provenance: dict | None = None) -> list[dict]:
     """Judge all extracted values for one paper using a two pass evaluation strateg"""
     _get_judge_model().set_paper_context(source_text, paper_id=paper_id)
+    all_provenance = all_provenance or {}
 
     #Build the raw (unfiltered) map of all values per field before any quality filtering
     raw_field_values: dict[str, list[str]] = {}
@@ -1230,26 +1557,25 @@ def evaluate_paper_with_geval(paper_id: str,
         if row["extracted_value"] not in raw_field_values[row["annotation_type"]]:
             raw_field_values[row["annotation_type"]].append(row["extracted_value"])
 
+    field_index = {f: list(v) for f, v in raw_field_values.items()}
+
+    def _prov(row):
+        return all_provenance.get(
+            (row["annotation_type"], _norm(row["extracted_value"])), {})
+
     n_total = len(eval_rows)
 
     print(f"    [judge pass 1] {n_total} values with raw sibling context ...")
     pass1_items = [
         (idx, r["annotation_type"], r["extracted_value"],
-         raw_field_values.get(r["annotation_type"], [r["extracted_value"]]))
+         raw_field_values.get(r["annotation_type"], [r["extracted_value"]]),
+         _prov(r), field_index)
         for idx, r in enumerate(eval_rows)
     ]
     pass1_results = _run_pass(pass1_items, n_total, "P1 ")
 
     for idx, row in enumerate(eval_rows):
-        r = pass1_results.get(idx, {})
-        row["verdict"]         = r.get("verdict")
-        row["type_mismatch"]   = r.get("type_mismatch")
-        row["correct_type"]    = r.get("correct_type")
-        row["value_correct"]   = r.get("value_correct")
-        row["value_complete"]  = r.get("value_complete")
-        row["hallucination"]   = r.get("hallucination")
-        row["corrected_value"] = r.get("corrected_value")
-        row["issue_summary"]   = r.get("issue_summary", "")
+        _apply_judge_result(row, pass1_results.get(idx, {}))
 
     #Build a clean sibling map that excludes values judged as low quality in pass 1
     clean_field_values: dict[str, list[str]] = {}
@@ -1278,9 +1604,12 @@ def evaluate_paper_with_geval(paper_id: str,
         
     pass2_items = [
         (idx, r["annotation_type"], r["extracted_value"],
-         clean_field_values.get(r["annotation_type"], [r["extracted_value"]]))
+         clean_field_values.get(r["annotation_type"], [r["extracted_value"]]),
+         _prov(r), field_index)
         for idx, r in enumerate(eval_rows)
         if r.get("verdict") == "medium"
+        and clean_field_values.get(r["annotation_type"], [r["extracted_value"]])
+        != raw_field_values.get(r["annotation_type"], [r["extracted_value"]])
     ]
 
     if pass2_items:
@@ -1291,17 +1620,9 @@ def evaluate_paper_with_geval(paper_id: str,
             if row.get("verdict") != "medium":
                 continue
             r2 = pass2_results.get(idx)
-            if r2 is None:
+            if r2 is None or r2.get("verdict") is None:
                 continue
-            if r2.get("verdict") is not None:
-                row["verdict"]         = r2.get("verdict")
-                row["type_mismatch"]   = r2.get("type_mismatch")
-                row["correct_type"]    = r2.get("correct_type")
-                row["value_correct"]   = r2.get("value_correct")
-                row["value_complete"]  = r2.get("value_complete")
-                row["hallucination"]   = r2.get("hallucination")
-                row["corrected_value"] = r2.get("corrected_value")
-                row["issue_summary"]   = r2.get("issue_summary", "")
+            _apply_judge_result(row, r2)
     else:
         print(f"    [judge pass 2] no medium values found, skipping.")
 
@@ -1309,15 +1630,16 @@ def evaluate_paper_with_geval(paper_id: str,
 
 
 def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
-                                agent: str) -> dict[str, list[str]]:
+                                agent: str) -> tuple[dict[str, list[str]], dict[tuple, dict]]:
     """Load one agent's pipeline enriched JSON from the integrated_output structure.
 
     Reads from:
         input_dir/integrated_output/{agent}/temp_0.0/{pxd_id}_PubText_enriched.json
 
-    Each non-private field is a dict like {"resolved": "value", "confidence": ..., "status": "..."}.
-    Extracts the "resolved" value, skipping nulls and complex (non-string) resolved values.
-    Applies FIELD_NAME_MAP to canonical names.
+    Each non-private field is a dict like {"resolved": "value", "confidence": ...,
+    "status": ..., "sources": {"meti": ..., "pride": ..., "llm": {"value", "evidence"}}}.
+    Returns the {canonical_field: [values]} prediction plus a provenance map keyed by
+    (canonical_field, normalised value) carrying the value's source and evidence span.
     """
     enriched_path = os.path.join(
         input_dir, "integrated_output", agent, "temp_0.0",
@@ -1325,7 +1647,7 @@ def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
     )
     if not os.path.exists(enriched_path):
         print(f"    WARNING: pipeline enriched JSON not found: {enriched_path}")
-        return {}
+        return {}, {}
 
     try:
         with open(enriched_path, "r", encoding="utf-8") as f:
@@ -1333,7 +1655,7 @@ def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
         print(f"    [{agent}] pipeline loaded: {enriched_path}")
     except Exception as e:
         print(f"    WARNING: could not read {enriched_path}: {e}")
-        return {}
+        return {}, {}
 
     allowed_fields: set[str] = set()
     for fields_list in PIPELINE_FIELDS.values():
@@ -1342,6 +1664,7 @@ def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
             allowed_fields.add(FIELD_NAME_MAP.get(field, field))
 
     parsed: dict[str, list[str]] = {}
+    provenance: dict[tuple, dict] = {}
     for field, entry in raw_data.items():
         if field.startswith("_"):
             continue
@@ -1362,7 +1685,46 @@ def load_enriched_json_pipeline(input_dir: str, pxd_id: str,
         existing = parsed.setdefault(mapped, [])
         if value_str not in existing:
             existing.append(value_str)
-    return parsed
+        provenance[(mapped, _norm(value_str))] = _read_provenance(entry)
+    return parsed, provenance
+
+
+def _source_value(source) -> str:
+    """return source blocks value or "" when the block is missing or unusable"""
+    if not isinstance(source, dict):
+        return ""
+    value = source.get("value")
+    if value is None:
+        return ""
+    text = str(value).strip()
+    return "" if _is_not_extracted(text) else text
+
+
+def _read_provenance(entry: dict) -> dict:
+    """extract where resolved value came from and what evidence backs it"""
+    sources = entry.get("sources") or {}
+    meti_value = _source_value(sources.get("meti") or sources.get("runassessor"))
+    pride_value = _source_value(sources.get("pride"))
+    llm_block = sources.get("llm") or {}
+    llm_value = _source_value(llm_block)
+    evidence = ""
+    if isinstance(llm_block, dict):
+        evidence = str(llm_block.get("evidence") or "").strip()
+    if meti_value or pride_value:
+        origin = "instrument_metadata" if meti_value else "repository_metadata"
+    elif llm_value:
+        origin = "llm"
+    else:
+        origin = "unknown"
+    return {
+        "status": str(entry.get("status") or ""),
+        "confidence": entry.get("confidence"),
+        "meti_value": meti_value,
+        "pride_value": pride_value,
+        "llm_value": llm_value,
+        "evidence": evidence,
+        "origin": origin,
+    }
 
 
 def get_manuscript_from_pmc_cache(pxd_id: str, pmc_cache_path: str) -> str:
@@ -1450,10 +1812,12 @@ def run_pipeline_evaluation(pxd_id: str, input_dir: str,
 
     # --- Load extraction JSONs from all three agents ---
     all_predicted: dict[str, dict[str, list[str]]] = {}
+    all_provenance: dict[tuple, dict] = {}
     for agent in AGENTS:
-        pred = load_enriched_json_pipeline(input_dir, pxd_id, agent)
+        pred, prov = load_enriched_json_pipeline(input_dir, pxd_id, agent)
         if pred:
             all_predicted[agent] = pred
+        all_provenance.update(prov)
 
     if not all_predicted:
         print(f"  ERROR: no enriched JSON found for {pxd_id} -- aborting judge evaluation")
@@ -1513,6 +1877,7 @@ def run_pipeline_evaluation(pxd_id: str, input_dir: str,
             pmc_cache_path=pmc_cache_path,
             source_text=source_text,
             all_predicted=all_predicted,
+            all_provenance=all_provenance,
             run_cache_dir=run_cache,
         )
         all_runs_eval_rows.append(single_rows)
@@ -1676,46 +2041,48 @@ def _compute_consensus_eval_rows(all_runs: list[list[dict]]) -> list[dict]:
         return all_runs[0]
 
     n = len(all_runs)
-    threshold = n // 2 + 1  # strict majority
 
-    # Index rows by dedup key across all runs
-    from collections import Counter, defaultdict
-    key_to_rows: dict[tuple, list[dict]] = defaultdict(list)
+    from collections import Counter, OrderedDict
+    key_to_rows: "OrderedDict[tuple, list[dict]]" = OrderedDict()
     for run in all_runs:
         for row in run:
             key = (row.get("annotation_type", ""), _norm(str(row.get("extracted_value", ""))))
-            key_to_rows[key].append(row)
+            key_to_rows.setdefault(key, []).append(row)
 
     consensus: list[dict] = []
     for key, rows in key_to_rows.items():
-        base = dict(rows[0])  # template from first row
+        judged = [r for r in rows if r.get("verdict") is not None]
+        if not judged:
+            base = dict(rows[0])
+            base["consensus_runs"]  = n
+            base["consensus_votes"] = len(rows)
+            consensus.append(base)
+            continue
 
-        # Majority verdict
-        verdicts = [r.get("verdict") for r in rows if r.get("verdict")]
-        if verdicts:
-            verdict_counts = Counter(verdicts)
-            majority_verdict, count = verdict_counts.most_common(1)[0]
-            base["verdict"] = majority_verdict if count >= threshold else verdict_counts.most_common(1)[0][0]
+        outcomes = Counter(
+            (r.get("verdict"), bool(r.get("hallucination")), bool(r.get("type_mismatch")),
+             bool(r.get("value_correct")), bool(r.get("value_complete")))
+            for r in judged
+        )
+        winning_outcome, _ = outcomes.most_common(1)[0]
+        winner = next(
+            r for r in judged
+            if (r.get("verdict"), bool(r.get("hallucination")), bool(r.get("type_mismatch")),
+                bool(r.get("value_correct")), bool(r.get("value_complete"))) == winning_outcome
+        )
+        base = dict(winner)
 
-        # Majority per boolean flags
-        for flag in ("hallucination", "type_mismatch", "value_correct", "value_complete"):
-            vals = [r.get(flag) for r in rows if r.get(flag) is not None]
-            if vals:
-                true_count = sum(1 for v in vals if v is True or v == "True")
-                base[flag] = true_count >= threshold
-
-        # Majority corrected_value (must appear in strict majority, ignoring None)
-        corr_vals = [r.get("corrected_value") for r in rows if r.get("corrected_value")]
+        corr_vals = [r.get("corrected_value") for r in judged if r.get("corrected_value")]
         if corr_vals:
-            corr_counts = Counter(corr_vals)
-            top_val, top_count = corr_counts.most_common(1)[0]
-            base["corrected_value"] = top_val if top_count >= threshold else None
+            top_val, top_count = Counter(corr_vals).most_common(1)[0]
+            base["corrected_value"] = top_val if top_count > len(corr_vals) / 2 else None
         else:
             base["corrected_value"] = None
 
-        # Annotate that this came from consensus
-        base["consensus_runs"] = n
-        base["consensus_votes"] = len(rows)
+        base["consensus_runs"]     = n
+        base["consensus_votes"]    = len(judged)
+        base["consensus_agreement"] = round(outcomes[winning_outcome] / len(judged), 4)
+        base["error_category"]     = _classify_row(base)
         consensus.append(base)
 
     return consensus
@@ -1723,7 +2090,8 @@ def _compute_consensus_eval_rows(all_runs: list[list[dict]]) -> list[dict]:
 
 def _run_single_evaluation(pxd_id: str, input_dir: str,
                            pmc_cache_path: str, source_text: str,
-                           all_predicted: dict, run_cache_dir: str) -> list[dict]:
+                           all_predicted: dict, all_provenance: dict,
+                           run_cache_dir: str) -> list[dict]:
     """Run one GEval judge pass and return the eval_rows."""
     global CACHE_DIR, _judge_model
     CACHE_DIR    = run_cache_dir
@@ -1746,6 +2114,7 @@ def _run_single_evaluation(pxd_id: str, input_dir: str,
                 if dedup_key in seen_eval:
                     continue
                 seen_eval.add(dedup_key)
+                prov = all_provenance.get((mapped, _norm(v)), {})
                 eval_rows.append({
                     "paper_id":             pxd_id,
                     "agent":                agent,
@@ -1758,12 +2127,21 @@ def _run_single_evaluation(pxd_id: str, input_dir: str,
                     "value_correct":        None,
                     "value_complete":       None,
                     "hallucination":        None,
+                    "value_origin":         prov.get("origin", "unknown"),
+                    "evidence_span":        prov.get("evidence", ""),
+                    "technical_origin":     False,
+                    "contract_status":      None,
+                    "error_category":       None,
                     "issue_summary":        "",
                     "corrected_value":      None,
                 })
 
     if USE_LLM_JUDGE and source_text:
-        eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
+        eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text,
+                                              all_provenance)
+
+    for row in eval_rows:
+        row["error_category"] = _classify_row(row)
 
     return eval_rows
 
@@ -1783,6 +2161,11 @@ def _write_paper_json(pxd_id: str, eval_rows: list[dict], json_dir: str) -> None
             "value_correct":   row.get("value_correct"),
             "value_complete":  row.get("value_complete"),
             "hallucination":   row.get("hallucination"),
+            "value_origin":    row.get("value_origin"),
+            "evidence_span":   row.get("evidence_span"),
+            "technical_origin": row.get("technical_origin"),
+            "contract_status": row.get("contract_status"),
+            "error_category":  row.get("error_category") or _classify_row(row),
             "corrected_value": row.get("corrected_value"),
             "issue_summary":   _parse_checks_to_dict(raw_summary),
         })
@@ -1814,7 +2197,20 @@ def _single_scalar_value(raw) -> str | None:
     return text
 
 
-def _choose_override_candidate(rows: list[dict]) -> tuple[str | None, str | None, list[str]]:
+def _contract_allows(field: str, value) -> bool:
+    """true when value may be written into an sdrf column for this field"""
+    if value is None:
+        return False
+    check = contracts.check_field_contract(field, value)
+    if not check.get("applies"):
+        return True
+    if check.get("satisfied") is not True:
+        return False
+    canonical = check.get("canonical")
+    return bool(canonical) and contracts._clean(value).lower() == canonical
+
+
+def _choose_override_candidate(rows: list[dict], field: str = "") -> tuple[str | None, str | None, list[str]]:
     high_values = []
     corrected_values = []
     reasons = []
@@ -1828,10 +2224,16 @@ def _choose_override_candidate(rows: list[dict]) -> tuple[str | None, str | None
             and not row.get("hallucination")
             and not row.get("type_mismatch")
             and extracted_scalar
+            and _contract_allows(field, extracted_scalar)
         ):
             high_values.append(extracted_scalar)
             reasons.append("judge_high_confidence")
-        if corrected_scalar:
+        if (
+            corrected_scalar
+            and not row.get("type_mismatch")
+            and not row.get("hallucination")
+            and _contract_allows(field, corrected_scalar)
+        ):
             corrected_values.append(corrected_scalar)
 
     high_values = sorted(set(high_values))
@@ -1861,7 +2263,7 @@ def _write_sdrf_override_json(pxd_id: str, eval_rows: list[dict], all_predicted:
         if not rows:
             continue
 
-        selected_value, selection_source, _ = _choose_override_candidate(rows)
+        selected_value, selection_source, _ = _choose_override_candidate(rows, field)
         pipeline_values = predicted_by_field.get(field, [])
         unique_pipeline_values = sorted(set(v for v in pipeline_values if _single_scalar_value(v)))
         apply_override = bool(selected_value) and unique_pipeline_values != [selected_value]
@@ -1880,6 +2282,8 @@ def _write_sdrf_override_json(pxd_id: str, eval_rows: list[dict], all_predicted:
                     "value_complete": row.get("value_complete"),
                     "hallucination": row.get("hallucination"),
                     "type_mismatch": row.get("type_mismatch"),
+                    "value_origin": row.get("value_origin"),
+                    "contract_status": row.get("contract_status"),
                     "corrected_value": row.get("corrected_value"),
                 }
                 for row in rows
@@ -2017,6 +2421,11 @@ def process_model(model_name: str, extraction_dir: str, out_dir: str):
                         "value_correct":      None,
                         "value_complete":     None,
                         "hallucination":      None,
+                        "value_origin":       "unknown",
+                        "evidence_span":      "",
+                        "technical_origin":   False,
+                        "contract_status":    None,
+                        "error_category":     None,
                         "issue_summary":      "",
                         "corrected_value":    None,
                     })
@@ -2039,6 +2448,9 @@ def process_model(model_name: str, extraction_dir: str, out_dir: str):
 
         if USE_LLM_JUDGE:
             eval_rows = evaluate_paper_with_geval(pxd_id, eval_rows, source_text)
+
+        for row in eval_rows:
+            row["error_category"] = _classify_row(row)
 
         review_csv.append_rows(eval_rows)
         _write_paper_json(pxd_id, eval_rows, json_out_dir)
