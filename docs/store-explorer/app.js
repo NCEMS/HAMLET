@@ -4,11 +4,15 @@ const state = {
   summary: null,
   qcSummary: null,
   tableDefinitions: null,
+  qcTab: "version",
+  qcVersion: null,
   qcMetric: "judge_accuracy",
   qcDeltaMode: "relative_delta",
   qcComparisonId: null,
   qcBaselineVersion: null,
   qcCandidateVersion: null,
+  versionJudgeCache: {},
+  versionMetadataCache: {},
 };
 const detail = document.querySelector("#detail");
 const list = document.querySelector("#pxd-list");
@@ -247,6 +251,178 @@ function histogramCard(field) {
   return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
 }
 
+function sortedVersions() {
+  return [...new Set(state.records.map(record => record.version || "Unknown"))]
+    .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+}
+
+function metricPlotId(metric) {
+  const slug = String(metric).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `qc-version-metric-${slug}`;
+}
+
+function selectDefaultQcVersion() {
+  if (state.qcVersion) return;
+  const versions = sortedVersions();
+  const known = versions.filter(version => version !== "Unknown");
+  state.qcVersion = known[known.length - 1] || versions[0] || null;
+}
+
+function buildHistogram(values, bins = 10) {
+  if (!values.length) return [];
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  const span = maximum - minimum;
+  const step = span === 0 ? 1 : span / bins;
+  const counts = new Array(bins).fill(0);
+  for (const value of values) {
+    let index = span === 0 ? 0 : Math.floor((value - minimum) / step);
+    if (index < 0) index = 0;
+    if (index >= bins) index = bins - 1;
+    counts[index] += 1;
+  }
+  return counts.map((count, index) => {
+    const lower = span === 0 ? minimum : minimum + (index * step);
+    const upper = span === 0 ? maximum : (index === bins - 1 ? maximum : minimum + ((index + 1) * step));
+    return {
+      label: `${lower.toFixed(2)}-${upper.toFixed(2)}`,
+      count,
+    };
+  });
+}
+
+function firstNonEmptyDataRow(rows) {
+  for (let index = 1; index < rows.length; index += 1) {
+    if (rows[index].some(cell => String(cell || "").trim() !== "")) return rows[index];
+  }
+  return null;
+}
+
+async function loadVersionJudgeMetrics(version) {
+  const cached = state.versionJudgeCache[version];
+  if (cached?.data) return cached.data;
+  if (cached?.promise) return cached.promise;
+  const promise = (async () => {
+    const records = state.records.filter(record => (record.version || "Unknown") === version);
+    const metrics = (state.summary?.judge_fields || []).map(field => field.field);
+    const metricPoints = Object.fromEntries(metrics.map(metric => [metric, []]));
+    let judgeRecords = 0;
+
+    await Promise.all(records.map(async record => {
+      const perPaperPath = record.agentic.find(path => path.endsWith("/llm_judge_per_paper.csv"));
+      if (!perPaperPath) return;
+      try {
+        const rows = parseDelimited(await fetchText(perPaperPath), ",");
+        if (rows.length < 2) return;
+        const header = rows[0];
+        const dataRow = firstNonEmptyDataRow(rows);
+        if (!dataRow) return;
+        let populated = false;
+        for (const metric of metrics) {
+          const metricIndex = header.indexOf(metric);
+          if (metricIndex === -1) continue;
+          const value = Number.parseFloat(dataRow[metricIndex]);
+          if (!Number.isFinite(value)) continue;
+          metricPoints[metric].push({ pxd: record.pxd, value });
+          populated = true;
+        }
+        if (populated) judgeRecords += 1;
+      } catch (_error) {
+        // Skip unreadable per-paper judge files for this PXD.
+      }
+    }));
+
+    for (const metric of Object.keys(metricPoints)) {
+      metricPoints[metric].sort((left, right) => left.pxd.localeCompare(right.pxd, undefined, { numeric: true }));
+    }
+
+    const distributions = metrics
+      .map(metric => {
+        const values = metricPoints[metric].map(point => point.value);
+        if (!values.length) return null;
+        return {
+          field: metric,
+          count: values.length,
+          minimum: Math.min(...values),
+          maximum: Math.max(...values),
+          mean: values.reduce((sum, value) => sum + value, 0) / values.length,
+          histogram: buildHistogram(values),
+        };
+      })
+      .filter(Boolean);
+
+    return {
+      version,
+      totalPxds: records.length,
+      judgeRecords,
+      metricPoints,
+      distributions,
+      availableMetrics: metrics.filter(metric => (metricPoints[metric] || []).length),
+    };
+  })();
+
+  state.versionJudgeCache[version] = { promise };
+  const data = await promise;
+  state.versionJudgeCache[version] = { data };
+  return data;
+}
+
+async function loadVersionMetadata(version) {
+  const cached = state.versionMetadataCache[version];
+  if (cached?.data) return cached.data;
+  if (cached?.promise) return cached.promise;
+  const promise = (async () => {
+    const records = state.records.filter(record => (record.version || "Unknown") === version);
+    const categories = new Map();
+
+    await Promise.all(records.map(async record => {
+      const sdrfPath = record.agentic.find(path => path.endsWith(`/${record.pxd}.sdrf.tsv`));
+      if (!sdrfPath) return;
+      try {
+        const rows = parseDelimited(await fetchText(sdrfPath));
+        if (!rows.length) return;
+        const headers = rows[0].filter(Boolean);
+        for (const header of headers) {
+          if (!categories.has(header)) categories.set(header, new Set());
+          categories.get(header).add(record.pxd);
+        }
+      } catch (_error) {
+        // Skip unreadable SDRF files for this PXD.
+      }
+    }));
+
+    const knownOrder = (state.summary?.metadata_categories || []).map(item => item.header);
+    const headers = [...categories.keys()].sort((left, right) => {
+      const leftIndex = knownOrder.indexOf(left);
+      const rightIndex = knownOrder.indexOf(right);
+      if (leftIndex !== -1 && rightIndex !== -1) return leftIndex - rightIndex;
+      if (leftIndex !== -1) return -1;
+      if (rightIndex !== -1) return 1;
+      return left.localeCompare(right, undefined, { numeric: true });
+    });
+    const rows = headers.map(header => {
+      const catalog = state.summary?.metadata_categories?.find(item => item.header === header);
+      return [
+        header,
+        headerDefinition("SDRF", header),
+        catalog?.requirement || "Not specified",
+        catalog?.type || "Not specified",
+        catalog?.ontology_accession || "Not specified",
+        formatNumber(categories.get(header).size),
+      ];
+    });
+    return {
+      rows,
+      observed: rows.length,
+    };
+  })();
+
+  state.versionMetadataCache[version] = { promise };
+  const data = await promise;
+  state.versionMetadataCache[version] = { data };
+  return data;
+}
+
 function qcStatus(value) {
   return value === "passed" ? "Pass"
     : value === "failed" ? "Failed"
@@ -254,6 +430,41 @@ function qcStatus(value) {
         : value === "available" ? "Available"
           : value === "missing" ? "Missing"
             : "Not run";
+}
+
+function renderVersionMetricPlots(versionData) {
+  const container = document.querySelector("#qc-version-metric-plots");
+  if (!container) return;
+  for (const metric of versionData.availableMetrics) {
+    const plot = document.querySelector(`#${metricPlotId(metric)}`);
+    if (!plot) continue;
+    const points = versionData.metricPoints[metric] || [];
+    if (!points.length) {
+      plot.textContent = `No ${metric} values are available for this version.`;
+      continue;
+    }
+    if (!globalThis.Plotly) {
+      plot.textContent = "Interactive plotting library is unavailable.";
+      continue;
+    }
+    const width = Math.max(980, points.length * 20);
+    globalThis.Plotly.newPlot(plot, [{
+      type: "bar",
+      x: points.map(point => point.pxd),
+      y: points.map(point => point.value),
+      marker: { color: "#007f6f" },
+      hovertemplate: "<b>%{x}</b><br>Value: %{y:.4f}<extra></extra>",
+    }], {
+      width,
+      margin: { l: 70, r: 24, t: 26, b: 140 },
+      paper_bgcolor: "#fffdf8",
+      plot_bgcolor: "#fffdf8",
+      font: { family: "Georgia, Times New Roman, serif", color: "#17212b" },
+      title: { text: `${metric} by PXD`, font: { size: 15 } },
+      xaxis: { title: "PXD", tickangle: -60, tickfont: { family: "ui-monospace, monospace", size: 9 } },
+      yaxis: { title: metric, zeroline: true, zerolinecolor: "#66727c" },
+    }, { responsive: true, displaylogo: false });
+  }
 }
 
 function qcComparisons(summary) {
@@ -353,14 +564,11 @@ function renderQcMetricPlot(comparison) {
   }, { responsive: true, displaylogo: false });
 }
 
-function qcOverview(summary) {
-  if (!summary) {
-    return section("Quality control", "No reviewed QC summary has been published with this Store Explorer build.", "<p class=\"section-note\">QC artifacts remain available from their reviewed workflow run.</p>");
-  }
-  const comparisons = qcComparisons(summary);
-  const comparison = activeQcComparison(summary);
+function comparisonQcContent(summary) {
+  const comparisons = qcComparisons(summary || {});
+  const comparison = activeQcComparison(summary || {});
   if (!comparison) {
-    return section("Quality control", "A QC summary was published, but it does not contain a recognized comparison payload.", "<p class=\"section-note\">Rebuild the summary with the release-comparison QC script.</p>");
+    return "<p class=\"section-note\">A QC summary was published, but it does not contain a recognized comparison payload.</p>";
   }
   const results = Array.isArray(comparison.results) ? comparison.results : [];
   const rows = [["PXD", "SDRF", "Baseline judge", "Candidate judge", "judge_accuracy delta", "Category deltas"]];
@@ -409,8 +617,73 @@ function qcOverview(summary) {
     if (deltaSelect) deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
     renderQcMetricPlot(activeQcComparison(summary));
   }, 0);
-  const comparisonNote = `Static comparison of archived HAMLET release artifacts. Missing judge rows indicate the versioned store lacks a readable per-paper judge record for that PXD.`;
-  return section("Quality control", comparisonNote, `<div class="stat-grid">${cards}</div>${comparisonSelector}${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No shared PXDs were found for this version pair.</p>"}`);
+  return `<p class="section-note">Static comparison of archived HAMLET release artifacts. Missing judge rows indicate the versioned store lacks a readable per-paper judge record for that PXD.</p><div class="stat-grid">${cards}</div>${comparisonSelector}${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No shared PXDs were found for this version pair.</p>"}`;
+}
+
+async function renderVersionQcDetails() {
+  const container = document.querySelector("#qc-version-content");
+  if (!container) return;
+  selectDefaultQcVersion();
+  if (!state.qcVersion) {
+    container.innerHTML = "<p class=\"section-note\">No versions are available in this Store Explorer bundle.</p>";
+    return;
+  }
+  const requestedVersion = state.qcVersion;
+  container.innerHTML = "<p class=\"section-note\">Loading version-specific QC artifacts...</p>";
+  const [judgeData, metadataData] = await Promise.all([
+    loadVersionJudgeMetrics(requestedVersion),
+    loadVersionMetadata(requestedVersion),
+  ]);
+  if (state.qcVersion !== requestedVersion) return;
+
+  const versionCount = state.records.filter(record => (record.version || "Unknown") === requestedVersion).length;
+  const cards = [
+    ["Selected version", requestedVersion],
+    ["PXDs in version", formatNumber(versionCount)],
+    ["Per-paper judge records", formatNumber(judgeData.judgeRecords)],
+    ["Observed metadata headers", formatNumber(metadataData.observed)],
+  ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>Version-specific QC summary</small></article>`).join("");
+
+  const distributions = judgeData.distributions.length
+    ? `<div class="histogram-grid">${judgeData.distributions.map(histogramCard).join("")}</div>`
+    : "<p class=\"section-note\">No per-paper judge metrics were published for this version.</p>";
+
+  const metricCards = judgeData.availableMetrics.length
+    ? `<div id="qc-version-metric-plots" class="metric-plot-stack">${judgeData.availableMetrics.map(metric => `<article class="metric-plot-card"><h4>${esc(metric)}</h4><p class="section-note">Absolute values across all PXDs in ${esc(requestedVersion)}.</p><div class="plot-scroll"><div id="${esc(metricPlotId(metric))}" class="qc-plot qc-plot-compact"></div></div></article>`).join("")}</div>`
+    : "<p class=\"section-note\">No absolute metric values were found for this version.</p>";
+
+  const metadataRows = [["SDRF header", "Definition", "Requirement", "Type", "Ontology accession", "PXDs"], ...metadataData.rows];
+  const metadataSection = metadataData.rows.length
+    ? tableContent(metadataRows, "SDRF metadata categories")
+    : "<p class=\"section-note\">No SDRF headers were detected for this version.</p>";
+
+  container.innerHTML = `<div class="stat-grid">${cards}</div>${section("HAMLET SDRFs by version", "Counts shown below are scoped to the selected version.", `<p class=\"section-note\"><strong>${esc(requestedVersion)}</strong> includes ${esc(formatNumber(versionCount))} PXDs with final SDRFs in this static bundle.</p>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(judgeData.judgeRecords)} per-paper judge records for HAMLET ${requestedVersion}.`, distributions)}${section("LLM judge metrics", "Absolute per-PXD metric values. Plots are interactive and horizontally scrollable.", metricCards)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs for the selected version.", metadataSection)}`;
+  setTimeout(() => renderVersionMetricPlots(judgeData), 0);
+}
+
+function qcOverview(summary) {
+  selectDefaultQcVersion();
+  const versions = sortedVersions();
+  const versionControls = `<div class="qc-controls"><label for="qc-version-select">Version</label><select id="qc-version-select">${versions.map(version => `<option value="${esc(version)}"${version === state.qcVersion ? " selected" : ""}>${esc(version)}</option>`).join("")}</select></div>`;
+  const comparisonPanel = summary
+    ? comparisonQcContent(summary)
+    : "<p class=\"section-note\">No reviewed QC summary has been published with this Store Explorer build for comparison mode.</p>";
+  setTimeout(() => {
+    document.querySelectorAll("[data-qc-tab]").forEach(button => button.addEventListener("click", () => {
+      state.qcTab = button.dataset.qcTab;
+      renderOverview();
+    }));
+    const versionSelect = document.querySelector("#qc-version-select");
+    if (versionSelect) {
+      versionSelect.addEventListener("change", () => {
+        state.qcVersion = versionSelect.value;
+        renderVersionQcDetails();
+      });
+    }
+    if (state.qcTab === "version") renderVersionQcDetails();
+  }, 0);
+
+  return section("Quality control", "Review either a single version or a baseline-vs-candidate comparison.", `<div class="qc-tabs"><button class="qc-tab ${state.qcTab === "version" ? "active" : ""}" type="button" data-qc-tab="version">Version QC</button><button class="qc-tab ${state.qcTab === "comparison" ? "active" : ""}" type="button" data-qc-tab="comparison">Comparison QC</button></div><div class="qc-tab-panel ${state.qcTab === "version" ? "active" : ""}" id="qc-tab-version">${versionControls}<div id="qc-version-content"><p class="section-note">Select a version to load version-specific QC details.</p></div></div><div class="qc-tab-panel ${state.qcTab === "comparison" ? "active" : ""}" id="qc-tab-comparison">${comparisonPanel}</div>`);
 }
 
 function renderOverview() {
@@ -422,17 +695,7 @@ function renderOverview() {
     detail.innerHTML = `<div class="empty-state">Store summary data is unavailable.</div>`;
     return;
   }
-  const versionCards = summary.sdrf_versions.map(item => `<article class="stat-card"><span>HAMLET ${esc(item.version)}</span><strong>${esc(formatNumber(item.count))}</strong><small>PXDs with final SDRFs</small></article>`).join("");
-  const categories = summary.metadata_categories.map(item => [
-    item.header,
-    headerDefinition("SDRF", item.header),
-    item.requirement || "Not specified",
-    item.type || "Not specified",
-    item.ontology_accession || "Not specified",
-    formatNumber(item.pxd_count),
-  ]);
-  const categoryRows = [["SDRF header", "Definition", "Requirement", "Type", "Ontology accession", "PXDs"], ...categories];
-  detail.innerHTML = `<header class="record-header overview-header"><div><p class="eyebrow">Store overview</p><h2>HAMLET record summary</h2></div><span class="availability">${esc(formatNumber(summary.total_pxds))} catalogued PXDs</span></header>${qcOverview(state.qcSummary)}${section("HAMLET SDRFs by version", "Counts include PXDs with a final HAMLET SDRF, grouped by the schema version detected in the store.", `<div class="stat-grid">${versionCards}</div>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(summary.judge_records)} final per-paper judge records. Hover a bar to see its bin count.`, `<div class="histogram-grid">${summary.judge_fields.map(histogramCard).join("")}</div>`)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs. Definitions are sourced from the editable table-definitions.json glossary, with term metadata from the SDRF catalog.", tableContent(categoryRows, "SDRF metadata categories"))}`;
+  detail.innerHTML = `<header class="record-header overview-header"><div><p class="eyebrow">Store overview</p><h2>HAMLET record summary</h2></div><span class="availability">${esc(formatNumber(summary.total_pxds))} catalogued PXDs</span></header>${qcOverview(state.qcSummary)}`;
 }
 
 async function renderRecord(record) {
@@ -515,6 +778,7 @@ async function initialize() {
   state.summary = await summaryResponse.json();
   state.qcSummary = qcSummary;
   state.records = index.pxds;
+  selectDefaultQcVersion();
   const versions = [...new Set(state.records.map(record => record.version || "Unknown"))].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
   versionFilter.innerHTML += versions.map(version => `<option value="${esc(version)}">${esc(version)}</option>`).join("");
   filter.addEventListener("input", renderCatalog);
