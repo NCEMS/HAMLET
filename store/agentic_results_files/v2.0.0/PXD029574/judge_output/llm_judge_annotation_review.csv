@@ -1,0 +1,126 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD029574","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human cancer cell lines"", ""human 18S rRNA"", and ""human patients"", and uses the ""Swissprot Human"" database for MS analysis.
+TRUTH CHECK: The use of human cell lines (HeLa, HepG2, FreeStyle 293-F) confirms Homo sapiens as a source organism.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", but the paper also describes experiments using ""Mettl5 knockout mice"" (Mus musculus). Therefore, the set is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD029574","TechnicalAgent","acquisition_method","data-dependent","data-dependent","high","False","","True","True","False","TYPE CHECK: The candidate value ""data-dependent"" is a valid acquisition scheme name.
+SOURCE CHECK: The text explicitly states ""The mass spectrometer was operated in data-dependent mode"" in the METTL5 binding partner ID section.
+TRUTH CHECK: The value is factually correct as described in the methods.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the proteomics experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK: The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""trypsin digestion was performed"" and ""digested with trypsin (Promega)"" in the ""METTL5 binding partner ID"" section.
+TRUTH CHECK: The value is factually correct as trypsin was the protease used for the proteomics experiments.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only cleavage agent mentioned for the proteomics analysis in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","TechnicalAgent","instrument","Q Exactive","Q Exactive","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Thermo Fisher Q Exactive"" in the ""METTL5 binding partner ID"" section and ""Q-Exactive HF (Thermo Scientific)"" in the ""TMT11 proteomic analysis"" section.
+TRUTH CHECK: The value is factually correct as it refers to the instruments used for the proteomic analyses.
+COMPLETENESS CHECK: The full set contains ""Q Exactive"", but the paper mentions both a ""Q Exactive"" and a ""Q-Exactive HF"". While ""Q Exactive"" is a correct general model, the set is slightly incomplete as it doesn't distinguish the HF model used in the TMT experiment. However, in many extraction pipelines, ""Q Exactive"" serves as the base model.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Thermo Fisher Q Exactive"", ""Thermo Scientific Q-Exactive HF""]","Thermo Fisher Q Exactive, Thermo Scientific Q-Exactive HF"
+"PXD029574","TechnicalAgent","label","TMT","TMT","high","False","","True","True","False","TYPE CHECK: The candidate value ""TMT"" is a valid labeling method, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"" in the section ""TMT11 proteomic analysis of biochemically active fractions"".
+TRUTH CHECK: The value is factually correct as TMT was used for the proteomic analysis of the active fractions.
+COMPLETENESS CHECK: The full set of extracted values contains ""TMT"", which covers the labeling method used in the specific proteomic experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","ExperimentalDesignAgent","replicates","HeLa nuclear extract","1","low","True","","False","False","False","TYPE CHECK:        The candidate value ""HeLa nuclear extract"" is a sample description/material, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""HeLa nuclear extract"" is present in the text, but it refers to the starting material for the TMT11 experiment, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect as a count of replicates.
+COMPLETENESS CHECK: The full set contains ""HeLa nuclear extract"" (incorrect type) and ""1"". While ""1"" is a safe default, the inclusion of a sample name in this field is a type error.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD029574","ExperimentalDesignAgent","replicates","1","1","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""1"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions multiple experiments with different replication schemes (e.g., ""Three biological replicates"" for RNA-seq, ""four replicate 96-well plates"" for growth assays), but for the specific ""METTL5 binding partner ID"" proteomic analysis, no biological replicate count is explicitly stated.
+TRUTH CHECK:       Per the field definition, ""1"" is the correct value when no replication is mentioned for a specific experiment.
+COMPLETENESS CHECK: The full set of extracted values contains ""HeLa nuclear extract"", which is a material/sample type, not a replicate count. This indicates the extraction pipeline has mixed different metadata fields into the replicates field.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""1""]","1"
+"PXD029574","ExperimentalDesignAgent","experimental_design","fractionation of HeLa nuclear extract followed by TMT labeling","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a technical procedure (fractionation and labeling) rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The text mentions ""biochemical fractionation followed by a liquid chromatography coupled to tandem mass spectrometry (LC-MS/MS)-based assay"" and ""TMT-labeled peptides"", but this is a method, not the experimental design.
+TRUTH CHECK:       The value is a correct description of a technical step, but it is not a valid ""experimental design"" as defined.
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD029574","ExperimentalDesignAgent","factor_value","fraction (1-11)","fraction (1-11)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a variable (fraction number) used in an experimental setup.
+SOURCE CHECK:      The text mentions ""HeLa nuclear extract was fractionated into 11 fractions"" and that ""a few active fractions were identified.""
+TRUTH CHECK:       While fractions were generated, the ""factor"" under study in the proteomics experiment was the activity of the methyltransferase within those fractions, not the fraction number itself as a biological variable. However, in the context of the TMT11 experiment, the fractions are the primary variable being compared.
+COMPLETENESS CHECK:    The full set only contains this value, but it misses other major experimental factors in the paper such as ""METTL5 knockout"" (vs WT) and ""Mettl5 knockout mice"" (vs heterozygotes/wild-type).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""fraction (1-11)"", ""METTL5 knockout"", ""Mettl5 knockout mice""]",""
+"PXD029574","ExperimentalDesignAgent","fractions","11","11","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper states in the ""TMT11 proteomic analysis"" section: ""HeLa nuclear extract was fractionated into 11 fractions"".
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""11"", which accurately reflects the fractionation described for the TMT11 proteomic analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD029574","ExperimentalDesignAgent","number_of_samples","11","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The value ""11"" is found in the ""TMT11 proteomic analysis"" section, which states ""HeLa nuclear extract was fractionated into 11 fractions"".
+TRUTH CHECK:       The value ""11"" refers to the number of fractions from a single HeLa nuclear extract, not the total number of biological samples processed in the study. The study involves multiple cell lines (HeLa, HepG2, 293-F), multiple knockout clones, and multiple mouse genotypes (WT, Het, KO).
+COMPLETENESS CHECK: The full set consists only of this value, which is a misidentification of fractions as samples.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

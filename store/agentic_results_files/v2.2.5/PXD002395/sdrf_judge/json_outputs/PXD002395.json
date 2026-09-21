@@ -1,0 +1,290 @@
+{
+  "paper_id": "PXD002395",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of immortalized cell line names, which matches the field definition.",
+        "SOURCE_CHECK": "These cell lines are explicitly listed in the \"Results\" and \"Experimental Procedures\" sections as the materials that were lysed, digested, and analyzed by LC-MS/MS.",
+        "TRUTH_CHECK": "The list accurately reflects the eleven cell lines described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all eleven cell lines mentioned as the source of the proteomics data."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell, T cell, hepatocyte, myeloid cell, neuron, fibroblast",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "epithelial cell, T cell, hepatocyte, myeloid cell",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of cell types/lineages, which matches the field definition.",
+        "SOURCE_CHECK": "The paper analyzes 11 cell lines (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) via MS; some of these lineages are explicitly mentioned (e.g., \"T-cell leukemia\" for Jurkat) or are well-known (e.g., HeLa/MCF7/A549 as epithelial).",
+        "TRUTH_CHECK": "While some values are correct (T cell for Jurkat, hepatocyte for HepG2, epithelial for HeLa/MCF7/A549/RKO), others are not supported by the paper's sample list: \"neuron\" and \"fibroblast\" are not the lineages of the 11 cell lines used in the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set includes unsupported cell types and misses others (e.g., osteosarcoma/bone for U2OS, prostate for LnCap)."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of disease states/diagnoses, which matches the definition of the `disease` field.",
+        "SOURCE_CHECK": "The values are explicitly stated in the \"RESULTS\" section (e.g., \"A549 from lung carcinoma\", \"GAMG from glioblastoma\", etc.) and refer to the cell lines that were lysed and analysed by mass spectrometry.",
+        "TRUTH_CHECK": "The values accurately reflect the origins of the 11 cell lines described in the paper; \"normal\" is a correct safe default for the noncancerous HEK293 cell line.",
+        "COMPLETENESS_CHECK": "The full set (which is just this one string) covers all 11 cell lines analyzed in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "lung, brain, cervix, liver, blood, prostate, breast, colon, bone, kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "lung, brain, cervix, liver, blood, prostate, breast, colon, bone",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of organs/tissues, which matches the definition of the 'organ' field.",
+        "SOURCE_CHECK": "The values are inferable from the cell lines actually analysed by MS (A549: lung, GAMG: glioblastoma/brain, HeLa: cervix, HepG2: liver, Jurkat/K562: blood/leukemia, LnCap: prostate, MCF7: breast, RKO: colon, U2OS: osteosarcoma/bone).",
+        "TRUTH_CHECK": "The mapping of cell lines to organs is factually correct based on the text (e.g., \"A549 from lung carcinoma\", \"GAMG from glioblastoma\", \"HeLa from cervical carcinoma\", \"HepG2 from hepatoma\", \"LnCap from prostate carcinoma\", \"MCF7 from mammary carcinoma\", \"RKO from colon carcinoma\", \"U2OS from osteosarcoma\"). However, \"kidney\" is not mentioned and no kidney-derived cell line was used.",
+        "COMPLETENESS_CHECK": "The set includes organs for almost all cell lines, but includes \"kidney\" which is not in the paper."
+      }
+    },
+    {
+      "annotation_type": "sex",
+      "extracted_value": "male",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"male\" is the correct category for the sex field.",
+        "SOURCE_CHECK": "The paper mentions that certain proteins were expressed only in \"cell lines of male origin (LnCap, Jurkat, HepG2, and A549)\", which were part of the MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly identifies some of the analyzed cell lines as being of male origin.",
+        "COMPLETENESS_CHECK": "The full set contains \"male\", but the paper also describes other cell lines (e.g., HeLa, MCF7) which are well-known to be female; however, the text does not explicitly label the other lines as \"female\", only specific ones as \"male\"."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states \"We analyzed 11 human cell lines\" and mentions searching against the \"IPI-human database\".",
+        "TRUTH_CHECK": "The value \"Homo sapiens\" is the scientific name for humans and is factually correct for the samples analyzed.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental factor (cell line) and its specific levels, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"RESULTS\" section, listing the 11 cell lines analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The list of cell lines (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) accurately matches the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the specific cell line names and their corresponding disease/tissue origins, which exhaustively describes the experimental factors under study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of disease states/diagnoses, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "These values are explicitly stated in the \"Results\" section as the origins of the 11 cell lines analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The values accurately match the paper: A549 (lung carcinoma), GAMG (glioblastoma), HeLa (cervical carcinoma), HepG2 (hepatoma), Jurkat (acute T-cell leukemia), K562 (chronic myeloid leukemia), LnCap (prostate carcinoma), MCF7 (mammary carcinoma), RKO (colon carcinoma), U2OS (osteosarcoma), and HEK293 (noncancerous/normal).",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the specific cell line names and their corresponding disease/origin factors, which is exhaustive for the experimental design."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The text explicitly states \"protein digestion with trypsin according to the FASP protocol\" in the Protein Digestion and Fractionation section.",
+        "TRUTH_CHECK": "The value is factually correct as per the paper.",
+        "COMPLETENESS_CHECK": "The full set contains the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states \"Peptide fragmentation was performed with the HCD method\".",
+        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is the standard abbreviation for \"beam-type collision-induced dissociation\".",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately reflects the fragmentation method described in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "LTQ Orbitrap Velos, LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes mass spectrometer models, which matches the instrument field definition.",
+        "SOURCE_CHECK": "Both instruments are explicitly mentioned in the \"RESULTS\" and \"LC-MS/MS Analysis\" sections as the devices used to analyze the cell line samples.",
+        "TRUTH_CHECK": "The text states that one replicate was done on the \"LTQ-Orbitrap Velos\" and the other two replicates used a \"novel LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all instruments used for the MS analysis described in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "SILAC",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper explicitly states \"relative abundance of proteins was determined by label-free quantification\" and \"we used label-free quantification\" for the main comparative analysis of the 11 cell lines.",
+        "TRUTH_CHECK": "While the main experiment was label-free, the paper also describes the construction of a \"super-SILAC\" standard and \"SILAC quantification experiments\" using heavy labeled cell lines (Lys8 and Arg10). According to the field definition, \"label-free\" is INCORRECT if the paper describes ANY metabolic/chemical labeling such as SILAC.",
+        "COMPLETENESS_CHECK": "The full set contains only \"label free\", which ignores the SILAC labeling described in the text."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is explicitly mentioned multiple times in the text (e.g., \"LTQ-Orbitrap family mass spectrometer\", \"Orbitrap mass analyzer\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using an Orbitrap-based instrument for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"Orbitrap\") is exhaustive for the mass analyzer used in this study."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "iodoacetamide derivatized residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": "carbamidomethyl cysteine",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The phrase \"iodoacetamide derivatized residue\" does not appear in the text; while iodoacetamide is a common alkylation reagent, it is not mentioned by name in this paper.",
+        "TRUTH_CHECK": "The paper explicitly lists \"fixed modification of carbamidomethyl cysteine\", \"methionine oxidation\", and \"N-terminal acetylation\". It does not mention iodoacetamide.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete as it misses the three modifications explicitly named in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Cell Culture Sample Preparation\" section of the methods (\"Cells were lysed with a buffer consisting of... 0.1 m dithiothreitol\").",
+        "TRUTH_CHECK": "The value is factually correct as the reduction reagent used in the sample preparation for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this reagent, and no other reduction reagents are mentioned in the text."
+      }
+    }
+  ]
+}

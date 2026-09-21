@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD037907",
+  "annotations": [
+    {
+      "annotation_type": "age",
+      "extracted_value": "5 and 7 weeks",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a time-based age measurement, which matches the definition of the age field.",
+        "SOURCE_CHECK": "The value \"5 and 7 weeks\" appears in the text, but it refers to the nude mice used for the in vivo peritoneal metastasis assay, not the samples analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The mass spectrometry analysis was performed on cell lysates from OVTW59 cells and purchased extracellular domains of integrins expressed by HEK293 cells; the mice were used for a separate functional assay.",
+        "COMPLETENESS_CHECK": "The value is not applicable to the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "ES-2, SKOV3, OVTW59, HEK293",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "OVTW59, HEK293",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes two distinct MS experiments: 1) a glycoproteomic analysis using ConA pull-down from OVTW59 cells (specifically mentioned as \"performed LC-MS/MS analysis\" on proteins pulled down from OVTW59 cells), and 2) analysis of the extracellular domains of integrins $\\beta1$ and $\\beta4$ expressed by HEK293 cells (\"analyzed their extracellular domains expressed by HEK293 cells using HCD or EThcTD mass spectrometry\"). ES-2 and SKOV3 are used for functional assays (migration, invasion, etc.) and Western blots, but the text does not state they were analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "OVTW59 and HEK293 are correct MS sample sources. ES-2 and SKOV3 are used in the study but not for the MS analysis.",
+        "COMPLETENESS_CHECK": "The full set includes cell lines that were not analyzed by MS, making the extraction inaccurate."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "ovarian cancer cells",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a cell type/lineage, which matches the field definition.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the paper explicitly states that \"cell lysates were treated with PNGase F... and then performed LC-MS/MS analysis\" using OVTW59 cells, which are identified as human ovarian cancer cells.",
+        "TRUTH_CHECK": "The value is factually correct as the samples analyzed by MS were derived from ovarian cancer cell lines (OVTW59).",
+        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the cell type of the material analyzed by mass spectrometry."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "ovarian cancer",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"ovarian cancer\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned throughout the text as the disease being studied, and the MS samples (OVTW59 cells) are described as ovarian cancer cells.",
+        "TRUTH_CHECK": "The paper explicitly states that the study focuses on ovarian cancer and uses ovarian cancer cell lines for the glycoproteomic analysis.",
+        "COMPLETENESS_CHECK": "The full set contains \"ovarian cancer\", which covers the disease state of the biological material analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "ovary",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "ovary, kidney",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"ovary\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The MS samples were derived from OVTW59 cells (ovarian cancer cell line) and HEK293 cells (human embryonic kidney cells).",
+        "TRUTH_CHECK": "While the study focuses on ovarian cancer, the actual MS analysis was performed on OVTW59 cells (ovary origin) and HEK293 cells (kidney origin). \"Ovary\" is correct for the OVTW59 samples.",
+        "COMPLETENESS_CHECK": "The full set only contains \"ovary\", but the paper also used HEK293 cells for MS analysis of integrin domains, meaning \"kidney\" is missing from the set."
+      }
+    },
+    {
+      "annotation_type": "sex",
+      "extracted_value": "Female",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Female\" is the correct category for the sex field.",
+        "SOURCE_CHECK": "The value \"Female\" appears in the \"Peritoneal metastasis assay\" section describing the nude mice used for in vivo experiments, not the biological material analyzed by mass spectrometry (which were OVTW59 and HEK293 cells).",
+        "TRUTH_CHECK": "While the mice were female, the proteomics samples (cell lines) do not have a reported sex in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only a value from an unrelated in vivo assay."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a valid species name.",
+        "SOURCE_CHECK": "The MS analysis was performed on proteins expressed by HEK293 cells and lysates from human ovarian cancer cell lines (OVTW59), both of which are human-derived.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"human ovarian cancer cell lines\" and \"Uniprot human database\" for protein identification.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "TMTC1 expression (control, knockdown, overexpression)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (TMTC1 expression levels) and the specific groups compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is derived from the MS experiment context; the paper describes LC-MS/MS analysis of OVTW59 cells transfected with control or TMTC1 siRNA (knockdown) and mentions overexpression in ES-2 cells.",
+        "TRUTH_CHECK": "The value is factually correct as the study explicitly compares control, knockdown (siRNA), and overexpression (plasmid/lentivirus) conditions of TMTC1.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the primary experimental variable (TMTC1 expression) and the disease context (ovarian cancer), covering the experimental design described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "ovarian cancer",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"ovarian cancer\" is a valid value for a factor (specifically a disease factor).",
+        "SOURCE_CHECK": "The value is present in the text; the proteomics analysis was performed on ovarian cancer cell lines (OVTW59) and proteins expressed in HEK293 cells to study ovarian cancer substrates.",
+        "TRUTH_CHECK": "The study specifically investigates the role of TMTC1 in ovarian cancer.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the disease state and the experimental manipulation (TMTC1 levels), which are the primary axes of the study."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"LC-MS/MS analysis and database search\" section (\"Mass spectrometry analysis was performed in a data-dependent mode\").",
+        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HCD, EThcD",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the paper text; the text explicitly mentions \"HCD\" and \"EThcD\".",
+        "TRUTH_CHECK": "The value is factually incorrect for this experiment as the paper specifies HCD and EThcD, not beam-type CID.",
+        "COMPLETENESS_CHECK": "The full set is incorrect and does not cover the methods described in the paper."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis and database search\" section as the instrument used for the proteomics analysis.",
+        "TRUTH_CHECK": "The paper states the analysis was conducted on an \"Orbitrap Fusion Lumos Tribrid quadrupole-ion trap-Orbitrap mass spectrometer\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis of ConA pull-down samples and purified integrin domains without mentioning any isobaric, metabolic, or chemical labeling.",
+        "TRUTH_CHECK": "No labeling reagents (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, making \"label-free\" the correct description.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS analysis and database search\" section, describing the Orbitrap Fusion Lumos Tribrid mass spectrometer used for the analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used is an Orbitrap-based system.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for this field."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "mannosylated residue",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"mannosylated residue\" describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"O-mannosylated protein substrates\", \"O-mannosylation site\", and \"O-mannosylated sites\" in the context of the LC-MS/MS analysis of integrins and protocadherin 7.",
+        "TRUTH_CHECK": "The paper focuses on identifying O-mannosylation sites using mass spectrometry, making this a correct modification for the experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications not mentioned in the text (e.g., \"Lysine oxidation to aminoadipic semialdehyde\", \"Deamidation (NQR)\", \"Iodoacetamide derivative\"), but the candidate value itself is correct."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Lysine oxidation to aminoadipic semialdehyde (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Lysine oxidation to aminoadipic semialdehyde\" or any similar modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except perhaps mannosylation) are supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQR)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"Deamidation (NQR)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of deamidation being searched or identified.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, none of which (including deamidation) are explicitly named in the text as search parameters."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions LC-MS/MS and HCD/EThcD but does not list the specific search parameters or modifications used in the database search.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications, none of which are explicitly mentioned in the provided text."
+      }
+    }
+  ]
+}

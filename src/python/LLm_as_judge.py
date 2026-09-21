@@ -2216,7 +2216,7 @@ def main():
 MODES:
   Pipeline mode (HAMLET integration):
     --pipeline --pxd PXD073162 --input_dir metadata_extraction_output
-               --pmc_cache pride_survey/pmc_cache --outdir judge_output
+                             --pmc_cache pride_survey/pmc_cache --outdir llm_refinement_judge
 
   Benchmark mode (multi-model/multi-paper evaluation):
     --model claude|gpt|gemini|llama

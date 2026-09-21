@@ -106,8 +106,9 @@ results/
           TechnicalAgent/
           BiologicalAgent/
           ExperimentalDesignAgent/
-        post_judge/        # Second-pass judge results (after user overrides)
       PXD000070.sdrf.tsv   # Final SDRF file
+    llm_refinement_judge/  # Pre-SDRF consensus and safe override decisions
+    sdrf_judge/            # Authoritative evaluation of the final SDRF
   ...
 ResultsSummary.csv         # Pipeline completion summary
 ```

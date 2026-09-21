@@ -1,0 +1,189 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD001468","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human cell line"" and ""Homo_sapiens GRCh37.61"" in the database searching section.
+TRUTH CHECK: The use of HEK293 cells (a human cell line) confirms the species is Homo sapiens.
+COMPLETENESS CHECK: The paper describes experiments on both human (HEK293) and mouse (brain lysate) samples; the full set of extracted values only contains ""Homo sapiens"", missing ""Mus musculus"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD001468","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is the correct category (organ/tissue).
+SOURCE CHECK:      The paper mentions ""Mouse brain lysate"" and ""HEK293 cells"", but there is no mention of kidney.
+TRUTH CHECK:       The value is not factually correct for this experiment.
+COMPLETENESS CHECK: The full set of extracted values is incorrect as it contains a hallucinated organ.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""brain""]",""
+"PXD001468","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK293 cells"" and ""human cell line,"" but it does not explicitly state that they are ""epithelial cells.""
+TRUTH CHECK:       While HEK293 cells are derived from human embryonic kidney cells (often characterized as epithelial-like), the paper text itself does not provide this specific classification.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD001468","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper uses HEK293 cells and mouse brain lysate without mentioning any disease state or pathology.
+TRUTH CHECK:       Since no disease is mentioned and the samples are standard laboratory cell lines/tissues, ""normal"" is a safe default.
+COMPLETENESS CHECK: The full set contains ""normal"", which accurately reflects the lack of disease state in the described experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK: The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK: The paper explicitly mentions ""a proteome-wide dataset from a human cell line"" and specifies ""HEK293 cells"".
+TRUTH CHECK: The value is factually correct as HEK293 is a well-known immortalized cell line.
+COMPLETENESS CHECK: While the paper also uses mouse brain lysate (tissue), the current set of extracted values only covers the HEK293 experiment; however, the candidate value itself is a correct extraction for that part of the study. Since the full set of all_extracted_values is missing ""tissue"" (for the mouse brain lysate), the set is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""cell line"", ""tissue""]","cell line, tissue"
+"PXD001468","BiologicalAgent","cell_line","HEK293","HEK293","high","False","","True","True","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""HEK293 cells"" multiple times in the abstract and methods.
+TRUTH CHECK:       The value is factually correct as per the paper.
+COMPLETENESS CHECK: The full set of extracted values contains only ""HEK293"", which is the only cell line mentioned in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","TechnicalAgent","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","TYPE CHECK:        The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""alkylation with 10 mM iodoacetamide"" in both the HEK293 and mouse tissue protein extraction sections.
+TRUTH CHECK:       The value is factually correct as per the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""iodoacetamide"", which is the only alkylation reagent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","TechnicalAgent","cleavage_agent","Lys-C, trypsin","Lys-C, trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value lists proteases used for protein digestion, which matches the definition.
+SOURCE CHECK:      The text explicitly mentions ""digested overnight at room temperature with Lys-C... followed by... digestion with trypsin"" for HEK293 cells and ""digested with Lys-C"" for mouse tissue.
+TRUTH CHECK:       The value is factually correct as both enzymes were used in the experimental workflow.
+COMPLETENESS CHECK: The full set of extracted values covers all proteases mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","TechnicalAgent","collision_energy","35%, 25%","35%, 25%","high","False","","True","True","False","TYPE CHECK:        The candidate value contains percentages, which is the correct category for normalized collision energy.
+SOURCE CHECK:      The paper explicitly mentions ""Normalized collision energies were set to 35%"" for the LTQ Orbitrap Elite and ""Normalized collision energies were set to 25%"" for the Q-Exactive.
+TRUTH CHECK:       The values are factually correct as stated in the methods section.
+COMPLETENESS CHECK: The full set of extracted values covers both instruments used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","TechnicalAgent","instrument","Q Exactive","Q Exactive","medium","False","","True","False","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""analyzed on a Q-Exactive Orbitrap mass spectrometer.""
+TRUTH CHECK: The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also describes the use of an ""LTQ Orbitrap Elite"" for the mouse brain lysate experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Q-Exactive Orbitrap"", ""LTQ Orbitrap Elite""]","Q-Exactive Orbitrap, LTQ Orbitrap Elite"
+"PXD001468","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The experimental description is consistent with a label-free shotgun proteomics approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","TechnicalAgent","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","TYPE CHECK:        The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""The lysate was reduced with 5 mM dithiothreitol"" in both the HEK293 and mouse tissue protein extraction sections.
+TRUTH CHECK:       The value is factually correct based on the provided methods.
+COMPLETENESS CHECK: The full set of extracted values contains only ""dithiothreitol"", which is the only reduction reagent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","ExperimentalDesignAgent","replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions that mouse brain lysate was analyzed ""in triplicate,"" but for the primary HEK293 cell dataset (the main focus of the study), no biological replication is mentioned.
+TRUTH CHECK:       While ""triplicate"" is mentioned for the mouse brain test, the main proteome-wide dataset from HEK293 cells does not specify biological replicates; per the field definition, ""1"" is the correct default when replication is not mentioned for the sample.
+COMPLETENESS CHECK: The full set contains only ""1"", which is the appropriate default for the main experiment described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","ExperimentalDesignAgent","experimental_design","Closed search vs Open search comparison","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a comparison of search algorithms, not a biological study design (e.g., case-control, time course).
+SOURCE CHECK:      The text describes comparing ""Closed search"" and ""Open search"" strategies to identify modified peptides.
+TRUTH CHECK:       While the paper compares these two search methods, ""experimental design"" in proteomics metadata refers to the biological/experimental setup of the samples, not the computational analysis strategy.
+COMPLETENESS CHECK: The full set contains only this value, which is a miscategorization of a computational method as a study design.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD001468","ExperimentalDesignAgent","factor_value","search strategy (Closed, Open)","search strategy (Closed, Open)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the experimental variable (the search strategy) being compared in the study.
+SOURCE CHECK:      Yes, the paper explicitly compares ""Closed search"" and ""Open search"" strategies to identify modified peptides.
+TRUTH CHECK:       Yes, the core of the paper is a comparison between these two database search strategies.
+COMPLETENESS CHECK: The full set captures the primary experimental factor being investigated.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD001468","ExperimentalDesignAgent","fractions","24","24","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK: The text explicitly states that HEK293 cell peptides were ""separated into 24 fractions"".
+TRUTH CHECK: The value ""24"" is factually correct based on the methods section.
+COMPLETENESS CHECK: The full set contains the only mentioned fractionation count for the primary dataset.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","ExperimentalDesignAgent","number_of_samples","1","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper describes two distinct experimental setups: one using mouse brain lysate and one using HEK293 cells.
+TRUTH CHECK:       The paper states mouse brain lysate was analyzed ""in triplicate"" (3 samples) and HEK293 cells were processed as a ""proteome-wide dataset"" separated into 24 fractions (which typically originate from one biological sample/batch). The total count of samples processed is at least 4 (3 mouse + 1 human), not 1.
+COMPLETENESS CHECK: The full set of extracted values (""1"") does not cover the samples described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

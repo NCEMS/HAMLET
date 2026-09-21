@@ -11,9 +11,10 @@
 ```
 store/
 ├── README.md                         ← this file
-├── aggregated_results_files/         ← one JSON per PXD (primary output)
-├── hamlet_sdrfs/                     ← curated SDRF TSV files per PXD
-├── agentic_results_files/            ← per-PXD agentic LLM extraction outputs
+├── aggregated_results_files/         ← active JSONs plus immutable release snapshots
+├── hamlet_sdrfs/                     ← immutable SDRF release snapshots
+├── agentic_results_files/            ← immutable agentic result release snapshots
+├── releases/                         ← immutable per-release manifests and active-version index
 └── intermediate_files/               ← per-PXD intermediate pipeline artefacts
 ```
 
@@ -120,7 +121,86 @@ intermediate_files/PXD######/
 
 ---
 
-## STATUS — as of 2026-08-18
+## Release Structure
+
+Aggregate JSONs retain flat compatibility paths. SDRFs and agentic bundles are versioned only: each PXD is associated with one release in `releases/active.json`, and canonical artifacts are always under that release directory.
+
+```text
+hamlet_sdrfs/
+├── v2.0.0/PXD######.sdrf.tsv         ← legacy flat-store snapshot
+├── v2.1.0/PXD######.sdrf.tsv         ← immutable historical snapshot from Git revision 18d4e458
+└── v2.1.1/PXD######.sdrf.tsv         ← immutable promoted v2.1.1 artifact
+
+aggregated_results_files/
+├── PXD######_aggregated_results.json  ← active compatibility path
+├── v2.0.0/PXD######_aggregated_results.json
+├── v2.1.0/PXD######_aggregated_results.json
+└── v2.1.1/PXD######_aggregated_results.json
+
+agentic_results_files/
+├── v2.0.0/PXD######/                 ← legacy flat-store snapshot
+├── v2.1.0/PXD######/                 ← immutable historical agentic artifacts
+└── v2.1.1/PXD######/                 ← immutable promoted agentic artifacts
+
+releases/
+├── active.json                       ← PXD -> active HAMLET release version
+├── v2.0.0/manifest.json              ← flat-store migration inventory
+├── v2.1.0/manifest.json              ← Git-HEAD baseline hashes and judge metrics
+└── v2.1.1/manifest.json              ← promoted v2.1.1 source and active SDRF hashes
+```
+
+`v2.0.0` preserves the legacy flat store: 490 SDRFs, 2,756 aggregate JSONs, and 1,822 agentic bundles. Aggregate JSONs retain flat compatibility links; SDRFs and agentic bundles are accessed only through their release directories.
+
+`v2.1.1` promotes the 299 PXDs in `assets/pxd_lists/HamletPXDs.csv`. Every promoted SDRF has `comment[sdrf annotation tool] = HAMLET-agentic v2.1.1`. The `v2.1.0` snapshot preserves its Git-source bytes exactly, including its historical `HAMLET-agentic v0.1.0` row annotation; its directory name and release manifest identify the reviewed v2.1.0 baseline snapshot.
+
+Use the release-aware promotion utility rather than copying result directories directly:
+
+```bash
+conda run -n meti_env python src/job_scripts/updatestore.py \
+    results_hamletpxds_agentic_v2_1_1 store \
+    --release-version v2.1.1
+```
+
+The utility validates every PXD bundle before modifying the store, writes immutable versioned artifacts, and refuses to overwrite an existing release manifest or versioned artifact directory. Use `materialize_store_versions.py` only to backfill a release from an explicit Git revision or an existing `--source-version`; it also refuses to replace existing snapshots.
+
+Each promotion writes the result SDRF and agentic bundle plus a versioned copy of the matching flat aggregate JSON. The aggregate remains at its flat compatibility path because agentic-only result directories do not generate a replacement aggregate.
+
+For an interrupted release run, first capture only PXDs that have passed the final SDRF judge without making the release immutable:
+
+```bash
+conda run -n meti_env python src/job_scripts/updatestore.py \
+    results_hamletpxds_agentic_v2_2_5 store \
+    --release-version v2.2.5 \
+    --in-progress
+```
+
+The command may be rerun after the pipeline resumes; it skips already archived PXDs and adds newly complete bundles. When every PXD is complete, seal the same version with:
+
+```bash
+conda run -n meti_env python src/job_scripts/updatestore.py \
+    results_hamletpxds_agentic_v2_2_5 store \
+    --release-version v2.2.5 \
+    --finalize-in-progress
+```
+
+Finalization requires a nonempty final SDRF judge result for every PXD and writes `releases/v2.2.5/manifest.json`; it then refuses further changes to that release.
+
+Static QC comparisons are now version-to-version summaries built from these immutable store snapshots, rather than a fresh post-store judge rerun. Generate a comparison and publish it into the Store Explorer bundle with:
+
+```bash
+python src/python/run_sdrf_qc.py \
+    --baseline-version v2.1.0 \
+    --candidate-version v2.1.1 \
+    --output-dir /tmp/hamlet-static-qc
+
+python3 src/job_scripts/build_store_explorer.py \
+    --pxd-file assets/pxd_lists/Hamlet_GS_pride_sdrf_union.csv \
+    --qc-summary /tmp/hamlet-static-qc/qc-summary.json
+```
+
+The published `docs/store-explorer/data/qc-summary.json` is a static release-comparison artifact. The site reads it directly and lets reviewers switch between any version pairs present in that summary.
+
+## STATUS — historical snapshot as of 2026-08-18
 
 ### 1. `aggregated_results_files/` — 2,756 PXDs
 
@@ -171,7 +251,7 @@ Raw per-agent LLM extraction outputs (BiologicalAgent, ExperimentalDesignAgent, 
 
 ## Version and run-mode reference
 
-HAMLET has one release version. The current release, incorporating the merged SDRF-builder fixes, is **`v2.1.0`**. Each new aggregated-results JSON records this value in its top-level `pipeline_version` field.
+HAMLET uses release-aware SDRF promotion. The current generator release is **`v2.2.1`**, which preserves the pre-build `llm_refinement_judge` artifacts and requires the final-SDRF `sdrf_judge` artifacts for promotion. Existing v0.1.0, v2.1.0, and v2.1.1 records remain valid historical releases. Per-PXD release identity is determined by the final SDRF's `comment[sdrf annotation tool]` and indexed by `releases/active.json`; historical aggregate `pipeline_version` fields can predate the current release convention.
 
 `run_mode` is separate from the release version and describes how the individual PXD was processed.
 

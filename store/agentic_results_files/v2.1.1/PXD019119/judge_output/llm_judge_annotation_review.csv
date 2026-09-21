@@ -1,0 +1,177 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD019119","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human host proteins"", ""human Uniprot proteome"", and ""human proteins"" in the methods and results.
+TRUTH CHECK:       The study analyzes clinical samples from human patients to detect SARS-CoV-2.
+COMPLETENESS CHECK:    The full set contains ""Homo sapiens"", which correctly identifies the human source of the clinical samples. (Note: While SARS-CoV-2 is the virus being detected, the ""species"" field typically refers to the source organism/host of the sample).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","BiologicalAgent","organ","upper respiratory tract","upper respiratory tract","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an anatomical region/organ system, which fits the definition of ""organ"".
+SOURCE CHECK:      The text explicitly mentions ""samples harvested from the upper respiratory tract"" and ""datasets derived from the upper respiratory tract"".
+TRUTH CHECK:       The value is factually correct as the study analyzes samples from this region.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also explicitly mentions ""lung biopsies"" (lung) and ""BALF"" (bronchoalveolar lavage fluid/deep lung).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""upper respiratory tract"", ""lung"", ""bronchoalveolar lavage fluid""]","upper respiratory tract, lung, bronchoalveolar lavage fluid"
+"PXD019119","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""Vero cell lines"" and ""Vero E6 cells,"" but it does not explicitly mention ""epithelial cells."" While Vero cells are derived from African green monkey kidney epithelial cells, this specific term is not in the text.
+TRUTH CHECK:       The paper describes the use of Vero and Vero E6 cell lines; it does not explicitly state ""epithelial cell.""
+COMPLETENESS CHECK: The full set contains only ""epithelial cell,"" which is not explicitly mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD019119","BiologicalAgent","disease","COVID-19","COVID-19","high","False","","True","True","False","TYPE CHECK:        The candidate value ""COVID-19"" is a disease state/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""Coronavirus Disease 2019 (COVID-19)"" throughout the title, abstract, and results.
+TRUTH CHECK:       The study focuses on detecting peptides from patients with COVID-19.
+COMPLETENESS CHECK: The full set of extracted values contains ""COVID-19"", which covers the primary disease state described. While the paper mentions ""COVID-19 negative"" samples, ""COVID-19"" as the disease under study is the central focus.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","BiologicalAgent","material_type","swabs","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""swabs"" is not one of the allowed broad material classes defined for this field (e.g., ""tissue"", ""biofluid"", ""cell line"").
+SOURCE CHECK:      The paper mentions ""oro- and naso-pharyngeal swabs"" multiple times.
+TRUTH CHECK:       While swabs were used to collect the material, the material itself is a biofluid/mucus sample.
+COMPLETENESS CHECK: The full set contains only ""swabs"", which is a collection method rather than a material class, and it misses other materials used in the study (cell lines, lung biopsies, BALF).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""biofluid"", ""tissue""]","cell line, biofluid, tissue"
+"PXD019119","BiologicalAgent","cell_line","Vero E6","Vero E6","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a specific immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Vero E6 cells"" in the ""Cell culture datasets"" section of the Methods.
+TRUTH CHECK:       The value is factually correct as it is the cell line used in the referenced datasets (Grenga et al. and Davidson et al.).
+COMPLETENESS CHECK:    The full set contains ""Vero E6""; however, the text also mentions ""Vero cell lines"" from Chlorocebus primates (Gouveia et al.). While ""Vero E6"" is a specific subtype, the general ""Vero"" line is also used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Vero"", ""Vero E6""]","Vero, Vero E6"
+"PXD019119","BiologicalAgent","strain","Italy-INMI1","Italy-INMI1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a specific strain/isolate of the SARS-CoV-2 virus.
+SOURCE CHECK:      The value ""Italy-INMI1"" is explicitly mentioned in the Methods section under ""Cell culture datasets"" as the virus used to infect Vero E6 cells.
+TRUTH CHECK:       The value is factually correct as it identifies the specific viral strain used in one of the analyzed datasets.
+COMPLETENESS CHECK: The full set contains the only specific viral strain mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","TechnicalAgent","acquisition_method","shotgun","shotgun","high","False","","True","True","False","TYPE CHECK:        The value ""shotgun"" refers to a general proteomics approach (shotgun proteomics), which typically implies a DDA (Data-Dependent Acquisition) scheme.
+SOURCE CHECK:      The text explicitly mentions a ""seven-day time course shotgun proteomics study"" in the Cell culture datasets section.
+TRUTH CHECK:       While ""shotgun"" is used in the text, it is a broad methodology term rather than a specific MS acquisition scheme like DDA or DIA. However, in proteomics, ""shotgun"" is almost always synonymous with DDA.
+COMPLETENESS CHECK:    The full set contains only ""shotgun""; however, the paper analyzes multiple datasets from different sources, and the specific acquisition schemes (DDA/DIA) for all of them are not explicitly detailed in this text, only referred to via the original publications.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","TechnicalAgent","instrument","Q Exactive HF-X","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The text mentions several PXD accession numbers (e.g., PXD018804, PXD018594, PXD018241, PXD021328, PXD019423, PXD020394, PXD025214, PXD023016, PXD018094, PXD022085), but the provided text does not explicitly name the instrument model ""Q Exactive HF-X"".
+TRUTH CHECK:       The value is not present in the provided text.
+COMPLETENESS CHECK: The full set consists of a single value that is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD019119","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The analysis is based on sequence database searching and peptide validation of existing MS datasets without mention of labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods are described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","ExperimentalDesignAgent","replicates","patients positive and negative for COVID-19","10","low","True","","False","False","False","TYPE CHECK:        The candidate value is a description of sample groups, not a numeric count of biological replicates.
+SOURCE CHECK:      The phrase ""patients positive and negative for COVID-19"" is present in the text, but it describes the study population, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates', which requires a number.
+COMPLETENESS CHECK: The full set contains ""10"", which refers to the number of positive patient samples in one specific dataset (Cardozo et al.), but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD019119","ExperimentalDesignAgent","replicates","10","10","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The text mentions ""10 replicate samples"" in the context of the PXD020394 dataset (""TATKAYNVTQAFGR and AYNVTQAFGR detected in 6 out of 10 replicate samples"").
+TRUTH CHECK:       The value ""10"" is factually correct as a number of replicates for at least one of the analyzed datasets.
+COMPLETENESS CHECK: The full set of extracted values includes a non-numeric description (""patients positive and negative for COVID-19"") which is a type mismatch for this field, but the numeric value ""10"" is present. However, the paper analyzes multiple datasets (cell culture, various clinical datasets) with different sample sizes and replication schemes; ""10"" only refers to one specific dataset (PXD020394).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""10""]",""
+"PXD019119","ExperimentalDesignAgent","experimental_design","comparative quantitative proteomic analysis of COVID-19 positive and negative patients","comparative quantitative proteomic analysis of COVID-19 positive and negative patients","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the study design (comparing positive vs negative patients), which fits the definition of experimental_design.
+SOURCE CHECK:      The text explicitly mentions ""comparative quantitative proteomic analysis from oro- and naso-pharyngeal swabs used for COVID-19 diagnosis"" and discusses the analysis of patients ""positive and negative for COVID-19"".
+TRUTH CHECK:       The value accurately reflects the nature of the study's analysis of clinical datasets.
+COMPLETENESS CHECK: The full set captures the primary design of the clinical validation part of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","ExperimentalDesignAgent","factor_value","COVID-19 status (positive, negative)","COVID-19 status (positive, negative)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (infection status) being compared.
+SOURCE CHECK:      The text explicitly mentions analyzing datasets from ""patients positive and negative for COVID-19"" and comparing ""virus-positive samples"" to ""negative samples"".
+TRUTH CHECK:       The study's primary goal is to evaluate peptide targets for the diagnosis of COVID-19, making the positive/negative status the central experimental factor.
+COMPLETENESS CHECK:    The full set captures the primary variable used to distinguish the samples in the clinical datasets.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation is described in the methods or results.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD019119","ExperimentalDesignAgent","number_of_samples","10","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The value ""10"" appears in the text specifically referring to the Cardozo et al. dataset (""ten COVID-19 positive patient samples""), but it does not represent the total count of samples processed in the study.
+TRUTH CHECK:       The value is incorrect as a total count. The study analyzes multiple datasets: three cell culture datasets and at least seven clinical datasets (Cardozo et al., Ihling, Rivera, Bankar et al., lung biopsies, and BALF), many of which contain multiple samples or replicates.
+COMPLETENESS CHECK:    The full set consists only of ""10"", which is an undercount and refers only to one specific subset of the data.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

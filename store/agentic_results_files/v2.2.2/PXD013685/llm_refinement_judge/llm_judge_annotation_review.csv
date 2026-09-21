@@ -1,0 +1,179 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD013685","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""Human embryonic kidney 293 (HEK)"" and ""Human Bone Osteosarcoma Epithelial (U2OS)"" cells, and the mass spectrometry database search was performed against a ""Swiss-Prot database (taxonomy human)"".
+TRUTH CHECK: The use of human cell lines and a human database for the proteomics analysis confirms ""Homo sapiens"" as a source organism.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", but the paper also extensively uses ""Wistar rats"" (Rattus norvegicus) for primary hippocampal neuron cultures. The extraction is incomplete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Rattus norvegicus""]","Homo sapiens, Rattus norvegicus"
+"PXD013685","BiologicalAgent","organ","kidney, bone","","low","False","","False","False","False","TYPE CHECK:        The candidate value consists of organs/tissues, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""kidney fibroblast (COS-7)"" and ""Human Bone Osteosarcoma Epithelial (U2OS) cells"".
+TRUTH CHECK:       While the cells originate from these organs, the actual material used in the experiment is ""cell lines"" (COS-7, U2OS), not the organs themselves. The ""organ"" field should describe the source of the material; however, in the context of immortalized cell lines, the organ of origin is often listed, but here the extraction is combining two different cell line origins into one string.
+COMPLETENESS CHECK:    The full set only contains ""kidney, bone"", but the paper also uses primary hippocampal neurons (brain).
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""brain"", ""kidney"", ""bone""]",""
+"PXD013685","BiologicalAgent","cell_type","fibroblast, epithelial cell","","low","False","","False","False","False","TYPE CHECK:        The candidate value describes cell types, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""African Green Monkey SV40-transformed kidney fibroblast (COS-7)"" and ""Human Bone Osteosarcoma Epithelial (U2OS) cells"".
+TRUTH CHECK:       While the paper mentions fibroblasts and epithelial cells, these are specifically immortalized cell lines (COS-7 and U2OS). The `cell_type` field is for primary cell types or lineages, whereas `cell_line` is for immortalized lines.
+COMPLETENESS CHECK: The full set is incomplete as it ignores the primary hippocampal neurons which are a major part of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   neurons","neurons"
+"PXD013685","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","False","TYPE CHECK:        No, the candidate value is the name of a cell line's origin, not the disease state of the experimental subjects.
+SOURCE CHECK:      The text mentions ""Human Bone Osteosarcoma Epithelial (U2OS) cells"", but these are used as a heterologous cell culture model, not as a disease state being studied in a subject.
+TRUTH CHECK:       The study is investigating the molecular mechanisms of the axon initial segment (AIS) assembly using various cell lines and primary neurons; it is not a study of osteosarcoma.
+COMPLETENESS CHECK: The full set is incorrect as it misidentifies a cell line's name as the experimental disease state.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: disease
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013685","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK: The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK: The paper explicitly mentions the use of COS-7, HEK293T, and U2OS cell lines.
+TRUTH CHECK: The use of these immortalized cell lines is factually correct as described in the ""Heterologous Cell Culture and Transfection"" section.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the study also extensively uses primary hippocampal neurons (""Primary Neuronal Cultures and Transfection"" section).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""cell line"", ""primary cells""]","cell line, primary cells"
+"PXD013685","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        Yes, HEK293T is a name of an immortalized cell line.
+SOURCE CHECK:      Yes, the text mentions ""Human embryonic kidney 293 (HEK)"" in the Heterologous Cell Culture section and ""HEK293T cells"" in the Protein Purification section.
+TRUTH CHECK:       Yes, the value is factually correct based on the text.
+COMPLETENESS CHECK:The full set of extracted values is incomplete; the paper also uses COS-7 and U2OS cell lines.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""COS-7"", ""U2OS""]","HEK293T, COS-7, U2OS"
+"PXD013685","TechnicalAgent","acquisition_method","data-dependent mode","data-dependent mode","high","False","","True","True","False","TYPE CHECK:        The candidate value ""data-dependent mode"" describes the MS acquisition scheme, which matches the field definition.
+SOURCE CHECK:      The text explicitly states, ""The mass spectrometer was used in a data-dependent mode, which automatically switched between MS and MS/MS.""
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","TechnicalAgent","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK:      The text explicitly states ""Trypsin was specified as enzyme"" in the Mass Spectrometry section.
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK:    The full set of extracted values contains ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","TechnicalAgent","enrichment_method","streptavidin purification","streptavidin purification","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a purification/enrichment process used to isolate specific proteins before MS analysis.
+SOURCE CHECK:      The text explicitly mentions ""After streptavidin purification"" in the Mass Spectrometry section and describes the use of ""Strep-Tactin Sepharose beads"" for protein purification.
+TRUTH CHECK:       The value is factually correct as the proteins were purified using a Strep-tag/streptavidin-based affinity method.
+COMPLETENESS CHECK:    The full set contains the only enrichment method mentioned for the MS experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper mentions an ""Orbitrap Q-Exactive mass spectrometer"", but it does not specify the ""HF"" (High Field) model.
+TRUTH CHECK:       The text specifies ""Orbitrap Q-Exactive"", not ""Q Exactive HF"".
+COMPLETENESS CHECK: The full set contains only this value, which is an incorrect specific model.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""Orbitrap Q-Exactive""]",""
+"PXD013685","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a mass spectrometry experiment (Orbitrap Q-Exactive) but does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC); therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The value is factually correct as no labeling method was described.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the replicates field.
+SOURCE CHECK:      I have searched the ""Mass Spectrometry"" and ""Quantification and Statistical Analysis"" sections, as well as the results, and there is no mention of the number of biological replicates for the proteomics experiment.
+TRUTH CHECK:       The value ""3"" is not mentioned or inferable from the text; the paper does not specify how many biological replicates were used for the MS analysis.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   1",""
+"PXD013685","ExperimentalDesignAgent","experimental_design","comparison of different protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","comparison of different protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables/groups being compared, which aligns with the ""experimental_design"" field's purpose of describing the study design.
+SOURCE CHECK:      The paper explicitly describes experiments comparing these specific constructs (e.g., 480AnkG-GFP vs 480AnkG-NN-GFP and TRIM46) in both cellular assays and in vitro reconstitution.
+TRUTH CHECK:       The value is factually correct based on the results and methods sections.
+COMPLETENESS CHECK:    The full set captures the primary design of the protein interaction and dynamics assays, though the paper also includes shRNA-mediated depletion (knockdown vs control) and mutant comparisons (wt vs FIGQD). However, the candidate value accurately represents a core part of the design.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""comparison of different protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)"", ""knockdown vs control (shRNA depletion of AnkG and TRIM46)"", ""wild-type vs mutant comparison (NF186 wt vs FIGQD)""]","comparison of different protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP), knockdown vs control (shRNA depletion of AnkG and TRIM46), wild-type vs mutant comparison (NF186 wt vs FIGQD)"
+"PXD013685","ExperimentalDesignAgent","factor_value","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (different protein constructs) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly mentions the use and comparison of these constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP) across various assays.
+TRUTH CHECK:       The value is factually correct as these are the primary variables manipulated in the experiments.
+COMPLETENESS CHECK:    The full set of extracted values captures the primary protein constructs, but the study also involves other factors such as ""shRNA depletion"" (AnkG-shRNA, TRIM46-shRNA) and ""nocodazole treatment,"" which are also experimental variables.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)"", ""shRNA depletion (AnkG-shRNA, TRIM46-shRNA)"", ""nocodazole treatment""]",""
+"PXD013685","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes a standard LC-MS/MS workflow (""chromatographically separated over the analytical column... using 90 min linear gradient"") without any mention of offline fractionation.
+TRUTH CHECK:       Since no offline fractionation is mentioned, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set of extracted values consists of a single ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper text does not explicitly state a total count of samples processed for the proteomics experiment; it mentions ""n"" and ""N"" in the statistical analysis section but does not provide a global sample count.
+TRUTH CHECK:       There is no evidence in the text to support the value ""3"" as the total number of samples processed in the study.
+COMPLETENESS CHECK:The full set contains only one value that is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

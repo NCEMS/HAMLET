@@ -242,8 +242,9 @@ workflow {
         // finalize_sdrf needs: [pxd, agentic_stage_output, aggregated_results, judge_stage_output]
         // agentic_results_ch_minimal = [pxd, agentic_stage_output, aggregated_results]
         // llm_judge_ch_minimal = [pxd, judge_stage_output]
-        // Join on pxd to get all 4 elements
+        // Retain the aggregate so final judging can use RunAssessor provenance.
         finalize_input_ch_minimal = agentic_results_ch_minimal
+            .map { pxd, agentic_output, agg_results -> [pxd, agentic_output, agg_results] }
             .join(llm_judge_ch_minimal, by: 0)
         
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
@@ -307,6 +308,7 @@ workflow {
         '--base_dir', baseDir.toString(),
         '--outdir', params.outdir.toString(),
         '--central_dir', params.central_mzml_dir.toString(),
+        '--max_raw_files', (params.max_raw_files ?: 0).toString(),
         '--pxds', pxd_list.join(','),
     ]
     def manifestProc = new ProcessBuilder(manifestCmd.collect { it.toString() })
@@ -437,7 +439,7 @@ workflow {
     organism_with_context_ch = organism_id(organism_input_ch)
     
     // Extract just organism_results for downstream processes that don't need context
-    organism_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results ->
+    organism_results_ch = organism_with_context_ch.map { pxd, fetched_dir, detected_params, organism_results, organism_status ->
         tuple(pxd, organism_results)
     }
     
@@ -509,10 +511,8 @@ workflow {
     llm_judge_ch = llm_judge(llm_judge_input_ch)[0]
 
     finalized_sdrf_input_ch = agentic_results_ch
+        .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output, aggregated_results) }
         .join(llm_judge_ch)
-        .map { pxd, metadata_extraction_output, aggregated_results, judge_output ->
-            tuple(pxd, metadata_extraction_output, aggregated_results, judge_output)
-        }
 
     finalized_sdrf_ch = finalize_sdrf(finalized_sdrf_input_ch)[0]
 
@@ -758,6 +758,7 @@ process fetch_pxd {
     script:
     def aria2c_args = params.use_aria2c ? "--use_aria2c --aria2c_threads ${params.aria2c_threads}" : ""
     def max_files_arg = params.max_raw_files ? "--max_raw_files ${params.max_raw_files}" : ""
+    def manifest_max_raw_files = params.max_raw_files ?: 0
     def globus_destination_base = params.globus_destination_base ?: params.central_mzml_dir
     def globus_args = params.globus ? "--globus --globus_source_collection ${params.globus_source_collection} --globus_destination_base ${globus_destination_base}" : ""
     def globus_destination_arg = params.globus_destination_collection ? "--globus_destination_collection ${params.globus_destination_collection}" : ""
@@ -771,6 +772,7 @@ process fetch_pxd {
         --base_dir ${baseDir} \
         --outdir ${params.outdir} \
         --central_dir ${params.central_mzml_dir} \
+        --max_raw_files ${manifest_max_raw_files} \
         --pxd ${pxd} \
         --stage fetch || MANIFEST_RC=\$?
     if [ \$MANIFEST_RC -eq 0 ]; then
@@ -801,6 +803,7 @@ process fetch_pxd {
         --base_dir ${baseDir} \
         --outdir ${params.outdir} \
         --central_dir ${params.central_mzml_dir} \
+        --max_raw_files ${manifest_max_raw_files} \
         --pxd ${pxd} \
         --stage fetch || true
     """
@@ -914,7 +917,7 @@ process organism_id {
     tag "organism-${pxd}"
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: false,
-        saveAs: { name -> name == 'organism_results' ? name : null }
+        saveAs: { name -> name in ['organism_results', 'organism_status.json'] ? name : null }
 
     cache 'deep'
 
@@ -926,7 +929,7 @@ process organism_id {
     tuple val(pxd), path(fetched_dir), path(detected_params), path(contaminants_fasta), path(taxid_list_file), path(llm_results)
 
     output:
-    tuple val(pxd), path(fetched_dir), path(detected_params), path("organism_results")
+    tuple val(pxd), path(fetched_dir), path(detected_params), path("organism_results"), path("organism_status.json")
 
     script:
     def peptonizer_container_arg = params.peptonizer_container ? "--peptonizer_container ${params.peptonizer_container}" : ""
@@ -958,6 +961,9 @@ process organism_id {
         fi
         if [ ! -f "organism_results/empty.json" ]; then
             echo '{}' > organism_results/empty.json
+        fi
+        if [ ! -f "organism_status.json" ]; then
+            echo '{"status":"interrupted_or_wrapper_failure","reason":"organism_id did not write a status file"}' > organism_status.json
         fi
         echo "TRAP: Ensured organism_results/empty.json exists"
     }
@@ -1041,7 +1047,8 @@ process organism_id {
         ${peptonizer_container_arg} \
         --log_file organism/events.jsonl \
         --results_base_dir ${params.outdir} \
-        --pxd ${pxd}
+        --pxd ${pxd} \
+        --status_file organism_status.json
     
     ORGANISM_EXIT_CODE=\$?
     
@@ -1050,6 +1057,7 @@ process organism_id {
         echo "WARNING: organism_id process failed with exit code \$ORGANISM_EXIT_CODE (likely timeout or GPU error)"
         echo "Creating empty organism_results so downstream processes can continue with PRIDE/LLM taxids only"
         echo '{}' > organism_results/empty.json
+        printf '{"status":"execution_failed","reason":"organism_id exit code %s"}\n' "\$ORGANISM_EXIT_CODE" > organism_status.json
     fi
 
     ls -R organism_results || true
@@ -1366,7 +1374,7 @@ process agentic_metadata_extraction {
  * --------------------- */
 process llm_judge {
 
-    tag "judge-${pxd}"
+    tag "llm-refinement-judge-${pxd}"
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true, saveAs: { name ->
         def normalized = name.replaceFirst('^\\./', '')
@@ -1374,10 +1382,10 @@ process llm_judge {
             return null
         }
         normalized = normalized.replaceFirst('^judge_stage_output/?', '')
-        if (!normalized || normalized.startsWith('judge_stage_output/') || normalized.startsWith('judge_output/')) {
+        if (!normalized || normalized.startsWith('judge_stage_output/') || normalized.startsWith('llm_refinement_judge/')) {
             return null
         }
-        return "judge_output/${normalized}"
+        return "llm_refinement_judge/${normalized}"
     }
 
     cache false
@@ -1440,11 +1448,11 @@ process llm_judge {
 
     ls -la judge_stage_output/ || echo "No judge output"
 
-    # Materialize only canonical judge outputs before manifest update.
-    mkdir -p ${outputDir}/${pxd}/judge_output
+    # Materialize the pre-SDRF judge that supplies safe refinement overrides.
+    mkdir -p ${outputDir}/${pxd}/llm_refinement_judge
     for rel_path in json_outputs llm_judge_accuracy.png llm_judge_aggregate.png llm_judge_annotation_quality_counts.png llm_judge_annotation_review.csv llm_judge_coverage.csv llm_judge_per_paper.csv skipped.json; do
         if [ -e "judge_stage_output/\${rel_path}" ]; then
-            cp -r "judge_stage_output/\${rel_path}" ${outputDir}/${pxd}/judge_output/
+            cp -r "judge_stage_output/\${rel_path}" ${outputDir}/${pxd}/llm_refinement_judge/
         fi
     done
 
@@ -1471,12 +1479,11 @@ process finalize_sdrf {
     // output (finalize_stage_output here) is invoked exactly ONCE with the
     // directory's own name -- it is NOT recursed per nested file. That means
     // saveAs can only rename/filter the directory as a whole, never pick out
-    // a nested subtree like post_judge/. Verified empirically with a minimal
+    // a nested subtree like sdrf_judge/. Verified empirically with a minimal
     // standalone Nextflow script. So publishing of both the SDRF file and the
-    // post_judge/ subtree is done via explicit `cp` in the script block below,
+    // final SDRF judge subtree is done via explicit `cp` in the script block below,
     // not through saveAs.
     publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
-    publishDir "${baseDir}/store/hamlet_sdrfs", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
 
     cache false
 
@@ -1523,14 +1530,13 @@ process finalize_sdrf {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/finalize_sdrf.py \
         --pxd ${pxd} \
         --input_dir ${agentic_stage_output} \
-        --aggregated_json ${aggregated_results} \
-        --output_dir finalize_stage_output \
+        --aggregated_results ${aggregated_results} \
         --pmc_cache ${baseDir}/pride_survey/pmc_cache \
+        --output_dir finalize_stage_output \
         \${judge_args}
 
-    # Promote flat SDRF to task root so Nextflow can publish it directly to hamlet_sdrfs/
+    # Copy final SDRF outputs into the configured result directory.
     if [ -f "finalize_stage_output/${pxd}.sdrf.tsv" ]; then
-        cp finalize_stage_output/${pxd}.sdrf.tsv ${pxd}.sdrf.tsv
         mkdir -p ${outputDir}/${pxd}/agentic_metadata
         cp finalize_stage_output/${pxd}.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
     fi
@@ -1538,17 +1544,24 @@ process finalize_sdrf {
         mkdir -p ${outputDir}/${pxd}/agentic_metadata
         cp finalize_stage_output/${pxd}.confidence.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.confidence.sdrf.tsv
     fi
+    if [ -f "finalize_stage_output/${pxd}.sdrf_refinement_report.json" ]; then
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf_refinement_report.json ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf_refinement_report.json
+    fi
+    if [ -f "finalize_stage_output/${pxd}.sdrf_refinement_metrics.json" ]; then
+        mkdir -p ${outputDir}/${pxd}/agentic_metadata
+        cp finalize_stage_output/${pxd}.sdrf_refinement_metrics.json ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf_refinement_metrics.json
+    fi
 
-    # Publish the post_judge/ subtree (second-pass judge evaluation run after
-    # overrides are applied) explicitly via cp -- Nextflow's publishDir/saveAs
+    # Publish the final SDRF judge subtree explicitly via cp -- Nextflow's publishDir/saveAs
     # cannot reach into a nested subdirectory of a directory-type output (see
     # note above), so we copy it ourselves, excluding the internal prompt cache.
-    if [ -d "finalize_stage_output/post_judge" ]; then
-        dest="${outputDir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
+    if [ -d "finalize_stage_output/sdrf_judge" ]; then
+        dest="${outputDir}/${pxd}/sdrf_judge"
         mkdir -p "\$dest"
         shopt -s nullglob
-        post_judge_items=(finalize_stage_output/post_judge/*)
-        for item in "\${post_judge_items[@]}"; do
+        final_judge_items=(finalize_stage_output/sdrf_judge/*)
+        for item in "\${final_judge_items[@]}"; do
             base=\$(basename "\$item")
             case "\$base" in
                 .prompt_cache*) continue ;;

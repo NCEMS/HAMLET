@@ -1,0 +1,157 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD054439","BiologicalAgent","species","Giardia duodenalis","Giardia duodenalis","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK:      The value ""Giardia duodenalis"" is explicitly mentioned multiple times throughout the text (e.g., in the title and methods).
+TRUTH CHECK:       The value is factually correct as the study focuses on this parasite.
+COMPLETENESS CHECK:    The paper also uses C57BL/6 mice (Mus musculus) as a host for infection studies. The full set of extracted values only contains the parasite, missing the mouse species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Giardia duodenalis"", ""Mus musculus""]","Giardia duodenalis, Mus musculus"
+"PXD054439","BiologicalAgent","cell_type","trophozoites","trophozoites","high","False","","True","True","False","TYPE CHECK:        The candidate value ""trophozoites"" describes the life stage/cell type of the parasite Giardia.
+SOURCE CHECK:      The term ""trophozoites"" is used throughout the paper (e.g., ""GLV-containing Giardia trophozoites"").
+TRUTH CHECK:       The experiment specifically uses Giardia trophozoites as the biological material.
+COMPLETENESS CHECK: The full set contains ""trophozoites"", which is the only cell type described for the parasite in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD054439","BiologicalAgent","disease","GLV-infected","","low","False","","False","False","False","TYPE CHECK:        The candidate value describes a state of infection, which fits the category of a disease state or diagnosis.
+SOURCE CHECK:      The text mentions ""GLV-infected Giardia"" and ""GLV-infected mouse models"" throughout the results and methods.
+TRUTH CHECK:       While the paper discusses GLV infection, GLV (Giardiavirus) is a virus that infects the parasite *Giardia*, not the primary disease state of the host (which is giardiasis). The ""disease"" being studied in the mice is the infection caused by *Giardia duodenalis*, with GLV acting as a modulating factor.
+COMPLETENESS CHECK:    The full set only contains ""GLV-infected"", which ignores the primary disease (giardiasis/Giardia infection) and the control states.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""giardiasis"", ""Giardia infection""]",""
+"PXD054439","BiologicalAgent","material_type","extracellular vesicles","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""extracellular vesicles"" is not one of the allowed broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""biofluid"").
+SOURCE CHECK:      The paper explicitly describes the isolation and study of extracellular vesicles (EVs).
+TRUTH CHECK:       While the paper studies EVs, the field definition requires a ""Broad material class"" from a specific list. EVs are typically considered a component of a biofluid or a specialized secretion, but ""extracellular vesicles"" itself is not a listed category.
+COMPLETENESS CHECK:The full set contains only this value, which is a specific entity rather than a broad material class.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   biofluid","biofluid"
+"PXD054439","BiologicalAgent","strain","Assemblage AI","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Assemblage AI"" refers to a genotype/assemblage of the parasite *Giardia duodenalis*, not an animal or plant strain.
+SOURCE CHECK:      The value is present in the text (""identifying them as Assemblage AI"").
+TRUTH CHECK:       While the value is present, it describes the parasite's genetic group, whereas the 'strain' field is defined for animal or plant strains (e.g., the C57BL/6 mice used in the study).
+COMPLETENESS CHECK: The full set is incomplete as it misses the actual animal strain (C57BL/6) mentioned in the ""Animal studies"" section.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: strain
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   C57BL/6","C57BL/6"
+"PXD054439","TechnicalAgent","enrichment_method","ultracentrifugation or exoEasy Kit","ultracentrifugation or exoEasy Kit","high","False","","True","True","False","TYPE CHECK:        The candidate value describes methods used to isolate extracellular vesicles (EVs), which serves as the enrichment step for the proteins analyzed by proteomics.
+SOURCE CHECK:      The paper explicitly mentions that EVs were isolated via ""ultracentrifugation or exosome assay kit"" (abstract) and specifically the ""exoEasy Maxi Kit"" (methods).
+TRUTH CHECK:       The values are factually correct as the methods used to enrich the sample (EVs) prior to proteomic analysis.
+COMPLETENESS CHECK:    The full set of extracted values covers the two primary methods mentioned in the text for EV isolation.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD054439","TechnicalAgent","instrument","Orbitrap Exploris 480","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The candidate value ""Orbitrap Exploris 480"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK:       The value is not supported by the text; while the paper mentions ""proteomic analysis"" and a ProteomeXchange ID (PXD054439), it does not specify the instrument used.
+COMPLETENESS CHECK: The full set contains only this hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD054439","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper mentions ""proteomic and western blotting analysis"" to detect proteins in EVs, but does not mention any isobaric or metabolic labeling (like TMT or SILAC). Per the safe defaults rule, ""label-free"" is correct when no such labels are mentioned.
+TRUTH CHECK:       The value is factually correct based on the absence of labeling descriptions in the text.
+COMPLETENESS CHECK: The full set contains only ""label-free"", which is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD054439","ExperimentalDesignAgent","replicates","Giardia+GLV EVs","3","low","True","","False","False","False","TYPE CHECK:        The candidate value ""Giardia+GLV EVs"" is a sample/material name, not a numeric count of biological replicates.
+SOURCE CHECK:      The term ""Giardia+GLV EVs"" is present in the text, but it refers to the sample type, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field ""replicates"".
+COMPLETENESS CHECK: The full set contains ""3"", which is correct based on the ""Statistical analysis"" section (""representative of a minimum of three independent experiments""), but the candidate value itself is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD054439","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper states in the Statistical analysis section: ""The presented results are representative of a minimum of three independent experiments exhibiting consistent data.""
+TRUTH CHECK:       The value ""3"" accurately reflects the minimum number of independent experiments (biological replicates) mentioned.
+COMPLETENESS CHECK: The full set of extracted values contains ""3"" and ""Giardia+GLV EVs"". The latter is a sample name, not a replicate count, and is a type mismatch for this field. However, the value ""3"" alone covers the biological replication described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD054439","ExperimentalDesignAgent","experimental_design","Protein characterization of Giardia+GLV extracellular vesicles","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental goal or objective, not a study design type (e.g., ""treated vs control"", ""time course"").
+SOURCE CHECK:      The text mentions proteomic analysis of EVs, but the candidate value is a summary of an objective rather than a design classification.
+TRUTH CHECK:       The value is a description of a task performed, but it does not fit the definition of ""experimental design"".
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD054439","ExperimentalDesignAgent","factor_value","sample source (Giardia+GLV EVs)","sample source (Giardia+GLV EVs)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a sample source, which is a variable/factor under study in the context of the experiment.
+SOURCE CHECK:      The paper explicitly discusses the use of EVs from Giardia+GLV (GLV-containing Giardia) to study their role in viral transmission and the attenuation of disease.
+TRUTH CHECK:       The value is factually correct as the study compares the effects of GLV-infected Giardia (and its EVs) versus GLV-free Giardia.
+COMPLETENESS CHECK:    The full set of extracted values is incomplete; the study also uses ""GLV-free Giardia"" (or GS isolate) as a primary comparative factor, and ""time points"" (7 and 14 days post-infection) as a variable.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Giardia+GLV EVs"", ""GLV-free Giardia"", ""time point""]",""
+"PXD054439","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the fractions field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation steps; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values consists of the single default value, which is exhaustive for this paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD054439","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper mentions ""a minimum of three independent experiments"" in the Statistical analysis section, but it does not explicitly state the total number of samples processed in the study.
+TRUTH CHECK:       The value ""3"" refers to the number of independent experiments (replicates), not the total number of samples processed across the entire study (which includes multiple groups of mice, different Giardia strains, and various time points).
+COMPLETENESS CHECK:    The full set consists of only this value, which is an incorrect interpretation of the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

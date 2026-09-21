@@ -1,0 +1,480 @@
+{
+  "paper_id": "PXD022741",
+  "annotations": [
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes a study on the diauxic shift in *Saccharomyces cerevisiae* (yeast) without any mention of disease or pathology.",
+        "TRUTH_CHECK": "Since the subjects are not part of a disease study, \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains the single safe default value, which is exhaustive for this study."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Saccharomyces cerevisiae",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name of an organism, which matches the species field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the title and abstract as the model organism used for the proteomics experiment.",
+        "TRUTH_CHECK": "The paper identifies the organism as Saccharomyces cerevisiae (yeast).",
+        "COMPLETENESS_CHECK": "The full set contains the only species used in the study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value, as it mirrors a characteristic (e.g., disease state).",
+        "SOURCE_CHECK": "The paper describes a time course of yeast (Saccharomyces cerevisiae) during a diauxic shift; it does not mention a \"normal\" vs \"disease\" or \"normal\" vs \"mutant\" contrast.",
+        "TRUTH_CHECK": "While \"normal\" is a safe default for the `disease` field when subjects are healthy, it is not applicable here because the study is a temporal profiling of a natural biological process (diauxic shift) in a standard yeast strain, not a disease study where a \"normal\" control is being contrasted.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which does not reflect the actual experimental factor of this study (which is the time course/diauxic shift)."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes using a \"Top10 method\" for MS2 scans, which is a characteristic implementation of data-dependent acquisition (DDA).",
+        "TRUTH_CHECK": "The use of a \"Top10 method\" (selecting the top 10 most intense precursors for fragmentation) explicitly confirms a data-dependent acquisition (DDA) scheme.",
+        "COMPLETENESS_CHECK": "The full set contains the correct acquisition method described in the text."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Phosphoproteomic Workflow\" section of the methods (\"alkylated with 10 mM iodoacetamide\") as part of the sample preparation for the MS experiment.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"collision-induced dissociation\" is a valid fragmentation method.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the methods section (\"MS2 scans consisted of collision-induced dissociation\").",
+        "TRUTH_CHECK": "The value is factually correct as it describes the fragmentation used for MS2 scans in this experiment.",
+        "COMPLETENESS_CHECK": "The full set includes \"collision-induced dissociation\" and \"beam-type collision-induced dissociation\"; however, the text only explicitly mentions \"collision-induced dissociation\". \"Beam-type\" is not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": "collision-induced dissociation",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"collision-induced dissociation\" in the MS2 scan description.",
+        "TRUTH_CHECK": "The paper states \"MS2 scans consisted of collision-induced dissociation\"; it does not specify \"beam-type\" CID. While CID can be beam-type, the text does not provide this specific detail.",
+        "COMPLETENESS_CHECK": "The full set includes \"collision-induced dissociation\", which is the exact term used in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"RESULTS\" and \"MATERIALS AND METHODS\" sections as the instrument used for the MS analysis.",
+        "TRUTH_CHECK": "The value \"Orbitrap Fusion Lumos\" is factually correct according to the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT126",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of labeling methods.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not explicitly list the individual channel names (e.g., TMT126).",
+        "TRUTH_CHECK": "While TMT11-plex typically consists of these specific tags, the text does not explicitly name \"TMT126\" or any of the other individual tags listed in the extracted values.",
+        "COMPLETENESS_CHECK": "The full set of values lists individual TMT channels, but the paper only specifies the multiplexing level (\"TMT11\")."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT127N",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the 'label' field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMT11 sample multiplexing\" and \"labeling with the TMT11 (Thermo A37727) reagent\" in the context of the MS experiment.",
+        "TRUTH_CHECK": "While the paper specifies \"TMT11\", it does not explicitly list the individual channel names (e.g., \"TMT127N\"). These specific channel names are part of the TMT11 kit but are not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but the paper only mentions the overall \"TMT11\" multiplexing method."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT127C",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent\", but it does not explicitly list the individual channel names (e.g., TMT127C).",
+        "TRUTH_CHECK": "While TMT11-plex typically consists of these specific tags, the individual tag names are not written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific strings appear in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT128N",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not explicitly list the individual channel names (e.g., TMT128N).",
+        "TRUTH_CHECK": "While TMT11-plex kits typically contain these specific labels, the text does not explicitly name \"TMT128N\" or any of the other specific labels in the extracted set.",
+        "COMPLETENESS_CHECK": "The full set of values consists of specific TMT channels that are not mentioned in the text; the text only specifies \"TMT11\"."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT128C",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not explicitly list the individual channel names (e.g., TMT128C).",
+        "TRUTH_CHECK": "While TMT11-plex typically consists of these specific labels, the text does not explicitly name \"TMT128C\" or any of the other individual labels in the candidate set.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but the paper only specifies the multiplexing level as \"TMT11\"."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT129N",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the 'label' field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent\" used for the MS experiment, but it does not explicitly list the individual channel names (e.g., TMT129N).",
+        "TRUTH_CHECK": "While TMT11-plex kits typically contain these specific labels, the text does not explicitly name \"TMT129N\" or any of the other individual labels in the candidate set.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but none of these specific strings appear in the provided text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT129C",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMT11 sample multiplexing\" and \"TMT11 (Thermo A37727) reagent\" used for the MS experiment.",
+        "TRUTH_CHECK": "While the paper specifies \"TMT11\", it does not explicitly list the individual channel names (e.g., TMT129C). These specific channel names are typical of TMT11 kits but are not written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of values lists individual TMT channels, but the paper only mentions the overall \"TMT11\" labeling method."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT130N",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not explicitly list the individual channel names (e.g., TMT130N).",
+        "TRUTH_CHECK": "While TMT11-plex typically includes these channels, the specific labels listed in the candidate value and all_extracted_values are not written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of values lists individual TMT channels, but the paper only specifies the multiplexing level (\"TMT11\")."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT130C",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not explicitly list the individual channel names (e.g., TMT130C).",
+        "TRUTH_CHECK": "While TMT11-plex kits typically contain these specific labels, the text does not explicitly name \"TMT130C\" or any of the other individual labels in the `all_extracted_values` list.",
+        "COMPLETENESS_CHECK": "The full set of values consists of individual TMT channels, but none are explicitly mentioned in the text; the text only specifies the multiplexing level (TMT11)."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT131",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of a labeling method.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent,\" but it does not list the individual channel tags (like TMT131).",
+        "TRUTH_CHECK": "While the paper uses TMT11, the specific tag \"TMT131\" is not mentioned in the text; it is an inference based on the TMT11 kit composition.",
+        "COMPLETENESS_CHECK": "The full set of values lists individual TMT channels, but the paper only specifies the multiplexing level (TMT11)."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT131C",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMT11",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMT11 sample multiplexing\" and \"TMT11-plex reagent\", but it does not explicitly list the individual channel names (e.g., TMT131C).",
+        "TRUTH_CHECK": "While TMT11-plex typically includes a channel like TMT131C, the specific channel names are not written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, none of which are explicitly mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of an \"Orbitrap Fusion Lumos mass spectrometer\" and that MS1 and MS3 scans were obtained in the \"Orbitrap\".",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model and the description of the scans.",
+        "COMPLETENESS_CHECK": "The full set contains \"Orbitrap\", which is the primary mass analyzer used for the high-resolution scans described."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "monohydroxylated residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": "oxidation of methionine residues",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"monohydroxylated residue\" is a valid category for a protein modification.",
+        "SOURCE_CHECK": "The term \"monohydroxylated residue\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"oxidation of methionine residues\", which is the chemical equivalent of a monohydroxylated residue in proteomics CVs, but the specific phrase \"monohydroxylated residue\" is not used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains terms not explicitly written in the text (e.g., \"monohydroxylated residue\", \"deamidated residue\", \"iodoacetamide derivatized residue\") instead of the actual terms used in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "phosphorylated residue",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"phosphorylated residue\" describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"phosphorylation (+79.9663 Da)\" as a variable modification in the methods section.",
+        "TRUTH_CHECK": "\"Phosphorylated residue\" is a standard synonym/description for \"phosphorylation\" as per the field definitions (which state PSI-MOD/PRIDE names are equivalent to common chemistry names).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes \"monohydroxylated residue\" (oxidation), \"deamidated residue\" (deamidation), and \"phosphorylated residue\" (phosphorylation), which are all explicitly mentioned. However, \"iodoacetamide derivatized residue\" is not explicitly named as a modification (only the reagent iodoacetamide is mentioned), and \"carbamidomethylation\" is explicitly named in the text but missing from the set."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "deamidated residue",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"deamidated residue\" describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"deamidation on asparagine and glutamine\" as a variable modification in the methods section.",
+        "TRUTH_CHECK": "\"Deamidated residue\" is a standard synonym/description for \"deamidation\", and the paper confirms this modification was searched.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes several modifications, but it contains an incorrect entry (\"iodoacetamide derivatized residue\" is not named as a modification, only the reagent is mentioned) and uses CV-style names for others. However, \"deamidated residue\" itself is a correct extraction of one of the modifications mentioned."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "iodoacetamide derivatized residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": "carbamidomethylation of cysteine residues",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification of a residue, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The paper mentions \"iodoacetamide\" as an alkylation reagent in the methods, but it does not use the phrase \"iodoacetamide derivatized residue\" to describe a searched modification.",
+        "TRUTH_CHECK": "The value is incorrect because the paper explicitly names the searched static modification as \"carbamidomethylation of cysteine residues\", not \"iodoacetamide derivatized residue\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it includes a hallucinated modification and uses CV-style names for others, though the latter is acceptable."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "tris(2-carboxyethyl)phosphine",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a chemical reagent used for reduction, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions \"Samples were then reduced with 5 mM TCEP\", and TCEP is the common abbreviation for tris(2-carboxyethyl)phosphine.",
+        "TRUTH_CHECK": "The value is factually correct as TCEP is explicitly used for reduction in the phosphoproteomic workflow.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
+      }
+    }
+  ]
+}

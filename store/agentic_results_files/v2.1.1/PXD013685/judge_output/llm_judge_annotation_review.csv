@@ -1,0 +1,188 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD013685","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""Human embryonic kidney 293 (HEK)"" and ""Human Bone Osteosarcoma Epithelial (U2OS)"" cells, and specifically states the Mascot database search was performed against a ""Swiss-Prot database (taxonomy human)"".
+TRUTH CHECK:       The use of human cell lines and a human database for the mass spectrometry analysis confirms ""Homo sapiens"" as a source organism for the proteomics part of the study.
+COMPLETENESS CHECK:    The full set contains ""Homo sapiens""; however, the paper also extensively uses ""Wistar rats"" (Rattus norvegicus) for primary hippocampal neuron cultures. The current set is incomplete as it misses the rat species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Rattus norvegicus""]","Homo sapiens, Rattus norvegicus"
+"PXD013685","BiologicalAgent","organ","kidney","kidney","low","False","","False","False","False","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The paper mentions ""African Green Monkey SV40-transformed kidney fibroblast (COS-7)"" and ""Human embryonic kidney 293 (HEK)"" cells.
+TRUTH CHECK:       While kidney cells were used, the mass spectrometry experiment described in the ""Mass Spectrometry"" section was performed on proteins purified via streptavidin purification from HEK293T cells (as stated in the ""Protein Purification for In Vitro Reconstitution Assays"" section).
+COMPLETENESS CHECK: The full set contains only ""kidney"", which accurately reflects the organ of origin for the cells used in the MS analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","False","TYPE CHECK:        No, ""epithelial cell"" is a cell type, but the paper does not describe the cells as epithelial.
+SOURCE CHECK:      The paper mentions U2OS cells, which are ""Human Bone Osteosarcoma Epithelial"" cells, but the primary focus and the ""cell_type"" field usually refer to the biological identity of the cells used.
+TRUTH CHECK:       The paper describes U2OS as ""Human Bone Osteosarcoma Epithelial"" cells, but the primary experimental cells are ""hippocampal neurons"" and ""COS-7"" (kidney fibroblast).
+COMPLETENESS CHECK:The full set only contains ""epithelial cell"", missing the primary cell types used in the study (neurons, fibroblasts).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""neurons"", ""fibroblasts""]","neurons"
+"PXD013685","BiologicalAgent","material_type","HEK293T cells","","low","True","cell_line","False","False","False","TYPE CHECK: No, ""HEK293T cells"" is a specific cell line name, not a broad material class.
+SOURCE CHECK: Yes, the paper mentions ""Human embryonic kidney 293 (HEK)"" cells were used.
+TRUTH CHECK: Yes, the cells were used, but the value is the wrong type for this field.
+COMPLETENESS CHECK: The full set is incomplete because it provides a specific entity instead of the broad category, and it misses other materials used (COS-7, U2OS, primary neurons).
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: cell_line
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: [""cell line"", ""primary cells""]","cell line, primary cells"
+"PXD013685","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is the name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Human embryonic kidney 293 (HEK)"" in the Heterologous Cell Culture section and ""HEK293T cells"" in the Protein Purification section.
+TRUTH CHECK:       The value is factually correct as the paper used HEK293T cells for protein purification.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also used COS-7 and U2OS cell lines.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""COS-7"", ""U2OS""]","HEK293T, COS-7, U2OS"
+"PXD013685","TechnicalAgent","acquisition_method","data-dependent mode","data-dependent mode","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a mass spectrometry acquisition scheme, which matches the field definition.
+SOURCE CHECK:      The text explicitly states, ""The mass spectrometer was used in a data-dependent mode"".
+TRUTH CHECK:       The value is factually correct as described in the ""Mass Spectrometry"" section of the methods.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","TechnicalAgent","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The paper explicitly states ""Trypsin was specified as enzyme"" in the Mass Spectrometry section.
+TRUTH CHECK: The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","TechnicalAgent","enrichment_method","streptavidin purification","streptavidin purification","high","False","","True","True","False","TYPE CHECK:        Yes, streptavidin purification is a method used to enrich specific proteins (those with a Strep-tag) before mass spectrometry.
+SOURCE CHECK:      Yes, the text states ""After streptavidin purification, beads were resuspended..."" and ""purified using Strep(II)-Strep-Tactin affinity purification"".
+TRUTH CHECK:       Yes, the proteins were purified/enriched using streptavidin-based affinity chromatography.
+COMPLETENESS CHECK: The full set contains the only enrichment method mentioned for the MS samples.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper mentions an ""Orbitrap Q-Exactive mass spectrometer"", but it does not specify the ""HF"" (High Field) model.
+TRUTH CHECK:       The text specifies ""Orbitrap Q-Exactive"", not ""Q Exactive HF"".
+COMPLETENESS CHECK: The full set contains only this value, which is an incorrect specific model.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   Orbitrap Q-Exactive","Orbitrap Q-Exactive"
+"PXD013685","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK:      The paper describes a standard LC-MS/MS workflow (Orbitrap Q-Exactive, data-dependent mode) without any mention of isobaric (TMT, iTRAQ) or metabolic (SILAC) labels.
+TRUTH CHECK:       Per the field definition, ""label-free"" is the correct value when no specific labeling methods are mentioned.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the experimental setup.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","replicates","Purified protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a list of protein constructs, not a numeric count of biological replicates.
+SOURCE CHECK:      The proteins are mentioned in the text, but they are the subjects of the experiment, not the number of replicates.
+TRUTH CHECK:       The value is factually incorrect for the field 'replicates'.
+COMPLETENESS CHECK: The full set contains a numeric value ""3"" (though not explicitly stated as biological replicates in the text, the candidate value itself is completely wrong).
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","replicates","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""3"" is a numeric count, which is the correct type for the 'replicates' field.
+SOURCE CHECK:      The paper text does not explicitly state the number of biological replicates for the mass spectrometry experiment; it mentions ""N the number of independent experiments"" in the statistical analysis section but does not provide a specific number for the MS part.
+TRUTH CHECK:       There is no evidence in the text to support the value ""3"" as the number of biological replicates for the proteomics experiment.
+COMPLETENESS CHECK: The full set of extracted values is incorrect, as it includes a description of proteins instead of a replicate count.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD013685","ExperimentalDesignAgent","technical_replicates","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK:      The paper does not mention technical replicates for the mass spectrometry experiments.
+TRUTH CHECK:       According to the safe defaults in the instructions, ""1"" is correct when the paper is silent on replication.
+COMPLETENESS CHECK: The full set consists of a single value ""1"", which is the appropriate default for this study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","experimental_design","Comparison of purified protein constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental comparison of proteins rather than a study design type (e.g., ""treated vs control"", ""case-control"").
+SOURCE CHECK:      The proteins mentioned are present in the text, but the value is a description of the sample set, not the design type.
+TRUTH CHECK:       The value is factually based on the proteins used, but it does not answer ""what is the study design?"".
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch for the field.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","factor_value","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (different protein constructs) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly mentions the use and comparison of these specific constructs (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP) across various assays.
+TRUTH CHECK:       The value is factually correct as these are the primary variables manipulated in the experiments.
+COMPLETENESS CHECK:    While these are key constructs, the study also uses others (e.g., 270AnkG, NF186 mutants, shRNA depletion of TRIM46/AnkG) as experimental factors. The current set is a subset of the total variables studied.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP, 270AnkG, NF186-FIGQD)"", ""shRNA depletion (AnkG-shRNA, TRIM46-shRNA)""]",""
+"PXD013685","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013685","ExperimentalDesignAgent","number_of_samples","3","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed for the proteomics experiment; it mentions ""N the number of independent experiments"" in the statistical analysis section, but does not provide a specific total count for the MS samples.
+TRUTH CHECK:       There is no evidence in the text to support the value ""3"" as the total number of samples processed in the study.
+COMPLETENESS CHECK: The value is not supported by the text, and therefore the set is not exhaustive or correct.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

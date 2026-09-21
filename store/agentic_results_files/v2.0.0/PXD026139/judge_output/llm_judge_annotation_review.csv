@@ -1,0 +1,166 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD026139","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK:        The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human hematopoietic cells"", ""human genes"", and ""human blood"" in the title and abstract.
+TRUTH CHECK:       ""Homo sapiens"" is the scientific name for humans, making this factually correct.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which exhaustively covers the species described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","BiologicalAgent","organ","blood","blood","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""blood"" is a valid organ/tissue type.
+SOURCE CHECK:      The text explicitly mentions ""human blood and bone marrow"".
+TRUTH CHECK:       The value is factually correct as the study uses human blood.
+COMPLETENESS CHECK: The full set is missing ""bone marrow"", which is also mentioned as a source of the cells/plasma.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""blood"", ""bone marrow""]","blood, bone marrow"
+"PXD026139","BiologicalAgent","cell_type","hematopoietic cells","hematopoietic cells","high","False","","True","True","False","TYPE CHECK:        The candidate value ""hematopoietic cells"" describes a cell lineage/type, which matches the field definition.
+SOURCE CHECK:      The value is explicitly mentioned in the title (""human hematopoietic cells"").
+TRUTH CHECK:       The paper describes a map of proteoforms in human hematopoietic cells.
+COMPLETENESS CHECK: The paper mentions ""21 cell types"" were used; while ""hematopoietic cells"" is the overarching category, the specific 21 types are not listed in the provided text (they are in the supplementary materials). Given the provided text, this is the most accurate general description available.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","BiologicalAgent","disease","normal","normal","medium","False","","True","False","False","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field, as it represents a healthy control state.
+SOURCE CHECK: The text mentions ""distinguish normal graft function from acute rejection,"" implying a ""normal"" state was studied.
+TRUTH CHECK: The paper describes comparing normal graft function against dysfunction, making ""normal"" a factually correct state for the study.
+COMPLETENESS CHECK: The full set contains ""normal"", but the text also explicitly mentions ""acute rejection"" and ""graft dysfunction"" as the disease states being distinguished.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""normal"", ""acute rejection"", ""graft dysfunction""]","normal, acute rejection, graft dysfunction"
+"PXD026139","BiologicalAgent","material_type","human blood and bone marrow","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the source material, but it is a specific anatomical source rather than a broad material class as defined.
+SOURCE CHECK:      The text mentions ""plasma from human blood and bone marrow"" and ""21 cell types"".
+TRUTH CHECK:       The value ""human blood and bone marrow"" is mentioned in the text, but it does not match the required categories for `material_type`.
+COMPLETENESS CHECK: The full set is incomplete and incorrect because it provides the source location instead of the material class (e.g., ""biofluid"", ""primary cells"").
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""primary cells"", ""biofluid"", ""plasma""]",""
+"PXD026139","TechnicalAgent","instrument","Orbitrap Elite","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The provided text (title, abstract, and methods summary) does not mention ""Orbitrap Elite"" or any specific mass spectrometer model.
+TRUTH CHECK:       The value cannot be verified as correct because it is not present in the provided text.
+COMPLETENESS CHECK: The full set is not exhaustive because the information is missing from the source text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD026139","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper text does not mention any isobaric or metabolic labeling methods, making ""label-free"" a safe default.
+TRUTH CHECK:       The value is correct as no labeling is described in the provided text.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this field.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","replicates","21 cell types and plasma","","low","True","number_of_samples","False","False","False","TYPE CHECK:        No, the candidate value describes the number of sample types/groups, not the number of biological replicates per group.
+SOURCE CHECK:      The text mentions ""21 cell types and plasma"", but this refers to the diversity of the sample set, not the replication count.
+TRUTH CHECK:       The value is factually incorrect as a measure of biological replicates.
+COMPLETENESS CHECK:The full set of extracted values is incorrect; ""21 cell types and plasma"" is a sample description and ""22"" is the count of those types, not the number of replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: number_of_samples
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","replicates","22","","low","False","","False","False","False","TYPE CHECK:        No, the candidate value is a numeric count, but the context of the paper does not support this as the number of biological replicates.
+SOURCE CHECK:      The number ""22"" is not mentioned in the text as a replicate count; the text mentions ""21 cell types and plasma"" (which equals 22 samples/groups), but these are distinct biological entities, not replicates of a single condition.
+TRUTH CHECK:       Incorrect. The paper describes 21 cell types plus plasma, which refers to the number of unique sample types/groups, not the number of biological replicates per group.
+COMPLETENESS CHECK: The full set of extracted values is incorrect as it confuses the number of sample groups with the number of replicates.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE","1"
+"PXD026139","ExperimentalDesignAgent","technical_replicates","technical replicates","","low","True","","False","False","True","TYPE CHECK:        The candidate value ""technical replicates"" is the name of the field, not a numeric count as required by the definition.
+SOURCE CHECK:      The phrase ""technical replicates"" is not present in the provided text, nor is a specific number of technical replicates mentioned.
+TRUTH CHECK:       The value is not a factual measurement or count from the experiment.
+COMPLETENESS CHECK: The full set contains a label and a number (""4""), but neither is supported by the provided text.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: technical_replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","technical_replicates","4","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""4"" is a numeric count, which is the correct category for technical_replicates.
+SOURCE CHECK:      The provided text (title, abstract, and methods) does not mention the number of technical replicates.
+TRUTH CHECK:       There is no evidence in the text to support the value ""4"".
+COMPLETENESS CHECK: The full set of extracted values contains a generic phrase and a number, neither of which are supported by the provided text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","experimental_design","reference map of proteoforms across 21 cell types and plasma","reference map of proteoforms across 21 cell types and plasma","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the scope and goal of the study, which aligns with the ""experimental_design"" field's purpose of defining the study type.
+SOURCE CHECK:      The value is directly derived from the title (""A reference map of proteoforms in human hematopoietic cells"") and the abstract (""...across 21 cell types and plasma..."").
+TRUTH CHECK:       The value accurately reflects the nature of the study as a comprehensive reference atlas/map.
+COMPLETENESS CHECK: The full set captures the primary objective of the study as described in the provided text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","factor_value","cell type (21 cell types and plasma)","cell type (21 cell types and plasma)","high","False","","True","True","False","TYPE CHECK:        The candidate value identifies the experimental variable (cell type), which matches the definition of a factor_value.
+SOURCE CHECK:      The text explicitly mentions ""21 cell types and plasma from human blood and bone marrow.""
+TRUTH CHECK:       The value is factually correct based on the abstract.
+COMPLETENESS CHECK: The full set captures the primary experimental variable described in the abstract.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper text does not mention any offline fractionation process; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation is described.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which correctly represents the lack of fractionation.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD026139","ExperimentalDesignAgent","number_of_samples","22","22","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The paper text mentions ""21 cell types and plasma"", which sums to 22 samples.
+TRUTH CHECK:       The calculation (21 cell types + 1 plasma sample) is a reasonable interpretation of the abstract.
+COMPLETENESS CHECK: The full set contains the value 22, which covers the total count of sample types described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

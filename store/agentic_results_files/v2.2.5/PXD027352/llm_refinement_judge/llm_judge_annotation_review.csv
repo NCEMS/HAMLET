@@ -1,0 +1,124 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD027352","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""human cells"", ""human fibroblasts"", and ""SwissProt Human release 2021 01"".
+TRUTH CHECK:       The use of human cell lines (U2OS, RPE1, BJ) and human patient fibroblasts confirms the species is Homo sapiens.
+COMPLETENESS CHECK:    The full set contains ""Homo sapiens"", which covers the primary human-based experiments. While mouse models were also used, the extraction of ""Homo sapiens"" is a correct individual value for the species involved in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD027352","BiologicalAgent","organ","bone","","low","False","","False","False","True","TYPE CHECK:        No, ""bone"" is an organ, but the paper does not describe any samples originating from bone.
+SOURCE CHECK:      The value ""bone"" is not present in the paper text.
+TRUTH CHECK:       The paper uses U2OS (osteosarcoma), RPE1 (retinal pigment epithelial), hTERT BJ (skin fibroblasts), and mouse hippocampal neurons; none of these are described as ""bone"" tissue/organ.
+COMPLETENESS CHECK:The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD027352","BiologicalAgent","cell_type","osteosarcoma cell","","low","False","","False","False","False","TYPE CHECK:        The candidate value ""osteosarcoma cell"" describes a cell lineage/type, which fits the definition of `cell_type`.
+SOURCE CHECK:      The paper mentions ""U2OS cells"" multiple times. U2OS is a well-known human osteosarcoma cell line. However, the field `cell_type` refers to the primary cell type or lineage.
+TRUTH CHECK:       While U2OS are osteosarcoma cells, the paper explicitly identifies them as a ""cell line"" in the ""Cell lines and culture"" section. In proteomics metadata, when a specific immortalized line is used, it should be captured in `cell_line`. The `cell_type` field is typically for primary cells or the general lineage. More importantly, the paper also uses ""fibroblasts"" and ""hippocampal neurons,"" which are explicitly stated.
+COMPLETENESS CHECK:    The full set `[""osteosarcoma cell""]` is incomplete as it misses ""fibroblasts"" and ""neurons"" which are explicitly mentioned in the text.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""fibroblasts"", ""neurons""]",""
+"PXD027352","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","True","TYPE CHECK:        Yes, the candidate value is a disease name, which matches the field definition.
+SOURCE CHECK:      The term ""osteosarcoma"" does not appear in the provided text. While U2OS cells (used in the study) are derived from osteosarcoma, the paper does not explicitly mention the disease state of the cells or the patients.
+TRUTH CHECK:       The value is not explicitly stated in the text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD027352","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK:      The paper explicitly mentions the use of several cell lines, including U2OS, hTERT BJ, and hTERT RPE1.
+TRUTH CHECK:       The use of cell lines is factually correct for the experiments described.
+COMPLETENESS CHECK: The full set of extracted values only contains ""cell line"", but the paper also uses primary cells (human fibroblasts from skin biopsies and mouse hippocampal neurons). Therefore, the set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cell line"", ""primary cells""]","cell line, primary cells"
+"PXD027352","BiologicalAgent","cell_line","U2OS","U2OS","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""U2OS"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""U2OS"" is explicitly mentioned multiple times in the ""Cell lines and culture"" and ""Results"" sections.
+TRUTH CHECK:       The value is factually correct as U2OS cells were used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses ""hTERT BJ"", ""hTERT RPE1"", and ""hTERT RPE1 p53 KO"" cell lines.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""U2OS"", ""hTERT BJ"", ""hTERT RPE1"", ""hTERT RPE1 p53 KO""]","U2OS, hTERT BJ, hTERT RPE1, hTERT RPE1 p53 KO"
+"PXD027352","TechnicalAgent","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","TYPE CHECK:        The candidate value is a valid MS acquisition scheme.
+SOURCE CHECK:      The text explicitly states, ""The mass spectrometer was operated in a data-dependent acquisition mode"".
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value ""trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK:      The text explicitly states in the Mass spectrometry analysis section: ""Samples were digested with 2 μg trypsin"".
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only protease mentioned for digestion in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","TechnicalAgent","enrichment_method","Streptavidin affinity capture","Streptavidin affinity capture","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a method used to enrich specific proteins (biotinylated ones) before mass spectrometry, which matches the definition of an enrichment method.
+SOURCE CHECK:      The text explicitly states, ""Streptavidin affinity capture of biotinylated proteins coupled to mass spectrometry identified all augmin subunits...""
+TRUTH CHECK:       The value is factually correct as described in the BioID/Mass spectrometry analysis sections of the paper.
+COMPLETENESS CHECK: The full set of extracted values contains the only enrichment method mentioned for the MS experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""Orbitrap Fusion Lumos™ Tribrid (Thermo Scientific)"" in the Mass spectrometry analysis section.
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD027352","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the mass spectrometry analysis section; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The value is factually correct as the experiment used a standard BioID/streptavidin capture followed by LC-MS/MS without mentioned labels.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

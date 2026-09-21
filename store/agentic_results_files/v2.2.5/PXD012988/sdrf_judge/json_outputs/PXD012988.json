@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD012988",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "C2C12",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Unable to evaluate.",
+        "SOURCE_CHECK": "N/A",
+        "TRUTH_CHECK": "N/A",
+        "COMPLETENESS_CHECK": "N/A"
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "myoblast",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"myoblast\" is a cell type, which matches the field definition.",
+        "SOURCE_CHECK": "The paper states that the \"gold standard spike-in sample set (GS)\" used \"C2C12 cell lysate as constant background.\" C2C12 is a well-known mouse myoblast cell line.",
+        "TRUTH_CHECK": "C2C12 cells are myoblasts; therefore, \"myoblast\" is a factually correct description of the cell type for the MS sample.",
+        "COMPLETENESS_CHECK": "The full set contains only \"myoblast,\" which accurately describes the lineage of the C2C12 cells used as the protein matrix for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes a gold standard spike-in sample set using C2C12 cell lysate as a background matrix; there is no mention of any disease or pathology.",
+        "TRUTH_CHECK": "Since the study is not a disease study and uses a standard cell line as a background, the safe default \"normal\" is correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is sufficient for a non-disease study."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Mus musculus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"C2C12 cell lysate\" as the constant background and \"mouse cell lysate,\" and uses the \"UniProt reference mouse proteome.\"",
+        "TRUTH_CHECK": "C2C12 is a well-known mouse myoblast cell line; the text confirms the use of mouse proteins and proteomes.",
+        "COMPLETENESS_CHECK": "The full set contains \"Mus musculus,\" which correctly identifies the primary background species used in the MS samples."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "spike-in protein concentration (5 levels)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (protein concentration levels) being manipulated, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper explicitly states that a \"gold standard spike-in sample set (GS) consisting of five samples\" was prepared with \"varying concentrations of each spike-in protein\" (1.25 to 125 nm).",
+        "TRUTH_CHECK": "The value is factually correct as the study design centers on comparing five different spike-in concentration levels.",
+        "COMPLETENESS_CHECK": "The full set includes the experimental variable and a \"normal\" (safe default) value; together they cover the design of the spike-in experiment and the background matrix."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "gold standard spike-in sample set",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value, often used as a safe default for healthy or disease-free states.",
+        "SOURCE_CHECK": "The paper describes a \"gold standard spike-in sample set\" using C2C12 cell lysate as a \"constant background\" and \"mouse cell lysate\" as a \"complex biological sample.\" There is no mention of a \"normal\" vs \"disease\" contrast or a \"normal\" control group in the experimental design.",
+        "TRUTH_CHECK": "The study is a technical benchmark of DIA vs DDA using spike-ins; it is not a disease study. While \"normal\" is a safe default for disease fields when subjects are healthy, it is not applicable here as the \"factor\" under study is the concentration of spike-in proteins, not a biological health state.",
+        "COMPLETENESS_CHECK": "The full set includes the actual experimental variable (spike-in concentration), but \"normal\" is an irrelevant addition."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-independent acquisition",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "data-independent acquisition, data-dependent acquisition",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly mentioned throughout the paper as the primary method used for the proteomics analysis of the gold standard spike-in sample set.",
+        "TRUTH_CHECK": "The paper describes the use of both DDA and DIA, but the core of the study focuses on the performance of data-independent acquisition (DIA).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper explicitly describes the use of both DDA and DIA for the analysis of the samples."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"In-solution Tryptic Digestion\" section: \"proteins were alkylated with iodoacetamide\".",
+        "TRUTH_CHECK": "The value is factually correct as the alkylation reagent used in the sample preparation for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"In-solution Tryptic Digestion\" and \"Protein Fractionation\" sections as the enzyme used for digestion.",
+        "TRUTH_CHECK": "The paper states that digestion was carried out using trypsin.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned for the MS samples."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"HCD fragmentation\" in the Mass Spectrometric Acquisition section.",
+        "TRUTH_CHECK": "\"HCD\" (Higher-energy Collisional Dissociation) is the specific implementation of beam-type collision-induced dissociation used in Orbitrap instruments like the Q Exactive HF. While technically accurate in a general sense, the paper explicitly uses the term \"HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly identifies the fragmentation method used."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive HF",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometric Acquisition\" section as the instrument used for the LC-MS/MS analysis of the samples.",
+        "TRUTH_CHECK": "The value \"Q Exactive HF\" is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer model mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification approaches\" in the Results section.",
+        "TRUTH_CHECK": "The paper describes a spike-in experiment using C2C12 lysate and purified proteins without any mention of TMT, iTRAQ, SILAC, or other chemical/metabolic labeling.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"label free\", which accurately describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper states that a \"Q Exactive HF mass spectrometer\" was used; the Q Exactive series is well-known to use an Orbitrap mass analyzer.",
+        "TRUTH_CHECK": "The value is factually correct based on the instrument model mentioned.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the study."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "monohydroxylated residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": "oxidation (M)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a type of protein modification.",
+        "SOURCE_CHECK": "The value \"monohydroxylated residue\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper mentions \"oxidation (M)\" as a variable modification, but it does not use the term \"monohydroxylated residue\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several terms not explicitly mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "2-pyrrolidone-5-carboxylic acid (Gln)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text explicitly mentions \"Gln->pyro-Glu (N-terminal Q)\" as a variable modification.",
+        "TRUTH_CHECK": "\"2-pyrrolidone-5-carboxylic acid\" is the chemical name for pyroglutamic acid (pyro-Glu). The paper explicitly lists \"Gln->pyro-Glu (N-terminal Q)\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (oxidation, deamidation, carbamidomethylation), but the candidate value itself is a correct representation of one of the listed modifications."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "deamidated residue",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"deamidated residue\" is a post-translational modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the paper text under \"Spectral Library Generation,\" which describes the search settings for the MS analysis.",
+        "TRUTH_CHECK": "The paper explicitly lists \"deamidated (NQ)\" as a variable modification used in the searches. \"Deamidated residue\" is a standard synonym/description for this modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes other modifications mentioned in the text (oxidation, pyro-Glu, etc.), but \"deamidated residue\" is one of the correct individual entries."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "iodoacetamide derivatized residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification of a residue, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The paper mentions the use of \"iodoacetamide\" as an alkylation reagent in the methods, but it does not use the phrase \"iodoacetamide derivatized residue\" to describe the searched modification.",
+        "TRUTH_CHECK": "The paper explicitly states that \"as fixed modification, only aarbamidomethylation at C was set\". \"Iodoacetamide derivatized residue\" is an inference from the reagent used, not the name of the modification searched in the software.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains inferred values and misses the explicitly stated fixed modification."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"In-solution Tryptic Digestion\" section: \"After reduction with dithiothreitol (DTT, final concentration of 5 mm)...\"",
+        "TRUTH_CHECK": "The value is factually correct as it was the reagent used for reduction in the sample preparation for the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set contains the only reduction reagent mentioned in the text."
+      }
+    }
+  ]
+}

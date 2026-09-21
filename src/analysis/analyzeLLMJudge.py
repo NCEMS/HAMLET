@@ -1,6 +1,6 @@
 """Analyze HAMLET LLM judge outputs across all available PXDs.
 
-This script scans ``results/PXD*/`` for the post-judge CSV and matching
+This script scans ``results/PXD*/`` for the final-SDRF judge CSV and matching
 final SDRF file, then builds a combined table and publication-style
 distribution plots for the judge metrics.
 
@@ -18,7 +18,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-JUDGE_RELATIVE_PATH = Path(
+FINAL_JUDGE_RELATIVE_PATH = Path("sdrf_judge/llm_judge_per_paper.csv")
+HISTORICAL_FINAL_JUDGE_RELATIVE_PATH = Path(
     "agentic_metadata/metadata_extraction_output/post_judge/llm_judge_per_paper.csv"
 )
 SDRF_RELATIVE_TEMPLATE = "agentic_metadata/{pxd}.sdrf.tsv"
@@ -72,15 +73,19 @@ def read_sdrf_file(path: Path) -> pd.DataFrame | None:
 
 
 def discover_judge_file(pxd_dir: Path) -> tuple[Path | None, str]:
-    exact_path = pxd_dir / JUDGE_RELATIVE_PATH
+    exact_path = pxd_dir / FINAL_JUDGE_RELATIVE_PATH
     if exact_path.exists():
-        return exact_path, "exact_post_judge"
+        return exact_path, "final_sdrf_judge"
+
+    historical_path = pxd_dir / HISTORICAL_FINAL_JUDGE_RELATIVE_PATH
+    if historical_path.exists():
+        return historical_path, "historical_final_sdrf_judge"
 
     nested_post_judge = sorted(
         pxd_dir.glob("agentic_metadata/**/post_judge/llm_judge_per_paper.csv")
     )
     if nested_post_judge:
-        return nested_post_judge[0], "nested_post_judge"
+        return nested_post_judge[0], "historical_nested_final_sdrf_judge"
 
     return None, "missing"
 
@@ -96,7 +101,7 @@ def build_summary_row(
 ) -> dict[str, object]:
     row: dict[str, object] = {
         "pxd": pxd,
-        "has_post_judge": exact_judge_path.exists(),
+        "has_final_sdrf_judge": exact_judge_path.exists(),
         "judge_source": judge_source,
         "has_any_judge": judge_source != "missing",
         "has_sdrf": sdrf_path.exists(),
@@ -133,9 +138,9 @@ def summarize_presence(summary_df: pd.DataFrame) -> pd.DataFrame:
     categories = pd.Series(
         [
             "both_present"
-            if row.has_post_judge and row.has_sdrf
+            if row.has_final_sdrf_judge and row.has_sdrf
             else "judge_only"
-            if row.has_post_judge
+            if row.has_final_sdrf_judge
             else "sdrf_only"
             if row.has_sdrf
             else "neither_present"
@@ -207,7 +212,7 @@ def plot_presence_summary(summary_df: pd.DataFrame, outpath: Path) -> None:
         edgecolor="white",
         linewidth=0.8,
     )
-    ax.set_title("Post-judge and SDRF file availability")
+    ax.set_title("Final SDRF judge and SDRF file availability")
     ax.set_ylabel("PXD count")
     ax.set_xlabel("")
     ax.tick_params(axis="x", rotation=20)
@@ -235,7 +240,7 @@ def main() -> None:
 
     for pxd_dir in pxd_dirs:
         pxd = pxd_dir.name
-        exact_judge_path = pxd_dir / JUDGE_RELATIVE_PATH
+        exact_judge_path = pxd_dir / FINAL_JUDGE_RELATIVE_PATH
         judge_path, judge_source = discover_judge_file(pxd_dir)
         sdrf_path = pxd_dir / SDRF_RELATIVE_TEMPLATE.format(pxd=pxd)
 
@@ -278,22 +283,22 @@ def main() -> None:
         )
 
     total_pxds = len(summary_df)
-    with_judge = int(summary_df["has_post_judge"].sum())
+    with_judge = int(summary_df["has_final_sdrf_judge"].sum())
     with_any_judge = int(summary_df["has_any_judge"].sum())
     with_sdrf = int(summary_df["has_sdrf"].sum())
-    with_both = int((summary_df["has_post_judge"] & summary_df["has_sdrf"]).sum())
-    with_alt_judge = int(((~summary_df["has_post_judge"]) & summary_df["has_any_judge"]).sum())
+    with_both = int((summary_df["has_final_sdrf_judge"] & summary_df["has_sdrf"]).sum())
+    with_alt_judge = int(((~summary_df["has_final_sdrf_judge"]) & summary_df["has_any_judge"]).sum())
     missing_judge = total_pxds - with_judge
 
     print("LLM judge analysis summary")
     print(f"  results dir: {results_dir}")
     print(f"  PXDs scanned: {total_pxds}")
-    print(f"  with post_judge CSV: {with_judge}")
+    print(f"  with final SDRF judge CSV: {with_judge}")
     print(f"  with any judge CSV: {with_any_judge}")
     print(f"  with alternate judge CSV only: {with_alt_judge}")
     print(f"  with SDRF TSV: {with_sdrf}")
     print(f"  with both files: {with_both}")
-    print(f"  missing post_judge CSV: {missing_judge}")
+    print(f"  missing final SDRF judge CSV: {missing_judge}")
 
     if not summary_df.empty and summary_df["judge_rows"].sum() > 0:
         accurate_pxds = int((summary_df["fraction_accuracy_1"] == 1.0).sum())

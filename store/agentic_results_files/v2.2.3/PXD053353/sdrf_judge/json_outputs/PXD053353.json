@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD053353",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T, Hela, 3D4/21, PK-15, BHK-21",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HEK293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell lines, which matches the category for the `cell_line` field.",
+        "SOURCE_CHECK": "While all these cell lines are mentioned in the paper, only HEK293T was used for the LC-MS/MS experiment; the others (Hela, 3D4/21, PK-15, BHK-21) were used for luciferase assays, qPCR, immunofluorescence, or virus replication.",
+        "TRUTH_CHECK": "The value is factually incorrect because it includes multiple cell lines that were not analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it conflates all cell lines used in the study with the specific cell line used for the MS sample."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a cell type/lineage, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment (LC-MS/MS) was performed on lysates from HEK293T cells (co-transfected with Flag-STING and Myc-US2), as stated in the \"LC-MS/MS\" section of the methods.",
+        "TRUTH_CHECK": "HEK293T cells are derived from human embryonic kidney cells; while they are often described as \"epithelial-like,\" their primary lineage is renal/kidney epithelial. However, the candidate value \"epithelial cell\" is a correct general lineage for this cell line.",
+        "COMPLETENESS_CHECK": "The full set contains only \"epithelial cell,\" which covers the lineage of the only cell line used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The MS experiment used HEK293T cells (co-transfected with Flag-STING and Myc-US2), which are not derived from a specific disease state in this context.",
+        "TRUTH_CHECK": "Since the study is investigating a viral protein's mechanism in a cell line model rather than a disease-specific patient cohort, the safe default \"normal\" is applicable.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is sufficient for this experimental context."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Yes, \"kidney\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The value is not present in the text; the MS experiment used HEK293T cells.",
+        "TRUTH_CHECK": "HEK293T cells are derived from human embryonic kidney cells, making \"kidney\" a correct inference for the organ of origin.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which correctly describes the origin of the MS sample."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus, Sus scrofa",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of species names, which matches the required category for this field.",
+        "SOURCE_CHECK": "The paper describes experiments using HEK293T (human), C57BL/6 mice (mouse), and PK-15/3D4/21 cells (pig/Sus scrofa). However, the LC-MS/MS experiment specifically used HEK293T cells (human).",
+        "TRUTH_CHECK": "While multiple species are used in the overall study, the metadata for the proteomics experiment must refer to the biological material actually analysed by mass spectrometry. The \"LC-MS/MS\" section explicitly states that HEK293T cells were used.",
+        "COMPLETENESS_CHECK": "The full set includes species that were not part of the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (Myc-US2, control)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental groups/conditions (treatment) being compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the \"LC-MS/MS\" section explicitly states that HEK293T cells were co-transfected with \"expression plasmids for Flag-STING and Myc-US2 or control\" before immunoprecipitation and MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as the study compares the effect of Myc-US2 expression against a control in the MS experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the specific treatment groups for the MS experiment and a \"normal\" default; together they cover the experimental design described for the proteomics analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor value, specifically as a safe default for disease or health status.",
+        "SOURCE_CHECK": "The value is not explicitly mentioned, but \"normal\" is a safe default for healthy/control subjects in a study where no disease state is specified for the baseline.",
+        "TRUTH_CHECK": "In the context of the MS experiment (HEK293T cells co-transfected with Myc-US2 or control), the \"control\" group represents the baseline/normal state.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific treatment contrast and the baseline state, covering the experimental design."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions that an \"LC-MS/MS study\" was conducted by \"The Jingjie PTM BioLab (Hangzhou) Co. Inc.\", but it does not explicitly state the acquisition method (e.g., DDA or DIA) used.",
+        "TRUTH_CHECK": "There is no mention of \"data-dependent acquisition\" or any other specific acquisition scheme in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the source."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text; the LC-MS/MS section only states that the study was conducted by \"The Jingjie PTM BioLab (Hangzhou) Co. Inc.\" without specifying the fragmentation method.",
+        "TRUTH_CHECK": "The value cannot be verified as correct because it is absent from the text.",
+        "COMPLETENESS_CHECK": "The full set is insufficient as the value is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions that an LC-MS/MS study was conducted by \"The Jingjie PTM BioLab (Hangzhou) Co. Inc.\", but the text does not specify the instrument model used.",
+        "TRUTH_CHECK": "The value \"Q Exactive Plus\" is not mentioned anywhere in the provided paper text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes an LC-MS/MS experiment conducted by a core facility (Jingjie PTM BioLab) but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods are described."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions that LC-MS/MS was conducted by \"The Jingjie PTM BioLab (Hangzhou) Co. Inc.\", but it does not specify the instrument model or the mass analyzer used.",
+        "TRUTH_CHECK": "There is no mention of an Orbitrap or any other specific mass analyzer in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the provided source."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQR)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Deamidation (NQR)\" is the correct category (a protein modification) for this field.",
+        "SOURCE_CHECK": "The term \"Deamidation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The candidate value is not supported by the text; there is no mention of deamidation being searched or analyzed in the LC-MS/MS experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper mentions \"LC-MS/MS\" was conducted by a third party (Jingjie PTM BioLab), but it does not list the specific search modifications used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text does not mention \"Oxidation\", \"Hydroxylation\", or any specific search parameters for the LC-MS/MS experiment.",
+        "TRUTH_CHECK": "The value is not supported by the provided text; the paper mentions that LC-MS/MS was conducted by a third-party lab (Jingjie PTM BioLab) but does not list the modifications searched.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Deamidation\" is the correct category for a protein modification.",
+        "SOURCE_CHECK": "The word \"Deamidation\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper discusses ubiquitination, but not deamidation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification, which fits the category for the modification field.",
+        "SOURCE_CHECK": "The term \"Iodoacetamide derivative\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; while iodoacetamide is a common alkylation reagent, the specific modification name must be explicitly written in the text to be accepted.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the provided text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation or Hydroxylation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Oxidation\" or \"Hydroxylation\" as modifications searched during the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    }
+  ]
+}

@@ -56,8 +56,11 @@ for rowi, row in master.iterrows():
         print(f"{pxd} does not have metadata_extraction_output")
     master.at[rowi, 'HAMLETmeta'] = meta_results
     
-    ## Check if there is a store/agentic_results_files/PXD#######/post_judge/llm_judge_per_paper.csv file and set judge_accuracy = True if it exists, False if not
-    judge_accuracy = (store_path / "agentic_results_files" / pxd / "post_judge" / "llm_judge_per_paper.csv").exists()
+    ## The final SDRF judge is required for current releases; retain the historical path for archived records.
+    judge_accuracy = any((store_path / "agentic_results_files" / pxd / relative_path).exists() for relative_path in (
+        Path("sdrf_judge/llm_judge_per_paper.csv"),
+        Path("metadata_extraction_output/post_judge/llm_judge_per_paper.csv"),
+    ))
     if judge_accuracy:
         print(f"{pxd} has llm_judge_per_paper.csv")
     else:

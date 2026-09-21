@@ -22,8 +22,8 @@ cd HAMLET
 ```
 
 `src/analysis/Figure1/data/` (crosswalk table, `GoldenAnnotations`,
-`Select_27_Pubs`) and `store/hamlet_sdrfs/*.sdrf.tsv` are already tracked in
-git, so no extra setup is needed for those.
+`Select_27_Pubs`) is already tracked in git. SDRFs are stored by release under
+`store/hamlet_sdrfs/v<version>/`.
 
 ## 2. Get `pride_survey`
 

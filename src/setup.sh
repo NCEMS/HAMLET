@@ -24,7 +24,44 @@ INSTALL_DIR="${TMPDIR:-/tmp}/miniconda_installer"
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # ============================================
-# Step 1: Check if conda is available
+# Step 1: Initialize required submodules
+# ============================================
+RUNASSESSOR_SCRIPT="$PROJECT_ROOT/submodules/runassessor/src/runassessor.py"
+AGENTIC_METADATA_SCRIPT="$PROJECT_ROOT/src/agentic-metadata/main.py"
+if ! command -v git &> /dev/null; then
+    echo "ERROR: git is required to initialize HAMLET submodules" >&2
+    exit 1
+fi
+
+if ! git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "ERROR: HAMLET must be cloned with git so required submodules can be initialized" >&2
+    exit 1
+fi
+
+echo "✓ Initializing required submodule: runAssessor"
+if ! git -C "$PROJECT_ROOT" submodule update --init --recursive submodules/runassessor; then
+    echo "ERROR: Failed to initialize the runAssessor submodule" >&2
+    exit 1
+fi
+if [[ ! -f "$RUNASSESSOR_SCRIPT" ]]; then
+    echo "ERROR: runAssessor entrypoint was not found after submodule initialization: $RUNASSESSOR_SCRIPT" >&2
+    exit 1
+fi
+echo "✓ runAssessor submodule ready"
+
+echo "✓ Initializing required submodule: agentic-metadata"
+if ! git -C "$PROJECT_ROOT" submodule update --init --recursive --checkout src/agentic-metadata; then
+    echo "ERROR: Failed to initialize src/agentic-metadata. Sign in to GitHub over HTTPS with an account that can access CompOmics/agentic-metadata, then rerun setup." >&2
+    exit 1
+fi
+if [[ ! -f "$AGENTIC_METADATA_SCRIPT" ]]; then
+    echo "ERROR: agentic-metadata entrypoint was not found after submodule initialization: $AGENTIC_METADATA_SCRIPT" >&2
+    exit 1
+fi
+echo "✓ agentic-metadata submodule ready"
+
+# ============================================
+# Step 2: Check if conda is available
 # ============================================
 if command -v conda &> /dev/null; then
     echo "✓ Conda found: $(conda --version)"
@@ -59,7 +96,7 @@ else
 fi
 
 # ============================================
-# Step 2: Source conda environment
+# Step 3: Source conda environment
 # ============================================
 # Detect actual conda installation location (handles system-wide installs like Cyverse)
 CONDA_PREFIX="$(conda info --base)"
@@ -72,7 +109,7 @@ source "$CONDA_PREFIX/etc/profile.d/conda.sh"
 echo "✓ Conda initialized: $CONDA_PREFIX"
 
 # ============================================
-# Step 3: Create/Update Conda Environments
+# Step 4: Create/Update Conda Environments
 # ============================================
 create_or_update_env() {
     local env_file="$1"

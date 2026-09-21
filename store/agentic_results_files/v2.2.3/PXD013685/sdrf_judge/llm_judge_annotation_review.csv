@@ -1,0 +1,256 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD013685","","strict","Biological","cell_line","HEK293T, COS-7, U2OS","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
+SOURCE CHECK: The paper mentions HEK293T, COS-7, and U2OS; however, only HEK293T was used to produce the proteins for the MS experiment (""HEK293T cells were transfected... harvested 2 days post transfection... purified using Strep(II)-Strep-Tactin affinity purification... After streptavidin purification... analyzed with... Orbitrap Q-Exactive mass spectrometer""). COS-7 and U2OS were used exclusively for imaging and functional assays.
+TRUTH CHECK: Only HEK293T is the correct source for the MS sample; COS-7 and U2OS are unrelated to the proteomics workflow.
+COMPLETENESS CHECK: The full set is incorrect because it includes cell lines not used for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: HEK293T","HEK293T"
+"PXD013685","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes a basic research study on the assembly of the axon initial segment using cell lines and primary neurons without any mention of a disease state.
+TRUTH CHECK: Since the study is not a disease study and uses standard biological models, ""normal"" is a correct safe default.
+COMPLETENESS CHECK: The full set contains this single safe default, which is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Biological","organ","kidney","kidney","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The MS sample was derived from HEK293T cells (used for protein purification via Strep-Tactin affinity purification), which are human embryonic kidney cells.
+TRUTH CHECK: The value is factually correct as HEK293T cells originate from the kidney.
+COMPLETENESS CHECK: The full set contains ""kidney"", which correctly identifies the organ of origin for the material analyzed by MS.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Biological","species","Homo sapiens, Rattus norvegicus","","low","False","","False","True","False","False","","","wrong_value","TYPE CHECK: The candidate value contains organism names, which matches the species field definition.
+SOURCE CHECK: The paper describes MS analysis of proteins purified from HEK293T cells (Human/Homo sapiens) and also describes extensive experiments using rat hippocampal neurons (Rattus norvegicus).
+TRUTH CHECK: The ""Mass Spectrometry"" section explicitly states the database search was performed against a ""Swiss-Prot database (taxonomy human)"", confirming the MS sample was human. While rats were used for the bulk of the cellular imaging and functional assays, there is no mention of rat samples being analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set includes both human and rat, but only human is correct for the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD013685","","strict","ExperimentalDesign","factor_value","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the specific protein constructs used as the experimental variable, which is a correct category for a factor_value.
+SOURCE CHECK: The value is present in the ""Protein Purification for In Vitro Reconstitution Assays"" and ""Mass Spectrometry"" sections, referring to the proteins purified and subsequently analyzed by MS.
+TRUTH CHECK: The paper explicitly mentions the purification and analysis of GFP-TRIM46, 480AnkG-GFP, and 480AnkG-NN-GFP.
+COMPLETENESS CHECK: The full set of extracted values includes the constructs and a ""normal"" (likely referring to the control/wild-type state), which together cover the experimental variables for the MS analysis.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","ExperimentalDesign","factor_value","normal","protein construct (GFP-TRIM46, 480AnkG-GFP, 480AnkG-NN-GFP)","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, often used as a safe default for healthy/control states.
+SOURCE CHECK: The paper describes the purification of various protein constructs (GFP-TRIM46, 480AnkG-GFP, etc.) for MS analysis, but it does not describe a ""normal"" or ""healthy"" biological sample group as part of the proteomics experiment.
+TRUTH CHECK: The MS experiment was performed on purified proteins (streptavidin purification of constructs expressed in HEK293T cells), not on ""normal"" vs ""disease"" biological samples.
+COMPLETENESS CHECK: The full set of extracted values includes the actual protein constructs used, but ""normal"" is an irrelevant addition.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a mass spectrometry acquisition scheme, which matches the field definition.
+SOURCE CHECK: The value is explicitly stated in the ""Mass Spectrometry"" section: ""The mass spectrometer was used in a data-dependent mode"".
+TRUTH CHECK: The value ""data-dependent acquisition"" is a correct expansion/synonym of ""data-dependent mode"".
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass Spectrometry"" section of the methods (""Trypsin was specified as enzyme"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper text explicitly mentions ""HCD fragmentation"" in the Mass Spectrometry section.
+TRUTH CHECK: ""HCD"" (Higher-energy Collisional Dissociation) is a specific form of beam-type collision-induced dissociation; however, the paper uses the standard abbreviation ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, which is a synonym for the method described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","instrument","Orbitrap Q-Exactive","Orbitrap Q-Exactive","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass Spectrometry"" section of the methods (""coupled to an Orbitrap Q-Exactive mass spectrometer"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: This is the only mass spectrometer mentioned in the paper, so the extraction is complete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper describes a proteomics experiment using an Orbitrap Q-Exactive, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling method is described, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper explicitly mentions an ""Orbitrap Q-Exactive mass spectrometer"" in the Mass Spectrometry section.
+TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap Q-Exactive.
+COMPLETENESS CHECK: The full set of extracted values contains the only mass analyzer mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","monohydroxylated residue","","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""monohydroxylated residue"" is a type of protein modification, which matches the field definition.
+SOURCE CHECK: The term ""monohydroxylated residue"" does not appear in the paper text.
+TRUTH CHECK: The paper explicitly mentions ""oxidation of methionine"" as a variable modification, but it does not mention ""monohydroxylated residue"".
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""dihydroxy"", ""Deamidation"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","iodoacetamide derivatized residue","","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The phrase ""iodoacetamide derivatized residue"" does not appear in the text; the paper mentions ""Carbamidomethylation of cysteines"" in the Mass Spectrometry section.
+TRUTH CHECK: The value is not explicitly stated in the paper; while iodoacetamide is a common reagent for carbamidomethylation, the rules strictly forbid inferring modifications from reagents or using terms not literally present.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""dihydroxy"", ""Deamidation"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","Deamidation (NQR)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Deamidation (NQR)"" is not present in the paper text.
+TRUTH CHECK: The paper mentions ""Carbamidomethylation of cysteines"" and ""oxidation of methionine"", but does not mention deamidation.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""dihydroxy"", ""Iodoacetamide derivative"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","dihydroxy (CEFIKLMPRUVWY)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""dihydroxy"" or any mention of a dihydroxy modification is not present in the paper text.
+TRUTH CHECK: The value is not supported by the text; the only modifications explicitly mentioned are ""Carbamidomethylation of cysteines"" and ""oxidation of methionine"".
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications (e.g., ""Deamidation"", ""Iodoacetamide derivative"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The value is not present in the paper text; the only modifications mentioned are ""Carbamidomethylation of cysteines"" and ""oxidation of methionine"".
+TRUTH CHECK: The candidate value is factually incorrect as it is not the modification searched in this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text; the text only mentions ""Carbamidomethylation of cysteines"" and ""oxidation of methionine"".
+TRUTH CHECK: The value is factually incorrect as it is not the modification described in the paper.
+COMPLETENESS CHECK: The full set of extracted values is largely hallucinated and does not reflect the actual modifications stated in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","Deamidation","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Deamidation"" is the correct category (a protein modification).
+SOURCE CHECK: The value is not present in the paper text.
+TRUTH CHECK: The paper does not mention deamidation as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications (e.g., ""dihydroxy"", ""Iodoacetamide derivative"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","dihydroxy","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""dihydroxy"" describes a protein modification, which matches the field definition.
+SOURCE CHECK: The term ""dihydroxy"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid modification for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications (e.g., ""Deamidation"", ""Iodoacetamide derivative"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD013685","","strict","Technical","modification","Oxidation or Hydroxylation","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper text explicitly mentions ""oxidation of methionine was set as a variable modification"" in the Mass Spectrometry section.
+TRUTH CHECK: The paper mentions ""oxidation of methionine"", but it does not mention ""hydroxylation"" or a general ""Oxidation or Hydroxylation"" search.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""dihydroxy"", ""Deamidation"") that are not mentioned anywhere in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Oxidation (M)","Oxidation (M)"
+"PXD013685","","strict","Technical","modification","Iodoacetamide derivative","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The phrase ""Iodoacetamide derivative"" does not appear in the paper text; the text mentions ""Carbamidomethylation of cysteines"" and ""oxidation of methionine"".
+TRUTH CHECK: The value is not supported by the text. While iodoacetamide is a common reagent for carbamidomethylation, the specific phrase ""Iodoacetamide derivative"" is not used.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""dihydroxy"", ""Deamidation"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

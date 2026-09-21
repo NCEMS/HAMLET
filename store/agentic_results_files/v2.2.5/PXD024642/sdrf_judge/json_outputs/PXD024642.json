@@ -1,0 +1,328 @@
+{
+  "paper_id": "PXD024642",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HEK293T\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the paper; specifically, the \"Tandem affinity purification and mass spectrometry\" section states that \"ZZ-VAMP8-Flag stable expressing HEK293T cell pellets were lysed... for mass spectrometry (MS) analysis\".",
+        "TRUTH_CHECK": "The candidate value is factually correct as it identifies the cell line used to generate the material analyzed by MS.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"HEK293T\", which is the only cell line used for the MS experiment described in the text."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The MS experiment was performed on HEK293T cells; there is no mention of a disease state for these cells or the study overall.",
+        "TRUTH_CHECK": "According to the field definitions, \"normal\", \"healthy\", or \"no disease\" are safe defaults when subjects are not part of a disease study.",
+        "COMPLETENESS_CHECK": "The value \"normal\" is a complete representation of the disease state for this study."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "liver",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "kidney",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"liver\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The paper mentions mouse liver in the context of AAV9 injections and lipid droplet accumulation, but the actual mass spectrometry (MS) analysis was performed on ZZ-VAMP8-Flag stable expressing HEK293T cell pellets.",
+        "TRUTH_CHECK": "The MS sample was derived from HEK293T cells, not from liver tissue.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it identifies the wrong source material for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "The paper describes mass spectrometry analysis of proteins from HEK293T cells (human) and also performs in vivo experiments and immunoblotting on mouse liver (Mus musculus). However, the specific \"Tandem affinity purification and mass spectrometry\" section explicitly describes the use of \"ZZ-VAMP8-Flag stable expressing HEK293T cell pellets,\" which are human. While mice are used in the study, the MS experiment itself was performed on human cells.",
+        "TRUTH_CHECK": "The MS sample was derived from HEK293T cells, which are Homo sapiens. The inclusion of Mus musculus is incorrect because the MS analysis was not performed on mouse samples.",
+        "COMPLETENESS_CHECK": "The full set includes both species, but since one is not part of the MS experiment, it is factually incorrect."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "protein (VAMP8), mTORC1 inhibition, SCFD1 expression level",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental variables/factors (protein, inhibition, expression level), which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The values are present in the paper; however, the MS experiment specifically used \"ZZ-VAMP8-Flag stable expressing HEK293T cell pellets\" for tandem affinity purification to identify VAMP8-associated proteins.",
+        "TRUTH_CHECK": "While the paper studies mTORC1 inhibition and SCFD1 expression levels in various assays (immunoblotting, microscopy, etc.), the specific mass spectrometry experiment described in the \"Tandem affinity purification and mass spectrometry\" section was used to identify proteins interacting with VAMP8. The factors \"mTORC1 inhibition\" and \"SCFD1 expression level\" are variables in the broader study, but not the factors applied to the samples that were actually analyzed by MS.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is a mix of general study variables and a safe default (\"normal\"), but it does not accurately reflect the specific experimental design of the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (mirroring a healthy/disease-free state).",
+        "SOURCE_CHECK": "The value \"normal\" is not explicitly mentioned in the text, but the study uses healthy C57BL/6J mice and standard cell lines as baseline controls for the experimental conditions (mTORC1 inhibition, VAMP8 mutants).",
+        "TRUTH_CHECK": "Under the \"safe defaults\" rule, \"normal\", \"healthy\", or \"disease free\" are correct when subjects are not part of a disease study or serve as the baseline.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the specific experimental variables (mTORC1 inhibition, etc.) and the baseline state (\"normal\"), covering the experimental design."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"data-independent acquisition\" in the text.",
+        "TRUTH_CHECK": "While the use of MaxQuant and the description of the MS/MS process are consistent with DDA, the specific term is not present in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Tandem affinity purification and mass spectrometry\" section (\"digested by trypsin at 37 °C\") and the data analysis parameters (\"trypsin as the protease\").",
+        "TRUTH_CHECK": "The value is factually correct as described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": "higher-energy collision dissociation",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper text mentions \"higher-energy collision dissociation\" (HCD) in the \"Tandem affinity purification and mass spectrometry\" section, but it does not mention \"beam-type collision-induced dissociation\".",
+        "TRUTH_CHECK": "While HCD is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" is not present in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not explicitly stated in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Thermo Fisher LTQ Orbitrap ETD",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer make and model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Tandem affinity purification and mass spectrometry\" section as the instrument used for MS analysis.",
+        "TRUTH_CHECK": "The value \"Thermo Fisher LTQ Orbitrap ETD\" is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned for the proteomics experiment, so the extraction is complete."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry analysis of proteins pulled down via tandem affinity purification (TAP) but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, the \"label-free\" safe default is applicable.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which correctly describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Tandem affinity purification and mass spectrometry\" section, where the instrument is described as a \"Thermo Fisher LTQ Orbitrap ETD mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used for the MS analysis contains an Orbitrap analyzer.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only mass analyzer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "phosphorylated residue",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "phosphorylated residue",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"phosphorylated residue\" describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"phosphorylation sites of VAMP8\" and \"phosphorylation of VAMP8\" in the context of the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The paper identifies phosphorylation sites (T48 and S55) via MS, making \"phosphorylated residue\" a factually correct description of the modification studied.",
+        "COMPLETENESS_CHECK": "While \"phosphorylated residue\" is correct, the other values in the set (\"Deamidation\", \"Iodoacetamide derivative\", \"Formylation\") are not mentioned anywhere in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQR)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The term \"Deamidation (NQR)\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention deamidation as a modification searched during the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except possibly phosphorylation) are explicitly listed as search parameters in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Iodoacetamide derivative\" or any such modification being searched in the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications that are not explicitly mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation (KST,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"Formylation (KST,N-term)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (except possibly phosphorylation) are explicitly mentioned as search parameters in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Dithiothreitol (DTT)\" appears in the text, but it is mentioned in the context of \"Protein expression and purification\" and \"Proteoliposome reconstitution\", not in the \"Tandem affinity purification and mass spectrometry\" workflow.",
+        "TRUTH_CHECK": "The value is present in the paper, but it was used for recombinant protein storage and liposome preparation, not for the reduction of the samples analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is incorrectly attributed to the MS experiment."
+      }
+    }
+  ]
+}

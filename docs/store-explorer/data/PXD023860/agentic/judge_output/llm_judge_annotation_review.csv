@@ -1,0 +1,210 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD023860","BiologicalAgent","species","Mus musculus","Mus musculus","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""mouse hepatocytes"" and ""mouse hepatocyte AML12 cells"" multiple times.
+TRUTH CHECK:       ""Mus musculus"" is the scientific name for the mouse, which is the source organism for the primary experiments.
+COMPLETENESS CHECK:    The paper also mentions ""human hepatocyte HepG2 cell line"", meaning the full set of extracted values is missing ""Homo sapiens"".
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Mus musculus"", ""Homo sapiens""]","Mus musculus, Homo sapiens"
+"PXD023860","BiologicalAgent","organ","liver","liver","high","False","","True","True","False","TYPE CHECK:        The candidate value ""liver"" is a valid organ/tissue.
+SOURCE CHECK:      The paper explicitly mentions ""liver"" multiple times, including ""perfusion and digestion of livers"" and ""CCl4-induced hepatic fibrosis in mice"".
+TRUTH CHECK:       The source material for the EVs and the primary cells used in the study is the liver.
+COMPLETENESS CHECK: The full set of extracted values (""liver"") covers the organ of origin described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","BiologicalAgent","cell_type","hepatocyte","hepatocyte","high","False","","True","True","False","TYPE CHECK: The candidate value ""hepatocyte"" describes a primary cell type/lineage.
+SOURCE CHECK: The paper explicitly mentions ""human or mouse hepatocytes"" and ""primary mouse hepatocytes"" throughout the text.
+TRUTH CHECK: The value is factually correct as the study focuses on extracellular vesicles from hepatocytes.
+COMPLETENESS CHECK: The full set contains ""hepatocyte"", which covers the primary cell type of interest; while ""hepatic stellate cells"" are mentioned as target cells, the proteomics analysis (the core of the metadata extraction) was performed on hepatocyte-derived EVs.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","BiologicalAgent","disease","normal","normal","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when describing healthy controls.
+SOURCE CHECK:      The paper describes the use of ""wild type"" (WT) cells and mice, and specifically mentions ""non-injured hepatocytes"" in the abstract, which justifies the ""normal"" safe default.
+TRUTH CHECK:       The study uses wild-type AML12 cells and Swiss Webster mice as controls against CCl4-induced fibrosis.
+COMPLETENESS CHECK: The full set contains ""normal"", but the paper also explicitly describes ""hepatic fibrosis"" (CCl4-induced) as the disease state being studied.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""normal"", ""hepatic fibrosis""]","normal, hepatic fibrosis"
+"PXD023860","BiologicalAgent","material_type","extracellular vesicles","","low","True","","False","False","False","TYPE CHECK:        The candidate value ""extracellular vesicles"" is not one of the allowed broad material classes defined for this field (e.g., ""tissue"", ""cell line"", ""primary cells"", ""biofluid"").
+SOURCE CHECK:      The paper explicitly describes the study of extracellular vesicles (EVs).
+TRUTH CHECK:       While the experiment uses EVs, the field definition requires the broad material class from which the sample was derived or its general category. EVs are typically considered a ""biofluid"" component or derived from ""cell lines""/""primary cells"".
+COMPLETENESS CHECK: The full set contains only this value, which is a specific entity rather than a broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""cell line"", ""primary cells""]","cell line, primary cells"
+"PXD023860","BiologicalAgent","cell_line","AML12","AML12","medium","False","","True","False","False","TYPE CHECK:        The candidate value is the name of an immortalized cell line.
+SOURCE CHECK:      The paper explicitly mentions ""the wild type (WT) mouse hepatocyte line, AML12"".
+TRUTH CHECK:       The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set of extracted values is missing other cell lines mentioned in the text (HepG2 and HEK293T).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""AML12"", ""HepG2"", ""HEK293T""]","AML12, HepG2, HEK293T"
+"PXD023860","TechnicalAgent","acquisition_method","DDA","DDA","high","False","","True","True","False","TYPE CHECK:        The candidate value ""DDA"" is a valid acquisition scheme name.
+SOURCE CHECK:      The paper describes the MS/MS analysis as being programmed for a ""full scan... and an MS/MS scan to generate product ion spectra... starting from the most abundant peaks in the spectrum, and then selecting the next nine most abundant peaks,"" which is the definition of Data-Dependent Acquisition (DDA).
+TRUTH CHECK:       The description of the acquisition process (selecting the top N most abundant peaks for fragmentation) confirms the use of DDA.
+COMPLETENESS CHECK: The full set contains ""DDA"", which accurately describes the acquisition method used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","TechnicalAgent","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The text explicitly states ""dithiothreitol and iodoacetamide were sequentially added before sequencing grade trypsin... was added for digestion"".
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the described proteomics workflow.
+COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK:      The text explicitly states that ""sequencing grade trypsin (Promega Corp., Madison, WI, United States) was added for digestion"".
+TRUTH CHECK:       The value is factually correct as described in the methods section.
+COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","TechnicalAgent","enrichment_method","ultracentrifugation","ultracentrifugation","high","False","","True","True","False","TYPE CHECK:        Yes, ultracentrifugation is a method used to enrich specific particles (EVs) from a complex mixture before MS analysis.
+SOURCE CHECK:      Yes, the paper explicitly describes the use of sequential centrifugation and ultracentrifugation (100,000 x g) to purify EV pellets for subsequent mass spectrometry.
+TRUTH CHECK:       Yes, the EVs were enriched via ultracentrifugation prior to the proteomic analysis.
+COMPLETENESS CHECK:The full set contains ""ultracentrifugation"", which accurately describes the enrichment process used for the MS samples in this study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","TechnicalAgent","instrument","Q Exactive Plus","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions a ""Thermo Scientific Q Exactive mass spectrometer"", but it does not specify the ""Plus"" model.
+TRUTH CHECK:       The text states ""Q Exactive"", not ""Q Exactive Plus"". Adding ""Plus"" is an unsupported specification.
+COMPLETENESS CHECK: The full set contains only this value, which is slightly inaccurate based on the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   Q Exactive","Q Exactive"
+"PXD023860","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes mass spectrometry analysis (spectral counting via Scaffold) without mentioning any isobaric or metabolic labels; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The use of spectral counting for protein identification and relative abundance (quantitative values ~100-1000) is consistent with a label-free approach.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","TechnicalAgent","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Extracellular vesicles Protein Digestion and Mass Spectrometry"" section: ""...dithiothreitol and iodoacetamide were sequentially added..."".
+TRUTH CHECK: The value is factually correct as it was used for the reduction step of the protein digestion process.
+COMPLETENESS CHECK: The full set of extracted values contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","ExperimentalDesignAgent","replicates","3 separate AML12 cell EV samples","3","high","False","","True","True","False","TYPE CHECK:        The candidate value contains a numeric count but includes descriptive text (""separate AML12 cell EV samples"") rather than being a simple numeric count as per the definition.
+SOURCE CHECK:      The text explicitly states ""Mass spectrometry analysis of three separate AML12 cell EV samples"".
+TRUTH CHECK:       The number of biological replicates for the MS analysis is indeed 3.
+COMPLETENESS CHECK: The full set of extracted values includes both the descriptive phrase and the number ""3"", which together accurately and exhaustively cover the biological replication described for the proteomics experiment.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","ExperimentalDesignAgent","replicates","3","3","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for replicates.
+SOURCE CHECK: The paper explicitly states ""Mass spectrometry analysis of three separate AML12 cell EV samples"" in the Results section.
+TRUTH CHECK: The value ""3"" accurately reflects the number of separate biological samples analyzed by mass spectrometry.
+COMPLETENESS CHECK: The full set of extracted values includes both the raw phrase and the numeric value; together they exhaustively cover the biological replication mentioned for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023860","ExperimentalDesignAgent","experimental_design","Proteomic characterization of EVWT from AML12 cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes a specific experimental goal or procedure rather than a study design type (e.g., ""treated vs control"").
+SOURCE CHECK:      The text mentions proteomic analysis of EVs from AML12 cells, but the value is a description of the task, not the design.
+TRUTH CHECK:       The value is a factual description of one part of the study, but it does not fit the definition of ""experimental design"".
+COMPLETENESS CHECK: The full set contains only this value, which is a type mismatch.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD023860","ExperimentalDesignAgent","factor_value","EVWT (wild type AML12 cell EVs)","EVWT (wild type AML12 cell EVs)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes a specific experimental group/condition, which fits the definition of a factor value.
+SOURCE CHECK:      The text explicitly mentions ""EVWT"" as EVs from wild type AML12 cells.
+TRUTH CHECK:       The value is factually correct based on the paper's description of the experimental groups.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the study's primary comparison is between EVWT and EVΔFN1 (FN1-deficient EVs).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""EVWT (wild type AML12 cell EVs)"", ""EVΔFN1 (FN1-deficient AML12 cell EVs)""]","EVWT (wild type AML12 cell EVs), EVΔFN1 (FN1-deficient AML12 cell EVs)"
+"PXD023860","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of fractions.
+SOURCE CHECK:      The paper describes the mass spectrometry workflow (""Extracellular vesicles Protein Digestion and Mass Spectrometry"") and does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS.
+TRUTH CHECK:       Since no fractionation is mentioned for the proteomics samples, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the methods.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD023860","ExperimentalDesignAgent","number_of_samples","3","3","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the number of samples.
+SOURCE CHECK:      The text states ""Mass spectrometry analysis of three separate AML12 cell EV samples resulted in the identification of 481, 305, and 474 proteins"".
+TRUTH CHECK:       The value is factually correct for the proteomics experiment described.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the number of samples processed for the mass spectrometry analysis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

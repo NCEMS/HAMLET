@@ -1,0 +1,430 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD001468","","strict","Biological","cell_line","HEK293","HEK293","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the text as the source of the proteome-wide dataset analyzed by LC-MS/MS (""HEK293 cells were lysed, trypsinized... and analyzed by LC-MS/MS"").
+TRUTH CHECK: The value is factually correct as per the paper text.
+COMPLETENESS CHECK: The full set contains the only human cell line used for the primary MS experiment described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" describes a cell lineage, which matches the definition of the cell_type field.
+SOURCE CHECK: The value is inferable from the paper text; the actual MS sample was derived from HEK293 cells (""HEK293 cells were lysed, trypsinized... and analyzed by LC-MS/MS"").
+TRUTH CHECK: HEK293 cells are a well-established human embryonic kidney cell line, which are of epithelial lineage.
+COMPLETENESS CHECK: The full set contains this single value, which correctly describes the lineage of the primary cell line used for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes the use of HEK293 cells and mouse brain lysate for a method-development study on database searching, with no mention of any disease or pathology.
+TRUTH CHECK: Since the study is not a disease study and uses standard cell lines/tissues for benchmarking, the safe default ""normal"" is correct.
+COMPLETENESS CHECK: The full set contains only this value, which is sufficient for a non-disease study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Biological","organ","kidney","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The word ""kidney"" does not appear in the paper text, nor is it associated with the samples analyzed by MS.
+TRUTH CHECK: The MS samples described are HEK293 cells (human embryonic kidney cells) and mouse brain lysate. While HEK293 is derived from the kidney, the paper explicitly identifies the samples as ""HEK293 cells"" and ""Mouse brain"".
+COMPLETENESS CHECK:The full set is incomplete as it misses ""brain"" and does not accurately reflect the primary sample source described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: brain","brain"
+"PXD001468","","strict","Biological","species","Homo sapiens, Mus musculus","Homo sapiens, Mus musculus","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value contains organism names, which is the correct category for the species field.
+SOURCE CHECK: Both human (HEK293 cells) and mouse (brain lysate) materials were analyzed by LC-MS/MS as described in the ""Results"" and ""Methods"" sections.
+TRUTH CHECK: The paper explicitly mentions ""human cell line"" (HEK293) and ""Mouse brain lysate"" / ""Mus Musculus cross"", making both species correct.
+COMPLETENESS CHECK: The full set of extracted values covers all biological sources analyzed by mass spectrometry in this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","ExperimentalDesign","factor_value","search strategy (Closed, Open)","search strategy (Closed, Open)","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (search strategy) and its levels (Closed, Open), which fits the definition of a factor_value.
+SOURCE CHECK: The paper explicitly describes and compares two search strategies: ""Closed search"" (narrow tolerance) and ""Open search"" (wide tolerance) applied to the same MS datasets.
+TRUTH CHECK: The value is factually correct as the primary experimental axis of the study is the comparison between these two database search methods.
+COMPLETENESS CHECK: The full set includes the search strategy and a ""normal"" default; together they cover the experimental design described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","ExperimentalDesign","factor_value","normal","search strategy (Closed, Open)","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value (representing a healthy/baseline state).
+SOURCE CHECK: The value ""normal"" is not explicitly mentioned in the text, but the study uses HEK293 cells and mouse brain lysate as baseline proteomes to test search strategies.
+TRUTH CHECK: While ""normal"" is a safe default for healthy/disease-free subjects, this study is not a disease study; it is a method development study comparing ""Closed"" vs ""Open"" search strategies. The biological samples (HEK293, mouse brain) are the baseline, but ""normal"" as a factor value is not the focus of the experimental design.
+COMPLETENESS CHECK: The full set of extracted values includes the actual experimental variable (""search strategy""), but ""normal"" is an unnecessary addition here as there is no disease/treatment contrast.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
+SOURCE CHECK: The paper describes that ""the top 10 most abundant ions were selected for isolation and fragmentation"" (for mouse brain) and ""the top 20 most abundant ions were selected for isolation and fragmentation"" (for HEK293), which is the definition of a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The described process of selecting the most abundant ions for MS2 is factually equivalent to data-dependent acquisition.
+COMPLETENESS CHECK: The full set contains this single value, which accurately describes the acquisition scheme used for both experimental datasets in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical reagent used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Human HEK293 cell protein extraction and digestion"" and ""Mouse tissue protein extraction and digestion"" sections as the reagent used for alkylation.
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in both experimental workflows described.
+COMPLETENESS CHECK: The full set contains ""iodoacetamide"", which is the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""HCD"" multiple times (e.g., ""fragmentation by HCD-MS2"" and ""fragmentation by HCD""), and HCD is the standard abbreviation for Higher-energy Collisional Dissociation, also known as beam-type collision-induced dissociation.
+TRUTH CHECK: While ""beam-type collision-induced dissociation"" is a technical synonym for HCD, the paper specifically uses the term ""HCD"".
+COMPLETENESS CHECK: The full set contains only this value, which covers the fragmentation method used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","instrument","Q-Exactive Orbitrap, LTQ Orbitrap Elite","Q-Exactive Orbitrap, LTQ Orbitrap Elite","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value contains mass spectrometer models, which matches the definition of the instrument field.
+SOURCE CHECK: Both instruments are explicitly mentioned in the ""Liquid chromatography electrospray ionization tandem mass spectrometry (LC-ESI-MS/MS)"" section as being used to analyze the mouse brain lysate and HEK293 cell fractions.
+TRUTH CHECK: The paper explicitly names the ""LTQ Orbitrap Elite"" and the ""Q-Exactive Orbitrap mass spectrometer"".
+COMPLETENESS CHECK: The full set of extracted values covers both instruments used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper describes a standard LC-MS/MS workflow for HEK293 cells and mouse brain lysate without mentioning any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the labeling state of the experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is explicitly mentioned in the text describing the instruments used for the MS analysis of both mouse brain and HEK293 cells (""LTQ Orbitrap Elite"" and ""Q-Exactive Orbitrap"").
+TRUTH CHECK: The value is factually correct as the paper specifies the use of Orbitrap mass spectrometers.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as Orbitrap is the primary mass analyzer used for the experiments described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","monohydroxylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a modification name, which matches the required category for this field.
+SOURCE CHECK: The term ""monohydroxylated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text; the paper discusses modifications like phosphorylation, glycosylation, and oxidation, but not ""monohydroxylated residue"".
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","farnesylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The term ""farnesylated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The paper does not mention farnesylation as a modification searched or identified in the MS experiments.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","carboxylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a modification name, which matches the required category for this field.
+SOURCE CHECK: The term ""carboxylated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a modification searched or identified in this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","acetylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""acetylated residue"" describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""N-terminal methionine acetylation"" and ""acetylation (K)"" in the context of the MS analysis of HEK293 cells.
+TRUTH CHECK: The value is factually correct as acetylation is explicitly identified and searched for in the study.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""farnesylated residue"", ""biotinylated residue"") that are NOT mentioned in the provided text, making the overall set highly inaccurate.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","biotinylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The term ""biotinylated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The paper does not mention biotinylation or biotinylated residues in the context of the MS experiment or anywhere else.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","S-pyridylethyl-L-cysteine","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a specific chemical modification, which matches the required category for the modification field.
+SOURCE CHECK: The value ""S-pyridylethyl-L-cysteine"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not present in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text, indicating a high rate of hallucination.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","carbamoylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The term ""carbamoylation"" is explicitly mentioned in the results section (""Examples of other chemical modifications included carbamoylation..."") and in the ""Closed search with dynamic modifications"" section (""carbamylation (K)"").
+TRUTH CHECK: The paper explicitly identifies carbamoylation/carbamylation as a modification detected and searched for in the dataset.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""farnesylated residue"", ""biotinylated residue"") that are not mentioned in the provided text, while missing others that are (e.g., ""glycosylation""). However, the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","methylthiolated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a modification name, which matches the required category for this field.
+SOURCE CHECK: The term ""methylthiolated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid extraction for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","homoserine","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""homoserine"" is a type of amino acid/modification, which fits the category for the modification field.
+SOURCE CHECK: The term ""homoserine"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a modification searched or identified in this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text, indicating a systemic hallucination.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","amidated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""amidated residue"" is a type of protein modification, which matches the field definition.
+SOURCE CHECK: The term ""amidated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The paper does not mention amidation; it mentions ""deamidation"", but these are distinct chemical processes.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications (e.g., ""farnesylated residue"", ""biotinylated residue"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","iodoacetic acid derivatized residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a chemical modification of a residue, which matches the category for the modification field.
+SOURCE CHECK: The phrase ""iodoacetic acid derivatized residue"" does not appear in the paper text.
+TRUTH CHECK: The paper mentions ""iodoacetamide"" as an alkylation reagent and ""iodoacetmaide (M)"" in the context of a closed search set, but it does not mention ""iodoacetic acid"".
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications (e.g., ""farnesylated"", ""biotinylated"", ""sulfated"") that are not mentioned in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","iodoacetamide derivatized residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a chemical modification of a residue, which fits the category for the modification field.
+SOURCE CHECK: The text mentions ""alkylation with 10 mM iodoacetamide"" in the methods, but it does not explicitly name ""iodoacetamide derivatized residue"" as a modification searched or identified.
+TRUTH CHECK: The modification name ""iodoacetamide derivatized residue"" is not explicitly written in the paper text. Per the rules, naming an alkylation reagent (iodoacetamide) does not make the resulting modification correct unless the modification name itself appears.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""farnesylated residue"", ""biotinylated residue"") that are not mentioned anywhere in the provided text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","sulfated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""sulfated residue"" is the correct category (a protein modification).
+SOURCE CHECK: The term ""sulfated residue"" or ""sulfation"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid extraction for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","monomethylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The paper mentions ""mono- and di-methylation"" and ""protein methylation"" in the context of the HEK293 cell dataset analyzed by MS.
+TRUTH CHECK: The paper explicitly mentions ""mono- and di-methylation"" and ""methylation"" as modifications identified in the dataset. ""Monomethylated residue"" is a valid scientific synonym for mono-methylation.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., ""farnesylated residue"", ""biotinylated residue"") that are NOT mentioned in the provided text, while missing others that are (e.g., ""carbamoylation""). The set is not an accurate representation of the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: phosphorylation, glycosylation, methylation, oxidation, carbamoylation, deamidation, formylation, pyroglutamate, aminoethylbenzenesulfonylation, dimethylation, acetylation","phosphorylation, glycosylation, methylation, oxidation, carbamoylation, deamidation, formylation, pyroglutamate, aminoethylbenzenesulfonylation, dimethylation, acetylation"
+"PXD001468","","strict","Technical","modification","deamidated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""deamidated residue"" is the correct category (a protein modification) for this field.
+SOURCE CHECK: The term ""deamidation"" is explicitly mentioned in the ""Detection of a complex array of chemical modifications"" section of the results.
+TRUTH CHECK: ""Deamidated residue"" is a valid synonym/representation of ""deamidation"" as described in the paper.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text (e.g., farnesylated, biotinylated), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","homoserine lactone","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a chemical modification, which is the correct category for this field.
+SOURCE CHECK: The term ""homoserine lactone"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid extraction for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","phosphorylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""phosphorylated residue"" is the correct category for a protein modification.
+SOURCE CHECK: The paper explicitly mentions ""phosphorylation"" multiple times (e.g., ""including phosphorylation, glycosylation, and methylation"" and ""phosphorylation was localized to serine and threonine residues"").
+TRUTH CHECK: ""Phosphorylated residue"" is an unambiguous synonym for ""phosphorylation"" (as per the field definition's rule that CV-style names are equivalent to common chemistry names).
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text (e.g., ""farnesylated residue"", ""biotinylated residue""), but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","formylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""formylated residue"" describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""formylation"" in the results section (""Examples of other chemical modifications included carbamoylation, deamidation, formylation..."") and in the methods section under ""Closed search with dynamic modifications"" (""Set 2) Formylation (ST)"").
+TRUTH CHECK: The value is factually correct as the paper explicitly identifies formylation as a modification detected and searched for.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text (e.g., farnesylated, biotinylated), but the candidate value itself is a correct individual extraction.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","deaminated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""deaminated residue"" is a type of protein modification, which matches the field definition.
+SOURCE CHECK: The term ""deaminated residue"" does not appear in the paper text; however, ""deamidation"" is explicitly mentioned.
+TRUTH CHECK: While ""deamidation"" is present, ""deamination"" is a distinct chemical process, and the specific phrase ""deaminated residue"" is not in the text.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text (e.g., farnesylated, biotinylated), indicating a high rate of hallucination in the pipeline.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: deamidated residue","deamidated residue"
+"PXD001468","","strict","Technical","modification","dihydroxylated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is a modification, which matches the required category for this field.
+SOURCE CHECK: The term ""dihydroxylated residue"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text; the paper discusses modifications like phosphorylation, glycosylation, methylation, and oxidation, but not dihydroxylation.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text, indicating a systemic hallucination.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","monosodium salt","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","True","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""monosodium salt"" is not a peptide/protein modification; it is a chemical salt form.
+SOURCE CHECK: The term ""monosodium salt"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not a valid modification described in the experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications not mentioned in the text (e.g., farnesylated, biotinylated), indicating a massive hallucination across the set.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","(R)-5-oxo-1","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is presented as a chemical name, which fits the category of a protein modification.
+SOURCE CHECK: The value ""(R)-5-oxo-1"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and therefore cannot be verified as correct for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","modification","dehydrated residue","acetylated residue | carbamoylated residue | deamidated residue | phosphorylated residue | formylated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""dehydrated residue"" is a type of protein modification, which matches the field definition.
+SOURCE CHECK: The term ""dehydrated residue"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and cannot be inferred from the described experimental results or methods.
+COMPLETENESS CHECK: The full set of extracted values contains numerous modifications that are not mentioned in the text, indicating a systemic hallucination.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD001468","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Human HEK293 cell protein extraction and digestion"" and ""Mouse tissue protein extraction and digestion"" sections as the reagent used for reduction.
+TRUTH CHECK: The value is factually correct as per the paper text.
+COMPLETENESS CHECK: The full set of extracted values contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

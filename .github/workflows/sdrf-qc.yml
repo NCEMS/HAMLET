@@ -1,0 +1,84 @@
+name: SDRF quality control
+
+on:
+  push:
+    branches:
+      - sdrf_builder_updates
+      - qc-and-v2.1.1-updates
+    paths:
+      - store/releases/**
+      - store/hamlet_sdrfs/v*/**
+      - store/agentic_results_files/v*/**
+      - src/python/run_sdrf_qc.py
+      - src/job_scripts/build_store_explorer.py
+      - docs/store-explorer/**
+      - .github/workflows/sdrf-qc.yml
+  workflow_dispatch:
+    inputs:
+      baseline_version:
+        description: Baseline release version
+        required: false
+      candidate_version:
+        description: Candidate release version
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build static release comparison QC
+        id: qc
+        shell: bash
+        run: |
+          set -euo pipefail
+          output_dir="qc-runs/${{ github.sha }}"
+          compare_args=()
+          if [[ -n "${{ github.event.inputs.baseline_version || '' }}" || -n "${{ github.event.inputs.candidate_version || '' }}" ]]; then
+            compare_args=(
+              --baseline-version "${{ github.event.inputs.baseline_version }}"
+              --candidate-version "${{ github.event.inputs.candidate_version }}"
+            )
+          fi
+          python src/python/run_sdrf_qc.py \
+            --output-dir "${output_dir}" \
+            "${compare_args[@]}"
+          echo "output_dir=${output_dir}" >> "${GITHUB_OUTPUT}"
+
+      - name: Write workflow summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          summary="${{ steps.qc.outputs.output_dir }}/qc-summary.json"
+          echo "## HAMLET SDRF QC" >> "${GITHUB_STEP_SUMMARY}"
+          python - "${summary}" >> "${GITHUB_STEP_SUMMARY}" <<'PY'
+          import json
+          import sys
+
+          report = json.load(open(sys.argv[1], encoding="utf-8"))
+          print(f"Available versions: {', '.join(report['available_versions'])}")
+          print(f"Comparisons: {len(report['comparisons'])}")
+          print("| Baseline | Candidate | Shared PXDs | Changed SDRFs | Judge pairs |")
+          print("|---|---|---:|---:|---:|")
+          for comparison in report["comparisons"]:
+              summary = comparison.get("summary", {})
+              print(
+                  f"| {comparison['baseline_version']} | {comparison['candidate_version']} "
+                  f"| {summary.get('shared_pxds', 0)} | {summary.get('changed_sdrfs', 0)} "
+                  f"| {summary.get('judge_pairs_available', 0)} |"
+              )
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdrf-qc-${{ github.sha }}
+          path: ${{ steps.qc.outputs.output_dir }}
+          if-no-files-found: error
