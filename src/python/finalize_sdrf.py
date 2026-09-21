@@ -31,6 +31,18 @@ def _load_override_doc(judge_dir: Path, pxd: str) -> dict | None:
     return _load_json(override_path)
 
 
+def _comma_separated_values(value: object) -> set[str]:
+    return {part.strip().casefold() for part in str(value).split(",") if part.strip()}
+
+
+def _is_additive_cell_line_override(info: dict) -> bool:
+    """Reject overrides that retain every current cell line and add ancillary lines."""
+    pipeline_values = info.get("pipeline_values") or []
+    existing = set().union(*(_comma_separated_values(value) for value in pipeline_values))
+    selected = _comma_separated_values(info.get("selected_value"))
+    return bool(existing and selected > existing)
+
+
 def _build_applied_overrides(override_doc: dict | None) -> tuple[dict, dict]:
     if not override_doc:
         return {}, {
@@ -39,18 +51,24 @@ def _build_applied_overrides(override_doc: dict | None) -> tuple[dict, dict]:
             "overrides_applied": 0,
             "fields_improved": 0,
             "fields_unchanged": 0,
+            "cell_line_additive_overrides_blocked": 0,
         }
 
     field_overrides = override_doc.get("field_overrides", {})
     applied = {}
     with_selection = 0
     unchanged = 0
+    blocked_cell_line_overrides = 0
 
     for field_name, info in field_overrides.items():
         selected_value = info.get("selected_value")
         if selected_value:
             with_selection += 1
         if info.get("apply_override") and selected_value:
+            if info.get("builder_field") == "cell_line" and _is_additive_cell_line_override(info):
+                blocked_cell_line_overrides += 1
+                unchanged += 1
+                continue
             applied[str(info.get("builder_field"))] = str(selected_value)
         else:
             unchanged += 1
@@ -61,6 +79,7 @@ def _build_applied_overrides(override_doc: dict | None) -> tuple[dict, dict]:
         "overrides_applied": len(applied),
         "fields_improved": len(applied),
         "fields_unchanged": unchanged,
+        "cell_line_additive_overrides_blocked": blocked_cell_line_overrides,
     }
     return applied, metrics
 
@@ -89,11 +108,37 @@ def _raw_files_from_technical_document(document: dict) -> list[str]:
     return raw_files
 
 
+def _run_final_sdrf_judge(
+    pxd: str,
+    sdrf_path: Path,
+    pmc_cache: Path,
+    output_dir: Path,
+    agentic_dir: Path,
+    aggregated_results: Path | None = None,
+) -> dict:
+    """Evaluate the rendered SDRF and return its final quality summary."""
+    from sdrf_judge import run_single_sdrf_evaluation
+
+    stats = run_single_sdrf_evaluation(
+        pxd_id=pxd,
+        sdrf_path=str(sdrf_path),
+        pmc_cache_path=str(pmc_cache),
+        out_dir=str(output_dir / "sdrf_judge"),
+        agentic_dir=str(agentic_dir),
+        aggregated_results_path=str(aggregated_results) if aggregated_results else None,
+    )
+    if not stats:
+        raise RuntimeError(f"Final SDRF judge produced no evaluable result for {pxd}")
+    return dict(stats)
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Render an SDRF from enriched metadata and llm_judge consensus.")
+    parser = argparse.ArgumentParser(description="Render and evaluate an SDRF from enriched metadata and LLM refinement consensus.")
     parser.add_argument("--pxd", required=True, help="PXD accession")
     parser.add_argument("--input_dir", required=True, type=Path, help="Path to metadata_extraction_output directory")
-    parser.add_argument("--judge_dir", type=Path, default=None, help="Optional path to judge_output directory")
+    parser.add_argument("--aggregated_results", type=Path, default=None, help="Optional aggregated-results JSON for final judge provenance")
+    parser.add_argument("--judge_dir", type=Path, default=None, help="Optional path to LLM refinement judge output directory")
+    parser.add_argument("--pmc_cache", required=True, type=Path, help="PMC cache used to evaluate the final SDRF")
     parser.add_argument("--output_dir", type=Path, default=None, help="Directory to receive final .sdrf.tsv and refinement reports")
     args = parser.parse_args()
 
@@ -132,14 +177,26 @@ def main() -> None:
 
     write_sdrf(applied_overrides)
 
+    pmc_cache = args.pmc_cache.resolve()
+    if not pmc_cache.exists():
+        raise FileNotFoundError(f"PMC cache does not exist: {pmc_cache}")
+    aggregated_results = args.aggregated_results.resolve() if args.aggregated_results else None
+    if aggregated_results and not aggregated_results.is_file():
+        raise FileNotFoundError(f"Aggregated results file does not exist: {aggregated_results}")
+    final_judge_summary = _run_final_sdrf_judge(
+        args.pxd, sdrf_path, pmc_cache, output_dir, input_dir, aggregated_results
+    )
+
     report = {
         "paper_id": args.pxd,
         "final_sdrf": str(sdrf_path),
         "confidence_sidecar": str(confidence_path),
-        "pre_judge_summary": judge_stats,
+        "llm_refinement_judge_summary": judge_stats,
         "override_document": override_doc,
         "applied_overrides": applied_overrides,
         "refinement_metrics": refinement_metrics,
+        "final_judge_summary": final_judge_summary,
+        "final_judge_output_dir": str(output_dir / "sdrf_judge"),
     }
     report_path = output_dir / f"{args.pxd}.sdrf_refinement_report.json"
     with open(report_path, "w", encoding="utf-8") as handle:

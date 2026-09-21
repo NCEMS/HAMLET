@@ -1,0 +1,201 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD006603","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper mentions ""human Sec61β"", ""human reference genome"", and ""human database downloaded from Uniprot"", and uses human cell lines (U2OS, HEK293).
+TRUTH CHECK: The experiment uses human cell lines and human protein databases, making ""Homo sapiens"" correct.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which exhaustively covers the species used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006603","BiologicalAgent","organ","bone","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""bone"" is a valid category for the organ/tissue field.
+SOURCE CHECK:      The paper mentions U2OS cells (osteosarcoma) and A673 cells (Ewing sarcoma), both of which are bone-derived cancer cell lines, but the actual material used in the experiments are cell lines, not bone tissue.
+TRUTH CHECK:       The experiment was performed using immortalized cell lines (U2OS, A673, HEK293), not organ tissue. While these cell lines originate from bone tumors, the ""organ"" field refers to the source material of the experiment; in this case, the material is ""cell line"".
+COMPLETENESS CHECK:    The full set contains only ""bone"", which is an incorrect attribution of the cell line's origin to the experimental material.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","BiologicalAgent","disease","osteosarcoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""osteosarcoma"" is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK:      The paper mentions the use of ""U2OS"" and ""A673"" cell lines. U2OS and A673 are well-known osteosarcoma cell lines, but the text itself does not explicitly use the word ""osteosarcoma"".
+TRUTH CHECK:       While U2OS and A673 are osteosarcoma lines, the field definition requires the value to be present in or reasonably inferable from the paper text. The text describes these as ""U2OS Flp-In™ T-Rex™ cells"" and ""Ewing sarcoma A673 cells"". Specifically, A673 is identified as ""Ewing sarcoma"", not osteosarcoma.
+COMPLETENESS CHECK:    The full set contains only ""osteosarcoma"", which is not explicitly stated in the text and contradicts the explicit mention of ""Ewing sarcoma"" for the A673 line.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","BiologicalAgent","material_type","U2OS Flp-In™ T-Rex™ cells","","low","True","","False","False","False","TYPE CHECK:        The candidate value is a specific cell line name, but the field definition requires a ""Broad material class"" (e.g., ""cell line"").
+SOURCE CHECK:      The value is present in the text.
+TRUTH CHECK:       The value is factually correct as the source of the material, but it is not the correct category of value for this field.
+COMPLETENESS CHECK: The full set contains only the specific cell line name rather than the broad material class.
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: material_type
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   cell line","cell line"
+"PXD006603","BiologicalAgent","cell_line","U2OS","U2OS","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""U2OS Flp-In™ T-Rex™ cells"" and ""U2OS Flp-In™ T-Rex™"" multiple times in the results and methods.
+TRUTH CHECK: The value is factually correct as U2OS is the base cell line used.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also mentions ""Flp-In™ T-Rex™ 293"" (HEK293 derivative) and ""A673"" cell lines.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""U2OS"", ""Flp-In™ T-Rex™ 293"", ""A673""]","U2OS, Flp-In™ T-Rex™ 293, A673"
+"PXD006603","TechnicalAgent","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Chemicals and compounds"" section (""IAA (iodoacetamide, Sigma-Aldrich)"") and the ""Sample preparation for MS/MS"" section (""treated with UC buffer with 50 mM iodoacetamide"").
+TRUTH CHECK: The paper confirms iodoacetamide was used to treat the samples after reduction to alkylate cysteines.
+COMPLETENESS CHECK: The full set of extracted values contains ""iodoacetamide"", which is the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006603","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK: The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""Peptides were obtained after overnight incubation with trypsin at 37°C"" in the Sample preparation for MS/MS section.
+TRUTH CHECK: The value is factually correct as trypsin was the protease used for digestion.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD006603","TechnicalAgent","collision_energy","normalised collision energy of 28","normalised collision energy of 28","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric value with a descriptor (""normalised collision energy""), which matches the definition.
+SOURCE CHECK:      The text explicitly states ""fragmentation was performed in higher-energy C-trap dissociation (HCD) mode with a normalised collision energy of 28.""
+TRUTH CHECK:       The value is factually correct as per the methods section.
+COMPLETENESS CHECK: The full set contains the only collision energy value mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","TechnicalAgent","enrichment_method","streptavidin/agarose slurry","streptavidin/agarose slurry","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a material used for enrichment (streptavidin beads), which fits the category of an enrichment method.
+SOURCE CHECK:      The text explicitly mentions that ""77.8 µl of 50% streptavidin/agarose slurry was added per mg of whole-cell lysate"" to isolate biotinylated proteins.
+TRUTH CHECK:       The value is factually correct as the study used cell surface biotinylation followed by streptavidin-based affinity purification to enrich for membrane proteins before MS.
+COMPLETENESS CHECK:    The full set contains the primary enrichment method used for the SILAC-MS/MS experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""tandem mass spectrometry (Q Exactive, Thermo Fisher Scientific)"".
+TRUTH CHECK:       The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","TechnicalAgent","label","SILAC","SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value ""SILAC"" is a metabolic labeling method, which matches the field definition.
+SOURCE CHECK:      The paper explicitly mentions ""stable isotope labelling with amino acids in cell culture (SILAC)"" in the results and ""SILAC labelling"" in the methods.
+TRUTH CHECK:       The value is factually correct as the study used SILAC for quantitative proteomic analysis.
+COMPLETENESS CHECK:    The full set of extracted values contains ""SILAC"", which is the only labeling method described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","TechnicalAgent","reduction_reagent","DTT","DTT","high","False","","True","True","False","TYPE CHECK:        The candidate value ""DTT"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""100 mM DTT"" was used to reduce disulfide bonds during the MS sample preparation.
+TRUTH CHECK:       The value is factually correct based on the ""Sample preparation for MS/MS"" section.
+COMPLETENESS CHECK: The full set of extracted values contains ""DTT"", which is the only reduction reagent mentioned for the proteomics experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","replicates","two independent ΔEMC5 and ΔEMC6 cell lines","","low","True","","False","False","False","TYPE CHECK:        The candidate value describes the nature of the cell lines used rather than a numeric count of biological replicates.
+SOURCE CHECK:      The text mentions ""two independent ΔEMC5 and ΔEMC6 cell lines"" in the context of the SILAC-MS/MS analysis.
+TRUTH CHECK:       While the text mentions two independent lines per genotype, the candidate value is a descriptive phrase, not the numeric count of replicates required by the field definition.
+COMPLETENESS CHECK: The full set of extracted values contains a descriptive phrase and a number (""5""), neither of which accurately represents the biological replicate count for the primary proteomics experiment (which used two independent lines per knockout).
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: replicates
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","replicates","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'replicates' field.
+SOURCE CHECK:      The value ""5"" is not present in the text; the text mentions ""two independent ΔEMC5 and ΔEMC6 cell lines"" and ""triplicate"" for qPCR, but no mention of 5 biological replicates for the proteomics experiment.
+TRUTH CHECK:       The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values contains a descriptive phrase and an unsupported number, failing to provide a correct numeric count of biological replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","experimental_design","Comparison of WT and ΔEMC (ΔEMC5 and ΔEMC6) cell lines using SILAC","Comparison of WT and ΔEMC (ΔEMC5 and ΔEMC6) cell lines using SILAC","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental setup and comparison groups, which aligns with the ""experimental_design"" field.
+SOURCE CHECK:      The text explicitly mentions using SILAC to ""compare WT and ΔEMC cells"" and specifies the use of ""two independent ΔEMC5 and ΔEMC6 cell lines.""
+TRUTH CHECK:       The value accurately reflects the study's design of comparing wild-type cells against specific knockout mutants.
+COMPLETENESS CHECK:    The full set of extracted values captures the primary comparative design of the proteomics experiment described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","factor_value","genotype (WT, ΔEMC5, ΔEMC6)","genotype (WT, ΔEMC5, ΔEMC6)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes the experimental variables (genotypes) being compared, which fits the definition of a factor value.
+SOURCE CHECK:      The paper explicitly describes comparing wild-type (WT) cells with EMC5 knockout (Δ5/ΔEMC5) and EMC6 knockout (Δ6/ΔEMC6) cells.
+TRUTH CHECK:       The value is factually correct based on the results section where these three conditions are the primary groups analyzed.
+COMPLETENESS CHECK:    The full set captures the primary genetic factor; however, the study also investigates cholesterol availability (standard, excess, and starvation) as a critical experimental factor.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""genotype (WT, ΔEMC5, ΔEMC6)"", ""cholesterol availability (standard, excess, starvation)""]",""
+"PXD006603","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper describes a ""SILAC-MS/MS"" experiment and ""Sample preparation for MS/MS"" where peptides were desalted and resuspended, but no offline peptide fractionation (e.g., high-pH RP or SAX) is mentioned.
+TRUTH CHECK:       Since no fractionation step is described for the mass spectrometry analysis, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains only the value ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD006603","ExperimentalDesignAgent","number_of_samples","5","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper does not explicitly state a total number of samples processed across the study; it mentions various cell lines (WT, Δ5, Δ6, A673, HEK293) and conditions, but no single total count of ""5"" is provided.
+TRUTH CHECK:       The value ""5"" is not supported by the text. While five different cell line types are mentioned (WT, Δ5, Δ6, A673, HEK293), this does not represent the total number of samples processed in the proteomics or lipidomics experiments.
+COMPLETENESS CHECK: The full set contains only this unsupported value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""

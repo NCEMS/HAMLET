@@ -1773,6 +1773,11 @@ _DISSOCIATION_CV_NAMES = {
     "ecd": "electron capture dissociation",
 }
 
+_ACQUISITION_CV_NAMES = {
+    "dda": "data-dependent acquisition",
+    "dia": "data-independent acquisition",
+}
+
 #agent-JSON top-level key -> canonical field, for reading the technical
 #("sources.runassessor.value") sub-value specifically. Distinct from
 #ENTITY_FIELD_ALIAS, which is keyed by human-annotation entity-type names.
@@ -1784,7 +1789,8 @@ _AGENT_KEY_TO_CANONICAL = {
     "sex": "sex", "age": "age", "strain": "strain",
     "sample_source": "material_type",
     "instrument": "instrument",
-    "fragmentation": "fragmentation",
+    "mass_analyzer": "mass_analyzer",
+    "fragmentation": "fragmentation", "fragmentation_method": "fragmentation",
     "modification": "modification", "ptm": "modification",
     "experimental_design": "experimental_design",
 }
@@ -1800,16 +1806,13 @@ def _fmt_ppm_or_da(value, unit: str = "ppm") -> str | None:
 
 def load_technical_reference(
     pxd_id: str, agentic_dir: str | None = None, aggregated_results_path: str | None = None
-) -> dict[str, set[str]]:
-    """build the set of technical/RunAssessor-derived values (normalised) known for one
-    PXD, from two places: (1) each agent's enriched.json 'sources.runassessor.value'
-    sub-field, and (2) the earlier aggregated_results.json's runAssessor.search_criteria
-    (mass tolerances, fragmentation type, labeling, instrument model)."""
-    ref: dict[str, set[str]] = {}
+) -> dict[str, dict[str, set[str]]]:
+    """Build normalised value references and their authoritative non-text origins."""
+    ref: dict[str, dict[str, set[str]]] = {}
 
-    def _add(field: str, value: str) -> None:
+    def _add(field: str, value: str, origin: str) -> None:
         if value:
-            ref.setdefault(field, set()).add(_norm(value))
+            ref.setdefault(field, {}).setdefault(_norm(value), set()).add(origin)
 
     if agentic_dir:
         root = Path(agentic_dir) / "integrated_output"
@@ -1833,16 +1836,44 @@ def load_technical_reference(
                     canon = _AGENT_KEY_TO_CANONICAL.get(key)
                     if not canon or key.startswith("_") or not isinstance(val, dict):
                         continue
-                    ra_val = ((val.get("sources") or {}).get("runassessor") or {}).get("value")
+                    sources = val.get("sources") or {}
+                    ra_source = sources.get("runassessor") or sources.get("meti") or {}
+                    ra_val = ra_source.get("value")
                     if ra_val is None:
                         continue
                     ra_val = str(ra_val).strip()
                     if not ra_val or ra_val.lower() in _AGENT_UNRESOLVED_VALUES:
                         continue
-                    _add(canon, ra_val)
+                    _add(canon, ra_val, "runassessor")
                     mapped = _DISSOCIATION_CV_NAMES.get(ra_val.lower())
                     if mapped:
-                        _add(canon, mapped)
+                        _add(canon, mapped, "runassessor")
+
+                if agent_dir.name != "TechnicalAgent":
+                    continue
+
+                meti_data = data.get("_meti_data") or {}
+                ptms = meti_data.get("ptms") or {}
+                for record in ptms.get("records") or []:
+                    if not isinstance(record, dict):
+                        continue
+                    name = str(record.get("name") or "").strip()
+                    if name:
+                        _add("modification", name, "pride_repository")
+
+                for per_raw in (data.get("per_raw_file") or {}).values():
+                    if not isinstance(per_raw, dict):
+                        continue
+                    for record in per_raw.get("modifications") or []:
+                        if not isinstance(record, dict):
+                            continue
+                        name = str(record.get("name") or "").strip()
+                        if not name:
+                            continue
+                        _add("modification", name, "ptm_shepherd")
+                        targets = [str(target).strip() for target in record.get("targets") or [] if str(target).strip()]
+                        if targets:
+                            _add("modification", f"{name} ({','.join(targets)})", "ptm_shepherd")
 
     if aggregated_results_path and os.path.isfile(aggregated_results_path):
         try:
@@ -1857,57 +1888,74 @@ def load_technical_reference(
         prec_fmt = _fmt_ppm_or_da(tol.get("recommended overall precursor tolerance (ppm)"))
         frag_fmt = _fmt_ppm_or_da(tol.get("recommended overall fragment tolerance (ppm)"))
         if prec_fmt:
-            _add("precursor_mass_tolerance", prec_fmt)
+            _add("precursor_mass_tolerance", prec_fmt, "runassessor")
         if frag_fmt:
-            _add("fragment_mass_tolerance", frag_fmt)
+            _add("fragment_mass_tolerance", frag_fmt, "runassessor")
 
         frag_codes = set()
         if sc.get("fragmentation_type"):
             frag_codes.add(str(sc["fragmentation_type"]))
         frag_codes.update(str(k) for k in (sc.get("fragmentation_types") or {}))
         for code in frag_codes:
-            _add("fragmentation", code)
+            _add("fragmentation", code, "runassessor")
             mapped = _DISSOCIATION_CV_NAMES.get(code.strip().lower())
             if mapped:
-                _add("fragmentation", mapped)
+                _add("fragmentation", mapped, "runassessor")
+
+        acquisition_type = sc.get("acquisition_type")
+        if acquisition_type:
+            acquisition_value = str(acquisition_type).strip()
+            _add("acquisition_method", acquisition_value, "runassessor")
+            mapped = _ACQUISITION_CV_NAMES.get(acquisition_value.lower())
+            if mapped:
+                _add("acquisition_method", mapped, "runassessor")
 
         if sc.get("labeling"):
-            _add("label", str(sc["labeling"]))
+            _add("label", str(sc["labeling"]), "runassessor")
 
         knowledge = ra.get("knowledge") or {}
         for model in (knowledge.get("instrument_models") or {}):
-            _add("instrument", str(model))
+            _add("instrument", str(model), "runassessor")
         if knowledge.get("instrument_model"):
-            _add("instrument", str(knowledge["instrument_model"]))
+            _add("instrument", str(knowledge["instrument_model"]), "runassessor")
 
     return ref
 
 
-def _matches_technical_reference(field: str, value: str, technical_ref: dict[str, set[str]]) -> bool:
-    """True when a candidate extracted value matches a known RunAssessor/technical-pipeline
-    value for the same field: exact match after normalisation, or a token-subset/overlap
-    match for longer CV-style names (catches e.g. "9 ppm" vs "9.0 ppm")."""
+def _matching_technical_origins(
+    field: str, value: str, technical_ref: dict[str, dict[str, set[str]]]
+) -> set[str]:
+    """Return repository origins matching a final SDRF value for the same field."""
     if not technical_ref or field not in technical_ref:
-        return False
+        return set()
     norm_value = _norm(value)
     if not norm_value:
-        return False
+        return set()
     ref_values = technical_ref[field]
     if norm_value in ref_values:
-        return True
+        return set(ref_values[norm_value])
     value_tokens = set(re.findall(r"[a-z0-9]+", norm_value))
     if not value_tokens:
-        return False
-    for ref_val in ref_values:
+        return set()
+    matches: set[str] = set()
+    for ref_val, origins in ref_values.items():
         ref_tokens = set(re.findall(r"[a-z0-9]+", ref_val))
         if not ref_tokens:
             continue
         if value_tokens <= ref_tokens or ref_tokens <= value_tokens:
-            return True
+            matches.update(origins)
+            continue
         overlap = len(value_tokens & ref_tokens)
         if overlap and overlap / len(value_tokens | ref_tokens) >= 0.6:
-            return True
-    return False
+            matches.update(origins)
+    return matches
+
+
+def _matches_technical_reference(
+    field: str, value: str, technical_ref: dict[str, dict[str, set[str]]]
+) -> bool:
+    """Backward-compatible boolean check for a repository-backed SDRF value."""
+    return bool(_matching_technical_origins(field, value, technical_ref))
 
 
 #column names for the main annotation review CSV
@@ -1915,9 +1963,9 @@ def _matches_technical_reference(field: str, value: str, technical_ref: dict[str
 #(strict/inference) are only populated by run_compare_sources(); left blank
 #("") for the original single-SDRF pipeline.
 #"technical_origin" is True when a value the judge marked HALLUCINATED (judged
-#solely against the manuscript text) actually matches a real value from the
-#RunAssessor/technical pipeline (see load_technical_reference()) -- i.e. it is
-#not fabricated, just not verifiable from the text alone.
+#solely against the manuscript text) matches an authoritative repository-backed
+#value. "repository_origin" identifies whether that evidence came from
+#RunAssessor, PRIDE project metadata, or PTM-Shepherd search evidence.
 #"inference" (yes/no/None) ONLY exists in "inference" mode responses (the
 #strict-mode prompt never asks for it, so it is always None there). It marks
 #a value the judge accepted (HALLUCINATED: no) ONLY because inference mode's
@@ -1929,7 +1977,8 @@ def _matches_technical_reference(field: str, value: str, technical_ref: dict[str
 #into judge_n_correct or judge_n_hallucinated.
 #"error_category" is the single authoritative final classification (see
 #_classify_row / _ERROR_CATEGORIES) -- one of: correct_explicit, inferred,
-#hallucinated, meti_only, type_mismatch, wrong_value, incomplete. Prefer this
+#hallucinated, runassessor_only, pride_repository_only, ptm_shepherd_only,
+#type_mismatch, wrong_value, incomplete. Prefer this
 #over re-deriving a category from the individual boolean columns, which are
 #not mutually exclusive on their own (e.g. a meti_only row still has
 #technical_origin=True but hallucination has been reclassified to False).
@@ -1938,16 +1987,17 @@ _REVIEW_CSV_FIELDS = [
     "all_values_for_field",
     "verdict", "type_mismatch", "correct_type",
     "value_correct", "value_complete", "hallucination", "technical_origin",
+    "repository_origin",
     "inference", "error_category",
     "issue_summary", "corrected_value",
 ]
 
 #column names for the per paper statistics CSV
 #judge_n_hallucinated / judge_n_wrong / judge_accuracy are the judge's raw,
-#text-only verdicts (unchanged meaning). judge_n_technical_not_in_text is the
-#subset of judge_n_hallucinated that actually matched real RunAssessor/technical
-#data (see load_technical_reference()); judge_accuracy_adjusted recomputes
-#accuracy crediting those as correct, since they are not pipeline fabrications.
+#text-only verdicts (unchanged meaning). The repository-backed counters identify
+#values absent from manuscript text but confirmed by RunAssessor, PRIDE project
+#metadata, or PTM-Shepherd. judge_accuracy_adjusted credits all three because
+#they are not pipeline fabrications.
 #judge_n_inferred (inference mode only) is the count of values accepted SOLELY
 #because of inference mode's relaxed SOURCE CHECK (HALLUCINATED: no, INFERENCE:
 #yes) -- excluded from BOTH judge_n_correct (not a literal/explicit match) and
@@ -1960,7 +2010,8 @@ _STATS_CSV_FIELDS = [
     "paper_id", "source", "mode", "total_extracted",
     "judge_n_correct", "judge_n_hallucinated", "judge_n_mismatch",
     "judge_n_wrong", "judge_n_incomplete", "judge_n_corrected",
-    "judge_n_technical_not_in_text", "judge_n_inferred",
+    "judge_n_technical_not_in_text", "judge_n_runassessor_only",
+    "judge_n_pride_repository_only", "judge_n_ptm_shepherd_only", "judge_n_inferred",
     "judge_accuracy", "judge_accuracy_adjusted", "judge_accuracy_with_inference",
 ]
 
@@ -1998,7 +2049,8 @@ class _IncrementalCSV:
 #by _run_geval_semantic, so counting "type_mismatch" and "wrong_value" from
 #independent booleans double-counts it).
 _ERROR_CATEGORIES = (
-    "meti_only", "hallucinated", "inferred",
+    "runassessor_only", "pride_repository_only", "ptm_shepherd_only",
+    "hallucinated", "inferred",
     "type_mismatch", "wrong_value", "incomplete", "correct_explicit",
 )
 
@@ -2009,13 +2061,14 @@ def _classify_row(row: dict) -> str | None:
     complete/type-correct (-> correct_explicit / type_mismatch / wrong_value /
     incomplete); (ii) if not verbatim, could an expert infer it -- inference
     mode only (-> inferred); (iii) if neither, it is a hallucination; (iv)
-    UNLESS it matches real meti/RunAssessor technical-pipeline data, in which
-    case it is reclassified out of "hallucinated" entirely (-> meti_only).
+    UNLESS it matches authoritative repository evidence, in which case it is
+    reclassified out of "hallucinated" into its explicit source category.
     Returns None for a row that was never judged (e.g. an evaluation error)."""
     if row.get("value_correct") is None and row.get("verdict") is None:
         return None
-    if row.get("technical_origin"):
-        return "meti_only"
+    repository_origin = row.get("repository_origin")
+    if repository_origin:
+        return f"{repository_origin}_only"
     if row.get("hallucination"):
         return "hallucinated"
     if row.get("inference"):
@@ -2043,7 +2096,10 @@ def _compute_single_paper_stats(paper_id: str, eval_rows: list[dict]) -> dict:
         n_wrong      = counts["wrong_value"]
         n_incomplete = counts["incomplete"]
         n_inferred   = counts["inferred"]
-        n_technical  = counts["meti_only"]
+        n_runassessor = counts["runassessor_only"]
+        n_pride = counts["pride_repository_only"]
+        n_shepherd = counts["ptm_shepherd_only"]
+        n_technical = n_runassessor + n_pride + n_shepherd
         n_corrected  = sum(1 for r in eval_rows if r.get("corrected_value"))
         rec["judge_n_correct"]      = n_correct
         rec["judge_n_hallucinated"] = n_halluc
@@ -2052,6 +2108,9 @@ def _compute_single_paper_stats(paper_id: str, eval_rows: list[dict]) -> dict:
         rec["judge_n_incomplete"]   = n_incomplete
         rec["judge_n_corrected"]    = n_corrected
         rec["judge_n_technical_not_in_text"]  = n_technical
+        rec["judge_n_runassessor_only"] = n_runassessor
+        rec["judge_n_pride_repository_only"] = n_pride
+        rec["judge_n_ptm_shepherd_only"] = n_shepherd
         rec["judge_n_inferred"]               = n_inferred
         rec["judge_accuracy"]          = round(n_correct / total, 4) if total > 0 else 0.0
         rec["judge_accuracy_adjusted"] = (
@@ -2326,7 +2385,7 @@ def load_manuscript(pxd_id: str) -> str:
 
 def _evaluate_predicted(pxd_id: str, predicted: dict[str, list[str]], source_text: str,
                         out_dir: str, source_label: str = "", mode: str = "strict",
-                        technical_ref: dict[str, set[str]] | None = None):
+                        technical_ref: dict[str, dict[str, set[str]]] | None = None):
     """core evaluation routine: judge an already-loaded {canonical_field: [values]}
     prediction dict against source_text, writing CSVs/JSON under out_dir. Shared by
     the original single-SDRF pipeline (source_label="", mode="strict") and
@@ -2388,6 +2447,7 @@ def _evaluate_predicted(pxd_id: str, predicted: dict[str, list[str]], source_tex
                 "value_complete": None,
                 "hallucination": None,
                 "technical_origin": False,
+                "repository_origin": None,
                 "inference": None,
                 "error_category": None,
                 "issue_summary": "",
@@ -2402,21 +2462,16 @@ def _evaluate_predicted(pxd_id: str, predicted: dict[str, list[str]], source_tex
     if technical_ref:
         for row in eval_rows:
             if row.get("hallucination"):
-                is_technical = _matches_technical_reference(
+                origins = _matching_technical_origins(
                     row["annotation_type"], row["extracted_value"], technical_ref)
-                row["technical_origin"] = is_technical
-                if is_technical:
-                    #a value matching the meti/RunAssessor technical pipeline is,
-                    #by definition, real (verifiable against instrument/search
-                    #data) -- it is NOT a fabrication, just absent from the
-                    #manuscript text the judge reads. Reclassify it out of
-                    #"hallucinated" entirely: it becomes its own category
-                    #("meti_only", see _classify_row), not a hallucination that
-                    #happens to carry a side flag.
+                if origins:
+                    origin = next((name for name in ("ptm_shepherd", "pride_repository", "runassessor") if name in origins))
+                    row["technical_origin"] = True
+                    row["repository_origin"] = origin
                     row["hallucination"] = False
-                    print(f"    [meti-only origin] {row['annotation_type']}="
-                          f"'{row['extracted_value'][:40]}' matches RunAssessor/meti data, "
-                          f"not a fabrication -- just absent from the manuscript text")
+                    print(f"    [{origin}-only] {row['annotation_type']}="
+                          f"'{row['extracted_value'][:40]}' is repository-backed, "
+                          f"not a manuscript-supported extraction")
 
     for row in eval_rows:
         row["error_category"] = _classify_row(row)
@@ -2443,11 +2498,17 @@ def _evaluate_predicted(pxd_id: str, predicted: dict[str, list[str]], source_tex
     return df, coverage_df, per_paper_df
 
 
-def _evaluate_one_pxd(pxd_id: str, pxd_root: str, source_text: str, out_dir: str):
+def _evaluate_one_pxd(
+    pxd_id: str,
+    pxd_root: str,
+    source_text: str,
+    out_dir: str,
+    technical_ref: dict[str, dict[str, set[str]]] | None = None,
+):
     """original entry point: load the single <PXD>.sdrf.tsv under pxd_root and judge it
     in strict mode (used by process_all()/run_single_sdrf_evaluation(), i.e. --pipeline)"""
     predicted = load_sdrf(pxd_root, pxd_id)
-    return _evaluate_predicted(pxd_id, predicted, source_text, out_dir)
+    return _evaluate_predicted(pxd_id, predicted, source_text, out_dir, technical_ref=technical_ref)
 
 
 def run_single_sdrf_evaluation(
@@ -2455,6 +2516,8 @@ def run_single_sdrf_evaluation(
     sdrf_path: str,
     pmc_cache_path: str,
     out_dir: str,
+    agentic_dir: str | None = None,
+    aggregated_results_path: str | None = None,
     workers: int | None = None,
     use_llm_judge: bool = True,
 ):
@@ -2487,8 +2550,11 @@ def run_single_sdrf_evaluation(
         shutil.copy2(sdrf_src, temp_root / expected_name)
         pxd_root = str(temp_root)
 
+    technical_ref = load_technical_reference(pxd_id, agentic_dir, aggregated_results_path)
     try:
-        df, _, per_paper_df = _evaluate_one_pxd(pxd_id, pxd_root, source_text, str(out_dir_path))
+        df, _, per_paper_df = _evaluate_one_pxd(
+            pxd_id, pxd_root, source_text, str(out_dir_path), technical_ref=technical_ref
+        )
     finally:
         if temp_ctx is not None:
             temp_ctx.cleanup()
@@ -3127,6 +3193,8 @@ def main():
     parser.add_argument("--pxd", default=None, help="[pipeline] PXD accession")
     parser.add_argument("--sdrf", default=None, help="[pipeline] Path to final SDRF TSV")
     parser.add_argument("--pmc_cache", default=None, help="[pipeline] Path to pmc cache JSON (or dir)")
+    parser.add_argument("--agentic_dir", default=None, help="[pipeline] Enriched agentic metadata directory for repository provenance")
+    parser.add_argument("--aggregated_results", default=None, help="[pipeline] Optional aggregated-results JSON for RunAssessor provenance")
     parser.add_argument("--outdir", default=None, help="[pipeline] Output directory")
     parser.add_argument("--no-judge", action="store_true", help="Skip LLM judge")
     parser.add_argument("--limit", type=int, default=None, help="Limit to first N papers")
@@ -3173,6 +3241,8 @@ def main():
             sdrf_path=args.sdrf,
             pmc_cache_path=args.pmc_cache,
             out_dir=args.outdir,
+            agentic_dir=args.agentic_dir,
+            aggregated_results_path=args.aggregated_results,
             workers=args.workers,
             use_llm_judge=not args.no_judge,
         )

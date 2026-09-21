@@ -1,0 +1,126 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD011050","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The paper describes a study on the model archaeon *Haloferax volcanii* under various culture and stress conditions, not a disease study.
+TRUTH CHECK: As the study is not focused on a disease state, the safe default ""normal"" is factually correct.
+COMPLETENESS CHECK: The full set of extracted values consists of this single safe default, which is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011050","","strict","Biological","species","Haloferax volcanii","Haloferax volcanii","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of an organism, which matches the species field definition.
+SOURCE CHECK: The value is explicitly mentioned throughout the text as the primary subject of the proteomics reanalysis (e.g., ""Starting with the model archaeon Haloferax volcanii"").
+TRUTH CHECK: The value is factually correct as the source organism for the MS datasets analyzed.
+COMPLETENESS CHECK: The full set contains the primary species analyzed; while other species like N. magadii are mentioned for comparative purposes, H. volcanii is the central focus of the project.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011050","","strict","ExperimentalDesign","factor_value","strains, culture conditions","strains, culture conditions | normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variables (strains and culture conditions) being compared, which fits the definition of a factor_value.
+SOURCE CHECK: The paper explicitly states that the project reanalyzes MS datasets from ""various strains and culture conditions"" (Abstract) and ""diverse H. volcanii MS datasets comprising more than 23 million spectra"" (Results).
+TRUTH CHECK: The value is factually correct as these are the primary axes of variation across the 12 datasets analyzed.
+COMPLETENESS CHECK: The full set of extracted values (""strains, culture conditions"", ""normal"") covers the general experimental design and the baseline state.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011050","","strict","ExperimentalDesign","factor_value","normal","strains, culture conditions | normal","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value, as it mirrors a characteristic (e.g., disease state or control condition).
+SOURCE CHECK: The paper does not explicitly use the word ""normal,"" but it describes multiple control groups (e.g., ""mock (ddH2O) control"" in PXD006877, ""wild-type strain (H26)"" in PXD013046, and ""standard conditions"" in PXD011056).
+TRUTH CHECK: According to the field definitions, ""normal"", ""healthy"", and ""disease free"" are safe defaults and are CORRECT when subjects are healthy or serve as the non-disease/non-treated baseline, even if the exact phrase is not written.
+COMPLETENESS CHECK: The full set of extracted values (""strains, culture conditions"", ""normal"") is incomplete because the paper describes a vast array of specific factors across 12 datasets, including specific mutants (ΔubaA, ΔartA, ΔrhoII, ΔpssA), specific growth media (GMM vs CM), and stress conditions (hypochlorite, salt, temperature).
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""strains"", ""culture conditions"", ""wild-type"", ""mock control"", ""standard conditions"", ""hypochlorite stress"", ""low salt"", ""high salt"", ""low temperature"", ""high temperature"", ""ΔubaA"", ""ΔartA"", ""ΔrhoII"", ""ΔpssA"", ""GMM"", ""CM""]","strains, culture conditions, wild-type, mock control, standard conditions, hypochlorite stress, low salt, high salt, low temperature, high temperature, ΔubaA, ΔartA, ΔrhoII, ΔpssA, GMM, CM"
+"PXD011050","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
+SOURCE CHECK: The text explicitly mentions ""DDA"" (which is the standard abbreviation for data-dependent acquisition) in the description of Dataset PXD011056 (""each fraction was analyzed using DDA on a TripleTOF 5600+ mass spectrometer"").
+TRUTH CHECK: The value is factually correct as DDA is used in the described experiments.
+COMPLETENESS CHECK: The full set contains ""data-dependent acquisition"", which covers the DDA mentioned in the text; however, the paper also mentions ""SWATH acquisition"" (a form of DIA) for the same dataset PXD011056, meaning the set is incomplete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: data-dependent acquisition, SWATH","data-dependent acquisition, SWATH"
+"PXD011050","","strict","Technical","cleavage_agent","Trypsin","Trypsin","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned multiple times in the methods section (e.g., ""digested with trypsin"") in the context of the MS samples.
+TRUTH CHECK: The value is factually correct as trypsin was used for digestion in nearly all described datasets.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also explicitly mentions the use of ""GluC"" as a cleavage agent (e.g., in datasets PXD011012, PXD011015, and PXD011050).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: Trypsin, GluC","Trypsin, GluC"
+"PXD011050","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided paper text.
+TRUTH CHECK: The paper explicitly mentions ""HCD fragmentation"" (Higher-energy Collisional Dissociation) and ""collision-induced dissociation (IS-CID)"" for specific datasets, but not ""beam-type collision-induced dissociation"".
+COMPLETENESS CHECK: The full set is incomplete as it fails to capture the explicitly mentioned HCD and CID methods.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD011050","","strict","Technical","instrument","Q Exactive Plus, LTQ Orbitrap-Velos, LTQ Orbitrap Elite, LTQ Orbitrap XL, TripleTOF 5600+, Q Exactive HF","Q Exactive Plus, LTQ Orbitrap-Velos, LTQ Orbitrap Elite, LTQ Orbitrap XL, TripleTOF 5600+, Q Exactive HF","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a list of mass spectrometer models, which matches the required category for the instrument field.
+SOURCE CHECK: All listed instruments are explicitly mentioned in the ""Methods"" section as the mass spectrometers used for the various datasets (PXD000202, PXD006877, PXD007061, PXD009116, PXD010824, PXD011012, PXD011015, PXD011050, PXD011056, PXD011218, PXD013046, PXD014974) analyzed by mass spectrometry.
+TRUTH CHECK: The values are factually correct as they appear in the text.
+COMPLETENESS CHECK: The full set of extracted values covers all the mass spectrometers mentioned across the different datasets described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD011050","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""Orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the text; multiple datasets (e.g., PXD000202, PXD007061, PXD009116, PXD011012, PXD011050, PXD011218, PXD013046, PXD014974) used instruments with Orbitrap analyzers (e.g., LTQ Orbitrap-Velos, LTQ Orbitrap Elite, Q Exactive).
+TRUTH CHECK: The value is factually correct as the majority of the instruments used in the described MS experiments are Orbitrap-based.
+COMPLETENESS CHECK: While ""Orbitrap"" is correct, the full set of extracted values is incomplete because the paper also describes the use of a ""TripleTOF 5600+"" (Dataset PXD011056), which uses a TOF (Time-of-Flight) analyzer.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: Orbitrap, TOF","Orbitrap, TOF"
+"PXD011050","","strict","Technical","modification","iodoacetamide derivatized residue","","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a chemical modification of a residue, which fits the category of a protein modification.
+SOURCE CHECK: The text mentions ""alkylated with 2-iodoacetamide (30 mM)"" in the description of Dataset PXD014974, but it does not name the resulting modification.
+TRUTH CHECK: The specific modification name ""iodoacetamide derivatized residue"" is not explicitly written in the text; only the reagent used for alkylation is mentioned.
+COMPLETENESS CHECK: The full set contains only this value, which is unsupported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD011050","","strict","Technical","reduction_reagent","tris(2-carboxyethyl)phosphine","tris(2-carboxyethyl)phosphine","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value is a chemical used for the reduction of disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the methods section under ""Dataset PXD006877"" (""After reduction with tris‐(2‐carboxyethyl) phosphine (TCEP)..."").
+TRUTH CHECK: The value is factually correct as it is the full name of the reagent TCEP used in the described MS experiment.
+COMPLETENESS CHECK: The full set contains this value; however, the paper also mentions ""$\beta$-mercaptoethanol"" and ""DTT"" as reduction reagents in other datasets (PXD014974), meaning the current set is incomplete.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: tris(2-carboxyethyl)phosphine, $\beta$-mercaptoethanol, DTT","tris(2-carboxyethyl)phosphine, $\beta$-mercaptoethanol, DTT"

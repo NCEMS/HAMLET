@@ -13,7 +13,7 @@
       "pride": null,
       "llm": {
         "value": "Q Exactive Plus",
-        "evidence": "The eluted peptides were subjected to nanospray ionization and then MS/MS analysis in a Q Exactive Plus (Thermo)"
+        "evidence": "MS/MS analysis in a Q Exactive Plus (Thermo)"
       }
     }
   },
@@ -55,33 +55,33 @@
       "pride": null,
       "llm": {
         "value": "label-free",
-        "evidence": "The resulting MS/MS data were processed using MaxQuant (v.1.5.2.8, http://www.maxquant.org/)"
+        "evidence": "The eluted peptides were subjected to nanospray ionization and then MS/MS analysis in a Q Exactive Plus (Thermo)"
       }
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "The alkylated proteins were then digested with trypsin"
       }
     }
   },
   "enrichment_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "mono-, double-, and tri-methylated resin antibody beads",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "mono-, double-, and tri-methylated resin antibody beads",
+        "evidence": "incubated with mono-, double-, and tri-methylated resin antibody beads at 4 \u00b0C to enrich the methylated peptides"
       }
     }
   },
@@ -106,7 +106,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -119,34 +119,34 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "reduction_reagent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "dithiothreitol",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "dithiothreitol",
+        "evidence": "The extracted proteins were reduced with dithiothreitol (5 mM)"
       }
     }
   },
   "alkylation_reagent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "iodoacetamide",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "iodoacetamide",
+        "evidence": "followed by alkylation with iodoacetamide (11 mM)"
       }
     }
   },
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "ptm": {
     "resolved": "tri-Methylation; Carboxyl modification with ethanolamine; Formylation; Iodoacetamide derivative",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "tri-Methylation; Carboxyl modification with ethanolamine; Formylation; Iodoacetamide derivative",
@@ -205,10 +205,39 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "methylated lysine",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "oxidation on Met (variable); carbamidomethyl on Cys (fixed)",
+        "evidence": "The oxidation on Met and carbamidomethyl on Cys were specified as variable modification and fixed modification, respectively."
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": "20 ppm and 5 ppm",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "20 ppm and 5 ppm",
+        "evidence": "The mass tolerance allowed for precursor ions in the first search and the main research were 20 ppm and 5 ppm, respectively."
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": "0.02 Da",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "0.02 Da",
+        "evidence": "The mass tolerance allowed for fragment ions was 0.02 Da."
       }
     }
   },
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "methylated lysine",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,30 @@
     }
   },
   "_confidence": {
-    "overall": 0.831,
-    "evidence_score": 0.754,
-    "completeness": 0.769,
+    "overall": 0.8,
+    "evidence_score": 0.694,
+    "completeness": 0.765,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "methylated lysine"
+      ],
+      "records": [
+        {
+          "name": "methylated lysine",
+          "accession": "MOD:00663",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "methylated lysine"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -437,6 +483,790 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "C9017PIK_4.raw",
+      "raw_stem": "C9017PIK_4",
+      "source_path": "pride_metadata.files[0].fileName"
+    },
+    {
+      "raw_file": "C9017PIK_3.raw",
+      "raw_stem": "C9017PIK_3",
+      "source_path": "pride_metadata.files[1].fileName"
+    },
+    {
+      "raw_file": "C9017PIK_1.raw",
+      "raw_stem": "C9017PIK_1",
+      "source_path": "pride_metadata.files[3].fileName"
+    },
+    {
+      "raw_file": "C9017PIK_2.raw",
+      "raw_stem": "C9017PIK_2",
+      "source_path": "pride_metadata.files[5].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "C9017PIK_4": {
+      "raw_file": "C9017PIK_4.raw",
+      "manifest_source_path": "pride_metadata.files[0].fileName",
+      "instrument": {
+        "resolved": "Q Exactive Plus",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive Plus",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.instrument_model.name",
+            "source_value": "Q Exactive Plus",
+            "cv_accession": "MS:1002634",
+            "cv_name": "Q Exactive Plus",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 6,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_4.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 12,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "tri-Methylation",
+          "accession": "UNIMOD:37",
+          "targets": [
+            "KR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_4.data[0]",
+          "source_value": "tri-Methylation",
+          "fraction_modified": 0.108449
+        },
+        {
+          "name": "Carboxyl modification with ethanolamine",
+          "accession": "UNIMOD:734",
+          "targets": [
+            "CDE",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_4.data[1]",
+          "source_value": "Carboxyl modification with ethanolamine",
+          "fraction_modified": 0.093575
+        },
+        {
+          "name": "Formylation",
+          "accession": "UNIMOD:122",
+          "targets": [
+            "KST",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_4.data[2]",
+          "source_value": "Formylation",
+          "fraction_modified": 0.088105
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_4.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.023144
+        }
+      ]
+    },
+    "C9017PIK_3": {
+      "raw_file": "C9017PIK_3.raw",
+      "manifest_source_path": "pride_metadata.files[1].fileName",
+      "instrument": {
+        "resolved": "Q Exactive Plus",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive Plus",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.instrument_model.name",
+            "source_value": "Q Exactive Plus",
+            "cv_accession": "MS:1002634",
+            "cv_name": "Q Exactive Plus",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 6,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_3.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 11,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "tri-Methylation",
+          "accession": "UNIMOD:37",
+          "targets": [
+            "KR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_3.data[0]",
+          "source_value": "tri-Methylation",
+          "fraction_modified": 0.107466
+        },
+        {
+          "name": "Carboxyl modification with ethanolamine",
+          "accession": "UNIMOD:734",
+          "targets": [
+            "CDE",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_3.data[1]",
+          "source_value": "Carboxyl modification with ethanolamine",
+          "fraction_modified": 0.091535
+        },
+        {
+          "name": "Formylation",
+          "accession": "UNIMOD:122",
+          "targets": [
+            "KST",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_3.data[2]",
+          "source_value": "Formylation",
+          "fraction_modified": 0.086236
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_3.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.02355
+        }
+      ]
+    },
+    "C9017PIK_1": {
+      "raw_file": "C9017PIK_1.raw",
+      "manifest_source_path": "pride_metadata.files[3].fileName",
+      "instrument": {
+        "resolved": "Q Exactive Plus",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive Plus",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.instrument_model.name",
+            "source_value": "Q Exactive Plus",
+            "cv_accession": "MS:1002634",
+            "cv_name": "Q Exactive Plus",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 6,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_1.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 11,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "tri-Methylation",
+          "accession": "UNIMOD:37",
+          "targets": [
+            "KR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_1.data[0]",
+          "source_value": "tri-Methylation",
+          "fraction_modified": 0.105784
+        },
+        {
+          "name": "Carboxyl modification with ethanolamine",
+          "accession": "UNIMOD:734",
+          "targets": [
+            "CDE",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_1.data[1]",
+          "source_value": "Carboxyl modification with ethanolamine",
+          "fraction_modified": 0.093358
+        },
+        {
+          "name": "Formylation",
+          "accession": "UNIMOD:122",
+          "targets": [
+            "KST",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_1.data[2]",
+          "source_value": "Formylation",
+          "fraction_modified": 0.090396
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_1.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.023667
+        }
+      ]
+    },
+    "C9017PIK_2": {
+      "raw_file": "C9017PIK_2.raw",
+      "manifest_source_path": "pride_metadata.files[5].fileName",
+      "instrument": {
+        "resolved": "Q Exactive Plus",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive Plus",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.instrument_model.name",
+            "source_value": "Q Exactive Plus",
+            "cv_accession": "MS:1002634",
+            "cv_name": "Q Exactive Plus",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 6,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD023985/C9017PIK_2.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 10,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "tri-Methylation",
+          "accession": "UNIMOD:37",
+          "targets": [
+            "KR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_2.data[0]",
+          "source_value": "tri-Methylation",
+          "fraction_modified": 0.105303
+        },
+        {
+          "name": "Formylation",
+          "accession": "UNIMOD:122",
+          "targets": [
+            "KST",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_2.data[1]",
+          "source_value": "Formylation",
+          "fraction_modified": 0.090237
+        },
+        {
+          "name": "Carboxyl modification with ethanolamine",
+          "accession": "UNIMOD:734",
+          "targets": [
+            "CDE",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_2.data[2]",
+          "source_value": "Carboxyl modification with ethanolamine",
+          "fraction_modified": 0.089659
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.C9017PIK_2.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.024187
+        }
+      ]
     }
   },
   "_enrichment": {

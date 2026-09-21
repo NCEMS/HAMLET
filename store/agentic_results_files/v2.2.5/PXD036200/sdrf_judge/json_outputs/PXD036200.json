@@ -1,0 +1,328 @@
+{
+  "paper_id": "PXD036200",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HeLa",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HeLa\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly states that LDs were purified from HeLa cells and then \"pulled down GST-LC3B for mass spectrometry analysis\".",
+        "TRUTH_CHECK": "The value is factually correct as HeLa cells were the source of the biological material analyzed by MS.",
+        "COMPLETENESS_CHECK": "The full set contains \"HeLa\", which covers the cell line used for the primary MS screen described in the results. (Note: While E. coli was used for in vitro phosphorylation MS, the primary proteomics experiment focused on the HeLa-derived LDs)."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The value is inferable from the paper text; the MS analysis was performed on lipid droplets purified from HeLa cells (\"we purified LDs from HeLa cells... pulled down GST-LC3B for mass spectrometry analysis\").",
+        "TRUTH_CHECK": "HeLa is a well-established epithelial cell line (cervical adenocarcinoma), making \"epithelial cell\" a factually correct lineage.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the lineage of the HeLa cells used for the primary MS experiment."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "cervical adenocarcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cervical adenocarcinoma\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material analyzed by mass spectrometry (purified LDs from HeLa cells were analyzed by MS).",
+        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the disease origin of the primary cell line used for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "cervix",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"cervix\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the source of the purified lipid droplets (LDs) analyzed by mass spectrometry (\"we purified LDs from HeLa cells... pulled down GST-LC3B for mass spectrometry analysis\").",
+        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; therefore, \"cervix\" is a correct organ of origin.",
+        "COMPLETENESS_CHECK": "The full set contains only \"cervix\", which correctly describes the origin of the primary MS sample (HeLa cells)."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which is the correct category for the species field.",
+        "SOURCE_CHECK": "Both species are present in the context of mass spectrometry: \"Homo sapiens\" is the source for the LC3-interaction screen (HeLa cells) and phosphorylation analysis (HA-ORP8 immunoprecipitated from cells), and \"Mus musculus\" is the source for the in vitro phosphorylation site identification (though the text mentions \"UniProtKB human or E. coli\", the phosphorylation analysis of ORP8 in the context of the study involves both human cell lines and mouse models, and the MS analysis of the in vitro kinase assay used purified ORP8). Wait, looking closer at the HPLC-MS/MS section: \"The acquired MS/MS data were analyzed against a UniProtKB human or E. coli containing target proteins\". The MS was performed on HeLa cells (human) and recombinant proteins from E. coli. There is no mention of mouse tissue or mouse-derived proteins being analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "While the paper uses mouse models (ob/ob and Osbpl8-/-) for physiological validation, these were analyzed via Western blot, qPCR, and histology, not mass spectrometry. The MS analysis specifically targeted human proteins (from HeLa cells) and E. coli proteins (from recombinant expression).",
+        "COMPLETENESS_CHECK": "The set is incorrect because it includes a species not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (OA + CQ), condition (in vitro kinase assay)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental treatments and conditions, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The values are present in the text: \"HeLa cells treated with oleic acid (OA)... together with chloroquine (CQ)\" and \"in vitro kinase assay\".",
+        "TRUTH_CHECK": "The values accurately reflect the conditions under which the MS samples (LD-pulldowns and phosphorylated ORP8) were prepared.",
+        "COMPLETENESS_CHECK": "The full set includes \"cervical adenocarcinoma\" (inferable from HeLa), but the candidate value itself is a combined string of multiple factors. While the factors are present, the formatting as a single comma-separated string is slightly irregular, but the content is correct."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "cervical adenocarcinoma",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value \"cervical adenocarcinoma\" is not mentioned in the text; it is an inference based on the use of HeLa cells.",
+        "TRUTH_CHECK": "While HeLa cells are derived from cervical adenocarcinoma, the field definitions for factor_value require it to be judged by the same rules as the underlying characteristic (disease). For the disease field, \"cervical adenocarcinoma\" is an acceptable inference from \"HeLa\". However, in the context of this specific experiment, the factor being studied is not the cancer itself, but the effect of treatments (OA, CQ, serum starvation) and genotypes (WT vs KO).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete as it misses key experimental factors like \"serum starvation\" and \"ORP8 knockout\"."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; it only describes the instrument and the \"full-scan MS spectra survey\".",
+        "TRUTH_CHECK": "While a \"full-scan MS spectra survey\" followed by MS/MS is characteristic of DDA, the specific term \"data-dependent acquisition\" is not written in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not explicitly supported by the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"HPLC–MS/MS\" section of the methods (\"On-bead digestion was performed with MS-grade trypsin...\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper states trypsin was used for digestion.",
+        "COMPLETENESS_CHECK": "The full set contains \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify the fragmentation method used (e.g., HCD, CID, ETD); it only mentions the instrument (Q-Exactive) and the mass tolerances.",
+        "COMPLETENESS_CHECK": "The full set contains a value that is not present in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"HPLC–MS/MS\" section of the methods, describing the instrument used for the proteomics analysis.",
+        "TRUTH_CHECK": "The paper states that peptides were introduced into a \"Q-Exactive mass spectrometer (Thermo Fisher Scientific)\".",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the text for the proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis of proteins pulled down with LC3B and phosphorylated ORP8, but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"HPLC–MS/MS\" section of the methods, describing the instrument used for the MS analysis.",
+        "TRUTH_CHECK": "The paper states, \"An Orbitrap analyzer was used to perform a full-scan MS spectra survey.\"",
+        "COMPLETENESS_CHECK": "This is the only mass analyzer mentioned for the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamylation (CKMRSTY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Carbamylation\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Carbamidomethylation of cysteine\", \"oxidation of methionine\", and \"phosphorylation of Serine\\threonine\\tyrosine\" as modifications, but does not mention \"Carbamylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains hallucinations and misses the actual modifications listed in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Iodoacetamide derivative\" is not mentioned in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Carbamidomethylation of cysteine\", \"oxidation of methionine\", and \"phosphorylation of Serine\\threonine\\tyrosine\" as the modifications searched.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and does not match the modifications explicitly stated in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Carbamylation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": "Carbamidomethylation of cysteine",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Carbamylation\" is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"Carbamylation\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Carbamidomethylation of cysteine\" as a variable modification, not \"Carbamylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains hallucinations and does not accurately reflect the modifications listed in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is presented as a modification, but it describes a chemical reagent derivative rather than a standard protein modification name.",
+        "SOURCE_CHECK": "The term \"Iodoacetamide derivative\" does not appear in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Carbamidomethylation of cysteine\" as a variable modification; it does not mention \"Iodoacetamide derivative\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and contains hallucinations."
+      }
+    }
+  ]
+}

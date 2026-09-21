@@ -10,7 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src" / "job_scripts"))
 
-from materialize_store_versions import active_sources, read_pxds, target_paths
+from materialize_store_versions import read_pxds, target_paths, versioned_sources
 
 
 class StoreVersionMaterializationTest(unittest.TestCase):
@@ -22,14 +22,17 @@ class StoreVersionMaterializationTest(unittest.TestCase):
 
             self.assertEqual(read_pxds(path), ["PXD123456"])
 
-    def test_active_sources_and_targets_use_version_subdirectories(self):
+    def test_versioned_sources_and_targets_use_version_subdirectories(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             store = Path(temporary_directory) / "store"
-            (store / "hamlet_sdrfs").mkdir(parents=True)
-            (store / "agentic_results_files" / "PXD123456").mkdir(parents=True)
-            (store / "hamlet_sdrfs" / "PXD123456.sdrf.tsv").write_text("sdrf\n", encoding="utf-8")
+            (store / "hamlet_sdrfs" / "v2.1.0").mkdir(parents=True)
+            (store / "agentic_results_files" / "v2.1.0" / "PXD123456").mkdir(parents=True)
+            (store / "hamlet_sdrfs" / "v2.1.0" / "PXD123456.sdrf.tsv").write_text("sdrf\n", encoding="utf-8")
 
-            self.assertEqual(active_sources(store, ["PXD123456"]), (store / "hamlet_sdrfs", store / "agentic_results_files"))
+            self.assertEqual(
+                versioned_sources(store, "v2.1.0", ["PXD123456"]),
+                (store / "hamlet_sdrfs" / "v2.1.0", store / "agentic_results_files" / "v2.1.0"),
+            )
             self.assertEqual(target_paths(store, "v2.1.1"), (store / "hamlet_sdrfs" / "v2.1.1", store / "agentic_results_files" / "v2.1.1"))
 
 

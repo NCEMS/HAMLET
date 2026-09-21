@@ -1,0 +1,309 @@
+{
+  "paper_id": "PXD023906",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "Caco-2, RKO, HEK293T, Ca9-22",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "HEK293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions multiple cell lines, but only HEK293T was used for the mass spectrometry experiments (specifically, GFP-tagged stathmin was immunoprecipitated from transfected HEK293T cells and analyzed by MS). Caco-2, RKO, and Ca9-22 were used for immunofluorescence, Western blotting, and functional assays, not for the MS analysis.",
+        "TRUTH_CHECK": "Only HEK293T is factually correct as the source of the MS sample; the others are from unrelated experimental contexts.",
+        "COMPLETENESS_CHECK": "The full set includes cell lines that were not analyzed by MS, making the extraction incorrect."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The MS experiment used GFP-tagged stathmin immunoprecipitated from transfected HEK293T cells; while HEK293T is an embryonic kidney cell line, the paper's primary focus and the biological context of the study are mucosal epithelial cells (Caco-2, RKO, and primary intestinal/oral/vaginal epithelial cells). However, the specific MS sample described in the \"Mass spectrometry\" section was derived from HEK293T cells.",
+        "TRUTH_CHECK": "HEK293T cells are derived from human embryonic kidney cells, which are epithelial in nature. Furthermore, the study's overall objective is to understand epithelial barrier permeability, and the authors refer to the cells in the context of epithelial research.",
+        "COMPLETENESS_CHECK": "The full set contains only \"epithelial cell\", which accurately describes the lineage of the cells used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "colorectal carcinoma",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "healthy",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease/diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment used proteins immunoprecipitated from transfected HEK293T cells; however, the paper also uses Caco-2 cells, which are explicitly described as \"human colon cancer cells\".",
+        "TRUTH_CHECK": "Caco-2 is a well-known colorectal adenocarcinoma (colon cancer) cell line, and the text explicitly calls them \"human colon cancer cells\". \"Colorectal carcinoma\" is a correct scientific synonym for colon cancer.",
+        "COMPLETENESS_CHECK": "The MS analysis was performed on HEK293T cells (which are embryonic kidney cells, typically considered \"normal\" or \"healthy\" in this context unless specified otherwise), but the overall study focuses on the pathology of colon cancer cells (Caco-2). However, the specific material analyzed by MS was HEK293T."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "colon, kidney",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organs, which matches the field definition.",
+        "SOURCE_CHECK": "The MS samples were derived from Caco-2 (colon cancer) and HEK293T (embryonic kidney) cells.",
+        "TRUTH_CHECK": "Caco-2 is a human colon adenocarcinoma cell line and HEK293T is a human embryonic kidney cell line; therefore, \"colon\" and \"kidney\" are correct.",
+        "COMPLETENESS_CHECK": "The full set covers both cell lines used for the mass spectrometry experiments described in the paper."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper states that the sequence database searched for the mass spectrometry analysis was \"homo sapiens (Homo_sapiens_9606_Swiss-Prot)\".",
+        "TRUTH_CHECK": "The proteins analyzed by MS were derived from human cell lines (HEK293T), making \"Homo sapiens\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (HIV-1 gp120), PKG1 knockdown, RPG treatment, AMD3100 treatment",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental conditions/treatments, which is the correct category for a factor_value.",
+        "SOURCE_CHECK": "These treatments (HIV-1 gp120, PKG1 knockdown, RPG, and AMD3100) are explicitly mentioned in the paper; however, they are used in various contexts (some in MS-analyzed samples, some in immunofluorescence/Western blot assays).",
+        "TRUTH_CHECK": "The values are factually present in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the treatment conditions and the disease state (\"colorectal carcinoma\" for Caco-2 cells), covering the primary experimental variables."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "colorectal carcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is inferable from the use of Caco-2 cells, which the paper explicitly describes as \"human colon cancer cells\".",
+        "TRUTH_CHECK": "Caco-2 is a well-known colorectal adenocarcinoma cell line; \"colorectal carcinoma\" is a factually correct description of the disease origin of these cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental treatments and the disease state of the cells used, covering the primary axes of the study."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\"; it only describes the instruments and the search software.",
+        "TRUTH_CHECK": "While the use of a Q-Exactive/Orbitrap Elite with a search engine like Proteome Discoverer often implies DDA, the text does not explicitly state the acquisition method.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin/P",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin/P\" is a protease used for protein digestion, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass spectrometry\" section of the methods, describing the enzyme used to generate peptides for the MS analysis.",
+        "TRUTH_CHECK": "The paper states \"Trypsin/P was specified as the cleavage enzyme to generate peptides,\" which is factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"beam-type collision-induced dissociation\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify the fragmentation method used; it only mentions the instruments (Q-Exactive or Orbitrap Elite) and the general LC-MS/MS approach.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q-Exactive, Orbitrap Elite",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains mass spectrometer models, which matches the definition of the instrument field.",
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Mass spectrometry\" section of the methods (\"The data processing was conducted using the Q-Exactive or Orbitrap Elite mass spectrometer (Thermo Fisher Scientific)\").",
+        "TRUTH_CHECK": "The values are factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains both instruments mentioned in the paper, making it exhaustive."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis of immunoprecipitated proteins but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling is described, the \"label-free\" safe default is applicable.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of labeling described in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the \"Mass spectrometry\" section, where the text mentions the \"Q-Exactive or Orbitrap Elite mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct as both the Q-Exactive and Orbitrap Elite instruments utilize Orbitrap mass analyzers.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as it covers the mass analyzer technology used for the experiments."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Lysine oxidation to aminoadipic semialdehyde (K)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Lysine oxidation to aminoadipic semialdehyde\" as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Carbamidomethyl (C)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text specifies \"Carbamidomethyl on Cys\" as the fixed modification.",
+        "TRUTH_CHECK": "The candidate value is factually incorrect based on the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not reflect the modifications listed in the \"Mass spectrometry\" section of the methods."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Gln->Trp substitution (Q)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category for the modification field.",
+        "SOURCE_CHECK": "The value \"Gln->Trp substitution (Q)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention a glutamine to tryptophan substitution; it lists \"deamidated (NQ)\" as a variable modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    }
+  ]
+}

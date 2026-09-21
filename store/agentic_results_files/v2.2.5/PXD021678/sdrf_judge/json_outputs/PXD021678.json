@@ -1,0 +1,499 @@
+{
+  "paper_id": "PXD021678",
+  "annotations": [
+    {
+      "annotation_type": "age",
+      "extracted_value": "E11.5",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"E11.5\" is a valid representation of an embryonic age/developmental time point.",
+        "SOURCE_CHECK": "The value is present in the text and refers to the mouse embryos used for the MS experiment (\"To recapitulate the cellular environment... the ribosome interaction of the a9 IRES180 was further confirmed by employing E11.5 mouse embryo lysates... MS-quantification revealed...\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper explicitly states E11.5 embryos were used for the MS analysis.",
+        "COMPLETENESS_CHECK": "The value is complete as it identifies the specific age of the animal used for the MS sample."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "C3H/10T1/2",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "C3H/10T1/2, E11.5 mouse embryo",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; however, it is used for luciferase reporter assays and as a source of lysate for RNP affinity purification (pulldowns) that were subsequently analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "The text states that \"combined with C3H/10T1/2 cell lysate... the samples were subjected to quantitative mass spectrometry (MS) for P3 and P4 in comparison to the 4xS1m control\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper also describes MS analysis of E11.5 mouse embryo lysates (\"MS-quantification revealed that the a9 IRES180 binds to both full 40S and 60S subunits\" in E11.5 mouse embryo lysates)."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "mesenchymal cells, mouse embryonic stem cells, neural stem cells",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "mesenchymal cells",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains cell types/lineages, which matches the field definition.",
+        "SOURCE_CHECK": "The paper mentions C3H/10T1/2 \"embryonic mesenchymal cells\" and \"mouse embryonic stem cells\" (mESCs) which are differentiated into \"neural stem cells\". However, only the C3H/10T1/2 cells and E11.5 mouse embryo lysates were actually analyzed by mass spectrometry (as stated in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" and \"The Hoxa9 IRES-like element binds to the 40S ribosome\" sections). The mESCs/neural stem cells were used for CRISPR editing and polysome fractionation/RT-qPCR, not for MS.",
+        "TRUTH_CHECK": "The value is partially incorrect because it includes cell types (mESCs, neural stem cells) that were not the source of the MS samples.",
+        "COMPLETENESS_CHECK": "The full set is incorrect as it includes non-MS samples and fails to mention the embryo source."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The paper describes experiments using mouse embryos (E11.5), mouse embryonic stem cells (mESCs), and yeast; there is no mention of any disease or pathological condition being studied.",
+        "TRUTH_CHECK": "Since the study is not a disease study and uses standard biological models (embryos, stem cells, yeast), \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single safe default, which is exhaustive for a non-disease study."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "embryo",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "embryo, C3H/10T1/2",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"embryo\" describes a biological source/organ of origin, which fits the field definition.",
+        "SOURCE_CHECK": "The value comes from the MS experiment context; the text explicitly states that \"E11.5 mouse embryo lysates\" were used for \"MS-quantification\" (Figure 3G, Table S5).",
+        "TRUTH_CHECK": "The value is factually correct as the mass spectrometry analysis was performed on lysates derived from mouse embryos.",
+        "COMPLETENESS_CHECK": "The paper also describes MS analysis using \"C3H/10T1/2 cell lysate\" (Figure 3C, Table S4). The full set of extracted values only contains \"embryo\", missing the cell line source."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Mus musculus, Homo sapiens, Saccharomyces cerevisiae",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains a list of species names, which matches the required category for this field.",
+        "SOURCE_CHECK": "All three species are used in the mass spectrometry experiments: Mus musculus (C3H/10T1/2 cells and E11.5 embryos), Homo sapiens (HEK293 cells used for cryo-EM, though the MS section specifically mentions searching against the Mus musculus database for the pulldowns), and Saccharomyces cerevisiae (WT and hES9S yeast strains).",
+        "TRUTH_CHECK": "The paper describes quantitative MS analysis of pulldowns using mouse cell lysates, mouse embryo lysates, and yeast lysates.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all organisms whose biological material was analyzed by mass spectrometry in this study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "RNA bait (P3, P4, a9 IRES180, 4xS1m control)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (the specific RNA baits used for enrichment), which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is present in the paper text; the MS experiments used these specific RNA baits (P3, P4, a9 IRES180, and 4xS1m control) for the pulldowns.",
+        "TRUTH_CHECK": "The value is factually correct as these are the baits described in the results and methods for the quantitative mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental variable (the baits) and the baseline state (normal), which is exhaustive for the MS experimental design."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (representing a healthy/control state).",
+        "SOURCE_CHECK": "The value \"normal\" is not explicitly mentioned in the text, but the paper describes \"wildtype\" (WT) yeast strains and \"wildtype\" (WT) mouse embryonic stem cells as the baseline/control groups for the MS and translation experiments.",
+        "TRUTH_CHECK": "Per the field definition, \"normal\", \"healthy\", and \"disease free\" are safe defaults and are correct when subjects are healthy or not part of a disease study. In this study, the WT samples serve as the \"normal\" baseline.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the RNA baits used for the pulldown and the \"normal\" (WT) state; together they describe the primary experimental variables of the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition method field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section: \"The Orbitrap Elite... was operated in the data-dependent mode\".",
+        "TRUTH_CHECK": "The value is factually correct as the paper describes using data-dependent mode for MS/MS scans.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately covers the acquisition scheme described in the paper."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section of the methods, describing the sample preparation for the MS experiment.",
+        "TRUTH_CHECK": "The text states that proteins were \"alkylated with 15 mM iodoacetamide\", confirming the value is factually correct.",
+        "COMPLETENESS_CHECK": "Only one alkylation reagent is mentioned in the text, so the full set is exhaustive."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section of the methods, where it states proteins were digested with \"sequencing grade modified trypsin\".",
+        "TRUTH_CHECK": "The value is factually correct as the protease used for the MS sample digestion.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"higher energy collisional dissociation (HCD)\" in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section.",
+        "TRUTH_CHECK": "\"Beam-type collision-induced dissociation\" is a technical synonym for HCD, but the paper specifically uses the term \"HCD\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is a synonym for the method described in the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Elite",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section as the instrument used for MS/MS analysis.",
+        "TRUTH_CHECK": "The paper states the samples were analyzed using an \"Orbitrap Elite mass spectrometer (Thermo Fisher Scientific)\".",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned for the proteomics experiments in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT126",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the 'label' field.",
+        "SOURCE_CHECK": "The paper mentions \"TMTsixplex\" in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section, but it does not explicitly list the individual channel labels (e.g., TMT126, TMT127).",
+        "TRUTH_CHECK": "The paper specifies the use of \"TMTsixplex\", but the specific labels \"TMT126\" through \"TMT131\" are not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values attempts to list the six channels of a TMT6plex, but these specific values are not present in the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT127",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the category of the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMTsixplex\" (TMT 6-plex) in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section.",
+        "TRUTH_CHECK": "While the paper specifies \"TMTsixplex\", it does not explicitly list the individual channel tags (e.g., TMT127). TMT6plex typically consists of a set of six labels, but the specific numeric identifiers (126, 127, etc.) are not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values attempts to list individual TMT channels, but none of these specific numeric labels are mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT128",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the definition of the `label` field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"TMTsixplex\" (TMT 6-plex) in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section, but it does not list the specific individual channel labels (e.g., TMT126, TMT127, TMT128).",
+        "TRUTH_CHECK": "While the paper uses TMT 6-plex, the specific labels TMT126-TMT131 are not mentioned in the text; they are likely inferred from the common TMT6plex kit, but the rules require explicit mention for specific values.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (TMT126-TMT131) represents a standard 6-plex set, but none of these specific labels are written in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT129",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the definition of the label field.",
+        "SOURCE_CHECK": "The paper mentions \"TMTsixplex\" in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section, but it does not explicitly list the individual channel tags (e.g., TMT126, TMT129).",
+        "TRUTH_CHECK": "The paper specifies \"TMTsixplex\", which typically consists of six labels, but the specific numeric tags (126-131) are not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists six specific TMT tags, but these specific numbers are not present in the provided text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT130",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific TMT label, which belongs to the category of isobaric labeling methods.",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of \"TMTsixplex\" for labeling proteins in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section.",
+        "TRUTH_CHECK": "While the paper specifies \"TMTsixplex\", it does not explicitly list the individual channel labels (e.g., TMT130). TMTsixplex typically consists of six labels, but the specific numeric labels (126-131) are not written in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists individual TMT channels, but these specific numbers are not mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "TMT131",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "TMTsixplex",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a specific isobaric label, which fits the definition of the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of \"TMTsixplex\" for relative protein quantification in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section.",
+        "TRUTH_CHECK": "While the paper specifies \"TMTsixplex\", it does not explicitly list the individual channel tags (e.g., TMT131). TMT6plex typically consists of six different tags, but the specific numeric identifiers for those tags are not written in the provided text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values lists six individual TMT tags, but none of these specific tags are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the text (\"Orbitrap Elite mass spectrometer\").",
+        "TRUTH_CHECK": "The paper states that an Orbitrap Elite was used for the MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "TMT6plex-126 reporter+balance reagent acylated residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification/labeling agent, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The value is not present in the paper text; the paper mentions \"TMTsixplex\" and \"TMT6plex (N-term and K)\", but not a \"TMT6plex-126 reporter+balance reagent acylated residue\".",
+        "TRUTH_CHECK": "The value is not factually supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which (including the candidate) are explicitly listed in the text as described in the candidate values."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Sixplex Tandem Mass Tag® (HKSTY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a mass spectrometry labeling modification, which fits the category of a protein modification searched.",
+        "SOURCE_CHECK": "The paper mentions \"TMTsixplex\" and \"TMT6plex (N-term and K)\" in the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section.",
+        "TRUTH_CHECK": "While the paper mentions \"TMT6plex (N-term and K)\", the candidate value \"Sixplex Tandem Mass Tag® (HKSTY,N-term)\" introduces specific residues (H, S, T, Y) that are not explicitly listed in the text. The text only specifies \"N-term and K\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (e.g., \"reduced 4-Hydroxynonenal\", \"Formylation\") that are completely absent from the paper text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "reduced 4-Hydroxynonenal (CHK)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"reduced 4-Hydroxynonenal (CHK)\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not factually supported for this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation (KST,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Formylation (KST,N-term)\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention formylation as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions \"iodoacetamide\" as a reagent, but not as a modification name.",
+        "TRUTH_CHECK": "The value is not factually supported by the text. The paper mentions \"carbamidomethyl (C)\" as a static modification in the search parameters, not an \"Iodoacetamide derivative\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly mentioned in the text except for \"carbamidomethyl (C)\", \"deamidation (NQ)\", and \"oxidation (M)\"."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the paper text; the \"Relative Protein Quantification by Tandem Mass Tag (TMT) Labeling\" section states that proteins were denatured with \"5 mM DTT\".",
+        "TRUTH_CHECK": "DTT is the standard abbreviation for dithiothreitol, making the value factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"dithiothreitol\", which is the only reduction reagent mentioned for the MS sample preparation."
+      }
+    }
+  ]
+}

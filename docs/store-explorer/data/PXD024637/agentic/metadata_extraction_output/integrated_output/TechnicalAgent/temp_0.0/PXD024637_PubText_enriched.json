@@ -60,15 +60,15 @@
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "proteins were digested with trypsin (1:40 trypsin/protein; Promega)"
       }
     }
   },
@@ -80,7 +80,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -99,28 +99,28 @@
     }
   },
   "acquisition_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "data-dependent",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "data-dependent",
+        "evidence": "Mass spectra were acquired in a data-dependent manner, with an automatic switch between MS and MS/MS using a top-15 method."
       }
     }
   },
   "collision_energy": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "30 of normalized collision energy",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "30 of normalized collision energy",
+        "evidence": "HCD fragmentation was performed at 30 of normalized collision energy"
       }
     }
   },
@@ -132,21 +132,21 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "alkylation_reagent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "iodoacetamide",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "iodoacetamide",
+        "evidence": "Briefly, cysteine residues were blocked with 50 mM iodoacetamide buffer"
       }
     }
   },
@@ -179,7 +179,7 @@
   "mass_analyzer": {
     "resolved": "Orbitrap",
     "confidence": 1.0,
-    "status": "METI_ONLY",
+    "status": "AGREE",
     "sources": {
       "meti": {
         "value": "Orbitrap",
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "Orbitrap",
+        "evidence": "MS/MS spectra were analyzed at 60,000-pixel resolution in the Orbitrap."
       }
     }
   },
   "ptm": {
     "resolved": "Sixplex Tandem Mass Tag\u00ae; Iodoacetamide derivative",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "Sixplex Tandem Mass Tag\u00ae; Iodoacetamide derivative",
@@ -205,10 +205,39 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "iTRAQ8plex-116 reporter+balance reagent acylated residue",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "Cys carbamidomethylation (57.021464 Da) fixed; TMT labeling at the N-terminal end fixed; Lys (229.162932 Da) dynamic; Met oxidation (15.994915) dynamic",
+        "evidence": "using Cys carbamidomethylation (57.021464 Da) and TMT labeling at the N-terminal end as fixed modifications and Lys (229.162932 Da) and Met oxidation (15.994915) as dynamic modifications."
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": "800 parts per million (ppm)",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "800 parts per million (ppm)",
+        "evidence": "Precursor mass tolerance was set at 800 parts per million (ppm)"
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": "0.03 Da",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "0.03 Da",
+        "evidence": "fragment mass tolerance was set at 0.03 Da"
       }
     }
   },
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "iTRAQ8plex-116 reporter+balance reagent acylated residue",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,41 @@
     }
   },
   "_confidence": {
-    "overall": 0.938,
-    "evidence_score": 1.0,
-    "completeness": 0.692,
+    "overall": 0.937,
+    "evidence_score": 0.968,
+    "completeness": 0.765,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "iTRAQ8plex-116 reporter+balance reagent acylated residue",
+        "iodoacetamide derivatized residue"
+      ],
+      "records": [
+        {
+          "name": "iTRAQ8plex-116 reporter+balance reagent acylated residue",
+          "accession": "MOD:01549",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "iTRAQ8plex-116 reporter+balance reagent acylated residue"
+        },
+        {
+          "name": "iodoacetamide derivatized residue",
+          "accession": "MOD:00397",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[1]",
+          "source_value": "iodoacetamide derivatized residue"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -359,6 +416,454 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "TMT2_Aorta.raw",
+      "raw_stem": "TMT2_Aorta",
+      "source_path": "pride_metadata.files[1].fileName"
+    },
+    {
+      "raw_file": "TMT2_Liver.raw",
+      "raw_stem": "TMT2_Liver",
+      "source_path": "pride_metadata.files[3].fileName"
+    },
+    {
+      "raw_file": "TMT1_Aorta.raw",
+      "raw_stem": "TMT1_Aorta",
+      "source_path": "pride_metadata.files[5].fileName"
+    },
+    {
+      "raw_file": "TMT1_Liver.raw",
+      "raw_stem": "TMT1_Liver",
+      "source_path": "pride_metadata.files[6].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "TMT2_Aorta": {
+      "raw_file": "TMT2_Aorta.raw",
+      "manifest_source_path": "pride_metadata.files[1].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "??",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "??",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "??",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD024637/TMT2_Aorta.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 8,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Sixplex Tandem Mass Tag\u00ae",
+          "accession": "UNIMOD:737",
+          "targets": [
+            "HKSTY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.TMT2_Aorta.data[0]",
+          "source_value": "Sixplex Tandem Mass Tag\u00ae",
+          "fraction_modified": 0.598669
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.TMT2_Aorta.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.040648
+        }
+      ]
+    },
+    "TMT2_Liver": {
+      "raw_file": "TMT2_Liver.raw",
+      "manifest_source_path": "pride_metadata.files[3].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "??",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "??",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "??",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD024637/TMT2_Liver.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Sixplex Tandem Mass Tag\u00ae",
+          "accession": "UNIMOD:737",
+          "targets": [
+            "HKSTY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.TMT2_Liver.data[0]",
+          "source_value": "Sixplex Tandem Mass Tag\u00ae",
+          "fraction_modified": 0.601211
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.TMT2_Liver.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.040139
+        }
+      ]
+    },
+    "TMT1_Aorta": {
+      "raw_file": "TMT1_Aorta.raw",
+      "manifest_source_path": "pride_metadata.files[5].fileName",
+      "instrument": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "acquisition": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "dissociation": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "runassessor_diagnostics": {},
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      }
+    },
+    "TMT1_Liver": {
+      "raw_file": "TMT1_Liver.raw",
+      "manifest_source_path": "pride_metadata.files[6].fileName",
+      "instrument": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "acquisition": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "dissociation": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "runassessor_diagnostics": {},
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      }
     }
   },
   "_enrichment": {

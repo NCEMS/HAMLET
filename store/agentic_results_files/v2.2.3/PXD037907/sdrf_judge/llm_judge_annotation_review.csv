@@ -1,0 +1,183 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD037907","","strict","Biological","cell_line","OVTW59, ES-2, SKOV3, HEK293","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value is a list of cell line names, which matches the required category.
+SOURCE CHECK: The paper describes two distinct MS experiments: 1) a glycoproteomic analysis using ConA pull-down from OVTW59 cells, and 2) analysis of integrin extracellular domains expressed by HEK293 cells. ES-2 and SKOV3 are used for functional assays (migration, invasion, in vivo) and Western blots, but are not stated to have been analyzed by LC-MS/MS.
+TRUTH CHECK: OVTW59 and HEK293 are correct sources for the MS analysis. ES-2 and SKOV3 were used for other assays (MTT, transwell, nude mice) but not for the mass spectrometry proteomics workflow.
+COMPLETENESS CHECK: The set includes non-MS samples and correctly identifies the MS samples.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: OVTW59, HEK293","OVTW59, HEK293"
+"PXD037907","","strict","Biological","cell_type","ovarian cancer cells","ovarian cancer cells","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK: The value comes from the MS experiment context; the paper explicitly states that LC-MS/MS analysis was performed on proteins pulled down from OVTW59 cells (an ovarian cancer cell line).
+TRUTH CHECK: The value is factually correct as the cells used for the glycoproteomic analysis (OVTW59) are ovarian cancer cells.
+COMPLETENESS CHECK: The full set contains ""ovarian cancer cells"", which accurately describes the lineage of the MS samples (OVTW59) used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Biological","disease","ovarian cancer","ovarian cancer","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""ovarian cancer"" is a disease state, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned throughout the paper as the disease state of the cells (SKOV3, OVTW59, ES-2) and tissues analyzed by mass spectrometry.
+TRUTH CHECK: The paper explicitly states that the study focuses on ""ovarian cancer"" and uses ovarian cancer cell lines for the glycoproteomic analysis.
+COMPLETENESS CHECK: The full set contains ""ovarian cancer"", which completely covers the disease state described for the MS samples in this paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Biological","organ","ovary","ovary","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""ovary"" is a valid organ/tissue name.
+SOURCE CHECK: The MS samples were derived from OVTW59 cells (ovarian cancer cell line) and HEK293 cells (human embryonic kidney cells). The paper explicitly describes ""glycoproteomic analysis"" and ""LC-MS/MS analysis"" using these cells.
+TRUTH CHECK: OVTW59 is an ovarian cancer cell line, making ""ovary"" the correct organ of origin. While HEK293 (kidney) was also used for MS, ""ovary"" is factually correct for the primary experimental focus (OVTW59).
+COMPLETENESS CHECK: The full set only contains ""ovary"", but the paper also used HEK293 cells for MS analysis of integrin domains; therefore, ""kidney"" is missing from the set.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: ovary, kidney","ovary, kidney"
+"PXD037907","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Homo sapiens"" is a valid species name.
+SOURCE CHECK: The MS analysis was performed on proteins expressed by HEK293 cells and lysates from human ovarian cancer cell lines (OVTW59), both of which are human.
+TRUTH CHECK: The paper explicitly mentions ""human ovarian cancer cell lines"" and searching against the ""Uniprot human database"".
+COMPLETENESS CHECK: The full set contains the only species involved in the MS experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","ExperimentalDesign","factor_value","TMTC1 expression (control, knockdown, overexpression)","TMTC1 expression (control, knockdown, overexpression) | ovarian cancer","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (TMTC1 expression levels) and the specific conditions (control, knockdown, overexpression), which fits the definition of a factor_value.
+SOURCE CHECK: The paper explicitly describes these conditions in the context of the MS experiment: ""TMTC1 knockdown in OVTW59 cells... performed LC-MS/MS analysis"" and ""TMTC1 overexpression increased ConA binding... in ES-2 cells"" (though the latter is validated via ConA pull-down/Western, the overall study design for the proteomics is based on these TMTC1 levels).
+TRUTH CHECK: The values ""control"", ""knockdown"", and ""overexpression"" are all explicitly used to describe the manipulation of TMTC1 in the ovarian cancer cell lines analyzed.
+COMPLETENESS CHECK: The full set of extracted values includes both the primary experimental variable (TMTC1 expression) and the disease context (ovarian cancer), covering the main axes of the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","ExperimentalDesign","factor_value","ovarian cancer","TMTC1 expression (control, knockdown, overexpression) | ovarian cancer","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""ovarian cancer"" is a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The value is present in the text; the proteomics experiment (ConA pull-down LC-MS/MS) was performed using OVTW59 cells, which are explicitly described as human ovarian cancer cell lines.
+TRUTH CHECK: The value is factually correct as the study focuses on the role of TMTC1 in ovarian cancer.
+COMPLETENESS CHECK: The full set of extracted values includes both the disease state and the experimental manipulation (TMTC1 expression levels), which together cover the primary axes of the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometry acquisition scheme, which matches the field definition.
+SOURCE CHECK: The paper explicitly states in the ""LC-MS/MS analysis and database search"" section that ""Mass spectrometry analysis was performed in a data-dependent mode"".
+TRUTH CHECK: The value ""data-dependent acquisition"" is a correct expansion/synonym of ""data-dependent mode"".
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the text; the paper explicitly mentions ""HCD"" and ""EThcD"".
+TRUTH CHECK: While ""beam-type collision-induced dissociation"" is a technical synonym for HCD, the rules for this field do not allow for such external technical expansions if the specific term is not in the text.
+COMPLETENESS CHECK: The full set is incomplete as it fails to capture the explicitly mentioned ""HCD"" and ""EThcD"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD, EThcD","HCD, EThcD"
+"PXD037907","","strict","Technical","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis and database search"" section as the instrument used for the proteomics analysis.
+TRUTH CHECK: The paper states the analysis was conducted on an ""Orbitrap Fusion Lumos Tribrid quadrupole-ion trap-Orbitrap mass spectrometer"", making the candidate value factually correct.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods defined for this field.
+SOURCE CHECK: The paper describes LC-MS/MS analysis of proteins pulled down by ConA-agarose beads and the analysis of integrin extracellular domains, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).
+TRUTH CHECK: Since no labeling method is mentioned, the ""label-free"" safe default is applicable.
+COMPLETENESS CHECK: The full set contains only this value, which accurately reflects the absence of labeling in the described MS experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis and database search"" section as part of the instrument description (""Orbitrap Fusion Lumos Tribrid quadrupole-ion trap-Orbitrap mass spectrometer"").
+TRUTH CHECK: The value is factually correct as the instrument used for the MS analysis is an Orbitrap-based system.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as the paper describes a single instrument model.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","modification","mannosylated residue","mannosylated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""mannosylated residue"" describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""O-mannosylated protein substrates"", ""O-mannosylation site"", and ""O-mannosylated sites"" in the context of the LC-MS/MS analysis of integrins $\beta1$ and $\beta4$.
+TRUTH CHECK: The paper explicitly identifies O-mannosylation as the modification being analyzed and identified via mass spectrometry.
+COMPLETENESS CHECK: The full set of extracted values includes several modifications not mentioned in the text (e.g., ""Lysine oxidation to aminoadipic semialdehyde"", ""Deamidation"", ""Iodoacetamide derivative""), but the candidate value itself is a correct extraction.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","mannosylated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The candidate value is not mentioned in the text; the paper focuses on O-mannosylation.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (except potentially mannosylation) are supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","modification","Deamidation (NQR)","mannosylated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Deamidation (NQR)"" is the correct category (a protein modification) for this field.
+SOURCE CHECK: The term ""Deamidation"" or ""Deamidation (NQR)"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; there is no mention of deamidation being searched or identified.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which (including the candidate) are explicitly mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD037907","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","mannosylated residue","low","True","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: No, the candidate value is a specific chemical derivative/labeling term, but it is not listed as a searched modification in the text.
+SOURCE CHECK: The value is not present in the paper text.
+TRUTH CHECK: The paper does not mention ""Iodoacetamide derivative"" or any such modification being searched in the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text.
+TYPE_CORRECT: no
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

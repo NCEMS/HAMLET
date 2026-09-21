@@ -60,15 +60,15 @@
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "After 1D SDS-PAGE electrophoresis and trypsin digestion of the SOM and IOM"
       }
     }
   },
@@ -80,7 +80,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -99,54 +99,54 @@
     }
   },
   "acquisition_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "data-dependent mode",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "data-dependent mode",
+        "evidence": "The mass spectrometer was operated in positive and data-dependent mode"
       }
     }
   },
   "collision_energy": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "normalized collision energy of 28%",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "normalized collision energy of 28%",
+        "evidence": "Ions selected for MS/MS scan were fragmented using higher energy collision dissociation (HCD) at normalized collision energy of 28%"
       }
     }
   },
   "reduction_reagent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "dithiothreitol (DTT)",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "dithiothreitol (DTT)",
+        "evidence": "Reduction was performed using 10 mM dithiothreitol (DTT) in 100 mM NH4HCO3"
       }
     }
   },
   "alkylation_reagent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "Iodoacetamide",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "Iodoacetamide",
+        "evidence": "Alkylation was done with 55 mM Iodoacetamide in 100 mM NH4HCO3"
       }
     }
   },
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "ptm": {
     "resolved": "Iodoacetic acid derivative; Deamidation; Oxidation or Hydroxylation; Iodoacetamide derivative",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "Iodoacetic acid derivative; Deamidation; Oxidation or Hydroxylation; Iodoacetamide derivative",
@@ -205,10 +205,39 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "monohydroxylated residue",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "fixed: carbamidomethyl; variable: oxidation at methionine",
+        "evidence": "The fixed modifications were set to carbamidomethyl and variable modifications were set to oxidation at methionine."
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": "20 ppm",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "20 ppm",
+        "evidence": "The mass tolerance was set to 20 ppm for precursors"
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": "0.5 Da",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "0.5 Da",
+        "evidence": "and 0.5 Da for the MS/MS fragment ion"
       }
     }
   },
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "monohydroxylated residue",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,41 @@
     }
   },
   "_confidence": {
-    "overall": 0.9,
-    "evidence_score": 0.862,
-    "completeness": 0.846,
+    "overall": 0.854,
+    "evidence_score": 0.779,
+    "completeness": 0.824,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "monohydroxylated residue",
+        "iodoacetamide derivatized residue"
+      ],
+      "records": [
+        {
+          "name": "monohydroxylated residue",
+          "accession": "MOD:00425",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "monohydroxylated residue"
+        },
+        {
+          "name": "iodoacetamide derivatized residue",
+          "accession": "MOD:00397",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[1]",
+          "source_value": "iodoacetamide derivatized residue"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -437,6 +494,790 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "sample_SOMsc.raw",
+      "raw_stem": "sample_SOMsc",
+      "source_path": "pride_metadata.files[0].fileName"
+    },
+    {
+      "raw_file": "sample_IOMsc.raw",
+      "raw_stem": "sample_IOMsc",
+      "source_path": "pride_metadata.files[1].fileName"
+    },
+    {
+      "raw_file": "sample_IOMax.raw",
+      "raw_stem": "sample_IOMax",
+      "source_path": "pride_metadata.files[2].fileName"
+    },
+    {
+      "raw_file": "sample_SOMax.raw",
+      "raw_stem": "sample_SOMax",
+      "source_path": "pride_metadata.files[11].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "sample_SOMsc": {
+      "raw_file": "sample_SOMsc.raw",
+      "manifest_source_path": "pride_metadata.files[0].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_SOMsc.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 11,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMsc.data[0]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.173333
+        },
+        {
+          "name": "Iodoacetic acid derivative",
+          "accession": "UNIMOD:6",
+          "targets": [
+            "CKUW",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMsc.data[1]",
+          "source_value": "Iodoacetic acid derivative",
+          "fraction_modified": 0.171821
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMsc.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.074603
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMsc.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.050602
+        }
+      ]
+    },
+    "sample_IOMsc": {
+      "raw_file": "sample_IOMsc.raw",
+      "manifest_source_path": "pride_metadata.files[1].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_IOMsc.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 12,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Iodoacetic acid derivative",
+          "accession": "UNIMOD:6",
+          "targets": [
+            "CKUW",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMsc.data[0]",
+          "source_value": "Iodoacetic acid derivative",
+          "fraction_modified": 0.257485
+        },
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMsc.data[1]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.253968
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMsc.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.093093
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMsc.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.054054
+        }
+      ]
+    },
+    "sample_IOMax": {
+      "raw_file": "sample_IOMax.raw",
+      "manifest_source_path": "pride_metadata.files[2].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_IOMax.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 11,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Iodoacetic acid derivative",
+          "accession": "UNIMOD:6",
+          "targets": [
+            "CKUW",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMax.data[0]",
+          "source_value": "Iodoacetic acid derivative",
+          "fraction_modified": 0.165605
+        },
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMax.data[1]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.140704
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMax.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.065193
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_IOMax.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.046272
+        }
+      ]
+    },
+    "sample_SOMax": {
+      "raw_file": "sample_SOMax.raw",
+      "manifest_source_path": "pride_metadata.files[11].fileName",
+      "instrument": {
+        "resolved": "Q Exactive HF",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive HF",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.instrument_model.name",
+            "source_value": "Q Exactive HF",
+            "cv_accession": "MS:1002523",
+            "cv_name": "Q Exactive HF",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "??",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "??",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "??",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD020332/sample_SOMax.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 10,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMax.data[0]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.136564
+        },
+        {
+          "name": "Iodoacetic acid derivative",
+          "accession": "UNIMOD:6",
+          "targets": [
+            "CKUW",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMax.data[1]",
+          "source_value": "Iodoacetic acid derivative",
+          "fraction_modified": 0.108247
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMax.data[2]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.059406
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.sample_SOMax.data[3]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.056838
+        }
+      ]
     }
   },
   "_enrichment": {

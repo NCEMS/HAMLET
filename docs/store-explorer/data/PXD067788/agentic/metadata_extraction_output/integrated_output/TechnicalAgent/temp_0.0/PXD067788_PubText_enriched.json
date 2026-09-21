@@ -55,33 +55,33 @@
       "pride": null,
       "llm": {
         "value": "label-free",
-        "evidence": "no labeling strategy mentioned for sample-linked proteomics runs"
+        "evidence": "Proteins were identified and quantified using the Proteome Discoverer Software 2.4"
       }
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "trypsin as the enzyme with up to two missed cleavages allowed"
       }
     }
   },
   "enrichment_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "RNA pull-down",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "RNA pull-down",
+        "evidence": "RNA pull-down and mass spectrometry assay were conducted to identify its interacting proteins"
       }
     }
   },
@@ -106,7 +106,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -119,7 +119,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -132,7 +132,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -145,7 +145,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "ptm": {
     "resolved": "Lysine oxidation to aminoadipic semialdehyde; Deamidation; Oxidation or Hydroxylation; Iodoacetamide derivative",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "Lysine oxidation to aminoadipic semialdehyde; Deamidation; Oxidation or Hydroxylation; Iodoacetamide derivative",
@@ -205,10 +205,39 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "No PTMs are included in the dataset",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "carbamidomethylation (C) fixed; oxidation (M) variable; acetylation (protein N-terminus) variable",
+        "evidence": "carbamidomethylation (C) was set as a fixed modification; oxidation (M) and acetylation (protein N-terminus) were set as variable modifications"
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": "15 ppm",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "15 ppm",
+        "evidence": "precursor mass tolerance of 15 ppm"
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": "0.02 Da",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "0.02 Da",
+        "evidence": "fragment mass tolerance of 0.02 Da"
       }
     }
   },
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "No PTMs are included in the dataset",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,30 @@
     }
   },
   "_confidence": {
-    "overall": 0.812,
-    "evidence_score": 0.9,
-    "completeness": 0.308,
+    "overall": 0.831,
+    "evidence_score": 0.921,
+    "completeness": 0.353,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "No PTMs are included in the dataset"
+      ],
+      "records": [
+        {
+          "name": "No PTMs are included in the dataset",
+          "accession": "PRIDE:0000398",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "No PTMs are included in the dataset"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -437,6 +483,205 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "T480_FAIMS_JD_SHY005_hsa_circ_0001910.raw",
+      "raw_stem": "T480_FAIMS_JD_SHY005_hsa_circ_0001910",
+      "source_path": "pride_metadata.files[1].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "T480_FAIMS_JD_SHY005_hsa_circ_0001910": {
+      "raw_file": "T480_FAIMS_JD_SHY005_hsa_circ_0001910.raw",
+      "manifest_source_path": "pride_metadata.files[1].fileName",
+      "instrument": {
+        "resolved": "Orbitrap Exploris 480",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Orbitrap Exploris 480",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.instrument_model.name",
+            "source_value": "Orbitrap Exploris 480",
+            "cv_accession": "MS:1003028",
+            "cv_name": "Orbitrap Exploris 480",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD067788/T480_FAIMS_JD_SHY005_hsa_circ_0001910.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 9,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Lysine oxidation to aminoadipic semialdehyde",
+          "accession": "UNIMOD:352",
+          "targets": [
+            "K",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.T480_FAIMS_JD_SHY005_hsa_circ_0001910.data[0]",
+          "source_value": "Lysine oxidation to aminoadipic semialdehyde",
+          "fraction_modified": 0.16766
+        },
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.T480_FAIMS_JD_SHY005_hsa_circ_0001910.data[1]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.099471
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.T480_FAIMS_JD_SHY005_hsa_circ_0001910.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.035616
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.T480_FAIMS_JD_SHY005_hsa_circ_0001910.data[3]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.026693
+        }
+      ]
     }
   },
   "_enrichment": {

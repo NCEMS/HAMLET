@@ -239,12 +239,12 @@ workflow {
         // llm_judge outputs: [pxd, judge_stage_output]
         llm_judge_ch_minimal = llm_judge(llm_judge_input_ch_minimal)[0]
         
-        // finalize_sdrf needs: [pxd, agentic_stage_output, judge_stage_output]
+        // finalize_sdrf needs: [pxd, agentic_stage_output, aggregated_results, judge_stage_output]
         // agentic_results_ch_minimal = [pxd, agentic_stage_output, aggregated_results]
         // llm_judge_ch_minimal = [pxd, judge_stage_output]
-        // Drop the aggregate before finalization and join on pxd.
+        // Retain the aggregate so final judging can use RunAssessor provenance.
         finalize_input_ch_minimal = agentic_results_ch_minimal
-            .map { pxd, agentic_output, agg_results -> [pxd, agentic_output] }
+            .map { pxd, agentic_output, agg_results -> [pxd, agentic_output, agg_results] }
             .join(llm_judge_ch_minimal, by: 0)
         
         finalize_results_ch_minimal = finalize_sdrf(finalize_input_ch_minimal)
@@ -511,7 +511,7 @@ workflow {
     llm_judge_ch = llm_judge(llm_judge_input_ch)[0]
 
     finalized_sdrf_input_ch = agentic_results_ch
-        .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output) }
+        .map { pxd, metadata_extraction_output, aggregated_results -> tuple(pxd, metadata_extraction_output, aggregated_results) }
         .join(llm_judge_ch)
 
     finalized_sdrf_ch = finalize_sdrf(finalized_sdrf_input_ch)[0]
@@ -1374,7 +1374,7 @@ process agentic_metadata_extraction {
  * --------------------- */
 process llm_judge {
 
-    tag "judge-${pxd}"
+    tag "llm-refinement-judge-${pxd}"
 
     publishDir "${params.outdir}/${pxd}", mode: 'copy', overwrite: true, saveAs: { name ->
         def normalized = name.replaceFirst('^\\./', '')
@@ -1382,10 +1382,10 @@ process llm_judge {
             return null
         }
         normalized = normalized.replaceFirst('^judge_stage_output/?', '')
-        if (!normalized || normalized.startsWith('judge_stage_output/') || normalized.startsWith('judge_output/')) {
+        if (!normalized || normalized.startsWith('judge_stage_output/') || normalized.startsWith('llm_refinement_judge/')) {
             return null
         }
-        return "judge_output/${normalized}"
+        return "llm_refinement_judge/${normalized}"
     }
 
     cache false
@@ -1448,11 +1448,11 @@ process llm_judge {
 
     ls -la judge_stage_output/ || echo "No judge output"
 
-    # Materialize only canonical judge outputs before manifest update.
-    mkdir -p ${outputDir}/${pxd}/judge_output
+    # Materialize the pre-SDRF judge that supplies safe refinement overrides.
+    mkdir -p ${outputDir}/${pxd}/llm_refinement_judge
     for rel_path in json_outputs llm_judge_accuracy.png llm_judge_aggregate.png llm_judge_annotation_quality_counts.png llm_judge_annotation_review.csv llm_judge_coverage.csv llm_judge_per_paper.csv skipped.json; do
         if [ -e "judge_stage_output/\${rel_path}" ]; then
-            cp -r "judge_stage_output/\${rel_path}" ${outputDir}/${pxd}/judge_output/
+            cp -r "judge_stage_output/\${rel_path}" ${outputDir}/${pxd}/llm_refinement_judge/
         fi
     done
 
@@ -1479,19 +1479,18 @@ process finalize_sdrf {
     // output (finalize_stage_output here) is invoked exactly ONCE with the
     // directory's own name -- it is NOT recursed per nested file. That means
     // saveAs can only rename/filter the directory as a whole, never pick out
-    // a nested subtree like post_judge/. Verified empirically with a minimal
+    // a nested subtree like sdrf_judge/. Verified empirically with a minimal
     // standalone Nextflow script. So publishing of both the SDRF file and the
-    // post_judge/ subtree is done via explicit `cp` in the script block below,
+    // final SDRF judge subtree is done via explicit `cp` in the script block below,
     // not through saveAs.
     publishDir "${params.outdir}/${pxd}/agentic_metadata", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
-    publishDir "${baseDir}/store/hamlet_sdrfs", mode: 'copy', overwrite: true, saveAs: { name -> name.endsWith('.sdrf.tsv') ? name : null }
 
     cache false
 
     errorStrategy 'terminate'
 
     input:
-    tuple val(pxd), path(agentic_stage_output), path(judge_stage_output)
+    tuple val(pxd), path(agentic_stage_output), path(aggregated_results), path(judge_stage_output)
 
     output:
     tuple val(pxd), path("finalize_stage_output")
@@ -1531,12 +1530,13 @@ process finalize_sdrf {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/finalize_sdrf.py \
         --pxd ${pxd} \
         --input_dir ${agentic_stage_output} \
+        --aggregated_results ${aggregated_results} \
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache \
         --output_dir finalize_stage_output \
         \${judge_args}
 
-    # Promote flat SDRF to task root so Nextflow can publish it directly to hamlet_sdrfs/
+    # Copy final SDRF outputs into the configured result directory.
     if [ -f "finalize_stage_output/${pxd}.sdrf.tsv" ]; then
-        cp finalize_stage_output/${pxd}.sdrf.tsv ${pxd}.sdrf.tsv
         mkdir -p ${outputDir}/${pxd}/agentic_metadata
         cp finalize_stage_output/${pxd}.sdrf.tsv ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf.tsv
     fi
@@ -1553,16 +1553,15 @@ process finalize_sdrf {
         cp finalize_stage_output/${pxd}.sdrf_refinement_metrics.json ${outputDir}/${pxd}/agentic_metadata/${pxd}.sdrf_refinement_metrics.json
     fi
 
-    # Publish the post_judge/ subtree (second-pass judge evaluation run after
-    # overrides are applied) explicitly via cp -- Nextflow's publishDir/saveAs
+    # Publish the final SDRF judge subtree explicitly via cp -- Nextflow's publishDir/saveAs
     # cannot reach into a nested subdirectory of a directory-type output (see
     # note above), so we copy it ourselves, excluding the internal prompt cache.
-    if [ -d "finalize_stage_output/post_judge" ]; then
-        dest="${outputDir}/${pxd}/agentic_metadata/metadata_extraction_output/post_judge"
+    if [ -d "finalize_stage_output/sdrf_judge" ]; then
+        dest="${outputDir}/${pxd}/sdrf_judge"
         mkdir -p "\$dest"
         shopt -s nullglob
-        post_judge_items=(finalize_stage_output/post_judge/*)
-        for item in "\${post_judge_items[@]}"; do
+        final_judge_items=(finalize_stage_output/sdrf_judge/*)
+        for item in "\${final_judge_items[@]}"; do
             base=\$(basename "\$item")
             case "\$base" in
                 .prompt_cache*) continue ;;

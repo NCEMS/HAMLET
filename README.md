@@ -531,8 +531,8 @@ flowchart TD
   K --> M
   L --> M
   H --> M
-  M --> N["majority-vote evaluation consensus"]
-  N --> O["judge_output/json_outputs/PXD_sdrf_overrides.json"]
+  M --> N["majority-vote refinement consensus"]
+  N --> O["llm_refinement_judge/json_outputs/PXD_sdrf_overrides.json"]
 
   G --> P["<b>finalize_sdrf</b>"]
   J --> P
@@ -541,13 +541,16 @@ flowchart TD
   O --> P
   P --> R["sdrf_builder.py:<br/>AgenticToSDRF"]
   R --> Q["results/PXD/agentic_metadata/PXD.sdrf.tsv"]
+  Q --> S["<b>sdrf_judge</b>: final SDRF evaluation"]
+  H --> S
+  S --> T["results/PXD/sdrf_judge/"]
 ```
 
-By default, **`llm_judge`** makes three independent evaluations (`--n_judge_runs 3`) against publication text and the integrated agent values. It majority-votes each field/value evaluation and writes both a consensus review and `judge_output/json_outputs/<PXD>_sdrf_overrides.json`.
+By default, **`llm_judge`** makes three independent evaluations (`--n_judge_runs 3`) against publication text and the integrated agent values. It majority-votes each field/value evaluation and writes the refinement consensus to `llm_refinement_judge/json_outputs/<PXD>_sdrf_overrides.json`.
 
 **`finalize_sdrf`** reads that override document, accepts only an unambiguous selected value from the safe-field allowlist, and passes the resulting `{builder_field: value}` dictionary to `AgenticToSDRF`. The override applies in memory during TSV construction; it never mutates the three integrated JSONs. Each override artifact also retains judge verdict, correctness/completeness, hallucination/type-mismatch flags, and any corrected value for future provenance or confidence reporting.
 
-The current safe override fields are organism/sample attributes, instrument, label, replicate and fraction identifiers, and experimental factor value. Technical fields derived directly from runAssessor or search output, including acquisition method, dissociation, mass tolerance, and modification parameters, are not currently judge-overridable.
+The current safe override fields are organism/sample attributes, instrument, label, replicate and fraction identifiers, and experimental factor value. Technical fields derived directly from runAssessor or search output, including acquisition method, dissociation, mass tolerance, and modification parameters, are not currently judge-overridable. After rendering, **`sdrf_judge`** evaluates the exact final SDRF and writes the authoritative final metrics and annotation review under `sdrf_judge/`.
 
 ---
 

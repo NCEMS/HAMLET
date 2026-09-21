@@ -13,7 +13,7 @@
       "pride": null,
       "llm": {
         "value": "Q Exactive",
-        "evidence": "samples were analyzed using an EASY-nLC 1200 nano-UPLC system coupled to a Q Exactive mass spectrometer (Thermo Scientific)"
+        "evidence": "coupled to a Q Exactive mass spectrometer (Thermo Scientific)"
       }
     }
   },
@@ -55,33 +55,33 @@
       "pride": null,
       "llm": {
         "value": "label-free",
-        "evidence": "The protein database utilized was from UniProt (UniProt-mouse-20200526), with label-free quantification (LFQ) based on MS1 intensity measurements."
+        "evidence": "with label-free quantification (LFQ) based on MS1 intensity measurements."
       }
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "Protein samples underwent trypsin digestion (enzyme-to-substrate ratio of 1:50 at 37\u00b0C for 18\u201320\u2009h) in the filter"
       }
     }
   },
   "enrichment_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "TiO2 beads",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "TiO2 beads",
+        "evidence": "For phosphopeptide enrichment, TiO2 beads were prepared at a ratio of 6:1 (beads: protein)."
       }
     }
   },
@@ -99,28 +99,28 @@
     }
   },
   "acquisition_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "DDA",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "DDA",
+        "evidence": "Data-dependent acquisition (DDA) was employed"
       }
     }
   },
   "collision_energy": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "NCE 28%",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "NCE 28%",
+        "evidence": "The normalized collision energy (NCE) was set to 28%"
       }
     }
   },
@@ -132,7 +132,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -145,7 +145,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
   },
   "ptm": {
     "resolved": "Deamidation; Iodoacetamide derivative; Oxidation or Hydroxylation",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "Deamidation; Iodoacetamide derivative; Oxidation or Hydroxylation",
@@ -205,9 +205,38 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "phosphorylated residue",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "Oxidation (M) variable; acetyl (protein N-term) variable; Carbamidomethyl (C) fixed; phosphorylation (STY) variable",
+        "evidence": "Oxidation (M) and acetyl (protein N-term) were set as variable modifications. Carbamidomethyl (C) was set as a fixed modification... Variable modifications included oxidation (M), acetyl (protein N-term), and phosphorylation (STY), while carbamidomethyl (C) was set as a fixed modification."
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": null,
+    "confidence": 0,
+    "status": "UNKNOWN",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
+        "evidence": ""
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": null,
+    "confidence": 0,
+    "status": "UNKNOWN",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "phosphorylated residue",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,30 @@
     }
   },
   "_confidence": {
-    "overall": 0.892,
-    "evidence_score": 0.938,
-    "completeness": 0.615,
+    "overall": 0.853,
+    "evidence_score": 0.894,
+    "completeness": 0.529,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "phosphorylated residue"
+      ],
+      "records": [
+        {
+          "name": "phosphorylated residue",
+          "accession": "MOD:00696",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "phosphorylated residue"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -398,6 +444,427 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "B11A.raw",
+      "raw_stem": "B11A",
+      "source_path": "pride_metadata.files[3].fileName"
+    },
+    {
+      "raw_file": "B15A.raw",
+      "raw_stem": "B15A",
+      "source_path": "pride_metadata.files[5].fileName"
+    },
+    {
+      "raw_file": "B17A.raw",
+      "raw_stem": "B17A",
+      "source_path": "pride_metadata.files[7].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "B11A": {
+      "raw_file": "B11A.raw",
+      "manifest_source_path": "pride_metadata.files[3].fileName",
+      "instrument": {
+        "resolved": "Q Exactive",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B11A.mzML.instrument_model.name",
+            "source_value": "Q Exactive",
+            "cv_accession": "MS:1001911",
+            "cv_name": "Q Exactive",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B11A.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B11A.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B11A.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD044254/B11A.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD044254/B11A.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 9,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B11A.data[0]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.113128
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B11A.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.074992
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B11A.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.027411
+        }
+      ]
+    },
+    "B15A": {
+      "raw_file": "B15A.raw",
+      "manifest_source_path": "pride_metadata.files[5].fileName",
+      "instrument": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "acquisition": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "dissociation": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "runassessor_diagnostics": {},
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      }
+    },
+    "B17A": {
+      "raw_file": "B17A.raw",
+      "manifest_source_path": "pride_metadata.files[7].fileName",
+      "instrument": {
+        "resolved": "Q Exactive",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "Q Exactive",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B17A.mzML.instrument_model.name",
+            "source_value": "Q Exactive",
+            "cv_accession": "MS:1001911",
+            "cv_name": "Q Exactive",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B17A.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "HR HCD",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "HR HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B17A.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "HR HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "HR_HCD",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD044254/B17A.mzML.spectra_stats.fragmentation_type",
+            "source_value": "HR_HCD",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD044254/B17A.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 7,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD044254/B17A.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 9,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Deamidation",
+          "accession": "UNIMOD:7",
+          "targets": [
+            "NQR",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B17A.data[0]",
+          "source_value": "Deamidation",
+          "fraction_modified": 0.112884
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B17A.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.075381
+        },
+        {
+          "name": "Oxidation or Hydroxylation",
+          "accession": "UNIMOD:35",
+          "targets": [
+            "CDEFHIKLMNPQRSTUVWY",
+            "C-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.B17A.data[2]",
+          "source_value": "Oxidation or Hydroxylation",
+          "fraction_modified": 0.02729
+        }
+      ]
     }
   },
   "_enrichment": {

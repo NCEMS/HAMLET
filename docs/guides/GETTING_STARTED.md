@@ -230,8 +230,8 @@ The table uses `PXD######` as a placeholder. Paths are relative to the repositor
 | `search` | Runs SAGE for DDA or DIA-NN for DIA and derives PTM/search evidence. | `results/PXD######/search/dda_search/search_results.tsv` or `results/PXD######/search/dia_search/search_results.tsv` | Correct routing, PSM/peptide counts, and search errors. |
 | `aggregate_results` | Combines technical, taxonomy, and search outputs. | `results/PXD######/PXD######_aggregated_results.json` | The main structured summary for a full run. |
 | `agentic_metadata_extraction` | Extracts biological, design, and technical metadata from publications. | `results/PXD######/agentic_metadata/metadata_extraction_output/integrated_output/*Agent/temp_0.0/PXD######_PubText_enriched.json` | All three Agent JSON files should exist. |
-| `llm_judge` | Reviews extracted metadata and produces safe initial corrections. | `results/PXD######/judge_output/json_outputs/PXD######_sdrf_overrides.json` | `field_overrides` and `apply_override` decisions. |
-| `finalize_sdrf` | Builds the final SDRF, confidence sidecar, and post-finalization judge report. | `results/PXD######/agentic_metadata/PXD######.sdrf.tsv` | Final SDRF, confidence sidecar, and `post_judge/` report. |
+| `llm_judge` | Reviews extracted metadata and produces safe initial corrections. | `results/PXD######/llm_refinement_judge/json_outputs/PXD######_sdrf_overrides.json` | `field_overrides` and `apply_override` decisions. |
+| `finalize_sdrf` | Builds the final SDRF, confidence sidecar, and final-SDRF judge report. | `results/PXD######/agentic_metadata/PXD######.sdrf.tsv` | Final SDRF, confidence sidecar, and `sdrf_judge/` report. |
 | `results_summary` | Summarizes completed run results. | `results/ResultsSummary.csv` | Batch-level counts and judge metrics. |
 
 ## What a Successful PXD Produces
@@ -252,19 +252,19 @@ metadata_extraction_output/
     BiologicalAgent/temp_0.0/PXD######_PubText_enriched.json
     ExperimentalDesignAgent/temp_0.0/PXD######_PubText_enriched.json
     TechnicalAgent/temp_0.0/PXD######_PubText_enriched.json
-  post_judge/
-    llm_judge_per_paper.csv
-    json_outputs/PXD######.json
-judge_output/
+llm_refinement_judge/
   json_outputs/PXD######_sdrf_overrides.json
   llm_judge_per_paper.csv
+sdrf_judge/
+    llm_judge_per_paper.csv
+    llm_judge_annotation_review.csv
 ```
 
 Read the outputs in this order:
 
 1. **`PXD######.sdrf.tsv`**: the final standards-oriented annotation file.
 2. **`PXD######.confidence.sdrf.tsv`**: provenance, confidence, selected source, and judge rationale for SDRF fields.
-3. **`metadata_extraction_output/post_judge/json_outputs/PXD######.json`**: final SDRF evaluation. It is the authoritative judge report for the final SDRF, not the pre-finalization `judge_output` copy.
+3. **`sdrf_judge/llm_judge_per_paper.csv`** and its annotation review: authoritative evaluation of the final SDRF, not the pre-finalization `llm_refinement_judge` copy.
 4. **`PXD######_aggregated_results.json`**: the structured full-pipeline result and run metadata.
 
 ## Update the Store After a Run
@@ -327,7 +327,7 @@ This stage is allowed to fail without stopping all downstream work. Check GPU av
 
 ### Agentic extraction or judge fails
 
-Confirm `OPENROUTER_API_KEY` is exported in the shell that launches Nextflow. Inspect the task `.command.err` under `work/`, then check whether all three integrated Agent JSON files and `judge_output/llm_judge_per_paper.csv` exist.
+Confirm `OPENROUTER_API_KEY` is exported in the shell that launches Nextflow. Inspect the task `.command.err` under `work/`, then check whether all three integrated Agent JSON files and `llm_refinement_judge/llm_judge_per_paper.csv` exist.
 
 ### SDRF is missing despite a judge output
 
@@ -338,7 +338,7 @@ test -f results/PXD######/agentic_metadata/PXD######.sdrf.tsv
 grep -n -A 20 '"PXD######"' results/pipeline_stage_manifest.json
 ```
 
-The post-judge files are created after the SDRF is initially written. Use the final `post_judge/json_outputs/PXD######.json` to audit the final file. The finalizer can apply bounded, unambiguous post-judge mass-tolerance corrections and regenerate the SDRF.
+The final judge files are created after the SDRF is written. Use `sdrf_judge/llm_judge_per_paper.csv` and `sdrf_judge/llm_judge_annotation_review.csv` to audit the final file. The pre-SDRF refinement judge only supplies bounded, unambiguous overrides during SDRF construction.
 
 ### A rerun keeps old outputs
 
@@ -358,7 +358,7 @@ find work -name .command.err -exec sh -c 'echo "--- $1"; tail -n 80 "$1"' _ {} \
 3. Confirm one DDA or DIA search result exists under `results/PXD######/search/`.
 4. Confirm `PXD######_aggregated_results.json` exists.
 5. Confirm the final SDRF and confidence sidecar exist.
-6. Read the final `post_judge` JSON before treating the SDRF as reviewed.
+6. Read the final `sdrf_judge` report before treating the SDRF as reviewed.
 7. Only then expand the batch size or remove `--max_raw_files`.
 
 ## Related Documentation

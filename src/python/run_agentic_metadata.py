@@ -28,6 +28,37 @@ AGENTIC_CONFIG = REPO_ROOT / "assets" / "agentic_metadata_config.yaml"
 _last_input_json: Path = Path("")
 
 ######################################################################################################
+def build_legacy_descriptor(full_text: str, raw_filenames: list[str]) -> str:
+    """Preserve the pre-v2.1.8 descriptor for biological and technical agents."""
+    return full_text + "\nMass spectrometry data files:\n" + "\n".join(raw_filenames)
+
+
+def build_agentic_descriptor(full_text: str, raw_filenames: list[str]) -> str:
+    """Combine publication evidence with a clearly scoped PRIDE file manifest."""
+    manifest_lines = "\n".join(f"- {filename}" for filename in raw_filenames) or "- None listed"
+    return (
+        "=== PUBLICATION TEXT ===\n"
+        f"{full_text.strip()}\n\n"
+        "=== PRIDE RAW DATA-FILE MANIFEST ===\n"
+        f"RAW data-file count: {len(raw_filenames)}\n"
+        "RAW filenames:\n"
+        f"{manifest_lines}\n\n"
+        "Manifest interpretation: RAW files are MS data-file acquisitions. Their count is not "
+        "a biological-sample, biological-replicate, technical-replicate, or fraction count. "
+        "Do not infer those counts from this manifest alone."
+    )
+
+
+def write_agentic_descriptor(pub_text: Path, full_text: str, raw_filenames: list[str]) -> None:
+    """Write the current extraction descriptor, replacing any stale temporary file."""
+    pub_text.write_text(build_agentic_descriptor(full_text, raw_filenames), encoding="utf-8")
+
+
+def write_legacy_descriptor(pub_text: Path, full_text: str, raw_filenames: list[str]) -> None:
+    """Write the legacy descriptor, replacing any stale temporary file."""
+    pub_text.write_text(build_legacy_descriptor(full_text, raw_filenames), encoding="utf-8")
+
+
 def slice_cache_entry(cache_file: Path, key: str, is_array: bool = False, array_key: str = "accession") -> dict:
     """
     Extract a single entry from a large JSON cache file using jq (streaming, memory-efficient).
@@ -101,38 +132,30 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
 
     ###-------------------------------------------------------------------------------
     pub_text = Path(tempfile.gettempdir()) / f"{pxd}_PubText.txt"
-    if not pub_text.exists():
-        print(f"Publication text file not found: {pub_text}, Creating...")
+    print(f"Building publication descriptors for {pxd}")
 
-        ## Extract pride_cache entry for this PXD (memory-efficient using jq)
-        print(f"Extracting {pxd} from PRIDE cache (memory-efficient)...")
-        pxd_metadata = slice_cache_entry(pride_cache, pxd, is_array=True, array_key='accession')
-        
-        if not pxd_metadata:
-            sys.exit(f"ERROR: PXD ID {pxd} not found in PRIDE cache")
-        print(f"Loaded metadata for {pxd} from PRIDE cache")
+    ## Extract pride_cache entry for this PXD (memory-efficient using jq)
+    print(f"Extracting {pxd} from PRIDE cache (memory-efficient)...")
+    pxd_metadata = slice_cache_entry(pride_cache, pxd, is_array=True, array_key='accession')
 
-        ## Extract .raw file names from PRIDE metadata
-        files = pxd_metadata.get('files', [])
-        filenames = [f.get('fileName', '') for f in files if f.get('fileName', '').lower().endswith('.raw')]
-        print(f"Extracted .raw filenames from PRIDE metadata: {filenames}")
+    if not pxd_metadata:
+        sys.exit(f"ERROR: PXD ID {pxd} not found in PRIDE cache")
+    print(f"Loaded metadata for {pxd} from PRIDE cache")
 
-        ## Extract pmc_cache entry for this PXD (memory-efficient using jq)
-        print(f"Extracting {pxd} from PMC cache (memory-efficient)...")
-        pmc_metadata = slice_cache_entry(pmc_cache, pxd, is_array=False)
-        
-        if not pmc_metadata:
-            sys.exit(f"ERROR: PXD ID {pxd} not found in PMC cache")
-        print(f"Loaded publication text metadata for {pxd} from PMC cache")
+    ## Extract .raw file names from PRIDE metadata
+    files = pxd_metadata.get('files', [])
+    filenames = [f.get('fileName', '') for f in files if f.get('fileName', '').lower().endswith('.raw')]
+    print(f"Extracted .raw filenames from PRIDE metadata: {filenames}")
 
-        full_text = pmc_metadata.get('full_text', '')
-        full_text = full_text + "\nMass spectrometry data files:\n" + "\n".join(filenames)
-        # print(full_text)
-        # Save full text to a temporary file for agentic input
-        pub_text = Path(tempfile.gettempdir()) / f"{pxd}_PubText.txt"
-        with open(pub_text, 'w') as f:
-            f.write(full_text)
-        print(f"Saved publication text to temporary file: {pub_text}")
+    ## Extract pmc_cache entry for this PXD (memory-efficient using jq)
+    print(f"Extracting {pxd} from PMC cache (memory-efficient)...")
+    pmc_metadata = slice_cache_entry(pmc_cache, pxd, is_array=False)
+
+    if not pmc_metadata:
+        sys.exit(f"ERROR: PXD ID {pxd} not found in PMC cache")
+    print(f"Loaded publication text metadata for {pxd} from PMC cache")
+
+    publication_text = pmc_metadata.get('full_text', '')
 
     ###-------------------------------------------------------------------------------
 
@@ -146,36 +169,44 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
     
     else:
         with tempfile.TemporaryDirectory(prefix=f"agentic_{pxd}_") as tmpdir:
-            docs_dir = Path(tmpdir) / "documents"
+            legacy_docs_dir = Path(tmpdir) / "legacy_documents"
+            experimental_docs_dir = Path(tmpdir) / "experimental_documents"
             runassessor_dir = Path(tmpdir) / "runassessor_data"
             agentic_output = Path(tmpdir) / "output"
-            docs_dir.mkdir()
+            legacy_docs_dir.mkdir()
+            experimental_docs_dir.mkdir()
             runassessor_dir.mkdir()
             agentic_output.mkdir()
-            print(f"Created temporary directories: {docs_dir}, {runassessor_dir}, {agentic_output}")
+            print(f"Created temporary directories: {legacy_docs_dir}, {experimental_docs_dir}, {runassessor_dir}, {agentic_output}")
 
-            # Copy publication text if provided
-            shutil.copy(pub_text, docs_dir / pub_text.name)
-            print(f"Copied publication text to: {docs_dir / pub_text.name}")
+            legacy_pub_text = legacy_docs_dir / pub_text.name
+            experimental_pub_text = experimental_docs_dir / pub_text.name
+            write_legacy_descriptor(legacy_pub_text, publication_text, filenames)
+            write_agentic_descriptor(experimental_pub_text, publication_text, filenames)
+            print(f"Wrote legacy descriptor to: {legacy_pub_text}")
+            print(f"Wrote structured experimental descriptor to: {experimental_pub_text}")
 
             # Stage aggregated results for integration
             shutil.copy(input_json, runassessor_dir / input_json.name)
             print(f"Copied aggregated results to: {runassessor_dir / input_json.name}")
 
-            cmd = [
-                sys.executable, str(AGENTIC_MAIN), "all",
-                "--config", str(AGENTIC_CONFIG),
-                "--input", str(docs_dir),
-                "--output", str(agentic_output),
-                "--integrate",
-                "--meti-dir", str(runassessor_dir),
-                "--single-temp", temperature,
-                "--seed", "42",
-            ]
-            print(f"Running command: {' '.join(cmd)}")
-
-            print(f"Running agentic metadata extraction for {pxd}...")
-            subprocess.run(cmd, cwd=REPO_ROOT / "src" / "agentic-metadata", check=True)
+            for mode, docs_dir in (
+                ("biological", legacy_docs_dir),
+                ("technical", legacy_docs_dir),
+                ("experimental", experimental_docs_dir),
+            ):
+                cmd = [
+                    sys.executable, str(AGENTIC_MAIN), mode,
+                    "--config", str(AGENTIC_CONFIG),
+                    "--input", str(docs_dir),
+                    "--output", str(agentic_output),
+                    "--integrate",
+                    "--meti-dir", str(runassessor_dir),
+                    "--single-temp", temperature,
+                    "--seed", "42",
+                ]
+                print(f"Running command: {' '.join(cmd)}")
+                subprocess.run(cmd, cwd=REPO_ROOT / "src" / "agentic-metadata", check=True)
 
             # Copy results to output directory
             print(f"Copying agentic output from {agentic_output} to {outdir}...")

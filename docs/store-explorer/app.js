@@ -248,11 +248,14 @@ function histogramCard(field) {
     const height = Math.max(3, (bucket.count / maximum) * 100);
     return `<div class="histogram-bin" title="${esc(`${bucket.label}: ${bucket.count} PXDs`)}"><span class="histogram-bar" style="height:${height}%"></span><span class="histogram-label">${esc(bucket.label)}</span></div>`;
   }).join("");
-  return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
+  return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><p class="section-note">Fixed bins: ${esc(`${formatStatistic(field.histogramMinimum)}-${formatStatistic(field.histogramMaximum)}`)}</p><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
 }
 
 function sortedVersions() {
-  return [...new Set(state.records.map(record => record.version || "Unknown"))]
+  return [...new Set([
+    ...state.records.map(record => record.version || "Unknown"),
+    ...(state.summary?.version_judges || []).map(record => record.version),
+  ])]
     .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
 }
 
@@ -268,10 +271,22 @@ function selectDefaultQcVersion() {
   state.qcVersion = known[known.length - 1] || versions[0] || null;
 }
 
-function buildHistogram(values, bins = 10) {
+function metricHistogramBounds(judgeType, metric) {
+  const values = [];
+  for (const versionJudge of state.summary?.version_judges || []) {
+    if (versionJudge.judge_type !== judgeType) continue;
+    for (const record of versionJudge.records || []) {
+      const value = record.metrics?.[metric];
+      if (Number.isFinite(value)) values.push(value);
+    }
+  }
+  return values.length ? { minimum: Math.min(...values), maximum: Math.max(...values) } : null;
+}
+
+function buildHistogram(values, bins = 10, bounds = null) {
   if (!values.length) return [];
-  const minimum = Math.min(...values);
-  const maximum = Math.max(...values);
+  const minimum = bounds?.minimum ?? Math.min(...values);
+  const maximum = bounds?.maximum ?? Math.max(...values);
   const span = maximum - minimum;
   const step = span === 0 ? 1 : span / bins;
   const counts = new Array(bins).fill(0);
@@ -303,34 +318,16 @@ async function loadVersionJudgeMetrics(version) {
   if (cached?.data) return cached.data;
   if (cached?.promise) return cached.promise;
   const promise = (async () => {
-    const records = state.records.filter(record => (record.version || "Unknown") === version);
-    const metrics = (state.summary?.judge_fields || []).map(field => field.field);
+    const versionJudge = (state.summary?.version_judges || []).find(item => item.version === version);
+    const records = versionJudge?.records || [];
+    const metrics = versionJudge?.available_metrics || [];
     const metricPoints = Object.fromEntries(metrics.map(metric => [metric, []]));
-    let judgeRecords = 0;
-
-    await Promise.all(records.map(async record => {
-      const perPaperPath = record.agentic.find(path => path.endsWith("/llm_judge_per_paper.csv"));
-      if (!perPaperPath) return;
-      try {
-        const rows = parseDelimited(await fetchText(perPaperPath), ",");
-        if (rows.length < 2) return;
-        const header = rows[0];
-        const dataRow = firstNonEmptyDataRow(rows);
-        if (!dataRow) return;
-        let populated = false;
-        for (const metric of metrics) {
-          const metricIndex = header.indexOf(metric);
-          if (metricIndex === -1) continue;
-          const value = Number.parseFloat(dataRow[metricIndex]);
-          if (!Number.isFinite(value)) continue;
-          metricPoints[metric].push({ pxd: record.pxd, value });
-          populated = true;
-        }
-        if (populated) judgeRecords += 1;
-      } catch (_error) {
-        // Skip unreadable per-paper judge files for this PXD.
+    for (const record of records) {
+      for (const metric of metrics) {
+        const value = record.metrics?.[metric];
+        if (Number.isFinite(value)) metricPoints[metric].push({ pxd: record.pxd, value });
       }
-    }));
+    }
 
     for (const metric of Object.keys(metricPoints)) {
       metricPoints[metric].sort((left, right) => left.pxd.localeCompare(right.pxd, undefined, { numeric: true }));
@@ -340,21 +337,29 @@ async function loadVersionJudgeMetrics(version) {
       .map(metric => {
         const values = metricPoints[metric].map(point => point.value);
         if (!values.length) return null;
+        const bounds = metricHistogramBounds(versionJudge?.judge_type, metric) || {
+          minimum: Math.min(...values),
+          maximum: Math.max(...values),
+        };
         return {
           field: metric,
           count: values.length,
           minimum: Math.min(...values),
           maximum: Math.max(...values),
           mean: values.reduce((sum, value) => sum + value, 0) / values.length,
-          histogram: buildHistogram(values),
+          histogramMinimum: bounds.minimum,
+          histogramMaximum: bounds.maximum,
+          histogram: buildHistogram(values, 10, bounds),
         };
       })
       .filter(Boolean);
 
     return {
       version,
-      totalPxds: records.length,
-      judgeRecords,
+      judgeType: versionJudge?.judge_type || null,
+      releaseState: versionJudge?.release_state || null,
+      totalPxds: versionJudge?.release_pxd_count || records.length,
+      judgeRecords: records.length,
       metricPoints,
       distributions,
       availableMetrics: metrics.filter(metric => (metricPoints[metric] || []).length),
@@ -428,8 +433,14 @@ function qcStatus(value) {
     : value === "failed" ? "Failed"
       : value === "skipped" ? "Skipped"
         : value === "available" ? "Available"
+          : value === "incompatible_judge_types" ? "Incompatible types"
           : value === "missing" ? "Missing"
             : "Not run";
+}
+
+function qcJudgeLabel(judge) {
+  if (!judge || judge.status !== "available") return qcStatus(judge?.status);
+  return `${qcStatus(judge.status)} (${judge.judge_type || "unknown"})`;
 }
 
 function renderVersionMetricPlots(versionData) {
@@ -578,8 +589,8 @@ function comparisonQcContent(summary) {
     rows.push([
       result.pxd || "",
       result.sdrf_status === "missing" ? "Missing" : result.sdrf_changed ? "Changed" : "Same",
-      qcStatus(result.baseline_judge?.status),
-      qcStatus(result.candidate_judge?.status),
+      qcJudgeLabel(result.baseline_judge),
+      qcJudgeLabel(result.candidate_judge),
       accuracyDelta && Number.isFinite(accuracyDelta.absolute_delta) ? `${accuracyDelta.absolute_delta >= 0 ? "+" : ""}${accuracyDelta.absolute_delta.toFixed(4)}` : "-",
       categoryCount ? `${categoryCount} categories` : "-",
     ]);
@@ -591,7 +602,8 @@ function comparisonQcContent(summary) {
     ["Candidate version", comparison.candidate_version || "Unknown"],
     ["Shared PXDs", formatNumber(comparison.summary?.shared_pxds || 0)],
     ["Changed SDRFs", formatNumber(comparison.summary?.changed_sdrfs || 0)],
-    ["Judge pairs", formatNumber(comparison.summary?.judge_pairs_available || 0)],
+    ["Comparable judge pairs", formatNumber(comparison.summary?.judge_pairs_available || 0)],
+    ["Incompatible judge pairs", formatNumber(comparison.summary?.judge_pairs_incompatible || 0)],
   ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>Static release comparison from versioned store artifacts</small></article>`).join("");
   const metrics = qcCategoryMetricOptions(comparison);
   const versionOptions = [...new Set(comparisons.flatMap(item => [item.baseline_version, item.candidate_version]))]
@@ -617,7 +629,7 @@ function comparisonQcContent(summary) {
     if (deltaSelect) deltaSelect.addEventListener("change", () => { state.qcDeltaMode = deltaSelect.value; renderQcMetricPlot(activeQcComparison(summary)); });
     renderQcMetricPlot(activeQcComparison(summary));
   }, 0);
-  return `<p class="section-note">Static comparison of archived HAMLET release artifacts. Missing judge rows indicate the versioned store lacks a readable per-paper judge record for that PXD.</p><div class="stat-grid">${cards}</div>${comparisonSelector}${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No shared PXDs were found for this version pair.</p>"}`;
+  return `<p class="section-note">Static comparison of archived HAMLET release artifacts. Judge deltas are calculated only when both releases use the same judge type; cross-type pairs are shown as incompatible without metric deltas.</p><div class="stat-grid">${cards}</div>${comparisonSelector}${metricControls}${results.length ? `<div class="qc-table">${tableHtml}</div>` : "<p class=\"section-note\">No shared PXDs were found for this version pair.</p>"}`;
 }
 
 async function renderVersionQcDetails() {
@@ -636,10 +648,12 @@ async function renderVersionQcDetails() {
   ]);
   if (state.qcVersion !== requestedVersion) return;
 
-  const versionCount = state.records.filter(record => (record.version || "Unknown") === requestedVersion).length;
+  const versionCount = judgeData.totalPxds;
   const cards = [
     ["Selected version", requestedVersion],
+    ["Release state", judgeData.releaseState === "in_progress" ? "In progress" : "Immutable"],
     ["PXDs in version", formatNumber(versionCount)],
+    ["Judge type", judgeData.judgeType || "Unavailable"],
     ["Per-paper judge records", formatNumber(judgeData.judgeRecords)],
     ["Observed metadata headers", formatNumber(metadataData.observed)],
   ].map(([label, value]) => `<article class="stat-card"><span>${esc(label)}</span><strong class="qc-stat">${esc(value)}</strong><small>Version-specific QC summary</small></article>`).join("");
@@ -657,7 +671,9 @@ async function renderVersionQcDetails() {
     ? tableContent(metadataRows, "SDRF metadata categories")
     : "<p class=\"section-note\">No SDRF headers were detected for this version.</p>";
 
-  container.innerHTML = `<div class="stat-grid">${cards}</div>${section("HAMLET SDRFs by version", "Counts shown below are scoped to the selected version.", `<p class=\"section-note\"><strong>${esc(requestedVersion)}</strong> includes ${esc(formatNumber(versionCount))} PXDs with final SDRFs in this static bundle.</p>`)}${section("LLM judge distributions", `Histograms summarize ${formatNumber(judgeData.judgeRecords)} per-paper judge records for HAMLET ${requestedVersion}.`, distributions)}${section("LLM judge metrics", "Absolute per-PXD metric values. Plots are interactive and horizontally scrollable.", metricCards)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs for the selected version.", metadataSection)}`;
+  const judgeLabel = judgeData.judgeType === "sdrf_judge" ? "SDRF judge" : judgeData.judgeType === "llm_judge" ? "LLM judge" : "Judge";
+  const releaseStateText = judgeData.releaseState === "in_progress" ? "an in-progress snapshot" : "an immutable release";
+  container.innerHTML = `<div class="stat-grid">${cards}</div>${section("HAMLET SDRFs by version", "Counts shown below are scoped to the selected version.", `<p class=\"section-note\"><strong>${esc(requestedVersion)}</strong> is ${releaseStateText} with ${esc(formatNumber(versionCount))} versioned SDRFs.</p>`)}${section(`${judgeLabel} distributions`, `Histograms summarize ${formatNumber(judgeData.judgeRecords)} per-paper ${judgeLabel.toLowerCase()} records for HAMLET ${requestedVersion}. Each metric uses fixed bin limits across all ${judgeLabel.toLowerCase()} versions.`, distributions)}${section(`${judgeLabel} metrics`, "Absolute per-PXD metric values. Plots are interactive and horizontally scrollable.", metricCards)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs for the selected version.", metadataSection)}`;
   setTimeout(() => renderVersionMetricPlots(judgeData), 0);
 }
 

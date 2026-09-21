@@ -12,8 +12,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 
-POST_JUDGE_PATH = "store/agentic_results_files/{pxd}/metadata_extraction_output/post_judge/llm_judge_per_paper.csv"
-LEGACY_JUDGE_PATH = "store/agentic_results_files/{pxd}/judge_output/llm_judge_per_paper.csv"
+FINAL_JUDGE_PATH = "store/agentic_results_files/{pxd}/sdrf_judge/llm_judge_per_paper.csv"
+HISTORICAL_FINAL_JUDGE_PATH = "store/agentic_results_files/{pxd}/metadata_extraction_output/post_judge/llm_judge_per_paper.csv"
+LEGACY_REFINEMENT_JUDGE_PATH = "store/agentic_results_files/{pxd}/judge_output/llm_judge_per_paper.csv"
 SDRF_PATH = "store/hamlet_sdrfs/{pxd}.sdrf.tsv"
 REVIEW_FILENAME = "llm_judge_annotation_review.csv"
 JUDGE_CATEGORIES = ("Biological", "Technical", "ExperimentalDesign")
@@ -88,7 +89,11 @@ def category_metrics(review_content, pxd):
 
 
 def judge_record(repo_root, revision, pxd):
-    for relative_path in (POST_JUDGE_PATH.format(pxd=pxd), LEGACY_JUDGE_PATH.format(pxd=pxd)):
+    for relative_path in (
+        FINAL_JUDGE_PATH.format(pxd=pxd),
+        HISTORICAL_FINAL_JUDGE_PATH.format(pxd=pxd),
+        LEGACY_REFINEMENT_JUDGE_PATH.format(pxd=pxd),
+    ):
         content = git_bytes(repo_root, revision, relative_path)
         if content is None:
             continue

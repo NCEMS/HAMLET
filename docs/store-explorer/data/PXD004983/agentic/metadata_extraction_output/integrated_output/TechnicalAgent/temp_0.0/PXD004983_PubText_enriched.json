@@ -55,33 +55,33 @@
       "pride": null,
       "llm": {
         "value": "SILAC",
-        "evidence": "A SILAC-based mass spectrometry approach was employed to analyze changes to protein abundance in both whole cell and m7GTP-enriched samples"
+        "evidence": "A SILAC-based mass spectrometry approach was employed to analyze changes to protein abundance"
       }
     }
   },
   "cleavage_agent": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "trypsin",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "trypsin",
+        "evidence": "processed by in-gel trypsinization"
       }
     }
   },
   "enrichment_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "m7GTP-Sepharose enrichment",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "m7GTP-Sepharose enrichment",
+        "evidence": "At the same time, an m7GTP-Sepharose enrichment was performed to determine the effect of viral infection on the composition of eIF4E-containing cap-binding complexes"
       }
     }
   },
@@ -99,28 +99,28 @@
     }
   },
   "acquisition_method": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "data-dependent acquisition",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "data-dependent acquisition",
+        "evidence": "operated in data-dependent acquisition mode"
       }
     }
   },
   "collision_energy": {
-    "resolved": null,
-    "confidence": 0,
-    "status": "UNKNOWN",
+    "resolved": "normalized collision energy, 40%",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
     "sources": {
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "normalized collision energy, 40%",
+        "evidence": "Fragmentation conditions in the LTQ were as follows: normalized collision energy, 40%"
       }
     }
   },
@@ -132,7 +132,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -145,7 +145,7 @@
       "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
+        "value": "unknown",
         "evidence": ""
       }
     }
@@ -179,7 +179,7 @@
   "mass_analyzer": {
     "resolved": "Orbitrap",
     "confidence": 1.0,
-    "status": "METI_ONLY",
+    "status": "DISAGREE",
     "sources": {
       "meti": {
         "value": "Orbitrap",
@@ -189,15 +189,15 @@
       },
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "LTQ linear ion trap",
+        "evidence": "the top six multipley charged ions in each duty cycle selected for MS/MS in the LTQ linear ion trap."
       }
     }
   },
   "ptm": {
     "resolved": "Lysine oxidation to aminoadipic semialdehyde; Iodoacetamide derivative",
-    "confidence": 1.0,
-    "status": "METI_ONLY",
+    "confidence": 0.8,
+    "status": "DISAGREE_SPLIT",
     "sources": {
       "meti": {
         "value": "Lysine oxidation to aminoadipic semialdehyde; Iodoacetamide derivative",
@@ -205,10 +205,39 @@
         "taxon_id": null,
         "score": 1.0
       },
+      "pride": {
+        "value": "6x(13)C labeled residue",
+        "score": 0.9
+      },
+      "llm": {
+        "value": "carbaminomethylation of cysteine (fixed); Oxidation of methionine (variable); N-terminal acetylation (variable)",
+        "evidence": "Search criteria included carbaminomethylation of cysteine as a fixed modification. Oxidation of methionine and N-terminal acetylation were selected as variable modifications."
+      }
+    }
+  },
+  "precursor_tolerance": {
+    "resolved": "4.5 ppm",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
       "pride": null,
       "llm": {
-        "value": null,
-        "evidence": ""
+        "value": "4.5 ppm",
+        "evidence": "Peptide precursor mass tolerance was set at 4.5 ppm, and MS/MS tolerance was set at 0.5 Da."
+      }
+    }
+  },
+  "fragment_tolerance": {
+    "resolved": "0.5 Da",
+    "confidence": 0.5,
+    "status": "LLM_ONLY",
+    "sources": {
+      "meti": null,
+      "pride": null,
+      "llm": {
+        "value": "0.5 Da",
+        "evidence": "Peptide precursor mass tolerance was set at 4.5 ppm, and MS/MS tolerance was set at 0.5 Da."
       }
     }
   },
@@ -223,7 +252,10 @@
         "taxon_id": null,
         "score": 1.0
       },
-      "pride": null,
+      "pride": {
+        "value": "6x(13)C labeled residue",
+        "score": 0.9
+      },
       "llm": {
         "value": null,
         "evidence": ""
@@ -231,16 +263,30 @@
     }
   },
   "_confidence": {
-    "overall": 0.923,
-    "evidence_score": 1.0,
-    "completeness": 0.615,
+    "overall": 0.925,
+    "evidence_score": 0.968,
+    "completeness": 0.706,
     "format_score": 1.0
   },
   "_meti_data": {
     "ptms": {
       "source": "PRIDE",
-      "source_field": "pride_metadata.identifiedPTMStrings",
-      "values": []
+      "source_field": "pride_metadata.project.identifiedPTMStrings",
+      "values": [
+        "6x(13)C labeled residue"
+      ],
+      "records": [
+        {
+          "name": "6x(13)C labeled residue",
+          "accession": "MOD:00544",
+          "target": null,
+          "modification_type": null,
+          "source": "pride",
+          "scope": "study",
+          "source_path": "pride_metadata.project.identifiedPTMStrings[0]",
+          "source_value": "6x(13)C labeled residue"
+        }
+      ]
     },
     "experiment_types": [],
     "keywords": [],
@@ -359,6 +405,487 @@
         "score": 1.0
       },
       "llm": null
+    }
+  },
+  "raw_file_manifest": [
+    {
+      "raw_file": "BV2_1.raw",
+      "raw_stem": "BV2_1",
+      "source_path": "pride_metadata.files[0].fileName"
+    },
+    {
+      "raw_file": "BV2_3.raw",
+      "raw_stem": "BV2_3",
+      "source_path": "pride_metadata.files[1].fileName"
+    },
+    {
+      "raw_file": "BV2_2.raw",
+      "raw_stem": "BV2_2",
+      "source_path": "pride_metadata.files[4].fileName"
+    }
+  ],
+  "per_raw_file": {
+    "BV2_1": {
+      "raw_file": "BV2_1.raw",
+      "manifest_source_path": "pride_metadata.files[0].fileName",
+      "instrument": {
+        "resolved": "LTQ Orbitrap Velos",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "LTQ Orbitrap Velos",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.instrument_model.name",
+            "source_value": "LTQ Orbitrap Velos",
+            "cv_accession": "MS:1001742",
+            "cv_name": "LTQ Orbitrap Velos",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "LR IT CID",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "LR IT CID",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "LR IT CID",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "LR_IT_CID",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.spectra_stats.fragmentation_type",
+            "source_value": "LR_IT_CID",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.summary.combined summary.recommended precursor tolerance (ppm)",
+              "source_value": 10,
+              "cv_accession": null,
+              "cv_name": "ppm",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD004983/BV2_1.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 0.3117,
+              "cv_accession": null,
+              "cv_name": "m/z",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Lysine oxidation to aminoadipic semialdehyde",
+          "accession": "UNIMOD:352",
+          "targets": [
+            "K",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_1.data[0]",
+          "source_value": "Lysine oxidation to aminoadipic semialdehyde",
+          "fraction_modified": 0.475996
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_1.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.026197
+        }
+      ]
+    },
+    "BV2_3": {
+      "raw_file": "BV2_3.raw",
+      "manifest_source_path": "pride_metadata.files[1].fileName",
+      "instrument": {
+        "resolved": "LTQ Orbitrap Velos",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "LTQ Orbitrap Velos",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_3.mzML.instrument_model.name",
+            "source_value": "LTQ Orbitrap Velos",
+            "cv_accession": "MS:1001742",
+            "cv_name": "LTQ Orbitrap Velos",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_3.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "??",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "??",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_3.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "??",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "LR_IT_CID",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_3.mzML.spectra_stats.fragmentation_type",
+            "source_value": "LR_IT_CID",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": []
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD004983/BV2_3.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 0.2942,
+              "cv_accession": null,
+              "cv_name": "m/z",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Lysine oxidation to aminoadipic semialdehyde",
+          "accession": "UNIMOD:352",
+          "targets": [
+            "K",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_3.data[0]",
+          "source_value": "Lysine oxidation to aminoadipic semialdehyde",
+          "fraction_modified": 0.470596
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_3.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.025823
+        }
+      ]
+    },
+    "BV2_2": {
+      "raw_file": "BV2_2.raw",
+      "manifest_source_path": "pride_metadata.files[4].fileName",
+      "instrument": {
+        "resolved": "LTQ Orbitrap Velos",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "LTQ Orbitrap Velos",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_2.mzML.instrument_model.name",
+            "source_value": "LTQ Orbitrap Velos",
+            "cv_accession": "MS:1001742",
+            "cv_name": "LTQ Orbitrap Velos",
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "acquisition": {
+        "resolved": "DDA",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "DDA",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_2.mzML.spectra_stats.acquisition_type",
+            "source_value": "DDA",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "dissociation": {
+        "resolved": "LR IT CID",
+        "confidence": 1.0,
+        "status": "RUNASSESSOR_ONLY",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [
+          {
+            "value": "LR IT CID",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_2.mzML.spectra_stats.fragmentation_tag",
+            "source_value": "LR IT CID",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          },
+          {
+            "value": "LR_IT_CID",
+            "source": "runassessor",
+            "scope": "assay",
+            "source_path": "runAssessor.files.PXD004983/BV2_2.mzML.spectra_stats.fragmentation_type",
+            "source_value": "LR_IT_CID",
+            "cv_accession": null,
+            "cv_name": null,
+            "confidence": 1.0,
+            "valid": true
+          }
+        ],
+        "selected_source_index": 0
+      },
+      "runassessor_diagnostics": {
+        "precursor_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": []
+        },
+        "fragment_tolerance_recommendation": {
+          "status": "DIAGNOSTIC_ONLY",
+          "resolution_rule": "not_database_search_parameter",
+          "candidates": [
+            {
+              "value": null,
+              "source": "runassessor",
+              "scope": "assay",
+              "source_path": "runAssessor.files.PXD004983/BV2_2.mzML.summary.combined summary.fragmentation tolerance.recommended fragment tolerance",
+              "source_value": 0.3038,
+              "cv_accession": null,
+              "cv_name": "m/z",
+              "confidence": 0.0,
+              "valid": false
+            }
+          ]
+        }
+      },
+      "ms2_analyzer": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "label": {
+        "resolved": null,
+        "confidence": 0.0,
+        "status": "UNKNOWN",
+        "scope": "assay",
+        "resolution_rule": "direct_runassessor_per_raw",
+        "candidates": [],
+        "selected_source_index": null
+      },
+      "modifications": [
+        {
+          "name": "Lysine oxidation to aminoadipic semialdehyde",
+          "accession": "UNIMOD:352",
+          "targets": [
+            "K",
+            NaN
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_2.data[0]",
+          "source_value": "Lysine oxidation to aminoadipic semialdehyde",
+          "fraction_modified": 0.477357
+        },
+        {
+          "name": "Iodoacetamide derivative",
+          "accession": "UNIMOD:4",
+          "targets": [
+            "CDEHKMSTUY",
+            "N-term"
+          ],
+          "modification_type": null,
+          "source": "ptm_shepherd",
+          "scope": "assay",
+          "source_path": "modification_site_fractions.dda_closed_search.per_sample_files.BV2_2.data[1]",
+          "source_value": "Iodoacetamide derivative",
+          "fraction_modified": 0.028762
+        }
+      ]
     }
   },
   "_enrichment": {

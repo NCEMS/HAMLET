@@ -1,0 +1,103 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD021514","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human"" multiple times (e.g., ""human p.Q53Rfs*100-transgenic"", ""human embryonic kidney 293"", ""human reference genome assembly"").
+TRUTH CHECK: The study involves human patients (YUHL cohort) and human cell lines (HEK 293, HeLa), making ""Homo sapiens"" factually correct.
+COMPLETENESS CHECK: The paper also uses transgenic mice (Mus musculus), but the current set only contains ""Homo sapiens"". Since the study uses both humans and mice, the full set is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD021514","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is an organ, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK 293"" (human embryonic kidney 293) cells, but it does not describe the use of kidney tissue or organs in the experiments.
+TRUTH CHECK:       The experiments used HEK 293 cells (a cell line), not kidney organ/tissue.
+COMPLETENESS CHECK:The full set contains only ""kidney"", which is incorrect as the material used was a cell line.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021514","BiologicalAgent","cell_type","embryonic kidney cell","","low","False","","False","False","False","TYPE CHECK:        The candidate value describes a cell type/lineage, which matches the field definition.
+SOURCE CHECK:      The paper mentions ""HEK 293: human embryonic kidney 293"" in the abbreviations and ""Human embryonic kidney 293 (HEK 293...)"" in the methods.
+TRUTH CHECK:       While the cells are derived from embryonic kidney, HEK 293 is a well-known immortalized cell line.
+COMPLETENESS CHECK:    The extraction identifies the cell type, but it fails to distinguish that these are cell lines.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD021514","BiologicalAgent","disease","DFNA67","DFNA67","high","False","","True","True","False","TYPE CHECK:        The candidate value ""DFNA67"" is a disease/diagnosis (specifically a form of autosomal dominant hearing loss).
+SOURCE CHECK:      The value is explicitly mentioned in the abstract and results (""Autosomal dominant hearing loss (DFNA67) is caused by frameshift mutations in OSBPL2"").
+TRUTH CHECK:       The value is factually correct as the disease state being studied in the human subjects.
+COMPLETENESS CHECK: The full set contains ""DFNA67"", which covers the primary disease state described. While the paper also mentions ""hearing loss"" generally, ""DFNA67"" is the specific diagnosis.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021514","BiologicalAgent","material_type","cell line","cell line","high","False","","True","True","False","TYPE CHECK: The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK: The paper explicitly mentions the use of HEK 293 and HeLa cells, which are standard cell lines.
+TRUTH CHECK: The use of these cell lines for protein expression and interactome analysis is factually correct.
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the proteomics analysis (interactome) was performed using HEK 293 cells, but the study also extensively used mouse tissues (inner ear and brain) for other analyses. However, for the specific MS experiment described in the ""Identification of WT and mutant OSBPL2 interactors"" section, only cell lines were used. Wait, looking at the ""material_type"" definition, it must match what was actually used in the experiment. The MS experiment used HEK 293 cells. But the paper also mentions ""inner ear tissues"" and ""brain tissues"" in the context of other experiments. Usually, material_type refers to the sample source for the MS analysis. In this paper, the LC-MS/MS was performed on proteins extracted from HEK 293 cells. Therefore, ""cell line"" is correct for the MS part. However, the study as a whole uses both. If the pipeline is extracting material types for the MS experiment specifically, ""cell line"" is exhaustive. If it is for the whole paper, it is missing ""tissue"". Given the context of proteomics metadata, it usually refers to the MS sample.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021514","BiologicalAgent","cell_line","HEK 293","HEK 293","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HEK 293"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value is explicitly mentioned in the text (e.g., ""HEK 293, HEI-OC1, and HeLa cells"").
+TRUTH CHECK:       The value is factually correct as it was used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values [""HEK 293""] is incomplete because the paper also explicitly uses ""HEI-OC1"" and ""HeLa"" cell lines for the same experiments.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK 293"", ""HEI-OC1"", ""HeLa""]","HEK 293, HEI-OC1, HeLa"
+"PXD021514","TechnicalAgent","enrichment_method","affinity purification","affinity purification","high","False","","True","True","False","TYPE CHECK:        The candidate value ""affinity purification"" describes a protocol used to enrich specific proteins before MS analysis, which matches the field definition.
+SOURCE CHECK:      The paper explicitly states, ""Following affinity purification using anti-FLAG beads, protein eluates were analyzed using liquid chromatography coupled with a high-resolution mass spectrometer (LC-MS/MS).""
+TRUTH CHECK:       The value is factually correct as the study used anti-FLAG beads to pull down (enrich) the tagged OSBPL2 proteins and their interactors.
+COMPLETENESS CHECK: The full set contains ""affinity purification"", which accurately captures the enrichment step described in the ""Identification of WT and mutant OSBPL2 interactors"" section.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD021514","TechnicalAgent","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","high","False","","True","True","False","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""an Orbitrap Fusion Lumos mass spectrometer (Thermo Fisher Scientific)"".
+TRUTH CHECK: The value is factually correct as stated in the paper.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD021514","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes a proteomic analysis using LC-MS/MS but does not mention any isobaric or metabolic labeling (such as TMT or SILAC).
+TRUTH CHECK:       Per the field definition, ""label-free"" is the correct value when no labeling is mentioned.
+COMPLETENESS CHECK:   The full set contains only ""label-free"", which accurately reflects the experimental setup described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

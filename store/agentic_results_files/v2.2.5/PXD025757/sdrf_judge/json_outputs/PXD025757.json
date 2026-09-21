@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD025757",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HEK293T",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"HEK293T\" is a name of an immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; the \"Shotgun Proteomics\" section describes treating \"whole-cell protein lysate\" with the probe and analyzing it via LC-MS/MS, and later explicitly mentions that the lack of FABP1 identification is \"attributed to the low level of expression of this protein in HEK293T cells,\" confirming these were the cells used for the MS sample.",
+        "TRUTH_CHECK": "The candidate value is factually correct as the source of the protein lysate analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the proteomics experiment described in the paper."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The MS experiment used whole-cell lysates from HEK293T cells (implied by the mention of FABP1 expression levels in HEK293T cells in the results section), which are not used here to model a specific disease state.",
+        "TRUTH_CHECK": "The study is a chemoproteomic probe development study rather than a disease-comparison study; therefore, the \"normal\" safe default applies.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is exhaustive for this experimental context."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "kidney",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is the correct category (organ/tissue) for this field.",
+        "SOURCE_CHECK": "The value \"kidney\" does not appear in the paper text, nor is it inferable from the materials used in the MS experiment.",
+        "TRUTH_CHECK": "The MS experiment used whole-cell lysates from HEK293T cells (implied by the mention of \"low level of expression of this protein in HEK293T cells\" and the \"Cell Culture\" section). HEK293T cells are derived from the human embryonic kidney.",
+        "COMPLETENESS_CHECK": "The full set contains only \"kidney\", which is factually unsupported by the text."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a valid species name.",
+        "SOURCE_CHECK": "The MS experiment used a human fasta file (ipi.HUMAN.v.3.68.fasta) for protein identification and analyzed lysates from HEK293T cells (human embryonic kidney cells).",
+        "TRUTH_CHECK": "The use of a human database and human-derived cell lines confirms the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant species for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "probe concentration (10 μM, 100 μM)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (probe concentration) and its specific levels, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The text explicitly mentions conducting experiments using \"low (10 μM) and high (100 μM) concentrations of stable isotope-labeled PFOPA probes\" and \"the use of 10 and 100 μM probe\" for the MS analysis.",
+        "TRUTH_CHECK": "The value accurately reflects the concentrations used in the proteomics experiments described in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the probe concentration contrast and a \"normal\" (healthy) default; together they cover the primary experimental variables described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (representing a healthy/disease-free state).",
+        "SOURCE_CHECK": "The paper does not mention a \"normal\" or \"healthy\" group; it uses HEK293T cells for the proteomics experiment.",
+        "TRUTH_CHECK": "While \"normal\" is a safe default for disease fields when subjects are healthy, it is not applicable here as the study is a chemoproteomic probe validation using a specific cell line, not a disease vs. healthy comparison.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes a correct factor (probe concentration) and an unsupported one (\"normal\")."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"LC-MS/MS Analysis and Database Search\" section of the methods, describing the mass spectrometer operation.",
+        "TRUTH_CHECK": "The paper states, \"The mass spectrometer was operated in a data-dependent acquisition mode,\" which matches the candidate value.",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical reagent used for alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Cell Culture, Lysate Preparation, and Labeling with the PFOPA Probe\" section as the reagent used to alkylate the proteins before LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The paper states the proteins were \"alkylated with iodoacetamide (55 mM)\".",
+        "COMPLETENESS_CHECK": "The full set contains the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The paper explicitly mentions that proteins were \"digested with trypsin\" in the abstract and \"incubated with trypsin\" in the methods section for the MS samples.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Trypsin\", which is the only cleavage agent mentioned for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is not explicitly mentioned in the paper text; the paper mentions \"MS/MS scans\" and \"fragment ion\" but does not name the specific fragmentation technique.",
+        "TRUTH_CHECK": "While the instrument used (Q Exactive Plus) typically uses HCD (Higher-energy Collisional Dissociation), which is a form of beam-type CID, the specific phrase \"beam-type collision-induced dissociation\" does not appear in the text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"LC-MS/MS Analysis and Database Search\" section as the instrument used for the proteomics analysis.",
+        "TRUTH_CHECK": "The value \"Q Exactive Plus\" is factually correct according to the text.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper explicitly mentions the use of a \"Q Exactive Plus quadrupole-Orbitrap mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used for LC-MS/MS analysis is an Orbitrap-based system.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for the mass analyzer used in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is not present in the paper text; the paper mentions \"iodoacetamide\" as a reagent, but not as a searched modification name.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Cysteine carbamidomethylation\" as a fixed modification and \"methionine oxidation\" as a variable modification. It does not mention \"Iodoacetamide derivative\" as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications that are not mentioned in the text, and it misses the modifications actually listed in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "2-amino-3-oxo-butanoic_acid (STY,C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification on specific residues, which matches the category for the modification field.",
+        "SOURCE_CHECK": "The value \"2-amino-3-oxo-butanoic_acid\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Lysine C4-desthiobiotinylation\", \"methionine oxidation\", and \"Cysteine carbamidomethylation\" as the modifications used in the database search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not reflect the modifications stated in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": "Oxidation (M)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper mentions \"methionine oxidation\" as a variable modification, but it does not mention \"Oxidation or Hydroxylation\" of all residues or C-terminal residues.",
+        "TRUTH_CHECK": "The candidate value is factually incorrect; the paper specifically lists \"methionine oxidation\" as a variable modification, not a general oxidation/hydroxylation of all amino acids or the C-terminus.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (e.g., \"Iodoacetamide derivative\", \"2-amino-3-oxo-butanoic_acid\") that are not mentioned in the text at all."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Iodoacetamide derivative\" is a modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The term \"Iodoacetamide derivative\" does not appear in the paper text; while iodoacetamide is mentioned as an alkylation reagent, the modification name itself is not stated.",
+        "TRUTH_CHECK": "The value is not explicitly mentioned in the text. Per the field rules, modifications cannot be inferred from reagents (iodoacetamide $\\neq$ \"Iodoacetamide derivative\").",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are explicitly named in the text as searched modifications, except for \"methionine oxidation\" and \"Cysteine carbamidomethylation\"."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "2-amino-3-oxo-butanoic_acid",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a chemical name, which fits the category of a protein modification.",
+        "SOURCE_CHECK": "The value \"2-amino-3-oxo-butanoic_acid\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text as a searched modification; the paper explicitly lists \"Lysine C4-desthiobiotinylation\", \"methionine oxidation\", and \"Cysteine carbamidomethylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not reflect the modifications actually described in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation or Hydroxylation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": "Oxidation (M)",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"methionine oxidation\" as a variable modification in the \"LC-MS/MS Analysis and Database Search\" section.",
+        "TRUTH_CHECK": "The candidate value \"Oxidation or Hydroxylation\" is a common search term in software like MaxQuant, but the paper specifically names \"methionine oxidation\". While \"oxidation\" is present, \"hydroxylation\" is not mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several hallucinated entries (e.g., \"Iodoacetamide derivative\", \"2-amino-3-oxo-butanoic_acid\") and does not accurately reflect the modifications listed in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the methods section (\"reduced with dithiothreitol (20 mM)\") in the context of the sample preparation for LC-MS/MS analysis.",
+        "TRUTH_CHECK": "The value is factually correct as stated in the paper.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"dithiothreitol\", which is the only reduction reagent mentioned in the text."
+      }
+    }
+  ]
+}

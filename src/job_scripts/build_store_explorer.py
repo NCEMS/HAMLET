@@ -14,6 +14,7 @@ from pathlib import Path
 SUPPORTED_SUFFIXES = {".csv", ".json", ".md", ".png", ".tsv"}
 MAX_PUBLISHED_FILE_BYTES = 1 * 1024 * 1024
 RELEASE_VERSION_PATTERN = re.compile(r'"pipeline_version"\s*:\s*"(v\d+\.\d+\.\d+)"')
+VERSION_DIRECTORY_PATTERN = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 HAMLET_VERSION_PATTERN = re.compile(r'HAMLET_VERSION\s*=\s*"(v\d+\.\d+\.\d+)"')
 HAMLET_VERSION_FILE = Path(__file__).resolve().parents[1] / "python" / "hamlet_version.py"
 SDRF_TERMS_FILE = Path(__file__).resolve().parents[2] / "assets" / "sdrf-terms.csv"
@@ -37,6 +38,12 @@ def canonical_hamlet_version() -> str:
 
 CURRENT_SCHEMA_VERSION = canonical_hamlet_version()
 LEGACY_SCHEMA_VERSION = "v2.0.0"
+JUDGE_SOURCES = (
+    ("sdrf_judge", Path("sdrf_judge") / "llm_judge_per_paper.csv"),
+    ("llm_judge", Path("metadata_extraction_output") / "post_judge" / "llm_judge_per_paper.csv"),
+    ("llm_judge", Path("judge_output") / "llm_judge_per_paper.csv"),
+    ("llm_judge", Path("llm_refinement_judge") / "llm_judge_per_paper.csv"),
+)
 
 
 def copy_file(source: Path, destination: Path) -> None:
@@ -70,7 +77,8 @@ def release_version(aggregate: Path, agentic_source: Path, pxd: str) -> str | No
         f"{pxd}.sdrf.tsv",
         f"{pxd}.confidence.sdrf.tsv",
         "metadata_extraction_output",
-        "judge_output",
+        "llm_refinement_judge",
+        "sdrf_judge",
     }
     annotated_version = annotated_release_version(agentic_source, pxd)
     if annotated_version:
@@ -88,19 +96,36 @@ def read_pxd_file(path: Path) -> list[str]:
     return [line for line in lines if line and line != "PXDs"]
 
 
-def collect_pxds(store_path: Path, requested_pxds: list[str]) -> list[str]:
+def active_release_versions(store_path: Path) -> dict[str, str]:
+    active_path = store_path / "releases" / "active.json"
+    if not active_path.is_file():
+        return {}
+    try:
+        active = json.loads(active_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise RuntimeError(f"Could not read active release index {active_path}: {exc}") from exc
+    pxds = active.get("pxds", {})
+    if not isinstance(pxds, dict):
+        raise RuntimeError(f"Active release index has no PXD mapping: {active_path}")
+    return {
+        pxd: version
+        for pxd, version in pxds.items()
+        if isinstance(pxd, str) and re.fullmatch(r"PXD\d+", pxd)
+        and isinstance(version, str) and re.fullmatch(r"v\d+\.\d+\.\d+", version)
+    }
+
+
+def collect_pxds(store_path: Path, requested_pxds: list[str], active_versions: dict[str, str]) -> list[str]:
     if requested_pxds:
         return sorted(set(requested_pxds))
     aggregate_pxds = {
         path.name.removesuffix("_aggregated_results.json")
         for path in (store_path / "aggregated_results_files").glob("PXD*_aggregated_results.json")
     }
-    agentic_dir = store_path / "agentic_results_files"
-    agentic_pxds = {path.name for path in agentic_dir.glob("PXD*") if path.is_dir()}
-    return sorted(aggregate_pxds | agentic_pxds)
+    return sorted(aggregate_pxds | set(active_versions))
 
 
-def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
+def build_record(store_path: Path, output_data_dir: Path, pxd: str, active_versions: dict[str, str]) -> dict:
     record = {
         "pxd": pxd,
         "version": None,
@@ -113,8 +138,12 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
     }
     pxd_data_dir = output_data_dir / pxd
     aggregate = store_path / "aggregated_results_files" / f"{pxd}_aggregated_results.json"
-    agentic_source = store_path / "agentic_results_files" / pxd
-    record["version"] = release_version(aggregate, agentic_source, pxd)
+    record["version"] = active_versions.get(pxd)
+    agentic_source = (
+        store_path / "agentic_results_files" / record["version"] / pxd
+        if record["version"] else store_path / "agentic_results_files" / pxd
+    )
+    record["version"] = record["version"] or release_version(aggregate, agentic_source, pxd)
     record["available"] = aggregate.is_file()
     if aggregate.is_file() and aggregate.stat().st_size <= MAX_PUBLISHED_FILE_BYTES:
         relative_path = Path(pxd) / "aggregated_results.json"
@@ -139,7 +168,8 @@ def build_record(store_path: Path, output_data_dir: Path, pxd: str) -> dict:
                 continue
             if relative_source.parts[:1] == ("judge_output",):
                 post_judge_copy = agentic_source / "metadata_extraction_output" / "post_judge" / Path(*relative_source.parts[1:])
-                if post_judge_copy.is_file():
+                final_judge_copy = agentic_source / "sdrf_judge" / Path(*relative_source.parts[1:])
+                if post_judge_copy.is_file() or final_judge_copy.is_file():
                     continue
             relative_path = Path(pxd) / "agentic" / relative_source
             copy_file(source, output_data_dir / relative_path)
@@ -174,12 +204,110 @@ def final_sdrf_path(record: dict, output_data_dir: Path) -> Path | None:
     return output_data_dir / path if path else None
 
 
-def judge_summary_paths(record: dict, output_data_dir: Path) -> list[Path]:
-    return [
-        output_data_dir / path
-        for path in record["agentic"]
-        if path.endswith("/llm_judge_per_paper.csv")
+def read_judge_metrics(path: Path, pxd: str) -> dict[str, float]:
+    with path.open(encoding="utf-8", newline="") as handle:
+        rows = [row for row in csv.DictReader(handle) if row.get("paper_id") == pxd]
+    if len(rows) != 1:
+        return {}
+    metrics = {}
+    for field, raw_value in rows[0].items():
+        try:
+            value = float(raw_value)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(value):
+            metrics[field] = value
+    return metrics
+
+
+def preferred_judge_record(agentic_source: Path, pxd: str) -> tuple[str, dict[str, float]] | None:
+    for judge_type, relative_path in JUDGE_SOURCES:
+        metrics_path = agentic_source / relative_path
+        if not metrics_path.is_file():
+            continue
+        metrics = read_judge_metrics(metrics_path, pxd)
+        if metrics:
+            return judge_type, metrics
+    return None
+
+
+def release_pxds(store_path: Path, version: str, manifest: dict) -> list[str]:
+    pxds = [
+        item["pxd"]
+        for item in manifest.get("pxds", [])
+        if isinstance(item, dict) and isinstance(item.get("pxd"), str)
+        and re.fullmatch(r"PXD\d+", item["pxd"])
     ]
+    if pxds:
+        return sorted(set(pxds))
+    return sorted(
+        path.name.removesuffix(".sdrf.tsv")
+        for path in (store_path / "hamlet_sdrfs" / version).glob("PXD*.sdrf.tsv")
+        if re.fullmatch(r"PXD\d+", path.name.removesuffix(".sdrf.tsv"))
+    )
+
+
+def version_sort_key(version: str) -> tuple[int, int, int]:
+    match = VERSION_DIRECTORY_PATTERN.fullmatch(version)
+    if not match:
+        raise ValueError(f"Invalid release version: {version}")
+    return tuple(int(value) for value in match.groups())
+
+
+def release_judge_metrics(store_path: Path) -> list[dict]:
+    releases_dir = store_path / "releases"
+    sdrf_dir = store_path / "hamlet_sdrfs"
+    manifest_paths = {path.parent.name: path for path in releases_dir.glob("v*/manifest.json")}
+    release_versions = set(manifest_paths)
+    if sdrf_dir.is_dir():
+        release_versions.update(
+            path.name for path in sdrf_dir.iterdir()
+            if path.is_dir() and VERSION_DIRECTORY_PATTERN.fullmatch(path.name)
+        )
+    summaries = []
+    for version in sorted(release_versions, key=version_sort_key):
+        manifest_path = manifest_paths.get(version)
+        if manifest_path:
+            try:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if manifest.get("release_version") != version:
+                continue
+            release_state = "immutable"
+        else:
+            manifest = {"release_version": version, "pxds": []}
+            release_state = "in_progress"
+        pxds = release_pxds(store_path, version, manifest)
+        records_by_type = defaultdict(list)
+        for pxd in pxds:
+            judge = preferred_judge_record(store_path / "agentic_results_files" / version / pxd, pxd)
+            if judge:
+                judge_type, metrics = judge
+                records_by_type[judge_type].append({"pxd": pxd, "metrics": metrics})
+        if not records_by_type:
+            summaries.append({
+                "version": version,
+                "release_state": release_state,
+                "judge_type": None,
+                "release_pxd_count": len(pxds),
+                "records": [],
+                "available_metrics": [],
+            })
+            continue
+        judge_type = "sdrf_judge" if records_by_type["sdrf_judge"] else "llm_judge"
+        records = sorted(records_by_type[judge_type], key=lambda item: item["pxd"])
+        summaries.append(
+            {
+                "version": version,
+                "release_state": release_state,
+                "judge_type": judge_type,
+                "release_pxd_count": len(pxds),
+                "records": records,
+                "available_metrics": sorted({field for record in records for field in record["metrics"]}),
+            }
+        )
+    return summaries
 
 
 def load_sdrf_terms() -> dict[tuple[str, str], dict]:
@@ -251,53 +379,52 @@ def histogram(values: list[float]) -> list[dict]:
     ]
 
 
-def build_site_summary(records: list[dict], output_data_dir: Path) -> dict:
+def build_site_summary(records: list[dict], output_data_dir: Path, store_path: Path) -> dict:
     versions: Counter[str] = Counter()
     headers: Counter[str] = Counter()
-    judge_values: dict[str, list[float]] = defaultdict(list)
-    judge_rows = 0
     for record in records:
         sdrf_path = final_sdrf_path(record, output_data_dir)
         if sdrf_path:
             versions[record["version"] or "Unknown"] += 1
             with sdrf_path.open(encoding="utf-8", newline="") as handle:
                 headers.update(next(csv.reader(handle, delimiter="\t"), []))
-        for judge_path in judge_summary_paths(record, output_data_dir):
-            with judge_path.open(encoding="utf-8", newline="") as handle:
-                for row in csv.DictReader(handle):
-                    judge_rows += 1
-                    for field, raw_value in row.items():
-                        try:
-                            value = float(raw_value)
-                        except (TypeError, ValueError):
-                            continue
-                        if math.isfinite(value):
-                            judge_values[field].append(value)
-
     terms = load_sdrf_terms()
     categories = [
         {**category_metadata(header, terms), "pxd_count": count}
         for header, count in sorted(headers.items(), key=lambda item: item[0].lower())
     ]
-    judge_fields = [
-        {
-            "field": field,
-            "count": len(values),
-            "minimum": min(values),
-            "maximum": max(values),
-            "mean": sum(values) / len(values),
-            "histogram": histogram(values),
-        }
-        for field, values in sorted(judge_values.items())
-    ]
+    version_judges = release_judge_metrics(store_path)
+    judge_records_by_type = Counter()
+    judge_fields_by_type = {}
+    for judge_type in ("llm_judge", "sdrf_judge"):
+        values_by_field = defaultdict(list)
+        for version_judge in version_judges:
+            if version_judge["judge_type"] != judge_type:
+                continue
+            for judge_record in version_judge["records"]:
+                judge_records_by_type[judge_type] += 1
+                for field, value in judge_record["metrics"].items():
+                    values_by_field[field].append(value)
+        judge_fields_by_type[judge_type] = [
+            {
+                "field": field,
+                "count": len(values),
+                "minimum": min(values),
+                "maximum": max(values),
+                "mean": sum(values) / len(values),
+                "histogram": histogram(values),
+            }
+            for field, values in sorted(values_by_field.items())
+        ]
     return {
         "total_pxds": len(records),
         "sdrf_versions": [
             {"version": version, "count": count}
             for version, count in sorted(versions.items())
         ],
-        "judge_records": judge_rows,
-        "judge_fields": judge_fields,
+        "judge_records_by_type": dict(judge_records_by_type),
+        "judge_fields_by_type": judge_fields_by_type,
+        "version_judges": version_judges,
         "metadata_categories": categories,
     }
 
@@ -368,14 +495,18 @@ def main() -> None:
     output_data_dir.mkdir(parents=True)
 
     requested_pxds = [*args.pxd, *(read_pxd_file(args.pxd_file) if args.pxd_file else [])]
-    records = [build_record(args.store, output_data_dir, pxd) for pxd in collect_pxds(args.store, requested_pxds)]
+    active_versions = active_release_versions(args.store)
+    records = [
+        build_record(args.store, output_data_dir, pxd, active_versions)
+        for pxd in collect_pxds(args.store, requested_pxds, active_versions)
+    ]
     records = [record for record in records if record["available"]]
     (output_data_dir / "store-index.json").write_text(
         json.dumps({"pxds": records}, indent=2) + "\n",
         encoding="utf-8",
     )
     (output_data_dir / "site-summary.json").write_text(
-        json.dumps(build_site_summary(records, output_data_dir), indent=2) + "\n",
+        json.dumps(build_site_summary(records, output_data_dir, args.store), indent=2) + "\n",
         encoding="utf-8",
     )
     if args.qc_summary:

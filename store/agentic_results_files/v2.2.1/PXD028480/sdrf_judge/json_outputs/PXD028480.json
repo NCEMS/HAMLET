@@ -1,0 +1,309 @@
+{
+  "paper_id": "PXD028480",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "HeLa, U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, A549",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "HeLa",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category for this field.",
+        "SOURCE_CHECK": "The paper mentions many cell lines, but only HeLa was used for the AP-MS experiment (\"KCTD7 protein complexes were purified and identified by AP-MS... in HeLa cells\") and for the lipidomic MS analysis (\"parental and KCTD7 KO or CLN5 KD HeLa cells were harvested for... lipidomic analysis\"). The other cell lines (U87-MG, SH-SY5Y, 293T, etc.) were used for Western blots, IF, or general protein expression checks, not for mass spectrometry.",
+        "TRUTH_CHECK": "The inclusion of U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, and A549 is factually incorrect as they were not the source of the MS samples.",
+        "COMPLETENESS_CHECK": "The full set is over-inclusive, containing many cell lines not used for MS."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "glioblastoma cell, neuroblastoma cell",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "epithelial cell",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes cell types/lineages, which matches the field definition.",
+        "SOURCE_CHECK": "The values refer to U87-MG (glioblastoma) and SH-SY5Y (neuroblastoma) cells, but these were used for Western Blot (WB) and enzymatic activity assays, not for the mass spectrometry (AP-MS) experiment.",
+        "TRUTH_CHECK": "While these cell lines are used in the paper, they were not the biological material analyzed by mass spectrometry; only HeLa cells were used for the AP-MS.",
+        "COMPLETENESS_CHECK": "The set is incorrect because it includes cell types from unrelated assays and misses the cell type for the actual MS sample (HeLa)."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "neuronal ceroid lipofuscinoses",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease name, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the title and abstract as the disease being studied (\"Neuronal ceroid lipofuscinoses (NCLs) are a group of...\").",
+        "TRUTH_CHECK": "The paper focuses on the mechanisms of KCTD7 mutations causing this specific disease.",
+        "COMPLETENESS_CHECK": "The full set contains the primary disease discussed in the paper."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "cervix, brain, lung, kidney",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "cervix",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of organ names, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiment (AP-MS) was performed using HeLa cells (origin: cervix). Other cell lines mentioned in the paper (U87-MG, SH-SY5Y, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, A549, 293T) were used for WB, IF, or general expression analysis, but not for the AP-MS protein complex purification.",
+        "TRUTH_CHECK": "While HeLa cells originate from the cervix, the other organs (brain, lung, kidney) are not the source of the actual MS sample. The AP-MS was specifically conducted on HeLa cells with endogenous FLAG-tagged KCTD7.",
+        "COMPLETENESS_CHECK": "The full set includes organs that were not the source of the MS sample."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The value is reasonably inferable from the text, as the study uses multiple human cell lines (HeLa, U87-MG, SH-SY5Y, etc.) and discusses human NCL patients.",
+        "TRUTH_CHECK": "The cells and proteins analyzed by MS (KCTD7-FLAG in HeLa cells) are of human origin.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "cell condition (parental, KCTD7 KO, CLN5 KD)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental groups/conditions being compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"parental\", \"KCTD7 KO\", and \"CLN5 KD\" are explicitly mentioned in the context of the lipidomic analysis and other assays analyzed by mass spectrometry.",
+        "TRUTH_CHECK": "These are the actual conditions used in the study to investigate the effects of KCTD7 and CLN5 deficiency.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the biological condition (NCL) and the specific cell line modifications used in the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "neuronal ceroid lipofuscinoses",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease name, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is present in the text; however, it describes the disease model being studied, but the actual MS samples were derived from HeLa cells (parental, KO, KD).",
+        "TRUTH_CHECK": "The paper studies the mechanisms of neuronal ceroid lipofuscinoses (NCLs) using KCTD7-deficient and CLN5-deficient HeLa cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the specific cell conditions and the disease context."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "AP-MS",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes \"AP-MS\" (Affinity Purification Mass Spectrometry) and \"sequencing by MS\" of protein bands excised from a gel, but it does not explicitly mention the acquisition scheme (DDA or DIA).",
+        "TRUTH_CHECK": "There is no mention of \"data-dependent acquisition\" or \"DDA\" in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"beam-type collision-induced dissociation\" or any other specific fragmentation method (e.g., HCD, CID, ETD).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "Q Exactive Hybrid Quadrupole Orbitrap MS",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Orbitrap Fusion Lumos\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The paper explicitly mentions a \"Q Exactive Hybrid Quadrupole Orbitrap MS (Thermo Fisher Scientific)\" for the lipidomic analysis, but does not mention an Orbitrap Fusion Lumos.",
+        "COMPLETENESS_CHECK": "The full set contains only this incorrect value."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes AP-MS (affinity purification mass spectrometry) and lipidomic analysis, but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling methods are described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of labeling in the described experiments."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The value is present in the text, specifically in the \"Lipidomic analysis\" section describing the \"Q Exactive Hybrid Quadrupole Orbitrap MS\".",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used for the lipidomic analysis is an Orbitrap.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQR)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"Deamidation (NQR)\" does not appear in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention searching for deamidation or any other specific mass spectrometry search modifications.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Iodoacetamide derivative\" or any specific search modifications for the MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Loss of arginine due to transpeptidation (C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of transpeptidation or arginine loss.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text, as none of these modifications are explicitly named."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"dithiothreitol\" appears in the \"In vivo ubiquitination assays\" section, but this section describes a Western Blot (WB) assay, not the proteomics/MS experiment. The actual MS experiment (Protein complex purification) does not mention a reduction reagent.",
+        "TRUTH_CHECK": "The value is not correct for the MS experiment described in the paper.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is incorrectly attributed to the MS experiment."
+      }
+    }
+  ]
+}

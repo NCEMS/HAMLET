@@ -1,0 +1,212 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD023959","","strict","Biological","cell_line","293T, 293FT, HeLa, AML12","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the required category.
+SOURCE CHECK: The paper mentions these cell lines, but only 293T was used for the actual MS analysis (specifically, ""ubiquitinated Flag-VPS34 was isolated by immunoprecipitation... from 293T UBE3C knockout cells""). HeLa and AML12 are used for functional assays, shRNA screening, and liver metabolism studies, but not for the proteomics/MS experiments. 293FT is used for lentivirus production.
+TRUTH CHECK: Only 293T is the correct source for the MS sample; the others are mentioned in unrelated experimental contexts.
+COMPLETENESS CHECK: The full set includes several cell lines that were not used for MS, making the extraction factually incorrect.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: 293T","293T"
+"PXD023959","","strict","Biological","disease","normal, nonalcoholic fatty liver disease","normal, nonalcoholic fatty liver disease","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes disease states, which matches the field definition.
+SOURCE CHECK: The paper describes a mouse model of nonalcoholic fatty liver disease (NAFLD) via high-fat diet and compares it to a normal chow diet (control).
+TRUTH CHECK: The text explicitly mentions ""nonalcoholic fatty liver disease (NAFLD)"" and the use of a ""normal chow diet"" as the control group.
+COMPLETENESS CHECK: The full set of extracted values covers the primary disease contrast described in the in vivo portion of the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Biological","organ","liver","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value ""liver"" is a valid organ/tissue type.
+SOURCE CHECK: The paper describes a mouse model of NAFLD involving liver analysis, but the actual mass spectrometry experiments were performed on VPS34 derived from 293T cells (for ubiquitination sites) and in vitro reactions (for branched chains).
+TRUTH CHECK: The MS samples were derived from 293T cells (human embryonic kidney) and in vitro purified proteins, not from liver tissue. The liver is mentioned in the context of the NAFLD mouse model and histological/biochemical assays, not the LC-MS/MS proteomics.
+COMPLETENESS CHECK: The full set is incorrect as it identifies the wrong organ for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: kidney","kidney"
+"PXD023959","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","True","False","False","","","wrong_value","TYPE CHECK: The candidate value consists of organism names, which matches the definition of the species field.
+SOURCE CHECK: Both species are present in the text: ""Homo sapiens"" is implied by the use of human cell lines (HeLa, 293T) and the ""Swiss-Prot Human database"" used for MS search, and ""Mus musculus"" is explicitly mentioned via ""C57BL/6J mice"".
+TRUTH CHECK: The paper describes MS analysis of VPS34 derived from human cells (293T) and also conducts in vivo experiments using mice. However, the MS analysis specifically used the ""Swiss-Prot Human database"", and the samples analyzed by LC-MS/MS were derived from human cell lines (293T). The mouse experiments were histological and biochemical (ALT/AST, triglyceride), not mass spectrometry proteomics.
+COMPLETENESS CHECK: The set is exhaustive in terms of organisms mentioned, but includes a species not analyzed by MS.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD023959","","strict","ExperimentalDesign","factor_value","UBE3C expression (with or without V5-UBE3C)","UBE3C expression (with or without V5-UBE3C) | normal, nonalcoholic fatty liver disease","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes an experimental condition (presence or absence of a protein expression construct), which is a valid category for a factor_value.
+SOURCE CHECK: The value is derived from the MS experiment context; the paper describes determining ubiquitination sites on VPS34 by immunoprecipitating proteins from ""293T UBE3C knockout cells transfected with Flag-VPS34, His-ubiquitin, together with or without V5-UBE3C"".
+TRUTH CHECK: The value accurately reflects the experimental contrast used for the MS analysis of VPS34 ubiquitination.
+COMPLETENESS CHECK: The full set of extracted values covers both the cell-based MS experiment (UBE3C expression) and the in vivo mouse model (NAFLD), making the set exhaustive.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","ExperimentalDesign","factor_value","normal, nonalcoholic fatty liver disease","UBE3C expression (with or without V5-UBE3C) | normal, nonalcoholic fatty liver disease","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes disease states, which is a valid category for a factor_value.
+SOURCE CHECK: The paper describes a mouse model of nonalcoholic fatty liver disease (NAFLD) induced by a high-fat diet (HFD) and compares it to a normal chow diet (control).
+TRUTH CHECK: The paper explicitly mentions ""nonalcoholic fatty liver disease (NAFLD)"" and uses a ""normal chow diet"" as the control group.
+COMPLETENESS CHECK: The full set of extracted values covers both the in vitro (UBE3C expression) and in vivo (NAFLD vs normal) experimental axes described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid MS acquisition scheme.
+SOURCE CHECK: The paper explicitly states ""The mass spectrometer was operated in the data-dependent mode"" in the LC-MS/MS sections.
+TRUTH CHECK: The value is factually correct as it describes the acquisition mode used for both the LTQ Orbitrap Velos and the Orbitrap Fusion Lumos experiments.
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","cleavage_agent","Asp-N","Asp-N","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""Asp-N"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The value is present in the ""LC–MS/MS and label-free quantification"" section, where it is used for in-gel digestion of monoubiquitin bands for MS analysis.
+TRUTH CHECK: The paper explicitly states that the monoubiquitin band was ""excised for in-gel digestion with Asp-N"".
+COMPLETENESS CHECK: The full set of extracted values is incomplete because the paper also describes the use of ""Lys-C and Trypsin"" for the digestion of ubiquitinated Flag-VPS34 for MS analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: Asp-N, Lys-C, trypsin","Asp-N, Lys-C, trypsin"
+"PXD023959","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper text explicitly mentions ""HCD MS/MS fragmentation"" and ""HCD fragmentation"" in the LC-MS/MS sections.
+TRUTH CHECK: ""HCD"" stands for Higher-energy Collisional Dissociation, which is the same as ""beam-type collision-induced dissociation"".
+COMPLETENESS CHECK: The full set contains only this value, and it accurately reflects the fragmentation method used in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","instrument","Orbitrap Fusion Lumos","Orbitrap Fusion Lumos","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC–MS/MS and label-free quantification"" section of the methods, describing the instrument used for determining ubiquitination sites on VPS34.
+TRUTH CHECK: The paper explicitly states the use of a ""Thermo Orbitrap Fusion Luoms mass spectrometer"" (note: ""Luoms"" is a typo in the paper for ""Lumos"").
+COMPLETENESS CHECK: The paper mentions two different mass spectrometers: the ""LTQ Orbitrap Velos"" (for polyubiquitin chain types) and the ""Orbitrap Fusion Lumos"" (for ubiquitination sites). The full set of extracted values only contains one of these.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: Orbitrap Fusion Lumos, LTQ Orbitrap Velos","Orbitrap Fusion Lumos, LTQ Orbitrap Velos"
+"PXD023959","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the category of labeling methods.
+SOURCE CHECK: The paper explicitly mentions ""label-free quantification"" in the ""LC–MS/MS and label-free quantification"" section of the methods.
+TRUTH CHECK: The paper describes label-free quantification and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods.
+COMPLETENESS CHECK: The full set of extracted values contains only ""label free"", which is exhaustive for this paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the text, specifically mentioning the ""LTQ Orbitrap Velos"" and ""Thermo Orbitrap Fusion Luoms"" mass spectrometers used for the MS experiments.
+TRUTH CHECK: The value is factually correct as the instruments used are Orbitrap-based.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as Orbitrap is the only mass analyzer type mentioned for the LC-MS/MS experiments.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","modification","ubiquitination signature dipeptidyl lysine","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The paper mentions ""ubiquitinylation (K)"" as a variable modification in the search criteria section of the methods.
+TRUTH CHECK: The candidate value ""ubiquitination signature dipeptidyl lysine"" is a descriptive term for the GG-tag resulting from trypsin digestion of ubiquitinated proteins, but the paper explicitly lists the searched modification as ""ubiquitinylation (K)"".
+COMPLETENESS CHECK: The full set of extracted values contains several modifications (e.g., ""cysteine oxidation to cysteic acid"", ""Iodoacetamide derivative"") that are not mentioned anywhere in the provided text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: ubiquitinylation (K)","ubiquitinylation (K)"
+"PXD023959","","strict","Technical","modification","cysteine oxidation to cysteic acid (CFWY)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""cysteine oxidation to cysteic acid (CFWY)"" is not present in the paper text.
+TRUTH CHECK: The paper explicitly lists ""oxidation (M)"" as a variable modification in the search criteria, but does not mention cysteine oxidation to cysteic acid.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications not mentioned in the text; only ""carbamidomethyl (C)"", ""oxidation (M)"", and ""ubiquitinylation (K)"" are explicitly stated.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a chemical modification, which fits the category for the modification field.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions ""carbamidomethyl (C)"" as a variable modification, but not ""Iodoacetamide derivative"".
+TRUTH CHECK: The value is factually incorrect based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD023959","","strict","Technical","modification","Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The specific phrase ""Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)"" does not appear in the paper text.
+TRUTH CHECK: The paper explicitly mentions ""oxidation (M)"" as a variable modification in the search criteria, but it does not mention ""hydroxylation"" or the specific residue list/C-term localization provided in the candidate value.
+COMPLETENESS CHECK: The full set of extracted values contains several modifications not mentioned in the text (e.g., ""Iodoacetamide derivative"", ""cysteine oxidation to cysteic acid""). Only ""oxidation (M)"" and ""carbamidomethyl (C)"" are explicitly stated in the search criteria.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Oxidation (M)","Oxidation (M)"
+"PXD023959","","strict","Technical","modification","Oxidation or Hydroxylation","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value is not present in the paper text; the search criteria explicitly list ""oxidation (M)"" but not ""hydroxylation"" or a general ""Oxidation or Hydroxylation"" modification.
+TRUTH CHECK: The candidate value is factually incorrect as it introduces ""Hydroxylation,"" which is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple hallucinations and incorrect terms not found in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Oxidation (M)","Oxidation (M)"
+"PXD023959","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is present in the paper text within the ""In vitro ubiquitination and deubiquitination assays"" and ""Lbpro* purification and treatment"" sections (mentioned as ""DTT"").
+TRUTH CHECK: DTT is the standard abbreviation for dithiothreitol, and it was used in the experimental buffers.
+COMPLETENESS CHECK: The full set of extracted values contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

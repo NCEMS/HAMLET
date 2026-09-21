@@ -71,11 +71,13 @@ def _default_key_outputs(stage: str, pxd: str, args=None) -> List[str]:
         ]
     if stage == "llm_judge":
         return [
-            str(output_root / pxd / "judge_output" / "llm_judge_per_paper.csv"),
-            str(output_root / pxd / "judge_output" / "judge_output" / "llm_judge_per_paper.csv"),
+            str(output_root / pxd / "llm_refinement_judge" / "llm_judge_per_paper.csv"),
         ]
     if stage == "finalize_sdrf":
-        return [str(output_root / pxd / "agentic_metadata" / f"{pxd}.sdrf.tsv")]
+        return [
+            str(output_root / pxd / "agentic_metadata" / f"{pxd}.sdrf.tsv"),
+            str(output_root / pxd / "sdrf_judge" / "llm_judge_per_paper.csv"),
+        ]
     return []
 
 
@@ -429,7 +431,7 @@ def _prepare_materialize(args, complete: bool, availability: bool):
             else:
                 os.makedirs("agentic_stage_output", exist_ok=True)
         elif stage == "llm_judge":
-            src = outdir / pxd / "judge_output"
+            src = outdir / pxd / "llm_refinement_judge"
             if os.path.islink("judge_stage_output") or os.path.isfile("judge_stage_output"):
                 os.unlink("judge_stage_output")
             elif os.path.isdir("judge_stage_output"):
@@ -460,6 +462,9 @@ def _prepare_materialize(args, complete: bool, availability: bool):
             if sdrf.exists():
                 shutil.copy2(sdrf, f"finalize_stage_output/{pxd}.sdrf.tsv")
                 shutil.copy2(sdrf, f"{pxd}.sdrf.tsv")
+            final_judge = outdir / pxd / "sdrf_judge"
+            if final_judge.exists():
+                shutil.copytree(final_judge, "finalize_stage_output/sdrf_judge", dirs_exist_ok=True)
 
 
 def cmd_prepare(args):

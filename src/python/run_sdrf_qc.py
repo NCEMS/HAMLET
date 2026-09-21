@@ -18,10 +18,12 @@ LEGACY_AGENT_MAP = {
     "ExperimentalDesignAgent": "ExperimentalDesign",
 }
 VERSION_PATTERN = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
-POST_JUDGE_FILE = "metadata_extraction_output/post_judge/llm_judge_per_paper.csv"
-POST_JUDGE_REVIEW_FILE = "metadata_extraction_output/post_judge/llm_judge_annotation_review.csv"
-LEGACY_JUDGE_FILE = "judge_output/llm_judge_per_paper.csv"
-LEGACY_JUDGE_REVIEW_FILE = "judge_output/llm_judge_annotation_review.csv"
+FINAL_JUDGE_FILE = "sdrf_judge/llm_judge_per_paper.csv"
+FINAL_JUDGE_REVIEW_FILE = "sdrf_judge/llm_judge_annotation_review.csv"
+HISTORICAL_FINAL_JUDGE_FILE = "metadata_extraction_output/post_judge/llm_judge_per_paper.csv"
+HISTORICAL_FINAL_JUDGE_REVIEW_FILE = "metadata_extraction_output/post_judge/llm_judge_annotation_review.csv"
+LEGACY_REFINEMENT_JUDGE_FILE = "judge_output/llm_judge_per_paper.csv"
+LEGACY_REFINEMENT_JUDGE_REVIEW_FILE = "judge_output/llm_judge_annotation_review.csv"
 
 
 def parse_args():
@@ -114,7 +116,8 @@ def read_judge_category_metrics(path, pxd):
         if not category_rows:
             continue
         counts = {name: sum(review_error_category(row) == name for row in category_rows) for name in (
-            "correct_explicit", "hallucinated", "type_mismatch", "wrong_value", "incomplete", "meti_only", "inferred"
+            "correct_explicit", "hallucinated", "type_mismatch", "wrong_value", "incomplete",
+            "runassessor_only", "pride_repository_only", "ptm_shepherd_only", "meti_only", "inferred"
         )}
         total = len(category_rows)
         output[category] = {
@@ -124,11 +127,20 @@ def read_judge_category_metrics(path, pxd):
             "judge_n_mismatch": counts["type_mismatch"],
             "judge_n_wrong": counts["wrong_value"],
             "judge_n_incomplete": counts["incomplete"],
-            "judge_n_technical_not_in_text": counts["meti_only"],
+            "judge_n_technical_not_in_text": (
+                counts["runassessor_only"] + counts["pride_repository_only"] +
+                counts["ptm_shepherd_only"] + counts["meti_only"]
+            ),
+            "judge_n_runassessor_only": counts["runassessor_only"],
+            "judge_n_pride_repository_only": counts["pride_repository_only"],
+            "judge_n_ptm_shepherd_only": counts["ptm_shepherd_only"],
             "judge_n_inferred": counts["inferred"],
             "judge_n_corrected": sum(bool(row.get("corrected_value")) for row in category_rows),
             "judge_accuracy": round(counts["correct_explicit"] / total, 4),
-            "judge_accuracy_adjusted": round((counts["correct_explicit"] + counts["meti_only"]) / total, 4),
+            "judge_accuracy_adjusted": round((
+                counts["correct_explicit"] + counts["runassessor_only"] +
+                counts["pride_repository_only"] + counts["ptm_shepherd_only"] + counts["meti_only"]
+            ) / total, 4),
             "judge_accuracy_with_inference": round((counts["correct_explicit"] + counts["inferred"]) / total, 4),
         }
     return output
@@ -175,22 +187,36 @@ def load_release_manifest(path):
         if not isinstance(pxd, str) or not re.fullmatch(r"PXD\d+", pxd):
             raise ValueError("release manifest contains an invalid PXD: {}".format(path))
         records[pxd] = record
+    return manifest, records
+
+
+def release_records(store_root, version):
+    manifest, records = load_release_manifest(manifest_path(store_root, version))
+    if records:
+        return manifest, records
+    legacy_sdrfs = store_root / "hamlet_sdrfs" / version
+    for path in legacy_sdrfs.glob("PXD*.sdrf.tsv"):
+        pxd = path.name.removesuffix(".sdrf.tsv")
+        if re.fullmatch(r"PXD\d+", pxd):
+            records[pxd] = {"pxd": pxd}
     if not records:
-        raise ValueError("release manifest has no PXD records: {}".format(path))
+        raise ValueError("release has no PXD records or versioned SDRFs: {}".format(manifest_path(store_root, version)))
     return manifest, records
 
 
 def load_judge_record(store_root, version, pxd):
     base = versioned_agentic_path(store_root, version, pxd)
     candidates = (
-        (base / POST_JUDGE_FILE, base / POST_JUDGE_REVIEW_FILE),
-        (base / LEGACY_JUDGE_FILE, base / LEGACY_JUDGE_REVIEW_FILE),
+        ("sdrf_judge", base / FINAL_JUDGE_FILE, base / FINAL_JUDGE_REVIEW_FILE),
+        ("llm_judge", base / HISTORICAL_FINAL_JUDGE_FILE, base / HISTORICAL_FINAL_JUDGE_REVIEW_FILE),
+        ("llm_judge", base / LEGACY_REFINEMENT_JUDGE_FILE, base / LEGACY_REFINEMENT_JUDGE_REVIEW_FILE),
     )
-    for metrics_path, review_path in candidates:
+    for judge_type, metrics_path, review_path in candidates:
         if not metrics_path.is_file():
             continue
         record = {
             "status": "available",
+            "judge_type": judge_type,
             "metrics_path": str(metrics_path.relative_to(store_root)),
             "metrics": read_judge_metrics(metrics_path, pxd),
         }
@@ -204,8 +230,8 @@ def load_judge_record(store_root, version, pxd):
 
 
 def compare_pair(store_root, baseline_version, candidate_version):
-    _, baseline_records = load_release_manifest(manifest_path(store_root, baseline_version))
-    _, candidate_records = load_release_manifest(manifest_path(store_root, candidate_version))
+    _, baseline_records = release_records(store_root, baseline_version)
+    _, candidate_records = release_records(store_root, candidate_version)
     baseline_pxds = set(baseline_records)
     candidate_pxds = set(candidate_records)
     shared_pxds = sorted(baseline_pxds & candidate_pxds)
@@ -214,6 +240,7 @@ def compare_pair(store_root, baseline_version, candidate_version):
     results = []
     changed_sdrfs = 0
     judge_pairs = 0
+    incompatible_judge_pairs = 0
     for pxd in shared_pxds:
         baseline_sdrf = versioned_sdrf_path(store_root, baseline_version, pxd)
         candidate_sdrf = versioned_sdrf_path(store_root, candidate_version, pxd)
@@ -233,16 +260,22 @@ def compare_pair(store_root, baseline_version, candidate_version):
         if result["sdrf_changed"]:
             changed_sdrfs += 1
         if baseline_judge["status"] == "available" and candidate_judge["status"] == "available":
-            judge_pairs += 1
-            result["judge_delta_status"] = "available"
-            result["judge_deltas"] = metric_deltas(baseline_judge["metrics"], candidate_judge["metrics"])
-            result["judge_category_deltas"] = {
-                category: metric_deltas(
-                    baseline_judge["category_metrics"][category],
-                    candidate_judge["category_metrics"][category],
-                )
-                for category in sorted(set(baseline_judge["category_metrics"]) & set(candidate_judge["category_metrics"]))
-            }
+            if baseline_judge["judge_type"] != candidate_judge["judge_type"]:
+                incompatible_judge_pairs += 1
+                result["judge_delta_status"] = "incompatible_judge_types"
+                result["judge_deltas"] = {}
+                result["judge_category_deltas"] = {}
+            else:
+                judge_pairs += 1
+                result["judge_delta_status"] = "available"
+                result["judge_deltas"] = metric_deltas(baseline_judge["metrics"], candidate_judge["metrics"])
+                result["judge_category_deltas"] = {
+                    category: metric_deltas(
+                        baseline_judge["category_metrics"][category],
+                        candidate_judge["category_metrics"][category],
+                    )
+                    for category in sorted(set(baseline_judge["category_metrics"]) & set(candidate_judge["category_metrics"]))
+                }
         elif baseline_judge["status"] != "available" and candidate_judge["status"] != "available":
             result["judge_delta_status"] = "missing_both_judges"
         elif baseline_judge["status"] != "available":
@@ -271,6 +304,7 @@ def compare_pair(store_root, baseline_version, candidate_version):
             "changed_sdrfs": changed_sdrfs,
             "unchanged_sdrfs": len(shared_pxds) - changed_sdrfs,
             "judge_pairs_available": judge_pairs,
+            "judge_pairs_incompatible": incompatible_judge_pairs,
         },
         "results": results,
     }

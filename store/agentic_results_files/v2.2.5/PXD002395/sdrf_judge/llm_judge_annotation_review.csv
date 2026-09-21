@@ -1,0 +1,169 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD002395","","strict","Biological","cell_line","A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293","A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a list of immortalized cell line names, which matches the field definition.
+SOURCE CHECK: These cell lines are explicitly listed in the ""Results"" and ""Experimental Procedures"" sections as the materials that were lysed, digested, and analyzed by LC-MS/MS.
+TRUTH CHECK: The list accurately reflects the eleven cell lines described in the paper.
+COMPLETENESS CHECK: The full set of extracted values covers all eleven cell lines mentioned as the source of the proteomics data.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Biological","cell_type","epithelial cell, T cell, hepatocyte, myeloid cell, neuron, fibroblast","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value consists of cell types/lineages, which matches the field definition.
+SOURCE CHECK: The paper analyzes 11 cell lines (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) via MS; some of these lineages are explicitly mentioned (e.g., ""T-cell leukemia"" for Jurkat) or are well-known (e.g., HeLa/MCF7/A549 as epithelial).
+TRUTH CHECK: While some values are correct (T cell for Jurkat, hepatocyte for HepG2, epithelial for HeLa/MCF7/A549/RKO), others are not supported by the paper's sample list: ""neuron"" and ""fibroblast"" are not the lineages of the 11 cell lines used in the MS experiment.
+COMPLETENESS CHECK:The full set includes unsupported cell types and misses others (e.g., osteosarcoma/bone for U2OS, prostate for LnCap).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: epithelial cell, T cell, hepatocyte, myeloid cell","epithelial cell, T cell, hepatocyte, myeloid cell"
+"PXD002395","","strict","Biological","disease","lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal","lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a list of disease states/diagnoses, which matches the definition of the `disease` field.
+SOURCE CHECK: The values are explicitly stated in the ""RESULTS"" section (e.g., ""A549 from lung carcinoma"", ""GAMG from glioblastoma"", etc.) and refer to the cell lines that were lysed and analysed by mass spectrometry.
+TRUTH CHECK: The values accurately reflect the origins of the 11 cell lines described in the paper; ""normal"" is a correct safe default for the noncancerous HEK293 cell line.
+COMPLETENESS CHECK: The full set (which is just this one string) covers all 11 cell lines analyzed in the MS experiment.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Biological","organ","lung, brain, cervix, liver, blood, prostate, breast, colon, bone, kidney","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a list of organs/tissues, which matches the definition of the 'organ' field.
+SOURCE CHECK: The values are inferable from the cell lines actually analysed by MS (A549: lung, GAMG: glioblastoma/brain, HeLa: cervix, HepG2: liver, Jurkat/K562: blood/leukemia, LnCap: prostate, MCF7: breast, RKO: colon, U2OS: osteosarcoma/bone).
+TRUTH CHECK: The mapping of cell lines to organs is factually correct based on the text (e.g., ""A549 from lung carcinoma"", ""GAMG from glioblastoma"", ""HeLa from cervical carcinoma"", ""HepG2 from hepatoma"", ""LnCap from prostate carcinoma"", ""MCF7 from mammary carcinoma"", ""RKO from colon carcinoma"", ""U2OS from osteosarcoma""). However, ""kidney"" is not mentioned and no kidney-derived cell line was used.
+COMPLETENESS CHECK: The set includes organs for almost all cell lines, but includes ""kidney"" which is not in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: lung, brain, cervix, liver, blood, prostate, breast, colon, bone","lung, brain, cervix, liver, blood, prostate, breast, colon, bone"
+"PXD002395","","strict","Biological","sex","male","male","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""male"" is the correct category for the sex field.
+SOURCE CHECK: The paper mentions that certain proteins were expressed only in ""cell lines of male origin (LnCap, Jurkat, HepG2, and A549)"", which were part of the MS analysis.
+TRUTH CHECK: The value is factually correct as the paper explicitly identifies some of the analyzed cell lines as being of male origin.
+COMPLETENESS CHECK: The full set contains ""male"", but the paper also describes other cell lines (e.g., HeLa, MCF7) which are well-known to be female; however, the text does not explicitly label the other lines as ""female"", only specific ones as ""male"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Biological","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly states ""We analyzed 11 human cell lines"" and mentions searching against the ""IPI-human database"".
+TRUTH CHECK: The value ""Homo sapiens"" is the scientific name for humans and is factually correct for the samples analyzed.
+COMPLETENESS CHECK: The full set contains the only species involved in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","ExperimentalDesign","factor_value","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293)","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) | lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental factor (cell line) and its specific levels, which is the correct category for factor_value.
+SOURCE CHECK: The value is explicitly stated in the ""RESULTS"" section, listing the 11 cell lines analyzed by mass spectrometry.
+TRUTH CHECK: The list of cell lines (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) accurately matches the paper text.
+COMPLETENESS CHECK: The full set of extracted values covers both the specific cell line names and their corresponding disease/tissue origins, which exhaustively describes the experimental factors under study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","ExperimentalDesign","factor_value","lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal","cell line (A549, GAMG, HeLa, HepG2, Jurkat, K562, LnCap, MCF7, RKO, U2OS, HEK293) | lung carcinoma, glioblastoma, cervical carcinoma, hepatoma, acute t-cell leukemia, chronic myeloid leukemia, prostate carcinoma, mammary carcinoma, colon carcinoma, osteosarcoma, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a list of disease states/diagnoses, which is a correct category for factor_value.
+SOURCE CHECK: These values are explicitly stated in the ""Results"" section as the origins of the 11 cell lines analyzed by mass spectrometry.
+TRUTH CHECK: The values accurately match the paper: A549 (lung carcinoma), GAMG (glioblastoma), HeLa (cervical carcinoma), HepG2 (hepatoma), Jurkat (acute T-cell leukemia), K562 (chronic myeloid leukemia), LnCap (prostate carcinoma), MCF7 (mammary carcinoma), RKO (colon carcinoma), U2OS (osteosarcoma), and HEK293 (noncancerous/normal).
+COMPLETENESS CHECK: The full set of extracted values covers both the specific cell line names and their corresponding disease/origin factors, which is exhaustive for the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The text explicitly states ""protein digestion with trypsin according to the FASP protocol"" in the Protein Digestion and Fractionation section.
+TRUTH CHECK: The value is factually correct as per the paper.
+COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Technical","fragmentation","beam-type collision-induced dissociation","beam-type collision-induced dissociation","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper explicitly states ""Peptide fragmentation was performed with the HCD method"".
+TRUTH CHECK: ""HCD"" (Higher-energy Collisional Dissociation) is the standard abbreviation for ""beam-type collision-induced dissociation"".
+COMPLETENESS CHECK: The full set contains this single value, which accurately reflects the fragmentation method described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Technical","instrument","LTQ Orbitrap Velos, LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer","LTQ Orbitrap Velos, LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes mass spectrometer models, which matches the instrument field definition.
+SOURCE CHECK: Both instruments are explicitly mentioned in the ""RESULTS"" and ""LC-MS/MS Analysis"" sections as the devices used to analyze the cell line samples.
+TRUTH CHECK: The text states that one replicate was done on the ""LTQ-Orbitrap Velos"" and the other two replicates used a ""novel LTQ-Orbitrap family mass spectrometer with a high-field Orbitrap mass analyzer"".
+COMPLETENESS CHECK: The full set of extracted values covers all instruments used for the MS analysis described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Technical","label","label free","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper explicitly states ""relative abundance of proteins was determined by label-free quantification"" and ""we used label-free quantification"" for the main comparative analysis of the 11 cell lines.
+TRUTH CHECK: While the main experiment was label-free, the paper also describes the construction of a ""super-SILAC"" standard and ""SILAC quantification experiments"" using heavy labeled cell lines (Lys8 and Arg10). According to the field definition, ""label-free"" is INCORRECT if the paper describes ANY metabolic/chemical labeling such as SILAC.
+COMPLETENESS CHECK: The full set contains only ""label free"", which ignores the SILAC labeling described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: SILAC","SILAC"
+"PXD002395","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a correct category for a mass analyzer.
+SOURCE CHECK: The value is explicitly mentioned multiple times in the text (e.g., ""LTQ-Orbitrap family mass spectrometer"", ""Orbitrap mass analyzer"").
+TRUTH CHECK: The value is factually correct as the paper describes using an Orbitrap-based instrument for the MS analysis.
+COMPLETENESS CHECK: The full set of extracted values (""Orbitrap"") is exhaustive for the mass analyzer used in this study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD002395","","strict","Technical","modification","iodoacetamide derivatized residue","","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a chemical modification, which fits the category of the modification field.
+SOURCE CHECK: The phrase ""iodoacetamide derivatized residue"" does not appear in the text; while iodoacetamide is a common alkylation reagent, it is not mentioned by name in this paper.
+TRUTH CHECK: The paper explicitly lists ""fixed modification of carbamidomethyl cysteine"", ""methionine oxidation"", and ""N-terminal acetylation"". It does not mention iodoacetamide.
+COMPLETENESS CHECK: The full set of extracted values is incomplete as it misses the three modifications explicitly named in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: carbamidomethyl cysteine","carbamidomethyl cysteine"
+"PXD002395","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Cell Culture Sample Preparation"" section of the methods (""Cells were lysed with a buffer consisting of... 0.1 m dithiothreitol"").
+TRUTH CHECK: The value is factually correct as the reduction reagent used in the sample preparation for the MS experiment.
+COMPLETENESS CHECK: The full set of extracted values contains only this reagent, and no other reduction reagents are mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

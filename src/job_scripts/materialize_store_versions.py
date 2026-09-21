@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument("--pxd-file", type=Path, required=True)
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--source-revision", help="Git revision containing the historical source files")
-    source.add_argument("--from-active", action="store_true", help="Copy the current flat active store records")
+    source.add_argument("--source-version", help="Copy an existing versioned store snapshot")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -35,12 +35,12 @@ def target_paths(store_path, release_version):
     )
 
 
-def active_sources(store_path, pxds):
-    sdrf_root = store_path / "hamlet_sdrfs"
-    agentic_root = store_path / "agentic_results_files"
+def versioned_sources(store_path, source_version, pxds):
+    sdrf_root = store_path / "hamlet_sdrfs" / source_version
+    agentic_root = store_path / "agentic_results_files" / source_version
     missing = [pxd for pxd in pxds if not (sdrf_root / f"{pxd}.sdrf.tsv").is_file() or not (agentic_root / pxd).is_dir()]
     if missing:
-        raise ValueError("active store is missing {} PXD records: {}".format(len(missing), ", ".join(missing[:10])))
+        raise ValueError("{} is missing {} versioned PXD records: {}".format(source_version, len(missing), ", ".join(missing[:10])))
     return sdrf_root, agentic_root
 
 
@@ -79,8 +79,8 @@ def extract_revision(repo_root, revision, paths, destination):
     archive_path.unlink()
 
 
-def materialize_active(store_path, pxds, staged_sdrfs, staged_agentic):
-    sdrf_root, agentic_root = active_sources(store_path, pxds)
+def materialize_version(store_path, source_version, pxds, staged_sdrfs, staged_agentic):
+    sdrf_root, agentic_root = versioned_sources(store_path, source_version, pxds)
     for pxd in pxds:
         shutil.copy2(sdrf_root / f"{pxd}.sdrf.tsv", staged_sdrfs / f"{pxd}.sdrf.tsv")
         shutil.copytree(agentic_root / pxd, staged_agentic / pxd)
@@ -102,9 +102,9 @@ def main():
     sdrf_target, agentic_target = target_paths(store_path, args.release_version)
     if sdrf_target.exists() or agentic_target.exists():
         raise SystemExit("version snapshot already exists and is immutable: {}, {}".format(sdrf_target, agentic_target))
-    if args.from_active:
-        active_sources(store_path, pxds)
-        source_description = "active store"
+    if args.source_version:
+        versioned_sources(store_path, args.source_version, pxds)
+        source_description = "store release {}".format(args.source_version)
         revision = None
         paths = None
     else:
@@ -123,8 +123,8 @@ def main():
         staged_agentic = temporary_root / "agentic_results_files" / args.release_version
         staged_sdrfs.mkdir(parents=True)
         staged_agentic.mkdir(parents=True)
-        if args.from_active:
-            materialize_active(store_path, pxds, staged_sdrfs, staged_agentic)
+        if args.source_version:
+            materialize_version(store_path, args.source_version, pxds, staged_sdrfs, staged_agentic)
         else:
             materialize_revision(repo_root, revision, paths, pxds, staged_sdrfs, staged_agentic, temporary_root)
         staged_sdrfs.rename(sdrf_target)

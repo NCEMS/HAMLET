@@ -106,23 +106,22 @@ def _list_spectral_files(downloads_root: Path, pxd: str) -> List[str]:
 
 
 def _read_judge_summary(results_dir: Path, pxd: str) -> Dict[str, str]:
-    """Read llm_judge and SDRF refinement metrics from the finalize_sdrf output."""
+    """Read pre-refinement and final-SDRF judge metrics from finalization output."""
     empty: Dict[str, str] = {
-        "pre_judge_accuracy": "",
-        "pre_judge_correct": "",
-        "pre_judge_hallucinated": "",
-        "pre_judge_wrong": "",
-        "pre_judge_mismatch": "",
+        "llm_refinement_judge_accuracy": "",
+        "llm_refinement_judge_correct": "",
+        "llm_refinement_judge_hallucinated": "",
+        "llm_refinement_judge_wrong": "",
+        "llm_refinement_judge_mismatch": "",
         "overrides_applied": "",
         "applied_override_fields": "",
-        "post_judge_accuracy": "",
-        "post_judge_correct": "",
+        "final_sdrf_judge_accuracy": "",
+        "final_sdrf_judge_correct": "",
     }
     report_path = (
         results_dir
         / pxd
         / "agentic_metadata"
-        / "metadata_extraction_output"
         / f"{pxd}.sdrf_refinement_report.json"
     )
     if not report_path.exists():
@@ -134,13 +133,13 @@ def _read_judge_summary(results_dir: Path, pxd: str) -> Dict[str, str]:
 
     out: Dict[str, str] = dict(empty)
 
-    pre = report.get("pre_judge_summary") or {}
+    pre = report.get("llm_refinement_judge_summary") or report.get("pre_judge_summary") or {}
     if pre.get("judge_accuracy") is not None:
-        out["pre_judge_accuracy"] = f"{float(pre['judge_accuracy']):.2f}"
-    out["pre_judge_correct"]     = str(pre.get("judge_n_correct", ""))
-    out["pre_judge_hallucinated"] = str(pre.get("judge_n_hallucinated", ""))
-    out["pre_judge_wrong"]       = str(pre.get("judge_n_wrong", ""))
-    out["pre_judge_mismatch"]    = str(pre.get("judge_n_mismatch", ""))
+        out["llm_refinement_judge_accuracy"] = f"{float(pre['judge_accuracy']):.2f}"
+    out["llm_refinement_judge_correct"] = str(pre.get("judge_n_correct", ""))
+    out["llm_refinement_judge_hallucinated"] = str(pre.get("judge_n_hallucinated", ""))
+    out["llm_refinement_judge_wrong"] = str(pre.get("judge_n_wrong", ""))
+    out["llm_refinement_judge_mismatch"] = str(pre.get("judge_n_mismatch", ""))
 
     apps = report.get("applied_overrides") or {}
     out["overrides_applied"]       = str(len(apps))
@@ -148,10 +147,10 @@ def _read_judge_summary(results_dir: Path, pxd: str) -> Dict[str, str]:
         f"{k}={v}" for k, v in apps.items()
     )
 
-    post = report.get("post_judge_summary") or {}
-    if post.get("judge_accuracy") is not None:
-        out["post_judge_accuracy"] = f"{float(post['judge_accuracy']):.2f}"
-    out["post_judge_correct"] = str(post.get("judge_n_correct", ""))
+    final = report.get("final_judge_summary") or report.get("post_judge_summary") or {}
+    if final.get("judge_accuracy") is not None:
+        out["final_sdrf_judge_accuracy"] = f"{float(final['judge_accuracy']):.2f}"
+    out["final_sdrf_judge_correct"] = str(final.get("judge_n_correct", ""))
 
     return out
 
@@ -339,15 +338,15 @@ def main() -> None:
         fieldnames.append(f"{proc}_completed")
         fieldnames.append(f"{proc}_workdir")
     fieldnames += [
-        "pre_judge_accuracy",
-        "pre_judge_correct",
-        "pre_judge_hallucinated",
-        "pre_judge_wrong",
-        "pre_judge_mismatch",
+        "llm_refinement_judge_accuracy",
+        "llm_refinement_judge_correct",
+        "llm_refinement_judge_hallucinated",
+        "llm_refinement_judge_wrong",
+        "llm_refinement_judge_mismatch",
         "overrides_applied",
         "applied_override_fields",
-        "post_judge_accuracy",
-        "post_judge_correct",
+        "final_sdrf_judge_accuracy",
+        "final_sdrf_judge_correct",
     ]
 
     write_csv(out_csv, rows, fieldnames)

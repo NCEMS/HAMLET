@@ -1,0 +1,347 @@
+{
+  "paper_id": "PXD039394",
+  "annotations": [
+    {
+      "annotation_type": "age",
+      "extracted_value": "4-wk-old",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a numeric age with a unit, which matches the definition for the age field.",
+        "SOURCE_CHECK": "The value \"4-wk-old\" appears in the text describing the BALB/c nude mice used for the in vivo metastasis models, but these mice were used for tumor growth and H&E staining, not for the mass spectrometry experiment.",
+        "TRUTH_CHECK": "The mass spectrometry experiment in this paper was performed on proteins pulled down from cancer cell lines (as described in the \"circNEIL3 Interacts with YBX1\" section), not from the 4-week-old mice.",
+        "COMPLETENESS_CHECK": "The value is not applicable to the MS sample."
+      }
+    },
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "BT549, MDA-MB-231, A549, H1299, SW480, SW620, MCF10A",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the category for the cell_line field.",
+        "SOURCE_CHECK": "The paper mentions these cell lines, but the mass spectrometry analysis was specifically performed on proteins pulled down using biotin-labeled DNA oligomers in \"three different cancer cell lines\" (though not explicitly named in that sentence, the context of the RNA pull-down is the only MS experiment). However, the candidate value includes MCF10A, which was used for TGFβ treatment and RNA-seq (GSE165576), not the MS experiment.",
+        "TRUTH_CHECK": "The MS experiment (RNA pull-down) used \"three different cancer cell lines\" to identify YBX1. While the paper uses many cell lines for various assays (Transwell, RIP, etc.), it does not explicitly state which three were used for the MS, although they are likely among the cancer lines listed. MCF10A is explicitly linked to RNA-seq, not MS.",
+        "COMPLETENESS_CHECK": "The full set includes all cell lines mentioned in the paper regardless of whether they were the source of the MS sample."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a valid cell type/lineage.",
+        "SOURCE_CHECK": "The MS experiment involved RNA pull-down assays using \"three different cancer cell lines\" (though not explicitly named in that sentence, the paper identifies the cells used for these assays as MDA-MB-231, A549, and H1299 in the context of circNEIL3 localization and interaction). These are epithelial-derived cancer cell lines.",
+        "TRUTH_CHECK": "The candidate value is factually correct as the cell lines used for the MS analysis (cancer cells like A549 and MDA-MB-231) are of epithelial lineage.",
+        "COMPLETENESS_CHECK": "The full set contains \"epithelial cell\", which accurately describes the lineage of the cells analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "colorectal carcinoma",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"colorectal carcinoma\" is a disease state, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; however, the mass spectrometry experiment (RNA pull-down) was performed using \"three different cancer cell lines\" (which include breast, lung, and colorectal lines), not the CRC patient tissues.",
+        "TRUTH_CHECK": "The paper describes a proteomics experiment (RNA pull-down followed by MS) to identify YBX1. This was done in cancer cell lines. While the overall study focuses on colorectal carcinoma (CRC), the specific MS sample was derived from cancer cell lines (MDA-MB-231, A549, H1299, etc.).",
+        "COMPLETENESS_CHECK": "The full set only contains \"colorectal carcinoma\", but the MS experiment was conducted across multiple cancer types (breast, lung, and colorectal)."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "colon, liver, lung, brain, bone",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "breast, lung",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of organs/tissues, which matches the definition for the 'organ' field.",
+        "SOURCE_CHECK": "The candidate value includes organs mentioned in the paper, but most are unrelated to the mass spectrometry experiment. The MS analysis was performed on proteins pulled down from \"three different cancer cell lines\" (specifically MDA-MB-231, A549, and H1299 as mentioned in the context of the RNA pull-down and MS analysis in the Results section). The colon, liver, lung, brain, and bone are mentioned in the context of patient tissues (CRC/liver metastasis) or mouse models, not as the source of the MS sample.",
+        "TRUTH_CHECK": "The MS sample was derived from cell lines (breast and lung cancer cells), not from the listed organs.",
+        "COMPLETENESS_CHECK": "The full set is incorrect because it lists organs from unrelated experimental contexts (patient cohorts and mouse models) instead of the cell lines used for the MS analysis."
+      }
+    },
+    {
+      "annotation_type": "sex",
+      "extracted_value": "female",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"female\" is a valid category for the sex field.",
+        "SOURCE_CHECK": "The value \"female\" appears in the \"Animal Experiments\" section describing the BALB/c nude mice used in the study.",
+        "TRUTH_CHECK": "The paper explicitly states \"4-wk-old female BALB/c nude mice\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is the only sex mentioned for the animal models used in the study."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The mass spectrometry analysis was performed on proteins pulled down from cancer cell lines (MDA-MB-231, A549, H1299) and CRC patient tissues, all of which are human.",
+        "TRUTH_CHECK": "The paper explicitly mentions \"human breast cancer cell lines\", \"human lung cancer cell lines\", and \"human colorectal cancer cell lines\", confirming the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant species for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "probe type (sense, antisense)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes an experimental variable (probe type) used to distinguish between different conditions in the experiment, which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The value is present in the text; the authors performed RNA pull-down assays using \"biotin-labeled sense (S) or antisense (AS) DNA oligomers\" to identify interacting proteins via mass spectrometry.",
+        "TRUTH_CHECK": "The value is factually correct as the experiment compared the proteins pulled down by sense versus antisense probes to identify specific interactors.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the technical variable for the MS experiment (probe type) and the biological context (colorectal carcinoma), covering the primary experimental axes."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "colorectal carcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value \"colorectal carcinoma\" (CRC) is explicitly mentioned as the source of the primary tumors and metastatic lesions analyzed in the study.",
+        "TRUTH_CHECK": "The paper describes profiling circRNA and protein interactions in a cohort of 68 colorectal carcinoma (CRC) patients.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the disease state and the probe type used for the RNA pull-down MS experiment, covering the primary experimental variables."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"Mass spectrometry analysis\" and provides a ProteomeXchange accession (PXD039394), but the text does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "The value is not explicitly mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The value cannot be verified as correct because it is not mentioned in the text.",
+        "COMPLETENESS_CHECK": "The full set is incomplete as the information is missing from the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Exploris 480",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The candidate value \"Orbitrap Exploris 480\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and therefore cannot be verified as correct.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes a mass spectrometry analysis of proteins pulled down by RNA probes, but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is mentioned in the text, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions mass spectrometry analysis of RNA pull-down proteins and provides a Proteomics Identification Database accession (PXD039394), but the text does not explicitly name the instrument or the mass analyzer used.",
+        "TRUTH_CHECK": "The mass analyzer is not mentioned in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the source."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Deamidation (NQR)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value \"Deamidation (NQR)\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; the paper describes an RNA pull-down followed by mass spectrometry to identify YBX1, but it does not list the search parameters or modifications used during the MS database search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Oxidation or Hydroxylation (CDEFHIKLMNPQRSTUVWY,C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Oxidation or Hydroxylation\" or any of the other modifications listed in the extracted values.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text; none of these modifications are mentioned."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Replacement of 3 protons by iron (DE,C-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of iron-related modifications or the specific search parameters listed.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Iodoacetamide derivative\" or any specific search modifications for the mass spectrometry analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    }
+  ]
+}

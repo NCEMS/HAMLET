@@ -1,0 +1,195 @@
+{
+  "paper_id": "PXD009815",
+  "annotations": [
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The study uses a standard yeast lysate spiked with human proteins (UPS1 mix) to benchmark software; there is no disease state being studied.",
+        "TRUTH_CHECK": "Since the subjects (yeast lysate) are not part of a disease study, \"normal\" is a correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for this study."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Saccharomyces cerevisiae",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name of a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper states the dataset was generated from a \"yeast lysate\"; \"Saccharomyces cerevisiae\" is the standard scientific name for common baker's yeast used in such proteomics benchmarks.",
+        "TRUTH_CHECK": "The value is factually correct as the MS samples consisted of yeast lysate.",
+        "COMPLETENESS_CHECK": "The full set contains the primary organism used for the MS sample."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental variable (concentration levels of a spiked protein mix), which is a correct category for factor_value.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Experimental datasets\" section of the methods, describing the material analyzed by MS.",
+        "TRUTH_CHECK": "The values (0.01 to 50 fmol) match the text exactly.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the spiked concentrations and a \"normal\" (yeast lysate background) value, which together cover the experimental design described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": "ground truth",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value (representing a healthy/baseline state).",
+        "SOURCE_CHECK": "The paper describes a \"ground truth\" dataset using a yeast lysate spiked with UPS1 proteins; the yeast lysate itself serves as the invariant background/baseline.",
+        "TRUTH_CHECK": "While the yeast lysate is the background, the term \"normal\" is a safe default for healthy/disease-free/baseline states. However, in this specific experimental design, the \"factor\" being varied is the UPS1 concentration. The yeast lysate is the matrix, not a \"normal\" group in a disease study.",
+        "COMPLETENESS_CHECK": "The full set includes the actual experimental variable (UPS1 concentration) and a generic \"normal\" label."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid MS acquisition scheme.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Materials and methods\" section (Section 2) in the context of the quantification workflow used for the MS samples.",
+        "TRUTH_CHECK": "The paper explicitly states the use of \"data dependent acquisition (DDA) label-free quantification\".",
+        "COMPLETENESS_CHECK": "The full set contains the only acquisition method mentioned for the proteomics experiment."
+      }
+    },
+    {
+      "annotation_type": "cleavage_agent",
+      "extracted_value": "Trypsin",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Trypsin\" is a protease, which matches the definition of a cleavage agent.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Materials and methods\" section (\"Trypsin digested samples were then analyzed...\").",
+        "TRUTH_CHECK": "The value is factually correct as the paper states trypsin was used for digestion.",
+        "COMPLETENESS_CHECK": "The full set contains only \"Trypsin\", which is the only cleavage agent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions the use of a \"Q-Exactive Plus mass spectrometer,\" which typically uses HCD (Higher-energy Collisional Dissociation), but the specific phrase \"beam-type collision-induced dissociation\" does not appear in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not exhaustive because the value itself is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive Plus",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category for the instrument field.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Experimental datasets\" section (Section 2.2) as the instrument used to analyze the samples.",
+        "TRUTH_CHECK": "The paper states the samples were analyzed using a \"Q-Exactive Plus mass spectrometer\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass spectrometer mentioned in the text for the MS experiment."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification\" and \"label-free DDA method\" in the context of the MS analysis of the yeast lysate/UPS1 spiked samples.",
+        "TRUTH_CHECK": "The paper describes a label-free approach and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical labeling (SILAC, dimethyl, etc.).",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single correct value, which is exhaustive for this paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions the use of a \"Q-Exactive Plus mass spectrometer\" for the analysis of the samples.",
+        "TRUTH_CHECK": "The Q-Exactive Plus is a well-known mass spectrometer that utilizes an Orbitrap mass analyzer.",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer used in the described experiment."
+      }
+    }
+  ]
+}
