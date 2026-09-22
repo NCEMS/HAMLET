@@ -1,0 +1,220 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD051954","","strict","Biological","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value is present in the text; specifically, the ""Sample preparation for mass spectrometric analysis"" section states that Flag-vector or Flag-NDRG3 was transfected into HEK293T cells, which were then lysed and immunoprecipitated for mass spectrometric analysis to search for NDRG3-binding proteins.
+TRUTH CHECK: The value is factually correct as HEK293T was used as the source for the MS experiment described in the ""Sample preparation for mass spectrometric analysis"" section.
+COMPLETENESS CHECK: The full set contains ""HEK293T"", but the paper also describes a second MS experiment (""IP-Mass-based analysis of phosphorylated NDRG3 peptides"") using MIA PaCa-2 cells. Therefore, the set is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: HEK293T, MIA PaCa-2","HEK293T, MIA PaCa-2"
+"PXD051954","","strict","Biological","disease","pancreatic ductal adenocarcinoma, lung cancer, normal","pancreatic ductal adenocarcinoma, lung cancer, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value consists of disease states, which matches the field definition.
+SOURCE CHECK: The values are present in the text; the MS experiments used HEK293T (normal/safe default), MIA PaCa-2 (pancreatic cancer), and the paper discusses lung cancer cell lines and PDAC models.
+TRUTH CHECK: The paper explicitly mentions ""pancreatic ductal adenocarcinoma"" (PDAC), ""lung cancer cell lines"", and compares cancer tissues to ""normal pancreatic tissues"".
+COMPLETENESS CHECK: The full set covers the primary disease contexts (PDAC, lung cancer) and the control state (normal) described in the study.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Biological","organ","kidney","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK: The word ""kidney"" does not appear in the provided paper text.
+TRUTH CHECK: The mass spectrometry experiments were performed using HEK293T cells (human embryonic kidney) and MIA PaCa-2 cells (pancreatic cancer). While HEK293T is derived from kidney, the text does not mention ""kidney"" explicitly, and the other MS sample is pancreatic. However, the candidate value ""kidney"" is not supported by the text as the primary organ of interest or the explicit source of the MS samples.
+COMPLETENESS CHECK: The full set [""kidney""] is incomplete as it misses the pancreatic origin of the MIA PaCa-2 cells used in the phospho-peptide MS analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: pancreas","pancreas"
+"PXD051954","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","True","False","False","","","wrong_value","TYPE CHECK: The candidate value consists of organism names, which matches the definition of the species field.
+SOURCE CHECK: Both species are used in the MS experiments: HEK293T cells (human) were used for the NDRG3-binding protein search, and MIA PaCa-2 cells (human) were used for the IP-Mass-based analysis of phosphorylated NDRG3 peptides. While the paper describes extensive mouse models, the specific ""Sample preparation for mass spectrometric analysis"" section describes the use of human cell lines.
+TRUTH CHECK: The paper explicitly uses human cell lines (HEK293T, MIA PaCa-2) for the mass spectrometry experiments. However, the mass spectrometry sections only describe human samples. The mouse models (Mus musculus) were analyzed via Western Blot, IHC, and histology, but not by mass spectrometry.
+COMPLETENESS CHECK: The set includes Mus musculus, which was not analyzed by MS.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD051954","","strict","ExperimentalDesign","factor_value","transfection (Flag-vector, Flag-NDRG3)","transfection (Flag-vector, Flag-NDRG3) | pancreatic ductal adenocarcinoma, lung cancer, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental condition/treatment (transfection of specific vectors), which is a valid category for a factor_value.
+SOURCE CHECK: The value is present in the ""Sample preparation for mass spectrometric analysis"" section, where HEK293T cells were transfected with either Flag-vector or Flag-NDRG3 before immunoprecipitation and MS analysis.
+TRUTH CHECK: The value accurately reflects the experimental groups used for the first MS experiment described in the paper.
+COMPLETENESS CHECK: The full set of extracted values includes both the transfection conditions for the first MS experiment and the disease/tissue contexts for other analyses; together they cover the primary experimental variables associated with the proteomics data.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","ExperimentalDesign","factor_value","pancreatic ductal adenocarcinoma, lung cancer, normal","transfection (Flag-vector, Flag-NDRG3) | pancreatic ductal adenocarcinoma, lung cancer, normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value consists of disease states/tissue types, which is the correct category for a factor_value.
+SOURCE CHECK: The paper describes the use of pancreatic and lung cancer cell lines (e.g., MIA PaCa-2, NCI-H358) and normal pancreatic tissues in the context of the overall study, including the MS experiments (which used MIA PaCa-2 and HEK293T).
+TRUTH CHECK: The paper explicitly mentions pancreatic ductal adenocarcinoma (PDAC), lung cancer cell lines, and normal pancreatic tissues.
+COMPLETENESS CHECK: The full set of extracted values includes both the biological conditions (cancer types/normal) and the experimental manipulation (transfection), which covers the primary axes of comparison in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The value is present in the paper text; the ""LC-MS/MS analysis for phosphor-peptide identification"" section explicitly states that the survey scan ""was acquired in data-dependent mode"".
+TRUTH CHECK: The value is factually correct as it describes the acquisition mode used for the phosphoproteomic analysis.
+COMPLETENESS CHECK: The full set contains this value, and while the first MS experiment (Orbitrap Exploris 240) describes ""Top15 double play"" (which is a DDA-style scheme), the ""data-dependent"" mention for the second experiment is explicitly stated.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not present in the paper text; the text explicitly mentions ""HCD"" (Higher-energy Collisional Dissociation) for the Orbitrap Exploris 240 and ""normalized collision energy"" for the LTQ linear ion trap.
+TRUTH CHECK: The value is not supported by the text. While HCD is a form of beam-type CID, the specific phrase ""beam-type collision-induced dissociation"" does not appear, and the paper explicitly names ""HCD"".
+COMPLETENESS CHECK: The full set is incorrect as it uses a term not found in the text instead of the explicitly stated method.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: HCD","HCD"
+"PXD051954","","strict","Technical","instrument","Orbitrap Exploris 240","Orbitrap Exploris 240","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""LC-MS/MS analysis"" section as part of the ""RSLCnano u3000 / Orbitrap Exploris 240 (Thermo) system"" used for the proteomics analysis.
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains this instrument; while a second instrument (Finnigan LTQ linear ion trap) is mentioned for the phosphor-peptide identification, the candidate value is a correct extraction of one of the instruments used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper describes two mass spectrometry experiments (one for candidate NDRG3-binding proteins and one for phosphorylated NDRG3 peptides); neither experiment mentions the use of TMT, iTRAQ, SILAC, or other chemical/metabolic labels.
+TRUTH CHECK: Since no labeling methods are described, the ""label-free"" safe default is applicable.
+COMPLETENESS CHECK: The full set contains only this value, which correctly describes the labeling state for the MS experiments in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""LC-MS/MS analysis"" section describing the ""Orbitrap Exploris 240"" system used for the MS experiment.
+TRUTH CHECK: The value is factually correct as the instrument used is an Orbitrap Exploris 240.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for the primary LC-MS/MS analysis described. (Note: While a ""linear ion trap"" is mentioned for the phosphor-peptide identification, ""Orbitrap"" is a correct extraction for the main proteomics experiment).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention ""Lysine oxidation to aminoadipic semialdehyde"" or any such modification.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions ""carbamidomethyl (C)"" and ""carbamidomethyl cysteine"", but not ""Iodoacetamide derivative"".
+TRUTH CHECK: The value is factually incorrect based on the provided text. While iodoacetamide is a reagent used to create carbamidomethyl modifications, the specific term ""Iodoacetamide derivative"" does not appear in the text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: carbamidomethyl (C)","carbamidomethyl (C)"
+"PXD051954","","strict","Technical","modification","Pyro-glu from Q (N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text; the only modifications explicitly listed for the MS experiments are carbamidomethyl (C), Oxidation (M), Acetyl (protein N-term), and phosphorylation of serine, threonine, and tyrosine.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Amidation (C-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Amidation (C-term)"" is a protein modification, which matches the required category for this field.
+SOURCE CHECK: The term ""Amidation"" or ""C-term amidation"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not factually supported for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text; the only modifications explicitly listed are Oxidation (M), Acetyl (protein N-term), carbamidomethyl (C), and phosphorylation of serine, threonine, and tyrosine.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Iodoacetamide derivative","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions ""carbamidomethyl (C)"" and ""carbamidomethyl cysteine"", but not ""Iodoacetamide derivative"".
+TRUTH CHECK: The value is not factually supported by the text. While iodoacetamide is a common reagent used to create carbamidomethyl modifications, the rules explicitly forbid inferring the modification name from reagents or using names not literally present in the text.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Pyro-glu from Q","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value ""Pyro-glu from Q"" is not present in the provided paper text.
+TRUTH CHECK: The paper does not mention ""Pyro-glu from Q"" or any related modification in the LC-MS/MS or phosphor-peptide identification sections.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications (e.g., ""Amidation"", ""Iodoacetamide derivative"") that are also not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD051954","","strict","Technical","modification","Amidation","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Amidation"" is a protein modification, which matches the required category for this field.
+SOURCE CHECK: The term ""Amidation"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; there is no mention of C-terminal amidation or any other form of amidation being searched for in the mass spectrometry experiments.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications (e.g., ""Iodoacetamide derivative"", ""Pyro-glu"") that are also completely absent from the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
