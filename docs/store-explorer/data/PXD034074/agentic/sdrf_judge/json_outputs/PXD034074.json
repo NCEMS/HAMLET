@@ -3,7 +3,7 @@
   "annotations": [
     {
       "annotation_type": "age",
-      "extracted_value": "8 weeks",
+      "extracted_value": "12 weeks",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -14,10 +14,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric age with a unit, which matches the definition for the age field.",
-        "SOURCE_CHECK": "The paper states in the \"Experimental model and subject details\" section that \"Unless otherwise noted, 8-week-old male mice were used for all experiment,\" and the proteomics/ubiquitinome analysis was performed on eWAT of Mdm2-AKI and control mice.",
-        "TRUTH_CHECK": "The value \"8 weeks\" correctly reflects the age of the mice used in the study's experiments, including the MS analysis.",
-        "COMPLETENESS_CHECK": "The value is complete as it identifies the age of the animals used for the MS samples."
+        "TYPE_CHECK": "The candidate value is a time duration/age, which matches the required category for the age field.",
+        "SOURCE_CHECK": "The value is present in the text; the quantitative proteomics and ubiquitinome analyses were performed on eWAT of mice on HFD for 12 weeks.",
+        "TRUTH_CHECK": "The value is factually correct as it describes the age/duration of the HFD treatment for the mice used in the MS experiments.",
+        "COMPLETENESS_CHECK": "The value is complete as it identifies the specific time point used for the proteomics and ubiquitinome samples."
       }
     },
     {
@@ -33,15 +33,34 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"adipocytes\" is a cell type, which matches the field definition.",
-        "SOURCE_CHECK": "The value is correct as the proteomics and ubiquitinome analyses were performed on eWAT (epididymal white adipose tissue), which is primarily composed of adipocytes.",
-        "TRUTH_CHECK": "The paper explicitly states that quantitative proteomics and ubiquitinome analysis were performed in the eWAT of Mdm2-AKI and control mice.",
-        "COMPLETENESS_CHECK": "The full set contains \"adipocytes\", which accurately describes the primary cell type of the tissue (eWAT) analyzed by mass spectrometry."
+        "TYPE_CHECK": "The candidate value \"adipocytes\" is a cell type, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value is present in the context of the MS experiment; the paper states that \"quantitative proteomics analysis in eWAT [epididymal white adipose tissue] of Mdm2-AKI and control mice... through LC-MS/MS\" was performed, and eWAT is composed primarily of adipocytes.",
+        "TRUTH_CHECK": "The value is factually correct as the proteomics and ubiquitinome analyses were performed on eWAT samples.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"adipocytes\") covers the primary cell type of the tissue (eWAT) analyzed by mass spectrometry."
       }
     },
     {
       "annotation_type": "disease",
-      "extracted_value": "insulin resistance, hepatic steatosis, adipose tissue dysfunction",
+      "extracted_value": "hfd",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "hfd, NCD",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"hfd\" (High-Fat Diet) refers to a dietary treatment/condition, which is a valid way to describe the disease-like state or experimental condition being studied.",
+        "SOURCE_CHECK": "The value is present in the text and refers to the mice (Mdm2-AKI and WT) whose eWAT and serum were analyzed by LC-MS/MS.",
+        "TRUTH_CHECK": "The paper explicitly uses HFD to induce adipose tissue dysfunction and hepatic steatosis, making it the primary condition for the MS samples.",
+        "COMPLETENESS_CHECK": "The full set contains only \"hfd\"; however, the study also includes a \"NCD\" (Normal Chow Diet) group as the control, which is missing from the extracted values."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "ewat, serum",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -52,29 +71,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes disease states/pathologies, which matches the definition of the disease field.",
-        "SOURCE_CHECK": "These conditions are explicitly described as the phenotypes of the Mdm2-AKI mice analyzed by LC-MS/MS (eWAT samples).",
-        "TRUTH_CHECK": "The paper explicitly states that Mdm2-AKI mice exhibited \"exacerbated weight gain, insulin resistance, and decreased energy expenditure\" and \"chronic high-fat diet (HFD) exposure caused obvious epididymal white adipose tissue (eWAT) dysfunction... thereby leading to hepatic steatosis\".",
-        "COMPLETENESS_CHECK": "The full set captures the primary pathological conditions associated with the samples analyzed in the proteomics and ubiquitinome experiments."
-      }
-    },
-    {
-      "annotation_type": "organ",
-      "extracted_value": "epididymal white adipose tissue",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "technical_origin": false,
-      "inference": null,
-      "error_category": "incomplete",
-      "corrected_value": "epididymal white adipose tissue, serum",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a specific tissue/organ, which matches the definition of the `organ` field.",
-        "SOURCE_CHECK": "The value is explicitly mentioned in the text as the source for the quantitative proteomics and ubiquitinome analysis (\"we performed quantitative proteomics analysis in eWAT... through LC-MS/MS\").",
-        "TRUTH_CHECK": "The value \"epididymal white adipose tissue\" is the full name for the abbreviation \"eWAT\" used in the proteomics context of the paper.",
-        "COMPLETENESS_CHECK": "The full set contains the primary tissue analyzed by MS; while serum was also analyzed by LC-MS/MS, the core proteomic profiling and ubiquitinome study focused on eWAT. However, since serum is also a biological material analyzed by MS in this paper, the set is slightly incomplete."
+        "TYPE_CHECK": "The candidate value contains organ/tissue names, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper explicitly states that LC-MS/MS was performed on \"mixed serum samples\" and \"mixed eWAT samples\" (under the \"Proteomics and ubiquitinome\" section).",
+        "TRUTH_CHECK": "The values \"ewat\" (epididymal white adipose tissue) and \"serum\" are factually correct based on the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the serum proteomics and the eWAT proteomics/ubiquitinomics described in the paper."
       }
     },
     {
@@ -90,10 +90,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"male\" is the correct category for the sex field.",
-        "SOURCE_CHECK": "The value is explicitly stated in the \"Experimental model and subject details\" section (\"Unless otherwise noted, 8-week-old male mice were used for all experiment\").",
-        "TRUTH_CHECK": "The value is factually correct based on the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only male mice are mentioned for the experiments."
+        "TYPE_CHECK": "The candidate value \"male\" is a valid entry for the sex metadata field.",
+        "SOURCE_CHECK": "The value is explicitly stated in the \"Experimental model and subject details\" section (\"8-week-old male mice were used for all experiment\").",
+        "TRUTH_CHECK": "The value is factually correct as per the paper text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as only male mice were used."
       }
     },
     {
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a scientific name for an organism, which matches the species field definition.",
-        "SOURCE_CHECK": "The paper explicitly describes the use of \"mice\" (e.g., \"Mdm2-AKI mice\", \"WT mice\") for the proteomics and ubiquitinome experiments.",
-        "TRUTH_CHECK": "\"Mus musculus\" is the correct scientific name for the mouse.",
-        "COMPLETENESS_CHECK": "The full set contains the single correct species used in the study."
+        "TYPE_CHECK": "The candidate value \"Mus musculus\" is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes the use of \"Mdm2-AKI mice\" and \"WT mice\" for the quantitative proteomics and ubiquitinome analysis of eWAT.",
+        "TRUTH_CHECK": "The study uses mice, and \"Mus musculus\" is the correct scientific name for the mouse.",
+        "COMPLETENESS_CHECK": "The full set contains the only species used for the MS experiments in this study."
       }
     },
     {
@@ -128,15 +128,15 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes experimental factors (genotype and diet) and their respective levels, which is the correct category for factor_value.",
-        "SOURCE_CHECK": "The values are explicitly present in the text: \"Mdm2-AKI\" and \"WT\" (control) genotypes, and \"NCD\" (normal chow diet) and \"HFD\" (high-fat diet).",
-        "TRUTH_CHECK": "The values are factually correct; the study compares Mdm2-AKI vs WT mice under NCD and HFD conditions.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes both the primary experimental variables (genotype/diet) and the resulting phenotypes (insulin resistance, etc.), covering the experimental design described."
+        "TYPE_CHECK": "The candidate value describes the experimental factors (genotype and diet) and their respective levels, which is the correct category for factor_value.",
+        "SOURCE_CHECK": "The values \"Mdm2-AKI\", \"control\" (WT), \"NCD\", and \"HFD\" are all explicitly mentioned in the context of the proteomics and ubiquitinome experiments performed on eWAT.",
+        "TRUTH_CHECK": "The paper describes comparing Mdm2-AKI mice versus control (WT) mice and the effects of HFD versus NCD.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the primary experimental variables (genotype and diet) used to group the samples in the MS analysis."
       }
     },
     {
       "annotation_type": "factor_value",
-      "extracted_value": "insulin resistance, hepatic steatosis, adipose tissue dysfunction",
+      "extracted_value": "hfd",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -147,10 +147,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes characteristics/phenotypes under study, which is a correct category for factor_value.",
-        "SOURCE_CHECK": "These terms are explicitly mentioned in the abstract and results as the primary outcomes/dysfunctions being studied in the Mdm2-AKI mice.",
-        "TRUTH_CHECK": "The paper explicitly states that Mdm2-AKI mice exhibited \"exacerbated weight gain, insulin resistance... adipose tissue dysfunction... and hepatic steatosis.\"",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the independent variables (genotype, diet) and the dependent phenotypic factors (insulin resistance, etc.), providing a complete picture of the experimental design."
+        "TYPE_CHECK": "The candidate value \"hfd\" (High-Fat Diet) is a value for an experimental factor (diet), which fits the definition of factor_value.",
+        "SOURCE_CHECK": "The value \"HFD\" is explicitly mentioned throughout the paper as one of the diets used for the mice analyzed by LC-MS/MS (e.g., \"quantitative proteomics analysis in eWAT of Mdm2-AKI and control mice on HFD for 12 weeks\").",
+        "TRUTH_CHECK": "The value is factually correct as HFD is a primary experimental variable in the study.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the genotypes (Mdm2-AKI, control) and the diets (NCD, HFD), which exhaustively covers the experimental factors described for the proteomics experiments."
       }
     },
     {
@@ -166,9 +166,9 @@
       "error_category": "runassessor_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS\" and \"quantitative proteomics analysis\" performed by a third-party lab (Jingjie PTM BioLab), but it does not explicitly state whether the acquisition method was \"data-dependent acquisition\" (DDA) or \"data-independent acquisition\" (DIA).",
-        "TRUTH_CHECK": "The value is not explicitly mentioned in the text; while DDA is common for this type of study, it cannot be confirmed from the provided text.",
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"quantitative proteomics analysis\" and \"ubiquitinome\" performed via \"LC-MS/MS\" at a commercial lab, but it does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "The value is not mentioned or reasonably inferable from the provided text.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
@@ -185,10 +185,10 @@
       "error_category": "runassessor_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The phrase \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The paper mentions \"LC-MS/MS\" and \"quantitative proteomics analysis,\" but it does not specify the fragmentation method used.",
-        "COMPLETENESS_CHECK": "The value is not present in the text, so the extraction is not based on the provided source."
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"LC-MS/MS\" and \"quantitative proteomics analysis\" but does not specify the fragmentation method used (e.g., HCD, CID, ETD).",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "runassessor_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The paper mentions \"liquid chromatography-tandem mass spectrometry (LC-MS/MS)\" and \"quantitative proteomics analysis\", but it does not name the specific instrument model used.",
-        "TRUTH_CHECK": "The value \"Q Exactive Plus\" is not mentioned anywhere in the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category for the instrument field.",
+        "SOURCE_CHECK": "The candidate value \"Q Exactive Plus\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "Since the value is not present in the text, it cannot be verified as factually correct for this experiment.",
+        "COMPLETENESS_CHECK": "The full set consists of a single value that is not supported by the text."
       }
     },
     {
@@ -223,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper mentions \"quantitative proteomics analysis\" and \"affinity-based ubiquitinated peptide enrichment approach\" using LC-MS/MS, but does not mention any specific labeling reagents or methods.",
-        "TRUTH_CHECK": "No isobaric (TMT/iTRAQ), metabolic (SILAC), or chemical (dimethyl) labeling is described in the text; therefore, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiment."
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes quantitative proteomics and ubiquitinome analysis performed by a core facility (Jingjie PTM BioLab), but it does not explicitly mention any isobaric (TMT/iTRAQ) or metabolic/chemical (SILAC, dimethyl) labeling methods.",
+        "TRUTH_CHECK": "Since no labeling methods are mentioned in the text, the safe default \"label-free\" is applicable.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of this single value, which covers the labeling status of the experiment."
       }
     },
     {
@@ -236,14 +236,14 @@
       "type_mismatch": false,
       "value_correct": false,
       "value_complete": false,
-      "hallucination": true,
-      "technical_origin": false,
+      "hallucination": false,
+      "technical_origin": true,
       "inference": null,
-      "error_category": "hallucinated",
+      "error_category": "runassessor_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
-        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS\" and that proteomics/ubiquitinome services were performed by \"Jingjie PTM BioLab\", but it does not explicitly name the mass analyzer model or type.",
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions that proteomics and ubiquitinome analyses were performed by \"Jingjie PTM BioLab (Hangzhou) Co. Ltd\", but it does not explicitly name the instrument or the mass analyzer used.",
         "TRUTH_CHECK": "There is no mention of an Orbitrap mass analyzer in the provided text.",
         "COMPLETENESS_CHECK": "The value is not supported by the text."
       }
@@ -261,10 +261,10 @@
       "error_category": "ptm_shepherd_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"Deamidation (NQR)\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not supported by the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The term \"Deamidation (NQR)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention deamidation as a modification searched or analyzed in the proteomics or ubiquitinome experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned anywhere in the provided text."
       }
     },
     {
@@ -280,9 +280,9 @@
       "error_category": "ptm_shepherd_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a chemical modification, which is the correct category for this field.",
-        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions \"LC-MS/MS\" and \"ubiquitinome\" but does not list specific search modifications.",
-        "TRUTH_CHECK": "The value is not supported by the text. There is no mention of \"Iodoacetamide derivative\" or any specific search parameters for the mass spectrometry database search.",
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions \"proteomics\" and \"ubiquitinome\" but does not list the specific search modifications used.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned anywhere in the provided text."
       }
     },
@@ -299,9 +299,9 @@
       "error_category": "ptm_shepherd_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a protein/peptide modification, which matches the field definition.",
+        "TYPE_CHECK": "The candidate value is a protein/peptide modification, which matches the field definition.",
         "SOURCE_CHECK": "The candidate value \"Sodium adduct (DE,C-term)\" is not mentioned anywhere in the provided paper text.",
-        "TRUTH_CHECK": "The value is not supported by the text; the paper mentions \"ubiquitin modification\" and \"ubiquitination sites,\" but does not list specific search modifications like sodium adducts.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
       }
     }

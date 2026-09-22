@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD047910",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "VK2 E6/E7",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; VK2 E6/E7 cells were used to produce HCAmRNA, and the resulting HCAmRNA protein was analyzed by nanoUPLC-MS/MS.",
+        "TRUTH_CHECK": "The text explicitly states that HCAmRNA was produced from VK2 E6/E7 cells and subsequently analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used to produce one of the two MS samples (the other being a plant platform)."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" describes a cell lineage, which matches the definition of the cell_type field.",
+        "SOURCE_CHECK": "The MS sample HCAmRNA was produced using VK2 E6/E7 cells, which the paper explicitly describes as \"human vaginal epithelial\" cells.",
+        "TRUTH_CHECK": "The value is factually correct as the VK2 cells used to produce the MS-analyzed HCAmRNA are epithelial cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers the cell type of the human cell-based production platform; the other MS sample (HCA-N) was produced in plants, for which \"cell type\" is generally not applicable in the same sense."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "normal",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field.",
+        "SOURCE_CHECK": "The study describes the production and characterization of a monoclonal antibody (HCA) using two platforms; there is no disease state associated with the MS samples (which are purified proteins), and the human cells used for production (VK2) are a standard epithelial line.",
+        "TRUTH_CHECK": "\"normal\" is a safe default for studies that are not investigating a specific disease state.",
+        "COMPLETENESS_CHECK": "The full set contains only this safe default, which is exhaustive for this study."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "vagina",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "vagina, plant",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"vagina\" is a valid organ/tissue type.",
+        "SOURCE_CHECK": "The MS sample HCAmRNA was produced using VK2 cells, which the paper explicitly describes as \"human vaginal epithelial\" cells.",
+        "TRUTH_CHECK": "The value is factually correct as it describes the tissue of origin for the VK2 cell line used to produce one of the MS samples.",
+        "COMPLETENESS_CHECK": "The paper describes two MS samples: HCA-N (produced in Nicotiana benthamiana plants) and HCAmRNA (produced in VK2 human vaginal cells). The set only contains \"vagina\", missing the plant origin for HCA-N."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
+        "SOURCE_CHECK": "The MS analysis was performed on HCA (Human Contraception Antibody) produced in either human vaginal cells (VK2) or transgenic tobacco plants, and the MS/MS data were searched against a UniProtKB database restricted to Homo sapiens.",
+        "TRUTH_CHECK": "The antibody is a human IgG1, and the database search was explicitly restricted to Homo sapiens, confirming the target species.",
+        "COMPLETENESS_CHECK": "The full set contains the only relevant species for the protein analysis described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "manufacturing platform (HCA-N, HCAmRNA)",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes the experimental factor (manufacturing platform) and its specific levels (HCA-N, HCAmRNA), which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper explicitly compares the Fc glycosylation of HCA produced in two platforms: transgenic tobacco plants (HCA-N) and mRNA-mediated expression in human vaginal cells (HCAmRNA).",
+        "TRUTH_CHECK": "The value is factually correct as the study's primary objective was to compare these two specific manufacturing platforms.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the primary experimental contrast and a \"normal\" default; together they cover the experimental design described."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "normal",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": true,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "hallucinated",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor value, specifically as a safe default for disease state or health status.",
+        "SOURCE_CHECK": "The value \"normal\" appears in the text in the context of the \"Normal Pap Test Core Proteome\" (Section 3.1), but this refers to a reference proteome used for comparison, not the actual MS samples (HCA-N and HCAmRNA).",
+        "TRUTH_CHECK": "The MS samples in this study are two different manufacturing platforms for the HCA antibody; they are not \"normal\" vs \"diseased\" samples.",
+        "COMPLETENESS_CHECK": "The full set includes the correct factor (manufacturing platform), but the inclusion of \"normal\" is a hallucination based on a reference proteome mention."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes a \"triggered\" MS/MS approach where oxonium ions were used to \"trigger the generation of an HCD MS/MS spectrum,\" which is a specific implementation of data-dependent acquisition (DDA).",
+        "TRUTH_CHECK": "The description of using specific ions to trigger MS2 scans is the definition of a data-dependent acquisition strategy.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately captures the acquisition logic described in the text."
+      }
+    },
+    {
+      "annotation_type": "alkylation_reagent",
+      "extracted_value": "iodoacetamide",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"iodoacetamide\" is a chemical used for cysteine alkylation, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry Analysis\" section of the methods, describing the sample preparation for the MS experiment.",
+        "TRUTH_CHECK": "The paper states that the IgG samples were \"alkylated with 50 mM of iodoacetamide\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains the only alkylation reagent mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": "HCD",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which is the correct category for this field.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"high energy collisional dissociation (HCD)\" multiple times in the methods section (e.g., \"For high energy collisional dissociation (HCD) analyses...\").",
+        "TRUTH_CHECK": "\"Beam-type collision-induced dissociation\" is a technical synonym for HCD, but the paper specifically uses the term \"HCD\" and \"high energy collisional dissociation\".",
+        "COMPLETENESS_CHECK": "The full set contains only this value, but it uses a synonym not explicitly written in the text instead of the term used by the authors."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Orbitrap Fusion Lumos",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Mass Spectrometry Analysis\" section as the instrument used to analyze the HCA IgG protein samples.",
+        "TRUTH_CHECK": "The paper states the analyses were performed on an \"Orbitrap Fusion Lumos Tribrid mass spectrometer\", making \"Orbitrap Fusion Lumos\" a correct and equivalent representation.",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the proteomics analysis, so the extraction is complete."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the description of the instrument used for MS analysis (\"Orbitrap Fusion Lumos Tribrid mass spectrometer\").",
+        "TRUTH_CHECK": "The value is factually correct as the instrument model explicitly contains \"Orbitrap\".",
+        "COMPLETENESS_CHECK": "The full set contains the only mass analyzer mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "complex glycosylation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a type of glycosylation, which is a protein modification.",
+        "SOURCE_CHECK": "The paper mentions \"complex types\" of glycans in the context of the MS analysis of HCA-N and HCAmRNA.",
+        "TRUTH_CHECK": "While the paper discusses \"complex\" glycans, it does not list \"complex glycosylation\" as a searched modification in the database search parameters (which are explicitly listed as Carbamidomethylation, Met oxidation, and protein N-terminal acetylation).",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (e.g., \"Iodoacetamide derivative\", \"Formylation\") that are not mentioned in the text at all."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value is not present in the paper text; the text mentions \"iodoacetamide\" as a reagent, but not as a modification name.",
+        "TRUTH_CHECK": "The value is not factually supported by the text. The paper explicitly lists \"Carbamidomethylation (Cys)\", \"Met oxidation\", and \"protein N-terminal acetylation\" as the modifications used in the search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and does not reflect the modifications actually described in the paper."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation (KST,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"Formylation (KST,N-term)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention formylation as a searched modification; it only lists Carbamidomethylation, Met oxidation, and protein N-terminal acetylation.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and contains multiple hallucinations."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acrylamide adduct (CK,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The value \"Acrylamide adduct (CK,N-term)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention acrylamide adducts; it specifies \"Carbamidomethylation (Cys)\", \"Met oxidation\", and \"protein N-terminal acetylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect as it contains multiple modifications not mentioned in the text and misses the ones that are."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative",
+      "verdict": "low",
+      "type_mismatch": true,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "No, the candidate value is not a standard protein modification name with target residues as defined.",
+        "SOURCE_CHECK": "The text mentions \"iodoacetamide\" as an alkylation reagent, but it does not list \"Iodoacetamide derivative\" as a searched modification.",
+        "TRUTH_CHECK": "The value is not mentioned in the text as a searched modification; the text explicitly lists \"Carbamidomethylation (Cys)\", \"Met oxidation\", and \"protein N-terminal acetylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is highly inaccurate and contains multiple hallucinations not present in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Yes, the candidate value is a protein modification.",
+        "SOURCE_CHECK": "The value \"Formylation\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention formylation as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (e.g., \"Acrylamide adduct\", \"Iodoacetamide derivative\") that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Acrylamide adduct",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Acrylamide adduct\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention acrylamide adducts; it mentions \"Carbamidomethylation (Cys)\", \"Met oxidation\", and \"protein N-terminal acetylation\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and contains multiple hallucinations not found in the text."
+      }
+    }
+  ]
+}

@@ -3,21 +3,21 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "HeLa, U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, A549",
-      "verdict": "low",
+      "extracted_value": "HeLa",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
+      "value_correct": true,
       "value_complete": true,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "wrong_value",
-      "corrected_value": "HeLa",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a list of cell line names, which matches the required category for this field.",
-        "SOURCE_CHECK": "While all these cell lines are mentioned in the paper, only HeLa was used for the AP-MS experiment (\"KCTD7 protein complexes were purified and identified by AP-MS... in HeLa cells\") and for the lipidomic MS analysis (\"parental and KCTD7 KO or CLN5 KD HeLa cells were harvested for... lipidomic analysis\"). The other cell lines (U87-MG, SH-SY5Y, 293T, etc.) were used for Western blots, enzymatic assays, or to check CLN5 protein bands, but were not analyzed by mass spectrometry.",
-        "TRUTH_CHECK": "The inclusion of most of these cell lines is factually incorrect because they were not the source of the MS samples.",
-        "COMPLETENESS_CHECK": "The set is over-inclusive, containing many cell lines not used for MS."
+        "TYPE_CHECK": "The candidate value \"HeLa\" is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; specifically, the \"Protein complex purification\" section states that \"HeLa cells with endogenous FLAG-tagged KCTD7 were harvested and lysed... Protein bands were excised from the gel and subjected to sequencing by MS.\"",
+        "TRUTH_CHECK": "The candidate value is factually correct as HeLa cells were the source of the material analyzed by mass spectrometry.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only \"HeLa\", which is the only cell line used for the AP-MS protein complex purification described in the paper."
       }
     },
     {
@@ -35,8 +35,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
         "SOURCE_CHECK": "The value is inferable from the paper text; the MS experiment (AP-MS) was performed using HeLa cells, which are a well-established epithelial cell line.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical epithelial cells, making \"epithelial cell\" a factually correct lineage.",
-        "COMPLETENESS_CHECK": "The full set contains the correct lineage for the cell line used in the MS experiment."
+        "TRUTH_CHECK": "HeLa cells are derived from cervical cancer and are of epithelial lineage, making \"epithelial cell\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains this single value, which accurately describes the lineage of the cell line used for the MS analysis."
       }
     },
     {
@@ -53,7 +53,7 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a disease/diagnosis, which matches the field definition.",
-        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material used for the AP-MS experiment (\"KCTD7 protein complexes were purified and identified by AP-MS\" in HeLa cells).",
+        "SOURCE_CHECK": "The value is inferable from the use of HeLa cells, which were the biological material used for the AP-MS experiment (KCTD7-FLAG knock-in HeLa cells).",
         "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.",
         "COMPLETENESS_CHECK": "The full set contains this single value, which correctly describes the disease origin of the primary cell line used for the MS analysis."
       }
@@ -72,9 +72,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"cervix\" is a valid organ/tissue of origin.",
-        "SOURCE_CHECK": "The MS sample was derived from HeLa cells (\"KCTD7 protein complexes were purified and identified by AP-MS\" in HeLa cells), and the cervix is the well-known tissue of origin for the HeLa cell line.",
-        "TRUTH_CHECK": "The value is factually correct as HeLa cells are derived from cervical adenocarcinoma.",
-        "COMPLETENESS_CHECK": "The full set of extracted values correctly identifies the tissue of origin for the MS sample."
+        "SOURCE_CHECK": "The MS sample was derived from HeLa cells (\"KCTD7 protein complexes were purified and identified by AP-MS\" in HeLa cells), and the cervix is the well-established tissue of origin for the HeLa cell line.",
+        "TRUTH_CHECK": "Factually correct; HeLa cells are derived from cervical adenocarcinoma.",
+        "COMPLETENESS_CHECK": "The full set contains the correct tissue of origin for the cell line used in the MS experiment."
       }
     },
     {
@@ -92,8 +92,8 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
         "SOURCE_CHECK": "The paper describes the use of multiple human cell lines (HeLa, U87-MG, SH-SY5Y, etc.) and patient-derived mutations for the AP-MS and lipidomic experiments.",
-        "TRUTH_CHECK": "The cells used (e.g., HeLa) are human-derived, and the paper explicitly mentions \"human NCLs\" and \"human cell lines,\" making \"Homo sapiens\" correct.",
-        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens,\" which covers the only species used in the MS experiments described."
+        "TRUTH_CHECK": "The cell lines and patient samples used are human, making \"Homo sapiens\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains \"Homo sapiens\", which exhaustively covers the species used in the experiments."
       }
     },
     {
@@ -109,10 +109,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes the experimental groups/conditions being compared, which is a correct category for factor_value.",
-        "SOURCE_CHECK": "The values \"parental\", \"KCTD7 KO\", and \"CLN5 KD\" are explicitly mentioned in the context of the lipidomic analysis and other experiments analyzed by MS.",
-        "TRUTH_CHECK": "These are the actual conditions used in the study to compare the effects of KCTD7 and CLN5 deficiency.",
-        "COMPLETENESS_CHECK": "The full set of extracted values includes the cell conditions and the disease origin of the cell line; together they cover the primary experimental variables."
+        "TYPE_CHECK": "The candidate value describes the experimental conditions/groups being compared, which is a correct category for factor_value.",
+        "SOURCE_CHECK": "These conditions (parental, KCTD7 KO, and CLN5 KD) are explicitly mentioned throughout the results and methods as the groups analyzed in the lipidomic MS experiment.",
+        "TRUTH_CHECK": "The values are factually correct; the paper compares parental HeLa cells, KCTD7 knockout (KO) cells, and CLN5 knockdown (KD) cells.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes the experimental conditions and the disease origin of the cell line; together they cover the primary design factors of the MS experiment."
       }
     },
     {
@@ -128,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a disease/diagnosis, which is a valid category for a factor_value.",
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
         "SOURCE_CHECK": "The value is not explicitly mentioned in the text; it is inferred from the use of HeLa cells.",
-        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma, making this a factually correct inference for the disease state of the MS sample.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both the experimental conditions (KO/KD) and the underlying disease origin of the cell line."
+        "TRUTH_CHECK": "HeLa cells are derived from cervical adenocarcinoma, making this a factually correct inference for the disease origin of the sample.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both the experimental conditions (KO/KD) and the underlying disease/cell line origin."
       }
     },
     {
@@ -145,12 +145,12 @@
       "technical_origin": true,
       "inference": null,
       "error_category": "runassessor_only",
-      "corrected_value": null,
+      "corrected_value": "AP-MS",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\" in the text.",
-        "TRUTH_CHECK": "There is no explicit mention of the acquisition method in the provided text.",
-        "COMPLETENESS_CHECK": "The full set is not supported by the text."
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper describes \"AP-MS\" (Affinity Purification Mass Spectrometry) and \"sequencing by MS\" of protein bands excised from a gel, but it does not explicitly name the acquisition scheme (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "There is no mention of \"data-dependent acquisition\" or \"DDA\" in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
     {
@@ -167,28 +167,28 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The term \"beam-type collision-induced dissociation\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The value is not present in the text; the paper mentions \"tandem MS\" and \"sequencing by MS\" but does not specify the fragmentation method used.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+        "SOURCE_CHECK": "The value is not mentioned in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not specify the fragmentation method used for the AP-MS or lipidomic analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
       }
     },
     {
       "annotation_type": "instrument",
-      "extracted_value": "Orbitrap Fusion Lumos",
-      "verdict": "low",
+      "extracted_value": "Q Exactive Hybrid Quadrupole Orbitrap MS",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
+      "value_correct": true,
+      "value_complete": true,
       "hallucination": false,
-      "technical_origin": true,
+      "technical_origin": false,
       "inference": null,
-      "error_category": "runassessor_only",
-      "corrected_value": "Q Exactive Hybrid Quadrupole Orbitrap MS",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The candidate value is not mentioned in the provided text; the only mass spectrometer mentioned is a \"Q Exactive Hybrid Quadrupole Orbitrap MS\".",
-        "TRUTH_CHECK": "The value is factually incorrect as the paper specifies a Q Exactive, not an Orbitrap Fusion Lumos.",
-        "COMPLETENESS_CHECK": "The full set is incorrect and does not reflect the instrument used in the study."
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category for the instrument field.",
+        "SOURCE_CHECK": "The value is explicitly mentioned in the \"Lipidomic analysis\" section of the methods, describing the instrument used for the MS-based lipidomic analysis of HeLa cells.",
+        "TRUTH_CHECK": "The value \"Q Exactive Hybrid Quadrupole Orbitrap MS\" is factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "This is the only mass spectrometer mentioned in the paper for the MS experiments; therefore, the extraction is complete."
       }
     },
     {
@@ -204,10 +204,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
-        "SOURCE_CHECK": "The paper describes an AP-MS experiment (\"KCTD7 protein complexes were purified and identified by AP-MS\") and a lipidomic analysis, but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
-        "TRUTH_CHECK": "Since no labeling method is mentioned, the safe default \"label-free\" is factually correct.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiments."
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes AP-MS (affinity purification mass spectrometry) and lipidomic analysis, but does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or iTRAQ).",
+        "TRUTH_CHECK": "Since no labeling methods are described, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other labeling methods are mentioned."
       }
     },
     {
@@ -223,9 +223,9 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Lipidomic analysis\" section describing the \"Q Exactive Hybrid Quadrupole Orbitrap MS\".",
-        "TRUTH_CHECK": "The value is factually correct as the instrument used for lipidomic analysis is an Orbitrap.",
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
+        "SOURCE_CHECK": "The value is present in the paper text within the context of the lipidomic analysis (\"Q Exactive Hybrid Quadrupole Orbitrap MS\").",
+        "TRUTH_CHECK": "The value is factually correct as the instrument used for the MS analysis is an Orbitrap.",
         "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive for the mass analyzers mentioned in the MS experiments."
       }
     },
@@ -244,7 +244,7 @@
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
         "SOURCE_CHECK": "The term \"Deamidation (NQR)\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not mention deamidation or any specific search parameters for modifications used during the mass spectrometry analysis.",
+        "TRUTH_CHECK": "The paper does not mention searching for deamidation or any other specific mass spectrometry search modifications.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
       }
     },
@@ -262,9 +262,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not mention \"Iodoacetamide derivative\" or any specific search modifications for the mass spectrometry experiments.",
-        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of iodoacetamide derivatives or specific search parameters for these modifications.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text, as none of these modifications are explicitly named."
       }
     },
     {
@@ -281,9 +281,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The candidate value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The value is not mentioned in the text; there is no mention of transpeptidation or arginine loss.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+        "SOURCE_CHECK": "The candidate value is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not supported by the text; there is no mention of transpeptidation or loss of arginine.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
       }
     },
     {
@@ -292,7 +292,7 @@
       "verdict": "low",
       "type_mismatch": false,
       "value_correct": false,
-      "value_complete": true,
+      "value_complete": false,
       "hallucination": false,
       "technical_origin": false,
       "inference": null,
@@ -300,9 +300,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"dithiothreitol\" appears in the \"In vivo ubiquitination assays\" section of the methods.",
-        "TRUTH_CHECK": "While dithiothreitol is mentioned in the text, it is used in the context of a lysis buffer for an in vivo ubiquitination assay followed by Western Blot (WB) analysis, not as part of the sample preparation for the mass spectrometry (AP-MS) experiment.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, but it is not applicable to the MS experiment."
+        "SOURCE_CHECK": "The value \"dithiothreitol\" appears in the \"In vivo ubiquitination assays\" section, but this section describes a Western Blot (WB) assay, not the proteomics/MS experiment. The \"Protein complex purification\" section, which describes the actual AP-MS workflow (lysis, beads, PAGE, and MS sequencing), does not mention a reduction reagent.",
+        "TRUTH_CHECK": "While dithiothreitol is used in the paper, it is not used in the context of the mass spectrometry sample preparation.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is incorrectly attributed to the MS experiment."
       }
     }
   ]

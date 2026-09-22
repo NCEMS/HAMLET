@@ -1,0 +1,366 @@
+{
+  "paper_id": "PXD039401",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "MOLT4",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "MOLT4, 293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"MOLT4\" is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text; specifically, the \"Competitive ABPP and LC-MS/MS\" section states \"MOLT4 cells... were pre-treated... then harvested and lysed... and biotinylated proteins were enriched... for LC-MS/MS analysis.\"",
+        "TRUTH_CHECK": "The candidate value is factually correct as MOLT4 cells were used as the source for the competitive ABPP proteomics experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper describes two other distinct proteomics experiments: a TurboID-bait assay using \"293T\" cells and a TMT-based proteomics study using \"MOLT4\" cells (the latter is already covered, but the 293T one is missing)."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "T cell",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Unable to evaluate.",
+        "SOURCE_CHECK": "N/A",
+        "TRUTH_CHECK": "N/A",
+        "COMPLETENESS_CHECK": "N/A"
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "t-cell acute lymphoblastic leukemia, prostate cancer, lung cancer, non-small cell lung cancer",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of disease names, which matches the definition for the disease field.",
+        "SOURCE_CHECK": "The values are present in the text: \"T-ALL\" (T-cell acute lymphoblastic leukemia) for MOLT4 cells, \"prostate cancer\" for LNCaP/PC3/etc., and \"NSCLC\" (non-small cell lung cancer) for NCI-H2228 cells, all of which were used in the proteomics/MS experiments (ABPP, TurboID, and TMT-based proteomics).",
+        "TRUTH_CHECK": "The values are factually correct based on the cell lines used in the MS experiments described in the paper.",
+        "COMPLETENESS_CHECK": "The full set covers the primary disease contexts of the cell lines analyzed by mass spectrometry in this study."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "blood",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "blood, kidney",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"blood\" is a valid category for the organ/tissue field.",
+        "SOURCE_CHECK": "The paper describes MS experiments using MOLT4 cells (T-cell acute lymphoblastic leukemia) and 293T cells (epithelial kidney). While MOLT4 is a leukemia line (blood-derived), the word \"blood\" does not appear in the text.",
+        "TRUTH_CHECK": "MOLT4 is a human T-cell acute lymphoblastic leukemia cell line; therefore, \"blood\" (or \"bone marrow\") is a correct inference for its tissue of origin.",
+        "COMPLETENESS_CHECK": "The full set only contains \"blood\", but the paper describes multiple MS experiments: one using MOLT4 cells and others using 293T cells (which are kidney-derived). The set is incomplete as it misses the kidney origin for the 293T samples."
+      }
+    },
+    {
+      "annotation_type": "sex",
+      "extracted_value": "male, female",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "Unable to evaluate.",
+        "SOURCE_CHECK": "N/A",
+        "TRUTH_CHECK": "N/A",
+        "COMPLETENESS_CHECK": "N/A"
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a valid species name.",
+        "SOURCE_CHECK": "The value is present in the text; the MS analysis was performed on human cell lines (MOLT4, 293T) and the database search was explicitly set to \"Homo sapiens\".",
+        "TRUTH_CHECK": "The value is factually correct as the samples used in the proteomics experiments were human-derived.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "treatment (DMSO, PL, 955), time point, cell line",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes experimental factors (treatment, time, cell line), which is the correct category for this field.",
+        "SOURCE_CHECK": "These factors are present in the MS experiment context; the paper describes proteomics on MOLT4 cells (treatment with DMSO or PL) and 293T cells (treatment with DMSO or 955), as well as TMT-based proteomics comparing 955 and SNS-032 over time (1h and 6h).",
+        "TRUTH_CHECK": "The values are factually correct: DMSO, PL, and 955 are the treatments used; time points (1h, 6h) are used in the TMT study; and multiple cell lines (MOLT4, 293T) are used across the different MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the experimental variables (treatments, time, cell lines) and the disease/cancer types associated with the samples, covering the experimental design described in the paper."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "t-cell acute lymphoblastic leukemia, prostate cancer, lung cancer, non-small cell lung cancer",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value consists of disease states/cancer types, which are valid categories for factor_value.",
+        "SOURCE_CHECK": "The values are present in the text; however, they describe the disease origin of various cell lines used across different assays (MOLT4 for T-ALL, LNCaP/PC3/DU145 for prostate cancer, H1299/NCI-H2228 for lung cancer/NSCLC).",
+        "TRUTH_CHECK": "While these diseases are mentioned, the proteomics experiments (the actual MS samples) were specifically performed on MOLT4 cells (Competitive ABPP), 293T cells (TurboID-bait), and MOLT4 cells (TMT-based global proteome). The prostate cancer and lung cancer cell lines were used for viability assays and immunoblots, not for the mass spectrometry experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the actual MS experimental factors (treatment, time, cell line) and these unrelated disease types."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a correct category for the acquisition method field.",
+        "SOURCE_CHECK": "The paper describes a \"TopTen™ method\" for the first MS experiment and \"multi-notch MS3 parameters\" for the TMT experiment; while \"data-dependent acquisition\" (DDA) is the standard term for the TopTen method, the literal phrase \"data-dependent acquisition\" or \"DDA\" does not appear in the text.",
+        "TRUTH_CHECK": "The \"TopTen\" method is a well-known data-dependent acquisition (DDA) strategy, making the value factually correct for the described experiment.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the acquisition scheme for the primary proteomics experiments."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": "HCD, CID",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"beam-type collision-induced dissociation\" does not appear in the provided text; the paper explicitly mentions \"HCD\" and \"CID\".",
+        "TRUTH_CHECK": "While \"beam-type CID\" is often technically equivalent to HCD in some contexts, the paper explicitly uses the terms \"HCD\" and \"CID\" in the methods sections.",
+        "COMPLETENESS_CHECK": "The full set is incomplete as it misses the explicitly stated \"HCD\" and \"CID\" methods used in the different MS experiments."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Thermo Scientific Q Exactive HF Orbitrap, Orbitrap Eclipse Tribrid",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains names of mass spectrometer models, which matches the field definition.",
+        "SOURCE_CHECK": "Both instruments are explicitly mentioned in the \"METHOD DETAILS\" section: the Q Exactive HF Orbitrap was used for the competitive ABPP assay, and the Orbitrap Eclipse Tribrid was used for the TurboID-bait and TMT-based proteomics experiments.",
+        "TRUTH_CHECK": "The values are factually correct as stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all mass spectrometers used for the proteomics experiments described in the paper."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for the mass_analyzer field.",
+        "SOURCE_CHECK": "The value is present in the text; the paper mentions a \"Thermo Scientific Q Exactive HF Orbitrap mass spectrometer\" and an \"Orbitrap Eclipse Tribrid mass spectrometer\" used for the MS experiments.",
+        "TRUTH_CHECK": "The value is factually correct as both instruments used in the proteomics workflows utilize Orbitrap mass analyzers.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as it covers the mass analyzer technology used across the different MS experiments described."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "biotinylated residue",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "pride_repository_only",
+      "corrected_value": "biotinylated proteins",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The paper describes \"biotinylated proteins\" being enriched using streptavidin beads in both the competitive ABPP and TurboID-bait assays, and mentions \"biotinylated proteins\" in the results.",
+        "TRUTH_CHECK": "While the paper mentions \"biotinylated proteins,\" it does not explicitly list \"biotinylated residue\" as a modification searched during the database search (the search parameters are explicitly listed for the competitive ABPP and TurboID assays).",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains several modifications (e.g., \"formaldehyde adduct\", \"Iodoacetamide derivative\") that are not mentioned anywhere in the provided text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "formaldehyde adduct (CFHKRWY)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value \"formaldehyde adduct\" is not mentioned anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not present in the text and is therefore not factually supported for this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications, none of which are mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Nethylmaleimidehydrolysis (CK)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Nethylmaleimidehydrolysis\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention Nethylmaleimide or its hydrolysis as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions \"iodoacetamide (IA)-alkyne\" in the context of a gel-based ABPP assay, but not as a searched modification for the LC-MS/MS experiments.",
+        "TRUTH_CHECK": "The value is not factually supported by the text. The searched modifications explicitly listed in the \"Data processing and analysis\" section are Carbamidomethyl (C), Met-loss (M), met-loss+Acetyl (M), oxidation (M), and acetyl (N-terminus).",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "formaldehyde adduct",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"formaldehyde adduct\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not a valid extraction for this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Nethylmaleimidehydrolysis",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The value \"Nethylmaleimidehydrolysis\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text; the paper describes the use of \"iodoacetamide (IA)-alkyne\" in a gel-based assay, but does not list N-ethylmaleimide or its hydrolysis as a searched modification in the MS data processing sections.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications (e.g., \"formaldehyde adduct\", \"Iodoacetamide derivative\") that are also not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a chemical modification, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The phrase \"Iodoacetamide derivative\" does not appear in the paper text; the text mentions \"iodoacetamide (IA)-alkyne\" as a probe in a gel-based assay, but not as a searched modification for the LC-MS/MS experiments.",
+        "TRUTH_CHECK": "The value is not mentioned in the text as a searched modification for the proteomics experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains multiple modifications that are not mentioned in the text."
+      }
+    }
+  ]
+}

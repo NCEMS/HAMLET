@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
-"PXD028480","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper explicitly mentions ""human NCLs"", ""human KCTD7"", and uses various human cell lines (HeLa, 293T, etc.), making ""Homo sapiens"" a correct and inferable species.
-TRUTH CHECK: The experimental work is performed using human cell lines and discusses human disease mutations.
-COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which is the only species used in the experiments described.
+"PXD028480","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human NCLs"", ""human KCTD7"", and uses multiple human cell lines (HeLa, 293T, etc.).
+TRUTH CHECK: The experiment is conducted using human cell lines and focuses on human disease mutations, making ""Homo sapiens"" correct.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which is the only species involved in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -11,9 +11,9 @@ HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
 "PXD028480","BiologicalAgent","organ","cervix","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""cervix"" is a type of organ/tissue, which matches the field definition.
-SOURCE CHECK:      The paper mentions several cell lines, including ""SiHa"" and ""HEC-1A"", which are derived from cervical cancer, but the word ""cervix"" does not appear in the text.
-TRUTH CHECK:       While the cell lines used (SiHa, HEC-1A) are cervical, the experiment was performed on cultured cell lines, not on the organ itself.
-COMPLETENESS CHECK: The full set contains only ""cervix"", which is not explicitly mentioned as the source material for the experiments.
+SOURCE CHECK:      The paper mentions several cell lines (HeLa, SiHa, HEC-1A), but it does not explicitly state ""cervix"" as the organ of origin for the samples used in the experiments.
+TRUTH CHECK:       While HeLa, SiHa, and HEC-1A are known to be derived from cervical cancer, the paper text itself does not mention the cervix. Metadata should be extracted from the provided text, and ""cervix"" is not present.
+COMPLETENESS CHECK:The full set contains only ""cervix"", which is not supported by the text.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -21,10 +21,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD028480","BiologicalAgent","cell_type","epithelial cell","","low","False","cell_line","False","False","True","TYPE CHECK:        No, the candidate value ""epithelial cell"" is a cell type, but the paper describes the use of immortalized cell lines, not primary cell types.
-SOURCE CHECK:      The term ""epithelial cell"" does not appear in the text; the cells used are HeLa, U87-MG, SH-SY5Y, etc., which are cell lines.
-TRUTH CHECK:       Incorrect. The experiment uses cell lines (e.g., HeLa, which is derived from cervical cancer epithelial cells, but is categorized as a cell_line, not a primary cell_type).
-COMPLETENESS CHECK:The full set is incorrect as it identifies a cell type that is not explicitly mentioned or used as a primary cell source.
+"PXD028480","BiologicalAgent","cell_type","epithelial cell","","low","False","cell_line","False","False","True","TYPE CHECK:        No, the candidate value ""epithelial cell"" is a cell type, but the paper describes the use of immortalized cell lines.
+SOURCE CHECK:      The term ""epithelial cell"" does not appear in the text; the paper uses HeLa, U87-MG, SH-SY5Y, etc., which are cell lines.
+TRUTH CHECK:       The paper does not describe experiments using primary epithelial cells; it uses various cancer-derived cell lines.
+COMPLETENESS CHECK:The full set contains only ""epithelial cell"", which is not mentioned or supported by the text.
 TYPE_CORRECT:      no
 CORRECT_TYPE_NAME: cell_line
 VALUE_CORRECT:     no
@@ -33,53 +33,10 @@ HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
 "PXD028480","BiologicalAgent","disease","cervical adenocarcinoma","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a disease/diagnosis, which matches the field definition.
-SOURCE CHECK:      The paper mentions several cell lines (e.g., HeLa, SiHa), but it never explicitly mentions ""cervical adenocarcinoma"" as the disease state being studied; it focuses on ""neuronal ceroid lipofuscinoses (NCLs)"".
-TRUTH CHECK:       While HeLa and SiHa are derived from cervical adenocarcinoma, the experiment's objective is to model NCLs using these cells, not to study cervical adenocarcinoma itself.
-COMPLETENESS CHECK: The full set contains only this value, which is not the primary disease of interest in the paper.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD028480","BiologicalAgent","material_type","cell line","cell line","high","False","","True","True","False","TYPE CHECK: The candidate value ""cell line"" matches the defined categories for the material_type field.
-SOURCE CHECK: The paper explicitly mentions the use of several cell lines, including HeLa, 293T, U87-MG, and SH-SY5Y.
-TRUTH CHECK: The experiments were performed using these immortalized cell lines.
-COMPLETENESS CHECK: The full set of extracted values (""cell line"") accurately covers the material used across the study.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD028480","BiologicalAgent","cell_line","HeLa","HeLa","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
-SOURCE CHECK:      The value ""HeLa"" is explicitly mentioned multiple times in the text (e.g., ""we successfully ablated KCTD7 expression by CRISPR-Cas9 gene editing in HeLa cells"").
-TRUTH CHECK:       The value is factually correct as HeLa cells were used in the experiments.
-COMPLETENESS CHECK:    The full set of extracted values only contains ""HeLa"", but the paper also mentions ""U87-MG"", ""SH-SY5Y"", ""293T"", ""A498"", ""22Rv1"", ""SiHa"", ""DU145"", ""ECC-1"", ""HEC-1A"", and ""A549"".
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""HeLa"", ""U87-MG"", ""SH-SY5Y"", ""293T"", ""A498"", ""22Rv1"", ""SiHa"", ""DU145"", ""ECC-1"", ""HEC-1A"", ""A549""]","HeLa, U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, A549"
-"PXD028480","TechnicalAgent","enrichment_method","anti-FLAG antibody-conjugated M2 agarose beads","anti-FLAG antibody-conjugated M2 agarose beads","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the specific reagent used for immunoprecipitation, which is a valid enrichment method.
-SOURCE CHECK:      The text explicitly states that ""WCLs were incubated with anti-FLAG antibody-conjugated M2 agarose beads (Sigma-Aldrich) at 4°C overnight to capture FLAG-tagged KCTD7"" for AP-MS.
-TRUTH CHECK:       The value is factually correct as it describes the method used to enrich the KCTD7 protein complex prior to mass spectrometry.
-COMPLETENESS CHECK: The full set contains the specific reagent used for the affinity purification (AP-MS), which is the only enrichment step described for the proteomics experiment.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD028480","TechnicalAgent","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
-SOURCE CHECK:      The paper mentions a ""Q Exactive Hybrid Quadrupole Orbitrap MS (Thermo Fisher Scientific)"" in the Lipidomic analysis section, but does not mention an ""Orbitrap Fusion Lumos"".
-TRUTH CHECK:       The value is factually incorrect as it is not the instrument used in this study.
-COMPLETENESS CHECK: The full set contains only a hallucinated value.
+SOURCE CHECK:      The paper mentions ""SiHa"" cells in the methods, which are a cervical cancer cell line, but the text never explicitly mentions ""cervical adenocarcinoma"".
+TRUTH CHECK:       While SiHa cells are derived from cervical adenocarcinoma, the paper's primary focus is on ""neuronal ceroid lipofuscinoses (NCLs)"" and ""KCTD7 mutations"". The use of various cell lines (including SiHa) is for protein expression/localization validation, not as a disease model for the study.
+COMPLETENESS CHECK:   The full set only contains this value, which is not the primary disease of the study.
+
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
@@ -87,11 +44,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""
-"PXD028480","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
-TRUTH CHECK: The experimental procedures (AP-MS and lipidomics) do not describe any labeling schemes, making ""label-free"" factually correct.
-COMPLETENESS CHECK: The full set contains only ""label-free"", which accurately covers the labeling status of the experiments described.
-
+"PXD028480","BiologicalAgent","material_type","cell line","cell line","high","False","","True","True","False","TYPE CHECK: The candidate value ""cell line"" matches the defined categories for the material_type field.
+SOURCE CHECK: The paper explicitly mentions the use of multiple cell lines, including HeLa, 293T, U87-MG, and SH-SY5Y.
+TRUTH CHECK: The experiments were performed using these immortalized cell lines.
+COMPLETENESS CHECK: The full set of extracted values (""cell line"") accurately and exhaustively describes the material used in the experiments.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -99,10 +55,22 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD028480","TechnicalAgent","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","TYPE CHECK:        The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
-SOURCE CHECK:      The text explicitly mentions ""1 mM dithiothreitol"" in the ""In vivo ubiquitination assays"" section.
-TRUTH CHECK:       The value is factually correct as it is explicitly stated in the methods.
-COMPLETENESS CHECK: The full set of extracted values contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+"PXD028480","BiologicalAgent","cell_line","HeLa","HeLa","medium","False","","True","False","False","TYPE CHECK: The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions the use of HeLa cells multiple times (e.g., ""we successfully ablated KCTD7 expression by CRISPR-Cas9 gene editing in HeLa cells"").
+TRUTH CHECK: The value is factually correct as HeLa cells were used in the experiments.
+COMPLETENESS CHECK: While HeLa is a primary cell line used, the paper also mentions other cell lines used in the study, such as U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, and A549. The full set of extracted values only contains ""HeLa"", which is not exhaustive.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""HeLa"", ""U87-MG"", ""SH-SY5Y"", ""293T"", ""A498"", ""22Rv1"", ""SiHa"", ""DU145"", ""ECC-1"", ""HEC-1A"", ""A549""]","HeLa, U87-MG, SH-SY5Y, 293T, A498, 22Rv1, SiHa, DU145, ECC-1, HEC-1A, A549"
+"PXD028480","TechnicalAgent","enrichment_method","anti-FLAG antibody-conjugated M2 agarose beads","anti-FLAG antibody-conjugated M2 agarose beads","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the materials used for an immunoprecipitation/affinity purification, which is a type of enrichment method.
+SOURCE CHECK:      The text explicitly mentions that ""WCLs were incubated with anti-FLAG antibody-conjugated M2 agarose beads... to capture FLAG-tagged KCTD7"" before the proteins were ""subjected to sequencing by MS.""
+TRUTH CHECK:       The value is factually correct as it describes the specific agent used to enrich the KCTD7 protein complex for mass spectrometry.
+COMPLETENESS CHECK: The full set contains the only enrichment method described for the AP-MS experiment in the paper.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -110,44 +78,22 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD028480","ExperimentalDesignAgent","replicates","5","5","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK:      The paper explicitly states ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells were harvested"" in the Lipidomic analysis section.
-TRUTH CHECK:       The value ""5"" is factually correct for the lipidomic analysis experiment.
-COMPLETENESS CHECK: The full set of extracted values [""5"", ""15""] is not exhaustive or accurate; while ""5"" is mentioned for lipidomics, ""15"" is not mentioned as a replicate count anywhere in the text. The general statistical analysis section mentions ""at least three replicates"" for other experiments.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    no
-HALLUCINATED:      no
-VERDICT:           medium
-CORRECTED_VALUE:   [""5"", ""3""]","5, 3"
-"PXD028480","ExperimentalDesignAgent","replicates","15","5","low","False","","False","False","True","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: The paper mentions ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells were harvested for... lipidomic analysis"" and ""experiments performed with at least three replicates"" in the statistical analysis section. There is no mention of 15 replicates.
-TRUTH CHECK: The value ""15"" is not supported by the text; it appears to be a miscalculation (perhaps 5 replicates x 3 groups), but the number of biological replicates per group is 5 for lipidomics and at least 3 for other experiments.
-COMPLETENESS CHECK: The full set of extracted values is incorrect as it includes a hallucinated value (15).
-
+"PXD028480","TechnicalAgent","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK: The paper mentions a ""Q Exactive Hybrid Quadrupole Orbitrap MS (Thermo Fisher Scientific)"" in the Lipidomic analysis section, but it does not mention an ""Orbitrap Fusion Lumos"".
+TRUTH CHECK: The candidate value is not mentioned in the text; the actual instrument used for lipidomics is a Q Exactive.
+COMPLETENESS CHECK: The full set contains only a hallucinated value and fails to capture the actual instrument mentioned in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
-CORRECTED_VALUE: [""5"", ""3""]","5, 3"
-"PXD028480","ExperimentalDesignAgent","experimental_design","parental vs KCTD7 KO vs CLN5 KD comparison","parental vs KCTD7 KO vs CLN5 KD comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a comparison between different genetic conditions, which fits the category of experimental design.
-SOURCE CHECK:      The paper explicitly compares ""parental"" (control), ""KCTD7 KO"" (knockout), and ""CLN5 KD"" (knockdown) cells across multiple experiments (e.g., lipidomic analysis, lysosomal enzyme composition).
-TRUTH CHECK:       The value is factually correct as these are the primary groups compared throughout the study to establish the KCTD7-CLN5 axis.
-COMPLETENESS CHECK:    The full set captures the primary comparative design of the study.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD028480","ExperimentalDesignAgent","factor_value","cell condition (parental, KCTD7 KO, CLN5 KD)","cell condition (parental, KCTD7 KO, CLN5 KD)","high","False","","True","True","False","TYPE CHECK: The candidate value describes the experimental variables (cell conditions) being compared, which fits the definition of a factor value.
-SOURCE CHECK: The paper explicitly compares ""parental cells"", ""KCTD7-deficient cells"" (via KO or KD), and ""CLN5 KD"" cells throughout the results and methods.
-TRUTH CHECK: The values ""parental"", ""KCTD7 KO"", and ""CLN5 KD"" are factually correct representations of the experimental groups studied.
-COMPLETENESS CHECK: The full set captures the primary genetic manipulations (KCTD7 and CLN5 status) used as factors in the study.
+CORRECTED_VALUE: [""Q Exactive Hybrid Quadrupole Orbitrap MS""]","Q Exactive Hybrid Quadrupole Orbitrap MS"
+"PXD028480","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK: No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK: The value is factually correct as the study uses standard AP-MS and lipidomics without mentioned labels.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -155,10 +101,44 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD028480","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
-SOURCE CHECK:      The paper does not mention any offline peptide/protein fractionation (e.g., high-pH RP or SAX) prior to MS analysis; therefore, the safe default of ""1"" is applied.
-TRUTH CHECK:       The value is correct as no fractionation was described.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+"PXD028480","TechnicalAgent","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""1 mM dithiothreitol"" in the ""In vivo ubiquitination assays"" section.
+TRUTH CHECK: The value is factually correct as it is explicitly stated in the methods.
+COMPLETENESS CHECK: The full set of extracted values contains ""dithiothreitol"", which is the only reduction reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD028480","ExperimentalDesignAgent","replicates","5","5","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for biological replicates.
+SOURCE CHECK:      The text explicitly states ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells were harvested for... lipidomic analysis.""
+TRUTH CHECK:       The value ""5"" is factually correct for the lipidomic analysis experiment.
+COMPLETENESS CHECK: The full set includes ""5"" and ""15"". While ""5"" is correct for the lipidomics, the ""15"" is likely a hallucination or a miscalculation (perhaps 5 replicates x 3 groups), as no mention of 15 replicates appears in the text. However, the ""5"" itself is a correct extraction of a reported replicate count.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE","5, 3"
+"PXD028480","ExperimentalDesignAgent","replicates","15","5","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for replicates.
+SOURCE CHECK:      The paper mentions ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells were harvested"" for lipidomic analysis. There is no mention of 15 replicates in the text.
+TRUTH CHECK:       The value ""15"" is not supported by the text; the only explicit mention of biological replicates for a specific assay is ""Five"".
+COMPLETENESS CHECK:   The full set contains ""5"" and ""15"", but ""15"" is incorrect/hallucinated.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD028480","ExperimentalDesignAgent","experimental_design","parental vs KCTD7 KO vs CLN5 KD comparison","parental vs KCTD7 KO vs CLN5 KD comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the comparison groups used in the study, which fits the category of experimental design.
+SOURCE CHECK:      The paper explicitly compares ""parental"" (control) cells with ""KCTD7 KO"" (knockout) and ""CLN5 KD"" (knockdown) cells across multiple experiments (e.g., lipidomic analysis, lysosomal enzyme activity, and autophagic flux).
+TRUTH CHECK:       The value accurately reflects the primary experimental comparisons described in the results and methods.
+COMPLETENESS CHECK:    The full set of extracted values captures the core comparative design of the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -166,10 +146,32 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD028480","ExperimentalDesignAgent","number_of_samples","15","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+"PXD028480","ExperimentalDesignAgent","factor_value","cell condition (parental, KCTD7 KO, CLN5 KD)","cell condition (parental, KCTD7 KO, CLN5 KD)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variables (cell conditions) being compared, which fits the definition of a factor_value.
+SOURCE CHECK:      The paper explicitly compares ""parental"", ""KCTD7 KO"" (knockout), and ""CLN5 KD"" (knockdown) cells throughout the results and methods.
+TRUTH CHECK:       The value is factually correct as these are the primary experimental groups used to study the effects of KCTD7 and CLN5.
+COMPLETENESS CHECK:    The full set captures the primary genetic manipulations (KO/KD) and the control (parental) used in the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD028480","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to MS analysis.
+TRUTH CHECK:       According to the safe defaults, ""1"" is correct when the paper is silent regarding fractionation.
+COMPLETENESS CHECK: The full set of extracted values consists of this single default value, which is exhaustive given the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD028480","ExperimentalDesignAgent","number_of_samples","15","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
 SOURCE CHECK:      The paper does not explicitly state a total number of samples processed across the entire study.
-TRUTH CHECK:       There is no evidence in the text to support the value ""15"". The lipidomic analysis mentions ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells"" (which would be 3 groups * 5 = 15), but this only refers to one specific experiment, not the total count of samples for the whole study.
-COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text as a global sample count.
+TRUTH CHECK:       There is no evidence in the text to support the number ""15"". The lipidomic analysis mentions ""Five replicates of parental and KCTD7 KO or CLN5 KD HeLa cells"" (which would be 3 groups * 5 = 15), but this refers only to one specific experiment, not the total count of samples for the study.
+COMPLETENESS CHECK:The full set contains only this value, which is not supported by the text as a total sample count.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no

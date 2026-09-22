@@ -1,8 +1,8 @@
 "paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
 "PXD053353","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The paper mentions the use of ""Hela cells"" and ""HEK293T cells,"" both of which are human cell lines, and ""human TRIM21-specific siRNA,"" making ""Homo sapiens"" reasonably inferable.
-TRUTH CHECK: The use of human-derived cell lines (HeLa, HEK293T) confirms that Homo sapiens is a source organism for the experiments.
-COMPLETENESS CHECK: The full set contains only ""Homo sapiens,"" but the paper also uses ""Mus musculus"" (C57BL/6 mice) and ""Sus scrofa"" (implied by PK-15 cells and PRV infection), so the set is incomplete.
+SOURCE CHECK: The paper mentions the use of ""Hela cells"" and ""HEK293T cells,"" both of which are human-derived cell lines, and ""human TRIM21-specific siRNA,"" making ""Homo sapiens"" reasonably inferable.
+TRUTH CHECK: The use of human cell lines and human-specific reagents confirms the involvement of Homo sapiens in the experimental setup.
+COMPLETENESS CHECK: The full set contains only ""Homo sapiens""; however, the paper also explicitly uses ""C57BL/6 mice"" (Mus musculus) and ""PK-15 cells"" (Sus scrofa), meaning the current set is incomplete.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -10,44 +10,44 @@ VALUE_COMPLETE: no
 HALLUCINATED: no
 VERDICT: medium
 CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus"", ""Sus scrofa""]","Homo sapiens, Mus musculus, Sus scrofa"
-"PXD053353","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        Yes, ""kidney"" is an organ/tissue.
-SOURCE CHECK:      The paper mentions ""brain"" and ""lungs"" in the context of viral copy counts and histopathology, but ""kidney"" is not mentioned anywhere in the text.
-TRUTH CHECK:       The value is not supported by the text.
-COMPLETENESS CHECK: The full set contains only a hallucinated value.
+"PXD053353","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is an organ, which matches the field definition.
+SOURCE CHECK:      A search of the paper text reveals no mention of ""kidney""; the organs mentioned are ""brain"", ""lungs"", and ""serum"".
+TRUTH CHECK:       The value is not factually correct as it is not mentioned in the study.
+COMPLETENESS CHECK: The full set of extracted values is incorrect and does not reflect the organs actually used in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
 HALLUCINATED:      yes
 VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD053353","BiologicalAgent","disease","normal","normal","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when describing healthy controls.
-SOURCE CHECK:      The paper describes experiments using wild-type cells and mice as controls compared to those infected with PRV or modified by CRISPR/siRNA; ""normal"" is a safe default for these control subjects.
-TRUTH CHECK:       The study uses control groups (e.g., control cells, non-infected mice) to compare against the disease state (PRV infection).
-COMPLETENESS CHECK: The full set contains ""normal"", which correctly represents the control state in this experimental design.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD053353","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cell line"" is a valid category for the material_type field.
-SOURCE CHECK:      The paper explicitly mentions the use of several cell lines, including Hela, 3D4/21, HEK293T, PK-15, and BHK-21.
-TRUTH CHECK:       The use of these cell lines is factually correct as described in the ""Cells and viruses"" section.
-COMPLETENESS CHECK:    While the study also uses mice (whole organism) and mouse serum (biofluid/serum), the LC-MS/MS experiment specifically used HEK293T cells. However, the field definition asks for what was actually used in the study. The full set only lists ""cell line"", missing ""whole organism"" and ""serum"".
-
+CORRECTED_VALUE:   [""brain"", ""lungs"", ""serum""]",""
+"PXD053353","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when describing healthy controls.
+SOURCE CHECK:      The paper describes the use of wild-type and mutant viruses in mice and various cell lines; while ""normal"" is not explicitly written, it is a safe default for the control groups (e.g., non-infected or wild-type controls).
+TRUTH CHECK:       The study uses control groups (non-infected mice or cells) to compare against the disease/infection state.
+COMPLETENESS CHECK: The full set contains ""normal"", which covers the control state, but the paper is primarily about ""Pseudorabies virus"" infection.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""cell line"", ""whole organism"", ""serum""]","cell line, whole organism, serum"
-"PXD053353","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HEK293T"" is a name of an immortalized cell line, which matches the field definition.
+CORRECTED_VALUE:   [""normal"", ""Pseudorabies virus infection""]",""
+"PXD053353","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK: The candidate value ""cell line"" matches the defined categories for material_type.
+SOURCE CHECK: The paper explicitly mentions the use of several cell lines, including Hela, 3D4/21, HEK293T, PK-15, and BHK-21.
+TRUTH CHECK: The use of these immortalized cell lines is factually correct as described in the ""Cells and viruses"" section.
+COMPLETENESS CHECK: While the paper also uses mice (whole organism) and mouse serum (biofluid/serum), the LC-MS/MS experiment specifically used HEK293T cells. However, the field definition for material_type usually covers all materials used in the study's experimental context. Given the LC-MS/MS focus, ""cell line"" is correct, but the full set of materials used in the overall study includes ""whole organism"" and ""serum"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""cell line"", ""whole organism"", ""serum""]","cell line, whole organism, serum"
+"PXD053353","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
 SOURCE CHECK:      The value ""HEK293T"" is explicitly mentioned multiple times in the ""Cells and viruses"", ""US2 stable cell line generation"", and ""LC-MS/MS"" sections.
-TRUTH CHECK:       The value is factually correct as it was used in the experiments (e.g., for co-transfection and immunoprecipitation).
-COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses ""Hela"", ""3D4/21"", ""PK-15"", and ""BHK-21"" cells.
+TRUTH CHECK:       The value is factually correct as HEK293T cells were used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses Hela, 3D4/21, PK-15, and BHK-21 cells.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -55,32 +55,10 @@ VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
 CORRECTED_VALUE:   [""HEK293T"", ""Hela"", ""3D4/21"", ""PK-15"", ""BHK-21""]","HEK293T, Hela, 3D4/21, PK-15, BHK-21"
-"PXD053353","TechnicalAgent","enrichment_method","anti-Flag M2 Affinity Gel","anti-Flag M2 Affinity Gel","high","False","","True","True","False","TYPE CHECK:        The candidate value refers to a specific affinity gel used for immunoprecipitation, which is a valid enrichment method.
-SOURCE CHECK:      The text explicitly states in the LC-MS/MS section: ""the lysates were immunoprecipitated using anti-Flag M2 Affinity Gel.""
-TRUTH CHECK:       The value is factually correct as the method used to enrich the protein complex before mass spectrometry.
-COMPLETENESS CHECK:    The full set of extracted values correctly identifies the specific enrichment tool used for the MS experiment.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     yes
-VALUE_COMPLETE:    yes
-HALLUCINATED:      no
-VERDICT:           high
-CORRECTED_VALUE:   NONE",""
-"PXD053353","TechnicalAgent","instrument","Q Exactive Plus","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
-SOURCE CHECK:      The paper mentions that LC-MS/MS was conducted by ""The Jingjie PTM BioLab (Hangzhou) Co. Inc."", but the text does not specify the instrument make or model used.
-TRUTH CHECK:       The value ""Q Exactive Plus"" is not mentioned anywhere in the provided text.
-COMPLETENESS CHECK: The full set contains a value that is not supported by the text.
-TYPE_CORRECT:      yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT:     no
-VALUE_COMPLETE:    no
-HALLUCINATED:      yes
-VERDICT:           low
-CORRECTED_VALUE:   NONE",""
-"PXD053353","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK: The candidate value ""label-free"" is a valid category for the label field.
-SOURCE CHECK: The paper does not mention any isobaric or metabolic labeling (such as TMT or SILAC) for the LC-MS/MS experiment; therefore, ""label-free"" is a safe default.
-TRUTH CHECK: The value is factually correct as no labeling method was described.
-COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+"PXD053353","TechnicalAgent","enrichment_method","anti-Flag M2 Affinity Gel","anti-Flag M2 Affinity Gel","high","False","","True","True","False","TYPE CHECK: The candidate value refers to a specific affinity gel used for immunoprecipitation, which is a type of enrichment protocol.
+SOURCE CHECK: The text explicitly states in the LC-MS/MS section: ""the lysates were immunoprecipitated using anti-Flag M2 Affinity Gel.""
+TRUTH CHECK: The value is factually correct as the method used to enrich the protein complex before mass spectrometry.
+COMPLETENESS CHECK: The full set contains the specific reagent used for the immunoprecipitation enrichment described in the paper.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -88,22 +66,21 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD053353","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the replicates field.
-SOURCE CHECK: I have searched the text for mentions of biological replicates, ""n ="", or ""triplicate"", but there is no mention of ""2"" biological replicates for the proteomics/MS experiment. The only ""n=5"" mentioned refers to the mouse survival assay.
-TRUTH CHECK: The value ""2"" is not supported by the text; the paper does not specify the number of biological replicates for the LC-MS/MS experiment.
-COMPLETENESS CHECK: The full set contains only this unsupported value.
-
-TYPE_CORRECT: yes
+"PXD053353","TechnicalAgent","instrument","Q Exactive Plus","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions that LC-MS/MS was conducted by ""The Jingjie PTM BioLab (Hangzhou) Co. Inc."", but the text provided does not mention ""Q Exactive Plus"" or any specific mass spectrometer model.
+TRUTH CHECK:       The value is not present in the provided text.
+COMPLETENESS CHECK: The full set contains a value that is not supported by the source text.
+TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: no
-VALUE_COMPLETE: no
-HALLUCINATED: yes
-VERDICT: low
-CORRECTED_VALUE: 1",""
-"PXD053353","ExperimentalDesignAgent","experimental_design","US2 expression vs control comparison","US2 expression vs control comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a comparison between an experimental group and a control, which fits the ""treated vs control"" category of experimental design.
-SOURCE CHECK:      The paper repeatedly compares cells expressing US2 (or US2-deficient PRV) against control cells (or wild-type PRV) to determine the protein's function.
-TRUTH CHECK:       The value is factually correct as the study's core design involves comparing the effects of US2 expression/deficiency against controls.
-COMPLETENESS CHECK:    The full set captures the primary experimental logic of the study (comparing US2-expressing/deficient conditions to controls).
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053353","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes an LC-MS/MS study on immunoprecipitated samples but does not mention any isobaric or metabolic labeling (e.g., TMT, SILAC).
+TRUTH CHECK:       Per the field definition, ""label-free"" is the correct value when no specific labeling method is mentioned.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods are described.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -111,21 +88,43 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD053353","ExperimentalDesignAgent","factor_value","treatment (Myc-US2, control)","treatment (Myc-US2, control)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes an experimental variable (treatment with a specific protein vs control), which fits the definition of a factor_value.
-SOURCE CHECK:      The paper describes experiments comparing cells transfected with Myc-US2 (or US2 expression plasmids) against control/empty vector cells (e.g., in the LC-MS/MS and luciferase assay sections).
-TRUTH CHECK:       The value is factually correct as the study investigates the effect of US2 expression compared to controls.
-COMPLETENESS CHECK:    The full set of extracted values is incomplete; the study also investigates other factors such as PRV-WT vs PRV-ΔUS2 (virus strain), TRIM21 deficiency (knockout vs wild-type), and the use of siRNA for US2 knockdown.
+"PXD053353","ExperimentalDesignAgent","replicates","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""n = 5 in each group"" for the survival assay and ""triplicate for qPCR"", but there is no mention of ""2"" biological replicates for the proteomics/MS experiment.
+TRUTH CHECK:       The value ""2"" is not supported by the text; the only specific replicate counts mentioned are 5 (for mice) and 3 (for qPCR).
+COMPLETENESS CHECK: The full set contains only ""2"", which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD053353","ExperimentalDesignAgent","experimental_design","US2 expression vs control comparison","US2 expression vs control comparison","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a comparison between an experimental group and a control, which fits the ""treated vs control"" category of study design.
+SOURCE CHECK:      The paper explicitly compares cells expressing US2 (US2-PK-15 cells, US2-transfected HEK293T cells) against control cells (empty vector/control siRNA) across multiple assays (luciferase, qPCR, immunoblotting).
+TRUTH CHECK:       The value is factually correct as the study centers on the effects of US2 expression compared to controls.
+COMPLETENESS CHECK: The full set captures the primary design, although the study also includes a ""wild-type PRV vs US2-deficient PRV"" comparison and ""TRIM21-deficient vs control"" comparison.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
 VALUE_COMPLETE:    no
 HALLUCINATED:      no
 VERDICT:           medium
-CORRECTED_VALUE:   [""treatment (Myc-US2, control)"", ""virus strain (PRV-WT, PRV-ΔUS2)"", ""TRIM21 expression (wild-type, knockout)"", ""US2 expression (siRNA knockdown, control)""]",""
+CORRECTED_VALUE:   [""US2 expression vs control comparison"", ""wild-type PRV vs US2-deficient PRV comparison"", ""TRIM21-deficient vs control comparison""]",""
+"PXD053353","ExperimentalDesignAgent","factor_value","treatment (Myc-US2, control)","treatment (Myc-US2, control)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes experimental conditions (treatment groups), which fits the definition of a factor value.
+SOURCE CHECK:      The paper describes experiments comparing cells transfected with Myc-US2 (or US2 expression plasmids) against control cells (empty vector).
+TRUTH CHECK:       The value is factually correct as the study investigates the effect of US2 expression versus a control.
+COMPLETENESS CHECK:    The full set only contains this value, but the paper also explores other factors such as TRIM21 deficiency (KO vs WT) and PRV-ΔUS2 vs PRV-WT infection. The current set is incomplete.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""treatment (Myc-US2, control)"", ""TRIM21 deficiency (KO, WT)"", ""virus strain (PRV-WT, PRV-ΔUS2)""]",""
 "PXD053353","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
 SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation; therefore, the safe default of ""1"" is applicable.
 TRUTH CHECK:       The value is correct as no fractionation was described in the LC-MS/MS section.
-COMPLETENESS CHECK: The full set of extracted values consists of this single value, which correctly represents the lack of fractionation.
+COMPLETENESS CHECK: The full set of extracted values consists of this single value, which accurately reflects the lack of fractionation.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     yes
@@ -133,15 +132,14 @@ VALUE_COMPLETE:    yes
 HALLUCINATED:      no
 VERDICT:           high
 CORRECTED_VALUE:   NONE",""
-"PXD053353","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the number_of_samples field.
-SOURCE CHECK:      The paper describes multiple experiments involving various cell lines (PK-15, 3D4/21, HEK293T, HeLa, BHK-21) and mouse groups (PRV-WT vs PRV-ΔUS2), but it does not explicitly state a total count of ""2"" samples for the study as a whole.
-TRUTH CHECK:       The value ""2"" likely refers to the two groups in the mouse survival assay (PRV-WT and PRV-ΔUS2) or the two conditions in the LC-MS/MS experiment (Flag-STING + Myc-US2 vs control), but it does not represent the total count of samples processed in the entire study.
-COMPLETENESS CHECK: The full set of extracted values is insufficient as it only captures a subset of one specific experiment rather than the total study samples.
-
+"PXD053353","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The paper describes multiple experimental setups (cell lines, viral infections, and mouse models), but does not provide a single total count of samples processed for the entire study.
+TRUTH CHECK:       The value ""2"" is not supported as a total sample count; while there are often two groups (e.g., WT vs ΔUS2), this is not the total number of samples processed.
+COMPLETENESS CHECK:The full set of extracted values does not cover the total number of samples in the study.
 TYPE_CORRECT:      yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT:     no
 VALUE_COMPLETE:    no
-HALLUCINATED:      no
+HALLUCINATED:      yes
 VERDICT:           low
 CORRECTED_VALUE:   NONE",""

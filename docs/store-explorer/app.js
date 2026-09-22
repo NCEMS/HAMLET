@@ -3,6 +3,7 @@ const state = {
   selected: null,
   summary: null,
   qcSummary: null,
+  versionHistory: [],
   tableDefinitions: null,
   qcTab: "version",
   qcVersion: null,
@@ -196,6 +197,16 @@ function markdown(text) {
       rendered.push(`<h4>${markdownInline(heading[1])}</h4>`);
       continue;
     }
+    if (/^[-*]\s+/.test(line)) {
+      const items = [];
+      while (index < lines.length && /^[-*]\s+/.test(lines[index])) {
+        items.push(lines[index].replace(/^[-*]\s+/, ""));
+        index += 1;
+      }
+      index -= 1;
+      rendered.push(`<ul>${items.map(item => `<li>${markdownInline(item)}</li>`).join("")}</ul>`);
+      continue;
+    }
     if (line.includes("|") && /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[index + 1] || "")) {
       const header = markdownCells(line);
       const body = [];
@@ -249,6 +260,27 @@ function histogramCard(field) {
     return `<div class="histogram-bin" title="${esc(`${bucket.label}: ${bucket.count} PXDs`)}"><span class="histogram-bar" style="height:${height}%"></span><span class="histogram-label">${esc(bucket.label)}</span></div>`;
   }).join("");
   return `<article class="histogram-card"><h4>${esc(field.field)}</h4><p>${esc(headerDefinition("llm_judge_per_paper.csv", field.field))}</p><dl><div><dt>Mean</dt><dd>${esc(formatStatistic(field.mean))}</dd></div><div><dt>Range</dt><dd>${esc(`${formatStatistic(field.minimum)}-${formatStatistic(field.maximum)}`)}</dd></div><div><dt>PXDs</dt><dd>${esc(formatNumber(field.count))}</dd></div></dl><p class="section-note">Fixed bins: ${esc(`${formatStatistic(field.histogramMinimum)}-${formatStatistic(field.histogramMaximum)}`)}</p><div class="histogram" aria-label="Histogram for ${esc(field.field)}">${bars}</div></article>`;
+}
+
+function judgeMetricMethodology(judgeType) {
+  const judgeScope = judgeType === "sdrf_judge"
+    ? "`sdrf_judge` evaluates the completed, rendered SDRF after safe refinement overrides are applied."
+    : "`llm_judge` is a historical pre-finalization refinement evaluation; it assesses agent metadata before the final SDRF is rendered.";
+  return `<aside class="metric-methodology"><h4>How these distributions are assessed</h4><p>${judgeScope} Each candidate annotation is assigned exactly one outcome: explicit correct, hallucinated, type mismatch, wrong value, incomplete, repository-backed only, or inferred. Counts are therefore mutually exclusive except <code>judge_n_corrected</code>, which records any row with a proposed correction.</p><p><code>total_extracted</code> is the number of candidate annotations evaluated for a PXD. <code>judge_accuracy = judge_n_correct / total_extracted</code>: only explicit manuscript-supported, type-correct, complete values count. <code>judge_accuracy_adjusted = (judge_n_correct + judge_n_runassessor_only + judge_n_pride_repository_only + judge_n_ptm_shepherd_only) / total_extracted</code>: it credits authoritative deposited evidence that is absent from manuscript text. <code>judge_accuracy_with_inference = (judge_n_correct + judge_n_inferred) / total_extracted</code>: it shows the separate effect of inference-only acceptance and does not credit repository-only rows.</p><p><code>judge_n_technical_not_in_text</code> is the sum of the three repository-only counts. Histograms use fixed bins across versions with the same judge type. Do not compare <code>llm_judge</code> and <code>sdrf_judge</code> values as the same evaluation stage.</p></aside>`;
+}
+
+function versionHistoryNote(version) {
+  return state.versionHistory.find(note => note.version === version) || null;
+}
+
+function versionHistoryContent(version = null) {
+  const notes = version
+    ? state.versionHistory.filter(note => note.version === version)
+    : state.versionHistory;
+  if (!notes.length) {
+    return "<p class=\"section-note\">No version-history note is published for this release.</p>";
+  }
+  return `<div class="version-history-list">${notes.map(note => `<article class="version-history-note"><h4>${esc(`${note.version} - ${note.title}`)}</h4><div class="markdown-report">${markdown(note.markdown)}</div></article>`).join("")}</div>`;
 }
 
 function sortedVersions() {
@@ -673,7 +705,7 @@ async function renderVersionQcDetails() {
 
   const judgeLabel = judgeData.judgeType === "sdrf_judge" ? "SDRF judge" : judgeData.judgeType === "llm_judge" ? "LLM judge" : "Judge";
   const releaseStateText = judgeData.releaseState === "in_progress" ? "an in-progress snapshot" : "an immutable release";
-  container.innerHTML = `<div class="stat-grid">${cards}</div>${section("HAMLET SDRFs by version", "Counts shown below are scoped to the selected version.", `<p class=\"section-note\"><strong>${esc(requestedVersion)}</strong> is ${releaseStateText} with ${esc(formatNumber(versionCount))} versioned SDRFs.</p>`)}${section(`${judgeLabel} distributions`, `Histograms summarize ${formatNumber(judgeData.judgeRecords)} per-paper ${judgeLabel.toLowerCase()} records for HAMLET ${requestedVersion}. Each metric uses fixed bin limits across all ${judgeLabel.toLowerCase()} versions.`, distributions)}${section(`${judgeLabel} metrics`, "Absolute per-PXD metric values. Plots are interactive and horizontally scrollable.", metricCards)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs for the selected version.", metadataSection)}`;
+  container.innerHTML = `<div class="stat-grid">${cards}</div>${section("Version notes", "Release rationale and evaluation status from the canonical HAMLET version history.", versionHistoryContent(requestedVersion))}${section("HAMLET SDRFs by version", "Counts shown below are scoped to the selected version.", `<p class=\"section-note\"><strong>${esc(requestedVersion)}</strong> is ${releaseStateText} with ${esc(formatNumber(versionCount))} versioned SDRFs.</p>`)}${section(`${judgeLabel} distributions`, `Histograms summarize ${formatNumber(judgeData.judgeRecords)} per-paper ${judgeLabel.toLowerCase()} records for HAMLET ${requestedVersion}. Each metric uses fixed bin limits across all ${judgeLabel.toLowerCase()} versions.`, `${judgeMetricMethodology(judgeData.judgeType)}${distributions}`)}${section(`${judgeLabel} metrics`, "Absolute per-PXD metric values. Plots are interactive and horizontally scrollable.", metricCards)}${section("Available SDRF metadata categories", "Headers observed in final HAMLET SDRFs for the selected version.", metadataSection)}`;
   setTimeout(() => renderVersionMetricPlots(judgeData), 0);
 }
 
@@ -699,7 +731,8 @@ function qcOverview(summary) {
     if (state.qcTab === "version") renderVersionQcDetails();
   }, 0);
 
-  return section("Quality control", "Review either a single version or a baseline-vs-candidate comparison.", `<div class="qc-tabs"><button class="qc-tab ${state.qcTab === "version" ? "active" : ""}" type="button" data-qc-tab="version">Version QC</button><button class="qc-tab ${state.qcTab === "comparison" ? "active" : ""}" type="button" data-qc-tab="comparison">Comparison QC</button></div><div class="qc-tab-panel ${state.qcTab === "version" ? "active" : ""}" id="qc-tab-version">${versionControls}<div id="qc-version-content"><p class="section-note">Select a version to load version-specific QC details.</p></div></div><div class="qc-tab-panel ${state.qcTab === "comparison" ? "active" : ""}" id="qc-tab-comparison">${comparisonPanel}</div>`);
+  const historyPanel = section("All version notes", "Canonical release rationale and evaluation notes, newest first.", versionHistoryContent());
+  return section("Quality control", "Review a single version, compare compatible releases, or browse the complete version history.", `<div class="qc-tabs"><button class="qc-tab ${state.qcTab === "version" ? "active" : ""}" type="button" data-qc-tab="version">Version QC</button><button class="qc-tab ${state.qcTab === "comparison" ? "active" : ""}" type="button" data-qc-tab="comparison">Comparison QC</button><button class="qc-tab ${state.qcTab === "history" ? "active" : ""}" type="button" data-qc-tab="history">Version History</button></div><div class="qc-tab-panel ${state.qcTab === "version" ? "active" : ""}" id="qc-tab-version">${versionControls}<div id="qc-version-content"><p class="section-note">Select a version to load version-specific QC details.</p></div></div><div class="qc-tab-panel ${state.qcTab === "comparison" ? "active" : ""}" id="qc-tab-comparison">${comparisonPanel}</div><div class="qc-tab-panel ${state.qcTab === "history" ? "active" : ""}" id="qc-tab-history">${historyPanel}</div>`);
 }
 
 function renderOverview() {
@@ -779,7 +812,7 @@ function renderCatalog() {
 }
 
 async function initialize() {
-  const [response, definitionsResponse, summaryResponse, qcSummary] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json"), fetch("data/site-summary.json"), fetchOptionalJson("qc-summary.json")]);
+  const [response, definitionsResponse, summaryResponse, qcSummary, versionHistory] = await Promise.all([fetch("data/store-index.json"), fetch("table-definitions.json"), fetch("data/site-summary.json"), fetchOptionalJson("qc-summary.json"), fetchOptionalJson("version-history.json")]);
   if (!response.ok) {
     throw new Error(`Could not load store index (${response.status} ${response.statusText})`);
   }
@@ -793,6 +826,7 @@ async function initialize() {
   state.tableDefinitions = await definitionsResponse.json();
   state.summary = await summaryResponse.json();
   state.qcSummary = qcSummary;
+  state.versionHistory = versionHistory?.notes || [];
   state.records = index.pxds;
   selectDefaultQcVersion();
   const versions = [...new Set(state.records.map(record => record.version || "Unknown"))].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));

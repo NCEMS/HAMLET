@@ -1,0 +1,309 @@
+{
+  "paper_id": "PXD033099",
+  "annotations": [
+    {
+      "annotation_type": "cell_line",
+      "extracted_value": "786-O",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "incomplete",
+      "corrected_value": "786-O, 293T",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"786-O\" is a named immortalized cell line, which matches the required category.",
+        "SOURCE_CHECK": "The value is present in the text; specifically, the \"Pull-down assay and liquid chromatography-mass spectrometry (LC-MS/MS) analysis\" section states that \"293T or 786-O cells were lysed... Flag affinity resins... were incubated with cell lysates... The eluted protein samples were subjected to... MS analysis.\"",
+        "TRUTH_CHECK": "The candidate value is factually correct as 786-O cells were one of the sources for the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the text explicitly mentions that \"293T or 786-O cells\" were used for the MS analysis, but \"293T\" is missing from the extracted values."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "epithelial cell",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"epithelial cell\" is a correct category for the cell_type field.",
+        "SOURCE_CHECK": "The value is inferable from the MS experiment context; the paper describes LC-MS/MS analysis of pull-downs from 786-O cells (a renal clear cell carcinoma cell line) and 293T cells, and specifically mentions \"kidney epithelial cells\" in the context of the Mfn2 CKO model.",
+        "TRUTH_CHECK": "786-O and 293T are derived from epithelial lineages (renal epithelial and embryonic kidney/epithelial respectively), and the paper explicitly refers to \"kidney epithelial cells\" in the transgenic mouse section.",
+        "COMPLETENESS_CHECK": "The full set contains \"epithelial cell\", which accurately describes the lineage of the cells used in the MS experiments."
+      }
+    },
+    {
+      "annotation_type": "disease",
+      "extracted_value": "clear cell renal cell carcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease diagnosis, which matches the field definition.",
+        "SOURCE_CHECK": "The value is explicitly mentioned throughout the paper as the disease being studied (e.g., \"Clear cell renal cell carcinoma (ccRCC) is the most lethal renal cancer\").",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on the role of MFN2 in ccRCC.",
+        "COMPLETENESS_CHECK": "The full set contains the primary disease studied in the paper."
+      }
+    },
+    {
+      "annotation_type": "organ",
+      "extracted_value": "kidney",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue name.",
+        "SOURCE_CHECK": "The value is present in the text; the MS experiments (LC-MS/MS) were performed on lysates from 786-O cells (a human renal cell line) and mitochondria extracted from 786-O cells, both of which originate from the kidney.",
+        "TRUTH_CHECK": "The value is factually correct as 786-O is a clear cell renal cell carcinoma (ccRCC) cell line.",
+        "COMPLETENESS_CHECK": "The full set of extracted values (\"kidney\") covers the origin of the biological material used for the mass spectrometry analysis."
+      }
+    },
+    {
+      "annotation_type": "species",
+      "extracted_value": "Homo sapiens, Mus musculus",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "wrong_value",
+      "corrected_value": "Homo sapiens",
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains organism names, which matches the definition of the species field.",
+        "SOURCE_CHECK": "Both human (Homo sapiens) and mouse (Mus musculus) materials were analyzed by mass spectrometry: the paper describes LC-MS/MS on pull-downs from 786-O and 293T cells (human) and proteomic analysis on mitochondria extracted from 786-O cells (human), as well as the use of various mouse models (though the specific MS analysis is focused on the human cell lines, the study is a hybrid). However, looking closely at the \"Pull-down assay and liquid chromatography-mass spectrometry (LC-MS/MS) analysis\" section, it specifically mentions 293T or 786-O cells (human). The \"proteomic analysis on mitochondria extracted from 786-O cells\" is also human. There is no mention of mass spectrometry being performed on the mouse tissues/cells.",
+        "TRUTH_CHECK": "While both species are used in the study, only human samples (786-O, 293T) were subjected to the LC-MS/MS analysis.",
+        "COMPLETENESS_CHECK": "The set is not correct because it includes a species not analyzed by MS."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "786-O, A-498, Caki-1, HK-2, 293T, MFN2 knockdown, MFN2 overexpression, gefitinib treatment",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a list of cell lines, experimental conditions, and treatments, which are all valid categories for factor_value.",
+        "SOURCE_CHECK": "All values are present in the text; however, 293T is used for pull-down assays and MFN2-bead validation, while the others are the primary subjects of the proteomics/MS analysis (e.g., 786-O for LC-MS/MS of MFN2 interactors and mitochondrial proteomics).",
+        "TRUTH_CHECK": "The values accurately reflect the various groups and conditions manipulated or compared in the study.",
+        "COMPLETENESS_CHECK": "The full set of all_extracted_values (including the disease state \"clear cell renal cell carcinoma\") covers the primary experimental axes of the study."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "clear cell renal cell carcinoma",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a disease state, which is a valid category for a factor_value.",
+        "SOURCE_CHECK": "The value is explicitly mentioned throughout the paper as the disease being studied in the MS experiments (e.g., \"proteomic analysis on mitochondria extracted from 786-O cells\" where 786-O is a ccRCC cell line).",
+        "TRUTH_CHECK": "The value is factually correct as the study focuses on clear cell renal cell carcinoma (ccRCC).",
+        "COMPLETENESS_CHECK": "The full set of extracted values includes both the disease state and various experimental conditions/cell lines, covering the primary axes of the study."
+      }
+    },
+    {
+      "annotation_type": "acquisition_method",
+      "extracted_value": "data-dependent acquisition",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a valid acquisition scheme name.",
+        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS\" and \"mass spectrum analysis\" but does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "There is no explicit mention of \"data-dependent acquisition\" in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "fragmentation",
+      "extracted_value": "beam-type collision-induced dissociation",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
+        "SOURCE_CHECK": "The value is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper mentions \"mass spectrum analysis\" and \"LC-MS/MS\" but does not specify the fragmentation method used.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "instrument",
+      "extracted_value": "Q Exactive",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the required category.",
+        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS\" and \"mass spectrum analysis\" multiple times, but it does not explicitly name the instrument model used.",
+        "TRUTH_CHECK": "The instrument model \"Q Exactive\" is not mentioned anywhere in the provided text.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "label",
+      "extracted_value": "label free",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"label free\" belongs to the correct category for the label field.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis of proteins eluted from pull-down assays and proteomic analysis of extracted mitochondria, but does not mention any isobaric, metabolic, or chemical labeling reagents.",
+        "TRUTH_CHECK": "Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned, \"label-free\" is the correct safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which is exhaustive for the described experiments."
+      }
+    },
+    {
+      "annotation_type": "mass_analyzer",
+      "extracted_value": "Orbitrap",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "runassessor_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"Orbitrap\" is a valid mass analyzer type.",
+        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS\" and \"mass spectrum analysis\" but does not explicitly name the mass spectrometer model or the mass analyzer used.",
+        "TRUTH_CHECK": "There is no mention of an Orbitrap mass analyzer in the provided text.",
+        "COMPLETENESS_CHECK": "The value is not present in the text, so the set is not based on the source."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "nitrosylation (CY)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The term \"nitrosylation\" does not appear anywhere in the provided paper text.",
+        "TRUTH_CHECK": "The value is not mentioned in the text and is therefore not factually supported for this experiment.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Iodoacetamide derivative (CDEHKMSTUY,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes a protein modification, which matches the field definition.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text; the text mentions \"LC-MS/MS\" and \"proteomic analysis\" but does not list the specific modifications searched for in the database.",
+        "TRUTH_CHECK": "The value is not supported by the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
+      }
+    },
+    {
+      "annotation_type": "modification",
+      "extracted_value": "Formylation (KST,N-term)",
+      "verdict": "low",
+      "type_mismatch": false,
+      "value_correct": false,
+      "value_complete": false,
+      "hallucination": false,
+      "technical_origin": true,
+      "inference": null,
+      "error_category": "ptm_shepherd_only",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value is a protein modification, which matches the required category for this field.",
+        "SOURCE_CHECK": "The value \"Formylation (KST,N-term)\" is not present in the provided paper text.",
+        "TRUTH_CHECK": "The paper does not mention formylation as a searched modification for the LC-MS/MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
+      }
+    },
+    {
+      "annotation_type": "reduction_reagent",
+      "extracted_value": "dithiothreitol",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value \"dithiothreitol\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the paper text; specifically, it is mentioned in the \"Protein expression and purification\" section (\"The protein was eluted with lysis buffer containing 1 mmol/L dithiothreitol (DTT; Gibco)...\").",
+        "TRUTH_CHECK": "The value is factually correct as it is explicitly stated in the text.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains only this one reagent, and no other reduction reagents are mentioned in the text."
+      }
+    }
+  ]
+}

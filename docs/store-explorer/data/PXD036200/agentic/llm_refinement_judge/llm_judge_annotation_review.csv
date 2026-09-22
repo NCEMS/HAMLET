@@ -1,0 +1,157 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD036200","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK:      The paper mentions the use of HeLa, HEK293, and Huh7 cells, and explicitly refers to ""human ORP8"" and ""UniProtKB human"" target proteins.
+TRUTH CHECK:       The use of human cell lines and human protein sequences confirms the species is Homo sapiens.
+COMPLETENESS CHECK:   The paper also uses mouse models (ob/ob mice, C57BL/6), but the mass spectrometry analysis specifically targeted human and E. coli proteins. However, for a general species field, the set should ideally include both if both were used in the study. In this specific context, the pipeline extracted only the human species.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD036200","BiologicalAgent","organ","cervix","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""cervix"" is a type of organ/tissue, which matches the field definition.
+SOURCE CHECK:      The word ""cervix"" does not appear in the provided paper text.
+TRUTH CHECK:       The paper describes experiments using HeLa cells (derived from cervical cancer), HEK293 cells, Huh7 cells, MEFs, and mouse liver/plasma; however, it does not mention the ""cervix"" as a source organ for the proteomics experiments.
+COMPLETENESS CHECK: The full set contains only a hallucinated value and fails to capture the actual organs/tissues mentioned (e.g., liver, plasma).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""liver"", ""plasma""]",""
+"PXD036200","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions HeLa, HEK293, HEK293T, and Huh7 cells, but it never explicitly uses the term ""epithelial cell"" to describe them.
+TRUTH CHECK:       While HeLa and Huh7 are derived from epithelial tissues, the paper does not state that the experiments were performed on ""epithelial cells"" as a general category; it specifies the cell lines.
+COMPLETENESS CHECK: The full set contains only ""epithelial cell"", which is not mentioned in the text and ignores the specific cell lines actually used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036200","BiologicalAgent","disease","cervical adenocarcinoma","","low","False","","False","False","True","TYPE CHECK:        No, the candidate value is a specific disease, but it does not appear in the text.
+SOURCE CHECK:      The term ""cervical adenocarcinoma"" is not present in the paper text.
+TRUTH CHECK:       The paper discusses lipophagy, ORP8, and ob/ob mice (obesity/diabetes model), but never mentions cervical adenocarcinoma.
+COMPLETENESS CHECK:The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD036200","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK: The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK: The paper explicitly mentions the use of several cell lines, including HeLa, HEK293, HEK293T, and Huh7.
+TRUTH CHECK: The use of these immortalized cell lines is factually correct as described in the methods.
+COMPLETENESS CHECK: While the paper also uses mouse liver tissue and plasma, the current set only contains ""cell line"". To be exhaustive, it must include ""tissue"" and ""biofluid"" (or ""plasma"").
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""cell line"", ""tissue"", ""plasma""]",""
+"PXD036200","BiologicalAgent","cell_line","HeLa","HeLa","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""HeLa"" is explicitly mentioned multiple times in the text (e.g., ""we purified LDs from HeLa cells"").
+TRUTH CHECK:       The value is factually correct as HeLa cells were used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values only contains ""HeLa"", but the paper also mentions ""HEK293"", ""HEK293T"", and ""Huh7"" cells.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HeLa"", ""HEK293"", ""HEK293T"", ""Huh7""]","HeLa, HEK293, HEK293T, Huh7"
+"PXD036200","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK: The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""On-bead digestion was performed with MS-grade trypsin"" and ""in-gel digestion with trypsin"" in the HPLC–MS/MS section.
+TRUTH CHECK: The value is factually correct as trypsin was the protease used for digestion in the mass spectrometry experiments.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD036200","TechnicalAgent","enrichment_method","GST-LC3 bound glutathione sepharose 4B beads or HA-ORP8 bound agarose beads","","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the materials used for enrichment (beads/ligands) rather than the protocol name itself.
+SOURCE CHECK:      The text mentions ""GST-LC3 bound glutathione sepharose 4B beads or HA-ORP8 bound agarose beads"" were precipitated for on-bead digestion.
+TRUTH CHECK:       The values are present, but they describe the specific reagents used to perform the enrichment (pull-down/immunoprecipitation) rather than the method name.
+COMPLETENESS CHECK: The full set describes the reagents used for two different MS experiments (one for LC3 interactors and one for ORP8 phosphorylation sites), but it uses the reagent names instead of the method names.
+
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: enrichment_method
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""pull-down"", ""immunoprecipitation""]",""
+"PXD036200","TechnicalAgent","instrument","Q Exactive","Q Exactive","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""a Q-Exactive mass spectrometer (Thermo Fisher Scientific)"".
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036200","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper describes mass spectrometry analysis (HPLC-MS/MS) but mentions no isobaric or metabolic labeling reagents; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The extraction is factually correct as no labeling method was used.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036200","ExperimentalDesignAgent","experimental_design","identification of LC3B-interacting proteins on lipid droplets and ORP8 phosphorylation sites","","low","True","","False","False","False","TYPE CHECK:        no
+SOURCE CHECK:      yes
+TRUTH CHECK:       no
+COMPLETENESS CHECK:no
+TYPE_CORRECT:      no
+CORRECT_TYPE_NAME: experimental_design
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   treated vs control",""
+"PXD036200","ExperimentalDesignAgent","factor_value","treatment (OA + CQ), condition (in vitro kinase assay)","treatment (OA + CQ), condition (in vitro kinase assay)","medium","False","","True","False","False","TYPE CHECK:        The candidate value describes experimental treatments and conditions, which fits the definition of a factor or variable under study.
+SOURCE CHECK:      The paper mentions treating cells with oleic acid (OA) and chloroquine (CQ) and performing an in vitro kinase assay.
+TRUTH CHECK:       The values are factually present in the text.
+COMPLETENESS CHECK:    The full set of extracted values is highly incomplete; the study involves numerous other factors including ORP8 knockout/overexpression, serum starvation, and ob/ob mouse models.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""OA treatment"", ""CQ treatment"", ""serum starvation"", ""ORP8 knockout"", ""ORP8 overexpression"", ""ob/ob mouse model"", ""in vitro kinase assay""]",""
+"PXD036200","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct type for the 'fractions' field.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS; therefore, the safe default of ""1"" is applicable.
+TRUTH CHECK:       The value is factually correct as no fractionation was described.
+COMPLETENESS CHECK: The full set of extracted values consists of only this value, which accurately reflects the lack of fractionation in the experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD036200","ExperimentalDesignAgent","number_of_samples","2","","low","False","","False","False","True","TYPE CHECK: The candidate value is a numeric count, which is the correct type for the number of samples.
+SOURCE CHECK: The paper does not explicitly state a total count of samples processed for the mass spectrometry experiments. It mentions various conditions (e.g., untreated, AICAR, serum starvation) and different cell lines (HeLa, HEK293), but no aggregate sample count is provided.
+TRUTH CHECK: There is no evidence in the text to support the value ""2"" as the total number of samples.
+COMPLETENESS CHECK: The value is not supported by the text, and therefore the set is not complete or correct.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""

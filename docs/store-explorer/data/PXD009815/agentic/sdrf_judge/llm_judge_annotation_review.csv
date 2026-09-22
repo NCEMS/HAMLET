@@ -1,0 +1,112 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD009815","","strict","Biological","disease","normal","normal","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""normal"" is a valid category for the disease field.
+SOURCE CHECK: The study uses a standard yeast lysate spiked with human proteins (UPS1 mix) to benchmark software; there is no disease state being studied.
+TRUTH CHECK: Since the subjects (yeast lysate) are not part of a disease study, ""normal"" is a correct safe default.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for this study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Biological","species","Saccharomyces cerevisiae","Saccharomyces cerevisiae","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a scientific name of a species, which matches the field definition.
+SOURCE CHECK: The paper states the dataset was generated from a ""yeast lysate""; ""Saccharomyces cerevisiae"" is the standard scientific name for common baker's yeast used in such proteomics benchmarks.
+TRUTH CHECK: The value is factually correct as the MS samples consisted of yeast lysate.
+COMPLETENESS CHECK: The full set contains the primary organism used for the MS sample.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","ExperimentalDesign","factor_value","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (concentration levels of a spiked protein mix), which is a correct category for factor_value.
+SOURCE CHECK: The value is explicitly stated in the ""Experimental datasets"" section of the methods, describing the material analyzed by MS.
+TRUTH CHECK: The values (0.01 to 50 fmol) match the text exactly.
+COMPLETENESS CHECK: The full set of extracted values includes the spiked concentrations and a ""normal"" (yeast lysate background) value, which together cover the experimental design described.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","ExperimentalDesign","factor_value","normal","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""normal"" is a valid category for a factor_value (representing a healthy/baseline state).
+SOURCE CHECK: The paper describes a ""ground truth"" dataset using a yeast lysate spiked with UPS1 proteins; the yeast lysate itself serves as the invariant background/baseline.
+TRUTH CHECK: While the yeast lysate is the background, the term ""normal"" is a safe default for healthy/disease-free/baseline states. However, in this specific experimental design, the ""factor"" being varied is the UPS1 concentration. The yeast lysate is the matrix, not a ""normal"" group in a disease study.
+COMPLETENESS CHECK: The full set includes the actual experimental variable (UPS1 concentration) and a generic ""normal"" label.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE","ground truth"
+"PXD009815","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a valid MS acquisition scheme.
+SOURCE CHECK: The value is explicitly mentioned in the ""Materials and methods"" section (Section 2) in the context of the quantification workflow used for the MS samples.
+TRUTH CHECK: The paper explicitly states the use of ""data dependent acquisition (DDA) label-free quantification"".
+COMPLETENESS CHECK: The full set contains the only acquisition method mentioned for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Materials and methods"" section (""Trypsin digested samples were then analyzed..."").
+TRUTH CHECK: The value is factually correct as the paper states trypsin was used for digestion.
+COMPLETENESS CHECK: The full set contains only ""Trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions the use of a ""Q-Exactive Plus mass spectrometer,"" which typically uses HCD (Higher-energy Collisional Dissociation), but the specific phrase ""beam-type collision-induced dissociation"" does not appear in the text.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive because the value itself is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Technical","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category for the instrument field.
+SOURCE CHECK: The value is explicitly mentioned in the ""Experimental datasets"" section (Section 2.2) as the instrument used to analyze the samples.
+TRUTH CHECK: The paper states the samples were analyzed using a ""Q-Exactive Plus mass spectrometer"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
+SOURCE CHECK: The paper explicitly mentions ""label-free quantification"" and ""label-free DDA method"" in the context of the MS analysis of the yeast lysate/UPS1 spiked samples.
+TRUTH CHECK: The paper describes a label-free approach and does not mention any isobaric (TMT/iTRAQ) or metabolic/chemical labeling (SILAC, dimethyl, etc.).
+COMPLETENESS CHECK: The full set of extracted values consists of this single correct value, which is exhaustive for this paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The paper mentions the use of a ""Q-Exactive Plus mass spectrometer"" for the analysis of the samples.
+TRUTH CHECK: The Q-Exactive Plus is a well-known mass spectrometer that utilizes an Orbitrap mass analyzer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer used in the described experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

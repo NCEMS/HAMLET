@@ -11,7 +11,13 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src" / "job_scripts"))
 
-from build_store_explorer import active_release_versions, annotated_release_version, release_judge_metrics, publish_qc_summary
+from build_store_explorer import (
+    active_release_versions,
+    annotated_release_version,
+    load_version_history,
+    publish_qc_summary,
+    release_judge_metrics,
+)
 
 
 class StoreExplorerVersionTest(unittest.TestCase):
@@ -136,6 +142,22 @@ class StoreExplorerVersionTest(unittest.TestCase):
             )
 
             self.assertEqual(active_release_versions(store), {"PXD123456": "v2.2.1"})
+
+    def test_load_version_history_splits_markdown_by_release_heading(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            path = Path(temporary_directory) / "history.md"
+            path.write_text(
+                "# History\n\n"
+                "## v2.2.5 - Final SDRF provenance\n\nStatus: in progress.\n\n"
+                "## v2.2.4 - Acquisition provenance\n\nStatus: evaluated.\n",
+                encoding="utf-8",
+            )
+
+            notes = load_version_history(path)
+
+        self.assertEqual([note["version"] for note in notes], ["v2.2.5", "v2.2.4"])
+        self.assertEqual(notes[0]["title"], "Final SDRF provenance")
+        self.assertEqual(notes[1]["markdown"], "Status: evaluated.")
 
 
 if __name__ == "__main__":

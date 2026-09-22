@@ -1,0 +1,157 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD058436","BiologicalAgent","species","Homo sapiens","Homo sapiens","high","False","","True","True","False","TYPE CHECK: The candidate value ""Homo sapiens"" is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""human primary tissue samples"" and ""reference proteome from UniProtKB... of Homo sapiens (TaxonID 9606)"".
+TRUTH CHECK: The value is factually correct as the study focuses on the human immunopeptidome.
+COMPLETENESS CHECK: The full set contains ""Homo sapiens"", which is the only species described in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD058436","BiologicalAgent","organ","myelon, stomach, thyroid","myelon, stomach, thyroid","medium","False","","True","False","False","TYPE CHECK:        The candidate value contains names of organs/tissues, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""various tissues such as myelon, stomach, and thyroid"" in the context of the benign reference dataset.
+TRUTH CHECK:       The values are factually correct as they are listed in the paper as tissues used in the study.
+COMPLETENESS CHECK: The full set of extracted values is not exhaustive; the paper mentions the ""benignMHCquant2 dataset"" covers ""23 different primary tissues"" and the ""HLA Ligand Atlas"" (which is also re-analyzed), but only lists a few examples. However, the candidate value itself is a comma-separated list rather than individual entries.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""myelon"", ""stomach"", ""thyroid""] (Note: The pipeline should extract these as individual values, and ideally identify all 23 tissues if listed in the supplementary files, though based on the provided text, only these three are explicitly named).",""
+"PXD058436","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field, specifically used for healthy controls.
+SOURCE CHECK:      The text states that for the benignMHCquant2 dataset, ""Subjects included in this study were not diagnosed with any malignant disease,"" making ""normal"" a safe and accurate default.
+TRUTH CHECK:       The value is factually correct as the subjects were explicitly described as not having malignant disease.
+COMPLETENESS CHECK: The full set contains ""normal"", which accurately describes the state of the primary subjects in the benignMHCquant2 dataset.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","BiologicalAgent","material_type","tissue","tissue","high","False","","True","True","False","TYPE CHECK:        The candidate value ""tissue"" matches the defined broad material classes for this field.
+SOURCE CHECK:      The text explicitly mentions ""human primary tissue samples"" and ""benign solid tissue samples"" multiple times.
+TRUTH CHECK:       The value is factually correct as the study used primary human tissues.
+COMPLETENESS CHECK: The full set of extracted values (""tissue"") accurately and exhaustively covers the material used for the primary dataset described.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","TechnicalAgent","acquisition_method","DDA","DDA","high","False","","True","True","False","TYPE CHECK:        The candidate value ""DDA"" is a valid MS acquisition scheme.
+SOURCE CHECK:      The text explicitly states ""using a data-dependent acquisition mode (DDA)"" in the timsTOF mass spectrometric data acquisition section.
+TRUTH CHECK:       The value is factually correct as described in the paper.
+COMPLETENESS CHECK: The full set contains ""DDA"", which is the only acquisition method mentioned for the primary data collection.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","TechnicalAgent","enrichment_method","immunoaffinity chromatography","immunoaffinity chromatography","high","False","","True","True","False","TYPE CHECK:        The candidate value describes a protocol used to enrich specific molecules (HLA ligands) before MS analysis.
+SOURCE CHECK:      The text explicitly states ""HLA class I and HLA class II molecules were isolated by previously described immunoaffinity chromatography protocols"".
+TRUTH CHECK:       The value is factually correct as it describes the method used to isolate the peptides of interest.
+COMPLETENESS CHECK: The full set contains the only enrichment method mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The paper mentions ""timsTOF Pro"", ""LTQ Orbitrap XL MS"", and ""ThermoFisher devices"", but ""Q Exactive HF"" does not appear in the text.
+TRUTH CHECK:       The value is not supported by the provided text.
+COMPLETENESS CHECK: The full set is incorrect as it contains a hallucinated value and misses the actual instruments used (timsTOF Pro).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   [""timsTOF Pro"", ""LTQ Orbitrap XL MS""]",""
+"PXD058436","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      No isobaric or metabolic labeling (such as TMT or SILAC) is mentioned in the text; therefore, ""label-free"" is a safe default.
+TRUTH CHECK:       The experiment describes standard immunopeptidomics using DDA on a timsTOF Pro without any mention of labels.
+COMPLETENESS CHECK: The full set contains the only applicable value for this field.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","ExperimentalDesignAgent","replicates","92","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""92 human primary tissue samples"" in the context of the benignMHCquant2 dataset.
+TRUTH CHECK:       The value ""92"" refers to the number of unique samples (biological entities), not the number of biological replicates per condition or group. In proteomics metadata, ""replicates"" typically refers to the number of times a specific biological condition was repeated, whereas ""number_of_samples"" refers to the total count of distinct samples.
+COMPLETENESS CHECK:    The full set contains only this value, but it is a misidentification of sample count as biological replication.
+
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   1","1"
+"PXD058436","ExperimentalDesignAgent","technical_replicates","3","3","high","False","","True","True","False","TYPE CHECK: The candidate value is a numeric count, which is the correct category for technical replicates.
+SOURCE CHECK: The text explicitly states in the ""timsTOF mass spectrometric data acquisition"" section: ""Sixty percent of the sample was injected in three technical replicates loading 5 μl.""
+TRUTH CHECK: The value ""3"" accurately reflects the number of technical replicates described in the methods.
+COMPLETENESS CHECK: The full set contains the single correct value mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD058436","ExperimentalDesignAgent","experimental_design","pipeline benchmark comparison (MHCquant2 vs FragPipe vs PEAKS)","pipeline benchmark comparison (MHCquant2 vs FragPipe vs PEAKS)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the nature of the study's comparison, which fits the category of experimental design.
+SOURCE CHECK:      The paper explicitly describes benchmarking MHCquant2 against FragPipe and PEAKS using the benignMHCquant2 dataset.
+TRUTH CHECK:       The value accurately reflects the primary objective of the described experiment.
+COMPLETENESS CHECK: The full set captures the main experimental design of the benchmarking section, though the paper also includes a reference dataset expansion and tumor antigen discovery application.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","ExperimentalDesignAgent","factor_value","pipeline (MHCquant2, FragPipe, PEAKS)","pipeline (MHCquant2, FragPipe, PEAKS)","high","False","","True","True","False","TYPE CHECK:        Yes, the candidate value describes the experimental factor (the software pipeline) being compared.
+SOURCE CHECK:      Yes, the paper explicitly benchmarks MHCquant2 against FragPipe and PEAKS.
+TRUTH CHECK:       Yes, the study compares the performance of these three specific pipelines on the benignMHCquant2 dataset.
+COMPLETENESS CHECK: The full set correctly identifies the primary variable being tested in the benchmarking section of the study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline fractionation method (e.g., high-pH RP or SAX); it describes a direct LC-MS injection.
+TRUTH CHECK:       Since no fractionation is described, the safe default of ""1"" is correct.
+COMPLETENESS CHECK: The full set contains the single correct value for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD058436","ExperimentalDesignAgent","number_of_samples","92","92","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK:      The text explicitly states ""we generated a novel benign HLA class I and II immunopeptidome dataset from 92 human primary tissue samples (benignMHCquant2)"".
+TRUTH CHECK:       The value 92 is factually correct for the benignMHCquant2 dataset described in the study.
+COMPLETENESS CHECK: The paper describes the generation of a new dataset with 92 samples and the re-analysis of several other public datasets (HLA Ligand Atlas, PXD038782, AML, CLL, OvCa, Mel). However, the primary novel experimental contribution is the 92-sample dataset. In the context of the ""benignMHCquant2"" dataset, 92 is the correct total.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

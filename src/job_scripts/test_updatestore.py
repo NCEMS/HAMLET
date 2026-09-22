@@ -41,8 +41,11 @@ class StorePromotionTest(unittest.TestCase):
             (store / "agentic_results_files").mkdir(parents=True)
             (store / "hamlet_sdrfs").mkdir()
             aggregates = store / "aggregated_results_files"
-            aggregates.mkdir()
-            (aggregates / "PXD123456_aggregated_results.json").write_text('{"pxd_id": "PXD123456"}\n', encoding="utf-8")
+            canonical_aggregates = aggregates / "v2.0.0"
+            canonical_aggregates.mkdir(parents=True)
+            canonical_aggregate = canonical_aggregates / "PXD123456_aggregated_results.json"
+            canonical_aggregate.write_text('{"pxd_id": "PXD123456"}\n', encoding="utf-8")
+            (aggregates / canonical_aggregate.name).symlink_to(Path("v2.0.0") / canonical_aggregate.name)
 
             records, incomplete = promotion_plan(root / "results", store, "v2.1.1")
             self.assertEqual(incomplete, [])
@@ -54,11 +57,11 @@ class StorePromotionTest(unittest.TestCase):
             self.assertFalse((store / "hamlet_sdrfs" / "PXD123456.sdrf.tsv").exists())
             self.assertTrue((store / "agentic_results_files" / "v2.1.1" / "PXD123456" / "sdrf_judge" / "llm_judge_per_paper.csv").is_file())
             self.assertFalse((store / "agentic_results_files" / "PXD123456").exists())
-            archive_aggregate = store / "aggregated_results_files" / "v2.1.1" / "PXD123456_aggregated_results.json"
-            self.assertEqual(archive_aggregate.read_text(encoding="utf-8"), '{"pxd_id": "PXD123456"}\n')
+            self.assertFalse((store / "aggregated_results_files" / "v2.1.1").exists())
             self.assertIn("v2.1.1", (store / "releases" / "active.json").read_text(encoding="utf-8"))
             manifest = (store / "releases" / "v2.1.1" / "manifest.json").read_text(encoding="utf-8")
             self.assertIn("hamlet_sdrfs/v2.1.1", manifest)
+            self.assertIn("aggregated_results_files/v2.0.0/PXD123456_aggregated_results.json", manifest)
             self.assertTrue((store / "releases" / "v2.1.1" / "manifest.json").is_file())
 
     def test_existing_release_is_immutable(self):

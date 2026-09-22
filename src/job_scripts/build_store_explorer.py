@@ -18,7 +18,9 @@ VERSION_DIRECTORY_PATTERN = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
 HAMLET_VERSION_PATTERN = re.compile(r'HAMLET_VERSION\s*=\s*"(v\d+\.\d+\.\d+)"')
 HAMLET_VERSION_FILE = Path(__file__).resolve().parents[1] / "python" / "hamlet_version.py"
 SDRF_TERMS_FILE = Path(__file__).resolve().parents[2] / "assets" / "sdrf-terms.csv"
+VERSION_HISTORY_FILE = Path(__file__).resolve().parents[2] / "docs" / "HAMLET_VERSION_HISTORY.md"
 SDRF_HEADER_PATTERN = re.compile(r"^(characteristics|comment|factor value)\[(.+)]$")
+VERSION_HISTORY_HEADING_PATTERN = re.compile(r"^##[ \t]+(v\d+\.\d+\.\d+)[ \t]+-[ \t]+(.+?)[ \t]*$", re.MULTILINE)
 
 HAMLET_SDRF_HEADER_METADATA = {
     "comment[sdrf version]": ("sdrf version", "REQUIRED", "comment", "HAMLET", "Version of the SDRF structure written by HAMLET."),
@@ -252,6 +254,23 @@ def version_sort_key(version: str) -> tuple[int, int, int]:
     if not match:
         raise ValueError(f"Invalid release version: {version}")
     return tuple(int(value) for value in match.groups())
+
+
+def load_version_history(path: Path = VERSION_HISTORY_FILE) -> list[dict]:
+    """Read release notes from the canonical Markdown history document."""
+    text = path.read_text(encoding="utf-8")
+    headings = list(VERSION_HISTORY_HEADING_PATTERN.finditer(text))
+    notes = []
+    for index, heading in enumerate(headings):
+        body_end = headings[index + 1].start() if index + 1 < len(headings) else len(text)
+        notes.append(
+            {
+                "version": heading.group(1),
+                "title": heading.group(2),
+                "markdown": text[heading.end():body_end].strip(),
+            }
+        )
+    return notes
 
 
 def release_judge_metrics(store_path: Path) -> list[dict]:
@@ -507,6 +526,10 @@ def main() -> None:
     )
     (output_data_dir / "site-summary.json").write_text(
         json.dumps(build_site_summary(records, output_data_dir, args.store), indent=2) + "\n",
+        encoding="utf-8",
+    )
+    (output_data_dir / "version-history.json").write_text(
+        json.dumps({"notes": load_version_history()}, indent=2) + "\n",
         encoding="utf-8",
     )
     if args.qc_summary:

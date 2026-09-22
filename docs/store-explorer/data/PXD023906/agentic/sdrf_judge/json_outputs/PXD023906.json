@@ -3,21 +3,40 @@
   "annotations": [
     {
       "annotation_type": "cell_line",
-      "extracted_value": "HEK293T, Caco-2, RKO, Ca9-22",
-      "verdict": "low",
+      "extracted_value": "HEK293T",
+      "verdict": "high",
       "type_mismatch": false,
-      "value_correct": false,
-      "value_complete": false,
-      "hallucination": true,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
       "technical_origin": false,
       "inference": null,
-      "error_category": "hallucinated",
-      "corrected_value": "HEK293T",
+      "error_category": "correct_explicit",
+      "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value contains names of immortalized cell lines, which matches the field definition.",
-        "SOURCE_CHECK": "Only HEK293T is used for the mass spectrometry experiments; Caco-2, RKO, and Ca9-22 are used for immunofluorescence, Western blotting, and functional assays.",
-        "TRUTH_CHECK": "The paper explicitly states that to identify proteins interacting with stathmin-GFP, \"immunoprecipitated proteins bound to GFP-beads were subjected to mass spectrometry\" from \"transfected HEK293T cells\". Caco-2, RKO, and Ca9-22 were not analyzed by MS.",
-        "COMPLETENESS_CHECK": "The full set includes cell lines that were not part of the MS experiment, making the extraction inaccurate."
+        "TYPE_CHECK": "The candidate value is a named immortalized cell line, which matches the field definition.",
+        "SOURCE_CHECK": "The value is present in the text and refers to the material used for the MS experiment (\"we immunoprecipitated green fluorescent protein (GFP)-tagged stathmin from transfected HEK293T cells and examined stathmin-interacting proteins by mass spectrometry\").",
+        "TRUTH_CHECK": "The candidate value is factually correct as per the paper.",
+        "COMPLETENESS_CHECK": "The full set contains the only cell line used for the MS-based interaction screen described in the text."
+      }
+    },
+    {
+      "annotation_type": "cell_type",
+      "extracted_value": "embryonic kidney cells, colon cancer cells, epithelial cells",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "technical_origin": false,
+      "inference": null,
+      "error_category": "correct_explicit",
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value contains descriptions of cell lineages/types, which matches the field definition.",
+        "SOURCE_CHECK": "The MS experiments were performed on GFP-tagged stathmin immunoprecipitated from transfected HEK293T cells (embryonic kidney) and on stathmin-GFP under HIV-1 gp120 treatment (which, based on the results section, were performed in Caco-2 cells, which are colon cancer/epithelial cells).",
+        "TRUTH_CHECK": "The paper explicitly mentions \"Caco-2 human colon cancer cells\" and \"HEK293T human embryonic kidney cells,\" and refers to the general context of \"epithelial cells.\"",
+        "COMPLETENESS_CHECK": "The full set covers the different cell types used across the two MS-based experiments described in the paper."
       }
     },
     {
@@ -34,9 +53,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field as a safe default.",
-        "SOURCE_CHECK": "The MS experiment used HEK293T cells (transfected with stathmin-GFP) to identify interacting proteins and phosphorylation sites; these are standard laboratory cells not used to model a specific disease state in this context.",
-        "TRUTH_CHECK": "\"normal\" is a correct safe default for samples that are not part of a disease study or are healthy controls.",
-        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is sufficient for the described experimental setup."
+        "SOURCE_CHECK": "The MS experiment used HEK293T cells (human embryonic kidney cells) to identify stathmin-interacting proteins and phosphorylation sites.",
+        "TRUTH_CHECK": "While the paper describes a disease-related process (HIV-1 exposure), the biological material actually analyzed by mass spectrometry (HEK293T cells) is a standard laboratory cell line not used here to model a specific disease state, making \"normal\" an acceptable safe default.",
+        "COMPLETENESS_CHECK": "The full set contains only \"normal\", which is sufficient for this experimental context."
       }
     },
     {
@@ -53,9 +72,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"kidney\" is a valid organ/tissue type.",
-        "SOURCE_CHECK": "The value is derived from the use of HEK293T cells (\"human embryonic kidney cells\"), which were used to immunoprecipitate GFP-tagged stathmin for mass spectrometry analysis.",
-        "TRUTH_CHECK": "HEK293T cells are derived from the kidney, making this a factually correct inference.",
-        "COMPLETENESS_CHECK": "The paper also mentions Caco-2 and RKO cells (colon/epithelial) and intestinal, oral, and vaginal epithelial cells, but the specific MS experiment described in the \"Mass spectrometry\" section refers to the identification of proteins interacting with stathmin-GFP (from HEK293T) and phosphorylation sites of stathmin-GFP (from HEK293T). However, the \"Results\" section mentions that endogenous PKG1 coimmunoprecipitated with stathmin in \"intestinal, oral, and vaginal epithelial cells,\" though these were validated via immunoblotting, not MS. The MS samples specifically came from the transfected HEK293T cells."
+        "SOURCE_CHECK": "The value is inferable from the use of HEK293T cells (\"human embryonic kidney cells\"), which were used to immunoprecipitate GFP-tagged stathmin for mass spectrometry analysis.",
+        "TRUTH_CHECK": "The paper explicitly states that HEK293T are \"human embryonic kidney cells\" and that these cells were used for the mass spectrometry experiments to identify stathmin-interacting proteins and phosphorylation sites.",
+        "COMPLETENESS_CHECK": "The full set contains only \"kidney\", which correctly identifies the organ of origin for the MS sample."
       }
     },
     {
@@ -72,9 +91,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Homo sapiens\" is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper specifies that the sequence database searched for the mass spectrometry analysis was \"homo sapiens (Homo_sapiens_9606_Swiss-Prot)\".",
-        "TRUTH_CHECK": "The value is factually correct as the cells used for the MS experiments (HEK293T) are human.",
-        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS analysis."
+        "SOURCE_CHECK": "The paper explicitly states that the sequence database searched for the mass spectrometry analysis was \"homo sapiens (Homo_sapiens_9606_Swiss-Prot)\".",
+        "TRUTH_CHECK": "The proteins analyzed by MS were derived from human cell lines (HEK293T, Caco-2, etc.), making \"Homo sapiens\" factually correct.",
+        "COMPLETENESS_CHECK": "The full set contains the only species involved in the MS experiment."
       }
     },
     {
@@ -91,9 +110,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a treatment condition, which is a valid category for a factor_value.",
-        "SOURCE_CHECK": "The value is present in the paper text; the MS analysis was specifically performed to identify phosphorylation sites \"under HIV-1 gp120 treatment\".",
-        "TRUTH_CHECK": "The value is factually correct as the study investigates the effects of HIV-1 gp120 on stathmin phosphorylation and degradation.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"treatment (HIV-1 gp120)\" and \"normal\") covers the experimental contrast (treated vs control) described in the study."
+        "SOURCE_CHECK": "The value is present in the paper; the MS analysis was specifically performed to identify phosphorylation sites \"under HIV-1 gp120 treatment\".",
+        "TRUTH_CHECK": "The value is factually correct as the experiment compared cells treated with HIV-1 gp120 against controls.",
+        "COMPLETENESS_CHECK": "The full set (\"treatment (HIV-1 gp120)\", \"normal\") covers the contrast between the treated group and the control group described in the MS experiment."
       }
     },
     {
@@ -109,10 +128,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid representation of a control state for an experimental factor.",
-        "SOURCE_CHECK": "The paper describes experiments comparing cells treated with HIV-1 gp120 against control cells (e.g., \"VSVG-pseudotyped control viruses\" or untreated cells); \"normal\" is a safe default for the control group in such a study.",
-        "TRUTH_CHECK": "The value is factually correct as it represents the baseline/control condition against which the HIV-1 exposure is compared.",
-        "COMPLETENESS_CHECK": "The full set of extracted values (\"treatment (HIV-1 gp120)\", \"normal\") covers the primary experimental contrast described in the proteomics experiments."
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for a factor_value, mirroring a characteristic (e.g., a control state).",
+        "SOURCE_CHECK": "While the word \"normal\" is not explicitly used, it is a safe default for the control group in an experiment comparing treated vs untreated samples.",
+        "TRUTH_CHECK": "The experiment compares cells treated with HIV-1 gp120 against control cells; \"normal\" is an acceptable representation of the control/untreated state.",
+        "COMPLETENESS_CHECK": "The full set (\"treatment (HIV-1 gp120)\", \"normal\") covers the primary contrast (treated vs control) described in the MS experiments."
       }
     },
     {
@@ -129,8 +148,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"data-dependent acquisition\" is a valid acquisition scheme name.",
-        "SOURCE_CHECK": "The paper does not explicitly mention \"data-dependent acquisition\", \"DDA\", or \"DIA\" in the text.",
-        "TRUTH_CHECK": "While the use of a Q-Exactive or Orbitrap Elite for protein identification often implies DDA, the specific term is not written in the provided text.",
+        "SOURCE_CHECK": "The paper mentions \"LC-MS/MS analysis\" and \"gel-based LC-MS approach\" but does not explicitly state the acquisition method (e.g., DDA or DIA).",
+        "TRUTH_CHECK": "The value is not explicitly mentioned in the text, nor is it a \"safe default\" for this field.",
         "COMPLETENESS_CHECK": "The full set contains only this value, which is not supported by the text."
       }
     },
@@ -167,8 +186,8 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a fragmentation method, which matches the field definition.",
-        "SOURCE_CHECK": "The value is not present in the provided paper text.",
-        "TRUTH_CHECK": "The paper does not mention \"beam-type collision-induced dissociation\" or any other specific fragmentation method (e.g., HCD, CID).",
+        "SOURCE_CHECK": "The value is not mentioned in the paper text.",
+        "TRUTH_CHECK": "The paper does not specify the fragmentation method used (e.g., HCD, CID, ETD).",
         "COMPLETENESS_CHECK": "The full set of extracted values is not supported by the text."
       }
     },
@@ -186,9 +205,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value contains mass spectrometer models, which matches the field definition.",
-        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Mass spectrometry\" section of the methods (\"The data processing was conducted using the Q-Exactive or Orbitrap Elite mass spectrometer\").",
-        "TRUTH_CHECK": "The values are factually correct as stated in the text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values covers both instruments mentioned in the paper."
+        "SOURCE_CHECK": "The values are explicitly mentioned in the \"Mass spectrometry\" section as the instruments used for data processing.",
+        "TRUTH_CHECK": "The paper states \"The data processing was conducted using the Q-Exactive or Orbitrap Elite mass spectrometer (Thermo Fisher Scientific)\".",
+        "COMPLETENESS_CHECK": "The full set captures both instruments mentioned in the text."
       }
     },
     {
@@ -204,10 +223,10 @@
       "error_category": "correct_explicit",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"label free\" belongs to the category of labeling methods.",
-        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis of immunoprecipitated proteins but does not mention any isobaric, metabolic, or chemical labeling reagents.",
-        "TRUTH_CHECK": "Since no labeling (TMT, SILAC, iTRAQ, etc.) is described, \"label-free\" is the correct safe default.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately describes the labeling state of the experiment."
+        "TYPE_CHECK": "The candidate value \"label free\" is the correct category for the label field.",
+        "SOURCE_CHECK": "The paper does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl) in the mass spectrometry section.",
+        "TRUTH_CHECK": "Since no labeling methods are described, the \"label-free\" safe default is applicable.",
+        "COMPLETENESS_CHECK": "The full set contains only this value, which accurately reflects the lack of labeling in the experiment."
       }
     },
     {
@@ -224,9 +243,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"Orbitrap\" is a correct category for a mass analyzer.",
-        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Mass spectrometry\" section mentioning \"Q-Exactive or Orbitrap Elite mass spectrometer\".",
-        "TRUTH_CHECK": "The value is factually correct as both the Q-Exactive and Orbitrap Elite instruments utilize Orbitrap mass analyzers.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as it covers the analyzer type for the instruments used."
+        "SOURCE_CHECK": "The value is present in the paper text, specifically in the \"Mass spectrometry\" section mentioning the \"Q-Exactive or Orbitrap Elite mass spectrometer\".",
+        "TRUTH_CHECK": "The value is factually correct as the instruments used (Q-Exactive and Orbitrap Elite) both utilize Orbitrap mass analyzers.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is exhaustive as no other mass analyzer types are mentioned."
       }
     },
     {
@@ -242,10 +261,10 @@
       "error_category": "ptm_shepherd_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a protein modification, which matches the field definition.",
-        "SOURCE_CHECK": "The value \"Lysine oxidation to aminoadipic semialdehyde (K)\" is not present in the paper text.",
-        "TRUTH_CHECK": "The value is not mentioned in the text; the only modifications listed in the \"Mass spectrometry\" section are Carbamidomethyl (C), Oxidation (Met), acetyl (Protein N-term), and deamidated (NQ).",
-        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not cover the modifications actually described in the paper."
+        "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
+        "SOURCE_CHECK": "The candidate value is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention \"Lysine oxidation to aminoadipic semialdehyde\" as a searched modification.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains modifications that are not mentioned in the text."
       }
     },
     {
@@ -259,12 +278,12 @@
       "technical_origin": true,
       "inference": null,
       "error_category": "ptm_shepherd_only",
-      "corrected_value": "Carbamidomethyl (C)",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value describes a protein modification, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value is not present in the paper text; the text mentions \"Carbamidomethyl on Cys\" as a fixed modification.",
-        "TRUTH_CHECK": "The candidate value is factually incorrect based on the provided text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incorrect and does not reflect the modifications explicitly listed in the methods section."
+        "SOURCE_CHECK": "The candidate value is not present in the paper text.",
+        "TRUTH_CHECK": "The paper explicitly lists \"Carbamidomethyl on Cys\" as the fixed modification and \"Oxidation (Met)\", \"acetyl (Protein N-term)\", and \"deamidated (NQ)\" as variable modifications. It does not mention \"Iodoacetamide derivative\".",
+        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not cover the modifications actually listed in the text."
       }
     },
     {
@@ -280,10 +299,10 @@
       "error_category": "ptm_shepherd_only",
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which is the correct category for this field.",
-        "SOURCE_CHECK": "The value is not present in the paper text; the \"Mass spectrometry\" section lists only Carbamidomethyl (C), Oxidation (Met), acetyl (Protein N-term), and deamidated (NQ).",
-        "TRUTH_CHECK": "The value is factually incorrect as it is not mentioned in the provided text.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not reflect the modifications explicitly listed in the paper."
+        "TYPE_CHECK": "The candidate value describes a protein modification/substitution, which fits the category of the modification field.",
+        "SOURCE_CHECK": "The value \"Gln->Trp substitution (Q)\" is not present in the paper text.",
+        "TRUTH_CHECK": "The paper does not mention any glutamine to tryptophan substitutions; it lists \"Carbamidomethyl on Cys\", \"Oxidation (Met)\", \"acetyl (Protein N-term)\", and \"deamidated (NQ)\" as the modifications used in the MS search.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is entirely incorrect and does not cover the modifications actually listed in the text."
       }
     }
   ]

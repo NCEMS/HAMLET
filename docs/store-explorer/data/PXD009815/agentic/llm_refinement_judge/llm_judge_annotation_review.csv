@@ -1,0 +1,145 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD009815","BiologicalAgent","species","Saccharomyces cerevisiae","Saccharomyces cerevisiae","high","False","","True","True","False","TYPE CHECK:        The candidate value is a scientific name for an organism, which matches the species field definition.
+SOURCE CHECK:      The paper mentions ""yeast lysate"" multiple times; ""Saccharomyces cerevisiae"" is the standard scientific name for common laboratory yeast.
+TRUTH CHECK:       The use of yeast lysate as the base for the spiked-in sample is explicitly stated in the text.
+COMPLETENESS CHECK: The full set contains the primary organism used in the experimental dataset.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field, used to denote healthy controls.
+SOURCE CHECK:      The paper describes using a ""standard (‘ground truth’) dataset generated from a yeast lysate"" and ""UPS1 mix of 48 human proteins,"" which are standard laboratory materials rather than diseased subjects.
+TRUTH CHECK:       The experiment uses standard yeast lysate and spiked proteins for software benchmarking; there is no disease state mentioned, making ""normal"" a safe default for the control/baseline state.
+COMPLETENESS CHECK: The full set contains only ""normal"", which accurately reflects the absence of a disease state in this benchmarking study.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","BiologicalAgent","material_type","whole organism","whole organism","low","False","","False","False","False","TYPE CHECK:        The candidate value ""whole organism"" is a valid category for the material_type field.
+SOURCE CHECK:      The paper mentions ""yeast lysate"" and ""UPS1 mix of 48 human proteins"", but does not explicitly state that a whole organism was the starting material; however, a lysate of yeast typically implies the whole organism was processed.
+TRUTH CHECK:       The experiment used a ""yeast lysate"", which is a processed form of the organism. While ""whole organism"" is a reasonable inference for the source of a yeast lysate, the material actually used in the MS experiment was a lysate.
+COMPLETENESS CHECK: The full set contains only ""whole organism"", which is a reasonable broad classification for the source of the yeast lysate.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","TechnicalAgent","acquisition_method","DDA","DDA","high","False","","True","True","False","TYPE CHECK: The candidate value ""DDA"" is a valid acquisition scheme name.
+SOURCE CHECK: The text explicitly mentions ""DDA label-free quantification workflow"" in the abstract and ""data dependent acquisition (DDA)"" in the methods section.
+TRUTH CHECK: The value is factually correct as the paper describes using a DDA workflow for the evaluation of the software.
+COMPLETENESS CHECK: The full set of extracted values (""DDA"") covers the acquisition method described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","TechnicalAgent","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","TYPE CHECK: The candidate value ""Trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK: The text explicitly states in the ""Experimental datasets"" section: ""Trypsin digested samples were then analyzed..."".
+TRUTH CHECK: The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD009815","TechnicalAgent","instrument","Q Exactive Plus","Q Exactive Plus","high","False","","True","True","False","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK:      The value is explicitly mentioned in the ""Materials and methods"" section (Section 2.2).
+TRUTH CHECK:       The paper states the samples were analyzed using a ""Q-Exactive Plus mass spectrometer"".
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is a valid category for the label field.
+SOURCE CHECK:      The paper explicitly mentions ""label-free quantification"" and ""label-free DDA method"" multiple times throughout the text.
+TRUTH CHECK:       The value is factually correct as the study uses a label-free approach to compare Proline and MaxQuant.
+COMPLETENESS CHECK: The full set of extracted values consists of only ""label-free"", which completely covers the labeling method described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","ExperimentalDesignAgent","replicates","10","","low","False","","False","False","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for the replicates field.
+SOURCE CHECK:      The paper mentions ""10 different levels of the equimolar UPS1 mix"" and ""10 different concentrations"", but it does not state that there were 10 biological replicates.
+TRUTH CHECK:       The value is incorrect. The text explicitly states in section 2.2 that samples ""were then analyzed in quadruplicate"", meaning there were 4 replicates per condition. The number 10 refers to the number of different spike concentrations (levels), not the number of biological replicates.
+COMPLETENESS CHECK: The full set is incorrect as it captures the number of experimental conditions/levels instead of the number of replicates.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           low
+CORRECTED_VALUE:   [""4""]","4"
+"PXD009815","ExperimentalDesignAgent","technical_replicates","4","4","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which is the correct category for technical_replicates.
+SOURCE CHECK:      The text states that ""Trypsin digested samples were then analyzed in quadruplicate by nanoLC–MS/MS... to produce 40 raw MS files.""
+TRUTH CHECK:       ""Analyzed in quadruplicate"" explicitly means 4 replicates were performed for each sample.
+COMPLETENESS CHECK: The full set contains the value ""4"", which exhaustively covers the replication described for the analysis of the samples.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","ExperimentalDesignAgent","experimental_design","concentration gradient of spiked UPS1 proteins in yeast lysate","concentration gradient of spiked UPS1 proteins in yeast lysate","high","False","","True","True","False","TYPE CHECK:        yes
+SOURCE CHECK:      yes
+TRUTH CHECK:       yes
+COMPLETENESS CHECK:The full set captures the specific design used to benchmark the software.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","ExperimentalDesignAgent","factor_value","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","UPS1 concentration (0.01, 0.05, 0.1, 0.250, 0.5, 1, 5, 10, 25, 50 fmol)","high","False","","True","True","False","TYPE CHECK:        The candidate value describes the experimental variable (concentration levels of a spiked-in protein mix), which fits the definition of a factor value.
+SOURCE CHECK:      The values are explicitly mentioned in the ""Experimental datasets"" section (0.01–0.05–0.1–0.250–0.5–1–5–10–25–50 fmol of the UPS1 equimolar mix).
+TRUTH CHECK:       The value is factually correct based on the text.
+COMPLETENESS CHECK: The full set contains this single value, which accurately captures the primary experimental variable used to benchmark the software's quantification accuracy.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","ExperimentalDesignAgent","fractions","1","1","high","False","","True","True","False","TYPE CHECK:        The candidate value is a numeric count, which matches the definition for the number of fractions.
+SOURCE CHECK:      The paper does not mention any offline peptide or protein fractionation being performed on the samples.
+TRUTH CHECK:       Per the field definition, ""1"" is the correct value when no fractionation occurred.
+COMPLETENESS CHECK: The full set contains only ""1"", which accurately reflects the lack of fractionation described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD009815","ExperimentalDesignAgent","number_of_samples","10","","low","False","","False","False","False","TYPE CHECK: The candidate value is a numeric count, which matches the definition for number_of_samples.
+SOURCE CHECK: The paper mentions ""10 different levels of the equimolar UPS1 mix"" and ""10 different concentrations"" (0.01 to 50 fmol), but these are the experimental conditions/levels, not the total number of samples.
+TRUTH CHECK: The text states that samples were analyzed in ""quadruplicate"" for each of the 10 levels, producing ""40 raw MS files"" (10 levels * 4 replicates = 40 samples). Therefore, 10 is the number of conditions, not the total number of samples.
+COMPLETENESS CHECK: The full set contains only the incorrect value ""10""; the correct total count is 40.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: low
+CORRECTED_VALUE: 40","40"

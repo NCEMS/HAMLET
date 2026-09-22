@@ -1,0 +1,79 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD031801","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","True","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human lung tissue samples"", ""human Treg cells"", and ""human lung cancer cells"", making ""Homo sapiens"" a correct extraction.
+TRUTH CHECK: The value is factually correct as the study utilizes human samples and cell lines.
+COMPLETENESS CHECK: The full set of extracted values only contains ""Homo sapiens"", but the paper also extensively uses mice (C57BL/6J, BALB/c, etc.), meaning the extraction is incomplete.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Mus musculus""]","Homo sapiens, Mus musculus"
+"PXD031801","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""kidney"" is a valid organ/tissue type.
+SOURCE CHECK:      The word ""kidney"" does not appear in the provided paper text.
+TRUTH CHECK:       The paper describes experiments using lung, colon, and melanoma tumor models, as well as serum, spleen, and lymph nodes, but does not mention kidney tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD031801","BiologicalAgent","material_type","cell line","cell line","medium","False","","True","False","False","TYPE CHECK:        The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK:      The paper explicitly mentions the use of several cell lines, including B16-F10, MC38, LLC, HEK293T, NIH-3T3, A549, and SW480.
+TRUTH CHECK:       The value is factually correct as cell lines were used in multiple experiments (e.g., for protein interaction and degradation assays).
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the study also used ""tissue"" (lung cancer tissues), ""primary cells"" (purified CD4+ T cells), ""serum"" (mouse and human serum), and ""whole organism"" (tumor-bearing mice).
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""cell line"", ""tissue"", ""primary cells"", ""serum"", ""whole organism""]",""
+"PXD031801","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK:        The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK:      The value ""HEK293T"" is explicitly mentioned multiple times in the ""Mice and cell lines"" and ""Mass spectrometry"" sections of the methods.
+TRUTH CHECK:       The value is factually correct as it was used in the experiments (e.g., for protein expression and MS analysis).
+COMPLETENESS CHECK: The full set of extracted values is incomplete; the paper also uses B16-F10, MC38, LLC, NIH-3T3, A549, and SW480 cell lines.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    no
+HALLUCINATED:      no
+VERDICT:           medium
+CORRECTED_VALUE:   [""HEK293T"", ""B16-F10"", ""MC38"", ""LLC"", ""NIH-3T3"", ""A549"", ""SW480""]","HEK293T, B16-F10, MC38, LLC, NIH-3T3, A549, SW480"
+"PXD031801","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""in-gel trypsin digestion"" in the Mass spectrometry section.
+TRUTH CHECK:       The value is factually correct based on the provided text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only cleavage agent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD031801","TechnicalAgent","instrument","Orbitrap Fusion Lumos","","low","False","","False","False","True","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The paper mentions a ""Q Exactive system (Thermo Fisher)"" in the Mass spectrometry section, but it does not mention an ""Orbitrap Fusion Lumos"".
+TRUTH CHECK: The value is factually incorrect as it is not the instrument used in this study.
+COMPLETENESS CHECK: The full set is incorrect because it contains a hallucinated instrument.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Q Exactive",""
+"PXD031801","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK:      The paper describes mass spectrometry analysis of protein content and phosphorylation but does not mention any isobaric or metabolic labeling (such as TMT or SILAC). Per the safe defaults rule, ""label-free"" is correct when no labels are mentioned.
+TRUTH CHECK:       The value is factually correct based on the absence of labeling reagents in the methods.
+COMPLETENESS CHECK: The full set contains the only applicable value for this experiment.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

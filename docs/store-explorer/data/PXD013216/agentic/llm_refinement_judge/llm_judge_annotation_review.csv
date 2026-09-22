@@ -1,0 +1,123 @@
+"paper_id","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","issue_summary","corrected_value"
+"PXD013216","BiologicalAgent","species","Homo sapiens","Homo sapiens","medium","False","","False","False","False","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper explicitly mentions ""human PKD1"" and ""human PKD isoforms"" multiple times.
+TRUTH CHECK: The use of human proteins and cells (HEK293T, etc.) confirms Homo sapiens as a source organism.
+COMPLETENESS CHECK: While the paper also uses C. elegans and R. norvegicus, the current set only contains Homo sapiens; however, the candidate value itself is a correct extraction of one of the species used.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""Homo sapiens"", ""Caenorhabditis elegans"", ""Rattus norvegicus""]",""
+"PXD013216","BiologicalAgent","organ","kidney","","low","False","","False","False","True","TYPE CHECK:        No, ""kidney"" is an organ, but it is not mentioned in the text.
+SOURCE CHECK:      The word ""kidney"" does not appear in the paper text.
+TRUTH CHECK:       The paper uses HEK293T (human embryonic kidney), INS-1 (pancreatic beta-cells), NIH3T3 (mouse embryo fibroblasts), and COS7 (monkey kidney) cells, but the ""organ"" field refers to the source of the material used in the proteomics experiment. The proteomics (PRM MS) was performed on cell lysates, not kidney tissue.
+COMPLETENESS CHECK: The full set contains only a hallucinated value.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","cell_type","epithelial cell","","low","False","","False","False","True","TYPE CHECK:        The candidate value ""epithelial cell"" is a cell type, which matches the field definition.
+SOURCE CHECK:      The paper mentions HEK293T, NIH3T3, and INS-1 cells, but it does not explicitly describe them as ""epithelial cells"" nor is this a safe default for these specific lines.
+TRUTH CHECK:       The paper does not state that the cells used are epithelial cells; HEK293T are human embryonic kidney cells, NIH3T3 are mouse embryonic fibroblasts, and INS-1 are pancreatic beta-cell lines.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","disease","normal","normal","high","False","","True","True","False","TYPE CHECK:        The candidate value ""normal"" is a valid category for the disease field when subjects are healthy controls.
+SOURCE CHECK:      The paper uses standard cell lines (HEK293T, NIH3T3, COS7, INS-1) and recombinant proteins; there is no mention of a disease state or clinical diagnosis.
+TRUTH CHECK:       Since the experiments are performed on standard laboratory cell lines and purified proteins without any disease-model induction, ""normal"" is a safe default.
+COMPLETENESS CHECK: The full set contains only ""normal"", which accurately reflects the lack of disease state in the experimental subjects.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","material_type","cell line","cell line","high","False","","True","True","False","TYPE CHECK:        The candidate value ""cell line"" is a valid category for the material_type field.
+SOURCE CHECK:      The paper explicitly mentions the use of HEK293T, INS-1, COS7, and NIH3T3 cells, all of which are established cell lines.
+TRUTH CHECK:       The use of these cell lines is factually correct as described in the ""Cell culture and transfection vectors"" and ""Results"" sections.
+COMPLETENESS CHECK: The full set of extracted values (""cell line"") covers the material used for the MS quantification and cellular assays described in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","BiologicalAgent","cell_line","HEK293T","HEK293T","medium","False","","True","False","False","TYPE CHECK: The candidate value is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value ""HEK293T"" is explicitly mentioned multiple times in the text (e.g., ""estimate the concentration of endogenous PKD1 in HEK293T cells"").
+TRUTH CHECK: The value is factually correct as it is the cell line used in the experiments.
+COMPLETENESS CHECK: The full set of extracted values is missing ""INS-1"" and ""NIH3T3"", both of which are explicitly mentioned as cell lines used in the study.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: [""HEK293T"", ""INS-1"", ""NIH3T3""]","HEK293T, INS-1, NIH3T3"
+"PXD013216","TechnicalAgent","acquisition_method","PRM","PRM","high","False","","True","True","False","TYPE CHECK:        The candidate value ""PRM"" (Parallel Reaction Monitoring) is a specific MS acquisition scheme.
+SOURCE CHECK:      The paper explicitly mentions ""parallel reaction monitoring (PRM) MS"" and ""quantified the individual PKD1-specific peptides by targeted MS"".
+TRUTH CHECK:       PRM is the correct acquisition method used for the quantification of endogenous PKD1 in HEK293T and INS-1 cells.
+COMPLETENESS CHECK:   The full set contains ""PRM"", which covers the targeted MS acquisition described in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","TechnicalAgent","cleavage_agent","trypsin","trypsin","high","False","","True","True","False","TYPE CHECK:        The candidate value ""trypsin"" is a protease used for protein digestion, which matches the field definition.
+SOURCE CHECK:      The text explicitly mentions ""After tryptic digestion"" in the section describing the PRM MS quantification of PKD1.
+TRUTH CHECK:       The use of trypsin for digestion is factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values contains only ""trypsin"", which is the only cleavage agent mentioned in the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","TechnicalAgent","instrument","Q Exactive HF","","low","False","","False","False","True","TYPE CHECK:        The candidate value is a mass spectrometer model, which matches the field definition.
+SOURCE CHECK:      The paper mentions a ""Waters Synapt G2-Si"" for intact protein MS and refers to ""supporting Experimental procedures"" for the PRM and peptide MS, but the provided text does not mention a ""Q Exactive HF"".
+TRUTH CHECK:       The value is not present in the provided text.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     no
+VALUE_COMPLETE:    no
+HALLUCINATED:      yes
+VERDICT:           low
+CORRECTED_VALUE:   NONE",""
+"PXD013216","TechnicalAgent","label","label-free","label-free","high","False","","True","True","False","TYPE CHECK:        The candidate value ""label-free"" is the correct category for the label field.
+SOURCE CHECK:      The paper describes the use of parallel reaction monitoring (PRM) and intact mass spectrometry without any mention of isobaric or metabolic labels.
+TRUTH CHECK:       Since no labeling method is mentioned, ""label-free"" is the correct safe default.
+COMPLETENESS CHECK: The full set of extracted values is exhaustive as no other labeling methods were used.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""
+"PXD013216","TechnicalAgent","reduction_reagent","TCEP","TCEP","high","False","","True","True","False","TYPE CHECK:        The candidate value ""TCEP"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK:      TCEP is explicitly mentioned multiple times in the methods section (e.g., ""1 mm TCEP"" in lysis and SEC buffers).
+TRUTH CHECK:       The use of TCEP as a reducing agent is factually correct based on the provided text.
+COMPLETENESS CHECK:   The full set of extracted values contains ""TCEP"", which is the only reduction reagent mentioned in the paper.
+TYPE_CORRECT:      yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT:     yes
+VALUE_COMPLETE:    yes
+HALLUCINATED:      no
+VERDICT:           high
+CORRECTED_VALUE:   NONE",""

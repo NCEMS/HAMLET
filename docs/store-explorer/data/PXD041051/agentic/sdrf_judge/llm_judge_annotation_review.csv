@@ -1,20 +1,32 @@
 "paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
-"PXD041051","","strict","Biological","cell_line","293 T, MODE-K, CT26, IEC-6","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value contains names of immortalized cell lines, which matches the field definition.
-SOURCE CHECK: The paper mentions these cell lines, but only 293 T cells were used for the MS experiment (via RNA pulldown of circDmbt1(3,4,5,6)-overexpressing 293 T cells). MODE-K, CT26, and IEC-6 were used for in-vitro functional assays (proliferation, apoptosis, comet assays) and not for mass spectrometry.
-TRUTH CHECK: Only ""293 T"" is correct; the other three cell lines were not the source of the MS sample.
-COMPLETENESS CHECK: The full set is incorrect because it includes cell lines used for unrelated assays.
+"PXD041051","","strict","Biological","disease","normal, radiation-induced intestinal injury","normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes disease states, which matches the definition of the `disease` field.
+SOURCE CHECK: The paper describes a mouse model of ""radiation-induced intestinal injury"" (RIII) and compares these mice to a ""sham IR"" (control/normal) group.
+TRUTH CHECK: The values are factually correct as the study focuses on the contrast between normal (sham) and radiation-injured intestines.
+COMPLETENESS CHECK: The full set covers both the control and the experimental disease state described in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD041051","","strict","Biological","organ","jejunum, crypts, villi, intestines","","low","False","","False","False","False","False","","","wrong_value","TYPE CHECK: The candidate value consists of anatomical sites/tissues, which matches the definition of the 'organ' field.
+SOURCE CHECK: The paper describes a ""Biotin-coupled probe pulldown assay"" where ""Crypts were extracted from a healthy mouse for protein extraction"" and the resulting ""RNA pulldown products were also analyzed by mass spectrometry.""
+TRUTH CHECK: The MS analysis was specifically performed on proteins pulled down from ""Crypts"" extracted from a mouse. While the paper discusses the ""jejunum"", ""villi"", and ""intestines"" in the context of RNA sequencing and histology, the specific material used for the MS experiment was the crypts.
+COMPLETENESS CHECK: The full set includes several tissues, but only ""crypts"" is the correct source for the MS sample. Including ""jejunum, villi, intestines"" introduces materials that were not the direct source of the MS analysis.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
 VALUE_COMPLETE: no
-HALLUCINATED: yes
+HALLUCINATED: no
 VERDICT: low
-CORRECTED_VALUE: 293 T","293 T"
-"PXD041051","","strict","Biological","disease","normal, radiation-induced intestinal injury","normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes disease states, which matches the field definition.
-SOURCE CHECK: The values are present in the text; ""radiation-induced intestinal injury"" (RIII) is the primary condition studied, and ""normal"" (or ""sham IR"") is the control state for the MS sample (proteins pulled down from crypts of healthy mice).
-TRUTH CHECK: The values are factually correct as the study compares healthy/sham-irradiated mice with those suffering from radiation-induced intestinal injury.
-COMPLETENESS CHECK: The full set covers the two primary conditions (control and disease) described in the experiment.
+CORRECTED_VALUE: crypts","crypts"
+"PXD041051","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a scientific name for a species, which matches the field definition.
+SOURCE CHECK: The paper describes the use of ""male C57BL/6 J mice"" for the experimental model and ""mouse intestinal organoid cells"" for the MS-related pulldown assay.
+TRUTH CHECK: The use of mice (Mus musculus) is explicitly stated throughout the text.
+COMPLETENESS CHECK: The full set contains the only species used for the biological samples analyzed in the study.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -22,10 +34,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Biological","organ","crypts","crypts","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""crypts"" refers to a specific anatomical region of an organ, which fits the definition of the organ/tissue field.
-SOURCE CHECK: The value comes from the MS experiment context; the text states that ""The RNA pulldown products [from crypts extracted from a healthy mouse] were also analyzed by mass spectrometry.""
-TRUTH CHECK: The value is factually correct as the proteins analyzed by MS were derived from isolated intestinal crypts.
-COMPLETENESS CHECK: The full set contains only ""crypts"", which accurately describes the source of the material used for the MS analysis described in the paper.
+"PXD041051","","strict","ExperimentalDesign","factor_value","probe type (circDmbt1(3,4,5,6) probe, negative control probe)","probe type (circDmbt1(3,4,5,6) probe, negative control probe) | normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (probe type) and its specific levels, which fits the definition of a factor_value.
+SOURCE CHECK: The value is present in the ""Biotin-coupled probe pulldown assay"" section, where the authors used a ""biotin-labeled circDmbt1(3,4,5,6) probe and a negative control probe"" for the pulldown that was subsequently analyzed by mass spectrometry.
+TRUTH CHECK: The value accurately reflects the experimental groups used for the MS analysis described in the paper.
+COMPLETENESS CHECK: The full set of extracted values includes both the probe-based contrast for the MS experiment and the general disease/condition contrast; together they cover the experimental factors described.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -33,10 +45,11 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Biological","species","Mus musculus","Mus musculus","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Mus musculus"" is a scientific name for a species, which matches the field definition.
-SOURCE CHECK: The mass spectrometry analysis was performed on proteins pulled down using a biotin-labeled probe from crypts extracted from a healthy mouse (and 293T cells), confirming the mouse origin of the MS sample.
-TRUTH CHECK: The paper explicitly mentions the use of ""male C57BL/6 J mice"" and ""mouse intestinal organoid model,"" making ""Mus musculus"" factually correct.
-COMPLETENESS CHECK: The full set contains ""Mus musculus,"" which covers the primary biological source of the MS experiment described.
+"PXD041051","","strict","ExperimentalDesign","factor_value","normal, radiation-induced intestinal injury","probe type (circDmbt1(3,4,5,6) probe, negative control probe) | normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the disease/condition states being compared, which is a correct category for a factor_value.
+SOURCE CHECK: The paper describes comparing ""sham IR"" (normal/control) and ""14 Gy abdominal irradiation"" (which causes radiation-induced intestinal injury) in the context of the MS analysis of proteins associated with the circRNA probe.
+TRUTH CHECK: The values are factually correct; ""normal"" is a safe default for the sham/control group, and ""radiation-induced intestinal injury"" (RIII) is the condition explicitly studied.
+COMPLETENESS CHECK: The full set of extracted values includes both the probe type and the condition, which covers the primary experimental variables for the MS experiment.
+
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -44,31 +57,9 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","ExperimentalDesign","factor_value","probe (circDmbt1(3,4,5,6))","probe (circDmbt1(3,4,5,6)) | normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental probe/bait used in the enrichment process, which is a valid characteristic of the experimental design.
-SOURCE CHECK: The value is present in the paper; the ""Biotin-coupled probe pulldown assay"" section describes using a ""biotin-labeled circDmbt1(3,4,5,6) probe"" for the MS analysis.
-TRUTH CHECK: The value is factually correct as the MS experiment was specifically designed to identify proteins binding to this circRNA probe.
-COMPLETENESS CHECK: The full set of extracted values includes both the specific bait used for the MS experiment and the general biological conditions (normal vs injury), covering the experimental design.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","ExperimentalDesign","factor_value","normal, radiation-induced intestinal injury","probe (circDmbt1(3,4,5,6)) | normal, radiation-induced intestinal injury","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental conditions/disease states being compared, which is a correct category for factor_value.
-SOURCE CHECK: The values are present in the text; ""normal"" (as sham IR/NR group) and ""radiation-induced intestinal injury"" (RIII) are the primary conditions studied.
-TRUTH CHECK: The values are factually correct as the study compares sham-irradiated (normal) mice with those suffering from radiation-induced intestinal injury.
-COMPLETENESS CHECK: The full set of extracted values includes both the biological condition and the specific probe used for the MS experiment, covering the primary experimental variables.
-TYPE_CORRECT: yes
-CORRECT_TYPE_NAME: NONE
-VALUE_CORRECT: yes
-VALUE_COMPLETE: yes
-HALLUCINATED: no
-VERDICT: high
-CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
-SOURCE CHECK: The paper mentions that RNA pulldown products were analyzed by mass spectrometry and provides a PRIDE dataset identifier (PXD041051), but the text does not specify the acquisition method (e.g., DDA or DIA) used.
-TRUTH CHECK: The value is not mentioned or reasonably inferable from the provided text.
+"PXD041051","","strict","Technical","acquisition_method","data-dependent acquisition","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for an MS acquisition scheme.
+SOURCE CHECK: The paper mentions that ""RNA pulldown products were also analyzed by mass spectrometry"" and provides a PRIDE dataset identifier (PXD041051), but the text does not explicitly state the acquisition method (e.g., DDA or DIA) used.
+TRUTH CHECK: The value is not mentioned in the provided text.
 COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -77,10 +68,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value is a fragmentation method, which matches the required category for this field.
-SOURCE CHECK: The value is not present in the provided paper text; the text mentions ""mass spectrometric (MS) analysis"" but does not specify the fragmentation method used.
-TRUTH CHECK: The value cannot be verified as correct because it is not mentioned in the text.
-COMPLETENESS CHECK: The full set of extracted values is not based on any information present in the paper.
+"PXD041051","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which matches the field definition.
+SOURCE CHECK: The value ""beam-type collision-induced dissociation"" is not present in the provided paper text.
+TRUTH CHECK: The paper mentions that ""RNA pulldown products were also analyzed by mass spectrometry"" and provides a PRIDE dataset identifier (PXD041051), but it does not explicitly state the fragmentation method used.
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -100,10 +91,9 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD041051","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" belongs to the correct category for the label field.
-SOURCE CHECK: The paper describes a mass spectrometry analysis of proteins pulled down by a biotin-labeled probe, but it does not mention any isobaric, metabolic, or chemical labeling methods.
-TRUTH CHECK: Since no labeling (TMT, SILAC, etc.) is mentioned, ""label-free"" is the correct safe default.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of proteins pulled down by a biotin-labeled probe, but it does not mention any isobaric, metabolic, or chemical labeling (such as TMT, SILAC, or dimethyl).
+TRUTH CHECK: Since no labeling method is mentioned, ""label-free"" is the correct safe default.
 COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
-
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: yes
@@ -111,10 +101,10 @@ VALUE_COMPLETE: yes
 HALLUCINATED: no
 VERDICT: high
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Technical","mass_analyzer","Orbitrap","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
-SOURCE CHECK: The paper mentions that RNA pulldown products were analyzed by mass spectrometry and provides a PRIDE dataset identifier (PXD041051), but the text does not specify the instrument model or the mass analyzer used.
-TRUTH CHECK: The value is not present in the provided text.
-COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+"PXD041051","","strict","Technical","mass_analyzer","Orbitrap","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value ""Orbitrap"" is a correct category for a mass analyzer.
+SOURCE CHECK: The paper mentions that RNA pulldown products were analyzed by mass spectrometry and provides a PRIDE dataset identifier (PXD041051), but the text does not explicitly name the mass spectrometer model or the mass analyzer used.
+TRUTH CHECK: The value is not explicitly stated in the provided text.
+COMPLETENESS CHECK: The value is not supported by the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
@@ -123,21 +113,20 @@ HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD041051","","strict","Technical","modification","Lysine oxidation to aminoadipic semialdehyde (K)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
-SOURCE CHECK: The candidate value is not mentioned anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text; there is no mention of lysine oxidation or aminoadipic semialdehyde.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text, as none of these modifications are explicitly named.
-
+SOURCE CHECK: The candidate value is not present in the provided paper text.
+TRUTH CHECK: The paper mentions that mass spectrometry was performed on RNA pulldown products, but it does not list any specific modifications searched or identified.
+COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned anywhere in the text.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no
-VALUE_COMPLETE: yes
+VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
 "PXD041051","","strict","Technical","modification","Deamidation (NQR)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Deamidation (NQR)"" is the correct category (a protein modification) for this field.
-SOURCE CHECK: The term ""Deamidation"" or ""Deamidation (NQR)"" does not appear anywhere in the provided paper text.
-TRUTH CHECK: The value is not supported by the text; the paper mentions mass spectrometry analysis of AGO2-associated proteins but does not list the specific search parameters or modifications used.
-COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
+SOURCE CHECK: The value is not present in the paper text; the paper mentions mass spectrometry analysis of proteins associated with circDmbt1(3,4,5,6) but does not list the search parameters or modifications used.
+TRUTH CHECK: The value is not supported by the text.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
 
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
@@ -146,10 +135,10 @@ VALUE_COMPLETE: no
 HALLUCINATED: yes
 VERDICT: low
 CORRECTED_VALUE: NONE",""
-"PXD041051","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
-SOURCE CHECK: The candidate value is not present in the paper text; the text mentions mass spectrometry analysis of RNA pulldown products but does not list any specific modifications searched or found.
+"PXD041051","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which is the correct category for this field.
+SOURCE CHECK: The candidate value is not present in the paper text; the text mentions mass spectrometry analysis of proteins associated with circDmbt1(3,4,5,6), but does not list the search parameters or modifications used.
 TRUTH CHECK: The value is not supported by the text.
-COMPLETENESS CHECK: The full set of extracted values is not supported by the text, as no modifications are mentioned.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text, as no modifications are explicitly named.
 TYPE_CORRECT: yes
 CORRECT_TYPE_NAME: NONE
 VALUE_CORRECT: no

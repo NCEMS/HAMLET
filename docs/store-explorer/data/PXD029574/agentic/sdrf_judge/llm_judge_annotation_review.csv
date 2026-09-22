@@ -1,0 +1,335 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD029574","","strict","Biological","cell_line","HeLa","HeLa","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""HeLa"" is a name of an immortalized cell line, which matches the field definition.
+SOURCE CHECK: The value is present in the text; specifically, the ""TMT11 proteomic analysis"" section states that ""HeLa nuclear extract was fractionated... proteins were then in-gel digested and labeled with 11 different tandem mass tags (TMT)... and analyzed by Q-Exactive HF"".
+TRUTH CHECK: The value is factually correct as HeLa cells were the source of the material used for the TMT-based proteomics experiment.
+COMPLETENESS CHECK: The full set of extracted values contains only ""HeLa"", which covers the cell line used for the primary proteomics identification of the METTL5 complex. (Note: While FreeStyle 293-F cells were used for protein expression/purification for in vitro assays, the actual discovery proteomics experiment used HeLa).
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Biological","cell_type","epithelial cell","epithelial cell","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""epithelial cell"" is a correct category for the cell_type field.
+SOURCE CHECK: The value is inferable from the use of HeLa cells, which were used for the ""METTL5 binding partner ID"" proteomics experiment (FLAG-M2 beads, trypsin digestion, Q Exactive analysis).
+TRUTH CHECK: HeLa is a well-established epithelial cell line (cervical adenocarcinoma), making ""epithelial cell"" a factually correct lineage.
+COMPLETENESS CHECK: The full set contains only this value; while other cell lines like FreeStyle 293-F were used for MS, they are also of epithelial lineage (human embryonic kidney), so this value is exhaustive for the lineage.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Biological","disease","cervical adenocarcinoma","cervical adenocarcinoma","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""cervical adenocarcinoma"" is a disease/diagnosis, which matches the field definition.
+SOURCE CHECK: The value is inferable from the use of HeLa cells, which were used for the proteomics analysis of METTL5-binding proteins (FLAG-METTL5 IP).
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma; this is standard domain knowledge as permitted by the field definition.
+COMPLETENESS CHECK: The full set contains only this value, and it correctly describes the disease origin of the primary cell line used in the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Biological","organ","cervix","cervix","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value ""cervix"" is a valid organ/tissue type.
+SOURCE CHECK: The value is inferable from the use of HeLa cells, which were used for the ""METTL5 binding partner ID"" proteomics experiment (lysed and analyzed by MS).
+TRUTH CHECK: HeLa cells are derived from cervical adenocarcinoma; therefore, ""cervix"" is a correct organ of origin.
+COMPLETENESS CHECK: The full set only contains ""cervix"", but the paper also describes a ""TMT11 proteomic analysis"" using HeLa nuclear extract and a ""METTL5 binding partner ID"" experiment using FreeStyle 293-F cells (which are derived from kidney). The set is incomplete as it misses the kidney origin for the 293-F cells.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: cervix, kidney","cervix, kidney"
+"PXD029574","","strict","Biological","species","Homo sapiens, Mus musculus","Homo sapiens, Mus musculus","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value consists of organism names, which matches the definition of the species field.
+SOURCE CHECK: Both human (HeLa, HepG2, FreeStyle 293-F cells) and mouse (Mettl5 knockout mice) materials were analyzed by mass spectrometry (LC-MS/MS for nucleoside quantification and proteomics for binding partner ID).
+TRUTH CHECK: The paper explicitly describes using human cell lines and mouse models for its MS-based experiments.
+COMPLETENESS CHECK: The full set of extracted values covers all species used in the MS experiments described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","ExperimentalDesign","factor_value","fraction number (1-11), genotype, species","fraction number (1-11), genotype, species","medium","False","","True","False","False","False","","","incomplete","TYPE CHECK: The candidate value lists multiple experimental factors (fraction number, genotype, species), which is the correct category for this field.
+SOURCE CHECK: These factors are present in the MS experiment context: ""fractionated into 11 fractions"" (TMT analysis), ""METTL5-WT and METTL5-KO"" (genotype), and ""human"" (species).
+TRUTH CHECK: The values are factually correct based on the text.
+COMPLETENESS CHECK: The full set of extracted values includes ""cervical adenocarcinoma"" (the disease associated with HeLa cells), but the candidate value itself is a list of factors. However, the candidate value is formatted as a comma-separated list of different factors rather than individual factor values.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: no
+HALLUCINATED: no
+VERDICT: medium
+CORRECTED_VALUE: None (The candidate value is a list of factor *names* rather than specific *values* for those factors, and the pipeline has grouped multiple distinct factors into one string. Each specific value like ""METTL5-KO"", ""METTL5-WT"", ""1"", ""2"" etc., should be its own entry).",""
+"PXD029574","","strict","ExperimentalDesign","factor_value","cervical adenocarcinoma","fraction number (1-11), genotype, species","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a disease state, which is a valid category for a factor_value.
+SOURCE CHECK: The value is not explicitly mentioned in the text; it is an inference from the use of HeLa cells.
+TRUTH CHECK: While HeLa cells are derived from cervical adenocarcinoma, the paper does not explicitly mention this disease state, and the primary experimental factor being studied is the METTL5 genotype (WT vs KO), not the cancer type.
+COMPLETENESS CHECK: The full set of extracted values is a mix of field names and a specific disease, which does not accurately represent the experimental factors (METTL5 status) described in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: METTL5-KO","METTL5-KO"
+"PXD029574","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a correct category for the acquisition method field.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""METTL5 binding partner ID"" section (""The mass spectrometer was operated in data-dependent mode"") and the ""TMT11 proteomic analysis"" section (""up to 20 data-dependent high-resolution MS/MS scans"").
+TRUTH CHECK: The value is factually correct as the paper explicitly describes the use of data-dependent mode for the MS experiments.
+COMPLETENESS CHECK: The full set contains this single value, which accurately covers the acquisition scheme described for the proteomics experiments in the paper.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical reagent used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""METTL5 binding partner ID"" section of the methods, describing the sample preparation for the nano LC/MS/MS analysis (""alkylation with 50 mM iodoacetamide at RT"").
+TRUTH CHECK: The value is factually correct as it is the reagent used for alkylation in the described proteomics experiment.
+COMPLETENESS CHECK: The full set of extracted values contains only ""iodoacetamide"", which is the only alkylation reagent mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Trypsin"" is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""METTL5 binding partner ID"" section (""trypsin digestion was performed"") and the ""TMT11 proteomic analysis"" section (""in-gel digested... allowing up to two missed trypsin cleavage sites"").
+TRUTH CHECK: The paper explicitly states that trypsin was used for protein digestion in the proteomics experiments.
+COMPLETENESS CHECK: Trypsin is the only cleavage agent mentioned for the proteomics workflows in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","fragmentation","beam-type collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value describes a fragmentation method, which is the correct category for this field.
+SOURCE CHECK: The phrase ""beam-type collision-induced dissociation"" does not appear in the provided paper text.
+TRUTH CHECK: The value is not present in the text; the paper mentions ""tandem mass spectrometry (LC-MS/MS)"" and ""data-dependent mode"" but does not explicitly name the fragmentation method (e.g., HCD, CID).
+COMPLETENESS CHECK: The full set contains only this value, which is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","instrument","Thermo Fisher Q Exactive, Thermo Scientific Q-Exactive HF","Thermo Fisher Q Exactive, Thermo Scientific Q-Exactive HF","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value contains mass spectrometer make and model names, which matches the field definition.
+SOURCE CHECK: Both instruments are explicitly mentioned in the text: ""Thermo Fisher Q Exactive"" is used for the METTL5 binding partner ID experiment, and ""Q-Exactive HF (Thermo Scientific)"" is used for the TMT11 proteomic analysis.
+TRUTH CHECK: The values are factually correct as they appear in the methods section.
+COMPLETENESS CHECK: The full set of extracted values covers all mass spectrometers mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","label","TMT126","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a specific label tag, which falls under the category of isobaric labeling methods.
+SOURCE CHECK: The value is derived from the ""TMT11 proteomic analysis of biochemically active fractions"" section, which describes a proteomics experiment using TMT labels.
+TRUTH CHECK: The paper explicitly mentions ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"", but it does not list the specific tag numbers (e.g., TMT126). The candidate value ""TMT126"" is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values consists of specific TMT tag numbers that are not present in the text; the paper only specifies ""11 different tandem mass tags"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","label","TMT127","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of a labeling method.
+SOURCE CHECK: The paper describes a proteomic analysis of biochemically active fractions where proteins were ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"".
+TRUTH CHECK: While the paper explicitly mentions ""TMT"" and ""11 different tandem mass tags"", it does not list the specific TMT channel numbers (e.g., TMT127). These specific channel identifiers are not present in the text.
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT channels that are not mentioned in the text; the only correct general label is ""TMT"".
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","label","TMT128","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a labeling method, which matches the field definition.
+SOURCE CHECK: The paper describes a proteomic analysis of biochemically active fractions where proteins were ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"".
+TRUTH CHECK: The paper explicitly mentions ""TMT"" labeling, but it does not specify the exact tag numbers (e.g., TMT128). The candidate value ""TMT128"" is a specific tag within a TMT set, but the text only refers to the general ""TMT"" method and the number of tags (11).
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT tags (126-131), which are not explicitly mentioned in the text. The text only mentions ""TMT"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","label","TMT129","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value refers to a specific tandem mass tag (TMT) label, which fits the category of an isobaric labeling method.
+SOURCE CHECK: The paper mentions ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"" in the section ""TMT11 proteomic analysis of biochemically active fractions,"" which is a proteomics experiment.
+TRUTH CHECK: The paper explicitly states ""11 different tandem mass tags (TMT)"" were used. It does not list the specific tag numbers (e.g., TMT129). The candidate value ""TMT129"" is not mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values lists specific TMT tags (126-131) that are not present in the text; the text only specifies ""11 different tandem mass tags"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","label","TMT130","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value ""TMT130"" refers to a specific isobaric label, which fits the category of the label field.
+SOURCE CHECK: The paper describes a proteomic analysis of biochemically active fractions where proteins were ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"".
+TRUTH CHECK: While the paper explicitly mentions ""TMT"", it does not list the specific tag numbers (e.g., TMT130) used in the 11-plex labeling.
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT tags, but these specific numbers are not present in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","label","TMT131","","low","False","","False","False","True","False","","","hallucinated","TYPE CHECK: The candidate value is a specific isobaric label, which fits the category of the label field.
+SOURCE CHECK: The paper describes a proteomic analysis of biochemically active fractions where proteins were ""labeled with 11 different tandem mass tags (TMT; Thermo Scientific)"".
+TRUTH CHECK: While the paper explicitly mentions ""TMT"" and ""11 different tandem mass tags"", it does not explicitly list the specific tag numbers (e.g., TMT131).
+COMPLETENESS CHECK: The full set of extracted values lists individual TMT tags, but the paper only refers to them collectively as ""11 different tandem mass tags (TMT)"".
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: TMT","TMT"
+"PXD029574","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a valid mass analyzer type.
+SOURCE CHECK: The value is present in the paper text, specifically in the ""METTL5 binding partner ID"" section (""MS and MS/MS performed in the Orbitrap"").
+TRUTH CHECK: The value is factually correct as the paper explicitly states the use of an Orbitrap for the proteomics analysis.
+COMPLETENESS CHECK: The full set of extracted values contains only ""Orbitrap"", which is the only mass analyzer mentioned for the proteomics experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","monohydroxylated residue","acetylated residue | deamidated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value ""monohydroxylated residue"" is a type of protein modification, which matches the field definition.
+SOURCE CHECK: The term ""monohydroxylated residue"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the paper mentions ""Oxidation (M)"" as a variable modification, but not ""monohydroxylated residue"".
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., Phosphorylation, Iodoacetamide derivative) that are not mentioned in the text, indicating a high rate of hallucination for this field.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","acetylated residue","acetylated residue | deamidated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""acetylated residue"" is the correct category for a protein modification.
+SOURCE CHECK: The paper explicitly mentions ""Acetyl (Protein N-term)"" as a variable modification in the ""METTL5 binding partner ID"" section.
+TRUTH CHECK: ""Acetylated residue"" is a valid synonym/description for the ""Acetyl"" modification mentioned in the text.
+COMPLETENESS CHECK: The full set of extracted values contains many hallucinations (e.g., Phosphorylation, Iodoacetamide derivative) not mentioned in the text, but the candidate value itself is supported.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","(R)-5-oxo-1","acetylated residue | deamidated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value is presented as a chemical modification, which fits the category for the modification field.
+SOURCE CHECK: The value ""(R)-5-oxo-1"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore not a valid modification for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text, and the candidate value itself is absent.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","deamidated residue","acetylated residue | deamidated residue","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""deamidated residue"" is a protein modification, which matches the field definition.
+SOURCE CHECK: The text explicitly mentions ""Deamidation (NQ)"" as a variable modification in the ""METTL5 binding partner ID"" section.
+TRUTH CHECK: ""Deamidated residue"" is a synonym for ""Deamidation"", and the paper explicitly lists it as a searched modification.
+COMPLETENESS CHECK: The full set of extracted values contains many hallucinations (e.g., ""Phosphorylation"", ""iodoacetamide derivatized residue"") not mentioned in the text, but the candidate value itself is correct.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","iodoacetamide derivatized residue","acetylated residue | deamidated residue","low","False","","False","False","False","True","pride_repository","","pride_repository_only","TYPE CHECK: The candidate value describes a chemical modification of a residue, which fits the category of the modification field.
+SOURCE CHECK: The text mentions ""alkylation with 50 mM iodoacetamide"", but it does not explicitly name the resulting modification as an ""iodoacetamide derivatized residue"".
+TRUTH CHECK: The modification name ""iodoacetamide derivatized residue"" is not explicitly written in the text; only the reagent (iodoacetamide) is mentioned. Per the rules, modifications must be explicitly named and not inferred from reagents.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications (e.g., Phosphorylation) that are not mentioned in the text at all, and the set as a whole is not exhaustive of the actual modifications listed in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: yes
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","acetylated residue | deamidated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field definition.
+SOURCE CHECK: The value is not present in the paper text; the paper mentions ""iodoacetamide"" as a reagent, but not as a searched modification.
+TRUTH CHECK: The value is factually incorrect for this experiment; the paper explicitly lists ""Carbamidomethyl"" as the fixed modification and ""Oxidation (M), Acetyl (Protein N-term), Pyro-Glu (N-term Q), Deamidation (NQ)"" as variable modifications.
+COMPLETENESS CHECK: The full set of extracted values is highly inaccurate and contains many hallucinations.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","Phosphorylation (CDEHKRSTY)","acetylated residue | deamidated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value is a protein modification, which matches the field definition.
+SOURCE CHECK: The term ""Phosphorylation"" does not appear anywhere in the provided paper text.
+TRUTH CHECK: The value is not mentioned in the text and is therefore factually unsupported for this experiment.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications, none of which are supported by the text except for those explicitly listed in the ""METTL5 binding partner ID"" and ""TMT11 proteomic analysis"" sections.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","Iodoacetamide derivative","acetylated residue | deamidated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a chemical modification, which fits the category for the modification field.
+SOURCE CHECK: The text mentions ""alkylation with 50 mM iodoacetamide"", but it does not name the resulting modification as an ""Iodoacetamide derivative"".
+TRUTH CHECK: The modification name ""Iodoacetamide derivative"" is not explicitly written in the text; only the reagent (iodoacetamide) is mentioned.
+COMPLETENESS CHECK: The full set of extracted values contains many modifications not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","modification","Phosphorylation","acetylated residue | deamidated residue","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value ""Phosphorylation"" is the correct category for the modification field.
+SOURCE CHECK: The word ""Phosphorylation"" does not appear in the provided paper text.
+TRUTH CHECK: The paper does not mention searching for or analyzing phosphorylation as a protein modification in any of its mass spectrometry experiments.
+COMPLETENESS CHECK: The full set of extracted values contains multiple modifications (e.g., ""Phosphorylation"", ""Iodoacetamide derivative"") that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD029574","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""dithiothreitol"" is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""METTL5 binding partner ID"" section of the methods, where it states samples were ""reduced with 10 mM dithiothreitol"".
+TRUTH CHECK: The value is factually correct as it was the reagent used for reduction in the proteomics experiment.
+COMPLETENESS CHECK: The full set of extracted values contains only ""dithiothreitol"", which is the only reduction reagent mentioned for the MS sample preparation.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""

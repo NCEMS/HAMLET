@@ -12,9 +12,9 @@
       "corrected_value": "Homo sapiens, Mus musculus",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a scientific name for a species, which matches the field definition.",
-        "SOURCE_CHECK": "The paper uses HeLa, 293T, and 293FT cells, and explicitly mentions searching against the \"Swiss-Prot Human database,\" confirming the use of human proteins/cells.",
-        "TRUTH_CHECK": "The use of human cell lines (HeLa, 293T) makes \"Homo sapiens\" a factually correct species for the experiments described.",
-        "COMPLETENESS_CHECK": "The paper also uses \"C57BL/6J mice\" (Mus musculus) for the NAFLD model, so the full set of extracted values is missing the mouse species."
+        "SOURCE_CHECK": "The paper uses human cell lines (HeLa, 293T, 293FT) and searches the \"Swiss-Prot Human database\" for MS analysis.",
+        "TRUTH_CHECK": "The use of human cell lines and the human protein database confirms the species is Homo sapiens.",
+        "COMPLETENESS_CHECK": "The paper also uses Mus musculus (C57BL/6J mice), so the full set of extracted values is missing the mouse species."
       }
     },
     {
@@ -27,9 +27,9 @@
       "hallucination": true,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "Yes, \"kidney\" is an organ/tissue.",
+        "TYPE_CHECK": "Yes, \"kidney\" is an organ.",
         "SOURCE_CHECK": "The word \"kidney\" does not appear in the provided paper text.",
-        "TRUTH_CHECK": "The paper focuses on HeLa, 293T, and AML12 cells, as well as mouse liver (NAFLD model); no kidney samples were used.",
+        "TRUTH_CHECK": "The paper focuses on HeLa cells, 293T cells, and the liver of C57BL/6J mice; no kidney samples were used.",
         "COMPLETENESS_CHECK": "The full set contains only a hallucinated value."
       }
     },
@@ -41,12 +41,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "normal, nonalcoholic fatty liver disease",
+      "corrected_value": "normal, nonalcoholic fatty liver disease, steatosis",
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field when describing healthy controls.",
-        "SOURCE_CHECK": "The paper describes a mouse model of nonalcoholic fatty liver disease (NAFLD) and compares them to mice fed with a \"normal chow diet\".",
-        "TRUTH_CHECK": "The use of \"normal\" is factually correct to represent the healthy control group in the NAFLD experiment.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"normal\", but the paper also explicitly discusses \"nonalcoholic fatty liver disease\" (NAFLD) and \"steatosis\"."
+        "TYPE_CHECK": "The candidate value \"normal\" is a valid category for the disease field, used to describe healthy control subjects.",
+        "SOURCE_CHECK": "The paper describes a mouse model of nonalcoholic fatty liver disease (NAFLD) and compares these mice with those fed a \"normal chow diet,\" which serves as the healthy control group.",
+        "TRUTH_CHECK": "The use of \"normal\" to represent the healthy control group (normal chow diet) is factually correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"normal,\" but the paper also explicitly discusses \"nonalcoholic fatty liver disease\" (NAFLD) and \"steatosis\" as the disease states being studied."
       }
     },
     {
@@ -57,12 +57,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "cell line, tissue, whole organism",
+      "corrected_value": "cell line, tissue",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"cell line\" is a valid category for the material_type field.",
         "SOURCE_CHECK": "The paper explicitly mentions the use of several cell lines, including HeLa, 293T, 293FT, and AML12.",
-        "TRUTH_CHECK": "The use of cell lines is factually correct as they were used for the majority of the in vitro experiments.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"cell line\", but the paper also describes experiments using \"tissue\" (mouse liver) and \"whole organism\" (C57BL/6J mice). Therefore, the set is incomplete."
+        "TRUTH_CHECK": "The use of cell lines is factually correct as described in the methods and results.",
+        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"cell line\", but the paper also describes experiments using mouse liver tissue (e.g., \"Mouse livers were collected\", \"H&E staining... of the liver sections\"). Therefore, the set is incomplete."
       }
     },
     {
@@ -78,7 +78,7 @@
         "TYPE_CHECK": "The candidate value \"293T\" is a name of an immortalized cell line, which matches the field definition.",
         "SOURCE_CHECK": "The value \"293T\" is explicitly mentioned multiple times in the text (e.g., \"293T and 293FT cells were maintained in DMEM\").",
         "TRUTH_CHECK": "The value is factually correct as it is one of the cell lines used in the experiments.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also uses \"HeLa\", \"293FT\", and \"AML12\" cell lines."
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete; the paper also uses \"HeLa\", \"293FT\", and \"AML12\"."
       }
     },
     {
@@ -107,31 +107,15 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"carbamidomethyl\" refers to the chemical group added to cysteine during alkylation, rather than the reagent itself.",
+        "TYPE_CHECK": "The candidate value \"carbamidomethyl\" refers to the chemical group added during alkylation, not the reagent itself.",
         "SOURCE_CHECK": "The text mentions \"variable modifications set as carbamidomethyl (C)\" in the search criteria, which implies the use of an alkylating agent like iodoacetamide.",
-        "TRUTH_CHECK": "\"Carbamidomethyl\" is the resulting modification, not the reagent (e.g., iodoacetamide) used to achieve it.",
-        "COMPLETENESS_CHECK": "The full set contains only the modification name, not the reagent name."
+        "TRUTH_CHECK": "\"Carbamidomethyl\" is the resulting modification, whereas the field requires the reagent (e.g., iodoacetamide).",
+        "COMPLETENESS_CHECK": "The full set contains only the modification name, not the reagent."
       }
     },
     {
       "annotation_type": "cleavage_agent",
-      "extracted_value": "Asp-N",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "Asp-N, Lys-C, trypsin",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value \"Asp-N\" is a protease used for protein digestion, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"in-gel digestion with Asp-N at 37 °C for overnight\" in the LC–MS/MS section.",
-        "TRUTH_CHECK": "The value is factually correct as it was used for the digestion of monoubiquitin bands.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete because the paper also specifies the use of \"Lys-C and Trypsin\" for the in-gel digestion of ubiquitinated Flag-VPS34."
-      }
-    },
-    {
-      "annotation_type": "collision_energy",
-      "extracted_value": "normalized collision energy of 35%",
+      "extracted_value": "Asp-N, Lys-C, Trypsin",
       "verdict": "high",
       "type_mismatch": false,
       "value_correct": true,
@@ -139,10 +123,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a collision energy setting, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states \"Fragmentation was performed with normalized collision energy of 35%\" in the LC–MS/MS section.",
-        "TRUTH_CHECK": "The value is factually correct as per the provided text.",
-        "COMPLETENESS_CHECK": "The full set contains the only collision energy mentioned for the relevant MS/MS experiments."
+        "TYPE_CHECK": "The candidate value lists proteases used for protein digestion, which matches the definition of cleavage_agent.",
+        "SOURCE_CHECK": "The paper explicitly mentions \"in-gel digestion with Asp-N\" (for polyubiquitin chain types) and \"in-gel digestion with Lys-C and Trypsin\" (for determining ubiquitination sites on VPS34).",
+        "TRUTH_CHECK": "The values are factually correct as they are explicitly stated in the methods section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers all proteases mentioned for the MS experiments in the text."
+      }
+    },
+    {
+      "annotation_type": "collision_energy",
+      "extracted_value": "normalized collision energy of 35%, normalized collision energy of 30",
+      "verdict": "high",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": true,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes normalized collision energies, which matches the field definition.",
+        "SOURCE_CHECK": "The text mentions \"normalized collision energy of 35%\" for the LTQ Orbitrap Velos and \"normalized collision energy of 30\" for the Orbitrap Fusion Lumos.",
+        "TRUTH_CHECK": "The values are factually correct as stated in the methods section.",
+        "COMPLETENESS_CHECK": "The full set of extracted values covers both MS experiments described in the paper."
       }
     },
     {
@@ -155,9 +155,9 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes an enrichment protocol (immunoprecipitation) used before MS analysis, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly states: \"ubiquitinated Flag-VPS34 was isolated by immunoprecipitation with anti-Flag M2 beads from 293T UBE3C knockout cells... and subjected to in-gel digestion... NanoLC−nanoESI-MS/MS analysis was performed\".",
-        "TRUTH_CHECK": "The value is factually correct as described in the \"LC–MS/MS and label-free quantification\" section of the methods.",
+        "TYPE_CHECK": "The candidate value describes an enrichment protocol (immunoprecipitation) used before MS analysis.",
+        "SOURCE_CHECK": "The text explicitly states: \"ubiquitinated Flag-VPS34 was isolated by immunoprecipitation with anti-Flag M2 beads from 293T UBE3C knockout cells... [and] subjected to in-gel digestion... NanoLC−nanoESI-MS/MS analysis was performed\".",
+        "TRUTH_CHECK": "The value is factually correct as described in the methods section.",
         "COMPLETENESS_CHECK": "The full set contains the only enrichment method mentioned for the MS analysis of VPS34 ubiquitination sites."
       }
     },
@@ -169,12 +169,12 @@
       "value_correct": true,
       "value_complete": false,
       "hallucination": false,
-      "corrected_value": "Orbitrap Fusion Lumos, Waters Synapt G2 HDMS, LTQ Orbitrap Velos",
+      "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a mass spectrometer model, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"Thermo Orbitrap Fusion Luoms mass spectrometer\" (note: \"Luoms\" is a typo in the paper for \"Lumos\").",
+        "SOURCE_CHECK": "The text explicitly mentions a \"Thermo Orbitrap Fusion Luoms mass spectrometer\" (note: \"Luoms\" is a typo in the paper for \"Lumos\").",
         "TRUTH_CHECK": "The value is factually correct based on the provided text.",
-        "COMPLETENESS_CHECK": "The paper also mentions a \"Waters Synapt G2 HDMS\" and an \"LTQ Orbitrap Velos\", so the full set of extracted values is missing two instruments."
+        "COMPLETENESS_CHECK": "The paper mentions two different mass spectrometers: the \"LTQ Orbitrap Velos\" and the \"Orbitrap Fusion Lumos\". The full set of extracted values only contains one of them."
       }
     },
     {
@@ -188,9 +188,9 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"label-free\" is a valid category for the label field.",
-        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification\" in the \"LC–MS/MS and label-free quantification\" section of the methods.",
-        "TRUTH_CHECK": "The value is factually correct as the study used label-free quantification for its MS analysis.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of only \"label-free\", which exhaustively covers the labeling method described in the paper."
+        "SOURCE_CHECK": "The paper explicitly mentions \"label-free quantification\" in the LC-MS/MS section.",
+        "TRUTH_CHECK": "The use of label-free quantification is factually correct as described in the methods.",
+        "COMPLETENESS_CHECK": "The full set of extracted values contains \"label-free\", which is the only labeling method mentioned."
       }
     },
     {
@@ -204,7 +204,7 @@
       "corrected_value": null,
       "issue_summary": {
         "TYPE_CHECK": "The candidate value \"DTT\" is a chemical used to reduce disulfide bonds, which matches the field definition.",
-        "SOURCE_CHECK": "The text explicitly mentions \"10 mM DTT\" in the \"In vitro deubiquitination assays\" and \"Lbpro* purification and treatment\" sections.",
+        "SOURCE_CHECK": "The text explicitly mentions \"10 mM DTT\" in the \"In vitro ubiquitination and deubiquitination assays\" and \"Lbpro* purification and treatment\" sections.",
         "TRUTH_CHECK": "DTT (dithiothreitol) is correctly identified as the reduction reagent used in the described experimental procedures.",
         "COMPLETENESS_CHECK": "The full set of extracted values contains \"DTT\", which is the only reduction reagent mentioned in the text."
       }
@@ -220,30 +220,14 @@
       "corrected_value": "2, 3",
       "issue_summary": {
         "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the replicates field.",
-        "SOURCE_CHECK": "The paper states in the \"Statistics and reproducibility\" section that \"data are representative of three... or two... independent experiments.\"",
-        "TRUTH_CHECK": "The paper reports that some experiments were performed in duplicate (two independent experiments) and others in triplicate.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains \"2\", but the paper explicitly mentions that some data are representative of \"three\" independent experiments. Therefore, the extraction is incomplete."
+        "SOURCE_CHECK": "The paper states in the Statistics and reproducibility section that \"data are representative of three... or two... independent experiments.\"",
+        "TRUTH_CHECK": "The paper mentions both 2 and 3 independent experiments across different figures; extracting only \"2\" is factually present but not the only value.",
+        "COMPLETENESS_CHECK": "The full set of extracted values [\"2\"] is incomplete because the paper explicitly mentions that some data are representative of three independent experiments."
       }
     },
     {
       "annotation_type": "experimental_design",
-      "extracted_value": "UBE3C-mediated ubiquitination vs control",
-      "verdict": "medium",
-      "type_mismatch": false,
-      "value_correct": true,
-      "value_complete": false,
-      "hallucination": false,
-      "corrected_value": "treated vs control, case-control",
-      "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes a comparison between a treated/modified state and a control, which fits the \"treated vs control\" category of experimental design.",
-        "SOURCE_CHECK": "The paper describes multiple experiments comparing UBE3C-mediated ubiquitination (via overexpression or in vitro assays) against controls (catalytically dead mutants or absence of UBE3C).",
-        "TRUTH_CHECK": "The value is factually correct as the study focuses on the effects of UBE3C-mediated ubiquitination of VPS34 compared to controls.",
-        "COMPLETENESS_CHECK": "The full set of extracted values is insufficient; the paper employs a much broader experimental design including knockdown/knockout studies, rescue experiments (chemically induced dimerization), and an in vivo mouse model of NAFLD (HFD vs control)."
-      }
-    },
-    {
-      "annotation_type": "factor_value",
-      "extracted_value": "UBE3C expression (with or without V5-UBE3C)",
+      "extracted_value": "with vs without V5-UBE3C transfection",
       "verdict": "medium",
       "type_mismatch": false,
       "value_correct": true,
@@ -251,10 +235,26 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value describes an experimental variable (protein expression level/presence), which fits the definition of a factor_value.",
-        "SOURCE_CHECK": "The paper describes experiments where 293T UBE3C knockout cells were transfected with Flag-VPS34 and His-ubiquitin, \"together with or without V5-UBE3C\", to determine ubiquitination sites on VPS34.",
-        "TRUTH_CHECK": "The value is factually correct based on the \"LC–MS/MS and label-free quantification\" section of the methods.",
-        "COMPLETENESS_CHECK": "The full set of extracted values only contains this one factor, but the paper explores many other factors (e.g., TRABID knockdown/overexpression, high-fat diet vs normal chow, ER/proteotoxic stress). The current set is not exhaustive."
+        "TYPE_CHECK": "The candidate value describes a comparison between two experimental groups, which fits the \"treated vs control\" style of an experimental design.",
+        "SOURCE_CHECK": "The paper describes experiments where 293T UBE3C knockout cells were transfected \"together with or without V5-UBE3C\" to determine ubiquitination sites on VPS34.",
+        "TRUTH_CHECK": "The value accurately reflects the specific comparison used in the MS analysis of VPS34 ubiquitination.",
+        "COMPLETENESS_CHECK": "The full set of extracted values captures this specific comparison, but the paper contains multiple other designs (e.g., HFD vs normal chow in mice, TRABID knockdown vs control, UBE3C knockout vs WT). However, for the specific MS-related experiment, this is correct."
+      }
+    },
+    {
+      "annotation_type": "factor_value",
+      "extracted_value": "UBE3C expression (with V5-UBE3C, without V5-UBE3C)",
+      "verdict": "medium",
+      "type_mismatch": false,
+      "value_correct": true,
+      "value_complete": false,
+      "hallucination": false,
+      "corrected_value": null,
+      "issue_summary": {
+        "TYPE_CHECK": "The candidate value describes an experimental variable (expression level of a protein), which fits the definition of a factor_value.",
+        "SOURCE_CHECK": "The paper describes experiments comparing cells transfected with V5-UBE3C versus those without (e.g., in the \"LC-MS/MS and label-free quantification\" section: \"ubiquitinated Flag-VPS34 was isolated... from 293T UBE3C knockout cells transfected with Flag-VPS34, His-ubiquitin, together with or without V5-UBE3C\").",
+        "TRUTH_CHECK": "The value is factually correct as it represents a primary variable used to modulate VPS34 ubiquitination in the MS experiments.",
+        "COMPLETENESS_CHECK": "The full set of extracted values is incomplete. The study investigates multiple factors across different experiments, including TRABID expression (overexpression vs knockdown), nutrient status (DMEM vs EBSS), ER/proteotoxic stress (tunicamycin, puromycin, etc.), and high-fat diet (HFD vs normal chow) in mice."
       }
     },
     {
@@ -267,10 +267,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the 'fractions' field.",
-        "SOURCE_CHECK": "The paper does not mention any offline peptide or protein fractionation (e.g., high-pH RP or SAX) prior to LC-MS/MS; therefore, the safe default of \"1\" is applicable.",
-        "TRUTH_CHECK": "The value is correct as no fractionation was described.",
-        "COMPLETENESS_CHECK": "The full set of extracted values consists of only this value, which accurately reflects the absence of fractionation in the described experiments."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition for the number of fractions.",
+        "SOURCE_CHECK": "The paper describes LC-MS/MS analysis but does not mention any offline peptide or protein fractionation steps.",
+        "TRUTH_CHECK": "Since no fractionation is mentioned, the safe default of \"1\" is correct.",
+        "COMPLETENESS_CHECK": "The full set of extracted values consists of a single \"1\", which is exhaustive for this experiment."
       }
     },
     {
@@ -283,10 +283,10 @@
       "hallucination": false,
       "corrected_value": null,
       "issue_summary": {
-        "TYPE_CHECK": "The candidate value is a numeric count, which is the correct type for the number of samples.",
-        "SOURCE_CHECK": "The paper does not explicitly state a total number of samples processed across the entire study; it describes various experiments with different sample sizes (e.g., \"three\" or \"two\" independent experiments for specific figures).",
-        "TRUTH_CHECK": "The value \"2\" is not a total count of samples for the study; it likely refers to the number of independent experiments for specific figures mentioned in the \"Statistics and reproducibility\" section, not the total sample size.",
-        "COMPLETENESS_CHECK": "The full set contains only this value, which is an incorrect interpretation of the text."
+        "TYPE_CHECK": "The candidate value is a numeric count, which matches the definition of number_of_samples.",
+        "SOURCE_CHECK": "The paper does not explicitly state a total count of samples processed for the entire study. The value \"2\" appears in the \"Statistics and reproducibility\" section referring to the number of independent experiments for specific figures, not the total sample count.",
+        "TRUTH_CHECK": "The value \"2\" is not the total number of samples processed in the study; it refers to the number of independent replicates for certain data points.",
+        "COMPLETENESS_CHECK": "The full set of extracted values does not accurately represent the total number of samples in the study."
       }
     }
   ]

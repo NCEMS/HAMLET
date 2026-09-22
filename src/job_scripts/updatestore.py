@@ -66,7 +66,6 @@ def versioned_paths(store_path, release_version, pxd):
     return (
         store_path / "hamlet_sdrfs" / release_version / "{}.sdrf.tsv".format(pxd),
         store_path / "agentic_results_files" / release_version / pxd,
-        store_path / "aggregated_results_files" / release_version / "{}_aggregated_results.json".format(pxd),
     )
 
 
@@ -129,8 +128,8 @@ def promotion_plan(
     release_dir = store_path / "releases" / release_version
     if release_dir.exists() and not allow_incomplete:
         raise ValueError("release is already immutable: {}".format(release_dir))
-    versioned_sdrfs, versioned_agentic, versioned_aggregates = versioned_paths(store_path, release_version, "PXD000000")
-    versioned_directories = (versioned_sdrfs.parent, versioned_agentic.parent, versioned_aggregates.parent)
+    versioned_sdrfs, versioned_agentic = versioned_paths(store_path, release_version, "PXD000000")
+    versioned_directories = (versioned_sdrfs.parent, versioned_agentic.parent)
     if not allow_existing and any(path.exists() for path in versioned_directories):
         raise ValueError("release artifact directories are already immutable: {}".format(
             ", ".join(map(str, versioned_directories))
@@ -152,8 +151,8 @@ def promotion_plan(
         source_aggregate = store_path / "aggregated_results_files" / "{}_aggregated_results.json".format(pxd)
         if not source_aggregate.is_file() or not source_aggregate.stat().st_size:
             raise ValueError("{} is missing aggregate source: {}".format(pxd, source_aggregate))
-        release_sdrf, release_agentic, release_aggregate = versioned_paths(store_path, release_version, pxd)
-        existing = (release_sdrf.exists(), release_agentic.exists(), release_aggregate.exists())
+        release_sdrf, release_agentic = versioned_paths(store_path, release_version, pxd)
+        existing = (release_sdrf.exists(), release_agentic.exists())
         if any(existing):
             if not allow_existing or not all(existing):
                 raise ValueError("{} has a partial or immutable release snapshot".format(pxd))
@@ -178,15 +177,13 @@ def promotion_plan(
 def promote_record(record, store_path, annotation):
     pxd = record["pxd"]
     release_version = annotation.removeprefix("HAMLET-agentic ")
-    release_sdrf, release_agentic, release_aggregate = versioned_paths(store_path, release_version, pxd)
+    release_sdrf, release_agentic = versioned_paths(store_path, release_version, pxd)
     release_agentic.parent.mkdir(parents=True, exist_ok=True)
     release_sdrf.parent.mkdir(parents=True, exist_ok=True)
-    release_aggregate.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=str(store_path)) as temporary_directory:
         staging_root = Path(temporary_directory)
         staged_agentic = staging_root / "agentic"
         staged_sdrf = staging_root / release_sdrf.name
-        staged_aggregate = staging_root / release_aggregate.name
         shutil.copytree(record["result_dir"] / "agentic_metadata", staged_agentic)
         for judge_directory in ("llm_refinement_judge", "sdrf_judge"):
             if "{}/llm_judge_per_paper.csv".format(judge_directory) in record["artifacts"]:
@@ -195,18 +192,16 @@ def promote_record(record, store_path, annotation):
             record["artifacts"]["agentic_metadata/{}.sdrf.tsv".format(pxd)], staged_sdrf, annotation
         )
         shutil.copy2(staged_sdrf, staged_agentic / staged_sdrf.name)
-        shutil.copy2(record["aggregate_source"], staged_aggregate)
         staged_agentic.rename(release_agentic)
         staged_sdrf.replace(release_sdrf)
-        staged_aggregate.replace(release_aggregate)
     return release_record(record, store_path, annotation)
 
 
 def release_record(record, store_path, annotation):
     pxd = record["pxd"]
     release_version = annotation.removeprefix("HAMLET-agentic ")
-    release_sdrf, release_agentic, release_aggregate = versioned_paths(store_path, release_version, pxd)
-    if not release_sdrf.is_file() or not release_agentic.is_dir() or not release_aggregate.is_file():
+    release_sdrf, release_agentic = versioned_paths(store_path, release_version, pxd)
+    if not release_sdrf.is_file() or not release_agentic.is_dir():
         raise ValueError("{} has an incomplete release snapshot".format(pxd))
     with record["artifacts"]["agentic_metadata/{}.sdrf.tsv".format(pxd)].open(encoding="utf-8-sig", newline="") as source:
         rows = list(csv.reader(source, delimiter="\t"))
@@ -222,8 +217,8 @@ def release_record(record, store_path, annotation):
             "sdrf_path": str(release_sdrf.relative_to(store_path)),
             "sdrf_sha256": sha256(release_sdrf),
             "agentic_path": str(release_agentic.relative_to(store_path)),
-            "aggregate_path": str(release_aggregate.relative_to(store_path)),
-            "aggregate_sha256": sha256(release_aggregate),
+            "aggregate_path": str(record["aggregate_source"].resolve().relative_to(store_path.resolve())),
+            "aggregate_sha256": sha256(record["aggregate_source"]),
         },
         "artifacts": [
             {
@@ -240,6 +235,12 @@ def write_release_manifest(store_path, results_path, release_version, records):
     releases_dir = store_path / "releases"
     release_dir = releases_dir / release_version
     release_dir.mkdir(parents=True)
+    aggregate_directories = {
+        Path(record["archive"]["aggregate_path"]).parent
+        for record in records
+    }
+    if len(aggregate_directories) != 1:
+        raise ValueError("release aggregate sources must share one directory")
     manifest = {
         "schema_version": 1,
         "release_version": release_version,
@@ -248,7 +249,7 @@ def write_release_manifest(store_path, results_path, release_version, records):
         "versioned_store_paths": {
             "sdrfs": "hamlet_sdrfs/{}".format(release_version),
             "agentic_results": "agentic_results_files/{}".format(release_version),
-            "aggregated_results": "aggregated_results_files/{}".format(release_version),
+            "aggregated_results": str(aggregate_directories.pop()),
         },
         "pxds": records,
     }

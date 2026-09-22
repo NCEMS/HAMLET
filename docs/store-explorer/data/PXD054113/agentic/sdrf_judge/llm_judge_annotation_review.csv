@@ -1,0 +1,193 @@
+"paper_id","source","mode","agent","annotation_type","extracted_value","all_values_for_field","verdict","type_mismatch","correct_type","value_correct","value_complete","hallucination","technical_origin","repository_origin","inference","error_category","issue_summary","corrected_value"
+"PXD054113","","strict","Biological","cell_line","OECM-1","OECM-1","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a named immortalized cell line, which matches the field definition.
+SOURCE CHECK: The paper explicitly states that OECM-1 cells were selected for longitudinal analysis and that ""samples from different passages were collected for RNA sequencing (Table S3) and proteomic analysis (Table S4),"" and later confirms ""Mass spectrometric analysis of proteomic changes confirmed the presence of these pathways.""
+TRUTH CHECK: The value is factually correct as OECM-1 is the cell line used for the proteomics experiment.
+COMPLETENESS CHECK: The full set contains only ""OECM-1""; while other cell lines (CAL-27, etc.) are used for validation, OECM-1 is the only one explicitly linked to the proteomic time-course analysis.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Biological","cell_type","tumor cell","tumor cell","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""tumor cell"" describes a cell type/lineage, which fits the definition of the `cell_type` field.
+SOURCE CHECK: The value is present and inferable from the MS experiment context; the paper states that OECM-1 cells (an HNSCC cell line) were used for ""proteomic analysis"" and refers to them as ""tumor cells"" throughout the results section.
+TRUTH CHECK: The value is factually correct as OECM-1 is a head and neck squamous cell carcinoma (HNSCC) tumor cell line.
+COMPLETENESS CHECK: The full set contains ""tumor cell"", which accurately describes the lineage of the OECM-1 cells analyzed by mass spectrometry.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Biological","disease","head and neck squamous cell carcinoma","head and neck squamous cell carcinoma","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a disease diagnosis, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the abstract and results as the disease state of the patients and the origin of the cell lines (HNSCC) analyzed by mass spectrometry.
+TRUTH CHECK: The value is factually correct; the paper focuses on head and neck squamous cell carcinoma (HNSCC).
+COMPLETENESS CHECK: The full set contains the primary disease studied in the proteomics experiments.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Biological","organ","head and neck","head and neck","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""head and neck"" describes an anatomical region/organ, which fits the definition of the organ field.
+SOURCE CHECK: The MS experiment was performed on OECM-1 cells, which are described in the text as a ""human head and neck cancer cell line"".
+TRUTH CHECK: The value is factually correct as the cells used for the proteomics analysis are derived from head and neck squamous cell carcinoma (HNSCC).
+COMPLETENESS CHECK: The full set contains only this value, which accurately describes the origin of the MS samples.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Biological","species","Homo sapiens, Mus musculus","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value contains organism names, which is the correct category for the species field.
+SOURCE CHECK: Both human (HNSCC cell lines OECM-1, CAL-27 and patient samples) and mouse (C57BL/6J mice and MOCL2-1 cell line) materials are mentioned, but the mass spectrometry section specifically describes the analysis of ""proteomic changes"" in OECM-1 cells and ""unbiased mass spectrometric analysis"" of STAT1 in resistant cells (which are human HNSCC lines). While the paper uses mice for in vivo models, the MS experiments described in the ""Mass spectrometry"" methods section refer to the protein solutions derived from the cell lines (OECM-1, CAL-27).
+TRUTH CHECK: The MS analysis was performed on human HNSCC cell lines. There is no mention of mass spectrometry being performed on the mouse samples; the mouse experiments used knockdown, reconstitution, and IHC/Western blot, not the LC-MS/MS workflow described in the ""Mass spectrometry"" section.
+COMPLETENESS CHECK: The set is incorrect because it includes a species not analyzed by MS.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: Homo sapiens","Homo sapiens"
+"PXD054113","","strict","ExperimentalDesign","factor_value","treatment duration (passages of cetuximab exposure)","treatment duration (passages of cetuximab exposure) | head and neck squamous cell carcinoma","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value describes the experimental variable (treatment duration/passages) being studied, which fits the definition of a factor_value.
+SOURCE CHECK: The value is present in the text; the authors specifically analyzed OECM-1 cells across different passages (e.g., ""≤8 passages"", ""8–12 passages"", ""≥18 passages"") during prolonged cetuximab exposure for proteomic analysis.
+TRUTH CHECK: The value is factually correct as the study explicitly uses the number of passages as the measure of treatment duration to track the evolution of resistance.
+COMPLETENESS CHECK: The full set of extracted values includes both the experimental variable (treatment duration) and the disease context (HNSCC), which together cover the primary factors of the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","ExperimentalDesign","factor_value","head and neck squamous cell carcinoma","treatment duration (passages of cetuximab exposure) | head and neck squamous cell carcinoma","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a disease name, which is a valid characteristic for a factor_value.
+SOURCE CHECK: The value is explicitly mentioned throughout the text as the disease being studied (HNSCC).
+TRUTH CHECK: The study focuses on head and neck squamous cell carcinoma (HNSCC) cells and patients.
+COMPLETENESS CHECK: The full set of extracted values includes both the disease state and the primary experimental variable (treatment duration/passages), which together cover the main axes of the experimental design.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","acquisition_method","data-dependent acquisition","data-dependent acquisition","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""data-dependent acquisition"" is a valid acquisition scheme name.
+SOURCE CHECK: The paper explicitly states in the Mass spectrometry section that ""The 20 most abundant precursor ions were selected for fragmentation using data-dependent MS/MS scans"", which describes a data-dependent acquisition (DDA) scheme.
+TRUTH CHECK: The value is factually correct based on the described MS/MS process.
+COMPLETENESS CHECK: The full set contains this single value, which accurately covers the acquisition method described in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","alkylation_reagent","iodoacetamide","iodoacetamide","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""iodoacetamide"" is a chemical used for cysteine alkylation, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section of the methods (""Cysteine residues were alkylated with 55 mM iodoacetamide (IAM, Sigma)"").
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains the only alkylation reagent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","cleavage_agent","Trypsin","Trypsin","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a protease, which matches the definition of a cleavage agent.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section of the methods (""Proteins were digested overnight at 37°C using sequencing-grade modified porcine trypsin"").
+TRUTH CHECK: The value is factually correct as per the text.
+COMPLETENESS CHECK: The full set contains the only cleavage agent mentioned in the paper.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","fragmentation","collision-induced dissociation","","low","False","","False","False","False","True","runassessor","","runassessor_only","TYPE CHECK: The candidate value is a fragmentation method, which matches the field definition.
+SOURCE CHECK: The paper mentions the use of an ""Orbitrap Elite ETD"" mass spectrometer, but it does not explicitly mention ""collision-induced dissociation"" or ""CID"" in the text.
+TRUTH CHECK: The value is not present in the text; the instrument model ""Orbitrap Elite ETD"" suggests ETD fragmentation, not CID.
+COMPLETENESS CHECK: The full set is not exhaustive as the value is not supported by the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: ETD","ETD"
+"PXD054113","","strict","Technical","instrument","LTQ Orbitrap Elite","LTQ Orbitrap Elite","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a mass spectrometer model, which matches the required category.
+SOURCE CHECK: The paper explicitly mentions the use of an ""Orbitrap Elite ETD"" in the Mass spectrometry section.
+TRUTH CHECK: The paper states ""2D linear ion trap mass spectrometer (Orbitrap Elite ETD; Thermo Fisher)"". While the candidate value adds ""LTQ"" (which is the linear ion trap component of that specific architecture), it accurately identifies the instrument model described.
+COMPLETENESS CHECK: The full set contains the only mass spectrometer mentioned in the text.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","label","label free","label free","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""label free"" is the correct category for the label field.
+SOURCE CHECK: The paper describes a mass spectrometry analysis of proteomic changes in OECM-1 cells, but does not mention any isobaric, metabolic, or chemical labeling reagents.
+TRUTH CHECK: Since no labeling methods (TMT, SILAC, iTRAQ, etc.) are mentioned in the text, the ""label-free"" safe default applies.
+COMPLETENESS CHECK: The full set contains only this value, which is exhaustive for the described experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","mass_analyzer","Orbitrap","Orbitrap","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value ""Orbitrap"" is a correct category for the mass_analyzer field.
+SOURCE CHECK: The value is present in the ""Mass spectrometry"" section, which describes the instrument used for the proteomics analysis of OECM-1 cells.
+TRUTH CHECK: The paper explicitly mentions the use of an ""Orbitrap Elite ETD"" mass spectrometer.
+COMPLETENESS CHECK: The full set contains the only mass analyzer mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","modification","Loss of Lysine (K)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a protein modification, which matches the field's category.
+SOURCE CHECK: The value ""Loss of Lysine (K)"" is not mentioned anywhere in the provided paper text.
+TRUTH CHECK: The value is not supported by the text; the paper discusses acetylation and phosphorylation, but not ""Loss of Lysine"".
+COMPLETENESS CHECK: The full set of extracted values contains modifications that are not mentioned in the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","modification","Iodoacetamide derivative (CDEHKMSTUY,N-term)","","low","False","","False","False","False","True","ptm_shepherd","","ptm_shepherd_only","TYPE CHECK: The candidate value describes a chemical modification, which matches the category for the modification field.
+SOURCE CHECK: The value is not present in the paper text; the text mentions the reagent ""iodoacetamide"" in the mass spectrometry section, but not this specific modification name.
+TRUTH CHECK: The value is not factually supported by the text. Per the rules, naming an alkylation reagent (iodoacetamide) does not justify the extraction of a modification name unless the modification itself is explicitly written.
+COMPLETENESS CHECK: The full set of extracted values is not supported by the text.
+
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: no
+VALUE_COMPLETE: no
+HALLUCINATED: yes
+VERDICT: low
+CORRECTED_VALUE: NONE",""
+"PXD054113","","strict","Technical","reduction_reagent","dithiothreitol","dithiothreitol","high","False","","True","True","False","False","","","correct_explicit","TYPE CHECK: The candidate value is a chemical used to reduce disulfide bonds, which matches the field definition.
+SOURCE CHECK: The value is explicitly mentioned in the ""Mass spectrometry"" section of the methods (""disulfide bonds were reduced using 10 mM dithiothreitol (DTT, Merck)"").
+TRUTH CHECK: The value is factually correct as stated in the text.
+COMPLETENESS CHECK: The full set contains the only reduction reagent mentioned for the MS experiment.
+TYPE_CORRECT: yes
+CORRECT_TYPE_NAME: NONE
+VALUE_CORRECT: yes
+VALUE_COMPLETE: yes
+HALLUCINATED: no
+VERDICT: high
+CORRECTED_VALUE: NONE",""
