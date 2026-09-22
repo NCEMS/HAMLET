@@ -28,6 +28,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # ============================================
 RUNASSESSOR_SCRIPT="$PROJECT_ROOT/submodules/runassessor/src/runassessor.py"
 AGENTIC_METADATA_SCRIPT="$PROJECT_ROOT/src/agentic-metadata/main.py"
+AGENTIC_METADATA_BRANCH="feature/hamlet-per-raw-integration"
 if ! command -v git &> /dev/null; then
     echo "ERROR: git is required to initialize HAMLET submodules" >&2
     exit 1
@@ -49,8 +50,8 @@ if [[ ! -f "$RUNASSESSOR_SCRIPT" ]]; then
 fi
 echo "✓ runAssessor submodule ready"
 
-echo "✓ Initializing required submodule: agentic-metadata"
-if ! git -C "$PROJECT_ROOT" submodule update --init --recursive --checkout src/agentic-metadata; then
+echo "✓ Initializing required submodule: agentic-metadata ($AGENTIC_METADATA_BRANCH)"
+if ! git -C "$PROJECT_ROOT" submodule update --init --recursive --remote --checkout src/agentic-metadata; then
     echo "ERROR: Failed to initialize src/agentic-metadata. Sign in to GitHub over HTTPS with an account that can access CompOmics/agentic-metadata, then rerun setup." >&2
     exit 1
 fi
@@ -58,7 +59,13 @@ if [[ ! -f "$AGENTIC_METADATA_SCRIPT" ]]; then
     echo "ERROR: agentic-metadata entrypoint was not found after submodule initialization: $AGENTIC_METADATA_SCRIPT" >&2
     exit 1
 fi
-echo "✓ agentic-metadata submodule ready"
+AGENTIC_METADATA_HEAD="$(git -C "$PROJECT_ROOT/src/agentic-metadata" rev-parse HEAD)"
+AGENTIC_METADATA_REMOTE_HEAD="$(git -C "$PROJECT_ROOT/src/agentic-metadata" rev-parse "origin/$AGENTIC_METADATA_BRANCH")"
+if [[ "$AGENTIC_METADATA_HEAD" != "$AGENTIC_METADATA_REMOTE_HEAD" ]]; then
+    echo "ERROR: agentic-metadata is at $AGENTIC_METADATA_HEAD, not origin/$AGENTIC_METADATA_BRANCH ($AGENTIC_METADATA_REMOTE_HEAD)" >&2
+    exit 1
+fi
+echo "✓ agentic-metadata submodule ready at $AGENTIC_METADATA_HEAD"
 
 # ============================================
 # Step 2: Check if conda is available

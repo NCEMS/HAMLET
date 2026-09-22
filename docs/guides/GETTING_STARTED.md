@@ -34,7 +34,7 @@ gh auth login --hostname github.com --git-protocol https --web
 bash src/setup.sh
 ```
 
-Authorize the GitHub CLI as the collaborator account that can access `CompOmics/agentic-metadata`. `src/setup.sh` initializes both required submodules, including agentic-metadata, so do not run a separate generic submodule update command. GitHub SSH keys are not required.
+Authorize the GitHub CLI as the collaborator account that can access `CompOmics/agentic-metadata`. `src/setup.sh` initializes both required submodules and fetches the latest `feature/hamlet-per-raw-integration` commit for agentic-metadata, so do not run a separate generic submodule update command. GitHub SSH keys are not required.
 
 If the installer adds Miniconda to your shell configuration, open a new shell or run the command it prints before rerunning `src/setup.sh`.
 
