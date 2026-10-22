@@ -638,6 +638,7 @@ process llm_extraction {
     conda run -p ${params.meti_env_path} python ${baseDir}/src/python/GetTextcsvs.py \
         --PXDcsv temp_pxd.csv \
         --results_path ${fetched_dir} \
+        --pmc_cache ${baseDir}/pride_survey/pmc_cache \
         --outpath llm_results \
         --log_file events.jsonl || {
             echo "WARNING: Failed to extract publication text for ${pxd}"

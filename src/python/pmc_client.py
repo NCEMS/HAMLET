@@ -6,6 +6,7 @@ import logging
 import requests
 import subprocess
 import os
+import time
 from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,25 @@ class PMCClient:
         self.idconv_url = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
         self.bioc_base = "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi"
         self.supp_base = "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/supplmat.cgi"
-    
+
+    def _get(self, url: str, params: Optional[Dict[str, Any]] = None, retries: int = 4) -> requests.Response:
+        """
+        GET with backoff when NCBI rate-limits (429) or has a temporary server error (5xx)
+
+        Waits 2, 4, 8, 16 s between attempts unless NCBI sends a Retry-After header.
+        Raises requests.HTTPError if the last attempt still fails.
+        """
+        for attempt in range(retries + 1):
+            response = requests.get(url, params=params, timeout=self.timeout)
+            if response.status_code not in (429, 500, 502, 503, 504) or attempt == retries:
+                break
+            retry_after = response.headers.get("Retry-After", "")
+            wait = int(retry_after) if retry_after.isdigit() else 2 ** (attempt + 1)
+            logger.warning(f"HTTP {response.status_code} from {url}, retrying in {wait}s ({attempt + 1}/{retries})")
+            time.sleep(wait)
+        response.raise_for_status()
+        return response
+
     def pmid_to_pmcid(self, pmid: str) -> Optional[str]:
         """
         Convert PubMed ID to PubMed Central ID
@@ -49,8 +68,7 @@ class PMCClient:
 
         try:
             logger.info(f"Converting PMID {pmid} to PMCID")
-            response = requests.get(self.idconv_url, params=params, timeout=self.timeout)
-            response.raise_for_status()
+            response = self._get(self.idconv_url, params=params)
             data = response.json()
             # print(data)
             
@@ -92,9 +110,8 @@ class PMCClient:
         
         try:
             logger.info(f"Fetching full text for PMCID {pmcid}")
-            response = requests.get(url, timeout=self.timeout)
+            response = self._get(url)
             response.encoding = 'utf-8'
-            response.raise_for_status()
             return response.json()
             
         except requests.RequestException as e:

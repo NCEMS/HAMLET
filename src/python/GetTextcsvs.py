@@ -10,6 +10,7 @@ from pathlib import Path
 # Add parent directory to path for importing PipelineLogger
 sys.path.insert(0, str(Path(__file__).parent))
 from PipelineLogger import PipelineLogger
+from run_agentic_metadata import slice_cache_entry
 
 """
 Get the text files for each PXD provided as user arguments and load them 
@@ -81,6 +82,7 @@ if __name__ == "__main__":
     parser.add_argument('--PXDcsv', metavar='PXD', type=str, help='Path to CSV file containing PXDs')
     parser.add_argument('--results_path', type=str, required=True, help='Path to results directory containing PXD subdirectories with metadata and PMC JSON')
     parser.add_argument('--outpath', type=str, help='Output path for the processed data')
+    parser.add_argument('--pmc_cache', type=str, default=None, help='Path to pride_survey/pmc_cache, used when no PMC JSON was fetched for a PXD')
     parser.add_argument('--log_file', default=None, help='Path to JSONL file for pipeline event logging')
     args = parser.parse_args()
 
@@ -116,24 +118,42 @@ if __name__ == "__main__":
             
             # Look for PMC publication text (BioC JSON format)
             textjson_file_path = glob.glob(os.path.join(results_path, 'pmc_json', f"{pxd}_*.json"))
-            
-            if not textjson_file_path:
+            cached_bioc = None
+
+            # FetchPXD can fail to download the text (e.g. NCBI rate limiting);
+            # the PMC cache stores the same BioC JSON under 'pmc_response'
+            if not textjson_file_path and args.pmc_cache:
+                print(f"No PMC JSON in {os.path.join(results_path, 'pmc_json')}, checking PMC cache: {args.pmc_cache}")
+                cached_bioc = slice_cache_entry(Path(args.pmc_cache), pxd).get('pmc_response')
+
+            if not textjson_file_path and not cached_bioc:
                 error_msg = f"No PMC publication text found for {pxd} at {os.path.join(results_path, 'pmc_json')}"
+                if args.pmc_cache:
+                    error_msg += f" or in {args.pmc_cache}"
                 print(f"ERROR: {error_msg}")
                 if logger:
                     logger.process_error("llm_extraction", error_msg, is_fatal=True)
                 sys.exit(1)
-            
-            if len(textjson_file_path) > 1:
-                print(f"Warning: Multiple text files found for {pxd}. Using the first one.")
-            textjson_file_path = textjson_file_path[0]
-            print(f"Using publication text from: {textjson_file_path}")
+
+            if cached_bioc:
+                textjson_file_path = args.pmc_cache
+                print(f"Using publication text from PMC cache: {textjson_file_path}")
+                if logger:
+                    logger.process_step("llm_extraction", "Publication text loaded from PMC cache", {"pxd": pxd})
+            else:
+                if len(textjson_file_path) > 1:
+                    print(f"Warning: Multiple text files found for {pxd}. Using the first one.")
+                textjson_file_path = textjson_file_path[0]
+                print(f"Using publication text from: {textjson_file_path}")
 
             text_row = {section: '' for section in ALLOWED_section_types}
             try:
                 # load json into dictionary
-                with open(textjson_file_path, 'r') as f:
-                    text_data = json.load(f)
+                if cached_bioc:
+                    text_data = cached_bioc
+                else:
+                    with open(textjson_file_path, 'r') as f:
+                        text_data = json.load(f)
 
                 # BioC JSON from PMC is an array; access the first item which contains documents
                 if not text_data or len(text_data) == 0:

@@ -11,6 +11,7 @@ Usage:
 """
 
 import argparse
+import mmap
 import re
 import subprocess
 import sys
@@ -61,40 +62,54 @@ def write_legacy_descriptor(pub_text: Path, full_text: str, raw_filenames: list[
 
 def slice_cache_entry(cache_file: Path, key: str, is_array: bool = False, array_key: str = "accession") -> dict:
     """
-    Extract a single entry from a large JSON cache file using jq (streaming, memory-efficient).
-    
+    Extract a single entry from a large JSON cache file without loading the whole file.
+
+    Both caches are written by json.dump, so every entry starts with a fixed byte pattern:
+        pmc_cache:   {"PXD000070": {"pmc_id": ...}, ...}
+        pride_cache: {..., "response": [{"accession": "PXD000070", ...}, ...]}
+    The file is memory-mapped, the pattern for key is located, and only that entry is decoded.
+
     Args:
         cache_file: Path to large JSON cache file (e.g., pride_cache, pmc_cache)
         key: Key to extract (PXD ID for pmc_cache, or value to find in array for pride_cache)
         is_array: If True, search through 'response' array for array_key==key
         array_key: Field name to match when is_array=True (default: 'accession')
-    
+
     Returns:
         dict: The extracted entry, or empty dict if not found
     """
+    if is_array:
+        # For pride_cache the entry starts at the opening brace of the marker
+        marker = f'{{"{array_key}": "{key}"'.encode()
+        offset = 0
+    else:
+        # For pmc_cache the entry starts at the brace after the key
+        marker = f'"{key}": {{'.encode()
+        offset = len(marker) - 1
+
     try:
-        # Build jq filter for efficient streaming extraction
-        if is_array:
-            # For pride_cache: .response[] | select(.accession == "PXD000070")
-            jq_filter = f'.response[] | select(.{array_key} == "{key}")'
-        else:
-            # For pmc_cache: .["{key}"]
-            jq_filter = f'.["{key}"]'
-        
-        result = subprocess.run(
-            ['jq', '-c', jq_filter, str(cache_file)],
-            capture_output=True,
-            text=True,
-            timeout=10
-        )
-        
-        if result.returncode == 0 and result.stdout.strip():
-            return json.loads(result.stdout.strip())
-        else:
-            return {}
+        with open(cache_file, 'rb') as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+            pos = mm.find(marker)
+            if pos == -1:
+                return {}
+            start = pos + offset
+            # Decode a growing window until it holds the whole entry
+            window = 1 << 20
+            while True:
+                end = min(start + window, len(mm))
+                try:
+                    entry, _ = json.JSONDecoder().raw_decode(mm[start:end].decode('utf-8', errors='replace'))
+                    break
+                except json.JSONDecodeError:
+                    if end == len(mm):
+                        raise
+                    window *= 4
+        if is_array and entry.get(array_key) != key:
+            raise ValueError(f"entry at byte {start} has {array_key}={entry.get(array_key)!r}")
+        return entry
     except Exception as e:
-        print(f"WARNING: jq failed ({e}), falling back to full load for {cache_file.name}")
-        # Fallback to full load if jq not available
+        print(f"WARNING: indexed lookup failed ({e}), falling back to full load for {cache_file.name}")
+        # Fallback to full load if the cache is not laid out as json.dump writes it
         try:
             with open(cache_file, 'r') as f:
                 data = json.load(f)
@@ -134,7 +149,7 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
     pub_text = Path(tempfile.gettempdir()) / f"{pxd}_PubText.txt"
     print(f"Building publication descriptors for {pxd}")
 
-    ## Extract pride_cache entry for this PXD (memory-efficient using jq)
+    ## Extract pride_cache entry for this PXD (memory-efficient, reads only this entry)
     print(f"Extracting {pxd} from PRIDE cache (memory-efficient)...")
     pxd_metadata = slice_cache_entry(pride_cache, pxd, is_array=True, array_key='accession')
 
@@ -147,7 +162,7 @@ def run_agentic_extraction(input_json: Path, outdir: Path, pride_cache: Path, pm
     filenames = [f.get('fileName', '') for f in files if f.get('fileName', '').lower().endswith('.raw')]
     print(f"Extracted .raw filenames from PRIDE metadata: {filenames}")
 
-    ## Extract pmc_cache entry for this PXD (memory-efficient using jq)
+    ## Extract pmc_cache entry for this PXD (memory-efficient, reads only this entry)
     print(f"Extracting {pxd} from PMC cache (memory-efficient)...")
     pmc_metadata = slice_cache_entry(pmc_cache, pxd, is_array=False)
 
