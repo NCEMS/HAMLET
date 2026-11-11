@@ -1,5 +1,11 @@
 # HAMLET
 
+**v3.0.1 migration:** fetch/conversion/RunAssessor and organism identification now
+use [MassSpecOrganismID](submodules/MassSpecOrganismID). Sequencing uses installed
+Casanovo/Cascadia packages, not the retained Bolt sources. See
+[migration and installation notes](docs/organism-id-submodule.md). Real-PXD
+validation of this release is pending.
+
 **H**ybrid **A**gentic **M**etadata **L**iterature **E**xtraction and **T**echnical annotator
 
 HAMLET is a local Nextflow DSL2 pipeline that processes PRIDE proteomics datasets end-to-end — from raw file download through database search — and produces a structured JSON report per experiment enriched with organism identity, instrument parameters, post-translational modifications, and optionally LLM- and agentic-extracted publication metadata.
@@ -13,7 +19,7 @@ flowchart TD
   A["PRIDE Archive<br/>RAW files and project metadata"] --> B["<b>FetchPXD.py</b><br/><small>Nextflow: fetch_pxd</small>"]
   B --> C["spectral_files/PXD<br/>mzML, PRIDE metadata"]
 
-  C --> D["<b>runAssessor submodule<br/>src/runassessor.py</b><br/><small>Nextflow: run_assessor</small>"]
+  C --> D["<b>nested RunAssessor submodule</b><br/><small>inside Nextflow: fetch_pxd</small>"]
   C --> E["<b>determine_acquisition_params.py</b><br/><small>Nextflow: determine_acquisition_params</small>"]
   D --> E
   D --> F["runAssessor study_metadata.json"]
@@ -50,13 +56,49 @@ flowchart TD
 
 1. **Fetches** RAW files from PRIDE and converts them to mzML (via ThermoRawFileParser / ProteoWizard)
 2. **Assesses** each run with runAssessor — detects acquisition type (DDA/DIA), labeling, instrument model, fragmentation
-3. **Identifies organisms** via de novo peptide sequencing (Casanovo / CasanovoBolt) + Peptonizer2000 taxonomy scoring, with PRIDE project organism metadata used to augment the taxid search pool
+3. **Identifies organisms** through the MassSpecOrganismID submodule using installed Casanovo/Cascadia + patched Peptonizer2000, with PRIDE project organism metadata used to augment the taxid search pool
 4. **Routes searches** automatically — DDA via SAGE, DIA via DIA-NN (controlled by `--acquisition_type`)
 5. **Extracts publication metadata** via optional LLM prompting (`--run_llm_extraction`) and manifest-controlled downstream agentic stages
 6. **Aggregates** all per-PXD outputs into a single `*_aggregated_results.json` report
 7. **Generates SDRF** — the agentic pipeline can produce SDRF-Proteomics v1.1.0 TSV files via `src/python/run_agentic_metadata.py`
 
 The pipeline is **100% container-free**, using conda environments for all tools.
+
+### Checking archived aggregated results
+
+`src/python/enrich_sections_from_tar.py` fills the five section/path columns in a
+ROAR-enriched CSV using JSONs inside `.tar`, `.tar.gz`, or `.tar.zst` archives,
+without extracting files. It streams each archive once, with one process per
+archive (up to `--workers`). Compressed archives still require a full sequential
+decompression scan; additional workers beyond the number of archives do not help.
+For Zstandard, install `zstandard` in the Python environment used to run the script.
+
+```bash
+python3 -m pip install zstandard
+python3 src/python/enrich_sections_from_tar.py \
+  --csv Trackers/subset_nonzero_ROAR_sections.csv \
+  --output Trackers/subset_nonzero_all_sections.csv \
+  --workers 3 \
+  --archive /scratch/ims86/HAMLET_ACCESS_CPU_vol2.tar.gz assets/FileLists/ACCESS_CPUv2_HAMLET_aggregated_results_10052026.json \
+  --archive /scratch/ims86/HAMLET_ACCESS_GPU_vol1.tar.gz assets/FileLists/ACCESS_GPUv1_HAMLET_aggregated_results_10052026.json \
+  --archive /scratch/ims86/HAMLET_store.tar.zst assets/FileLists/CyVerse_HAMLET_aggregated_results_10052026.json
+```
+
+Each `--archive` pairs an archive with its plain-text file list; confirm the store
+archive contains the CyVerse-listed paths before using that pairing. Cluster root
+prefixes are ignored, but paths below `HAMLETruns`, `results`, `store`, or `work`
+must match, not just filenames. Unmatched relevant list entries are reported.
+Symlink/hardlink members are not read as JSON candidates.
+
+For each input PXD, the largest JSON wins across accessible ROAR files and listed
+archive members; equal sizes prefer the newest filesystem/member modification
+time, then the lexical location for deterministic ties. Existing ROAR paths must
+remain accessible. The selected JSON alone determines the four `True`/`False`
+nonempty-section indicators; archive locations are stored as `archive::member`.
+Rows without a selected file remain unchanged. Malformed selected JSONs or
+unreadable inputs fail explicitly, and the new CSV is published only after all
+scans and CSV verification succeed. Existing output files are never overwritten.
+Use the original ROAR-enriched CSV as input, not a previous archive-enriched output.
 
 ---
 
@@ -85,8 +127,8 @@ bash src/setup.sh
 - Create four conda environments from [src/conda_envs/](src/conda_envs/):
   - `meti_env` — core tools: FetchPXD, SAGE, runAssessor, aggregation scripts
   - `search_env` — database search dependencies
-  - `cascadia_env` — DIA peptide identification runtime (model weights + Lightning; uses `src/cascadiaBolt/` for inference)
-  - `casanovo_env` — DDA de novo sequencing runtime (PyTorch + Lightning; uses `src/casanovoBolt/` for inference)
+  - `cascadia_env` — installed Cascadia DIA peptide identification runtime
+  - `casanovo_env` — installed Casanovo DDA peptide identification runtime
 - Verify key executables (`ThermoRawFileParser`, `aria2c`, etc.)
 - Download NCBI taxonomy database files (nodes.dmp, names.dmp) for organism identification
 
@@ -133,6 +175,73 @@ python -c "import pandas, sage_runner; print('OK')"
 conda deactivate
 ```
 
+### 7. Optional: Apptainer/Singularity container
+
+HAMLET is container-free by design (conda environments cover every tool), but an
+[Apptainer](https://apptainer.org/) definition is provided so you can bake `meti_env`,
+`search_env`, `casanovo_env`, `cascadia_env`, and the search tool binaries (SAGE,
+PTM-Shepherd, Fragpipe/MSFragger, dotnet, DIA-NN) into a single image instead of running
+`src/setup.sh` on the host. This is useful on shared HPC systems where you want a
+reproducible, portable runtime without touching the host's conda installation.
+
+The container does **not** bake in the HAMLET repo itself, its git submodules,
+`assets/cascadia.ckpt`, or `assets/taxonomy/*.dmp` — those are bind-mounted from a real
+checkout at runtime (most HPC sites already auto-bind `/storage`, `/scratch`, and `$HOME`
+into containers; check your site's Apptainer/Singularity bind-path config if paths aren't
+visible).
+
+**Build the image** (from the repo root, since [containers/hamlet.def](containers/hamlet.def)
+copies `src/conda_envs/*.yml` and `src/bash/install_search_tools.sh` using paths relative to
+the build's working directory):
+
+```bash
+apptainer build --fakeroot containers/hamlet.sif containers/hamlet.def
+```
+
+**Test that you can reach and use the container.** `apptainer exec` treats every trailing
+argument as the command to run *inside* the container, so `apptainer exec hamlet.sif --help`
+fails with `executable file not found in $PATH` — there is no `--help` binary. Use this
+instead to confirm the image is readable and its tools resolve:
+
+```bash
+apptainer exec /storage/group/epo2/default/software/HAMLET/containers/hamlet.sif bash -lc 'source /opt/conda/etc/profile.d/conda.sh; conda activate meti_env; command -v sage && command -v diann && command -v ThermoRawFileParser && sage --version && echo CONTAINER_OK'
+```
+
+A successful run prints the three tool paths, `sage 0.14.6`, and `CONTAINER_OK`. Any other
+user on the HPC can run this same command against
+`/storage/group/epo2/default/software/HAMLET/containers/hamlet.sif` from any directory —
+no need to be inside this repo checkout.
+
+**One-time runtime setup** — install the patched nested Peptonizer package into
+the container's `meti_env` from the bind-mounted checkout:
+
+```bash
+apptainer exec containers/hamlet.sif /opt/conda/envs/meti_env/bin/python \
+  src/python/install_organism_id.py --submodule submodules/MassSpecOrganismID
+```
+
+**Run the pipeline inside the container.** Use the `container_gpu` Nextflow profile (added
+in [nextflow.config](nextflow.config)) to repoint `conda_init`/`meti_env_path`/
+`casanovo_env_path`/`cascadia_env_path`/`search_env_path` at the environments baked into the
+image (`/opt/conda/envs/*`), and combine it with the site profile(s) you'd otherwise use
+(e.g. `roar_basic,roar_basic_gpu`). Launch `nextflow` itself via `apptainer exec --nv` so
+the local executor's child processes inherit the container's environment and GPU access:
+
+```bash
+apptainer exec --nv containers/hamlet.sif bash -lc "
+  source /opt/conda/etc/profile.d/conda.sh
+  conda activate meti_env
+  nextflow run main.nf \
+    -profile roar_basic,roar_basic_gpu,container_gpu \
+    --pxd PXD000070 \
+    -resume
+"
+```
+
+See [PXD073162GPU.slurm](PXD073162GPU.slurm) for a full working example that runs this way
+under SLURM — it runs the casanovo-data fixup once, then wraps the entire `nextflow run`
+invocation (fetch → organism ID → search → LLM/agentic metadata) in `apptainer exec --nv`.
+
 ---
 
 ## 2. Pipeline Usage Modes
@@ -156,14 +265,16 @@ nextflow run main.nf \
 
 Use `--globus` to transfer selected PRIDE RAW files from the EMBL-EBI Public Data collection. The Globus CLI must be authenticated, and Globus Connect Personal must expose `--central_mzml_dir` on the destination host.
 
-Use `--runAssessorOnly` to stop after `fetch_pxd` and `run_assessor`; no acquisition detection, organism identification, search, aggregation, or agentic processes are launched.
+Use `--mode 'runassessor only'` to run combined `fetch_pxd`/RunAssessor and write
+the PXD's aggregated-results JSON, then stop. No organism identification,
+database search, or agentic processes are launched.
 
 ```bash
 nextflow run main.nf \
   -c assets/nextflow_configs/nextflow_JS2.config \
   --pxd PXD000070 \
   --globus \
-  --runAssessorOnly \
+  --mode 'runassessor only' \
   --max_raw_files 1 \
   -resume
 ```
@@ -216,32 +327,73 @@ nextflow run main.nf \
 
 See [assets/pxd_test_files/README.md](assets/pxd_test_files/README.md) for detailed information about each test set.
 
+### Pipeline modes and updating existing results
+
+Select one mode with `--mode` (default: `full`). Quote names containing spaces;
+equivalent underscore or hyphen spellings are also accepted.
+
+| Mode | Work performed | Stops after |
+|------|----------------|-------------|
+| `full` | Fetch/assessment, organism ID, search, aggregation, agentic/judge/SDRF | SDRF finalization |
+| `runassessor only` | Fetch/assessment and aggregation | Aggregated-results JSON |
+| `organism only` | Fetch/assessment, acquisition detection, organism ID, aggregation | Aggregated-results JSON |
+| `search only` | Fetch/assessment, acquisition detection, taxid selection, search, aggregation | Aggregated-results JSON |
+| `agentic only` | Reuse stored aggregates; run agentic extraction, judge, SDRF | SDRF finalization |
+
+The old `--agentic_only`, `--runAssessorOnly`, `--run_organism_id`,
+`--run_search`, and `--run_agentic_metadata` flags have been removed; supplying
+them fails with a migration message. Regenerate previously generated job scripts.
+
+To refresh one stage while preserving the other aggregate sections:
+
+```bash
+nextflow run main.nf --pxd PXD000070 --mode 'search only' \
+  --update_from_existing true \
+  --existing_results_dir /path/to/prior/results \
+  --outdir /path/to/new/results
+```
+
+Update mode uses
+`<existing_results_dir>/<PXD>/<PXD>_aggregated_results.json` as its base.
+Organism-only replaces organism identification; search-only replaces search/PTM
+results, modification-site fractions, and taxid warnings; RunAssessor-only
+replaces RunAssessor and PRIDE metadata. Other sections, including custom data
+and prior publication metadata, survive even when their source files are gone.
+Version, run mode, aggregation timestamp, relevant input paths, and processing
+summary are refreshed. Search-only can also recover taxid evidence from the
+embedded organism predictions and metadata if original source files are missing.
+Full update refreshes all main stages but retains extra fields and existing
+LLM-extracted metadata when no replacement is available.
+
+If the base aggregate is absent, HAMLET explicitly reports this and rebuilds
+from available stage outputs, including reusable prior stage directories.
+Malformed aggregates or mismatched PXD IDs fail rather than silently discarding
+data. The prior directory is never overwritten: `--outdir` must differ from
+`--existing_results_dir`. Spectra and tools needed for the selected stage are
+still required; missing spectra are fetched as usual.
+
 ### Manifest-driven stage control
 
 HAMLET now uses `results/pipeline_stage_manifest.json` as the single source of truth for per-PXD stage execution.
 
-- Deprecated run flags such as `--run_search`, `--run_agentic_metadata`, and `--run_llm_judge` are no longer used.
+- `--mode` selects which stages are eligible to run; partial modes always stop at aggregation.
 - On each run, HAMLET reconciles the manifest from existing outputs.
-- runAssessor now runs in its own dedicated stage (`run_assessor`) between `fetch` and `determine_acquisition_params`, so it can be updated and rerun independently.
+- RunAssessor runs inside the combined fetch task; its separate `run_assessor` manifest record still supports independent reruns on cached spectra.
 - Per stage, each PXD has:
   - `availability`: whether the stage is allowed to run
   - `complete`: computed from checkpoint files
   - `key_outputs`: checkpoint file patterns used to determine completion
 
-### runAssessor as a submodule (recommended)
+### RunAssessor within MassSpecOrganismID
 
-You can keep runAssessor decoupled from HAMLET by installing it as a git submodule and letting the dedicated `run_assessor` process call it.
+MassSpecOrganismID uses its pinned nested RunAssessor dependency. Initialize it with:
 
 ```bash
-git submodule add <RUNASSESSOR_REPO_URL> submodules/runassessor
-git submodule update --init --recursive
+git submodule update --init --recursive submodules/MassSpecOrganismID
 ```
 
-Then run HAMLET normally. The pipeline will prefer:
-
-- `--runassessor_script submodules/runassessor/src/runassessor.py`
-
-and requires this submodule path to exist.
+The retained legacy `run_assessor` process and its script override are not used
+by the v3.0.1 workflow.
 
 Default behavior for a normal run:
 
@@ -440,7 +592,7 @@ python src/python/pride_survey.py \
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--denovo_threshold` | `70` | Min Casanovo/CasanovoBolt peptide confidence |
+| `--denovo_threshold` | `70` | Min Casanovo/Cascadia peptide confidence |
 | `--min_peptides_for_peptonizer` | `5` | Min peptides required to run Peptonizer2000 |
 | `--contaminants_fasta` | `assets/UniversalContaminats.fasta` | Contaminant sequences |
 | `--taxid_list_file` | `assets/taxid_lists/CommonPRIDEtaxids.txt` | Allowed taxid list |
@@ -462,9 +614,9 @@ python src/python/pride_survey.py \
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `--runAssessorOnly` | `false` | Run only `fetch_pxd` and `run_assessor`, then stop |
+| `--mode` | `full` | Select one of the five pipeline modes above |
 | `--runassessor_submodule_dir` | `submodules/runassessor` | Preferred runAssessor submodule directory |
-| `--runassessor_script` | `submodules/runassessor/src/runassessor.py` | Script used by dedicated `run_assessor` stage |
+| `--organism_id_submodule_dir` | `submodules/MassSpecOrganismID` | Standalone fetch and organism-ID source |
 
 ### Tool paths
 
@@ -480,7 +632,7 @@ python src/python/pride_survey.py \
 
 ### Runtime output layout
 
-Converted spectra have one canonical location under `--central_mzml_dir` (default: `spectral_files`). A downloaded RAW file is deleted only after its same-stem mzML file passes validation. The full pipeline and `--runAssessorOnly` both use this same storage policy.
+Converted spectra have one canonical location under `--central_mzml_dir` (default: `spectral_files`). A downloaded RAW file is deleted only after its same-stem mzML file passes validation. The full pipeline and `--mode 'runassessor only'` both use this same storage policy.
 
 ```text
 spectral_files/
@@ -516,7 +668,7 @@ The final SDRF is generated from the per-PXD runtime outputs under `results/`; `
 flowchart TD
   A["PRIDE RAW files"] --> B["<b>fetch_pxd</b>"]
   B --> C["spectral_files/PXD/run-*.mzML"]
-  C --> D["<b>run_assessor</b>"]
+  C --> D["<b>RunAssessor inside fetch_pxd</b>"]
   D --> E["runAssessor metadata"]
   E --> F["<b>aggregate_results</b> or<br/><b>create_minimal_aggregated_results</b>"]
   F --> G["results/PXD/PXD_aggregated_results.json"]
@@ -605,8 +757,8 @@ src/
   setup.sh                   # Environment bootstrap
   BaselinePrompt.txt         # LLM prompt template for baseline metadata extraction
   conda_envs/                # Environment YAML definitions
-  casanovoBolt/              # Optimized Casanovo fork (BF16, larger batches for RTX Ada)
-  cascadiaBolt/              # Optimized Cascadia fork (BF16, larger batches for RTX Ada)
+  casanovoBolt/              # Retained legacy source; not executed in v3.0.1
+  cascadiaBolt/              # Retained legacy source; not executed in v3.0.1
   python/
     OrganismID.py            # Organism identification orchestrator (de novo + Peptonizer)
     run_agentic_metadata.py  # Standalone agentic extraction + SDRF script

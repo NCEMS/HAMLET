@@ -1,0 +1,125 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+# ============================================================================
+# HAMLET annotator pipeline container
+#
+# Bakes the conda environments + search tool binaries described in
+# src/setup.sh into a single Apptainer/Singularity image. The HAMLET
+# repository itself (code, submodules, assets/taxonomy, assets/cascadia.ckpt)
+# is NOT baked in -- bind-mount the repo at runtime, e.g.:
+#
+#   apptainer exec --nv --bind /path/to/HAMLET:/workspace hamlet.sif \
+#       bash -c 'cd /workspace && nextflow run main.nf --pxd PXD003539 -resume'
+#
+# Build (from the repo root, so the relative %files paths resolve):
+#   apptainer build --fakeroot hamlet.sif containers/hamlet.def
+# ============================================================================
+
+%files
+    src/conda_envs/meti_env.yml       /opt/hamlet/conda_envs/meti_env.yml
+    src/conda_envs/search_env.yml     /opt/hamlet/conda_envs/search_env.yml
+    src/conda_envs/casanovo_env.yml   /opt/hamlet/conda_envs/casanovo_env.yml
+    src/conda_envs/cascadia_env.yml   /opt/hamlet/conda_envs/cascadia_env.yml
+    src/bash/install_search_tools.sh  /opt/hamlet/install_search_tools.sh
+
+%post
+    set -eu
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    # ------------------------------------------------------------------
+    # System packages (git for submodules mounted at runtime, build-essential
+    # for pip source builds, curl/wget/unzip for the search-tool installers)
+    # ------------------------------------------------------------------
+    apt-get update
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        build-essential \
+        curl \
+        wget \
+        git \
+        unzip \
+        bzip2 \
+        procps \
+        locales
+    rm -rf /var/lib/apt/lists/*
+
+    # ------------------------------------------------------------------
+    # Miniconda
+    # ------------------------------------------------------------------
+    CONDA_PREFIX=/opt/conda
+    MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    curl -L "$MINICONDA_URL" -o /tmp/miniconda.sh
+    bash /tmp/miniconda.sh -b -p "$CONDA_PREFIX"
+    rm -f /tmp/miniconda.sh
+
+    . "$CONDA_PREFIX/etc/profile.d/conda.sh"
+    conda config --system --set solver libmamba || true
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main || true
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r || true
+    conda install -n base -y -c conda-forge mamba
+    conda clean -afy
+
+    # ------------------------------------------------------------------
+    # HAMLET conda environments
+    # ------------------------------------------------------------------
+    conda env create -f /opt/hamlet/conda_envs/meti_env.yml --solver libmamba
+    conda env create -f /opt/hamlet/conda_envs/search_env.yml --solver libmamba
+    conda env create -f /opt/hamlet/conda_envs/casanovo_env.yml --solver libmamba
+    conda env create -f /opt/hamlet/conda_envs/cascadia_env.yml --solver libmamba
+    conda clean -afy
+
+    # ------------------------------------------------------------------
+    # Search tools (SAGE, PTM-Shepherd, Fragpipe/MSFragger, dotnet, DIA-NN)
+    # Installed into both search_env and meti_env, matching src/setup.sh
+    # ------------------------------------------------------------------
+    chmod +x /opt/hamlet/install_search_tools.sh
+    SEARCH_ENV_PATH="$(conda run -n search_env python -c 'import sys; print(sys.prefix)')"
+    METI_ENV_PATH="$(conda run -n meti_env python -c 'import sys; print(sys.prefix)')"
+    bash /opt/hamlet/install_search_tools.sh "$SEARCH_ENV_PATH"
+    bash /opt/hamlet/install_search_tools.sh "$METI_ENV_PATH"
+
+    # Locale (some search tools warn without a UTF-8 locale)
+    locale-gen en_US.UTF-8 || true
+
+%environment
+    export LANG=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+    export CONDA_PREFIX=/opt/conda
+    if [ -f /opt/conda/etc/profile.d/conda.sh ]; then . /opt/conda/etc/profile.d/conda.sh; fi
+
+    # Search tool locations installed by install_search_tools.sh (meti_env copy)
+    export SEARCH_TOOLS_ROOT=/opt/conda/envs/meti_env/opt/search_tools
+    export SAGE_HOME="$SEARCH_TOOLS_ROOT/sage"
+    export PTMSHEPHERD_HOME="$SEARCH_TOOLS_ROOT/ptmshepherd"
+    export PTMSHEPHERD_JAR="$SEARCH_TOOLS_ROOT/ptmshepherd/ptmshepherd.jar"
+    export FRAGPIPE_HOME="$SEARCH_TOOLS_ROOT/fragpipe"
+    export DIANN_HOME="$SEARCH_TOOLS_ROOT/diann"
+    export DOTNET_ROOT="$SEARCH_TOOLS_ROOT/dotnet"
+    export PATH="$DOTNET_ROOT:$SAGE_HOME:$DIANN_HOME:$FRAGPIPE_HOME/bin:$PATH"
+
+%runscript
+    . /opt/conda/etc/profile.d/conda.sh
+    conda activate meti_env
+    exec "$@"
+
+%labels
+    Author HAMLET
+    Description Container-free-no-more: conda envs + search tools for the HAMLET annotator pipeline
+    Note Run with --nv to expose GPUs for casanovo/cascadia; bind-mount the HAMLET repo checkout to /workspace
+
+%help
+    HAMLET annotator pipeline container.
+
+    Bakes in: meti_env, search_env, casanovo_env, cascadia_env conda
+    environments plus SAGE, PTM-Shepherd, Fragpipe/MSFragger, dotnet and
+    DIA-NN (see src/setup.sh / src/bash/install_search_tools.sh).
+
+    Does NOT bake in: the HAMLET git repo, its submodules, assets/cascadia.ckpt,
+    or assets/taxonomy/*.dmp -- bind-mount a real checkout at runtime.
+
+    Example:
+      apptainer exec --nv --bind /path/to/HAMLET:/workspace hamlet.sif \
+          bash -c 'cd /workspace && conda activate meti_env && \
+                   nextflow run main.nf --pxd PXD003539 -resume'

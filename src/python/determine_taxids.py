@@ -16,6 +16,44 @@ from pathlib import Path
 from collections import Counter
 import pandas as pd
 
+from aggregate_results import load_existing_aggregate
+
+
+def organism_raw_filename(path):
+    parts = Path(path).parts
+    sample = next((parts[i + 1] for i, part in enumerate(parts[:-1])
+                   if "CasanovoSequence" in part or "CascadiaSequence" in part), None)
+    if sample is None:
+        return None
+    match = re.search(r"PXD\d+_(.*)", sample)
+    return (match.group(1) if match else sample) + ".raw"
+
+
+def aggregate_taxid_sources(aggregate):
+    """Use embedded predictions without requiring their original CSV paths."""
+    organism_taxids = {}
+    for result in aggregate.get("organism_identification", {}).get("results", []):
+        raw_file = organism_raw_filename(result["file_path"])
+        if raw_file is None:
+            raise ValueError(f"Cannot identify RAW filename in stored organism result: {result['file_path']}")
+        predictions = result.get("data", [])
+        if predictions:
+            top = max(predictions, key=lambda row: float(row["score"]))
+            taxid = str(top["taxon_id"])
+            if not is_valid_taxid(taxid):
+                raise ValueError(f"Invalid stored organism taxid for {raw_file}: {taxid}")
+            organism_taxids[raw_file] = taxid
+    llm_taxids = {}
+    for raw_file, metadata in (aggregate.get("llm_extracted_metadata") or {}).items():
+        if isinstance(metadata, dict):
+            values = metadata.get("Characteristics[OrganismTaxid]", [])
+            if values and is_valid_taxid(values[0]):
+                llm_taxids[raw_file] = str(values[0]).strip()
+    pride = aggregate.get("pride_metadata") or {}
+    organisms = pride.get("organisms") or (pride.get("project") or {}).get("organisms", [])
+    pride_taxid = extract_taxid_from_accession(organisms[0].get("accession")) if organisms else None
+    return organism_taxids, llm_taxids, pride_taxid
+
 
 def extract_taxid_from_accession(accession):
     """Extract taxid from NEWT accession (e.g., 'NEWT:36329' -> '36329')"""
@@ -116,37 +154,14 @@ def parse_organism_id_results(organism_results_dir):
     
     for pep_file in peptonizer_files:
         try:
-            # Extract raw filename from the directory path
-            # Path structure: .../CasanovoSequence/<PXD####_raw_file_name>/Peptonizer2000_data/... (DDA)
-            #            or: .../CascadiaSequence/<PXD####_raw_file_name>/Peptonizer2000_data/... (DIA)
-            # We need to get the <PXD####_raw_file_name> part and convert to .raw
-            parts = pep_file.parts
-            raw_file_name = None
-            
-            for i, part in enumerate(parts):
-                if "CasanovoSequence" in part or "CascadiaSequence" in part:
-                    # Next part after sequence type is the raw file directory
-                    if i + 1 < len(parts):
-                        raw_file_name = parts[i + 1]
-                        break
-            
-            if not raw_file_name:
+            raw_file = organism_raw_filename(pep_file)
+            if raw_file is None:
                 warnings.append({
                     "type": "ORGANISM_ID_PARSE_ERROR",
                     "file": str(pep_file),
                     "message": f"Failed to extract raw file name from path: {pep_file}"
                 })
                 continue
-            
-            # Convert directory name to .raw format
-            # Directory name is like: PXD004732_01625b_GF4-TUM_first_pool_30_01_01-3xHCD-1h-R1
-            # Raw file should be: 01625b_GF4-TUM_first_pool_30_01_01-3xHCD-1h-R1.raw
-            # (strip PXD prefix and add .raw)
-            match = re.search(r'PXD\d+_(.*)', raw_file_name)
-            if match:
-                raw_file = match.group(1) + ".raw"
-            else:
-                raw_file = raw_file_name + ".raw"
             
             # Parse CSV file
             df = pd.read_csv(pep_file)
@@ -284,6 +299,7 @@ def main():
     parser.add_argument('--organism_results', required=True, help='Directory with organism_id results')
     parser.add_argument('--llm_results', required=True, help='Directory with LLM results')
     parser.add_argument('--default_taxid', help='Default taxid if no valid taxid found')
+    parser.add_argument('--existing_aggregate', help='Prior aggregate supplying preserved organism/LLM evidence')
     parser.add_argument('--output_mapping', default='taxid_mapping.json', help='Output mapping file')
     parser.add_argument('--output_warnings', default='taxid_warnings.json', help='Output warnings file')
     
@@ -303,6 +319,12 @@ def main():
     # 3. Parse organism_id results
     organism_taxids, organism_warnings = parse_organism_id_results(args.organism_results)
     all_warnings.extend(organism_warnings)
+    existing = load_existing_aggregate(args.existing_aggregate, args.pxd)
+    if existing is not None:
+        stored_organisms, stored_llm, stored_pride = aggregate_taxid_sources(existing)
+        organism_taxids = {**stored_organisms, **organism_taxids}
+        llm_taxids = {**stored_llm, **llm_taxids}
+        pride_taxid = pride_taxid or stored_pride
     
     # 4. Find all mzML files
     mzml_files = []

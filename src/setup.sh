@@ -19,6 +19,7 @@ echo "================================"
 CONDA_PREFIX="${HOME}/miniconda3"
 MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 INSTALL_DIR="${TMPDIR:-/tmp}/miniconda_installer"
+CONDA_SOLVER="${HAMLET_CONDA_SOLVER:-libmamba}"
 
 # Get project root directory
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -49,6 +50,9 @@ if [[ ! -f "$RUNASSESSOR_SCRIPT" ]]; then
     exit 1
 fi
 echo "✓ runAssessor submodule ready"
+
+echo "✓ Initializing required submodule: MassSpecOrganismID"
+git -C "$PROJECT_ROOT" submodule update --init --recursive submodules/MassSpecOrganismID
 
 echo "✓ Initializing required submodule: agentic-metadata ($AGENTIC_METADATA_BRANCH)"
 if ! git -C "$PROJECT_ROOT" submodule update --init --recursive --remote --checkout src/agentic-metadata; then
@@ -124,31 +128,23 @@ create_or_update_env() {
     
     if conda env list | awk '{print $1}' | grep -Fxq "$env_name"; then
         echo "  Updating: $env_name"
-        conda env update -n "$env_name" -f "$env_file" --prune -q
+        conda env update -n "$env_name" -f "$env_file" --prune --solver "$CONDA_SOLVER" -q
     else
         echo "  Creating: $env_name"
-        conda env create -f "$env_file" -q
+        conda env create -f "$env_file" --solver "$CONDA_SOLVER" -q
     fi
 }
 
 echo ""
-echo "✓ Setting up conda environments:"
+echo "✓ Setting up conda environments (solver: $CONDA_SOLVER):"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/meti_env.yml" "meti_env"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/search_env.yml" "search_env"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/cascadia_env.yml" "cascadia_env"
 create_or_update_env "$PROJECT_ROOT/src/conda_envs/casanovo_env.yml" "casanovo_env"
 
-# casanovoBolt uses relative imports from a 'data' subpackage that lives in the
-# installed casanovo package.  Symlink it into the source tree so the import
-# 'from .data.psm import PepSpecMatch' resolves correctly at runtime.
-CASANOVO_DATA="$(conda run -n casanovo_env python -c \
-    'import casanovo, os; print(os.path.join(os.path.dirname(casanovo.__file__), "data"))' 2>/dev/null || echo "")"
-if [ -n "$CASANOVO_DATA" ] && [ -d "$CASANOVO_DATA" ]; then
-    ln -sfn "$CASANOVO_DATA" "$PROJECT_ROOT/src/casanovoBolt/data"
-    echo "✓ Linked casanovo data package into casanovoBolt"
-else
-    echo "⚠ Could not locate installed casanovo data package; casanovoBolt may fail to import"
-fi
+git -C "$PROJECT_ROOT/submodules/MassSpecOrganismID" submodule update --init --recursive
+conda run -n meti_env --no-capture-output python "$PROJECT_ROOT/src/python/install_organism_id.py" \
+    --submodule "$PROJECT_ROOT/submodules/MassSpecOrganismID"
 
 # ============================================
 # Step 4: Install Search Tools
@@ -399,4 +395,3 @@ echo ""
 echo "For more information, see:"
 echo "  - README.md - Project overview & setup guide"
 echo "  - src/bash/EXAMPLE.sh - Example pipeline invocations"
-

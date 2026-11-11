@@ -1,3 +1,3 @@
 """Canonical HAMLET release version."""
 
-HAMLET_VERSION = "v2.2.5"
+HAMLET_VERSION = "v3.0.1"

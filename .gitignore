@@ -3,9 +3,16 @@ work/
 .nextflow/
 .nextflow.log
 .nextflow.log.*
+.cache/
+.pytest_cache/
+.deepeval/
+*.log
+*.log.[0-9]*
 
 # ── Large pipeline output / data directories ─────────────────────────────────
 results/
+/HAMLETruns/
+/PXD003350_GPU/
 results_hamletpxds_agentic_v2_1_1/
 spectral_files/
 pride_survey/
@@ -27,6 +34,10 @@ cascadia_*/
 
 # ── Machine-local symlinks (created by setup.sh, path is system-specific) ────
 src/casanovoBolt/data
+
+# ── Apptainer/Singularity built image (>100 MB, exceeds GitHub file size limit;
+#    rebuild via `apptainer build --fakeroot containers/hamlet.sif containers/hamlet.def`) ──
+containers/*.sif
 
 # ── Large model / library files (>100 MB, exceed GitHub file size limit) ─────
 assets/cascadia.ckpt
@@ -93,3 +104,9 @@ pride_survey.tar.xz
 # ── LLM-judge disk response cache (sdrf_judge.py DiskResponseCache; large ────
 # numbers of small regenerable files, one per judge call) ────────────────────
 **/.prompt_cache_*/
+
+# Local Slurm submission receipts; generated job definitions remain tracked.
+/slurm/v3.0.1/submitted_jobs*.csv
+!/slurm/v3.0.1/logs/
+/slurm/v3.0.1/logs/*
+!/slurm/v3.0.1/logs/.gitkeep

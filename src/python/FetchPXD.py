@@ -80,6 +80,16 @@ def fetch_pride_project_and_files(pxd: str, page_size: int = 200, timeout: int =
 ###################################################################################################################################################
 
 ###################################################################################################################################################
+def _tail_text(text, max_chars=2000):
+    """Return the last max_chars characters of captured subprocess output."""
+    if not text:
+        return ""
+    if isinstance(text, bytes):
+        text = text.decode("utf-8", errors="replace")
+    text = text.strip()
+    return text[-max_chars:]
+
+
 def download_ftp_file_aria2c(url, outfile, threads=4):
     """
     Download using aria2c with multiple threads for parallel segment downloads.
@@ -91,6 +101,7 @@ def download_ftp_file_aria2c(url, outfile, threads=4):
     candidates.append(url)
 
     last_err = None
+    attempts = []
     for candidate in candidates:
         for attempt in range(6):
             try:
@@ -101,17 +112,27 @@ def download_ftp_file_aria2c(url, outfile, threads=4):
             except subprocess.CalledProcessError as e:
                 last_err = e
                 rc = e.returncode
+                # aria2c reports its [ERROR] lines on stdout, so both streams are needed
+                attempts.append({
+                    "url": candidate,
+                    "attempt": attempt + 1,
+                    "returncode": rc,
+                    "stdout_tail": _tail_text(e.stdout),
+                    "stderr_tail": _tail_text(e.stderr),
+                })
                 # Retry on network/server errors
                 if rc in (3, 5, 7, 9):  # aria2c error codes for network issues
                     sleep_s = 5 * (2 ** attempt)
-                    print(f"aria2c failed (rc={rc}). Retrying in {sleep_s}s...\nSTDERR:\n{e.stderr}")
+                    print(f"aria2c failed (rc={rc}). Retrying in {sleep_s}s...\nSTDOUT:\n{_tail_text(e.stdout)}\nSTDERR:\n{_tail_text(e.stderr)}")
                     time.sleep(sleep_s)
                     continue
                 else:
-                    print(f"aria2c failed (rc={rc}). Not retrying.\nSTDERR:\n{e.stderr}")
+                    print(f"aria2c failed (rc={rc}). Not retrying.\nSTDOUT:\n{_tail_text(e.stdout)}\nSTDERR:\n{_tail_text(e.stderr)}")
                     break
 
     # If we get here, all retries/candidates failed
+    if last_err is not None:
+        last_err.download_attempts = attempts
     raise last_err
 
 def download_ftp_file_wget(url, outfile):
@@ -1039,6 +1060,7 @@ def processes_pxds(
                 globus_destination_base or download_dir,
             )
 
+        max_conversion_retries = 1
         num_raw_downloaded = 0
         num_download_failures = 0
         for selected_file in missing_files:
@@ -1048,29 +1070,51 @@ def processes_pxds(
             retained_raw = raw_stem in retained_raw_files
             outfile_path = retained_raw_files.get(raw_stem, os.path.join(pxd_dir, file_name))
 
-            if not retained_raw and not use_globus:
-                print(f"Downloading .raw file {file_name} from {ftp_url} to {outfile_path}")
-                try:
-                    if use_aria2c:
-                        download_ftp_file_aria2c(ftp_url, outfile_path, aria2c_threads)
-                    else:
-                        download_ftp_file_wget(ftp_url, outfile_path)
-                except Exception as e:
-                    error_msg = f"Download failed for {file_name}: {str(e)}"
-                    print(f"WARNING: {error_msg}")
-                    if logger:
-                        logger.process_error("fetch", error_msg, is_fatal=False, details={
-                            "pxd": pxd,
-                            "file_name": file_name,
-                            "ftp_url": ftp_url,
-                            "error_type": type(e).__name__
-                        })
-                    # Skip this file and continue to the next one
-                    num_download_failures += 1
-                    print(f"Skipping {file_name} and continuing to next file...")
-                    continue
+            mzml_path = None
+            download_failed = False
+            for attempt in range(max_conversion_retries + 1):
+                if not retained_raw and not use_globus:
+                    if attempt > 0:
+                        print(f"RETRY {attempt}/{max_conversion_retries}: re-downloading {file_name} after conversion failure")
+                    print(f"Downloading .raw file {file_name} from {ftp_url} to {outfile_path}")
+                    try:
+                        if use_aria2c:
+                            download_ftp_file_aria2c(ftp_url, outfile_path, aria2c_threads)
+                        else:
+                            download_ftp_file_wget(ftp_url, outfile_path)
+                    except Exception as e:
+                        error_msg = f"Download failed for {file_name}: {str(e)}"
+                        print(f"WARNING: {error_msg}")
+                        if logger:
+                            logger.process_error("fetch", error_msg, is_fatal=False, details={
+                                "pxd": pxd,
+                                "file_name": file_name,
+                                "ftp_url": ftp_url,
+                                "error_type": type(e).__name__,
+                                "returncode": getattr(e, "returncode", None),
+                                "download_attempts": getattr(e, "download_attempts", None),
+                            })
+                        download_failed = True
+                        break
 
-            mzml_path = convert_spectral_file_to_mzml(outfile_path)
+                mzml_path = convert_spectral_file_to_mzml(outfile_path)
+                if mzml_path and os.path.exists(mzml_path):
+                    break
+
+                if attempt < max_conversion_retries:
+                    print(f"Conversion failed for {outfile_path}; deleting and retrying via fresh download...")
+                    if os.path.exists(outfile_path):
+                        os.remove(outfile_path)
+                    retained_raw = False
+                else:
+                    print(f"WARNING: Conversion failed for {outfile_path} after {max_conversion_retries} retry/retries")
+
+            if download_failed:
+                # Skip this file and continue to the next one
+                num_download_failures += 1
+                print(f"Skipping {file_name} and continuing to next file...")
+                continue
+
             if mzml_path and os.path.exists(mzml_path):
                 num_raw_downloaded += 1
                 print(f"Successfully converted {outfile_path} to {mzml_path}")
@@ -1112,10 +1156,14 @@ def processes_pxds(
             print(f"\n{'='*80}")
             print(warning_msg)
             print(f"{'='*80}\n")
-            
+
+            # A completely failed fetch (zero usable files) is fatal; a partial fetch is not,
+            # since downstream stages process each spectral file independently.
+            is_fatal = not completed_mzml_stems
+
             # Log to pipeline logger
             if logger:
-                logger.process_error("fetch", warning_msg, is_fatal=True, details={"pxd": pxd})
+                logger.process_error("fetch", warning_msg, is_fatal=is_fatal, details={"pxd": pxd})
             
             # Log warning to file
             warning_log_file = os.path.join(pxd_dir, f"{pxd}_INCOMPLETE_FETCH_WARNING.log")
@@ -1129,7 +1177,14 @@ def processes_pxds(
                 wf.write("One or more selected PRIDE RAW files were not converted to valid mzML.\n")
             
             print(f"Warning logged to: {warning_log_file}")
-            raise RuntimeError(warning_msg)
+
+            if is_fatal:
+                raise RuntimeError(warning_msg)
+
+            print(
+                f"Continuing with {len(completed_mzml_stems)}/{len(selected_files)} valid mzML file(s); "
+                "downstream stages will process the available files independently."
+            )
 
         print(
             f"\nSelected inventory complete for {pxd}: {len(completed_mzml_stems)}/"

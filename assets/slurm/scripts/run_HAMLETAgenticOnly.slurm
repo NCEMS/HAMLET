@@ -17,6 +17,8 @@
 
 # Redirect Nextflow home away from /storage/home (limited quota)
 export NXF_HOME=/storage/group/epo2/default/ims86/.nextflow
+export CONDA_ENVS_PATH=/storage/group/epo2/default/ims86/miniconda3/envs
+export CONDA_PKGS_DIRS=/storage/group/epo2/default/ims86/miniconda3/pkgs
 
 cd /scratch/ims86/HAMLETruns/HAMLET_0
 
@@ -29,7 +31,7 @@ export OPENROUTER_API_KEY="${OPENROUTER_API_KEY}"
 
 # Run agentic-only workflow
 nextflow run main.nf \
-    --agentic_only true \
+    --mode 'agentic only' \
     --pxd_csv /scratch/ims86/HAMLETruns/HAMLET_0/assets/pxd_lists/GSlist_split/GSlist0.csv \
-    --conda_base /storage/work/ims86/.conda \
+    --conda_base /storage/group/epo2/default/ims86/miniconda3 \
     -resume

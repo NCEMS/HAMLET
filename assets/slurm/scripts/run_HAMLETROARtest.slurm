@@ -12,6 +12,8 @@
 
 
 CONDA_BASE=/storage/group/epo2/default/ims86/miniconda3
+export CONDA_ENVS_PATH="${CONDA_BASE}/envs"
+export CONDA_PKGS_DIRS="${CONDA_BASE}/pkgs"
 
 # Redirect Nextflow home away from /storage/home (limited quota)
 export NXF_HOME=/storage/group/epo2/default/ims86/.nextflow

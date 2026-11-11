@@ -40,13 +40,13 @@ nextflow run main.nf \
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
 #   --num_pxds 10 \
-#   --run_search true \
+#   --mode full \
 #   -resume
 
 # Example 5: Force DDA search with a fallback taxid
 # nextflow run main.nf \
 #   --pxd PXD000070 \
-#   --run_search true \
+#   --mode full \
 #   --acquisition_type DDA \
 #   --taxid 9606 \
 #   -resume
@@ -64,15 +64,14 @@ nextflow run main.nf \
 # nextflow run main.nf \
 #   --pxd_csv master.csv \
 #   --num_pxds 5 \
-#   --run_search true \
+#   --mode full \
 #   --run_llm_extraction true \
-#   --run_agentic_metadata true \
 #   -resume
 
 # Example 8: Run in background, log to file
 # nohup nextflow run main.nf \
 #   --pxd_csv master.csv \
-#   --run_search true \
+#   --mode full \
 #   -resume > logs/pipeline_$(date +%Y%m%d_%H%M%S).log 2>&1 &
 
 # ---------------------------------------------------------------------------
@@ -88,4 +87,3 @@ nextflow run main.nf \
 #       ├── taxid_mapping.json
 #       └── PXDxxxxxx_aggregated_results.json    # Main output
 # ---------------------------------------------------------------------------
-

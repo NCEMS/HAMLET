@@ -338,12 +338,14 @@ def main():
                         help='PXD accession ID')
     parser.add_argument('--llm_results_dir',
                         help='Directory containing GPT_Extraction output (llm_results/)')
+    parser.add_argument('--force', action='store_true', help='Recompute instead of reusing the persistent acquisition JSON')
+    parser.add_argument('--acquisition_type', choices=('AUTO', 'DDA', 'DIA'), default='AUTO')
     args = parser.parse_args()
 
     # ---- Skip-if-exists: reuse persistent copy from spectral_files ----
     if args.central_mzml_dir and args.pxd:
         central_output = os.path.join(args.central_mzml_dir, args.pxd, 'detected_params.json')
-        if os.path.exists(central_output):
+        if os.path.exists(central_output) and not args.force:
             print(f"✓ Using cached detected_params.json from spectral_files: {central_output}")
             import shutil
             shutil.copy2(central_output, args.output)
@@ -380,6 +382,9 @@ def main():
     acquisition_type, acq_source, acq_evidence = determine_acquisition_type(
         runAssessor_data, llm_data, pride_data
     )
+    if args.acquisition_type != 'AUTO':
+        acquisition_type = args.acquisition_type
+        acq_source = 'workflow_override'
 
     # ---- Extract labeling and other params from runAssessor ----
     if runAssessor_data:
@@ -418,7 +423,7 @@ def main():
     print(f"\n✅ detected_params.json written to: {args.output}")
 
     # Also persist to spectral_files for future reruns
-    if central_output:
+    if central_output and args.acquisition_type == 'AUTO':
         import shutil
         os.makedirs(os.path.dirname(central_output), exist_ok=True)
         shutil.copy2(args.output, central_output)

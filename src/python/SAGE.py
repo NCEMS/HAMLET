@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, re, argparse
+import os, re, argparse, sys
 import pandas as pd
 import numpy as np
 import json
@@ -251,10 +251,37 @@ def run_sage(config_path: str, outdir: str) -> Tuple[int, str, str]:
     outdir = os.path.abspath(outdir)
     Path(outdir).mkdir(parents=True, exist_ok=True)
 
-    # Find sage binary using full path
-    sage_path = shutil.which("sage")
+    def _is_sagemath_wrapper(path: str) -> bool:
+        try:
+            with open(path, "rb") as fh:
+                head = fh.read(2048)
+            return b"from sage.cli.__main__ import main" in head
+        except OSError:
+            return False
+
+    # Prefer the HAMLET-managed SAGE binary under the active conda env.
+    # This avoids accidentally running SageMath's `sage` CLI when both are installed.
+    candidate_paths = []
+    conda_prefix = os.environ.get("CONDA_PREFIX")
+    if conda_prefix:
+        candidate_paths.append(os.path.join(conda_prefix, "opt", "search_tools", "sage", "sage"))
+    which_sage = shutil.which("sage")
+    if which_sage:
+        candidate_paths.append(which_sage)
+
+    sage_path = None
+    for candidate in candidate_paths:
+        if candidate and os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            if _is_sagemath_wrapper(candidate):
+                continue
+            sage_path = candidate
+            break
+
     if sage_path is None:
-        raise RuntimeError("Could not find 'sage' on PATH. Activate the env or install SAGE.")
+        raise RuntimeError(
+            "Could not find the SAGE proteomics binary. "
+            "Expected <CONDA_PREFIX>/opt/search_tools/sage/sage or a non-SageMath `sage` on PATH."
+        )
 
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     stdout_log = os.path.join(outdir, f"sage_stdout_{ts}.log")
@@ -373,6 +400,7 @@ output_extended = false"""
     # If not explicitly set, search common locations including conda environments
     if not jar_path or not os.path.exists(jar_path):
         candidate_paths = [
+            os.path.join(sys.prefix, 'opt', 'search_tools', 'ptmshepherd', 'ptmshepherd.jar'),
             os.path.expanduser('~/miniconda3/envs/search_env/opt/search_tools/ptmshepherd/ptmshepherd.jar'),
             '/opt/ptmshepherd/ptmshepherd.jar',
             os.path.expanduser('~/miniconda3/envs/meti_env/opt/search_tools/ptmshepherd/ptmshepherd.jar'),

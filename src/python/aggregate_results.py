@@ -19,6 +19,58 @@ import tempfile
 from hamlet_version import HAMLET_VERSION
 
 
+MODE_SECTIONS = {
+    "runassessor_only": ("runAssessor", "pride_metadata"),
+    "organism_only": ("organism_identification",),
+    "search_only": (
+        "PTM-shepherd_open_search", "PTM-shepherd_closed_search",
+        "Search_and_modification_results", "modification_site_fractions", "taxid_warnings",
+    ),
+}
+
+
+def load_existing_aggregate(path, pxd_id):
+    if not path:
+        return None
+    try:
+        with open(path) as handle:
+            data = json.load(handle)
+    except FileNotFoundError:
+        print(f"No existing aggregate at {path}; rebuilding from available stage outputs")
+        return None
+    if not isinstance(data, dict):
+        raise ValueError(f"Existing aggregate must be a JSON object: {path}")
+    if data.get("pxd_id", pxd_id) != pxd_id:
+        raise ValueError(f"Existing aggregate {path} belongs to {data.get('pxd_id')}, not {pxd_id}")
+    return data
+
+
+def merge_aggregate(existing, refreshed, mode):
+    """Replace selected stage sections, never infer deletions from missing source files."""
+    sections = set(MODE_SECTIONS[mode]) if mode != "full" else {
+        key for fields in MODE_SECTIONS.values() for key in fields
+    }
+    if mode == "full" and refreshed.get("llm_extracted_metadata") is not None:
+        sections.add("llm_extracted_metadata")
+    merged = dict(existing)
+    for key, value in refreshed.items():
+        if key not in merged or key in sections or key in (
+            "pxd_id", "pipeline_version", "run_mode", "aggregation_timestamp",
+        ):
+            merged[key] = value
+    path_fields = {
+        "runassessor_only": ("pxd_dir", "pride_json_dir"),
+        "organism_only": ("organism_dir",),
+        "search_only": ("sage_results_dir", "taxid_warnings"),
+        "full": tuple(refreshed["input_paths"]),
+    }
+    merged["input_paths"] = {
+        **existing.get("input_paths", {}),
+        **{key: refreshed["input_paths"][key] for key in path_fields[mode]},
+    }
+    return merged
+
+
 def compute_modification_site_fractions(results_tsv_path: str, script_dir: str, include_hidden_mods: bool = True) -> dict:
     """
     Compute modification site fractions from a search_results.tsv file.
@@ -509,11 +561,14 @@ def load_pride_metadata(pride_json_dir, pxd_id, pxd_dir=None):
     return None
 
 
-def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_results_dir, pride_json_dir, taxid_warnings, output_file, include_hidden_mods=True):
+def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_results_dir, pride_json_dir, taxid_warnings, output_file, include_hidden_mods=True, existing_aggregate=None, mode="full"):
     """
     Aggregate all pipeline results for a single PXD into a unified JSON structure
     """
     
+    if mode not in ("full", *MODE_SECTIONS):
+        raise ValueError(f"Unsupported aggregation mode: {mode}")
+    existing = load_existing_aggregate(existing_aggregate, pxd_id)
     print(f"Aggregating results for {pxd_id}...")
     print(f"Input paths: pxd_dir={pxd_dir}, organism_dir={organism_dir}, sage_results_dir={sage_results_dir}, llm_results_dir={llm_results_dir}")
     
@@ -541,7 +596,7 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     aggregated_results = {
         "pxd_id": pxd_id,
         "pipeline_version": HAMLET_VERSION,
-        "run_mode": "full",
+        "run_mode": mode,
         "aggregation_timestamp": datetime.now().isoformat(),
         "input_paths": {
             "pxd_dir": pxd_dir,
@@ -567,13 +622,17 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     
     # Load study metadata
     print("Loading study metadata...")
-    runAssessor = load_runAssessor(pxd_dir)
+    runAssessor = load_runAssessor(pxd_dir) if existing is None or mode in ("full", "runassessor_only") else None
     aggregated_results["runAssessor"] = runAssessor
     
     # Load organism identification results
     print("Loading organism identification results...")
-    organism_results = load_organism_results(organism_dir)
+    organism_results = load_organism_results(organism_dir) if existing is None or mode in ("full", "organism_only") else []
     aggregated_results["organism_identification"]["results"] = organism_results
+    status_path = os.path.join(organism_dir, "organism_status.json")
+    if (existing is None or mode in ("full", "organism_only")) and os.path.isfile(status_path):
+        with open(status_path) as handle:
+            aggregated_results["organism_identification"]["status"] = json.load(handle)
     
     # Create organism summary
     if organism_results:
@@ -587,7 +646,7 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     
     # Load SAGE results
     print("Loading SAGE analysis results...")
-    sage_results = load_sage_results(sage_results_dir)
+    sage_results = load_sage_results(sage_results_dir) if existing is None or mode in ("full", "search_only") else None
     if sage_results:
         # Unpack the combined structure
         aggregated_results["PTM-shepherd_open_search"] = sage_results.get("PTM-shepherd_open_search")
@@ -596,13 +655,13 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     
     # Load LLM extraction results
     print("Loading LLM extracted metadata...")
-    llm_results = load_llm_results(llm_results_dir)
+    llm_results = load_llm_results(llm_results_dir) if existing is None or mode == "full" else None
     aggregated_results["llm_extracted_metadata"] = llm_results
     
     # Load taxid warnings
     print("Loading taxid determination warnings...")
     taxid_warnings_data = None
-    if taxid_warnings and os.path.exists(taxid_warnings):
+    if (existing is None or mode in ("full", "search_only")) and taxid_warnings and os.path.exists(taxid_warnings):
         try:
             with open(taxid_warnings, 'r') as f:
                 taxid_warnings_data = json.load(f)
@@ -613,7 +672,7 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
     
     # Load PRIDE metadata
     print("Loading PRIDE metadata...")
-    pride_metadata = load_pride_metadata(pride_json_dir, pxd_id, pxd_dir=pxd_dir)
+    pride_metadata = load_pride_metadata(pride_json_dir, pxd_id, pxd_dir=pxd_dir) if existing is None or mode in ("full", "runassessor_only") else None
     if isinstance(pride_metadata, dict):
         top_level_organisms = pride_metadata.get("organisms")
         project_organisms = (pride_metadata.get("project") or {}).get("organisms", [])
@@ -697,16 +756,19 @@ def aggregate_results(pxd_id, pxd_dir, organism_dir, sage_results_dir, llm_resul
         aggregated_results["modification_site_fractions"] = mod_fractions_data
         print(f"Added modification site fractions for {len(mod_fractions_data)} search types")
     
-    # Create processing summary
+    if existing is not None:
+        aggregated_results = merge_aggregate(existing, aggregated_results, mode)
+    organism_results = aggregated_results.get("organism_identification", {}).get("results", [])
     aggregated_results["processing_summary"] = {
-        "runAssessor_found": runAssessor is not None,
+        **aggregated_results.get("processing_summary", {}),
+        "runAssessor_found": aggregated_results["runAssessor"] is not None,
         "organism_results_found": len(organism_results) > 0,
         "ptm_shepherd_open_search_found": aggregated_results["PTM-shepherd_open_search"] is not None,
         "ptm_shepherd_closed_search_found": aggregated_results["PTM-shepherd_closed_search"] is not None,
         "sage_results_found": aggregated_results["Search_and_modification_results"] is not None,
         "modification_site_fractions_found": aggregated_results.get("modification_site_fractions") is not None,
-        "llm_metadata_found": llm_results is not None,
-        "pride_metadata_found": pride_metadata is not None,
+        "llm_metadata_found": aggregated_results.get("llm_extracted_metadata") is not None,
+        "pride_metadata_found": aggregated_results["pride_metadata"] is not None,
         "consolidated_pipeline_found": True,  # Will be added after consolidation
         "total_data_files": len(organism_results) + (1 if aggregated_results["Search_and_modification_results"] else 0)
     }
@@ -737,6 +799,9 @@ def main():
     parser.add_argument('--pride_json_dir', default='/data/20250927/pride_json', 
                        help='Directory containing PRIDE metadata JSON files')
     parser.add_argument('--output_file', required=True, help='Output JSON file path')
+    parser.add_argument('--existing_aggregate', help='Prior aggregate to update; rebuild if absent')
+    parser.add_argument('--mode', choices=("full", *MODE_SECTIONS), default="full",
+                        help='Stage sections to refresh in an existing aggregate')
     
     args = parser.parse_args()
     
@@ -757,6 +822,8 @@ def main():
         pride_json_dir=args.pride_json_dir,
         taxid_warnings=args.taxid_warnings,
         output_file=args.output_file,
+        existing_aggregate=args.existing_aggregate,
+        mode=args.mode,
     )
     
     # Consolidate pipeline logs if they exist
@@ -780,12 +847,14 @@ def main():
             json.dump(consolidated_log, f, indent=2)
         print(f"Consolidated pipeline log written to: {log_file}")
         
-        # Replace taxid_warnings with consolidated log in aggregated results
-        # The consolidated log contains all event history including warnings, so it replaces the old taxid_warnings
-        results["consolidated_pipeline"] = consolidated_log
-        del results["taxid_warnings"]  # Remove redundant taxid_warnings section
+        # Preserve historical aggregate logs; the sidecar describes this update.
+        if not args.existing_aggregate:
+            results["consolidated_pipeline"] = consolidated_log
+            del results["taxid_warnings"]
+        else:
+            results.setdefault("consolidated_pipeline", consolidated_log)
         
-        # Re-write aggregated results with consolidated log included (replacing taxid_warnings)
+        # Re-write aggregated results with consolidated log included.
         output_file = args.output_file
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=2, default=str)

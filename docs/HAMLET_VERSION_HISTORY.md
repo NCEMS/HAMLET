@@ -7,6 +7,33 @@ step that produced it. Versions before v2.2.1 use the historical
 pre-finalization `llm_judge`; v2.2.1 and later use `sdrf_judge` on the rendered
 SDRF, so their judge distributions must not be compared directly.
 
+## v3.0.1 - Standalone Organism ID and Focused Pipeline Modes
+
+Status: development revision; offline regression checks pass, real-PXD validation
+of this integrated revision is pending. No stable release or tag is published.
+
+- Fetch/conversion/RunAssessor and organism identification use the pinned
+  MassSpecOrganismID submodule and installed Casanovo/Cascadia packages.
+- `--mode` selects `full`, `runassessor only`, `organism only`, `search only`,
+  or `agentic only`, replacing the older stage-selection flags.
+- Partial modes stop after aggregation. Update-from-existing runs replace only
+  the selected sections, preserving other embedded data without source files;
+  missing aggregates are rebuilt from available stage outputs.
+- Execution fingerprints and explicit organism status distinguish usable
+  results, completed attempts without predictions, and execution failures.
+- ResultsTracker records populated RunAssessor, organism prediction, and
+  modification-fraction sections. The v3.0.1 Slurm manifest defines ordered
+  CPU/GPU jobs with validated aggregates and per-PXD success dependencies.
+
+## v2.2.6 - Frequency-Ranked Peptonizer Taxid Blocks
+
+Status: implementation ready for validation.
+
+- Peptonizer2000 now receives taxids from frequency-ranked blocks in `assets/taxid_lists/AllPRIDEtaxids.csv` instead of one static common-taxid list.
+- Each sample reuses its single Casanovo or Cascadia peptide output while testing Peptonizer blocks in order. PRIDE-reported taxids are appended to every block.
+- Iteration stops at the first block whose best taxid score is strictly greater than the configurable `peptonizer_score_threshold` (default `0.8`).
+- Only the selected block is published to the canonical Peptonizer result path. A JSON iteration manifest records tested blocks, scores, and the selected prediction, and prevents reuse of pre-v2.2.6 cached results.
+
 ## v2.2.5 - Analyzer Provenance and Safe Cell-Line Overrides
 
 Status: immutable 423-PXD release finalized on 2026-09-21. Every stored SDRF

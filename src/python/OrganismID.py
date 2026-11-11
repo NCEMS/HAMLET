@@ -8,6 +8,7 @@ import subprocess
 import shutil
 import glob
 import sys
+import tempfile
 from pathlib import Path
 from pyteomics import fasta, parser
 from collections import defaultdict
@@ -378,6 +379,59 @@ def merge_taxid_query(base_taxid_list_str, extra_taxids):
 ###############################################
 
 ###############################################
+def load_taxid_blocks(taxid_blocks_file):
+    """Load frequency-ranked taxid blocks from a CSV file."""
+    df = pd.read_csv(taxid_blocks_file, dtype={'taxid': str})
+    required_columns = {'taxid', 'block'}
+    missing_columns = required_columns.difference(df.columns)
+    if missing_columns:
+        raise ValueError(
+            f"Taxid block file {taxid_blocks_file} is missing columns: "
+            f"{sorted(missing_columns)}"
+        )
+
+    df['taxid'] = df['taxid'].fillna('').astype(str).str.strip()
+    df['block'] = pd.to_numeric(df['block'], errors='raise').astype(int)
+    if (df['taxid'] == '').any() or not df['taxid'].str.fullmatch(r'\d+').all():
+        raise ValueError(f"Taxid block file {taxid_blocks_file} contains invalid taxids")
+    if (df['block'] < 1).any():
+        raise ValueError(f"Taxid block file {taxid_blocks_file} contains invalid block numbers")
+
+    blocks = []
+    for block_number, block_df in df.groupby('block', sort=True):
+        taxids = list(dict.fromkeys(block_df['taxid'].tolist()))
+        blocks.append((int(block_number), taxids))
+
+    if not blocks:
+        raise ValueError(f"Taxid block file {taxid_blocks_file} contains no taxids")
+    return blocks
+
+
+def evaluate_peptonizer_result(result_file, score_threshold):
+    """Return the best prediction and whether it strictly exceeds the threshold."""
+    result_df = pd.read_csv(result_file)
+    required_columns = {'taxon_id', 'score'}
+    missing_columns = required_columns.difference(result_df.columns)
+    if missing_columns:
+        raise ValueError(
+            f"Peptonizer result {result_file} is missing columns: {sorted(missing_columns)}"
+        )
+
+    result_df = result_df.copy()
+    result_df['score'] = pd.to_numeric(result_df['score'], errors='coerce')
+    result_df = result_df.dropna(subset=['score'])
+    if result_df.empty:
+        return None, None, False
+
+    best_row = result_df.loc[result_df['score'].idxmax()]
+    best_taxid = str(best_row['taxon_id'])
+    if best_taxid.endswith('.0'):
+        best_taxid = best_taxid[:-2]
+    best_score = float(best_row['score'])
+    return best_taxid, best_score, best_score > float(score_threshold)
+###############################################
+
+###############################################
 def count_unique_llm_taxids(llm_results_path):
     """Return a set of unique numeric taxids found across all *_Metadata.json files
     in the LLM results directory.  Returns an empty set if the path is absent/invalid."""
@@ -420,6 +474,7 @@ def broadcast_organism_results(output_dir, representative_mzml, all_mzml_files, 
         print(f"WARNING: No peptonizer_result.csv found under {rep_dir}; cannot broadcast to other files.")
         return
     rep_csv = rep_results[0]
+    rep_manifest = rep_csv.parent / "peptonizer_iteration_manifest.json"
     print(f"Broadcasting representative result from {rep_csv} to {len(all_mzml_files) - 1} other file(s).")
 
     for mzml_path in all_mzml_files:
@@ -433,6 +488,8 @@ def broadcast_organism_results(output_dir, representative_mzml, all_mzml_files, 
         dest_csv = os.path.join(data_dir, "peptonizer_result.csv")
         if not os.path.exists(dest_csv):
             shutil.copy2(str(rep_csv), dest_csv)
+            if rep_manifest.exists():
+                shutil.copy2(str(rep_manifest), os.path.join(data_dir, rep_manifest.name))
             print(f"  → Broadcast to: {dest_csv}")
         else:
             print(f"  → Already exists, skipping: {dest_csv}")
@@ -475,20 +532,10 @@ script_dir: {script_dir}
 ###############################################
 
 ###############################################
-def generate_snakemake_commands(filtered_files, taxid_list_str, min_peptides=100, *, conda_exe=None, snakemake_env_path=None, peptonizer_container=None):
-    """
-    For each filtered CASANOVO output, build a Peptonizer2000 config and run
-    the bundled Snakemake workflow from a writable CWD, with absolute paths.
-    
-    If peptonizer_container is set, run Snakemake via singularity container.
-    Otherwise, run via conda env (or system Python if snakemake_env_path is None).
-    """
-    peptonizer_result_files = []
-
+def run_peptonizer_attempt(input_file, data_dir, log_dir, config_path, taxid_list_str, *, conda_exe=None, snakemake_env_path=None, peptonizer_container=None):
+    """Run one Peptonizer2000 attempt and return its result path when successful."""
     pep_home = os.environ.get("PEPTONIZER2000_HOME", "/opt/Peptonizer2000")
     snakefile = os.path.join(pep_home, "snakemake", "workflow", "Snakefile")
-
-    # NEW: keep CWD = Nextflow task dir and make sure ./scripts exists here
     workdir = os.getcwd()
     scripts_src = os.path.join(pep_home, "snakemake", "workflow", "scripts")
     scripts_dst = os.path.join(workdir, "scripts")
@@ -498,146 +545,177 @@ def generate_snakemake_commands(filtered_files, taxid_list_str, min_peptides=100
         except OSError:
             shutil.copytree(scripts_src, scripts_dst)
 
-    # env: make sure python can import peptonizer modules
     env = os.environ.copy()
     env["PYTHONPATH"] = f"{pep_home}:{env.get('PYTHONPATH', '')}"
+    os.makedirs(data_dir, exist_ok=True)
+    os.makedirs(log_dir, exist_ok=True)
+    make_config(input_file, data_dir, log_dir, config_path, taxid_list_str)
+
+    cmd = [
+        "snakemake", "-s", snakefile, "--cores", "10",
+        "--configfile", config_path, "--printshellcmds", "--directory", workdir,
+    ]
+    if peptonizer_container:
+        if not os.path.exists(peptonizer_container):
+            raise FileNotFoundError(f"Peptonizer2000 container not found: {peptonizer_container}")
+        if not os.path.exists(pep_home):
+            raise FileNotFoundError(f"PEPTONIZER2000_HOME path does not exist: {pep_home}")
+        cmd = [
+            "singularity", "exec",
+            "--bind", f"{os.environ.get('HOME', '/root')}:{os.environ.get('HOME', '/root')}",
+            "--bind", "/tmp:/tmp", "--bind", f"{workdir}:{workdir}",
+            "--bind", f"{pep_home}:/opt/Peptonizer2000", "--bind", "/mnt:/mnt",
+            peptonizer_container, *cmd,
+        ]
+    else:
+        cmd = _conda_wrap(cmd, conda_exe=conda_exe, env_path=snakemake_env_path)
+
+    print(f"Running Peptonizer2000 snakemake: {' '.join(cmd)}")
+    run_env = _prepend_env_lib_to_ld_library_path(env, snakemake_env_path)
+    result = subprocess.run(cmd, capture_output=True, text=True, env=run_env)
+    print(result.stdout)
+    if result.returncode != 0:
+        error_output = result.stdout + result.stderr
+        known_failure = any(message in error_output for message in (
+            "All objects have zero weight", "WeightTaxa", "weighted_random_sample"
+        ))
+        if known_failure:
+            error_log_path = os.path.join(log_dir, "peptonizer_error.log")
+            with open(error_log_path, 'w') as handle:
+                handle.write(error_output)
+            print("WARNING: Peptonizer2000 taxa weighting failed for this block")
+            return None
+        raise RuntimeError(f"Peptonizer2000 failed:\n{error_output}")
+
+    peptide_taxa_path = os.path.join(data_dir, "peptide_taxa.json")
+    outfile = os.path.join(data_dir, "peptonizer_result.csv")
+    if not os.path.exists(peptide_taxa_path) or not os.path.exists(outfile):
+        print("WARNING: Peptonizer2000 did not create its required result files")
+        return None
+    try:
+        with open(peptide_taxa_path, 'r') as handle:
+            taxa_data = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        print(f"WARNING: Could not parse {peptide_taxa_path}")
+        return None
+    if not taxa_data:
+        print("WARNING: Unipept lookup returned no taxonomic assignments")
+        return None
+    return outfile
+
+
+def generate_snakemake_commands(filtered_files, taxid_blocks, pride_taxids, score_threshold=0.8, min_peptides=100, *, conda_exe=None, snakemake_env_path=None, peptonizer_container=None):
+    """Run Peptonizer block-by-block and publish only the first passing result."""
+    peptonizer_result_files = []
 
     for file in filtered_files:
-        root = os.path.dirname(file)  # writable
+        root = os.path.dirname(file)
         basename = os.path.basename(file).replace(".tsv", "")
-        # NEW: use ABSOLUTE paths
-        infile = os.path.abspath(os.path.join(root, os.path.basename(file)))
-
-        df = pd.read_csv(infile, sep="\t")
-        if len(df) < min_peptides:
-            print(f"Skipping {file} as it has less than {min_peptides} peptides ({len(df)})")
+        infile = os.path.abspath(file)
+        if len(pd.read_csv(infile, sep="\t")) < min_peptides:
+            print(f"Skipping {file}: fewer than {min_peptides} filtered peptides")
             continue
 
-        # NEW: ABSOLUTE dirs
-        data_dir = os.path.abspath(os.path.join(root, "Peptonizer2000_data", basename))
-        log_dir  = os.path.abspath(os.path.join(root, "Peptonizer2000_logs", basename))
-        os.makedirs(data_dir, exist_ok=True)
-        os.makedirs(log_dir,  exist_ok=True)
+        canonical_data_dir = os.path.abspath(os.path.join(root, "Peptonizer2000_data", basename))
+        canonical_log_dir = os.path.abspath(os.path.join(root, "Peptonizer2000_logs", basename))
+        canonical_outfile = os.path.join(canonical_data_dir, "peptonizer_result.csv")
+        manifest_path = os.path.join(canonical_data_dir, "peptonizer_iteration_manifest.json")
 
-        config_path = os.path.abspath(os.path.join(data_dir, f"{basename}_config.yaml"))
-        outfile = os.path.join(data_dir, "peptonizer_result.csv")
-        peptonizer_result_files.append(outfile)
-
-        if os.path.exists(outfile):
-            print(f"Output already exists for {file}, skipping Peptonizer2000.")
-            continue
-
-        make_config(infile, data_dir, log_dir, config_path, taxid_list_str)
-
-        # NEW: run snakemake from task dir (so ./scripts resolves)
-        cmd = [
-            "snakemake",
-            "-s", snakefile,
-            "--cores", "10",
-            "--configfile", config_path,
-            "--printshellcmds",
-            "--directory", workdir,   # was: root
-        ]
-
-        # If peptonizer_container is set, wrap the command with singularity exec
-        if peptonizer_container:
-            print(f"Using peptonizer_container: {peptonizer_container}")
-            if not os.path.exists(peptonizer_container):
-                raise FileNotFoundError(f"Peptonizer2000 container not found: {peptonizer_container}")
-            
-            # Validate that pep_home exists (important when binding to singularity)
-            if not os.path.exists(pep_home):
-                raise FileNotFoundError(
-                    f"PEPTONIZER2000_HOME path does not exist: {pep_home}\n"
-                    f"Please set PEPTONIZER2000_HOME environment variable to the host path of Peptonizer2000\n"
-                    f"(e.g., PEPTONIZER2000_HOME=/mnt/storage_2/Production/src/Peptonizer2000)"
-                )
-            
-            # Wrap snakemake command with singularity exec
-            # Bind necessary directories: home, /tmp, work directory, Peptonizer2000 path
-            sing_opts = [
-                "singularity", "exec",
-                "--bind", f"{os.environ.get('HOME', '/root')}:{os.environ.get('HOME', '/root')}",
-                "--bind", "/tmp:/tmp",
-                "--bind", f"{workdir}:{workdir}",
-                "--bind", f"{pep_home}:/opt/Peptonizer2000",
-                "--bind", "/mnt:/mnt",  # For any mounted data
-                peptonizer_container
-            ]
-            cmd = sing_opts + cmd
-            print(f"Wrapped Snakemake command with singularity: {' '.join(cmd[:6])} ...")
-        else:
-            # Use conda wrapping if snakemake_env_path is set
-            cmd = _conda_wrap(cmd, conda_exe=conda_exe, env_path=snakemake_env_path)
-
-        print(f"Running Peptonizer2000 snakemake for {file}: {' '.join(cmd)}")
-        run_env = _prepend_env_lib_to_ld_library_path(env, snakemake_env_path)
-        result = subprocess.run(cmd, capture_output=True, text=True, env=run_env)
-        print(result.stdout)
-        
-        # Check if Snakemake failed and if it's due to empty Unipept results or taxa weighting issues
-        if result.returncode != 0:
-            # Combine stdout and stderr for better error detection
-            error_output = result.stdout + result.stderr
-            
-            # Check if this is the "All objects have zero weight" error (Peptonizer2000 taxa weighting failure)
-            if "All objects have zero weight" in error_output or "WeightTaxa" in error_output or "weighted_random_sample" in error_output:
-                peptide_taxa_path = os.path.join(data_dir, basename, "peptide_taxa.json")
-                print(f"WARNING: Peptonizer2000 taxa weighting failed for {basename}")
-                print(f"  This typically means the de novo peptides do not match any organisms in the taxonomy database.")
-                print(f"  The sample will be skipped and marked as organism undetermined.")
-                print(f"  Error: All objects have zero weight in taxa sampling - peptides may not be in Unipept database.")
-                print(f"Skipping {file} due to Peptonizer2000 taxa weighting failure")
-                
-                # Log the failure to a dedicated error log file
-                error_log_path = os.path.join(log_dir, "peptonizer_error.log")
-                os.makedirs(log_dir, exist_ok=True)
-                try:
-                    with open(error_log_path, 'w') as f:
-                        f.write(f"Peptonizer2000 WeightTaxa failed for {basename}\n")
-                        f.write(f"Error: All objects have zero weight in taxa sampling\n\n")
-                        f.write("STDOUT:\n")
-                        f.write(error_output)
-                except Exception as log_err:
-                    print(f"Could not write error log: {log_err}")
-                
-                # Skip this file as it cannot be processed further
+        if os.path.exists(canonical_outfile) and os.path.exists(manifest_path):
+            with open(manifest_path, 'r') as handle:
+                cached_manifest = json.load(handle)
+            if (
+                cached_manifest.get('strategy') == 'frequency_ranked_taxid_blocks'
+                and float(cached_manifest.get('score_threshold', -1)) == float(score_threshold)
+                and cached_manifest.get('passed_threshold') is True
+            ):
+                print(f"Reusing iterative Peptonizer2000 result for {file}")
+                peptonizer_result_files.append(canonical_outfile)
                 continue
-            
-            # If it's not a known taxa weighting failure, raise the error
-            print("ERROR: Snakemake failed with unknown error:")
-            print(error_output)
-            raise SyntaxError(f"Error running Snakemake for {file}:\n{error_output}")
 
-        # CHECK: Validate that peptide_taxa.json exists and is not empty (defensive check for success case)
-        peptide_taxa_path = os.path.join(data_dir, basename, "peptide_taxa.json")
-        if os.path.exists(peptide_taxa_path):
+        if os.path.exists(canonical_data_dir):
+            shutil.rmtree(canonical_data_dir)
+        if os.path.exists(canonical_log_dir):
+            shutil.rmtree(canonical_log_dir)
+        os.makedirs(canonical_data_dir, exist_ok=True)
+        attempts = []
+        selected = None
+
+        for block_number, block_taxids in taxid_blocks:
+            query_taxids = list(dict.fromkeys([*block_taxids, *pride_taxids]))
+            attempt_root = tempfile.mkdtemp(
+                prefix=f"peptonizer_{basename}_block_{block_number:04d}_",
+                dir=os.getcwd(),
+            )
+            attempt_data_dir = os.path.join(attempt_root, "data")
+            attempt_log_dir = os.path.join(attempt_root, "logs")
+            attempt_config = os.path.join(attempt_data_dir, f"{basename}_config.yaml")
+            print(
+                f"Peptonizer2000 block {block_number}: testing {len(query_taxids)} taxids "
+                f"({len(pride_taxids)} PRIDE taxids considered)"
+            )
             try:
-                with open(peptide_taxa_path, 'r') as f:
-                    taxa_data = json.load(f)
-                if not taxa_data or len(taxa_data) == 0:
-                    print(f"WARNING: Unipept lookup returned no taxonomic assignments for {basename}")
-                    print(f"  The sample will be skipped and marked as organism undetermined.")
-                    print(f"Skipping {file} due to Unipept lookup failure")
-                    continue
-            except json.JSONDecodeError:
-                print(f"WARNING: Could not parse peptide_taxa.json at {peptide_taxa_path}")
-                print(f"  The sample will be skipped and marked as organism undetermined.")
-                continue
-        else:
-            # This can happen if Peptonizer2000 failed during GetTaxonomyFromUnipept rule
-            print(f"WARNING: peptide_taxa.json not found at {peptide_taxa_path}")
-            print(f"  Peptonizer2000 may have failed during taxonomy lookup.")
-            print(f"  The sample will be skipped and marked as organism undetermined.")
-            continue
+                attempt_outfile = run_peptonizer_attempt(
+                    infile, attempt_data_dir, attempt_log_dir, attempt_config,
+                    ','.join(query_taxids), conda_exe=conda_exe,
+                    snakemake_env_path=snakemake_env_path,
+                    peptonizer_container=peptonizer_container,
+                )
+                best_taxid = best_score = None
+                passed = False
+                if attempt_outfile:
+                    best_taxid, best_score, passed = evaluate_peptonizer_result(
+                        attempt_outfile, score_threshold
+                    )
+                attempts.append({
+                    'block': block_number,
+                    'taxids_tested': query_taxids,
+                    'best_taxid': best_taxid,
+                    'maximum_score': best_score,
+                    'passed_threshold': passed,
+                })
+                if passed:
+                    shutil.copytree(attempt_data_dir, canonical_data_dir, dirs_exist_ok=True)
+                    shutil.copytree(attempt_log_dir, canonical_log_dir, dirs_exist_ok=True)
+                    selected = attempts[-1]
+                    break
+            finally:
+                shutil.rmtree(attempt_root, ignore_errors=True)
 
-        print(f"Finished running Peptonizer2000 for {file} -> {outfile}")
+        manifest = {
+            'strategy': 'frequency_ranked_taxid_blocks',
+            'score_threshold': float(score_threshold),
+            'comparison': 'strictly_greater_than',
+            'pride_taxids': pride_taxids,
+            'passed_threshold': selected is not None,
+            'selected_block': selected['block'] if selected else None,
+            'selected_taxid': selected['best_taxid'] if selected else None,
+            'selected_score': selected['maximum_score'] if selected else None,
+            'attempts': attempts,
+        }
+        with open(manifest_path, 'w') as handle:
+            json.dump(manifest, handle, indent=2)
+            handle.write("\n")
+
+        if selected:
+            canonical_config = os.path.join(canonical_data_dir, f"{basename}_config.yaml")
+            make_config(
+                infile, canonical_data_dir, canonical_log_dir, canonical_config,
+                ','.join(selected['taxids_tested'])
+            )
+            peptonizer_result_files.append(canonical_outfile)
+            print(
+                f"Selected Peptonizer2000 block {selected['block']} with taxid "
+                f"{selected['best_taxid']} score {selected['maximum_score']:.4f}"
+            )
+        else:
+            print(f"No Peptonizer2000 block exceeded score {score_threshold} for {file}")
 
     return peptonizer_result_files
 ###############################################
 
 ####################################################
-def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80, src_dir=None, file_subset=None):
+def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_env_path=None, casanovo_config_path=None, cascadia_env_path=None, cascadia_model_path=None, denovo_threshold_pct: int = 80, src_dir=None, file_subset=None):
     """
     Run de novo sequencing (Casanovo or Cascadia) on all .mzML files under input_dir.
     If no .mzML files are found, attempt to convert .raw files to .mzML.
@@ -797,10 +875,21 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 ]
             base_cmd = _conda_wrap(base_cmd, conda_exe=conda_exe, env_path=cascadia_env_path)
         else:
-            # Prefer casanovoBolt (src/casanovoBolt/casanovo.py) when src_dir is supplied;
-            # fall back to the installed casanovo CLI for legacy envs.
+            # Prefer casanovoBolt only when its complete package is available;
+            # otherwise use the installed Casanovo CLI.
             casanovo_bolt_script = os.path.join(src_dir, "casanovoBolt", "casanovo.py") if src_dir else None
-            if casanovo_bolt_script and os.path.exists(casanovo_bolt_script):
+            casanovo_bolt_data_dir = os.path.join(src_dir, "casanovoBolt", "data") if src_dir else None
+            use_cpu_config = (
+                casanovo_config_path
+                and os.path.basename(casanovo_config_path) == "casanovo_cpu.config"
+            )
+            if (
+                casanovo_bolt_script
+                and os.path.exists(casanovo_bolt_script)
+                and casanovo_bolt_data_dir
+                and os.path.isdir(casanovo_bolt_data_dir)
+                and not use_cpu_config
+            ):
                 # Use -m module invocation so relative imports inside casanovoBolt work.
                 # casanovo.py uses `from . import __version__, utils` which requires a package context.
                 base_cmd = [
@@ -813,13 +902,19 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                 base_cmd = [
                     "casanovo", "sequence",
                     mzml_path,
-                    "--output_dir", out_dir,
-                    "--output_root", out_root
+                    "--output", out_file
                 ]
+            if casanovo_config_path:
+                base_cmd.extend(["--config", casanovo_config_path])
             base_cmd = _conda_wrap(base_cmd, conda_exe=conda_exe, env_path=casanovo_env_path)
 
-        # --- Run Casanovo/Cascadia on GPU ---
-        print(f"Running {tool_name} (GPU mode):", " ".join(base_cmd))
+        hardware_mode = (
+            "CPU"
+            if not use_cascadia and casanovo_config_path
+            and os.path.basename(casanovo_config_path) == "casanovo_cpu.config"
+            else "automatic accelerator selection"
+        )
+        print(f"Running {tool_name} ({hardware_mode}):", " ".join(base_cmd))
         try:
             # Run with GPU enabled (no CUDA_VISIBLE_DEVICES restriction)
             env = os.environ.copy()
@@ -850,7 +945,12 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
             # so `python -m cascadiaBolt.cascadia` / `python -m casanovoBolt.casanovo`
             # resolve the package correctly via relative imports.
             casanovo_bolt_dir = os.path.join(src_dir, "casanovoBolt") if src_dir else None
-            use_casanovo_bolt = not use_cascadia and casanovo_bolt_dir and os.path.exists(casanovo_bolt_dir)
+            use_casanovo_bolt = (
+                not use_cascadia
+                and casanovo_bolt_dir
+                and os.path.exists(casanovo_bolt_dir)
+                and not use_cpu_config
+            )
             if (use_cascadia and cascadia_bolt_dir and os.path.exists(cascadia_bolt_dir)) or use_casanovo_bolt:
                 old_pp = env.get("PYTHONPATH", "")
                 env["PYTHONPATH"] = f"{src_dir}:{old_pp}" if old_pp else src_dir
@@ -868,7 +968,7 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                     env=env,
                     timeout=43200,  # 12-hour per-file safety timeout
                 )
-            print(f"{tool_name} (GPU) succeeded.")
+            print(f"{tool_name} ({hardware_mode}) succeeded.")
             
             # Check and convert output if using Cascadia
             if use_cascadia:
@@ -893,7 +993,7 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                     print(f"Directory contents: {os.listdir(out_dir)}")
                     
         except subprocess.CalledProcessError as e:
-            print(f"{tool_name} (GPU mode) exited with code {e.returncode}")
+            print(f"{tool_name} ({hardware_mode}) exited with code {e.returncode}")
             
             # Read stderr from log file (since we streamed it there)
             stderr_content = "N/A"
@@ -923,11 +1023,11 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
                     lf.write(stderr_content)
             else:
                 # No output generated - this is a real failure
-                print(f"✗ {tool_name} (GPU mode) failed, no output generated")
-                error_msg = f"\n{'='*70}\nERROR: {tool_name} (GPU) failed for {mzml_path}\n{'='*70}\n"
+                print(f"✗ {tool_name} ({hardware_mode}) failed, no output generated")
+                error_msg = f"\n{'='*70}\nERROR: {tool_name} ({hardware_mode}) failed for {mzml_path}\n{'='*70}\n"
                 error_msg += f"Exit Code: {e.returncode}\n"
                 error_msg += f"Error Output:\n{stderr_content}\n\n"
-                error_msg += f"{tool_name} processing failed on GPU.\n"
+                error_msg += f"{tool_name} processing failed using {hardware_mode}.\n"
                 error_msg += f"{'='*70}\n"
                 print(error_msg)
                 with open(log_file, "w") as lf:
@@ -951,7 +1051,7 @@ def run_de_novo_sequencing(input_dir, output_dir, *, conda_exe=None, casanovo_en
     return casanovo_outputs
 ####################################################
 
-def check_cached_organism_results(pxd, input_dir, results_base_dir, denovo_threshold_pct):
+def check_cached_organism_results(pxd, input_dir, results_base_dir, denovo_threshold_pct, score_threshold):
     """
     Check if organism_id results already exist in results/{PXD}/organism_results/.
     
@@ -1000,13 +1100,29 @@ def check_cached_organism_results(pxd, input_dir, results_base_dir, denovo_thres
                 f"{out_root}_filtered{denovo_threshold_pct}pct_slim",
                 'peptonizer_result.csv'
             )
+            manifest_path = os.path.join(
+                os.path.dirname(expected_path), 'peptonizer_iteration_manifest.json'
+            )
             
-            if os.path.exists(expected_path) and os.path.getsize(expected_path) > 0:
+            cache_valid = False
+            if os.path.exists(expected_path) and os.path.getsize(expected_path) > 0 and os.path.exists(manifest_path):
+                try:
+                    with open(manifest_path, 'r') as handle:
+                        manifest = json.load(handle)
+                    cache_valid = (
+                        manifest.get('strategy') == 'frequency_ranked_taxid_blocks'
+                        and float(manifest.get('score_threshold', -1)) == float(score_threshold)
+                        and manifest.get('passed_threshold') is True
+                    )
+                except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                    cache_valid = False
+
+            if cache_valid:
                 file_size = os.path.getsize(expected_path)
                 print(f"  ✓ {base}: found cached result ({file_size} bytes)")
                 cached_files.append(expected_path)
             else:
-                print(f"  ✗ {base}: not found or empty")
+                print(f"  ✗ {base}: missing or incompatible iterative Peptonizer result")
                 print(f"    Expected: {expected_path}")
                 all_found = False
                 break
@@ -1153,13 +1269,15 @@ def main():
     parser.add_argument('--input_dir', help='Directory to scan for .mzML files')
     parser.add_argument('--output_dir', default='OrganismID', help='Directory to save the output .tsv files')
     parser.add_argument('--contaminants_fasta', default='data/FASTA/UniversalContaminats.fasta', help='Path to contaminants FASTA file')
-    parser.add_argument('--taxid_list_file', default='data/taxid_lists/CommonPRIDEtaxids.txt', help='Path to file containing list of taxids')
+    parser.add_argument('--taxid_blocks_file', default='assets/taxid_lists/AllPRIDEtaxids.csv', help='CSV containing frequency-ranked taxid blocks')
+    parser.add_argument('--peptonizer_score_threshold', type=float, default=0.8, help='Stop after a block produces a taxid score strictly above this value')
     parser.add_argument('--denovo_threshold', type=int, default=80, help='De novo confidence threshold (percent). Used for both Casanovo and Cascadia peptides passed to Peptonizer2000.')
     # Backwards-compat alias (will be removed): accept the old name if provided.
     parser.add_argument('--casanovo_thresholds', default=None, help=argparse.SUPPRESS)
     parser.add_argument('--min_peptides_for_peptonizer', type=int, default=100, help='Minimum number of high-quality peptides required to run Peptonizer2000')
     parser.add_argument('--conda_exe', default=None, help='Path to conda executable (for conda run -p ...)')
     parser.add_argument('--casanovo_env_path', default=None, help='Conda env prefix path containing casanovo')
+    parser.add_argument('--casanovo_config_path', default=None, help='Casanovo YAML configuration file')
     parser.add_argument('--cascadia_env_path', default=None, help='Conda env prefix path containing cascadia')
     parser.add_argument('--src_dir', default=None,
                         help='Path to HAMLET src/ directory. When set, casanovoBolt and '
@@ -1206,7 +1324,8 @@ def main():
         pxd=pxd,
         input_dir=args.input_dir,
         results_base_dir=args.results_base_dir,
-        denovo_threshold_pct=denovo_threshold_pct
+        denovo_threshold_pct=denovo_threshold_pct,
+        score_threshold=args.peptonizer_score_threshold,
     )
     
     if cache_hit:
@@ -1244,18 +1363,15 @@ def main():
     # No cache hit - proceed with normal workflow
     print(f"\nNo cached results found, running organism_id pipeline...")
 
-    # Parse the taxid list file
-    if os.path.exists(args.taxid_list_file):
-        taxid_list = open(args.taxid_list_file, 'r').read().strip().splitlines()
-        assert len(taxid_list) == 1, f"Expected a single line of comma-separated taxids in {args.taxid_list_file}, but found {len(taxid_list)} lines."
-        taxid_list = taxid_list[0]
-        print(f'taxid_list: {taxid_list}')
-        print(f"Loaded {len(taxid_list.split(','))} taxids from {args.taxid_list_file}")
+    taxid_blocks = load_taxid_blocks(args.taxid_blocks_file)
+    print(
+        f"Loaded {sum(len(taxids) for _, taxids in taxid_blocks)} taxids "
+        f"in {len(taxid_blocks)} blocks from {args.taxid_blocks_file}"
+    )
 
     pride_metadata_path = os.path.join(args.input_dir, f"{pxd}_PRIDEmetadata.json")
     pride_taxids = load_pride_organism_taxids(pride_metadata_path)
-    taxid_list = merge_taxid_query(taxid_list, pride_taxids)
-    print(f"Effective taxid query for Peptonizer2000: {taxid_list}")
+    print(f"PRIDE taxids appended to each Peptonizer2000 block: {pride_taxids}")
 
     # ---------------------------------------------------------------
     # Decide representative-file vs all-files mode
@@ -1330,6 +1446,7 @@ def main():
         args.output_dir,
         conda_exe=args.conda_exe,
         casanovo_env_path=args.casanovo_env_path,
+        casanovo_config_path=args.casanovo_config_path,
         cascadia_env_path=args.cascadia_env_path,
         cascadia_model_path=args.cascadia_model_path,
         denovo_threshold_pct=denovo_threshold_pct,
@@ -1353,7 +1470,9 @@ def main():
     # Generate Snakemake commands to use Peptonizer2000 workflow
     peptonizer_result_files = generate_snakemake_commands(
         slim_files,
-        taxid_list,
+        taxid_blocks,
+        pride_taxids,
+        score_threshold=args.peptonizer_score_threshold,
         min_peptides=args.min_peptides_for_peptonizer,
         conda_exe=args.conda_exe,
         snakemake_env_path=args.snakemake_env_path,

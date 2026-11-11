@@ -2,6 +2,7 @@
 import argparse
 import fcntl
 import glob
+import hashlib
 import json
 import os
 import shutil
@@ -163,6 +164,19 @@ def _stage_complete(base_dir: Path, central_dir: Path, stage: str, key_outputs: 
         return _fetch_complete(central_dir, pxd, getattr(args, "max_raw_files", None))
     if stage == "run_assessor" and pxd:
         return _run_assessor_complete(base_dir, central_dir, pxd, key_outputs)
+    if stage == "organism_id" and pxd and args:
+        status_path = Path(args.outdir) / pxd / "organism_status.json"
+        if not status_path.is_file():
+            return False
+        with status_path.open() as handle:
+            status = json.load(handle)
+        expected = getattr(args, "organism_fingerprint", None)
+        if expected and status.get("execution_fingerprint") != expected:
+            return False
+        engine = base_dir / "submodules/MassSpecOrganismID/src/OrganismID.py"
+        if not expected and engine.is_file() and status.get("engine_sha256") != hashlib.sha256(engine.read_bytes()).hexdigest():
+            return False
+        return status.get("status") in {"usable_results", "no_usable_results"}
     if stage in {"organism_id", "search", "llm_judge"}:
         # Any valid output is enough for these stage families.
         return any(_expand(base_dir, p) for p in key_outputs)
@@ -190,6 +204,10 @@ def _stage_complete_since(base_dir: Path, central_dir: Path, stage: str, key_out
         if not _run_assessor_complete(base_dir, central_dir, pxd, key_outputs):
             return False
         return all(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
+    if stage == "organism_id" and pxd and args:
+        status_path = Path(args.outdir) / pxd / "organism_status.json"
+        return (_stage_complete(base_dir, central_dir, stage, key_outputs, pxd, args)
+                and status_path.stat().st_mtime >= since_ts)
     if stage in {"organism_id", "search", "llm_judge"}:
         return any(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
     return all(_fresh_matches(base_dir, p, since_ts) for p in key_outputs)
@@ -360,6 +378,9 @@ def _prepare_materialize(args, complete: bool, availability: bool):
         if stage == "organism_id":
             os.makedirs("organism_results", exist_ok=True)
             Path("organism_results/empty.json").write_text("{}\n", encoding="utf-8")
+            status = '{"status":"skipped","reason":"disabled_by_manifest"}\n'
+            Path("organism_status.json").write_text(status, encoding="utf-8")
+            Path("organism_results/organism_status.json").write_text(status, encoding="utf-8")
         elif stage == "determine_taxids":
             Path("taxid_mapping.json").write_text('{"mappings": {}}\n', encoding="utf-8")
             Path("taxid_warnings.json").write_text('{"warnings": []}\n', encoding="utf-8")
@@ -397,7 +418,9 @@ def _prepare_materialize(args, complete: bool, availability: bool):
             if os.path.islink("organism_results"):
                 os.unlink("organism_results")
             elif os.path.isdir("organism_results"):
-                pass
+                if Path("organism_results").resolve() == src.resolve():
+                    raise ValueError("Refusing to replace the canonical organism results directory")
+                shutil.rmtree("organism_results")
             os.symlink(str(src), "organism_results")
             status_src = outdir / pxd / "organism_status.json"
             if status_src.exists():
@@ -514,12 +537,10 @@ def cmd_prepare(args):
         # An incomplete upstream stage always wins: this stage must (re)run
         # regardless of its own leftover outputs.
         complete = False
-    # Honor explicit manifest completion for organism_id (skip recheck),
-    # unless a forced rerun is pending for it.
-    elif args.stage == "organism_id" and availability and complete and not force_since:
-        pass
     else:
         complete = _effective_complete(base_dir, Path(args.central_dir), args.stage, stages_for_pxd, pxd=args.pxd, args=args)
+    if getattr(args, "refresh", False) and availability:
+        complete = False
     # Note: we intentionally do NOT write complete back to the manifest here.
     # mark-complete is the authoritative update path.  This removes the
     # LOCK_EX serialisation bottleneck when hundreds of tasks run concurrently.
@@ -544,6 +565,21 @@ def cmd_mark_complete(args):
         stages_for_pxd = manifest["pxds"][args.pxd]["stages"]
         stage_rec = stages_for_pxd[args.stage]
         stage_rec["complete"] = _effective_complete(base_dir, Path(args.central_dir), args.stage, stages_for_pxd, pxd=args.pxd, args=args)
+        fingerprint = getattr(args, "organism_fingerprint", None)
+        if args.stage == "organism_id" and fingerprint:
+            # publishDir runs after the process exits; inspect this task's status now.
+            with Path("organism_status.json").open() as handle:
+                status = json.load(handle)
+            stage_rec["complete"] = (
+                status.get("execution_fingerprint") == fingerprint
+                and status.get("status") in {"usable_results", "no_usable_results"}
+            )
+            previous = stage_rec.get("execution_fingerprint")
+            if previous != fingerprint:
+                for stage in STAGES[STAGES.index("organism_id") + 1:]:
+                    stages_for_pxd[stage]["complete"] = False
+                    stages_for_pxd[stage]["force_rerun_after"] = time.time()
+            stage_rec["execution_fingerprint"] = fingerprint
         # A stage that just genuinely completed (with fresh-enough output,
         # per _effective_complete) has consumed any pending force_rerun
         # request; clear it so future runs don't get stuck.
@@ -601,6 +637,7 @@ def build_parser():
                 help="Requested RAW-file cap; zero and omission mean all files")
         sp.add_argument("--store_backed_agentic_only", action="store_true",
                         help="Disable upstream stages for store-backed agentic finalization")
+        sp.add_argument("--organism_fingerprint", help="Required organism execution fingerprint for reuse")
 
     p_init = sub.add_parser("init")
     add_common(p_init)
@@ -610,6 +647,7 @@ def build_parser():
     add_common(p_prepare)
     p_prepare.add_argument("--pxd", required=True)
     p_prepare.add_argument("--stage", required=True, choices=STAGES)
+    p_prepare.add_argument("--refresh", action="store_true", help="Run available stage even when previous outputs exist")
 
     p_mark = sub.add_parser("mark-complete")
     add_common(p_mark)

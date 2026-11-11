@@ -45,20 +45,20 @@ The CSV should have a header row with "PXD" as the first column name.
 ### Basic Command with Single PXD
 
 ```bash
-nextflow run main.nf --agentic_only true --pxd PXD000070 -resume
+nextflow run main.nf --mode 'agentic only' --pxd PXD000070 -resume
 ```
 
 ### With Multiple PXDs from CSV
 
 ```bash
-nextflow run main.nf --agentic_only true --pxd_csv GSlist0.csv -resume
+nextflow run main.nf --mode 'agentic only' --pxd_csv GSlist0.csv -resume
 ```
 
 ### Limit Number of PXDs
 
 ```bash
 nextflow run main.nf \
-    --agentic_only true \
+    --mode 'agentic only' \
     --pxd_csv GSlist0.csv \
     --aggregated_results_dir store/aggregated_results_files \
     --stage_manifest results/agentic_only_stage_manifest.json \
@@ -72,7 +72,7 @@ By default, the pipeline runs 3 judge passes for consensus. Adjust with:
 
 ```bash
 nextflow run main.nf \
-    --agentic_only true \
+    --mode 'agentic only' \
     --pxd_csv GSlist0.csv \
     --n_judge_runs 5 \
     -resume
@@ -148,7 +148,7 @@ cat results/pipeline_stage_manifest.json | grep -A 5 "<PXD>"
 
 To force re-run:
 ```bash
-nextflow run main.nf --agentic_only true --pxd PXD000070 -resume -N
+nextflow run main.nf --mode 'agentic only' --pxd PXD000070 -resume -N
 # -N flag clears the cache
 ```
 
