@@ -421,7 +421,7 @@ def _prepare_materialize(args, complete: bool, availability: bool):
                 if Path("organism_results").resolve() == src.resolve():
                     raise ValueError("Refusing to replace the canonical organism results directory")
                 shutil.rmtree("organism_results")
-            os.symlink(str(src), "organism_results")
+            shutil.copytree(src, "organism_results")
             status_src = outdir / pxd / "organism_status.json"
             if status_src.exists():
                 Path("organism_status.json").write_text(status_src.read_text(encoding="utf-8"), encoding="utf-8")
@@ -437,7 +437,11 @@ def _prepare_materialize(args, complete: bool, availability: bool):
             src = outdir / pxd / "search"
             if os.path.islink("search"):
                 os.unlink("search")
-            os.symlink(str(src), "search")
+            elif os.path.isdir("search"):
+                if Path("search").resolve() == src.resolve():
+                    raise ValueError("Refusing to replace the canonical search results directory")
+                shutil.rmtree("search")
+            shutil.copytree(src, "search")
         elif stage == "aggregate_results":
             for name in [f"{pxd}_aggregated_results.json", f"{pxd}_pipeline.json", f"{pxd}_pipeline_summary.md"]:
                 src = outdir / pxd / name

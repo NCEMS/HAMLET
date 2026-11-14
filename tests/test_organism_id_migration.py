@@ -27,6 +27,30 @@ SPEC.loader.exec_module(STANDALONE)
 
 
 class MigrationTests(unittest.TestCase):
+    def test_reused_results_survive_overwriting_publish_destination(self):
+        for stage, name in [("organism_id", "organism_results"), ("search", "search")]:
+            with self.subTest(stage=stage), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                canonical = root / "results/PXD000001" / name
+                canonical.mkdir(parents=True)
+                (canonical / "result.csv").write_text("preserved")
+                work = root / "work"
+                work.mkdir()
+                previous = Path.cwd()
+                try:
+                    os.chdir(work)
+                    args = SimpleNamespace(pxd="PXD000001", stage=stage,
+                                           outdir=str(root / "results"), central_dir="spectral")
+                    # A retry may leave the old symlink-based materialization behind.
+                    Path(name).symlink_to(canonical, target_is_directory=True)
+                    stage_manifest._prepare_materialize(args, complete=True, availability=True)
+                    self.assertFalse(Path(name).is_symlink())
+                    shutil.rmtree(canonical)
+                    shutil.copytree(name, canonical)
+                    self.assertEqual((canonical / "result.csv").read_text(), "preserved")
+                finally:
+                    os.chdir(previous)
+
     @unittest.skipUnless(shutil.which("nextflow"), "Nextflow is required for manifest wiring regression")
     def test_nextflow_manifest_resolution_with_null_config_defaults(self):
         source = (ROOT / "main.nf").read_text()
